@@ -1,0 +1,25 @@
+1. Create MySQL database per DATABASE.sql
+2. Edit database credentials in wv_config.php
+3. Create a user for yourself using adduser.php (you need to edit that file first; only runs in CLI)
+4. Give yourself the proper rights:
+  UPDATE people SET rights='B', changedpwd=1 WHERE id=1
+5. Add the following cron entries:
+
+# WikiVerifier Beta graphs
+0 * * * * php -q <PATH>/wiki_beta/wv_cron.php cli
+
+# WikiVerifier Beta robots
+0 * * * * php -q <PATH>/wiki_beta/get_robots.php
+
+# WikiVerifier Update states
+50 * * * * nice -n 19 php -q <PATH>/wiki_beta/update_states.php
+
+# WikiVerifier Update curid
+40 * * * * php -q <PATH>/wiki_beta/update_curid.php
+
+# WikiVerifier get timestamps
+30 * * * * php -q <PATH>/wiki_beta/get_timestamps.php
+
+# WikiVerifier delete own user's changes on user page
+20 * * * * php -q <PATH>/wiki_beta/delete_own_userpage_changes.php
+
