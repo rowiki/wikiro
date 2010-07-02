@@ -10,7 +10,7 @@ Command-line arguments:
 
 -always           Don't prompt to make changes, just do them.
 
-Example: "python diacritics_redirects.py -start:B -always"
+Example: "python duplicate_category.py -start:B -always"
 '''
 #
 # (C) Strainu 2010
@@ -18,7 +18,7 @@ Example: "python diacritics_redirects.py -start:B -always"
 #
 # Distributed under the terms of the GPLv2 license.
 #
-__version__ = '$Id: diacritics_redirects.py 7918 2010-02-08 11:24:22Z xqt $'
+__version__ = '$Id: duplicate_category.py 7918 2010-02-08 11:24:22Z xqt $'
 #
 
 import time, sys, re
@@ -31,7 +31,19 @@ docuReplacements = {
 }
 
 msg = {	
-     'ro': u'Robot: Crează redirectare la [[%s]] pentru [[Wikipedia:Corectarea diacriticelor|corectarea diacriticelor]]',
+     'ar': u'روبوت: إنشاء تحويلة إلى [[%s]]',
+     'cs': u'Robot vytvořil přesměrování na [[%s]]',
+     'de': u'Bot: Weiterleitung angelegt auf [[%s]]',
+     'en': u'Robot: Create redirect to [[%s]]',
+     'fr': u'robot: Créer redirection à [[%s]]',
+     'he': u'בוט: יוצר הפניה לדף [[%s]]',
+     'ja': u'ロボットによる: リダイレクト作成 [[%s]]',
+     'ksh': u'Bot: oemleidung aanjelaat op [[%s]]',
+     'nl': u'Bot: doorverwijzing gemaakt naar [[%s]]',
+     'pt': u'Bot: Criando redirecionamento para [[%s]]',
+     'ro': u'Robot: Crează redirectare la [[%s]]. Vezi [[Wikipedia:Corectarea diacriticelor]]',
+     'sv': u'Bot: Omdirigerar till [[%s]]',
+     'zh': u'機器人: 建立重定向至[[%s]]',
     }
 
 class DiacriticsBot:
@@ -63,13 +75,7 @@ class DiacriticsBot:
         except:
             pywikibot.output(u"An error occurred while getting the page, skipping...")
             return
-        if text.find(u"{{titlu corect") > -1: 
-            # turkish text, we should ignore it, maybe log it
-            pywikibot.output(u"Found title marked as turkish, skipping...")
-            return
         
-        #transrule = string.maketrans("şţŞŢ", "șțȘȚ")
-        #page_cap = pywikibot.Page(self.site, page_t.translate(transrule))
         new_page_t = string.replace(page_t, u'ş', u'ș')
         new_page_t = string.replace(new_page_t, u'ţ', u'ț')
         new_page_t = string.replace(new_page_t, u'Ş', u'Ș')
@@ -86,16 +92,17 @@ class DiacriticsBot:
             pywikibot.output(u'[[%s]] doesn\'t exist' % page_mod.title())
             if not self.acceptall:
                 choice = pywikibot.inputChoice(
-                        u'Do you want to create a redirect?',
+                        u'Do you want to create a new category?',
                         ['Yes', 'No', 'All', 'Quit'], ['y', 'N', 'a', 'q'], 'N')
                 if choice == 'a':
                     self.acceptall = True
                 elif choice == 'q':
                     self.done = True
             if self.acceptall or choice == 'y':
-                comment = pywikibot.translate(self.site, msg) % page_t
+                comment = pywikibot.translate(self.site, msg) % new_page_t
                 try:
-                    page_mod.put(u"#%s [[%s]]" % (self.site.redirect(True), page_t), comment)
+                    page_mod.put(text, comment)
+                    page.put(u'#redirect [[%s]]' % new_page_t, comment)
                 except:
                     pywikibot.output(u"An error occurred, skipping...")
 
