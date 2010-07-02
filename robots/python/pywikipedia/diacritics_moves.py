@@ -31,7 +31,19 @@ docuReplacements = {
 }
 
 msg = {	
-     'ro': u'Robot: Crează redirectare la [[%s]] pentru [[Wikipedia:Corectarea diacriticelor|corectarea diacriticelor]]',
+     'ar': u'روبوت: إنشاء تحويلة إلى [[%s]]',
+     'cs': u'Robot vytvořil přesměrování na [[%s]]',
+     'de': u'Bot: Weiterleitung angelegt auf [[%s]]',
+     'en': u'Robot: Create redirect to [[%s]]',
+     'fr': u'robot: Créer redirection à [[%s]]',
+     'he': u'בוט: יוצר הפניה לדף [[%s]]',
+     'ja': u'ロボットによる: リダイレクト作成 [[%s]]',
+     'ksh': u'Bot: oemleidung aanjelaat op [[%s]]',
+     'nl': u'Bot: doorverwijzing gemaakt naar [[%s]]',
+     'pt': u'Bot: Criando redirecionamento para [[%s]]',
+     'ro': u'Robot: Mută [[%s]] pentru [[Wikipedia:corectarea diacriticelor|]]',
+     'sv': u'Bot: Omdirigerar till [[%s]]',
+     'zh': u'機器人: 建立重定向至[[%s]]',
     }
 
 class DiacriticsBot:
@@ -79,14 +91,11 @@ class DiacriticsBot:
         if new_page_t == page_t:
             pywikibot.output(u'%s does not contain diacritics, skipping...\n'
                              % page_mod.aslink())
-        elif page_mod.exists():
-            pywikibot.output(u'%s already exists, skipping...\n'
-                             % page_mod.aslink())
         else:            
-            pywikibot.output(u'[[%s]] doesn\'t exist' % page_mod.title())
+            pywikibot.output(u'[[%s]] will be created' % page_mod.title())
             if not self.acceptall:
                 choice = pywikibot.inputChoice(
-                        u'Do you want to create a redirect?',
+                        u'Do you want to move the page?',
                         ['Yes', 'No', 'All', 'Quit'], ['y', 'N', 'a', 'q'], 'N')
                 if choice == 'a':
                     self.acceptall = True
@@ -95,7 +104,7 @@ class DiacriticsBot:
             if self.acceptall or choice == 'y':
                 comment = pywikibot.translate(self.site, msg) % page_t
                 try:
-                    page_mod.put(u"#%s [[%s]]" % (self.site.redirect(True), page_t), comment)
+                    page.move(new_page_t, comment, throttle=True, leaveRedirect=True)
                 except:
                     pywikibot.output(u"An error occurred, skipping...")
 
