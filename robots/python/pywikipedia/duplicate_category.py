@@ -102,7 +102,7 @@ class DiacriticsBot:
                 comment = pywikibot.translate(self.site, msg) % new_page_t
                 try:
                     page_mod.put(text, comment)
-                    page.put(u'#redirect [[%s]]' % new_page_t, comment)
+                    page.put(u'{{Redirect categorie|%s}}' % page_mod.titleWithoutNamespace(), comment)
                 except:
                     pywikibot.output(u"An error occurred, skipping...")
 
