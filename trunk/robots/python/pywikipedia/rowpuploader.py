@@ -92,7 +92,11 @@ for i in range(startno, endno + 1):
 	newname = newname.replace(" ","_").replace("__", "_")
 	crtfileindex = crtfileindex + 1
 	uploader = upload.UploadRobot(useFilename = newname, description = description, targetSite = cmsite, url = url, verifyDescription = False, keepFilename = True)
-	uploader.run()
-
-	pagetext = pagetext + u"{{NowCommons|File:" + newname + u"}}";
-	page.put(pagetext, comment = u"mutat la Commons")
+	uploadresult = uploader.run()
+	
+	if uploadresult <> None:
+		wikipedia.output("File uploaded as " + uploadresult)
+		pagetext = pagetext + u"{{NowCommons|File:" + newname + u"}}";
+		page.put(pagetext, comment = u"mutat la Commons")
+	else:
+		wikipedia.output("File not uploaded")
