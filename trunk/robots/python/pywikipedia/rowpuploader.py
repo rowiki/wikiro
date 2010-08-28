@@ -8,11 +8,14 @@ nfpattern = sys.argv[2]
 categ = unicode(sys.argv[3], 'utf-8')
 startno = int(sys.argv[4])
 endno = int(sys.argv[5])
-extranamefile = sys.argv[6]
+if len(sys.argv) >= 7:
+        extranamefile = sys.argv[6]
+else:
+        extranamefile = None
 
 crtfileindex = 0
 extranames = []
-if os.path.exists(extranamefile):
+if extranamefile <> None and os.path.exists(extranamefile):
 	extranames = open(extranamefile).readlines()
 
 for i in range(startno, endno + 1): 
