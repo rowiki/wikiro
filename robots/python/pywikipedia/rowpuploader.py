@@ -74,7 +74,7 @@ for i in range(startno, endno + 1):
 	else:
 		description += u"|Source=Uploaded to ro.wikipedia by the [[:ro:Utilizator:" + origuploader + u"|]], as [[:ro:Fişier:" + origfilename + u"|]]\n" 
 	if origauthor == origuploader:
-		description += u"|Author=[[:ro:Utilizator:" + origuploader + "|]] at ro.wikipedia\n" + origfilename + u"|]]\n" 
+		description += u"|Author=[[:ro:Utilizator:" + origuploader + "|]] at ro.wikipedia\n"
 	else:
 		description += u"|Author=" + origauthor + u", uploaded by [[:ro:Utilizator:" + origuploader + "|]] at ro.wikipedia\n"
 	description += u"|Permission={{self|cc-by-sa-2.5|author=" + origauthor + u"}}\n"
