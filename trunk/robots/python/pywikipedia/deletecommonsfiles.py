@@ -36,7 +36,7 @@ for page in gen:
 			cmtext = cmpage.get()
 			isDPpersonal = (u"{{PD-user-w|ro|wikipedia|" + localfileuploader[0] + u"}}") in cmtext and (u"{{DP-personal}}" in text or u"{{DP-oferit" in text)
 			wikipedia.output("isdppersonal: " + repr(isDPpersonal))
-			isGFDL = ((u"{{GFDL-user-w|ro|wikipedia|" + localfileuploader[0] + u"}}") in cmtext or u"{{self|GFDL|" in cmtext) and u"{{GFDL}}" in text
+			isGFDL = ((u"{{GFDL-user-w|ro|wikipedia|" + localfileuploader[0] + u"}}") in cmtext or u"{{self|GFDL|" in cmtext or u"{{GFDL}}" in cmtext) and u"{{GFDL}}" in text
 			wikipedia.output("isgfdl: " + repr(isGFDL))
 			isCC = (u"{{cc-by" in cmtext.lower()  or u"{{self|cc-by-sa" in cmtext.lower()) and u"{{cc-by" in text.lower()
 			wikipedia.output("iscc: " + repr(isCC))
@@ -80,8 +80,8 @@ for page in gen:
 					print(repr(replacedtext))
 					eachpage.put(replacedtext, comment = u"Înlocuit cu copia de la Commons")
 					
-						
-				page.delete(reason="Duplicat al unei imagini de la Commons", prompt=False)
+				deletereason = "Duplicat al unei imagini de la Commons: [[:commons:File:" + newlocalfname + "]]"
+				page.delete(reason=deletereason , prompt=False)
 				raport += u"* [[:"
 				raport += page.title()
 				raport += u"]]\n"
