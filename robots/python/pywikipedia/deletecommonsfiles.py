@@ -13,7 +13,7 @@ imgsterse = 0
 for page in gen:
     if page.isImage():
 	text = page.get()
-	ex = re.compile(u"\{\{NowCommons(\|([\w\:\-\_\.\,\(\)\ äăşţâĂŞȘŢȚÂșșțáöéüíПиднторубльаверс]*))?")
+	ex = re.compile(u"\{\{NowCommons(\|([\w\:\-\_\.\,\(\)\&\'\ żóéáìüäăşţőâĂŞȘŢȚÂșșțáöéüíПиднторубльаверс]*))?")
 	res = re.findall(ex, text)
  	
  	wikipedia.output(page.title())
@@ -34,39 +34,43 @@ for page in gen:
 			"""Intai vedem daca e pusa licenta bine"""
 			localfileuploader = page.getLatestUploader()
 			cmtext = cmpage.get()
-			commonsDPpersonal = ((u"{{pd-user-w|ro|wikipedia|" + localfileuploader[0].lower() + u"}}") in cmtext.lower() or "{{PD-self" in cmtext)
-			lcDPPersonal = (u"{{DP-personal}}" in text or u"{{DP-oferit" in text)
-			lcGFDL = u"{{GFDL}}" in text
-			cmGFDL = ((u"{{GFDL-user-w|ro|wikipedia|" + localfileuploader[0] + u"}}") in cmtext or u"{{self|gfdl" in cmtext.lower() or u"{{GFDL" in cmtext)
+			commonsDPpersonal = ((u"{{pd-user-w|ro|wikipedia|" + localfileuploader[0].lower() + u"}}") in cmtext.lower() or u"{{PD-self" in cmtext or u"{{PD-user-ro|" + localfileuploader[0] in cmtext)
+			lcDPPersonal = (u"{{DP-personal}}" in text or u"{{DP-oferit" in text or u"{{DP-utilizator}}" in text)
+			lcGFDL = u"{{GFDL" in text
+			cmGFDL = ((u"{{GFDL-user-w|ro|wikipedia|" + localfileuploader[0] + u"}}") in cmtext or u"{{self|gfdl" in cmtext.lower() or u"{{GFDL" in cmtext or u"{{picswiss" in cmtext.lower())
 
 			lcCC = u"{{cc-by" in text.lower()
-			cmCC = (u"{{cc-by" in cmtext.lower()  or u"{{self|cc-by-sa" in cmtext.lower())
+			cmCC = (u"{{cc-by" in cmtext.lower()  or u"{{self|cc-by" in cmtext.lower())
 			
 			cmCOA = (u"{{pd-romaniagov" in cmtext.lower() or u"{{pd-ro-exempt" in cmtext.lower() or u"{{pd-ro-symbol" in cmtext.lower() or u"{{PD-money-Romania}}" in cmtext)
 			localCOA = (u"{{stemă" in text.lower() or u"{{dp-ro" in text.lower())
 			
-			localUC = u"{{utilizare cinstită" in text.lower() or u"{{Carte-copertă" in text.lower()
+			localUC = u"{{utilizare cinstită" in text.lower() or u"{{Carte-copertă" in text.lower() or u"{{utilizarecinstită" in text.lower() or u"{{timbre" in text.lower() or u"{{stemă" in text.lower() or "u{{logo" in text.lower()
 			
-			cmEuroCoin = u"{{money-eu" in cmtext.lower() or u"{{Euro coin common face}}" in cmtext;
-			localPDGovUS = u"{{dp-guvsua" in text.lower()
-			cmPDGovUS = "{{pd-usgov" in cmtext.lower();
+			cmEuroCoin = u"{{money-eu" in cmtext.lower() or u"{{Euro coin common face}}" in cmtext
+			localPDGovUS = u"{{dp-guvsua" in text.lower() or u"{{pd-guvsua" in text.lower()
+			cmPDGovUS = u"{{pd-usgov" in cmtext.lower();
 			
-			localPD = (u"{{pd}}" in text.lower() or u"{{dp}}" in text.lower() or u"{{dp-inapt" in text.lower() or u"{{fără drepturi" in text.lower() or u"{{dp-legătură" in text.lower());
-			cmPD = u"{{pd-" in cmtext.lower()
+			localPD = (u"{{pd}}" in text.lower() or u"{{dp}}" in text.lower() or u"{{dp-inapt" in text.lower() or u"{{fără drepturi" in text.lower() or u"{{dp-legătură" in text.lower() or u"{{dp-utilizator" in text.lower());
+			cmPD = u"{{pd-" in cmtext.lower() or u"{{no rights reserved" in cmtext.lower()
 			
 			localPDOld = (u"{{dp-artă" in text.lower()) or u"{{dp-70" in text.lower()
-			cmPDOld = (u"{{pd-art" in cmtext.lower() or u"{{pd-old" in cmtext.lower()) or (u"{{PD-EU-no author disclosure}}" in cmtext or "{{pd-old" in cmtext.lower())
+			cmPDOld = (u"{{pd-art" in cmtext.lower() or u"{{pd-old" in cmtext.lower()) or (u"{{PD-EU-no author disclosure}}" in cmtext or u"{{pd-old" in cmtext.lower())
 
 			cmPDCanada = u"{{PD-Canada" in cmtext
 			lcPDCanada = u"{{DP-Canada" in text 
 			cmPDGermania = u"{{PD-Coa-Germany" in cmtext
 			cmPDTransnistria = u"{{PD-PMR-exempt" in cmtext
+			lcPDRusia = u"{{DP-Rusia" in text
+			cmPDRusia = u"{{PD-RU-exempt" in cmtext
 			
 			isOK = False
 			isOK = isOK or cmEuroCoin
+			isOK = isOK or (localPDGovUS and cmPDGovUS)
 			isOK = isOK or cmPDGermania
 			isOK = isOK or (lcPDCanada and cmPDCanada)
 			isOK = isOK or cmPDTransnistria
+			isOK = isOK or (localPD and cmPD)
 			
 			isBothFree = (lcGFDL or lcCC or lcDPPersonal) and (cmGFDL or cmCC or cmPD)
 			isOK = isOK or isBothFree
@@ -74,6 +78,8 @@ for page in gen:
 			isOK = isOK or isLcUCAndCmFree
 			isOK = isOK or (localCOA and cmCOA)
 			isOK = isOK or (lcDPPersonal and commonsDPpersonal)
+			isOK = isOK or (cmPDOld and localPDOld)
+			isOK = isOK or (lcPDRusia and cmPDRusia)
 			
 			if isOK:
 				""" Verificam cine se leaga aici
