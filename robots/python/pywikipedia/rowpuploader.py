@@ -33,14 +33,16 @@ for i in range(startno, endno + 1):
 	pagetext = u""
 	pagetext = page.get()
 	print repr(pagetext)
-	ex = re.compile(u"\{\{([\w \-\:\.]+[\s]*)((\|(([\w \-]+[\s]*=)?[\s]*[\w \-\„\”\{\}\[\]\(\)\u2018\,\.\?]*[\s]*)[\s]*)*)\}\}", re.U)
+	ex = re.compile(u"\{\{([\w \-\:\.]+[\s]*)((\|[\s]*(([\w \-]+[\s]*=)?[\s]*[\w \-\„\”\{\}\[\]\(\)\:\u2018\u2019\u201b\u201d\u201b\u201a\,\.\?]*[\s]*)[\s]*)*)\}\}", re.U)
 	res = re.findall(ex, pagetext)
 	if res:
 		print "Match:" + repr(res)
 	if res[0][0].startswith(u"Informații") or res[0][0].startswith(u"Informaţii"):
 		params = re.split(u"\|", res[0][1], re.U)
+		
 		for param in params:
 			pelems = re.split(u"=", param, re.U)
+			
 			print repr(pelems)
 			if pelems[0].startswith("Descriere"):
 				origdescr = pelems[1].lstrip().rstrip()
@@ -56,15 +58,23 @@ for i in range(startno, endno + 1):
 	months = [u'ianuarie', u'februarie', u'martie', u'aprilie',  u'mai',  u'iunie',  u'iulie',  u'august',  u'septembrie',  u'octombrie',  u'noiembrie',  u'decembrie']
 	dateparts = origdate.split()
 	year = int(dateparts.pop())
-	month = months.index(dateparts.pop()) + 1
+		
+	month = None
+	if (len(dateparts) > 0):
+		month = months.index(dateparts.pop()) + 1
+
 	if (len(dateparts) > 0):
 		day = dateparts.pop()
 		actualdate = datetime.date(year, month, day)
 		newdate = actualdate.strftime('%Y-%m-%d')
 	else:
-		actualdate = datetime.date(year, month, 1)
-		newdate = actualdate.strftime('%Y-%m')
-	
+		if not month is None:
+			actualdate = datetime.date(year, month, 1)
+			newdate = actualdate.strftime('%Y-%m')
+		else:
+			actualdate = datetime.date(year, 1, 1)
+			newdate = actualdate.strftime('%Y')
+
 	description = u"=={{int:filedesc}}==\n"
 	description += u"{{Information\n"
 	description += u"|Description={{ro|" + origdescr + u"}}\n"
