@@ -87,7 +87,7 @@ for i in range(startno, endno + 1):
 		description += u"|Author=[[:ro:Utilizator:" + origuploader + "|]] at ro.wikipedia\n"
 	else:
 		description += u"|Author=" + origauthor + u", uploaded by [[:ro:Utilizator:" + origuploader + "|]] at ro.wikipedia\n"
-	description += u"|Permission={{self|cc-by-sa-2.5|author=" + origauthor + u"}}\n"
+	description += u"|Permission={{self|cc-by-sa-3.0|author=" + origauthor + u"}}\n"
 	description += u"}}\n"
 	description += u"==Original history==\n" + page.getFileVersionHistoryTable()
 	description += u"[[Category:" + categ + "]]"
