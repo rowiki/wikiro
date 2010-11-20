@@ -13,7 +13,7 @@ imgsterse = 0
 for page in gen:
     if page.isImage():
 	text = page.get()
-	ex = re.compile(u"\{\{NowCommons(\|([\w\:\-\_\.\,\\\"\(\)\&\'\'\ żóéáìüäăşţőâÉÎĂŞȘŢȚÂșșțáöéüíПиднторубльаверс]*))?")
+	ex = re.compile(u"\{\{NowCommons(\|([\w\:\-\_–\.\,\\\"\(\)\&\'\'§„”“\ żóéáìüäăşţőâÉÎĂŞȘŢȚÂșșțáöéüíПийднкторуябБльавВерс]*))?")
 	res = re.findall(ex, text)
  	
  	wikipedia.output(page.title())
@@ -39,8 +39,8 @@ for page in gen:
 			lcGFDL = u"{{GFDL" in text
 			cmGFDL = ((u"{{GFDL-user-w|ro|wikipedia|" + localfileuploader[0] + u"}}") in cmtext or u"{{self|gfdl" in cmtext.lower() or u"{{GFDL" in cmtext or u"{{picswiss" in cmtext.lower())
 
-			lcCC = u"{{cc-by" in text.lower() or u"{{creative commons" in text.lower()
-			cmCC = (u"{{cc-by" in cmtext.lower() or u"{{self|cc-by" in cmtext.lower() or u"{{attribution" in cmtext.lower() or u"{{self|cc-by-" in cmtext.lower() or u"{{cc-sa-" in cmtext.lower())
+			lcCC = u"{{cc-by" in text.lower() or u"{{creative commons" in text.lower() or u"{{cc-sa" in text.lower()
+			cmCC = (u"{{cc-by" in cmtext.lower() or u"{{self|cc-by" in cmtext.lower() or u"{{attribution" in cmtext.lower() or u"{{self|cc-by-" in cmtext.lower() or u"{{cc-sa" in cmtext.lower())
 			
 			cmCOA = (u"{{pd-romaniagov" in cmtext.lower() or u"{{pd-ro-exempt" in cmtext.lower() or u"{{pd-ro-symbol" in cmtext.lower() or u"{{PD-money-Romania}}" in cmtext)
 			localCOA = (u"{{stemă" in text.lower() or u"{{dp-ro" in text.lower())
@@ -64,6 +64,7 @@ for page in gen:
 			lcPDRusia = u"{{DP-Rusia" in text
 			cmPDRusia = u"{{PD-RU-exempt" in cmtext
 			cmCOA = u"{{wappenrecht" in cmtext.lower()
+			cmPDGermania = u"{{Coa-Germany-b1945".lower() in cmtext.lower() or u"{{Flag-Germany-b1945".lower() in cmtext.lower()
 			
 			isOK = False
 			isOK = isOK or cmEuroCoin
@@ -82,6 +83,7 @@ for page in gen:
 			isOK = isOK or (cmPDOld and localPDOld)
 			isOK = isOK or (lcPDRusia and cmPDRusia)
 			isOK = isOK or cmCOA
+			isOK = isOK or cmPDGermania
 			
 			if isOK:
 				""" Verificam cine se leaga aici
