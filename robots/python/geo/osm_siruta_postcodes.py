@@ -91,8 +91,8 @@ class SirutaPostcodes:
                     continue
                 if tag.tagName != "tag" or tag.hasAttribute('k') == False or tag.hasAttribute('v') == False:
                     continue
-                if tag.getAttribute('k') == "place":
-                    type = tag.getAttribute('v')
+                if tag.getAttribute('type') == "village":
+                    node_id = tag.getAttribute('osm_id')
                     if type <> "town" and type <> "village" and type <> "hamlet":
                         #Towns generally have round codes. This is not 100% sure, but better be safe than sorry
                         #This is not an error, as we might have cities in the data, but we just want to skip them
