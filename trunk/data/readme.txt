@@ -1,0 +1,1 @@
+wikilinks2osm.csv - Tab separated values file containing Article title, URL Encoded Titles, coordinates and postal codes from ro.Wikipedia articles about Romanian Villages, as well as a flag stating if the coordinates need updating or not.

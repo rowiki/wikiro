@@ -7,5 +7,8 @@ extract_coodinates.py - extract coordinates and article names from articles abou
 geowiki_sql2csv.sh - download the data dumps containing coordinates from Wikipedia articles from 
                      http://toolserver.org/~dispenser/dumps/ extract them, extract the coordinates 
                      and article names from the sql, then save them in a csv file
+wiki2osm_links.py - extract coordinates, postal codes and article names from articles about villages from ro.wpl find
+		    the corresponding point in OSM, extract its coordinates and postal code and put all the information
+		    in a CSV file, then add a link to the Wikipedia article in OSM
 
 
