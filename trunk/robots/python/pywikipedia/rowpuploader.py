@@ -61,7 +61,7 @@ for i in range(startno, endno + 1):
 		
 	month = None
 	if (len(dateparts) > 0):
-		month = months.index(dateparts.pop()) + 1
+		month = months.index(dateparts.pop().lower()) + 1
 
 	if (len(dateparts) > 0):
 		day = dateparts.pop()
