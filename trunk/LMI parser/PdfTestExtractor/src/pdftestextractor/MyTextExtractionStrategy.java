@@ -177,7 +177,10 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
          */
         public boolean sameLine(TextChunk as){
             if (orientationMagnitude != as.orientationMagnitude) return false;
-            if (compareInts(distPerpendicular, as.distPerpendicular) != 0) return false;
+            if (compareInts(distPerpendicular, as.distPerpendicular) != 0 &&
+                compareInts((int)Math.floor(distParallelStart), 
+                            (int)Math.floor(as.distParallelStart)) != 0)
+                return false;
             return true;
         }
 
