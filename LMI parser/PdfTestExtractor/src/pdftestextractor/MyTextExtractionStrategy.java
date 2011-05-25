@@ -103,12 +103,13 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
      */
     public void renderText(TextRenderInfo renderInfo) {
     	LineSegment segment = renderInfo.getBaseline();
+        //bold text contains table header, so just throw it out
         if(!renderInfo.getFont().getPostscriptFontName().contains("Bold"))
         {
             TextChunk location = new TextChunk(renderInfo.getText(), segment.getStartPoint(), segment.getEndPoint(), 4/*renderInfo.getSingleSpaceWidth()*/);
-            locationalResult.add(location);        
+            if(location.orientationMagnitude != 0)//non-vertical text, should be horisontal
+                locationalResult.add(location);        
         }
-        System.out.println(renderInfo.getFont().getPostscriptFontName().contains("Bold"));
     }
 
     private void groupConsecutiveChunks(List<TextChunk> locationalResult) {
@@ -130,7 +131,6 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                                 thisChunk.endLocation.get(Vector.I3)),
                     thisChunk.charSpaceWidth);
                 
-                //System.out.println(newChunk.text);
                 
                 locationalResult.remove(i);//thisChunk
                 locationalResult.remove(i);//nextChunk
@@ -253,12 +253,15 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             if (rslt != 0) return rslt;
 
             //different line, same column
-            /*if(Math.abs(distPerpendicular - rhs.distPerpendicular) < 22 &&
+            if(Math.abs(distPerpendicular - rhs.distPerpendicular) < 22 &&
                     distParallelStart < rhs.distParallelStart)
                 return -1;
-            */
+            
+            //TODO: we also need to take into account the parallel distance
+            // it should come before the previous chunk if the distance is significant
+            
             rslt = compareInts(distPerpendicular, rhs.distPerpendicular);
-            if (rslt != 0 && Math.abs(distPerpendicular - rhs.distPerpendicular) >= 20) return rslt;
+            if (rslt != 0) return rslt;
 
             // note: it's never safe to check floating point numbers for equality, and if two chunks
             // are truly right on top of each other, which one comes first or second just doesn't matter
