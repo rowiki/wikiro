@@ -48,7 +48,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
      */
     public String getResultantText(){
         
-        Collections.sort(locationalResult);
+        //Collections.sort(locationalResult);
+        groupConsecutiveChunks(locationalResult);
         
         if (DUMP_STATE) {
             dumpState();
@@ -63,20 +64,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                 sb.append(chunk.text);
             } else {
                 if (chunk.sameLine(lastChunk)){
-                    float dist = chunk.distanceFromEndOf(lastChunk);
-                    
-                    if (dist < -chunk.charSpaceWidth)
-                        sb.append(' ');
-
-                    // we only insert a blank space if the trailing character of the previous string wasn't a space, and the leading character of the current string isn't a space
-                    else if (dist > chunk.charSpaceWidth/2.0f && chunk.text.charAt(0) != ' ' && lastChunk.text.charAt(lastChunk.text.length()-1) != ' ')
-                    {
-                        /*if(paramIndex >= templateParams.length)
-                            paramIndex = 0;
-                        sb.append(templateParams[paramIndex]);
-                        paramIndex++;*/
-                        sb.append(' ');
-                    }
+                    sb.append(needSpace(lastChunk, chunk));
 
                     sb.append(chunk.text);
                 } else {
@@ -115,8 +103,65 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
      */
     public void renderText(TextRenderInfo renderInfo) {
     	LineSegment segment = renderInfo.getBaseline();
-        TextChunk location = new TextChunk(renderInfo.getText(), segment.getStartPoint(), segment.getEndPoint(), 4/*renderInfo.getSingleSpaceWidth()*/);
-        locationalResult.add(location);        
+        if(!renderInfo.getFont().getPostscriptFontName().contains("Bold"))
+        {
+            TextChunk location = new TextChunk(renderInfo.getText(), segment.getStartPoint(), segment.getEndPoint(), 4/*renderInfo.getSingleSpaceWidth()*/);
+            locationalResult.add(location);        
+        }
+        System.out.println(renderInfo.getFont().getPostscriptFontName().contains("Bold"));
+    }
+
+    private void groupConsecutiveChunks(List<TextChunk> locationalResult) {
+        Collections.sort(locationalResult);
+        if(false){
+        for(int i = 0; i < locationalResult.size() - 1; i++)
+        {
+            TextChunk thisChunk = locationalResult.get(i);
+            TextChunk nextChunk = locationalResult.get(i+1);
+            
+            while (thisChunk.sameBox(nextChunk) && 
+                    nextChunk.distanceFromEndOf(thisChunk) < 25)
+            {
+                String newText = thisChunk.text + ""/*needSpace(thisChunk, nextChunk)*/ + nextChunk.text;
+                TextChunk newChunk = new TextChunk(newText, 
+                    thisChunk.startLocation, 
+                    new Vector(nextChunk.endLocation.get(Vector.I1), 
+                                thisChunk.endLocation.get(Vector.I2),
+                                thisChunk.endLocation.get(Vector.I3)),
+                    thisChunk.charSpaceWidth);
+                
+                //System.out.println(newChunk.text);
+                
+                locationalResult.remove(i);//thisChunk
+                locationalResult.remove(i);//nextChunk
+                locationalResult.add(i, newChunk);
+                
+                thisChunk = newChunk;
+                if(i + 1 < locationalResult.size())
+                    nextChunk = locationalResult.get(i+1);
+                else
+                    break;
+            };
+        }
+        }
+    }
+
+    private String needSpace(TextChunk lastChunk, TextChunk nextChunk) {
+        float dist = nextChunk.distanceFromEndOf(lastChunk);
+        
+        if(!lastChunk.sameLine(nextChunk))
+            return " ";
+                    
+        if (dist < -nextChunk.charSpaceWidth)
+            return " ";
+
+        // we only insert a blank space if the trailing character of the previous string wasn't a space, and the leading character of the current string isn't a space
+        else if (dist > nextChunk.charSpaceWidth/2.0f && nextChunk.text.charAt(0) != ' ' && lastChunk.text.charAt(lastChunk.text.length()-1) != ' ')
+        {
+            return " ";
+        }
+        
+        return "";
     }
     
 
@@ -168,7 +213,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             System.out.println("Text (@" + startLocation + " -> " + endLocation + "): " + text);
             System.out.println("orientationMagnitude: " + orientationMagnitude);
             System.out.println("distPerpendicular: " + distPerpendicular);
-            System.out.println("distParallel: " + distParallelStart);
+            System.out.println("distParallelStart: " + distParallelStart);
+            System.out.println("distParallelEnd: " + distParallelEnd);
         }
         
         /**
@@ -177,9 +223,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
          */
         public boolean sameLine(TextChunk as){
             if (orientationMagnitude != as.orientationMagnitude) return false;
-            if (compareInts(distPerpendicular, as.distPerpendicular) != 0 &&
-                compareInts((int)Math.floor(distParallelStart), 
-                            (int)Math.floor(as.distParallelStart)) != 0)
+            if (compareInts(distPerpendicular, as.distPerpendicular) != 0)
                 return false;
             return true;
         }
@@ -209,11 +253,12 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             if (rslt != 0) return rslt;
 
             //different line, same column
-            if(Math.abs(distPerpendicular - rhs.distPerpendicular) < 22 &&
+            /*if(Math.abs(distPerpendicular - rhs.distPerpendicular) < 22 &&
                     distParallelStart < rhs.distParallelStart)
                 return -1;
+            */
             rslt = compareInts(distPerpendicular, rhs.distPerpendicular);
-            if (rslt != 0) return rslt;
+            if (rslt != 0 && Math.abs(distPerpendicular - rhs.distPerpendicular) >= 20) return rslt;
 
             // note: it's never safe to check floating point numbers for equality, and if two chunks
             // are truly right on top of each other, which one comes first or second just doesn't matter
@@ -234,6 +279,15 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                 return 0;
             else 
                 return int1 < int2 ? -1 : 1;
+        }
+
+        private boolean sameBox(TextChunk as) {
+            if (orientationMagnitude != as.orientationMagnitude) return false;
+            if (compareInts(distPerpendicular, as.distPerpendicular) != 0 &&
+                compareInts((int)Math.floor(distParallelStart), 
+                            (int)Math.floor(as.distParallelStart)) != 0)
+                return false;
+            return true;
         }
 
         
