@@ -17,14 +17,14 @@ import java.util.List;
 public class MyTextExtractionStrategy implements TextExtractionStrategy {
 
     /** set to true for debugging */
-    static boolean DUMP_STATE = true;
+    static boolean DUMP_STATE = false;
     
     /** a summary of all found text */
     private final List<TextChunk> locationalResult = new ArrayList<TextChunk>();
     
     private final String[] templateParams = {"\n| Cod = ", "\n| Denumire = ", "\n| Localitate = ", "\n| Adresă = ", "\n| Datare = "};
     
-    private ArrayList<Integer> columnOffset = new ArrayList<Integer>();
+    private static ArrayList<Integer> columnOffset = new ArrayList<Integer>();
 
     /**
      * Creates a new text extraction renderer.
@@ -55,7 +55,6 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         
         if (DUMP_STATE) {
             dumpState();
-            System.out.println("Ala bala portocala");
         }
         
         StringBuffer sb = new StringBuffer();
@@ -86,6 +85,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         result = result.replace("MONITORUL OFICIAL AL ROMÂNIEI, PARTEA I, Nr. 670 bis/1.X.2010", "");
         result = result.replace("MINISTERUL CULTURII ŞI PATRIMONIULUI NAŢIONAL", "");
         result = result.replace("INSTITUTUL NAŢIONAL AL PATRIMONIULUI", "");
+        result = result.replace("", "\"");
 
         return result;
 
@@ -101,6 +101,14 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             System.out.println();
         }
         
+    }
+    
+    private boolean chunksInDifferentColumns(TextChunk thisChunk, TextChunk nextChunk) {
+        if(nextChunk.distanceFromEndOf(thisChunk) >= thisChunk.charSpaceWidth &&
+           (thisChunk.column >= columnOffset.size() - 1 ||
+           columnOffset.contains((int)Math.floor(nextChunk.distParallelStart))))
+            return true;
+        return false;
     }
     
     /**
@@ -129,26 +137,26 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                 TextChunk nextChunk = locationalResult.get(i+1);
 
                 if (thisChunk.sameLine(nextChunk) && 
-                        nextChunk.distanceFromEndOf(thisChunk) < 8) {
+                        !chunksInDifferentColumns(thisChunk, nextChunk)) {
                     nextChunk.column = thisChunk.column;
                 }
                 else if (thisChunk.sameLine(nextChunk)) {//new column
-                    nextChunk.column = thisChunk.column + 1;
-                    /*if(!firstLine && 
-                       TextChunk.compareInts(columnOffset.get(nextChunk.column), 
-                            (int)Math.abs(nextChunk.distParallelStart)) != 0)
-                        System.out.println("Error in column start. Expecting " + 
-                                columnOffset.get(nextChunk.column) + 
-                                ", got " + 
-                                (int)Math.abs(nextChunk.distParallelStart));*/
+                    int index = columnOffset.indexOf((int)Math.floor(nextChunk.distParallelStart));
+                    if(index > -1)
+                        nextChunk.column = index;
+                    else {
+                        System.out.println("Unknown column for offset " + 
+                                nextChunk.distParallelStart);
+                        nextChunk.column = thisChunk.column + 1;
+                    }
                     if(nextChunk.column < columnOffset.size())
                         columnOffset.set(nextChunk.column, 
-                                (int)Math.abs(nextChunk.distParallelStart));
+                                (int)Math.floor(nextChunk.distParallelStart));
                     else
-                        columnOffset.add((int)Math.abs(nextChunk.distParallelStart));
+                        columnOffset.add((int)Math.floor(nextChunk.distParallelStart));
                 }
                 else { //new line
-                    int index = columnOffset.indexOf((int)Math.abs(nextChunk.distParallelStart));
+                    int index = columnOffset.indexOf((int)Math.floor(nextChunk.distParallelStart));
                     if(index > -1)
                         nextChunk.column = index;
                     else {
@@ -233,6 +241,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             System.out.println("distPerpendicular: " + distPerpendicular);
             System.out.println("distParallelStart: " + distParallelStart);
             System.out.println("distParallelEnd: " + distParallelEnd);
+            System.out.println("column: " + column);
         }
         
         /**
