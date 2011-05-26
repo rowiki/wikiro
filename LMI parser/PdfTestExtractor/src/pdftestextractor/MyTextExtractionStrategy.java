@@ -22,7 +22,9 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     /** a summary of all found text */
     private final List<TextChunk> locationalResult = new ArrayList<TextChunk>();
     
-    private final String[] templateParams = {"}}\n{{ElementLMI", "\n| Cod = ", "\n| Denumire = ", "\n| Localitate = ", "\n| Adresă = ", "\n| Datare = "};
+    private final String[] templateParams = {"\n| Cod = ", "\n| Denumire = ", "\n| Localitate = ", "\n| Adresă = ", "\n| Datare = "};
+    
+    private ArrayList<Integer> columnOffset = new ArrayList<Integer>();
 
     /**
      * Creates a new text extraction renderer.
@@ -49,7 +51,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     public String getResultantText(){
         
         //Collections.sort(locationalResult);
-        groupConsecutiveChunks(locationalResult);
+        groupChunks(locationalResult);
         
         if (DUMP_STATE) {
             dumpState();
@@ -58,20 +60,24 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         
         StringBuffer sb = new StringBuffer();
         TextChunk lastChunk = null;
-        int paramIndex = 0;
         for (TextChunk chunk : locationalResult) {
-            if (lastChunk == null){
-                sb.append(chunk.text);
-            } else {
-                if (chunk.sameLine(lastChunk)){
+            if (lastChunk != null){
+                if (chunk.sameColumn(lastChunk)){
                     sb.append(needSpace(lastChunk, chunk));
 
                     sb.append(chunk.text);
                 } else {
-                    sb.append("\n");
-                    //paramIndex = 0;
+                    if(chunk.column == 0)
+                    {
+                        sb.append("\n}}\n{{ElementLMI");
+                    }
+                    sb.append(templateParams[chunk.column]);
                     sb.append(chunk.text);
                 }
+            } else {
+                sb.append("{{ElementLMI");
+                sb.append(templateParams[chunk.column]);
+                sb.append(chunk.text);
             }
             lastChunk = chunk;
         }
@@ -112,37 +118,46 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         }
     }
 
-    private void groupConsecutiveChunks(List<TextChunk> locationalResult) {
+    private void groupChunks(List<TextChunk> locationalResult) {
         Collections.sort(locationalResult);
-        if(false){
-        for(int i = 0; i < locationalResult.size() - 1; i++)
-        {
-            TextChunk thisChunk = locationalResult.get(i);
-            TextChunk nextChunk = locationalResult.get(i+1);
-            
-            while (thisChunk.sameBox(nextChunk) && 
-                    nextChunk.distanceFromEndOf(thisChunk) < 25)
+        if(true){
+            locationalResult.get(0).column = 0;
+            columnOffset.add((int)Math.abs(locationalResult.get(0).distParallelStart));
+            for(int i = 0; i < locationalResult.size() - 1; i++)
             {
-                String newText = thisChunk.text + ""/*needSpace(thisChunk, nextChunk)*/ + nextChunk.text;
-                TextChunk newChunk = new TextChunk(newText, 
-                    thisChunk.startLocation, 
-                    new Vector(nextChunk.endLocation.get(Vector.I1), 
-                                thisChunk.endLocation.get(Vector.I2),
-                                thisChunk.endLocation.get(Vector.I3)),
-                    thisChunk.charSpaceWidth);
-                
-                
-                locationalResult.remove(i);//thisChunk
-                locationalResult.remove(i);//nextChunk
-                locationalResult.add(i, newChunk);
-                
-                thisChunk = newChunk;
-                if(i + 1 < locationalResult.size())
-                    nextChunk = locationalResult.get(i+1);
-                else
-                    break;
-            };
-        }
+                TextChunk thisChunk = locationalResult.get(i);
+                TextChunk nextChunk = locationalResult.get(i+1);
+
+                if (thisChunk.sameLine(nextChunk) && 
+                        nextChunk.distanceFromEndOf(thisChunk) < 8) {
+                    nextChunk.column = thisChunk.column;
+                }
+                else if (thisChunk.sameLine(nextChunk)) {//new column
+                    nextChunk.column = thisChunk.column + 1;
+                    /*if(!firstLine && 
+                       TextChunk.compareInts(columnOffset.get(nextChunk.column), 
+                            (int)Math.abs(nextChunk.distParallelStart)) != 0)
+                        System.out.println("Error in column start. Expecting " + 
+                                columnOffset.get(nextChunk.column) + 
+                                ", got " + 
+                                (int)Math.abs(nextChunk.distParallelStart));*/
+                    if(nextChunk.column < columnOffset.size())
+                        columnOffset.set(nextChunk.column, 
+                                (int)Math.abs(nextChunk.distParallelStart));
+                    else
+                        columnOffset.add((int)Math.abs(nextChunk.distParallelStart));
+                }
+                else { //new line
+                    int index = columnOffset.indexOf((int)Math.abs(nextChunk.distParallelStart));
+                    if(index > -1)
+                        nextChunk.column = index;
+                    else {
+                        System.out.println("Unknown column for offset" + 
+                                nextChunk.distParallelStart);
+                        nextChunk.column = 0;
+                    }
+                }
+            }
         }
     }
 
@@ -189,12 +204,15 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         final float distParallelEnd;
         /** the width of a single space character in the font of the chunk */
         final float charSpaceWidth;
+        /** the column this chunk belongs to */
+        public int column;
         
         public TextChunk(String string, Vector startLocation, Vector endLocation, float charSpaceWidth) {
             this.text = string;
             this.startLocation = startLocation;
             this.endLocation = endLocation;
             this.charSpaceWidth = charSpaceWidth;
+            this.column = -1;
             
             orientationVector = endLocation.subtract(startLocation).normalize();
             orientationMagnitude = (int)(Math.atan2(orientationVector.get(Vector.I2), orientationVector.get(Vector.I1))*1000);
@@ -253,9 +271,9 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             if (rslt != 0) return rslt;
 
             //different line, same column
-            if(Math.abs(distPerpendicular - rhs.distPerpendicular) < 22 &&
+            /*if(Math.abs(distPerpendicular - rhs.distPerpendicular) < 22 &&
                     distParallelStart < rhs.distParallelStart)
-                return -1;
+                return -1;*/
             
             //TODO: we also need to take into account the parallel distance
             // it should come before the previous chunk if the distance is significant
@@ -284,11 +302,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                 return int1 < int2 ? -1 : 1;
         }
 
-        private boolean sameBox(TextChunk as) {
-            if (orientationMagnitude != as.orientationMagnitude) return false;
-            if (compareInts(distPerpendicular, as.distPerpendicular) != 0 &&
-                compareInts((int)Math.floor(distParallelStart), 
-                            (int)Math.floor(as.distParallelStart)) != 0)
+        private boolean sameColumn(TextChunk as) {
+            if(column != as.column)
                 return false;
             return true;
         }
