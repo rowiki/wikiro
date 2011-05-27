@@ -22,14 +22,19 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     /** a summary of all found text */
     private final List<TextChunk> locationalResult = new ArrayList<TextChunk>();
     
-    private final String[] templateParams = {"\n| Cod = ", "\n| Denumire = ", "\n| Localitate = ", "\n| Adresă = ", "\n| Datare = "};
+    private final String[] templateParams = {"\n| Cod = ", "\n| Denumire = ", 
+        "\n| Localitate = ", "\n| Adresă = ", "\n| Datare = ", 
+        "\n| Arhitect = ", "\n| Coordonate = "};
     
     private static ArrayList<Integer> columnOffset = new ArrayList<Integer>();
+    
+    private final String countyName;
 
     /**
      * Creates a new text extraction renderer.
      */
-    public MyTextExtractionStrategy() {
+    public MyTextExtractionStrategy(String county) {
+        countyName = county;
     }
 
     /**
@@ -51,34 +56,34 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     public String getResultantText(){
         
         //Collections.sort(locationalResult);
-        groupChunks(locationalResult);
+        orderChunks(locationalResult);
         
         if (DUMP_STATE) {
             dumpState();
         }
         
+        ArrayList<String[]> pageArray = new ArrayList<String[]>();
+        int line = 0;
         StringBuffer sb = new StringBuffer();
-        TextChunk lastChunk = null;
-        for (TextChunk chunk : locationalResult) {
-            if (lastChunk != null){
-                if (chunk.sameColumn(lastChunk)){
-                    sb.append(needSpace(lastChunk, chunk));
-
-                    sb.append(chunk.text);
-                } else {
-                    if(chunk.column == 0)
-                    {
-                        sb.append("\n}}\n{{ElementLMI");
-                    }
-                    sb.append(templateParams[chunk.column]);
-                    sb.append(chunk.text);
+        
+        groupChunks(pageArray);
+        
+        for(line = 0; line < pageArray.size(); line++) {
+            sb.append("\n{{ElementLMI");
+            int i = 0;
+            for(i = 0; i < pageArray.get(line).length; i++) {
+                String value = pageArray.get(line)[i];
+                if(templateParams[i].contains("Localitate")) {
+                    value = insertCityLinks(value);
                 }
-            } else {
-                sb.append("{{ElementLMI");
-                sb.append(templateParams[chunk.column]);
-                sb.append(chunk.text);
+                sb.append(templateParams[i]);
+                sb.append(value);
             }
-            lastChunk = chunk;
+            //append the remaining (hopefuly empty) parameters of the template
+            for(; i < templateParams.length; i++) {
+                sb.append(templateParams[i]);
+            }
+            sb.append("\n}}");
         }
         
         String result = sb.toString();
@@ -86,6 +91,9 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         result = result.replace("MINISTERUL CULTURII ŞI PATRIMONIULUI NAŢIONAL", "");
         result = result.replace("INSTITUTUL NAŢIONAL AL PATRIMONIULUI", "");
         result = result.replace("", "\"");
+        result = result.replace("","\"");
+        result = result.replace("","\"");
+        result = result.replace("null", "");
 
         return result;
 
@@ -104,7 +112,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     }
     
     private boolean chunksInDifferentColumns(TextChunk thisChunk, TextChunk nextChunk) {
-        if(nextChunk.distanceFromEndOf(thisChunk) >= thisChunk.charSpaceWidth &&
+        if(Math.round(nextChunk.distanceFromEndOf(thisChunk)) > 5 &&
            (thisChunk.column >= columnOffset.size() - 1 ||
            columnOffset.contains((int)Math.floor(nextChunk.distParallelStart))))
             return true;
@@ -126,11 +134,16 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         }
     }
 
-    private void groupChunks(List<TextChunk> locationalResult) {
+    private void orderChunks(List<TextChunk> locationalResult) {
         Collections.sort(locationalResult);
         if(true){
             locationalResult.get(0).column = 0;
-            columnOffset.add((int)Math.abs(locationalResult.get(0).distParallelStart));
+            if(locationalResult.get(0).column < columnOffset.size())
+                columnOffset.set(locationalResult.get(0).column, 
+                        (int)Math.floor(locationalResult.get(0).distParallelStart));
+            else
+                columnOffset.add((int)Math.floor(locationalResult.get(0).distParallelStart));
+            
             for(int i = 0; i < locationalResult.size() - 1; i++)
             {
                 TextChunk thisChunk = locationalResult.get(i);
@@ -185,6 +198,94 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         }
         
         return "";
+    }
+
+    private void groupChunks(ArrayList<String[]> pageArray) {
+        TextChunk lastChunk = null;
+        int line = 0;
+        for (TextChunk chunk : locationalResult) {
+            if (lastChunk != null){
+                if (chunk.sameColumn(lastChunk)){
+                    String temp = pageArray.get(line)[lastChunk.column] + 
+                                    needSpace(lastChunk, chunk) +
+                                    chunk.text;
+
+                    pageArray.get(line)[chunk.column] = temp;
+                } else {
+                    if(chunk.column == 0) {//TODO: this assumes the LMI code has only 1 line
+                        pageArray.add(new String[columnOffset.size()]);
+                        line++;
+                        pageArray.get(line)[chunk.column] = chunk.text;
+                    }
+                    else {
+                        String temp = pageArray.get(line)[chunk.column] + 
+                                    " " + chunk.text;
+
+                        pageArray.get(line)[chunk.column] = temp;
+                    }
+                }
+            } else {
+                pageArray.add(new String[columnOffset.size()]);
+                pageArray.get(line)[0] = chunk.text;
+            }
+            lastChunk = chunk;
+        }
+    }
+    
+    private String capitalize(String s){
+        StringBuffer sb = new StringBuffer();
+        for(int i = 1; i < s.length(); i++) {
+            if(s.charAt(i - 1) == ' ') {
+                if("DE".equals(s.substring(i, i+2)))
+                    sb.append(s.toLowerCase().charAt(i));
+                else
+                    sb.append(s.charAt(i));
+            }
+            else
+                sb.append(s.toLowerCase().charAt(i));
+        }
+        
+        return sb.toString();
+    }
+
+    private String insertCityLinks(String value) {
+        String[] administrations = {"sat", "localitatea", "municipiul", "oraş", "comuna"};
+        
+        if(value == null || value == "")
+            return value;
+        
+        for(String type: administrations) {
+            int index = value.indexOf(type);
+            int endIndex = -1;
+            String temp, ending = null;
+            if(index > -1) {
+                index += type.length();
+                if("sat".equals(type) && 
+                        value.substring(index).contains("aparţinător")) {//dirty hack?
+                    index += " aparţinător".length();
+                }
+                endIndex = value.indexOf(';', index);
+                
+                if(endIndex > -1){
+                    ending = value.substring(endIndex);
+                    temp = value.substring(index, endIndex);
+                }
+                else {
+                    temp = value.substring(index);
+                }
+                String capitalized = capitalize(temp);
+                String extra = "";
+                if(type == "sat" || type == "localitatea" || type == "comuna") {
+                    extra = ", " + countyName;
+                }
+                String link = " [[" + (type == "comuna" ? "Comuna " : "") + 
+                        capitalized + extra + "|" + capitalized + "]]";
+                value = value.substring(0, index) + link;
+                if(endIndex > -1)
+                    value = value + ending;
+            }
+        }
+        return value;
     }
     
 
@@ -278,14 +379,6 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             int rslt;
             rslt = compareInts(orientationMagnitude, rhs.orientationMagnitude);
             if (rslt != 0) return rslt;
-
-            //different line, same column
-            /*if(Math.abs(distPerpendicular - rhs.distPerpendicular) < 22 &&
-                    distParallelStart < rhs.distParallelStart)
-                return -1;*/
-            
-            //TODO: we also need to take into account the parallel distance
-            // it should come before the previous chunk if the distance is significant
             
             rslt = compareInts(distPerpendicular, rhs.distPerpendicular);
             if (rslt != 0) return rslt;
