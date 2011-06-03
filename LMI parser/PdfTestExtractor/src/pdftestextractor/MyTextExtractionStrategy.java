@@ -17,7 +17,7 @@ import java.util.List;
 public class MyTextExtractionStrategy implements TextExtractionStrategy {
 
     /** set to true for debugging */
-    static boolean DUMP_STATE = false;
+    static boolean DUMP_STATE = true;
     
     /** a summary of all found text */
     private final List<TextChunk> locationalResult = new ArrayList<TextChunk>();
@@ -93,6 +93,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         result = result.replace("", "\"");
         result = result.replace("","\"");
         result = result.replace("","\"");
+        result = result.replace("","-");
+        
         result = result.replace("null", "");
 
         return result;
@@ -112,7 +114,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     }
     
     private boolean chunksInDifferentColumns(TextChunk thisChunk, TextChunk nextChunk) {
-        if(Math.round(nextChunk.distanceFromEndOf(thisChunk)) > 5 &&
+        if(Math.round(nextChunk.distanceFromEndOf(thisChunk)) >= 5 &&
            (thisChunk.column >= columnOffset.size() - 1 ||
            columnOffset.contains((int)Math.floor(nextChunk.distParallelStart))))
             return true;
@@ -236,7 +238,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         StringBuffer sb = new StringBuffer();
         for(int i = 1; i < s.length(); i++) {
             if(s.charAt(i - 1) == ' ') {
-                if("DE".equals(s.substring(i, i+2)))
+                if("DE".equals(s.substring(i, (i+2<s.length())?(i+2):i)))
                     sb.append(s.toLowerCase().charAt(i));
                 else
                     sb.append(s.charAt(i));
