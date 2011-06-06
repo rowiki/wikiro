@@ -114,7 +114,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     }
     
     private boolean chunksInDifferentColumns(TextChunk thisChunk, TextChunk nextChunk) {
-        if(Math.round(nextChunk.distanceFromEndOf(thisChunk)) >= 5 &&
+        if(Math.round(nextChunk.distanceFromEndOf(thisChunk)) > 5 &&
            (thisChunk.column >= columnOffset.size() - 1 ||
            columnOffset.contains((int)Math.floor(nextChunk.distParallelStart))))
             return true;
@@ -139,7 +139,9 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     private void orderChunks(List<TextChunk> locationalResult) {
         Collections.sort(locationalResult);
         if(true){
-            locationalResult.get(0).column = 0;
+            locationalResult.get(0).column = columnOffset.indexOf((int)Math.floor(locationalResult.get(0).distParallelStart));
+            if(locationalResult.get(0).column < 0)
+                locationalResult.get(0).column = 0;
             if(locationalResult.get(0).column < columnOffset.size())
                 columnOffset.set(locationalResult.get(0).column, 
                         (int)Math.floor(locationalResult.get(0).distParallelStart));
@@ -228,7 +230,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                 }
             } else {
                 pageArray.add(new String[columnOffset.size()]);
-                pageArray.get(line)[0] = chunk.text;
+                pageArray.get(line)[chunk.column] = chunk.text;
             }
             lastChunk = chunk;
         }
