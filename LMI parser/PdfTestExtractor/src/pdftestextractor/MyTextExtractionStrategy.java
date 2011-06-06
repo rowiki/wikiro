@@ -238,9 +238,12 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     
     private String capitalize(String s){
         StringBuffer sb = new StringBuffer();
+        //if the string does not start with space, we might want to add one
+        if(s.charAt(0) != ' ')
+            s = " " + s;
         for(int i = 1; i < s.length(); i++) {
-            if(s.charAt(i - 1) == ' ') {
-                if("DE".equals(s.substring(i, (i+2<s.length())?(i+2):i)))
+            if(s.charAt(i - 1) == ' ' || s.charAt(i - 1) == '-') {
+                if("DE ".equals(s.substring(i, (i+3<s.length())?(i+3):i)))
                     sb.append(s.toLowerCase().charAt(i));
                 else
                     sb.append(s.charAt(i));
