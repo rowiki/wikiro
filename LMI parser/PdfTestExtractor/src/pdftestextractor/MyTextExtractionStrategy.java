@@ -18,22 +18,24 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
 
     /** set to true for debugging */
     static boolean DUMP_STATE = true;
-    
+
     /** a summary of all found text */
     private final List<TextChunk> locationalResult = new ArrayList<TextChunk>();
-    
-    private final String[] templateParams = {"\n| Cod = ", "\n| Denumire = ", 
-        "\n| Localitate = ", "\n| Adresă = ", "\n| Datare = ", 
+
+    private final String[] templateParams = {"\n| Cod = ", "\n| Denumire = ",
+        "\n| Localitate = ", "\n| Adresă = ", "\n| Datare = ",
         "\n| Arhitect = ", "\n| Coordonate = "};
-    
+
     private static ArrayList<Integer> columnOffset = new ArrayList<Integer>();
-    
+
     private final String countyName;
+    private final String countyCode;
 
     /**
      * Creates a new text extraction renderer.
      */
-    public MyTextExtractionStrategy(String county) {
+    public MyTextExtractionStrategy(String code, String county) {
+        countyCode = code;
         countyName = county;
     }
 
@@ -54,20 +56,20 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
      * @return  a String with the resulting text.
      */
     public String getResultantText(){
-        
+
         //Collections.sort(locationalResult);
         orderChunks(locationalResult);
-        
+
         if (DUMP_STATE) {
             dumpState();
         }
-        
+
         ArrayList<String[]> pageArray = new ArrayList<String[]>();
         int line = 0;
         StringBuffer sb = new StringBuffer();
-        
+
         groupChunks(pageArray);
-        
+
         for(line = 0; line < pageArray.size(); line++) {
             sb.append("\n{{ElementLMI");
             int i = 0;
@@ -85,7 +87,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             }
             sb.append("\n}}");
         }
-        
+
         String result = sb.toString();
         result = result.replace("MONITORUL OFICIAL AL ROMÂNIEI, PARTEA I, Nr. 670 bis/1.X.2010", "");
         result = result.replace("MINISTERUL CULTURII ŞI PATRIMONIULUI NAŢIONAL", "");
@@ -94,7 +96,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         result = result.replace("","\"");
         result = result.replace("","\"");
         result = result.replace("","-");
-        
+
         result = result.replace("null", "");
 
         return result;
@@ -105,24 +107,24 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     private void dumpState(){
         for (Iterator<TextChunk> iterator = locationalResult.iterator(); iterator.hasNext(); ) {
             TextChunk location = (TextChunk) iterator.next();
-            
+
             location.printDiagnostics();
-            
+
             System.out.println();
         }
-        
+
     }
-    
+
     private boolean chunksInDifferentColumns(TextChunk thisChunk, TextChunk nextChunk) {
         if(Math.round(nextChunk.distanceFromEndOf(thisChunk)) > 5 &&
            (thisChunk.column >= columnOffset.size() - 1 ||
-           columnOffset.contains((int)Math.floor(nextChunk.distParallelStart))))
+           locateOffsetValue(Math.round(nextChunk.distParallelStart)) > -1))
             return true;
         return false;
     }
-    
+
     /**
-     * 
+     *
      * @see com.itextpdf.text.pdf.parser.RenderListener#renderText(com.itextpdf.text.pdf.parser.TextRenderInfo)
      */
     public void renderText(TextRenderInfo renderInfo) {
@@ -132,52 +134,52 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         {
             TextChunk location = new TextChunk(renderInfo.getText(), segment.getStartPoint(), segment.getEndPoint(), 4/*renderInfo.getSingleSpaceWidth()*/);
             if(location.orientationMagnitude != 0)//non-vertical text, should be horisontal
-                locationalResult.add(location);        
+                locationalResult.add(location);
         }
     }
 
     private void orderChunks(List<TextChunk> locationalResult) {
         Collections.sort(locationalResult);
         if(true){
-            locationalResult.get(0).column = columnOffset.indexOf((int)Math.floor(locationalResult.get(0).distParallelStart));
+            locationalResult.get(0).column = locateOffsetValue(Math.round(locationalResult.get(0).distParallelStart));
             if(locationalResult.get(0).column < 0)
                 locationalResult.get(0).column = 0;
             if(locationalResult.get(0).column < columnOffset.size())
-                columnOffset.set(locationalResult.get(0).column, 
-                        (int)Math.floor(locationalResult.get(0).distParallelStart));
+                columnOffset.set(locationalResult.get(0).column,
+                        Math.round(locationalResult.get(0).distParallelStart));
             else
-                columnOffset.add((int)Math.floor(locationalResult.get(0).distParallelStart));
-            
+                columnOffset.add(Math.round(locationalResult.get(0).distParallelStart));
+
             for(int i = 0; i < locationalResult.size() - 1; i++)
             {
                 TextChunk thisChunk = locationalResult.get(i);
                 TextChunk nextChunk = locationalResult.get(i+1);
 
-                if (thisChunk.sameLine(nextChunk) && 
+                if (thisChunk.sameLine(nextChunk) &&
                         !chunksInDifferentColumns(thisChunk, nextChunk)) {
                     nextChunk.column = thisChunk.column;
                 }
                 else if (thisChunk.sameLine(nextChunk)) {//new column
-                    int index = columnOffset.indexOf((int)Math.floor(nextChunk.distParallelStart));
+                    int index = locateOffsetValue(Math.round(nextChunk.distParallelStart));
                     if(index > -1)
                         nextChunk.column = index;
                     else {
-                        System.out.println("Unknown column for offset " + 
+                        System.out.println("Unknown column for offset " +
                                 nextChunk.distParallelStart);
                         nextChunk.column = thisChunk.column + 1;
                     }
                     if(nextChunk.column < columnOffset.size())
-                        columnOffset.set(nextChunk.column, 
-                                (int)Math.floor(nextChunk.distParallelStart));
+                        columnOffset.set(nextChunk.column,
+                                Math.round(nextChunk.distParallelStart));
                     else
-                        columnOffset.add((int)Math.floor(nextChunk.distParallelStart));
+                        columnOffset.add(Math.round(nextChunk.distParallelStart));
                 }
                 else { //new line
-                    int index = columnOffset.indexOf((int)Math.floor(nextChunk.distParallelStart));
+                    int index = locateOffsetValue(Math.round(nextChunk.distParallelStart));
                     if(index > -1)
                         nextChunk.column = index;
                     else {
-                        System.out.println("Unknown column for offset" + 
+                        System.out.println("Unknown column for offset" +
                                 nextChunk.distParallelStart);
                         nextChunk.column = 0;
                     }
@@ -188,10 +190,10 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
 
     private String needSpace(TextChunk lastChunk, TextChunk nextChunk) {
         float dist = nextChunk.distanceFromEndOf(lastChunk);
-        
+
         if(!lastChunk.sameLine(nextChunk))
             return " ";
-                    
+
         if (dist < -nextChunk.charSpaceWidth)
             return " ";
 
@@ -201,6 +203,15 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             return " ";
         }
         
+        //if the previous chunk ends in lower case and the new one begins with upper case
+        if (Character.isLowerCase(lastChunk.text.charAt(lastChunk.text.length() - 1))
+                && Character.isUpperCase(nextChunk.text.charAt(0)))
+            return " ";
+        
+        if(!Character.isLetter(lastChunk.text.charAt(lastChunk.text.length() - 1)) &&
+                Character.isLetter(nextChunk.text.charAt(0)))
+            return " ";
+
         return "";
     }
 
@@ -209,20 +220,21 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         int line = 0;
         for (TextChunk chunk : locationalResult) {
             if (lastChunk != null){
-                if (chunk.sameColumn(lastChunk)){
-                    String temp = pageArray.get(line)[lastChunk.column] + 
+                if (chunk.sameColumn(lastChunk) && chunk.sameLine(lastChunk)){
+                    String temp = pageArray.get(line)[lastChunk.column] +
                                     needSpace(lastChunk, chunk) +
                                     chunk.text;
 
                     pageArray.get(line)[chunk.column] = temp;
                 } else {
-                    if(chunk.column == 0) {//TODO: this assumes the LMI code has only 1 line
+                    if(chunk.column == 0 && chunk.text.charAt(0) == countyCode.charAt(0)) {
+                        //TODO: 1 letter comparaison is not enough
                         pageArray.add(new String[columnOffset.size()]);
                         line++;
                         pageArray.get(line)[chunk.column] = chunk.text;
                     }
                     else {
-                        String temp = pageArray.get(line)[chunk.column] + 
+                        String temp = pageArray.get(line)[chunk.column] +
                                     " " + chunk.text;
 
                         pageArray.get(line)[chunk.column] = temp;
@@ -235,9 +247,11 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             lastChunk = chunk;
         }
     }
-    
+
     private String capitalize(String s){
         StringBuffer sb = new StringBuffer();
+        if(s.length() == 0)
+            return s;
         //if the string does not start with space, we might want to add one
         if(s.charAt(0) != ' ')
             s = " " + s;
@@ -251,28 +265,28 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             else
                 sb.append(s.toLowerCase().charAt(i));
         }
-        
+
         return sb.toString();
     }
 
     private String insertCityLinks(String value) {
         String[] administrations = {"sat", "localitatea", "municipiul", "oraş", "comuna"};
-        
+
         if(value == null || value == "")
             return value;
-        
+
         for(String type: administrations) {
             int index = value.indexOf(type);
             int endIndex = -1;
             String temp, ending = null;
             if(index > -1) {
                 index += type.length();
-                if("sat".equals(type) && 
+                if("sat".equals(type) &&
                         value.substring(index).contains("aparţinător")) {//dirty hack?
                     index += " aparţinător".length();
                 }
                 endIndex = value.indexOf(';', index);
-                
+
                 if(endIndex > -1){
                     ending = value.substring(endIndex);
                     temp = value.substring(index, endIndex);
@@ -285,7 +299,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                 if(type == "sat" || type == "localitatea" || type == "comuna") {
                     extra = ", " + countyName;
                 }
-                String link = " [[" + (type == "comuna" ? "Comuna " : "") + 
+                String link = " [[" + (type == "comuna" ? "Comuna " : "") +
                         capitalized + extra + "|" + capitalized + "]]";
                 value = value.substring(0, index) + link;
                 if(endIndex > -1)
@@ -294,7 +308,17 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         }
         return value;
     }
-    
+
+    private int locateOffsetValue(int round) {
+        for(int i = 0; i < columnOffset.size(); i++)
+        {
+            if(Math.abs(columnOffset.get(i) - round) <= 1)
+                return i;
+        }
+        
+        return -1;
+    }
+
 
 
     /**
@@ -322,14 +346,14 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         final float charSpaceWidth;
         /** the column this chunk belongs to */
         public int column;
-        
+
         public TextChunk(String string, Vector startLocation, Vector endLocation, float charSpaceWidth) {
             this.text = string;
             this.startLocation = startLocation;
             this.endLocation = endLocation;
             this.charSpaceWidth = charSpaceWidth;
             this.column = -1;
-            
+
             orientationVector = endLocation.subtract(startLocation).normalize();
             orientationMagnitude = (int)(Math.atan2(orientationVector.get(Vector.I2), orientationVector.get(Vector.I1))*1000);
 
@@ -351,7 +375,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             System.out.println("distParallelEnd: " + distParallelEnd);
             System.out.println("column: " + column);
         }
-        
+
         /**
          * @param as the location to compare to
          * @return true is this location is on the the same line as the other
@@ -375,18 +399,18 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             float distance = distParallelStart - other.distParallelEnd;
             return distance;
         }
-        
+
         /**
          * Compares based on orientation, perpendicular distance, then parallel distance
          * @see java.lang.Comparable#compareTo(java.lang.Object)
          */
         public int compareTo(TextChunk rhs) {
             if (this == rhs) return 0; // not really needed, but just in case
-            
+
             int rslt;
             rslt = compareInts(orientationMagnitude, rhs.orientationMagnitude);
             if (rslt != 0) return rslt;
-            
+
             rslt = compareInts(distPerpendicular, rhs.distPerpendicular);
             if (rslt != 0) return rslt;
 
@@ -407,7 +431,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         private static int compareInts(int int1, int int2){
             if(Math.abs(int1 - int2) <= 1)
                 return 0;
-            else 
+            else
                 return int1 < int2 ? -1 : 1;
         }
 
@@ -417,7 +441,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             return true;
         }
 
-        
+
     }
 
     /**
