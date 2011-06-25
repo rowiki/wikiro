@@ -23,13 +23,17 @@ import java.util.Hashtable;
 public class PdfTestExtractor {
 
      /** The original PDF that will be parsed. */
-    public static final String pdf = "C:\\Users\\acipu.IXIACOM\\Desktop\\LMI-2010_AB.pdf";
+    public static final String pdf = "C:\\Users\\andrei\\Desktop\\LMI\\LMI-2010_IL.pdf";
     /** The resulting text file. */
-    public static final String txt = "C:\\Users\\acipu.IXIACOM\\Desktop\\LMI-2010_AB.txt";
+    public static final String txt = "C:\\Users\\andrei\\Desktop\\LMI\\LMI-2010_IL.txt";
     
-    private static String getCountyFullName() {
+    private static String getCountyCode() {
         int index = pdf.lastIndexOf("_") + 1;
         String countyCode = pdf.substring(index, index + 2);
+        return countyCode;
+    }
+    
+    private static String getCountyFullName() {
         Hashtable counties = new Hashtable(); 
         counties.put("B.", "București");
         counties.put("AB", "Alba");
@@ -74,7 +78,7 @@ public class PdfTestExtractor {
         counties.put("VL", "Vâlcea");
         counties.put("VN", "Vrancea");
         
-        return (String)counties.get(countyCode);
+        return (String)counties.get(getCountyCode());
     }
     
     /**
@@ -84,10 +88,10 @@ public class PdfTestExtractor {
         throws DocumentException, IOException{
         PdfReader reader = new PdfReader(pdf);
         PdfReaderContentParser parser = new PdfReaderContentParser(reader);
-        PrintStream out = new PrintStream(new FileOutputStream(txt), true, "UTF8");
+        PrintStream out = new PrintStream(new FileOutputStream(txt), true, "UTF-8");
         TextExtractionStrategy strategy;
         for (int i = 1; i <= reader.getNumberOfPages(); i++) {
-            strategy = parser.processContent(i, new MyTextExtractionStrategy(getCountyFullName()));
+            strategy = parser.processContent(i, new MyTextExtractionStrategy(getCountyCode(), getCountyFullName()));
             out.println(strategy.getResultantText());
         }
         out.flush();
