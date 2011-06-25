@@ -208,8 +208,10 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                 && Character.isUpperCase(nextChunk.text.charAt(0)))
             return " ";
         
-        if(!Character.isLetter(lastChunk.text.charAt(lastChunk.text.length() - 1)) &&
-                Character.isLetter(nextChunk.text.charAt(0)))
+        if(!Character.isLetter(lastChunk.text.charAt(lastChunk.text.length() - 1)) && 
+                lastChunk.text.charAt(lastChunk.text.length() - 1) != '"' &&
+                lastChunk.text.charAt(lastChunk.text.length() - 1) != '-' &&
+                Character.isLetter(nextChunk.text.charAt(0)) && lastChunk.column > 0)
             return " ";
 
         return "";
@@ -257,7 +259,9 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             s = " " + s;
         for(int i = 1; i < s.length(); i++) {
             if(s.charAt(i - 1) == ' ' || s.charAt(i - 1) == '-') {
-                if("DE ".equals(s.substring(i, (i+3<s.length())?(i+3):i)))
+                if("DE ".equals(s.substring(i, (i+3<s.length())?(i+3):i)) ||
+                   "CU ".equals(s.substring(i, (i+3<s.length())?(i+3):i)) ||
+                   "DIN ".equals(s.substring(i, (i+4<s.length())?(i+4):i)))
                     sb.append(s.toLowerCase().charAt(i));
                 else
                     sb.append(s.charAt(i));
@@ -270,7 +274,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     }
 
     private String insertCityLinks(String value) {
-        String[] administrations = {"sat", "localitatea", "municipiul", "oraş", "comuna"};
+        String[] administrations = {"sat", "localitatea", "localitate componentă", "municipiul", "oraş", "comuna"};
 
         if(value == null || value == "")
             return value;
