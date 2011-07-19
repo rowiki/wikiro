@@ -107,9 +107,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     private void dumpState(){
         for (Iterator<TextChunk> iterator = locationalResult.iterator(); iterator.hasNext(); ) {
             TextChunk location = (TextChunk) iterator.next();
-
             location.printDiagnostics();
-
             System.out.println();
         }
 
@@ -133,7 +131,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         if(!renderInfo.getFont().getPostscriptFontName().contains("Bold"))
         {
             TextChunk location = new TextChunk(renderInfo.getText(), segment.getStartPoint(), segment.getEndPoint(), 4/*renderInfo.getSingleSpaceWidth()*/);
-            if(location.orientationMagnitude != 0)//non-vertical text, should be horisontal
+            if(location.orientationMagnitude != 0)//non-vertical text, should be horizontal
                 locationalResult.add(location);
         }
     }
@@ -261,7 +259,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             if(s.charAt(i - 1) == ' ' || s.charAt(i - 1) == '-') {
                 if("DE ".equals(s.substring(i, (i+3<s.length())?(i+3):i)) ||
                    "CU ".equals(s.substring(i, (i+3<s.length())?(i+3):i)) ||
-                   "DIN ".equals(s.substring(i, (i+4<s.length())?(i+4):i)))
+                   "DIN ".equals(s.substring(i, (i+4<s.length())?(i+4):i))||
+                   "CEL ".equals(s.substring(i, (i+4<s.length())?(i+4):i)))
                     sb.append(s.toLowerCase().charAt(i));
                 else
                     sb.append(s.charAt(i));
