@@ -4,9 +4,12 @@
  */
 package pdftestextractor;
 
+import com.itextpdf.text.pdf.CMapAwareDocumentFont;
 import com.itextpdf.text.pdf.parser.*;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -120,12 +123,39 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             return true;
         return false;
     }
+    
+    private CMapAwareDocumentFont addDiacriticsToFont(CMapAwareDocumentFont font){
+        try {
+            Field um = font.getClass().getDeclaredField("toUnicodeCmap");
+            um.setAccessible(true);
+            Field sbm = um.get(font).getClass().getDeclaredField("singleByteMappings");
+            sbm.setAccessible(true);
+            HashMap<Integer, String> hash = (HashMap<Integer, String>) sbm.get(um.get(font));
+            hash.put(2, "ț");
+            hash.put(3, "Ș");
+            hash.put(4, "Ț");
+            hash.put(5, "ă");
+            hash.put(6, "ș");
+            sbm.set(um.get(font), hash);
+            //um.set(font, sbm);
+        } catch (IllegalArgumentException ex) {
+            
+        } catch (IllegalAccessException ex) {
+            
+        } catch (NoSuchFieldException ex) {
+            
+        } catch (SecurityException ex) {
+            
+        }
+        
+        return font;
+    }
 
     /**
      *
      * @see com.itextpdf.text.pdf.parser.RenderListener#renderText(com.itextpdf.text.pdf.parser.TextRenderInfo)
      */
-    public void renderText(TextRenderInfo renderInfo) {
+    public void renderText(TextRenderInfo renderInfo) { 
     	LineSegment segment = renderInfo.getBaseline();
         //bold text contains table header, so just throw it out
         if(!renderInfo.getFont().getPostscriptFontName().contains("Bold"))
