@@ -152,6 +152,24 @@ public class PdfContentStreamProcessor {
         CMapAwareDocumentFont font = cachedFonts.get(n);
         if (font == null) {
             font = new CMapAwareDocumentFont(ind);
+            try {
+                Field um = font.getClass().getDeclaredField("toUnicodeCmap");
+                um.setAccessible(true);
+                Object o = um.get(font);
+                if(o==null)
+                    throw new Exception("null um");
+                Field sbm = o.getClass().getDeclaredField("singleByteMappings");
+                sbm.setAccessible(true);
+                HashMap<Integer, String> hash = (HashMap<Integer, String>) sbm.get(um.get(font));
+                hash.put(2, "Ș");
+                hash.put(3, "ș");
+                hash.put(4, "ă");
+                hash.put(5, "ț");
+                hash.put(6, "Ț");
+                sbm.set(um.get(font), hash);
+                //um.set(font, sbm);
+            } catch (Exception ex) {
+            }
             cachedFonts.put(n, font);
         }
         return font;
