@@ -13,7 +13,7 @@ imgsterse = 0
 for page in gen:
     if page.isImage():
 	text = page.get()
-	ex = re.compile(u"\{\{NowCommons(\|([\w\:\-\_–\.\,\\\"\(\)\&\'\'§„”“\ żóéáìüäăşţőâÉÎĂŞȘŢȚÂșșțáöéüíПийднкторуябБльавВерс]*))?")
+	ex = re.compile(u"\{\{NowCommons(\|([\w\:\-\_–\.\,\\\"\(\)\&\'\'§„”“\ żóéáìüäàăşţőâÉÎĂŞȘŢȚÂșțîáöéüíПийднкторуябБльавВерс]*))?")
 	res = re.findall(ex, text)
  	
  	wikipedia.output(page.title())
