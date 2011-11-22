@@ -33,7 +33,7 @@ for i in range(startno, endno + 1):
 	pagetext = u""
 	pagetext = page.get()
 	print repr(pagetext)
-	ex = re.compile(u"\{\{([\w \-\:\.]+[\s]*)((\|[\s]*(([\w \-]+[\s]*=)?[\s]*[\w \-\„\”\{\}\[\]\(\)\:\u2018\u2019\u201b\u201d\u201b\u201a\,\.\?]*[\s]*)[\s]*)*)\}\}", re.U)
+	ex = re.compile(u"\{\{([\w \-\:\.]+[\s]*)((\|[\s]*(([\w \-]+[\s]*=)?[\s]*[\w \-\„\”\{\}\[\]\(\)\:\u2018\u2019\u201b\u201d\u201b\u201a\u201e\,\.\?]*[\s]*)[\s]*)*)\}\}", re.U)
 	res = re.findall(ex, pagetext)
 	if res:
 		print "Match:" + repr(res)
@@ -90,7 +90,7 @@ for i in range(startno, endno + 1):
 	description += u"|Permission={{self|cc-by-sa-3.0|author=" + origauthor + u"}}\n"
 	description += u"}}\n"
 	description += u"==Original history==\n" + page.getFileVersionHistoryTable()
-	description += u"[[Category:" + categ + "]]"
+	description += u"\n\n[[Category:" + categ + "]]"
 
 	wikipedia.output(description);
 
