@@ -91,19 +91,20 @@ class o2wVillageData:
 	def logw(self, string):
 		self.log("* WIKI error (%s): " % time.strftime("%Y-%m-%d %H:%M:%S"), repr(string))
 		
+	#this is future code
 	def tl2Dict(self, template):
 		template = re.sub(r'\s', '', template)
 		dic = {}
 		params = template.split('|')
 		for line in params:
 			line = line.split('=')
-        if len(line) is 2:
-            dic[line[0]] = line[1]
-			#TODO:this is bullshit
-        else:
-            continue
+			if len(line) is 2:
+				dic[line[0]] = line[1]
+				#TODO:this is bullshit
+			else:
+				continue
 		print dic
-    return dic
+		return dic
 		
 	def getTemplateParam(self, template, param, value, text):
 		if template == None:
@@ -179,7 +180,7 @@ class o2wVillageData:
 			start = 0
 		site = pywikibot.getSite(lang)
 		reader = csv.reader(open(self._osmFilename, "r"), delimiter='\t')
-		village_templates = "(CutieSate|CasetăSate|Infocaseta Așezare|Infobox aşezare|Casetă așezare)"
+		village_templates = "(CutieSate|CasetăSate|Infocaseta Așezare|Infobox aşezare|Casetă așezare|Cutie așezare)"
 		for row in reader:
 			#row=[title, urlname, latitude, longitude, coord_need_update, postal_code, nodeid, Truelat, Truelong, Truecode]
 			title = row[1]				
