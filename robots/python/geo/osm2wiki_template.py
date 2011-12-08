@@ -130,12 +130,13 @@ class o2wVillageData:
 				key = re.sub(r'\s', '', key)
 				value = "=".join(line[1:]).encode("utf8")
 				self._dict[key] = str(value)
-				self._keyList.append(key)
+				self.insertKeyInKeyList(key)
 			elif line[0].startswith('{{'): #name of the template
 				self._dict["_name"] = line[0][2:]
-				self._keyList.append("_name")
+				self.insertKeyInKeyList("_name")
 			elif line[0] != "" and key != "":#the first line might not begin with {{
 				self._dict[key] = self._dict[key] + "|" + line[0].encode("utf8")
+        self.insertKeyInKeyList(key)
 		return self._dict
 		
 	def getDeg(self, decimal):
@@ -162,6 +163,9 @@ class o2wVillageData:
 			return 0 #this should really never happen
 			
 	def insertKeyInKeyList(self, key):
+    #don't include already existing keys
+    if key in self._keyList:
+      return
 		index = len(self._keyList)
 		try:
 			if key == "latd":
@@ -269,11 +273,14 @@ class o2wVillageData:
 				self.insertKeyInKeyList("lats")
 				
 			try:
-				latNS = self._dict["latNS"]
-				self.logi("The latNS field already exists")
-			except:
-				self._dict["latNS"] = "N"
-				self.insertKeyInKeyList("latNS")
+      	latNS = self._dict["latNS"]
+      	if latNS == 'N' or latNS == 'S':
+          self.logi("The latNS field already exists")
+        else:
+          self._dict["latNS"] = "N"
+      except:
+        self._dict["latNS"] = "N"
+        self.insertKeyInKeyList("latNS"))
 				
 			try:
 				longd = self._dict["longd"]
@@ -312,11 +319,14 @@ class o2wVillageData:
 				self.insertKeyInKeyList("longs")
 				
 			try:
-				longEV = self._dict["longEV"]
-				self.logi("The longEV field already exists")
-			except:
-				self._dict["longEV"] = "E"
-				self.insertKeyInKeyList("longEV")
+        longEV = self._dict["longEV"]
+        if longEV == 'E' or longEV == 'V':
+          self.logi("The longEV field already exists")
+        else:
+          self._dict["longEV"] = "E"
+      except:
+          self._dict["longEV"] = "E"
+          self.insertKeyInKeyList("longEV")
 				
 			try:
 				code = self._dict["codpoștal"]
