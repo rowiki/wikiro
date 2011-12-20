@@ -66,11 +66,11 @@ class extractWikiLinks:
 		
 	def parseGeohackLinks(self, page):
 		html = self.site.getUrl( "/wiki/" + page.urlname(), True)
-		geohack_regexp = re.compile("geohack\.php\?pagename=(.*?)&amp;language=ro&amp;params=(.*?)\"");
+		geohack_regexp = re.compile("geohack\.php\?pagename=(.*?)&(amp;)?params=(.*?)&(amp;)?language");
 		geohack_match = geohack_regexp.search(html)
 		if geohack_match <> None:
-			link = geohack_match.group(2)
-			print geohack_match.group(2)
+			link = geohack_match.group(3)
+			print geohack_match.group(3)
 		else:
 			pywikibot.output(u"No match for geohack link: %s" % page.title())
 			return 0,0
@@ -87,6 +87,7 @@ class extractWikiLinks:
 		for token in l:
 			if token == '' or string.find(token, ':') > -1:
 				tokens.remove(token)
+			token = token.replace(",", ".") #make sure we're dealing with US-style numbers
 		if tokens[0] == link: #no _
 			tokens = tokens[0].split(';')
 			if float(tokens[0]) and float(tokens[1]): # D;D
@@ -95,20 +96,21 @@ class extractWikiLinks:
 			else:
 				pywikibot.output(u"Geohack link parsing error 1: %s" % link)
 				return 0,0
-		elif len(tokens) == 9: # D_N_D_E_to_D_N_D_E 
+		elif len(tokens) == 9: # D_N_D_E_to_D_N_D_E or D_M_S_N_D_M_S_E_something
 			if tokens[4] <> "to":
 				pywikibot.output(u"Geohack link parsing error 2: %s" % link)
-				return 0,0
-			lat1 = float(tokens[0]) * self.geosign(tokens[1], 'N', 'S')
-			long1 = float(tokens[2]) * self.geosign(tokens[3], 'E', 'V')
-			lat2 = float(tokens[5]) * self.geosign(tokens[6], 'N', 'S')
-			long2 = float(tokens[7]) * self.geosign(tokens[8], 'E', 'V')
-			if lat1 * long1 * lat2 * long2 == 0: #TODO: one of them is 0; this is also true for equator and GMT
-				pywikibot.output(u"Geohack link parsing error 3: %s" % link)
-				return 0,0
-			lat = (lat1 + lat2) / 2
-			long = (long1 + long2) / 2
-		elif len(tokens) == 8: # D_M_S_N_D_M_S_E
+				tokens.remove(tokens[8])
+			else:
+				lat1 = float(tokens[0]) * self.geosign(tokens[1], 'N', 'S')
+				long1 = float(tokens[2]) * self.geosign(tokens[3], 'E', 'V')
+				lat2 = float(tokens[5]) * self.geosign(tokens[6], 'N', 'S')
+				long2 = float(tokens[7]) * self.geosign(tokens[8], 'E', 'V')
+				if lat1 * long1 * lat2 * long2 == 0: #TODO: one of them is 0; this is also true for equator and GMT
+					pywikibot.output(u"Geohack link parsing error 3: %s" % link)
+					return 0,0
+				lat = (lat1 + lat2) / 2
+				long = (long1 + long2) / 2
+		if len(tokens) == 8: # D_M_S_N_D_M_S_E
 			deg1 = float(tokens[0])
 			min1 = float(tokens[1])
 			sec1 = float(tokens[2])
