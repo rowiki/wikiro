@@ -139,20 +139,21 @@ class w2oWikiLinks:
 			else:
 				self.loge(u"Geohack link parsing error 1: %s" % link)
 				return 0,0
-		elif len(tokens) == 9: # D_N_D_E_to_D_N_D_E 
+		elif len(tokens) == 9: # D_N_D_E_to_D_N_D_E or D_M_S_N_D_M_S_E_something
 			if tokens[4] <> "to":
 				self.loge(u"Geohack link parsing error 2: %s" % link)
-				return 0,0
-			lat1 = float(tokens[0]) * self.geosign(tokens[1], 'N', 'S')
-			long1 = float(tokens[2]) * self.geosign(tokens[3], 'E', 'V')
-			lat2 = float(tokens[5]) * self.geosign(tokens[6], 'N', 'S')
-			long2 = float(tokens[7]) * self.geosign(tokens[8], 'E', 'V')
-			if lat1 * long1 * lat2 * long2 == 0: #TODO: one of them is 0; this is also true for equator and GMT
-				self.loge(u"Geohack link parsing error 3: %s" % link)
-				return 0,0
-			lat = (lat1 + lat2) / 2
-			long = (long1 + long2) / 2
-		elif len(tokens) == 8: # D_M_S_N_D_M_S_E
+				tokens.remove(tokens[8])
+			else:
+				lat1 = float(tokens[0]) * self.geosign(tokens[1], 'N', 'S')
+				long1 = float(tokens[2]) * self.geosign(tokens[3], 'E', 'V')
+				lat2 = float(tokens[5]) * self.geosign(tokens[6], 'N', 'S')
+				long2 = float(tokens[7]) * self.geosign(tokens[8], 'E', 'V')
+				if lat1 * long1 * lat2 * long2 == 0: #TODO: one of them is 0; this is also true for equator and GMT
+					self.loge(u"Geohack link parsing error 3: %s" % link)
+					return 0,0
+				lat = (lat1 + lat2) / 2
+				long = (long1 + long2) / 2
+		if len(tokens) == 8: # D_M_S_N_D_M_S_E
 			deg1 = float(tokens[0])
 			min1 = float(tokens[1])
 			sec1 = float(tokens[2])
