@@ -3,3 +3,5 @@ update_database.py - parse the monument lists and extract the data in the format
 parse_monument_article.py - parse the articles and images of monuments and log then in the following format: dict{code, list[dict{name, namespace, project, lat, lon}, ...]}; also log errors where needed
 
 corroborate_monument_data.py - parse all the databases, log errors and warnings and update the database where possible
+
+cleanup_code.py - remove spaces and potentially other detectable errors from the codes, either in image pages or monument lists
