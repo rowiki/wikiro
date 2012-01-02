@@ -39,27 +39,9 @@ import math
 import time
 
 msg = {
-    'ar': u'بوت: إضافة %s',
-    'cs': u'Robot přidal %s',
-    'de': u'Bot: "%s" hinzugefügt',
-    'en': u'Bot: Adding coordinates: %s',
-    'fr': u'Robot : Ajoute des coordonees: %s',
-    'he': u'בוט: מוסיף %s',
-    'fa': u'ربات: افزودن %s',
-    'it': u'Bot: Aggiungo %s',
-    'ja': u'ロボットによる: 追加 %s',
-    'ksh': u'Bot: dobeijedonn: %s',
-    'nds': u'Bot: tofoiegt: %s',
-    'nn': u'Robot: La til %s',
-    'pdc': u'Waddefresser: %s dezu geduh',
-    'pl': u'Robot dodaje: %s',
-    'pt': u'Bot: Adicionando %s',
-    'ro': u'Robot: Adaug coordonate: %s',
-    'ru': u'Бот: добавление %s',
-    'sv': u'Bot: Lägger till %s',
-    'szl': u'Bot dodowo: %s',
-    'vo': u'Bot: Läükon vödemi: %s',
-    'zh': u'機器人: 正在新增 %s',
+    'en': u'Bot: Updating coordinates: %s',
+    'fr': u'Robot : Actualiser des coordonees: %s',
+    'ro': u'Robot: Actualizez coordonate: %s',
     }
 
 class o2wVillageData:
@@ -97,18 +79,28 @@ class o2wVillageData:
 	#extract the first instance of a template 
 	#from the page text
 	def extractTemplate(self, text, template):
-		match = re.search("\{\{" + template, text)
+		pywikibot.output(text)
+		match = re.search("\{\{\s*" + template, text)
 		if match == None:
 			return None
 		tl = text[match.start():]
 		text = text[match.start() + 2:]
 		open = 0
 		close = 1
-		while open < close:
-			open = text.find("{{")
-			close = text.find("}}")
-			text = text[close + 2:]
-		tl = tl.replace(text, "")
+		innerTlCount = 0
+		while open < close and open <> -1:
+			open = text.find("{")
+			close = text.find("}") + 1
+			if open > close or open == -1:
+				while innerTlCount > 0:
+					print str(close) + " "  + str(innerTlCount)
+					close = text.find("}", close) + 1
+					innerTlCount -= 1
+			if open < close:
+				innerTlCount += text[open + 1:close].count('{')
+			print str(open) + " " + str(close) + " " + str(innerTlCount)
+			text = text[close:]
+		tl = tl.replace(text[1:], "") #the [1:] is because we want to grab the second '}'
 		self.logd("I have extracted template: " + tl)
 		return tl
 	
@@ -122,21 +114,24 @@ class o2wVillageData:
 		template = template[0:len(template)-2]#get rid of '}}'
 		params = template.split('|')
 		key = ""
+		value = ""
 		for line in params:
-			#print line
 			line = line.split('=')
+			#pywikibot.output(str(line))
 			if (len(line) > 1):
 				key = line[0].encode("utf8")
 				key = re.sub(r'\s', '', key)
 				value = "=".join(line[1:]).encode("utf8")
 				self._dict[key] = str(value)
 				self.insertKeyInKeyList(key)
-			elif line[0].startswith('{{'): #name of the template
+			elif line[0].startswith('{{') and not "_name" in self._dict: #name of the template
+				#pywikibot.output("Name: " + line[0][2:])
 				self._dict["_name"] = line[0][2:]
 				self.insertKeyInKeyList("_name")
 			elif line[0] != "" and key != "":#the first line might not begin with {{
 				self._dict[key] = self._dict[key] + "|" + line[0].encode("utf8")
 				self.insertKeyInKeyList(key)
+			#print self._dict
 		return self._dict
 		
 	def getDeg(self, decimal):
@@ -198,7 +193,7 @@ class o2wVillageData:
 			start = 0
 		site = pywikibot.getSite(lang)
 		reader = csv.reader(open(self._osmFilename, "r"), delimiter='\t')
-		village_templates = "(CutieSate|CasetăSate|Infocaseta Așezare|Infobox aşezare|Casetă așezare|Cutie așezare)".decode('utf8')
+		village_templates = "(CutieSate|CasetăSate|Infocaseta Așezare|Infobox așezare|Casetă așezare|Cutie așezare)".decode('utf8')
 		for row in reader:
 			self._keyList = []
 			self._dict = {}
@@ -280,7 +275,7 @@ class o2wVillageData:
 				  self._dict["latNS"] = "N"
 			except:
 				self._dict["latNS"] = "N"
-				self.insertKeyInKeyList("latNS"))
+				self.insertKeyInKeyList("latNS")
 				
 			try:
 				longd = self._dict["longd"]
@@ -385,6 +380,47 @@ def main():
 				start = arg[7:]
 	
 	bot = o2wVillageData()
+	# bot.tl2Dict(bot.extractTemplate(u"""{{Infocaseta Așezare
+# | nume = Bogdănești
+# | alt_nume = 
+# | tip_asezare = Sat
+# | imagine = 
+# | imagine_dimensiune = 250px
+# | imagine_descriere = Bogdănești
+# | stemă = 
+# | hartă = 
+# | pushpin_map = 
+# | pushpin_label_position = right
+# | tip_subdiviziune = Țară
+# | nume_subdiviziune = {{ROU}}
+# | tip_subdiviziune1 = [[Județele României|Județ]]
+# | nume_subdiviziune1 = [[județul Vaslui|Vaslui]]
+# | tip_subdiviziune3 = [[Comunele României|Comună]]
+# | nume_subdiviziune3 = [[Comuna Bogdănești, Vaslui|Bogdănești]]
+# | titlu_atestare = Prima atestare
+# | atestare = 
+# | suprafață_totală_km2 = 
+# | altitudine = 
+# | latd = 46
+# | latm = 26
+# | lats = 58
+# | latNS = N
+# | longd = 27
+# | longm = 43
+# | longs = 36
+# | longEV = E
+# | recensământ = 2002
+# | populație = 
+# | populație_note_subsol = 
+# | tip_cod_poștal = [[Cod poștal]]
+# | codpoștal = 
+# | camp_gol_nume =
+# | camp_gol_info = 
+# }}
+
+# '''Bogdănești''' este o localitate în [[județul Vaslui]], [[Moldova]], [[România]]
+# """, u"Infocaseta Așezare"))
+	# print bot._dict
 	bot.putCoordOnWiki(lang, start)
 
 if __name__ == "__main__":

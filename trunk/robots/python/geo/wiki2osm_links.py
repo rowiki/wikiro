@@ -76,7 +76,7 @@ class w2oWikiLinks:
 		template_match = template_regexp.search(text)
 		
 		if template_match <> None and template_match.lastindex <> None:
-			pywikibot.output(str(template_match.groups()))
+			#pywikibot.output(str(template_match.groups()))
 			return template_match.group(3) #value is the third regexp
 		else:
 			return None
@@ -112,11 +112,11 @@ class w2oWikiLinks:
 		geohack_regexp = re.compile("geohack\.php\?pagename=(.*?)&amp;language=ro&amp;params=(.*?)\"");
 		geohack_match = geohack_regexp.search(html)
 		if geohack_match <> None:
-			link = geohack_match.group(2)
-			#print geohack_match.group(2)
+				link = geohack_match.group(2)
+				#print geohack_match.group(2)
 		else:
-			pywikibot.output(u"No match for geohack link: %s" % page.title())
-			return 0,0
+				pywikibot.output(u"No match for geohack link: %s" % page.title())
+				return 0,0
 		#valid formats (see https://wiki.toolserver.org/view/GeoHack#params for details):
 		# D_M_S_N_D_M_S_E
 		# D_M_N_D_M_E
@@ -128,73 +128,73 @@ class w2oWikiLinks:
 		#sanitize non-standard strings
 		l = tokens[:]
 		for token in l:
-			if token == '' or string.find(token, ':') > -1:
-				tokens.remove(token)
-			token = token.replace(",", ".") #make sure we're dealing with US-style numbers
+				if token == '' or string.find(token, ':') > -1:
+						tokens.remove(token)
+				token = token.replace(",", ".") #make sure we're dealing with US-style numbers
 		if tokens[0] == link: #no _
-			tokens = tokens[0].split(';')
-			if float(tokens[0]) and float(tokens[1]): # D;D
-				lat = tokens[0]
-				long = tokens[1]
-			else:
-				self.loge(u"Geohack link parsing error 1: %s" % link)
-				return 0,0
+				tokens = tokens[0].split(';')
+				if float(tokens[0]) and float(tokens[1]): # D;D
+						lat = tokens[0]
+						long = tokens[1]
+				else:
+						self.loge(u"Geohack link parsing error 1: %s" % link)
+						return 0,0
 		elif len(tokens) == 9: # D_N_D_E_to_D_N_D_E or D_M_S_N_D_M_S_E_something
-			if tokens[4] <> "to":
-				self.loge(u"Geohack link parsing error 2: %s" % link)
-				tokens.remove(tokens[8])
-			else:
-				lat1 = float(tokens[0]) * self.geosign(tokens[1], 'N', 'S')
-				long1 = float(tokens[2]) * self.geosign(tokens[3], 'E', 'V')
-				lat2 = float(tokens[5]) * self.geosign(tokens[6], 'N', 'S')
-				long2 = float(tokens[7]) * self.geosign(tokens[8], 'E', 'V')
-				if lat1 * long1 * lat2 * long2 == 0: #TODO: one of them is 0; this is also true for equator and GMT
-					self.loge(u"Geohack link parsing error 3: %s" % link)
-					return 0,0
-				lat = (lat1 + lat2) / 2
-				long = (long1 + long2) / 2
+				if tokens[4] <> "to":
+						self.loge(u"Geohack link parsing error 2: %s" % link)
+						tokens.remove(tokens[8])
+				else:
+						lat1 = float(tokens[0]) * self.geosign(tokens[1], 'N', 'S')
+						long1 = float(tokens[2]) * self.geosign(tokens[3], 'E', 'V')
+						lat2 = float(tokens[5]) * self.geosign(tokens[6], 'N', 'S')
+						long2 = float(tokens[7]) * self.geosign(tokens[8], 'E', 'V')
+						if lat1 * long1 * lat2 * long2 == 0: #TODO: one of them is 0; this is also true for equator and GMT
+								self.loge(u"Geohack link parsing error 3: %s" % link)
+								return 0,0
+						lat = (lat1 + lat2) / 2
+						long = (long1 + long2) / 2
 		if len(tokens) == 8: # D_M_S_N_D_M_S_E
-			deg1 = float(tokens[0])
-			min1 = float(tokens[1])
-			sec1 = float(tokens[2])
-			sign1 = self.geosign(tokens[3],'N','S')
-			deg2 = float(tokens[4])
-			min2 = float(tokens[5])
-			sec2 = float(tokens[6])
-			sign2 = self.geosign(tokens[7],'E','V')
-			lat = self.dms2dec(deg1, min1, sec1, sign1)
-			long = self.dms2dec(deg2, min2, sec2, sign2)
-			self.coord_need_update = False
+				deg1 = float(tokens[0])
+				min1 = float(tokens[1])
+				sec1 = float(tokens[2])
+				sign1 = self.geosign(tokens[3],'N','S')
+				deg2 = float(tokens[4])
+				min2 = float(tokens[5])
+				sec2 = float(tokens[6])
+				sign2 = self.geosign(tokens[7],'E','V')
+				lat = self.dms2dec(deg1, min1, sec1, sign1)
+				long = self.dms2dec(deg2, min2, sec2, sign2)
+				self.coord_need_update = False
 		elif len(tokens) == 6: # D_M_N_D_M_E
-			deg1 = float(tokens[0])
-			min1 = float(tokens[1])
-			sec1 = 0.0
-			sign1 = self.geosign(tokens[2],'N','S')
-			deg2 = float(tokens[3])
-			min2 = float(tokens[4])
-			sec2 = 0.0
-			sign2 = self.geosign(tokens[5],'E','V')
-			lat = self.dms2dec(deg1, min1, sec1, sign1)
-			long = self.dms2dec(deg2, min2, sec2, sign2)
-			self.coord_need_update = True
-			self.logw("Article %s needs coordinates update" % page.title())
+				deg1 = float(tokens[0])
+				min1 = float(tokens[1])
+				sec1 = 0.0
+				sign1 = self.geosign(tokens[2],'N','S')
+				deg2 = float(tokens[3])
+				min2 = float(tokens[4])
+				sec2 = 0.0
+				sign2 = self.geosign(tokens[5],'E','V')
+				lat = self.dms2dec(deg1, min1, sec1, sign1)
+				long = self.dms2dec(deg2, min2, sec2, sign2)
+				self.coord_need_update = True
+				self.logw("Article %s needs coordinates update" % page.title())
 		elif len(tokens) == 4: # D_N_D_E
-			deg1 = float(tokens[0])
-			min1 = 0.0
-			sec1 = 0.0
-			sign1 = self.geosign(tokens[1],'N','S')
-			deg2 = float(tokens[2])
-			min2 = 0.0
-			sec2 = 0.0
-			sign2 = self.geosign(tokens[3],'E','V')
-			lat = self.dms2dec(deg1, min1, sec1, sign1)
-			long = self.dms2dec(deg2, min2, sec2, sign2)
+				deg1 = float(tokens[0])
+				min1 = 0.0
+				sec1 = 0.0
+				sign1 = self.geosign(tokens[1],'N','S')
+				deg2 = float(tokens[2])
+				min2 = 0.0
+				sec2 = 0.0
+				sign2 = self.geosign(tokens[3],'E','V')
+				lat = self.dms2dec(deg1, min1, sec1, sign1)
+				long = self.dms2dec(deg2, min2, sec2, sign2)
 		else:
-			self.loge(u"Geohack link parsing error 4: %s" % link)
-			return 0,0
-		if lat < 43 or lat > 48 or long < 20 or long > 29:
-			pywikibot.output("Invalid coordinates %f,%f" % (lat,long))
-			return 0,0
+				self.loge(u"Geohack link parsing error 4: %s" % link)
+				return 0,0
+		if lat < 43 or lat > 48.25 or long < 20 or long > 29.67:
+				pywikibot.output("Invalid coordinates %f,%f" % (lat,long))
+				return 0,0
 		return lat,long
 
 	def parseWiki(self, page):
@@ -216,7 +216,7 @@ class w2oWikiLinks:
 			self.loge(u"An error occurred while getting the page, skipping...")
 			return None
 		
-		village_templates = "(CutieSate|CasetăSate|Infocaseta Așezare|Infobox aşezare)"
+		village_templates = "(CutieSate|CasetăSate|Infocaseta Așezare|Infobox așezare|Casetă așezare|Cutie așezare)"
 		code = self.getTemplateParam(village_templates, "codpoștal", "([0-9]{5,6})", text)
 		latd = self.getTemplateParam(village_templates, "latd", "([0-9\.]+)", text)
 		if latd <> None:
@@ -269,7 +269,7 @@ class w2oWikiLinks:
 		longitude = self.dms2dec(longd, longm, longs, long_sign)
 		#print str(latitude) + "," + str(longitude)
 		#check data against Romania limits
-		if latitude < 43 or latitude > 48 or longitude < 20 or longitude > 29:
+		if latitude < 43 or latitude > 48.25 or longitude < 20 or longitude > 29.67:
 			self.logi("Invalid coordinates, will try to extract them from wikilinks")
 			latitude, longitude = self.parseGeohackLinks(page)
 		elif longs == 0.0 or lats == 0.0:
@@ -278,11 +278,11 @@ class w2oWikiLinks:
 		#if (latitude <> 0 and longitude <> 0) or code <> None:
 		return page.title(), page.urlname(), latitude, longitude, self.coord_need_update, code
 			
-	def pageText(self, url):
+	def pageText(self, server, path):
 		""" Function to load HTML text of a URL """
-		url = url.encode('utf8')
-		url = self.encodeSpaces(url)
-		#print url
+		#url = self.encodeSpaces(url)
+		url = server + path
+		print url.encode('utf8')
 		try:
 			request = urllib2.Request(url)
 			request.add_header("User-Agent", pywikibot.useragent)
@@ -294,7 +294,7 @@ class w2oWikiLinks:
 			#self.loge(u"Server error. Pausing for 10 seconds... " + str(e.code) + str(e.msg) )
 			#response.close()
 			time.sleep(10)
-			return self.pageText(url)
+			return self.pageText(server, path)
 		return text
 
 	def fetchWikiArticles(self, generator):
@@ -391,9 +391,10 @@ class w2oWikiLinks:
 			
 	def searchByCoord(self, lat, long, name, nameSup = "", county = ""):
 		"""search a village using the coordinates from Wikipedia or Nominatim"""
-		urlHead = "http://osmxapi.hypercube.telascience.org/api/0.6/node[name="
-		urlHead = "http://www.informationfreeway.org/api/0.6/node[name="
-		urlHead = "http://xapi.openstreetmap.org/api/0.6/node[name="
+		server = "http://osmxapi.hypercube.telascience.org/api/0.6/"
+		server = "http://open.mapquestapi.com/xapi/api/0.6/"
+		#server = "http://jxapi.openstreetmap.org/xapi/api/0.6/"
+		urlHead = "node[name="
 		self.logi("Searching: %s@(%s,%s)" % (name, lat, long))
 		lat = float(lat)
 		long = float(long)
@@ -422,10 +423,10 @@ class w2oWikiLinks:
 		
 		bbox = str(lowlong) + "," + str(lowlat) + "," + str(highlong) + "," + str(highlat)
 		self.logi(u"Fetching village nodes in area: %s" % bbox)
-		url = urlHead + name + "][bbox=" + bbox + "]"
-		self.logi(u"searchByCoord URL: %s" % url)
+		url = urlHead + urllib.quote(name.encode('utf8')) + "][bbox=" + bbox + "]"
+		self.logi(u"searchByCoord URL: %s" % server + url)
 		
-		xmlText = self.pageText(url)
+		xmlText = self.pageText(server, url)
 		#print xmlText
 		nodeid   = self.extractValueFromOsmData(xmlText, "id", "place", None)
 		truelat  = self.extractValueFromOsmData(xmlText, "lat", "place", None)
@@ -446,23 +447,26 @@ class w2oWikiLinks:
 	def searchByName(self, title, urlTitle, nameSup = "", county = ""):
 		placeTypes = ["village", "hamlet"]
 		"""Search a village in OSM by name, using the Nominatim service"""
-		urlHead = "http://open.mapquestapi.com/nominatim/v1/search?q="
-		#urlHead = " http://nominatim.openstreetmap.org/search?q="
+		server = "http://open.mapquestapi.com/nominatim/v1/search?"
+		#server = "http://nominatim.openstreetmap.org/nominatim/v1/search?"
+		urlHead = "q="
 		urlFormat = "&format=xml&email="
 		urlLimit = "&limit=10"
 		url = urlHead + urlTitle + urlFormat + self._osmUser + urlLimit
-		self.logi(u"searchByName URL: %s" % url.encode('utf8'))
+		self.logi(u"searchByName URL: %s" % (server + url.encode('utf8')))
 		
-		xmlText = self.pageText(url)
-		print xmlText
+		xmlText = self.pageText(server, url)
+		#print xmlText
 		try:
 			document = xml.dom.minidom.parseString(xmlText)
 			places = document.getElementsByTagName("place")
 			for place in places:
 				if place.getAttribute('type') in placeTypes:
 					node_id = place.getAttribute('osm_id');
-					lat = place.getAttribute('lat');
-					long = place.getAttribute('lon');
+					lat = float(place.getAttribute('lat'));
+					long = float(place.getAttribute('lon'));
+					if lat < 43 or lat > 48.25 or long < 20 or long > 29.67:
+						continue #place not in RO
 					nodeid, lat, lon, code = self.searchByCoord(lat, long, self.extractNameFromTitle(title), nameSup, county)
 					if nodeid <> 0:
 						return nodeid, lat, lon, code
@@ -483,7 +487,7 @@ class w2oWikiLinks:
 				#row=[title, urlname, latitude, longitude, coord_need_update, postal_code]
 				title	= row[0]
 				if start == 0:
-					if string.find(title.decode('utf-8'), startPage) > -1:
+					if string.find(row[1].decode('utf-8'), startPage) > -1:
 						self.logi("Starting from article %s" % title)
 						start = 1
 					else:
@@ -577,11 +581,11 @@ def main():
 	
 	bot = w2oWikiLinks(acceptall)
 	
-	#for categ in categs:
-	#	pywikibot.output(categ.decode("utf8"))
-	#	gen = pagegenerators.CategorizedPageGenerator(catlib.Category(pywikibot.getSite(), categ.decode("utf8")))
-	#	preloadingGen = pagegenerators.PreloadingGenerator(gen)
-	#	bot.fetchWikiArticles(preloadingGen)
+	# for categ in categs:
+		# pywikibot.output(categ.decode("utf8"))
+		# gen = pagegenerators.CategorizedPageGenerator(catlib.Category(pywikibot.getSite(), categ.decode("utf8")))
+		# preloadingGen = pagegenerators.PreloadingGenerator(gen, 125)
+		# bot.fetchWikiArticles(preloadingGen)
 	
 	bot.writeToOsm(startPage)
 
