@@ -181,7 +181,7 @@ class o2wVillageData:
 			elif key == "longEV":
 				index = 1 + self._keyList.index("longs")
 			elif key == "codpoștal":
-				index = 1 + self._keyList.index("longEV")
+				index = 1 + self._keyList.index("tip_cod_poștal")
 		except:
 			pass #we're ok with the default value
 		self._keyList.insert(index, key)
@@ -222,7 +222,8 @@ class o2wVillageData:
 			try:
 				text = generator.get()
 			except Exception as inst:
-				self.loge(u"Unknown error in getTagValue, exiting: %s" % inst);
+				self.loge(u"Unknown error in getPageValue, exiting: %s" % inst);
+				continue
 				
 			oldTl = self.extractTemplate(text, village_templates)
 			if oldTl == None:
