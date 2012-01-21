@@ -28,7 +28,6 @@ options = {
 fullDict = {}
 _log = "pages.err.log"
 _flog = None
-count = 0
 
 def initLog():
 	global _flog, _log;
@@ -58,9 +57,9 @@ def parseGeohackLinks(page):
 	geohack_match = geohack_regexp.search(html)
 	if geohack_match <> None:
 		link = geohack_match.group(3)
-		print geohack_match.group(3)
+		#print geohack_match.group(3)
 	else:
-		wikipedia.output("No geohack link found in article")
+		#wikipedia.output("No geohack link found in article")
 		return 0,0
 	#valid formats (see https://wiki.toolserver.org/view/GeoHack#params for details):
 	# D_M_S_N_D_M_S_E
@@ -87,18 +86,29 @@ def parseGeohackLinks(page):
 	elif len(tokens) == 9: # D_N_D_E_to_D_N_D_E or D_M_S_N_D_M_S_E_something
 		if tokens[4] <> "to":
 			wikipedia.output(u"*[[%s]] We should ignore parameter 9: %s (%s)" % (page.title(), tokens[8], link))
-			tokens.remove(tokens[8])
+			deg1 = float(tokens[0])
+			min1 = float(tokens[1])
+			sec1 = float(tokens[2])
+			sign1 = geosign(tokens[3],'N','S')
+			deg2 = float(tokens[4])
+			min2 = float(tokens[5])
+			sec2 = float(tokens[6])
+			sign2 = geosign(tokens[7],'E','V')
+			lat = dms2dec(deg1, min1, sec1, sign1)
+			long = dms2dec(deg2, min2, sec2, sign2)
+			if sec1 == 0 and sec2 == 0:
+				log(u"*''W'': [[:%s]] ar putea avea nevoie de actualizarea coordonatelor - valoarea secundelor este 0" % page.title())
 		else:
 			lat1 = float(tokens[0]) * geosign(tokens[1], 'N', 'S')
 			long1 = float(tokens[2]) * geosign(tokens[3], 'E', 'V')
 			lat2 = float(tokens[5]) * geosign(tokens[6], 'N', 'S')
 			long2 = float(tokens[7]) * geosign(tokens[8], 'E', 'V')
-			if lat1 * long1 * lat2 * long2 == 0: #TODO: one of them is 0; this is also true for equator and GMT
+			if lat1 == 0 or long1 == 0 or lat2 == 0 or long2 == 0: #TODO: one of them is 0; this is also true for equator and GMT
 				log(u"*''E'': [[:%s]] Problemă (2) cu legătura Geohack: - una dintre coordonatele de bounding box e 0: %s" % (page.title(), link))
 				return 0,0
 			lat = (lat1 + lat2) / 2
 			long = (long1 + long2) / 2
-	if len(tokens) == 8: # D_M_S_N_D_M_S_E
+	elif len(tokens) == 8: # D_M_S_N_D_M_S_E
 		deg1 = float(tokens[0])
 		min1 = float(tokens[1])
 		sec1 = float(tokens[2])
@@ -125,15 +135,11 @@ def parseGeohackLinks(page):
 		log(u"*''E'': [[:%s]] are nevoie de actualizarea coordonatelor - nu sunt disponibile secundele" % page.title())
 	elif len(tokens) == 4: # D_N_D_E
 		deg1 = float(tokens[0])
-		min1 = 0.0
-		sec1 = 0.0
 		sign1 = geosign(tokens[1],'N','S')
 		deg2 = float(tokens[2])
-		min2 = 0.0
-		sec2 = 0.0
 		sign2 = geosign(tokens[3],'E','V')
-		lat = dms2dec(deg1, min1, sec1, sign1)
-		long = dms2dec(deg2, min2, sec2, sign2)
+		lat = sign1 * deg1
+		long = sign2 * deg2
 	else:
 		log(u"*''E'': [[:%s]] Problemă (3) cu legătura Geohack: nu pot identifica nicio coordonată: %s" % (page.title(), link))
 		return 0,0
@@ -142,31 +148,45 @@ def parseGeohackLinks(page):
 		return 0,0
 	return lat,long
 
-def checkAllCodes(result1, result2, page):
-	if len(result2) == 0:
+# def checkAllCodes(result1, result2, page):
+	# if len(result2) == 0:
+		# log(u"*''E'': [[:%s]] nu conține niciun cod LMI valid" % page.title())
+		# return None
+	# elif len(result1) == 0:
+		# log(u"*''W'': [[:%s]] conține un cod LMI cu spații" % page.title())
+	# elif len(result2) > 1:
+		# code = result2[0][0]
+		# for res in result2:#TODO:wtf????
+			# if code != result2[0][0]:
+				# log(u"*''E'': [[[:%s]] conține mai multe coduri LMI distincte" % page.title())
+				# return None
+	# return result2[0][0]#first regular expression
+
+def checkAllCodes(result, page):
+	if len(result) == 0:
 		log(u"*''E'': [[:%s]] nu conține niciun cod LMI valid" % page.title())
 		return None
-	elif len(result1) == 0:
-		log(u"*''W'': [[:%s]] conține un cod LMI cu spații" % page.title())
-	elif len(result2) > 1:
-		code = result2[0][0]
-		for res in result2:
-			if code != result2[0][0]:
-				log(u"*''E'': [[[:%s]] conține mai multe coduri LMI distincte" % page.title())
-				return None
-	return result2[0][0]#first regular expression
+	elif len(result) > 1:
+		code = result[0][0]
+		for res in result:
+			for c in res:
+				if code != c:
+					log(u"*''E'': [[[:%s]] conține mai multe coduri LMI distincte" % page.title())
+					return None
+	return result[0][0]#first regular expression
 
 def processArticle(text, page, conf):
 	wikipedia.output(u'Working on "%s"' % page.title(True))
 	regexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2})?))", re.I)
 	result1 = re.findall(regexp, text)
-	text = re.sub(r'\s', '', text)
-	result2 = re.findall(regexp, text)
-	code = checkAllCodes(result1, result2, page)
+	code = checkAllCodes(result1, page)
+	#text = re.sub(r'\s', '', text)
+	#result2 = re.findall(regexp, text)
+	#code = checkAllCodes(result1, result1, page)
 	if code == None:
 		return	
-	else:
-		code = re.sub(r'\s', '', code)
+	#else:
+	#	code = re.sub(r'\s', '', code)
 		
 	lat, long = parseGeohackLinks(page)
 	if code in fullDict:
@@ -179,8 +199,6 @@ def processArticle(text, page, conf):
 							'namespace': page.namespace(), 
 							'project': page.site().language(), 
 							'lat': lat, 'long': long}]
-	global count
-	count += 1
 	
 def processImagePage(text, page, conf):
 	pass
@@ -213,12 +231,13 @@ def main():
 	_log = lang + "_" + _log;
 	initLog()
 	#page = wikipedia.Page(site, "File:Icoanei 56 (2).jpg")
+	count = 0
 	for page in pregenerator:
 		if page.exists() and not page.isRedirectPage():
 			# Do some checking
 			processArticle(page.get(), page, langOpt)
+			count += 1
 	closeLog()
-	global count
 	print count
 	f = open(lang + "_pages.json", "w+")
 	json.dump(fullDict, f)

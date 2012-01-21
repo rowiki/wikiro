@@ -1,10 +1,8 @@
 ﻿#!/usr/bin/python
 # -*- coding: utf-8  -*-
 '''
-Parse the monument pages (articles and images) and put the output in a json file
-with the following format:
-dict{code, list[dict{name, namespace, project, lat, lon}, ...]}
-
+Parse the monument pages (lists and images) and remove spaces from the 
+monument ID
 '''
 
 import sys, time, warnings, json, string
@@ -28,25 +26,65 @@ options = {
 def processList(text, page, conf):
 	wikipedia.output(u'Working on "%s"' % page.title(True))
 	index3 = 0
+	changed = False
 	while 1:
+		space = ""
 		index = text.lower().find("{{" + conf['codeTemplate'].lower(), index3)
 		if index == -1:
 			wikipedia.output(u'No more templates in "%s"' % page.title(True))
 			break
 		index2 = text.find("| Cod = ", index)
-		index3 = text.find("\r", index2)
-		code = text[index2 + 8:index3]
-		print code
+		len = 8
+		if index2 == -1:
+			index2 = text.find("|Cod = ", index)
+			len = 7
+		if index2 == -1:
+			index2 = text.find("|Cod=", index)
+			len = 5
+		index3 = text.find("\n", index2)
+		index4 = text.find("\r", index2)
+		#wikipedia.output(text[index2:index3])
+		if index4 + 1 == index3:
+			index3 = index4
+		index4 = text.find("azi", index2, index3)
+		if index4 <> -1:
+			#print "azi"
+			index3 = index4
+			space = " "
+		index4 = text.find("fost", index2, index3)
+		if index4 <> -1:
+			#print "fost"
+			index3 = index4
+			space = " "
+		index4 = text.find("\"", index2, index3)
+		if index4 <> -1:
+			#print "\""
+			index3 = index4
+			space = " "
+		index4 = text.find("(", index2, index3)
+		if index4 <> -1:
+			#print "("
+			index3 = index4
+			space = " "
+		code = text[index2 + len:index3]
+		#wikipedia.output(code)
 		newCode = re.sub(r'\s', '', code)
-		if code == newCode:
-			wikipedia.output(u"No change for %s, continuing" % code)
+		newCode += space
+		if code == newCode or code.lstrip() == "":
+			#wikipedia.output(u"No change for %s, continuing" % code)
 			continue
-		text = text.replace(code, newCode)
+		# wikipedia.output(text[index2:index3])
+		# wikipedia.output(str(index))
+		# wikipedia.output(str(index2))
+		# wikipedia.output(str(index3))
+		# wikipedia.output(str(index4))
+		# wikipedia.output(text)
+		text = text.replace(code, newCode, 1)
+		changed = True
 		wikipedia.output(u'Code "%s" replaced with "%s"' % (code, newCode))
 	comment = u'Se curăță codul LMI din articolul %s' % page.title(True)
-	#import time
-	#time.sleep(10)
-	page.put(text, comment)
+	if changed: #something changed
+		page.put(text, comment)
 
 
 def processArticle(text, page, conf):
@@ -105,6 +143,8 @@ def main():
 				processList(page.get(), page, langOpt)
 			else:
 				processArticle(page.get(), page, langOpt)
+	# page = wikipedia.Page(site, u"Lista monumentelor istorice din România/Vaslui")
+	# processList(page.get(), page, langOpt)
 
 if __name__ == "__main__":
 	try:

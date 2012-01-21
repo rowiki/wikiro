@@ -158,8 +158,7 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 		wikipedia.output("No change, nothing to upload!")
 		return text
 	#wikipedia.output("5")
-	wikipedia.output(" - \t" + orig)
-	wikipedia.output(" + \t" + new.replace("\n", "\n + \t"))
+	wikipedia.showDiff(orig, new)
 	answer = wikipedia.input(u"Upload change? ([y]es/[n]o/[l]og)")
 	if answer == 'y':
 		(before, code, after) = text.partition(rawCode)
@@ -225,7 +224,7 @@ def main():
 				if len(pages_commons[code]) == 1: #exactly one picture
 					picture = pages_commons[code][0]["name"]
 				elif monument["Imagine"] == "": #no image, multiple available
-					msg = u"*''W'': ''[%s]'' Există mai multe imagini disponibile la commons pentru acest cod" % code
+					msg = u"*''W'': ''[%s]'' Există mai multe imagini disponibile la commons pentru acest cod: " % code
 					for pic in pages_commons[code]:
 						msg += u"[[:File:%s]], " % pic["name"]
 					msg += "\n"
