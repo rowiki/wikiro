@@ -20,16 +20,17 @@ mistakes = {
 	u' și\"(\s+)' : u' și\g<1>\"',
 	u'([0-9]+)\s+,\s+' : u'\g<1>, ',
 	u'\sk\sm\s': u' km ',
-	u'([0-9])\s?[kK]\s?m\s?(SV|NV|SE|NE|nord|sud|est|vest|[NSEV]|de)': u'\g<1> km \g<2>',
-	u'([0-9])\s?[mM]\s?(SV|NV|SE|NE|nord|sud|est|vest|[NSEV]|de)': u'\g<1> m \g<2>',
-	u'([0-9]),(\s+)([0-9]+) km': u'\g<1>,\g<3> km',
+	u'([0-9])\s?[kK]\s?m\s?(SV|NV|SE|NE|nord|sud|est|vest|[NSEV]|de|față)': u'\g<1> km \g<2>',
+	u'([0-9])\s?[mM]\s?(SV|NV|SE|NE|nord|sud|est|vest|[NSEV]|de|față)': u'\g<1> m \g<2>',
+	u'([0-9]),(\s+)([0-9]+)\skm': u'\g<1>,\g<3> km',
+	u'([0-9])\.([0-9]+)\skm': u'\g<1>,\g<3> km',
 	u'([Kk])m([0-9])': u'\g<1>m \g<2>',
 	u'([Ll])a(SV|NV|SE|NE|nord|sud|est|vest|[NSEV])de': u'\g<1>a \g<2> de ',
 	u'([Ll])a([0-9])': u'\g<1>a \g<2>',
 	u'([șȘ])i([0-9])': u'\g<1>i \g<2>',
 	u'([0-9])([Ll])a': u'\g<1> \g<2>a',
 	u'([0-9])([Șș])i': u'\g<1> \g<2>i',
-	u'(SV|NV|SE|NE|nord|sud|est|vest|[NSEV])\s?de\s?(sat|oraș|intravilan|localitate|comună|șosea|drum)': '\g<1> de \g<2>',
+	u'(SV|NV|SE|NE|nord|sud|est|vest|[NSEV])\s?de\s?(sat|oraș|intravilan|localitate|comună|șosea|drum|conac|Dunăre)': '\g<1> de \g<2>',
 	u'([k\s]m)\s?de\s?(sat|oraș|intravilan|localitate|comună|șosea|drum)': '\g<1> de \g<2>',
 	u'<?!n>desat': 'de sat',
 	u'PiațaUnirii([0-9]+)' : u'Piața Unirii \g<1>',
@@ -38,25 +39,44 @@ mistakes = {
 	u'([Pp])oddepiatră': u'\g<1>od de piatră',
 	u'([Nn])r\.?([0-9])': u'\g<1>r. \g<2>',
 	u'([Nn])r\s?([0-9])': u'\g<1>r. \g<2>',
-	u'([sS])tr\.([^\s])': u'\g<1>tr. \g<2>',
+	u'([^:])([sS])tr\.([^\s])': u'\g<1>\g<2>tr. \g<2>',
 	u'cca\.?\s?([0-9])': u'cca. \g<1>',
 	u'([Ll])a\s?cca\.?(\s?)': u'\g<1>a cca.\g<2>',
-	u',(([^0-9\s]))': u', \g<2>',
+	u',(([^0-9\s_]))': u', \g<2>',
 	#u'\.(([^0-9\s\.]))': u'. \g<2>',
 	#u'\s*:\s*': u': ',
 	u' *; *': u'; ',
 	u'șila': u'și la',
+	u'șiîn': u'și în',
 	u'și([Ss])tr': u'și \g<1>tr',
 	u'([a-zăâîșț])de([jJ])os': u'\g<1> de Jos',
 	u'([a-zăâîșț])de([sS])us': u'\g<1> de Sus',
+	u'\[\[([a-zăâîșț]+)([Mm])are([^a-zăâîșț])': u'[[\g<1> Mare\g<3>',
+	u'\[\[([a-zăâîșț]+)([Mm])ic([^a-zăâîșț])': u'[[\g<1> Mic\g<3>',
+	u'D\s?N\s?([0-9]{1,3})\s([ABCDEFGH])([\s,\.])': u'DN\g<1>\g<2>\g<3>',
+	u'D\s?N\s?([0-9]{1,3})': u'DN\g<1>',
+	u'Ziddeincintă': u'Zid de incintă',
+	#specific to one or few file(s)
+	u'șin([ăe])([0-9])': u'șin\g<1> \g<2>',
+	u'defostul([a-zA-Z])': u'de fostul \g<1>',
+	u'([Ll])a\s?distanț([aă])de([0-9])': u'\g<1>a distanț\g<2> de \g<3>',
+	u'înpădure': u'în pădure',
+	u'de(DJ|DN)': u'de \g<1>',
+	u'Clopotnițăde([a-zăîâșț])': u'Clopotniță de \g<1>',
+	u'Ansamblu(l?)de([a-zăîâșț])': u'Ansamblu\g<1> de \g<2>',
+}
+
+coords = {
+	u'\|\s?Coordonate\s=.*(\r?)\n': u'',
 }
 
 improvements = {
 	#link km and m to the number
 	u'([0-9])\s*[kK]m': u'\g<1>&nbsp;km',
-	u'([0-9])\s*[mM](\s)': u'\g<1>&nbsp;m\g<2>',
-	u'&nbsp; ': u'&nbsp;',
+	u'([0-9])\s*[mM]([\s,\.])': u'\g<1>&nbsp;m\g<2>',
+	u'&nbsp;\s': u'&nbsp;',
 	u'&nbsp;': u' ',#the replacement is U+00A0
+	u' \s': u' ',#the replacement is U+00A0
 }
 
 def processList(page):
@@ -69,7 +89,9 @@ def processList(page):
 		if text <> newtext:
 			changed = True
 			text = newtext
-	comment = u'Se repară anumite erori frecvente din articolul %s' % page.title(True)
+	#comment = u'Înlocuiesc spațiul cu non-breaking space (U+00A0) în unitățile de distranță din articolul [[%s]]' % page.title(True)
+	#comment = u'Scot câmpul de coordonate din articolul [[%s]]' % page.title(True)
+	comment = u'Se corectează anumite erori frecvente din articolul [[%s]]' % page.title(True)
 	if changed == True:
 		wikipedia.showDiff(origtext, newtext)
 		resp = wikipedia.input("Do you agree with ALL the changes above? [y/n]")

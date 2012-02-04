@@ -112,8 +112,9 @@ def processMonument(params, source, countryconfig, title):
 				else:
 					#FIXME: Include more information where it went wrong
 					wikipedia.output(u'Found unknown field: %s on page %s' % (field, title) )
-					wikipedia.output(u'Field: %s' % (field,))
-					wikipedia.output(u'Value: %s' % (value,))
+					wikipedia.output(u'Field: %s' % field)
+					wikipedia.output(u'Value: %s' % value)
+					wikipedia.output(u'Params: %s\n%s' % (params, param))
 					#time.sleep(5)
 	return contents
 
