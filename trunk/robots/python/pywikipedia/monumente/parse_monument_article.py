@@ -48,7 +48,7 @@ options = {
 	},
 	'commons':
 	{
-		'namespaces': [6],
+		'namespaces': [14, 6],
 		'codeTemplate': "Monument_istoric",
 		'infoboxes': [],
 	}
@@ -56,6 +56,7 @@ options = {
 
 
 codeRegexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2})?))", re.I)
+errorRegexp = re.compile("eroare\s?=\s?([^0])", re.I)
 geohackRegexp = re.compile("geohack\.php\?pagename=(.*?)&(amp;)?params=(.*?)&(amp;)?language=")
 fullDict = {}
 _log = "pages.err.log"
@@ -232,8 +233,9 @@ def processArticle(text, page, conf):
 	code = checkAllCodes(re.findall(codeRegexp, text), title)
 	if code == None:
 		return
-	#else:
-	#	code = re.sub(r'\s', '', code)
+	if re.search(errorRegexp, text) <> None:
+		log(u"*''E'': [[:%s]] a fost marcat de un editor ca având o eroare în codul LMI %s" % (title, code))
+		return
 		
 	lat, long = parseGeohackLinks(page)
 	
@@ -286,25 +288,33 @@ def main():
 	langOpt = options.get(lang)
 			
 	rowTemplate = wikipedia.Page(site, u'%s:%s' % (site.namespace(10), langOpt.get('codeTemplate')))
-
-	transGen = pagegenerators.ReferringPageGenerator(rowTemplate, onlyTemplateInclusion=True)
-	filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen, langOpt.get('namespaces'), site)
-	pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 250)
 	global _log
+	global fullDict
 	_log = lang + "_" + _log;
 	initLog()
-	#page = wikipedia.Page(site, "File:Icoanei 56 (2).jpg")
-	count = 0
-	for page in pregenerator:
-		if page.exists() and not page.isRedirectPage():
-			# Do some checking
-			processArticle(page.get(), page, langOpt)
-			count += 1
+
+	for namespace in langOpt.get('namespaces'):
+		transGen = pagegenerators.ReferringPageGenerator(rowTemplate, onlyTemplateInclusion=True)
+		filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen, [namespace], site)
+		pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 250)
+		
+		#page = wikipedia.Page(site, "File:Biserica_Sf._Maria,_sat_Drumul_Carului,_'La_Cetate'-Gradistea._Moeciu,_jud._BRASOV.jpg")
+		count = 0
+		for page in pregenerator:
+			if page.exists() and not page.isRedirectPage():
+				# Do some checking
+				processArticle(page.get(), page, langOpt)
+				count += 1
+		print count
+		if namespace == 0:
+			namespaceName = ""
+		else:
+			namespaceName = "_" + site.namespace(namespace)
+		f = open(lang + namespaceName + "_pages.json", "w+")
+		json.dump(fullDict, f)
+		f.close();
+		fullDict = {}
 	closeLog()
-	print count
-	f = open(lang + "_pages.json", "w+")
-	json.dump(fullDict, f)
-	f.close();
 
 if __name__ == "__main__":
 	try:

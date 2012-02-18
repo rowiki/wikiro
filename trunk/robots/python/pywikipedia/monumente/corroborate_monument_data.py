@@ -189,8 +189,14 @@ def main():
 	wikipedia.output("...done")
 	f.close();
 	
-	f = open("commons_pages.json", "r+")
-	wikipedia.output("Reading commons pages file...")
+	f = open("commons_Category_pages.json", "r+")
+	wikipedia.output("Reading commons categories file...")
+	categories_commons = json.load(f)
+	wikipedia.output("...done")
+	f.close();
+	
+	f = open("commons_File_pages.json", "r+")
+	wikipedia.output("Reading commons images file...")
 	pages_commons = json.load(f)
 	wikipedia.output("...done")
 	f.close();
@@ -223,7 +229,6 @@ def main():
 					msg = u"*''E'': ''[%s]'' Codul este prezent în mai multe articole pe Wikipedia: " % code
 					for page in allPages:
 						msg += (u"[[:%s]] " % page["name"])
-					msg += u"\n"
 					log(msg)
 				elif len(allPages) == 1:
 					article = allPages[0]
@@ -237,6 +242,13 @@ def main():
 						msg += u"[[:%s]], " % pic["name"]
 					log(msg)
 				allPages.extend(pages_commons[code])
+			if code in categories_commons:
+				allPages.extend(categories_commons[code])
+				if len(categories_commons[code]) > 1:
+					msg = u"*''E'': ''[%s]'' Codului îi corespund mai multe categorii la Commons: " % code
+					for page in categories_commons[code]:
+						msg += (u"[[:%s]] " % page["name"])
+					log(msg)
 			#wikipedia.output(str(allPages))
 		except Exception as e:
 			wikipedia.output("Error: " + str(e))
@@ -290,6 +302,14 @@ def main():
 				artimage = "File:" + artimage
 			#wikipedia.output("Upload?" + artimage)
 			articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
+			
+		#Commons category
+		if code in categories_commons:
+			cat = categories_commons[code][0]
+			if monument["Commons"] == "":
+				articleText = updateTableData(monument["source"], code, "Commons", "commons:" + cat["name"], text=articleText)
+			elif monument["Commons"] <> ("commons:" + cat["name"]):
+				log(u"* ''E'': ''[%s]'' Există mai multe categorii pentru acest cod: [[:%s]] și [[:%s]]" % (code, "commons:" + cat["name"], monument["Commons"]))
 		
 		#latitude and longitude
 		if monument["Lat"] == "":
