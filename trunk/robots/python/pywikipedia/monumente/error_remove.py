@@ -37,17 +37,20 @@ mistakes = {
 	u'PiațaUnirii' : u'Piața Unirii',
 	u'S\s?f\s?\.' : u'Sf.',
 	u'([Pp])oddepiatră': u'\g<1>od de piatră',
-	u'([Nn])r\.?([0-9])': u'\g<1>r. \g<2>',
-	u'([Nn])r\s?([0-9])': u'\g<1>r. \g<2>',
-	u'([^:])([sS])tr\.([^\s])': u'\g<1>\g<2>tr. \g<2>',
+	u'(\| (?!Imagine))(.*)([Nn])r\.?([0-9])': u'\g<1>\g<2>\g<3>r. \g<2>',
+	u'(\| (?!Imagine))(.*)([Nn])r\s?([0-9])': u'\g<1>\g<2>\g<3>r. \g<2>',
+	u'([^:])([sS])tr\.([^\s_])': u'\g<1>\g<2>tr. \g<2>',
 	u'cca\.?\s?([0-9])': u'cca. \g<1>',
 	u'([Ll])a\s?cca\.?(\s?)': u'\g<1>a cca.\g<2>',
 	u',(([^0-9\s_]))': u', \g<2>',
-	#u'\.(([^0-9\s\.]))': u'. \g<2>',
-	#u'\s*:\s*': u': ',
+	u'(\| (?!Imagine))(.*)([^w])\.([a-zăîâșțA-ZĂÂÎȘȚ]{4,})': u'\g<1>\g<2>\g<3>. \g<4>',#high risk
+	u'(\| (?!Imagine))(.*)sf\.sec': u'\g<1>\g<2>sf. sec',
+	u'(\| (?!Imagine))(.*)sec\.X': u'\g<1>\g<2>sec. X',
+	u'\s*:([a-zăâîșț])': u': \g<1>',#high risk
 	u' *; *': u'; ',
 	u'șila': u'și la',
 	u'șiîn': u'și în',
+	u'([^a])dela': u'\g<1>de la',
 	u'și([Ss])tr': u'și \g<1>tr',
 	u'([a-zăâîșț])de([jJ])os': u'\g<1> de Jos',
 	u'([a-zăâîșț])de([sS])us': u'\g<1> de Sus',
@@ -56,7 +59,11 @@ mistakes = {
 	u'D\s?N\s?([0-9]{1,3})\s([ABCDEFGH])([\s,\.])': u'DN\g<1>\g<2>\g<3>',
 	u'D\s?N\s?([0-9]{1,3})': u'DN\g<1>',
 	u'Ziddeincintă': u'Zid de incintă',
+	u'(\| (?!Imagine))(.*)([a-zăîâșț])([A-ZĂÂÎȘȚ])': u'\g<1>\g<2>\g<3> \g<4>',#high risk
 	#specific to one or few file(s)
+	u'Cetate(a?)de([a-zăîâșțA-ZĂÂÎȘȚ])': u'Cetate\g<1> de \g<2>',
+	u'Moar([ăa])de([a-zăîâșțA-ZĂÂÎȘȚ])': u'Moar\g<1> de \g<2>',
+	u'Sitularheologic([a-zăîâșțA-ZĂÂÎȘȚ])': u'Situl arheologic \g<1>',
 	u'șin([ăe])([0-9])': u'șin\g<1> \g<2>',
 	u'defostul([a-zA-Z])': u'de fostul \g<1>',
 	u'([Ll])a\s?distanț([aă])de([0-9])': u'\g<1>a distanț\g<2> de \g<3>',
@@ -64,6 +71,10 @@ mistakes = {
 	u'de(DJ|DN)': u'de \g<1>',
 	u'Clopotnițăde([a-zăîâșț])': u'Clopotniță de \g<1>',
 	u'Ansamblu(l?)de([a-zăîâșț])': u'Ansamblu\g<1> de \g<2>',
+	u'([Îî])nparteade': u'\g<1>n partea de',
+	u'laextremitateade': u'la extremitatea de',
+	u'allui': u'al lui',
+	u'asatului': u'a satului',
 }
 
 coords = {
