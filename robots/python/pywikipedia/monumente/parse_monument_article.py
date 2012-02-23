@@ -20,7 +20,8 @@ options = {
 		'namespaces': [0],
 		'codeTemplate': "codLMI",
 		'infoboxes':
-		[{
+		[
+		{
 			'name': u'Infocaseta Monument',
 			'author': u'artist',
 			'image': u'imagine',
@@ -44,13 +45,26 @@ options = {
 			'name': u'Cutie Edificiu Religios|Infocaseta Edificiu religios',
 			'author': u'arhitect',
 			'image': u'imagine',
-		},],
+		},
+		],
+		'qualityTemplates':
+		[
+		u'Articol bun',
+		u'Articol de calitate',
+		u'Listă de calitate',
+		],
 	},
 	'commons':
 	{
 		'namespaces': [14, 6],
 		'codeTemplate': "Monument_istoric",
 		'infoboxes': [],
+		'qualityTemplates':
+		[
+		u'Valued image',
+		u'QualityImage',
+		u'Assessments',
+		],
 	}
 }
 
@@ -58,6 +72,7 @@ options = {
 codeRegexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2})?))", re.I)
 errorRegexp = re.compile("eroare\s?=\s?([^0])", re.I)
 geohackRegexp = re.compile("geohack\.php\?pagename=(.*?)&(amp;)?params=(.*?)&(amp;)?language=")
+qualityRegexp = None
 fullDict = {}
 _log = "pages.err.log"
 _flog = None
@@ -237,6 +252,11 @@ def processArticle(text, page, conf):
 		log(u"*''E'': [[:%s]] a fost marcat de un editor ca având o eroare în codul LMI %s" % (title, code))
 		return
 		
+	if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
+		quality = True
+	else:
+		quality = False
+		
 	lat, long = parseGeohackLinks(page)
 	
 	author = None
@@ -258,12 +278,14 @@ def processArticle(text, page, conf):
 		fullDict[code].append({'name': title, 
 								'project': page.site().language(), 
 								'lat': lat, 'long': long,
-								'author': author, 'image': image})
+								'author': author, 'image': image,
+								'quality': quality})
 	else:
 		fullDict[code] = [{'name': title, 
 							'project': page.site().language(), 
 							'lat': lat, 'long': long,
-							'author': author, 'image': image}]
+							'author': author, 'image': image,
+								'quality': quality}]
 	
 def processImagePage(text, page, conf):
 	pass
@@ -290,8 +312,17 @@ def main():
 	rowTemplate = wikipedia.Page(site, u'%s:%s' % (site.namespace(10), langOpt.get('codeTemplate')))
 	global _log
 	global fullDict
+	global qualityRegexp
 	_log = lang + "_" + _log;
 	initLog()
+	
+	qReg = u"\{\{("
+	for t in langOpt.get('qualityTemplates'):
+		qReg = qReg + t + "|"
+	qReg = qReg[:-1]
+	qReg += ")(.*)\}\}"
+	print qReg
+	qualityRegexp = re.compile(qReg, re.I)
 
 	for namespace in langOpt.get('namespaces'):
 		transGen = pagegenerators.ReferringPageGenerator(rowTemplate, onlyTemplateInclusion=True)
