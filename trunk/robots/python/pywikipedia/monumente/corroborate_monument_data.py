@@ -172,7 +172,8 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 			page.put(text, comment)
 			return None
 	elif answer == 'l' or answer == '':
-		log(u"* ''W'': ''[%s]'' De verificat dacă înlocuirea câmpului ''%s'' cu ''%s'' este corectă (inclusiv legăturile adăugate)" % (code, orig, new))
+		new = new.replace("\n", "<br/>")
+		log(u"*''W'': ''[%s]'' De verificat dacă înlocuirea câmpului ''%s'' cu ''%s'' este corectă (inclusiv legăturile adăugate)" % (code, orig, new))
 	#wikipedia.output("6")
 	return text
 	
@@ -240,7 +241,12 @@ def main():
 					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
 					for pic in pages_commons[code]:
 						msg += u"[[:%s]], " % pic["name"]
-					log(msg)
+						if pic["quality"] == True:
+							picture = pic["name"]
+							break
+					msg += "\n"
+					if picture == "": #no quality pictures
+						log(msg)
 				allPages.extend(pages_commons[code])
 			if code in categories_commons:
 				allPages.extend(categories_commons[code])
@@ -263,14 +269,14 @@ def main():
 			else: # check if the 2 links are the same
 				link = strainu.extractLink(monument["Denumire"])
 				if link == None:
-					log(u"* ''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire" % code)
+					log(u"*''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire" % code)
 				else:
 					page1 = wikipedia.Page(wikipedia.getSite(), link)
 					page2 = wikipedia.Page(wikipedia.getSite(), article["name"])
 					if page1 <> page2 and \
 					(not page1.isRedirectPage() or page1.getRedirectTarget() <> page2) and \
 					(not page2.isRedirectPage() or page2.getRedirectTarget() <> page1):
-						log(u"* ''W'': ''[%s]'' Câmpul Denumire are o legătură internă către [[%s]], dar articolul despre monument este [[%s]]" % (code, page1, page2))
+						log(u"*''W'': ''[%s]'' Câmpul Denumire are o legătură internă către [[%s]], dar articolul despre monument este [[%s]]" % (code, page1, page2))
 					
 		#author
 		if article <> None and article["author"] <> None and article["author"].strip() <> "":
@@ -284,7 +290,7 @@ def main():
 				a1 = author.split("<ref")[0].strip()
 				a2 = strainu.stripLink(monument["Arhitect"]).strip()
 				if a1 <> a2:
-					log(u"* ''W'': ''[%s]'' Câmpul Arhitect este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
+					log(u"*''W'': ''[%s]'' Câmpul Arhitect este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
 		
 		#image from Commons
 		if picture <> None and picture <> "" and monument["Imagine"] == "":
@@ -293,8 +299,10 @@ def main():
 				picture = "File:" + picture
 			articleText = updateTableData(monument["source"], code, "Imagine", picture, text=articleText)
 		
-		#use image from article only if none is available from commons
-		if picture == None and article <> None and article["image"] <> None and article["image"] <> "" and monument["Imagine"].strip() == "":
+		#use image from article only if none is available (or was selected) from commons 
+		if (picture == None or picture == "") and \
+		article <> None and article["image"] <> None and \
+		article["image"] <> "" and monument["Imagine"].strip() == "":
 			artimage = strainu.extractImageLink(article["image"]).strip()
 			if artimage == None or artimage == "":
 				wikipedia.output("Wrong link: %s" % article["image"])
@@ -309,7 +317,7 @@ def main():
 			if monument["Commons"] == "":
 				articleText = updateTableData(monument["source"], code, "Commons", "commons:" + cat["name"], text=articleText)
 			elif monument["Commons"] <> ("commons:" + cat["name"]):
-				log(u"* ''E'': ''[%s]'' Există mai multe categorii pentru acest cod: [[:%s]] și [[:%s]]" % (code, "commons:" + cat["name"], monument["Commons"]))
+				log(u"*''E'': ''[%s]'' Există mai multe categorii pentru acest cod: [[:%s]] și [[:%s]]" % (code, "commons:" + cat["name"], monument["Commons"]))
 		
 		#latitude and longitude
 		if monument["Lat"] == "":
@@ -328,7 +336,7 @@ def main():
 			if page["lat"] <> 0 and page["long"] <> 0:
 				if artLat <> 0: #this also means artLong <> 0
 					if math.fabs(artLat - page["lat"]) > 0.01 or math.fabs(artLong - page["long"]) > 0.01:
-						log(u"* ''E'': ''[%s]'' Coordonate diferite între [[:%s]] (%f,%f) și [[:%s]] (%f,%f)" % (code, page["name"], page["lat"], page["long"], artCoord, artLat, artLong))
+						log(u"*''E'': ''[%s]'' Coordonate diferite între [[:%s]] (%f,%f) și [[:%s]] (%f,%f)" % (code, page["name"], page["lat"], page["long"], artCoord, artLat, artLong))
 						updateCoord = False
 				else:
 					artLat = page["lat"]
@@ -341,7 +349,7 @@ def main():
 			articleText = updateTableData(monument["source"], code, "Lon", str(artLong), upload = True, text = articleText)
 		
 		if lat <> 0 and artLat <> 0 and (math.fabs(artLat - lat) > 0.01 or math.fabs(artLong - long) > 0.01):
-			log(u"* ''E'': ''[%s]'' Coordonate diferite între [[:%s]] (%f,%f) și listă (%f,%f)" % (code, artCoord, artLat, artLong, lat, long))
+			log(u"*''E'': ''[%s]'' Coordonate diferite între [[:%s]] (%f,%f) și listă (%f,%f)" % (code, artCoord, artLat, artLong, lat, long))
 		
 	closeLog()
 
