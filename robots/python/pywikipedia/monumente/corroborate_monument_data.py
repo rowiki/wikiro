@@ -134,8 +134,6 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 				elif fld == field:
 					orig = param.strip()
 				elif codeFound and orig == None and param == params[-1]: #keep the last element
-					wikipedia.output(str(params))
-					wikipedia.output(str(upload))
 					last = param.strip()
 			if codeFound:
 				break
@@ -146,6 +144,8 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 		log(u"*''E'': ''[%s]'' Codul este prezent articolul [[%s]], dar nu și în listă" % (code, title))
 		wikipedia.output(u"Weird code: %s" % code)
 		return None
+	else:
+		wikipedia.output(u"\n" + str(params) + u"\n")
 	#wikipedia.output("3")
 	if orig != None:
 		new = field + " = " + newvalue
@@ -244,7 +244,6 @@ def main():
 						if pic["quality"] == True:
 							picture = pic["name"]
 							break
-					msg += "\n"
 					if picture == "": #no quality pictures
 						log(msg)
 				allPages.extend(pages_commons[code])
@@ -303,6 +302,7 @@ def main():
 		if (picture == None or picture == "") and \
 		article <> None and article["image"] <> None and \
 		article["image"] <> "" and monument["Imagine"].strip() == "":
+			wikipedia.output(monument["Imagine"])
 			artimage = strainu.extractImageLink(article["image"]).strip()
 			if artimage == None or artimage == "":
 				wikipedia.output("Wrong link: %s" % article["image"])
