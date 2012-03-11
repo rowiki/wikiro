@@ -1,9 +1,25 @@
 ﻿#!/usr/bin/python
 # -*- coding: utf-8  -*-
 '''
-Parse the monument pages (articles and images) and put the output in a json file
-with the following format:
-dict{code, list[dict{name, project, lat, lon, image, author}, ...]}
+This program parses the Wikimedia Commons images that include the "codeTemplate"
+from the options and extract the following information in a csv file:
+- code: the LMI code of the monument in the image
+- name: the name of the picture, without extension or namespace
+- url: the URL of the page that contains the image description
+- fileUrl: the URL of the image itself
+- license: the license of the image
+    - CCBYSA: any version or flavour of CCBYSA, including re-licensed from GFDL
+    - CCBY: any version or flavour of CCBY
+    - GFDL
+    - DP: public domain
+    - "" (empty string): unable to determine the license
+- author: the author (or first uploader if unable to determine) of the image
+- date: the date the picture was taken (or the date of the upload)
+- desc_ro: description in Romanian, if available
+- desc_en: description in English, if available
+- lat: latitude of the monument, if avalailable (WGS84 decimal)
+- long: longitude of the monument, if avalailable (WGS84 decimal)
+- quality: 1 if the image was marked as "good" in any way
 
 '''
 
@@ -56,7 +72,8 @@ def log(list):
     #wikipedia.output(str(list))
     line = ""
     for s in list:
-        s = s.replace( '"', '\\"')
+        #s = s.replace( '"', '\\"')
+        s = s.replace(u'"', u'”')
         line += "\"" + s.encode("utf-8") + "\";"
     line = line[:-1] + "\n"
     _flog.write(line)
@@ -418,7 +435,7 @@ def main():
                 # Do some checking
                 processArticle(image.get(), image, options)
                 count += 1
-        wikipedia.output(count)
+        print count
 
 if __name__ == "__main__":
     try:
