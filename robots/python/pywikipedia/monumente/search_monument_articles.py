@@ -15,6 +15,7 @@ import config as user
 import strainu_functions as strainu
 
 codeRegexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2})?))", re.I)
+templateRegexp = re.compile("\{\{([aA]utorCodLMI|[cC]odLMI)")
 errorRegexp = re.compile("eroare\s?=\s?([^0])", re.I)
 _log = "search.err.log"
 _flog = None
@@ -34,8 +35,10 @@ def processArticle(page):
 	text = page.get()
 	# wikipedia.output(u'Working on "%s"' % title)
 	global codeRegexp
+	global templateRegexp
 	result  = re.findall(codeRegexp, text)
-	if len(result) > 0:
+	template = re.findall(templateRegexp, text)
+	if len(result) > 0 and len(template) == 0:
 		msg = u"* [[%s]]: " % page.title()
 		for res in result:
 			msg += res[0] + ", "
