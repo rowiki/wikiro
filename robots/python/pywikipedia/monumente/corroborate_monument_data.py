@@ -190,6 +190,12 @@ def main():
 	wikipedia.output("...done")
 	f.close();
 	
+	f = open("ro_authors.json", "r+")
+	wikipedia.output("Reading ro.wp authors file...")
+	authors_ro = json.load(f)
+	wikipedia.output("...done")
+	f.close();
+	
 	f = open("commons_Category_pages.json", "r+")
 	wikipedia.output("Reading commons categories file...")
 	categories_commons = json.load(f)
@@ -277,7 +283,7 @@ def main():
 					(not page2.isRedirectPage() or page2.getRedirectTarget() <> page1):
 						log(u"*''W'': ''[%s]'' Câmpul Denumire are o legătură internă către [[%s]], dar articolul despre monument este [[%s]]" % (code, page1, page2))
 					
-		#author
+		#author from article
 		if article <> None and article["author"] <> None and article["author"].strip() <> "":
 			author = strainu.stripLink(article["author"]).strip()
 			if author == None or author == "":
@@ -290,15 +296,31 @@ def main():
 				a2 = strainu.stripLink(monument["Arhitect"]).strip()
 				if a1 <> a2:
 					log(u"*''W'': ''[%s]'' Câmpul Arhitect este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
+
+		#add the author(s) extracted from author pages
+		elif code in authors_ro:
+			authors = monument["Arhitect"]
+			for author in authors_ro[code]:
+				if authors.find(author) == -1: #we don't already know the author
+					if authors <> "":
+						authors = author + ", " + authors
+					else:
+						authors = author
+			if authors <> monument["Arhitect"]: # if something changed, update the text
+				wikipedia.output(authors)
+				articleText = updateTableData(monument["source"], code, "Arhitect", authors, text=articleText)
+			else:
+				wikipedia.output("The authors list is unchanged for %s: %s" % (code, authors))
 		
-		#image from Commons
+		#image from Commons, none in the list
 		if picture <> None and picture <> "" and monument["Imagine"] == "":
 			#wikipedia.output("Upload?" + picture)
 			if picture.find(':') < 0:#no namespace
 				picture = "File:" + picture
 			articleText = updateTableData(monument["source"], code, "Imagine", picture, text=articleText)
 		
-		#use image from article only if none is available (or was selected) from commons 
+		#use image from article only if none is available (or was selected) 
+		#from commons and we don't have a picture in the list
 		if (picture == None or picture == "") and \
 		article <> None and article["image"] <> None and \
 		article["image"] <> "" and monument["Imagine"].strip() == "":
