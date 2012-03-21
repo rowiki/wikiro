@@ -43,13 +43,15 @@ mistakes = {
 	u'cca\.?\s?([0-9])': u'cca. \g<1>',
 	u'([Ll])a\s?cca\.?(\s?)': u'\g<1>a cca.\g<2>',
 	u',(([^0-9\s_]))': u', \g<2>',
-	u'(\| (?!Imagine))(.*)([^w])\.([a-zăîâșțA-ZĂÂÎȘȚ]{4,})': u'\g<1>\g<2>\g<3>. \g<4>',#high risk
+	#u'(\| (?!Imagine))(.*)([^w])\.([a-zăîâșțA-ZĂÂÎȘȚ]{4,})': u'\g<1>\g<2>\g<3>. \g<4>',#high risk
+	u'(\| (?!Imagine|Commons))(.*)([^w])\.([a-gi-zăîâșțA-GI-ZĂÂÎȘȚ][a-zăîâșțA-ZĂÂÎȘȚ]{3,})': u'\g<1>\g<2>\g<3>. \g<4>',#high risk
 	u'(\| (?!Imagine))(.*)sf\.sec': u'\g<1>\g<2>sf. sec',
 	u'(\| (?!Imagine))(.*)sec\.X': u'\g<1>\g<2>sec. X',
 	u'\s*:([a-zăâîșț])': u': \g<1>',#high risk
 	u' *; *': u'; ',
 	u'șila': u'și la',
 	u'șiîn': u'și în',
+	u'șiașezarea': u'și așezarea',
 	u'([^a])dela': u'\g<1>de la',
 	u'și([Ss])tr': u'și \g<1>tr',
 	u'([a-zăâîșț])de([jJ])os': u'\g<1> de Jos',
@@ -60,6 +62,7 @@ mistakes = {
 	u'D\s?N\s?([0-9]{1,3})': u'DN\g<1>',
 	u'Ziddeincintă': u'Zid de incintă',
 	u'(\| (?!Imagine))(.*)([a-zăîâșț])([A-ZĂÂÎȘȚ])': u'\g<1>\g<2>\g<3> \g<4>',#high risk
+	u' alui ': u' a lui ',
 	#specific to one or few file(s)
 	u'Cetate(a?)de([a-zăîâșțA-ZĂÂÎȘȚ])': u'Cetate\g<1> de \g<2>',
 	u'Moar([ăa])de([a-zăîâșțA-ZĂÂÎȘȚ])': u'Moar\g<1> de \g<2>',
@@ -69,12 +72,13 @@ mistakes = {
 	u'([Ll])a\s?distanț([aă])de([0-9])': u'\g<1>a distanț\g<2> de \g<3>',
 	u'înpădure': u'în pădure',
 	u'de(DJ|DN)': u'de \g<1>',
-	u'Clopotnițăde([a-zăîâșț])': u'Clopotniță de \g<1>',
+	u'([Cc])lopotniț([ăa])de([a-zăîâșț])': u'\g<1>lopotniț\g<2> de \g<3>',
 	u'Ansamblu(l?)de([a-zăîâșț])': u'Ansamblu\g<1> de \g<2>',
 	u'([Îî])nparteade': u'\g<1>n partea de',
 	u'laextremitateade': u'la extremitatea de',
 	u'allui': u'al lui',
 	u'asatului': u'a satului',
+	u'lemnabisericii([a-zăîâșț])': u'lemn a bisericii \g<1>',
 }
 
 coords = {
