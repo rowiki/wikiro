@@ -14,7 +14,7 @@ import wikipedia, re, pagegenerators
 import config as user
 import strainu_functions as strainu
 
-codeRegexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2})?))", re.I)
+codeRegexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
 templateRegexp = re.compile("\{\{([aA]utorCodLMI|[cC]odLMI)")
 errorRegexp = re.compile("eroare\s?=\s?([^0])", re.I)
 _log = "search.err.log"

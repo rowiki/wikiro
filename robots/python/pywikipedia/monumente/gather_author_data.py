@@ -31,7 +31,7 @@ fullDict = {}
 
 def processArticle(text, page, conf):
 	wikipedia.output(u'Working on "%s"' % page.title(True))
-	regexp = re.compile("\{\{[aA]utorCodLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2})?))", re.I)
+	regexp = re.compile("\{\{[aA]utorCodLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
 	results = re.findall(regexp, text)
 	if results == None:
 		return	
