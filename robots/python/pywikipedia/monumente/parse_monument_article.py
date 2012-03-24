@@ -38,7 +38,7 @@ options = {
 			'image': u'imagine',
 		},
 		{
-			'name': u'Castru|Infocaseta Castru',
+			'name': u'Castru|Infocaseta Castru|Infocaseta Gară',
 			#'artist' does not really exist, putting it here to prevent errors
 			'author': u'artist',
 			'image': u'imagine',
