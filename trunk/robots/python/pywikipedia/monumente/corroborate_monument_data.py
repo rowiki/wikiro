@@ -141,8 +141,8 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 				orig = None
 	#wikipedia.output("2")
 	if not codeFound:
-		log(u"*''E'': ''[%s]'' Codul este prezent articolul [[%s]], dar nu și în listă" % (code, title))
-		wikipedia.output(u"Weird code: %s" % code)
+		log(u"*''E'': ''[%s]'' Codul nu este prezent în [[%s|listă]]" % (code, title))
+		wikipedia.output(u"Code not found: %s" % code)
 		return None
 	else:
 		wikipedia.output(u"\n" + str(params) + u"\n")
