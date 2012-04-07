@@ -63,6 +63,11 @@ mistakes = {
 	u'Ziddeincintă': u'Zid de incintă',
 	u'(\| (?!Imagine))(.*)([a-zăîâșț])([A-ZĂÂÎȘȚ])': u'\g<1>\g<2>\g<3> \g<4>',#high risk
 	u' alui ': u' a lui ',
+	u'(I|V|X)a\.(\s?)Chr\.': u'\g<1> a. Chr.',
+	u'a\.Chr\.': u'a. Chr.',
+	u'(I|V|X)p\.(\s?)Chr\.': u'\g<1> p. Chr.',
+	u'p\.Chr\.': u'p. Chr.',
+	u'(\| (?!Imagine))(.*)sec\.(I|V|X)': u'\g<1>\g<2>sec. \g<3>',
 	#specific to one or few file(s)
 	u'Cetate(a?)de([a-zăîâșțA-ZĂÂÎȘȚ])': u'Cetate\g<1> de \g<2>',
 	u'Moar([ăa])de([a-zăîâșțA-ZĂÂÎȘȚ])': u'Moar\g<1> de \g<2>',
@@ -79,6 +84,8 @@ mistakes = {
 	u'allui': u'al lui',
 	u'asatului': u'a satului',
 	u'lemnabisericii([a-zăîâșț])': u'lemn a bisericii \g<1>',
+	u'afosteimănăstiri': u'a fostei mănăstiri',
+	u'([cC])astrulde': u'\g<1>astrul de',
 }
 
 coords = {
@@ -112,10 +119,10 @@ def processList(page):
 		resp = wikipedia.input("Do you agree with ALL the changes above? [y/n]")
 		if resp == "y" or resp == "Y":
 			page.put(newtext, comment)
-		
 
-	
-	
+
+
+
 def main():
 	lang = u'ro'
 	textfile = u''
@@ -126,10 +133,10 @@ def main():
 			user.mylang = lang
 		if arg.startswith('-family'):
 			user.family = arg [len('-family:'):]
-	
+
 	site = wikipedia.getSite()
 	lang = site.language()
-			
+
 	rowTemplate = wikipedia.Page(site, u'Format:ElementLMI')
 
 	transGen = pagegenerators.ReferringPageGenerator(rowTemplate, onlyTemplateInclusion=True)
