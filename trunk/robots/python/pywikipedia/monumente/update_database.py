@@ -11,76 +11,76 @@ import wikipedia, config, re, pagegenerators
 countries = {
 	('ro', 'ro') : {
 		'project' : u'wikipedia',
-	'lang' : u'ro',
-	'headerTemplate' : u'ÎnceputTabelLMI',
-	'rowTemplate' : u'ElementLMI',
+	    'lang' : u'ro',
+	    'headerTemplate' : u'ÎnceputTabelLMI',
+	    'rowTemplate' : u'ElementLMI',
 		'footerTemplate' : u'SfârșitTabelLMI',
 		'commonsTemplate' : u'Monument istoric',
 		'commonsTrackerCategory' : u'Cultural heritage monuments in Romania with known IDs',
 		'commonsCategoryBase' : u'Historical monuments in Romania',
 		'unusedImagesPage' : u'User:Multichill/Unused Monument istoric',
 		'imagesWithoutIdPage' : u'User:Multichill/Monument istoric without ID',
-	'namespaces' : [0],
-	'table' : u'monuments_ro_(ro)',
-	'truncate' : False, 
-	'primkey' : u'Cod',
-	'fields' : [
-		{
-		'source' : u'Cod',
-		'dest' : u'cod',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Denumire',
-		'dest' : u'denumire',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Localitate',
-		'dest' : u'localitate',
-		'conv' : u'',
-		},
-			{
-		'source' : u'Adresă',
-		'dest' : u'adresa',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Datare',
-		'dest' : u'datare',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Arhitect',
-		'dest' : u'arhitect',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Lat',
-		'dest' : u'lat',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Coordonate',
-		'dest' : u'',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Lon',
-		'dest' : u'lon',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Imagine',
-		'dest' : u'imagine',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Commons',
-		'dest' : u'commons',
-		'conv' : u'',
-		},
-		],
+	    'namespaces' : [0],
+	    'table' : u'monuments_ro_(ro)',
+	    'truncate' : False, 
+	    'primkey' : u'Cod',
+	    'fields' : [
+		    {
+		    'source' : u'Cod',
+		    'dest' : u'cod',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Denumire',
+		    'dest' : u'denumire',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Localitate',
+		    'dest' : u'localitate',
+		    'conv' : u'',
+		    },
+			    {
+		    'source' : u'Adresă',
+		    'dest' : u'adresa',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Datare',
+		    'dest' : u'datare',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Arhitect',
+		    'dest' : u'arhitect',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Lat',
+		    'dest' : u'lat',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Coordonate',
+		    'dest' : u'',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Lon',
+		    'dest' : u'lon',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Imagine',
+		    'dest' : u'imagine',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Commons',
+		    'dest' : u'commons',
+		    'conv' : u'',
+		    },
+		    ],
 	},
 }
 
