@@ -235,22 +235,21 @@ def main():
 				if len(allPages) > 1:
 					msg = u"*''E'': ''[%s]'' Codul este prezent în mai multe articole pe Wikipedia: " % code
 					for page in allPages:
-						msg += (u"[[:%s]] " % page["name"])
+						msg += (u"[[:%s]], " % page["name"])
 					log(msg)
 				elif len(allPages) == 1:
 					article = allPages[0]
 			if code in pages_commons:
 				if len(pages_commons[code]) == 1: #exactly one picture
 					picture = pages_commons[code][0]["name"]
-				elif monument["Imagine"] == "": #no image, multiple available
-					picture = ""
+				elif monument["Imagine"] == "": #no image in list, multiple available
 					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
 					for pic in pages_commons[code]:
 						msg += u"[[:%s]], " % pic["name"]
-						if pic["quality"] == True:
+						if pic["quality"] == True: #choose the first quality picture
 							picture = pic["name"]
 							break
-					if picture == "": #no quality pictures
+					if picture == None: #no quality pictures
 						log(msg)
 				allPages.extend(pages_commons[code])
 			if code in categories_commons:
@@ -313,7 +312,7 @@ def main():
 				wikipedia.output("The authors list is unchanged for %s: %s" % (code, authors))
 		
 		#image from Commons, none in the list
-		if picture <> None and picture <> "" and monument["Imagine"] == "":
+		if picture <> None and monument["Imagine"] == "":
 			#wikipedia.output("Upload?" + picture)
 			if picture.find(':') < 0:#no namespace
 				picture = "File:" + picture
@@ -321,8 +320,7 @@ def main():
 		
 		#use image from article only if none is available (or was selected) 
 		#from commons and we don't have a picture in the list
-		if (picture == None or picture == "") and \
-		article <> None and article["image"] <> None and \
+		if picture == None and article <> None and article["image"] <> None and \
 		article["image"] <> "" and monument["Imagine"].strip() == "":
 			wikipedia.output(monument["Imagine"])
 			artimage = strainu.extractImageLink(article["image"]).strip()
@@ -380,3 +378,4 @@ if __name__ == "__main__":
 		main()
 	finally:
 		wikipedia.stopme()
+		
