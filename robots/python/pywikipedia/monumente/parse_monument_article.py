@@ -294,15 +294,12 @@ def processArticle(text, page, conf):
 	        break # stop only if we have all the information we need
 
     if image == None:
-	# if there is a single image in the article, use it
-        # I'm deliberately skipping images in templates (they have been treated
+	# if there are images in the article, use the first image
+    # I'm deliberately skipping images in templates (they have been treated
 	# above) and galleries, which usually contain non-selected images
         for img in page.linkedPages(withImageLinks = True):
-	    if img.isImage():
-	        if image == None:
+	        if img.isImage() and image == None:
 		        image = img.title()
-	        else: #already a second image, reset and stop
-		        image = None
 		        break
 
     if code in fullDict:
