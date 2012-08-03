@@ -12,7 +12,7 @@ identify different improvements and further errors in the monument pages and dat
 ** în listă și articol coordonatele sunt diferite (diferențe mai mari de 0,01 grade sau ~35 de secunde de grad) - i
 '''
 
-import sys, time, warnings, json, string
+import sys, time, warnings, json, string, random
 import math, urlparse
 sys.path.append("..")
 import wikipedia, re, pagegenerators
@@ -96,7 +96,7 @@ _flog = None
 def initLog():
 	global _flog, _log;
 	_flog = open(_log, 'w+')
-	
+
 def closeLog():
 	global _flog
 	_flog.close()
@@ -104,7 +104,7 @@ def closeLog():
 def log(string):
 	#wikipedia.output(string.encode("utf8") + "\n")
 	_flog.write(string.encode("utf8") + "\n")
-	
+
 #TODO: Hardcoded order of parameters
 def updateTableData(url, code, field, newvalue, upload = True, text = None):
 	wikipedia.output("Uploading %s for %s; value \"%s\"" % (field, code, newvalue))
@@ -176,41 +176,41 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 		log(u"*''W'': ''[%s]'' De verificat dacă înlocuirea câmpului ''%s'' cu ''%s'' este corectă (inclusiv legăturile adăugate)" % (code, orig, new))
 	#wikipedia.output("6")
 	return text
-	
+
 def main():
 	f = open("db.json", "r+")
 	wikipedia.output("Reading database file...")
 	db = json.load(f)
 	wikipedia.output("...done")
 	f.close();
-	
+
 	f = open("ro_pages.json", "r+")
 	wikipedia.output("Reading ro.wp pages file...")
 	pages_ro = json.load(f)
 	wikipedia.output("...done")
 	f.close();
-	
+
 	f = open("ro_authors.json", "r+")
 	wikipedia.output("Reading ro.wp authors file...")
 	authors_ro = json.load(f)
 	wikipedia.output("...done")
 	f.close();
-	
+
 	f = open("commons_Category_pages.json", "r+")
 	wikipedia.output("Reading commons categories file...")
 	categories_commons = json.load(f)
 	wikipedia.output("...done")
 	f.close();
-	
+
 	f = open("commons_File_pages.json", "r+")
 	wikipedia.output("Reading commons images file...")
 	pages_commons = json.load(f)
 	wikipedia.output("...done")
 	f.close();
-	
+
 	initLog()
 	lastSource = None
-	
+
 	#this is the big loop that should only happen once
 	for monument in db:
 		if monument["source"] <> lastSource:
@@ -242,28 +242,29 @@ def main():
 			if code in pages_commons:
 				if len(pages_commons[code]) == 1: #exactly one picture
 					picture = pages_commons[code][0]["name"]
-				elif monument["Imagine"] == "": #no image in list, multiple available
+				elif monument["Imagine"].strip() == "": #no image in list, multiple available
 					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
 					for pic in pages_commons[code]:
 						msg += u"[[:%s]], " % pic["name"]
 						if pic["quality"] == True: #choose the first quality picture
 							picture = pic["name"]
 							break
-					if picture == None: #no quality pictures
-						log(msg)
+					if picture == None: #no quality pictures, but do not log - we'll choose a random one
+						pass
+						#log(msg)
 				allPages.extend(pages_commons[code])
 			if code in categories_commons:
 				allPages.extend(categories_commons[code])
 				if len(categories_commons[code]) > 1:
 					msg = u"*''E'': ''[%s]'' Codului îi corespund mai multe categorii la Commons: " % code
 					for page in categories_commons[code]:
-						msg += (u"[[:%s]] " % page["name"])
+						msg += (u"[[:commons:%s]] " % page["name"])
 					log(msg)
 			#wikipedia.output(str(allPages))
 		except Exception as e:
 			wikipedia.output("Error: " + str(e))
 			pass #ignore errors
-		
+	
 		#monument name and link
 		if article <> None and article["name"] <> None and article["name"] <> "":
 			if monument["Denumire"].find("[[") == -1:
@@ -281,7 +282,7 @@ def main():
 					(not page1.isRedirectPage() or page1.getRedirectTarget() <> page2) and \
 					(not page2.isRedirectPage() or page2.getRedirectTarget() <> page1):
 						log(u"*''W'': ''[%s]'' Câmpul Denumire are o legătură internă către [[%s]], dar articolul despre monument este [[%s]]" % (code, page1, page2))
-					
+				
 		#author from article
 		if article <> None and article["author"] <> None and article["author"].strip() <> "":
 			author = strainu.stripLink(article["author"]).strip()
@@ -310,35 +311,54 @@ def main():
 				articleText = updateTableData(monument["source"], code, "Arhitect", authors, text=articleText)
 			else:
 				wikipedia.output("The authors list is unchanged for %s: %s" % (code, authors))
-		
+	
 		#image from Commons, none in the list
-		if picture <> None and monument["Imagine"] == "":
+		if picture <> None and monument["Imagine"].strip() == "":
 			#wikipedia.output("Upload?" + picture)
 			if picture.find(':') < 0:#no namespace
 				picture = "File:" + picture
 			articleText = updateTableData(monument["source"], code, "Imagine", picture, text=articleText)
+	
+			#use image from article only if none is available (or was selected) 
+			#from commons and we don't have a picture in the list
+			if picture == None and article <> None and article["image"] <> None and \
+			article["image"] <> "" and monument["Imagine"].strip() == "":
+				wikipedia.output(monument["Imagine"])
+				artimage = strainu.extractImageLink(article["image"]).strip()
+				if artimage == None or artimage == "":
+					wikipedia.output("Wrong link: %s" % article["image"])
+				if artimage.find(':') < 0:#no namespace
+					artimage = "File:" + artimage
+				#wikipedia.output("Upload?" + artimage)
+				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
+
+		if picture == None and monument["Imagine"].strip() == "":
+			#use image from article only if none is available (or was selected) 
+			#from commons and we don't have a picture in the list
+			if article <> None and article["image"] <> None and article["image"] <> "":
+				wikipedia.output(monument["Imagine"])
+				artimage = strainu.extractImageLink(article["image"]).strip()
+				if artimage == None or artimage == "":
+					wikipedia.output("Wrong link: %s" % article["image"])
+				if artimage.find(':') < 0:#no namespace
+					artimage = "File:" + artimage
+				#wikipedia.output("Upload?" + artimage)
+				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
+			#final option: choose a random image from commons
+			elif (code in pages_commons) and len(pages_commons[code]) > 0:
+				artimage = random.sample(pages_commons[code],  1)[0]["name"]
+				if artimage.find(':') < 0:#no namespace
+					artimage = "File:" + artimage
+				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
 		
-		#use image from article only if none is available (or was selected) 
-		#from commons and we don't have a picture in the list
-		if picture == None and article <> None and article["image"] <> None and \
-		article["image"] <> "" and monument["Imagine"].strip() == "":
-			wikipedia.output(monument["Imagine"])
-			artimage = strainu.extractImageLink(article["image"]).strip()
-			if artimage == None or artimage == "":
-				wikipedia.output("Wrong link: %s" % article["image"])
-			if artimage.find(':') < 0:#no namespace
-				artimage = "File:" + artimage
-			#wikipedia.output("Upload?" + artimage)
-			articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
-			
 		#Commons category
 		if code in categories_commons:
 			cat = categories_commons[code][0]
 			if monument["Commons"] == "":
 				articleText = updateTableData(monument["source"], code, "Commons", "commons:" + cat["name"], text=articleText)
-			elif monument["Commons"] <> ("commons:" + cat["name"]):
-				log(u"*''E'': ''[%s]'' Există mai multe categorii pentru acest cod: [[:%s]] și [[:%s]]" % (code, "commons:" + cat["name"], monument["Commons"]))
-		
+			elif monument["Commons"].strip() <> ("commons:" + cat["name"].strip()):
+				log(u"*''E'': ''[%s]'' Există mai multe categorii pentru acest cod: <span lang=\"x-sic\">[[:%s]] și [[:%s]]<span>" % (code, "commons:" + cat["name"], monument["Commons"]))
+	
 		#latitude and longitude
 		if monument["Lat"] == "":
 			lat = 0
@@ -362,15 +382,15 @@ def main():
 					artLat = page["lat"]
 					artLong = page["long"]
 					artCoord = page["name"]
-					
+				
 		if lat == 0 and artLat <> 0 and updateCoord:
 			wikipedia.output(str(artLat) + " " + str(artLong))
 			articleText = updateTableData(monument["source"], code, "Lat", str(artLat), upload = False, text=articleText)
 			articleText = updateTableData(monument["source"], code, "Lon", str(artLong), upload = True, text = articleText)
-		
+	
 		if lat <> 0 and artLat <> 0 and (math.fabs(artLat - lat) > 0.01 or math.fabs(artLong - long) > 0.01):
 			log(u"*''E'': ''[%s]'' Coordonate diferite între [[:%s]] (%f,%f) și listă (%f,%f)" % (code, artCoord, artLat, artLong, lat, long))
-		
+	
 	closeLog()
 
 if __name__ == "__main__":
@@ -378,4 +398,4 @@ if __name__ == "__main__":
 		main()
 	finally:
 		wikipedia.stopme()
-		
+	
