@@ -1,9 +1,7 @@
 ﻿#!/usr/bin/python
 # -*- coding: utf-8  -*-
 '''
-Parse the monument pages (articles and images) and put the output in a json file
-with the following format:
-dict{code, list[dict{name, project, lat, lon, image, author}, ...]}
+Search for all the pages in a given wiki that contain a LMI code
 
 '''
 
