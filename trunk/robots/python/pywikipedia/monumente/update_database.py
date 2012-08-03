@@ -158,7 +158,7 @@ def processCountry(countryconfig):
 			processText(page.get(), page.permalink(), countryconfig, page=page)
 			
 	f = open("db.json", "w+")
-	json.dump(monuments_db, f)
+	json.dump(monuments_db, f, indent=2)
 	f.close();
 
 
