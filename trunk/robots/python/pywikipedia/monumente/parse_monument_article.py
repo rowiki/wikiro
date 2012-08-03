@@ -38,7 +38,7 @@ options = {
 	        'image': u'imagine',
         },
         {
-	        'name': u'Castru|Infocaseta Castru|Infocaseta Gară',
+	        'name': u'Castru|Infocaseta Castru|Infocaseta Gară|Mănăstire',
 	        #'artist' does not really exist, putting it here to prevent errors
 	        'author': u'artist',
 	        'image': u'imagine',
@@ -285,6 +285,9 @@ def processArticle(text, page, conf):
         (_dict, _keys) = strainu.tl2Dict(tl)
         if box['author'] in _dict:
 	        author = _dict[box['author']]
+	        #if we're using some strange attribution, mention it explicitly
+	        if box['author'] <> "arhitect" and box['author'] <> "artist":
+	            author += " (" + box['author'] + ")"
 	        #wikipedia.output(author)
         if box['image'] in _dict:
 	        #TODO:prefix with the namespace
