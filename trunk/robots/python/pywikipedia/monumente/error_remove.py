@@ -4,9 +4,12 @@
 Parse the monument pages (articles, lists and images) and correct frequent
 mistakes found in lists
 
+Requires Python 2.7
+
 '''
 
 import sys, time, warnings, json, string
+from collections import OrderedDict
 sys.path.append("..")
 import wikipedia, re, pagegenerators
 import config as user
@@ -30,7 +33,7 @@ mistakes = {
 	u'([șȘ])i([0-9])': u'\g<1>i \g<2>',
 	u'([0-9])([Ll])a': u'\g<1> \g<2>a',
 	u'([0-9])([Șș])i': u'\g<1> \g<2>i',
-	u'(SV|NV|SE|NE|nord|sud|est|vest|[NSEV])\s?de\s?(sat|oraș|intravilan|localitate|comună|șosea|drum|conac|Dunăre)': '\g<1> de \g<2>',
+	u'(SV|NV|SE|NE|nord|sud|est|vest|[NSEVnsev])\s?de\s?(sat|oraș|intravilan|localitate|comună|șosea|drum|conac|Dunăre)': '\g<1> de \g<2>',
 	u'([k\s]m)\s?de\s?(sat|oraș|intravilan|localitate|comună|șosea|drum)': '\g<1> de \g<2>',
 	u'<?!n>desat': 'de sat',
 	u'PiațaUnirii([0-9]+)' : u'Piața Unirii \g<1>',
@@ -92,33 +95,38 @@ coords = {
 	u'\|\s?Coordonate\s=.*(\r?)\n': u'',
 }
 
-improvements = {
+improvements = OrderedDict([
 	#link km and m to the number
-	u'([0-9])\s*[kK]m': u'\g<1>&nbsp;km',
-	u'([0-9])\s*[mM]([\s,\.])': u'\g<1>&nbsp;m\g<2>',
-	u'&nbsp;\s': u'&nbsp;',
-	u'&nbsp;': u' ',#the replacement is U+00A0
-	u' \s': u' ',#the replacement is U+00A0
-}
+	(u'([0-9])\s*[kK]m', u'\g<1>&nbsp;km'),
+	(u'([0-9])\s*[mM]([\s,\.])', u'\g<1>&nbsp;m\g<2>'),
+	(u'&nbsp;\s', u'&nbsp;'),
+	(u'&nbsp;', u' '),#the replacement is U+00A0
+	(u' \s', u' '),#the replacement is U+00A0
+])
 
 def processList(page):
 	wikipedia.output(u'Working on "%s"' % page.title(True))
 	global mistakes
 	origtext = text = page.get()
 	changed = False
+	#for mistake in improvements.keys():
+		#newtext = re.sub(mistake, improvements[mistake], text)
+		#if text <> newtext:
+			#changed = True
+			#text = newtext
 	for mistake in mistakes.keys():
 		newtext = re.sub(mistake, mistakes[mistake], text)
 		if text <> newtext:
 			changed = True
 			text = newtext
-	#comment = u'Înlocuiesc spațiul cu non-breaking space (U+00A0) în unitățile de distranță din articolul [[%s]]' % page.title(True)
+	comment = u'Înlocuiesc spațiul cu non-breaking space (U+00A0) în unitățile de distranță din articolul [[%s]]' % page.title(True)
 	#comment = u'Scot câmpul de coordonate din articolul [[%s]]' % page.title(True)
 	comment = u'Se corectează anumite erori frecvente din articolul [[%s]]' % page.title(True)
 	if changed == True:
-		wikipedia.showDiff(origtext, newtext)
+		wikipedia.showDiff(origtext, text)
 		resp = wikipedia.input("Do you agree with ALL the changes above? [y/n]")
 		if resp == "y" or resp == "Y":
-			page.put(newtext, comment)
+			page.put(text, comment)
 
 
 
