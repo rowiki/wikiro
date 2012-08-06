@@ -11,8 +11,10 @@ import static org.wikipedia.Wiki.USER_TALK_NAMESPACE;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TimeZone;
@@ -30,6 +32,7 @@ public class AutoSigner {
     private static final String defaultSummary = "Robot: semnãturã automatã";
 
     private static Wiki wiki;
+    private static Map<String, Long> lastReviewedVersion = new HashMap<String, Long>();
 
     private static Set<String> projectPages = new HashSet<String>() {
         private static final long serialVersionUID = -2245300967753508562L;
@@ -63,6 +66,12 @@ public class AutoSigner {
                 if (rev.getPage().startsWith("Wikipedia:") && !projectPages.contains(rev.getPage())) {
                     continue revisions;
                 }
+                Long lastRevVer = lastReviewedVersion.get(rev.getPage());
+                if (null != lastRevVer && lastRevVer < rev.getRevid()) {
+                    continue revisions;
+                } else {
+                    lastReviewedVersion.put(rev.getPage(), rev.getRevid());
+                }
                 String crtText = rev.getText();
                 String crtAuthor = rev.getUser();
 
@@ -91,8 +100,8 @@ public class AutoSigner {
                     }
                     // for edits spaced larger than 1 hour, we consider them
                     // different messages
-                    long timediff = pageHistory[i].getTimestamp().getTimeInMillis()
-                        - pageHistory[0].getTimestamp().getTimeInMillis();
+                    long timediff = pageHistory[0].getTimestamp().getTimeInMillis()
+                        - pageHistory[i].getTimestamp().getTimeInMillis();
                     if (!pageHistory[i].getUser().equals(crtAuthor) || timediff > 1000 * 60 * 60) {
                         lastMessageByOther = pageHistory[i];
                         break;
@@ -113,13 +122,17 @@ public class AutoSigner {
         } catch (LoginException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            if (null != wiki) {
+                wiki.logout();
+            }
         }
     }
 
     private static void analyzeDiff(Revision crtRev, Revision prevRev) throws IOException {
         // TODO Auto-generated method stub
-        String diff = prevRev.diff(crtRev);
-        System.out.println(diff);
+        DiffParser dp = new DiffParser(crtRev, prevRev);
+
     }
 
     private static void analyzeText(Revision revision) throws IOException, LoginException {
@@ -145,8 +158,8 @@ public class AutoSigner {
 
         System.out.println("I should append " + textToAdd);
         // actually append the template
-        //TODO uncomment
-        //wiki.edit(revision.getPage(), revision.getText() + textToAdd, defaultSummary, revision.getTimestamp());
+        // TODO uncomment
+        // wiki.edit(revision.getPage(), revision.getText() + textToAdd, defaultSummary, revision.getTimestamp());
     }
 
     protected static StringBuilder composeAutoSignature(Revision revision) {
