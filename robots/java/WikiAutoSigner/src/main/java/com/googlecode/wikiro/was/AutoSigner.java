@@ -27,6 +27,12 @@ import javax.security.auth.login.LoginException;
 import org.wikipedia.Wiki;
 import org.wikipedia.Wiki.Revision;
 
+/**
+ * In order to build and compile this robot, you need to download the Wiki API project from
+ * http://wiki-java.googlecode.com/svn This project depends on that one. All other dependencies are managed by Maven.
+ * 
+ * @author andrei.stroe
+ */
 public class AutoSigner {
 
     private static final String defaultSummary = "Robot: semnãturã automatã";
