@@ -31,6 +31,9 @@ import org.wikipedia.Wiki.Revision;
  * In order to build and compile this robot, you need to download the Wiki API project from
  * http://wiki-java.googlecode.com/svn This project depends on that one. All other dependencies are managed by Maven.
  * 
+ * It also requires a file named credentials.properties located in the classpath that contains two variables: Username and
+ * Password in order to authenticate to the wiki.
+ * 
  * @author andrei.stroe
  */
 public class AutoSigner {
