@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.wikipedia.Wiki.Revision;
 
+import difflib.DeleteDelta;
 import difflib.Delta;
 import difflib.DiffUtils;
 import difflib.Patch;
@@ -29,6 +30,9 @@ public class DiffParser {
         Patch diff = DiffUtils.diff(prevContents, crtContents);
         for (Delta delta : diff.getDeltas()) {
             System.out.println(delta);
+            if (delta instanceof DeleteDelta) {
+                System.out.println("Text was removed; ignoring this delta...");
+            }
         }
     }
 }

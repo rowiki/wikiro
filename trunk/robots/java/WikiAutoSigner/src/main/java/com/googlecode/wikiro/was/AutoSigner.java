@@ -140,8 +140,8 @@ public class AutoSigner {
 
     private static void analyzeDiff(Revision crtRev, Revision prevRev) throws IOException {
         // TODO Auto-generated method stub
-        DiffParser dp = new DiffParser(crtRev, prevRev);
-
+        DiffParser dp = new DiffParser(prevRev, crtRev);
+        dp.analyze();
     }
 
     private static void analyzeText(Revision revision) throws IOException, LoginException {
