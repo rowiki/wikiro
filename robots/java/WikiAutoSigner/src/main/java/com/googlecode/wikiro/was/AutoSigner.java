@@ -65,6 +65,7 @@ public class AutoSigner {
             String username = credentials.getProperty("Username");
             String password = credentials.getProperty("Password");
             wiki.login(username, password.toCharArray());
+            wiki.setMarkBot(true);
             Revision[] revisions = wiki.recentChanges(20, HIDE_BOT | HIDE_SELF, new int[] { TALK_NAMESPACE,
                 USER_TALK_NAMESPACE, PROJECT_TALK_NAMESPACE, PROJECT_NAMESPACE, CATEGORY_TALK_NAMESPACE });
             revisions: for (Revision rev : revisions) {
@@ -141,7 +142,13 @@ public class AutoSigner {
     private static void analyzeDiff(Revision crtRev, Revision prevRev) throws IOException {
         // TODO Auto-generated method stub
         DiffParser dp = new DiffParser(prevRev, crtRev);
-        dp.analyze();
+        dp.analyze(crtRev.getUser());
+        
+        if (!dp.isSigned()) {
+            StringBuilder signature = composeAutoSignature(crtRev);
+            System.out.println("I should add: " + signature);
+            System.out.println("    ... at line " + dp.getLine());
+        }
     }
 
     private static void analyzeText(Revision revision) throws IOException, LoginException {
@@ -157,10 +164,12 @@ public class AutoSigner {
         Matcher matcher = userPageDetector.matcher(text);
         if (matcher.find()) {
             System.out.println("Mesaj de " + revision.getUser() + " semnat cu link spre pagina de utilizator.");
+            return;
         }
         matcher = userTalkPageDetector.matcher(text);
         if (matcher.find()) {
             System.out.println("Mesaj de " + revision.getUser() + " semnat cu link spre pagina de discuţii utilizator.");
+            return;
         }
 
         StringBuilder textToAdd = composeAutoSignature(revision);
