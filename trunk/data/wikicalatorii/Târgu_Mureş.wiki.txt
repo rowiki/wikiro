@@ -1,0 +1,6 @@
+'''Târgu Mureş''' este un oraş în [[Transilvania]], [[România]].
+{{IsIn|Transilvania}}
+{{ciot}}
+
+[[de:Târgu Mureş]]
+[[hu:Marosvásárhely]]

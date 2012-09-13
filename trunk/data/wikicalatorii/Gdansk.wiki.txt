@@ -1,0 +1,13 @@
+'''Gdansk''' este un oraş în [[Polonia]].
+{{IsIn|Polonia}}
+{{ciot}}
+
+[[WikiPedia:Gdańsk]]
+
+[[de:Danzig]]
+[[en:Gdańsk]]
+[[fr:Gdansk]]
+[[it:Danzica]]
+[[nl:Gdansk]]
+[[pl:Gdańsk]]
+[[sv:Gdansk]]

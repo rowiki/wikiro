@@ -1,0 +1,26 @@
+'''Timorul de Est''' este o ţară în [[Asia de sud-est]].
+
+==Destinaţii==
+
+*[[Dili]]
+{{IsIn|Asia_de_Sud-est}}
+{{ciot}}
+
+[[WikiPedia:Timorul de Est]]
+
+
+[[de:Osttimor]]
+[[en:East Timor]]
+[[eo:Orienta Timoro]]
+[[es:Timor Leste]]
+[[fi:Itä-Timor]]
+[[fr:Timor Leste]]
+[[hu:Kelet-Timor]]
+[[it:Timor Est]]
+[[ja:東ティモール]]
+[[nl:Oost-Timor]]
+[[pl:Timor Wschodni]]
+[[pt:Timor Leste]]
+[[ru:Восточный Тимор]]
+[[sv:Östtimor]]
+[[wts:Category:East Timor]]

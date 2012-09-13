@@ -1,0 +1,28 @@
+'''Bolivia''' este o ţară în [[America de Sud]].
+
+==Destinaţii==
+
+*[[La Paz]]
+{{IsIn|America_de_Sud}}
+{{ciot}}
+
+&lt;!--[[nl:Bolivia]]-->
+[[WikiPedia:Bolivia]]
+[[Dmoz:America de Sud/Bolivia/]]
+
+
+
+[[ca:Bolívia]]
+[[de:Bolivien]]
+[[en:Bolivia]]
+[[eo:Bolivio]]
+[[es:Bolivia]]
+[[fi:Bolivia]]
+[[fr:Bolivie]]
+[[hu:Bolívia]]
+[[it:Bolivia]]
+[[ja:ボリビア]]
+[[pt:Bolívia]]
+[[ru:Боливия]]
+[[sv:Bolivia]]
+[[wts:Category:Bolivia]]

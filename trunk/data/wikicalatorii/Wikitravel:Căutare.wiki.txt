@@ -1,0 +1,20 @@
+This page in other languages:
+
+*[[:en:Wikitravel:Search help|English]]
+*[[:de:Wikitravel:Hilfe zur Suche|Deutsch]]
+*[[:fr:Wikitravel:Comment chercher une page|Français]]
+*[[:ja:Wikitravel:検索機能のヘルプ|Japanese]]
+*[[:pt:Wikitravel:Como buscar uma página|Português]]
+
+
+
+
+[[de:Wikitravel:Hilfe zur Suche]]
+[[en:Wikitravel:Search help]]
+[[es:Wikitravel:Cómo buscar una página]]
+[[fr:Wikitravel:Comment chercher une page]]
+[[it:Wikitravel:Aiuto ricerca]]
+[[ja:Wikitravel:検索機能のヘルプ]]
+[[nl:Wikitravel:Zoeken]]
+[[pt:Wikitravel:Como buscar uma página]]
+[[sv:Wikitravel:Sökhjälp]]

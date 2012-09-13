@@ -1,0 +1,3533 @@
+This is a list of all messages available in the MediaWiki: namespace
+
+&lt;table border=1 width=100%>&lt;tr>&lt;td>
+  '''Name'''
+&lt;/td>&lt;td>
+  '''Default text'''
+&lt;/td>&lt;td>
+  '''Current text'''
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Categories&amp;action=edit categories]
+&lt;/td>&lt;td>
+  Page categories
+&lt;/td>&lt;td>
+  {{MSGNW:categories}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Category&amp;action=edit category]
+&lt;/td>&lt;td>
+  category
+&lt;/td>&lt;td>
+  {{MSGNW:category}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Category_header&amp;action=edit category_header]
+&lt;/td>&lt;td>
+  Articles in category &amp;quot;$1&amp;quot;
+&lt;/td>&lt;td>
+  {{MSGNW:category_header}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Subcategories&amp;action=edit subcategories]
+&lt;/td>&lt;td>
+  Subcategories
+&lt;/td>&lt;td>
+  {{MSGNW:subcategories}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Linktrail&amp;action=edit linktrail]
+&lt;/td>&lt;td>
+  /^(&amp;#91;a-z]+)(.*)$/sD
+&lt;/td>&lt;td>
+  {{MSGNW:linktrail}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Mainpage&amp;action=edit mainpage]
+&lt;/td>&lt;td>
+  Main Page
+&lt;/td>&lt;td>
+  {{MSGNW:mainpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Mainpagetext&amp;action=edit mainpagetext]
+&lt;/td>&lt;td>
+  Wiki software successfully installed.
+&lt;/td>&lt;td>
+  {{MSGNW:mainpagetext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:About&amp;action=edit about]
+&lt;/td>&lt;td>
+  About
+&lt;/td>&lt;td>
+  {{MSGNW:about}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Aboutwikipedia&amp;action=edit aboutwikipedia]
+&lt;/td>&lt;td>
+  About Wikitravel
+&lt;/td>&lt;td>
+  {{MSGNW:aboutwikipedia}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Aboutpage&amp;action=edit aboutpage]
+&lt;/td>&lt;td>
+  Wikitravel:About
+&lt;/td>&lt;td>
+  {{MSGNW:aboutpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Help&amp;action=edit help]
+&lt;/td>&lt;td>
+  Help
+&lt;/td>&lt;td>
+  {{MSGNW:help}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Helppage&amp;action=edit helppage]
+&lt;/td>&lt;td>
+  Wikitravel:Help
+&lt;/td>&lt;td>
+  {{MSGNW:helppage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Wikititlesuffix&amp;action=edit wikititlesuffix]
+&lt;/td>&lt;td>
+  Wikitravel
+&lt;/td>&lt;td>
+  {{MSGNW:wikititlesuffix}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Bugreports&amp;action=edit bugreports]
+&lt;/td>&lt;td>
+  Bug reports
+&lt;/td>&lt;td>
+  {{MSGNW:bugreports}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Bugreportspage&amp;action=edit bugreportspage]
+&lt;/td>&lt;td>
+  Wikitravel:Bug_reports
+&lt;/td>&lt;td>
+  {{MSGNW:bugreportspage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Sitesupport&amp;action=edit sitesupport]
+&lt;/td>&lt;td>
+  Donations
+&lt;/td>&lt;td>
+  {{MSGNW:sitesupport}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Sitesupportpage&amp;action=edit sitesupportpage]
+&lt;/td>&lt;td>
+  &amp;amp;lt;sitesupportpage&amp;amp;gt;
+&lt;/td>&lt;td>
+  {{MSGNW:sitesupportpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Faq&amp;action=edit faq]
+&lt;/td>&lt;td>
+  FAQ
+&lt;/td>&lt;td>
+  {{MSGNW:faq}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Faqpage&amp;action=edit faqpage]
+&lt;/td>&lt;td>
+  Wikitravel:FAQ
+&lt;/td>&lt;td>
+  {{MSGNW:faqpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Edithelp&amp;action=edit edithelp]
+&lt;/td>&lt;td>
+  Editing help
+&lt;/td>&lt;td>
+  {{MSGNW:edithelp}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Edithelppage&amp;action=edit edithelppage]
+&lt;/td>&lt;td>
+  Wikitravel:How_to_edit_a_page
+&lt;/td>&lt;td>
+  {{MSGNW:edithelppage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Cancel&amp;action=edit cancel]
+&lt;/td>&lt;td>
+  Cancel
+&lt;/td>&lt;td>
+  {{MSGNW:cancel}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Qbfind&amp;action=edit qbfind]
+&lt;/td>&lt;td>
+  Find
+&lt;/td>&lt;td>
+  {{MSGNW:qbfind}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Qbbrowse&amp;action=edit qbbrowse]
+&lt;/td>&lt;td>
+  Browse
+&lt;/td>&lt;td>
+  {{MSGNW:qbbrowse}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Qbedit&amp;action=edit qbedit]
+&lt;/td>&lt;td>
+  Edit
+&lt;/td>&lt;td>
+  {{MSGNW:qbedit}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Qbpageoptions&amp;action=edit qbpageoptions]
+&lt;/td>&lt;td>
+  This page
+&lt;/td>&lt;td>
+  {{MSGNW:qbpageoptions}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Qbpageinfo&amp;action=edit qbpageinfo]
+&lt;/td>&lt;td>
+  Context
+&lt;/td>&lt;td>
+  {{MSGNW:qbpageinfo}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Qbmyoptions&amp;action=edit qbmyoptions]
+&lt;/td>&lt;td>
+  My pages
+&lt;/td>&lt;td>
+  {{MSGNW:qbmyoptions}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Qbspecialpages&amp;action=edit qbspecialpages]
+&lt;/td>&lt;td>
+  Special pages
+&lt;/td>&lt;td>
+  {{MSGNW:qbspecialpages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Moredotdotdot&amp;action=edit moredotdotdot]
+&lt;/td>&lt;td>
+  More...
+&lt;/td>&lt;td>
+  {{MSGNW:moredotdotdot}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Mypage&amp;action=edit mypage]
+&lt;/td>&lt;td>
+  My page
+&lt;/td>&lt;td>
+  {{MSGNW:mypage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Mytalk&amp;action=edit mytalk]
+&lt;/td>&lt;td>
+  My talk
+&lt;/td>&lt;td>
+  {{MSGNW:mytalk}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Currentevents&amp;action=edit currentevents]
+&lt;/td>&lt;td>
+  -
+&lt;/td>&lt;td>
+  {{MSGNW:currentevents}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Errorpagetitle&amp;action=edit errorpagetitle]
+&lt;/td>&lt;td>
+  Error
+&lt;/td>&lt;td>
+  {{MSGNW:errorpagetitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Returnto&amp;action=edit returnto]
+&lt;/td>&lt;td>
+  Return to $1.
+&lt;/td>&lt;td>
+  {{MSGNW:returnto}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Fromwikipedia&amp;action=edit fromwikipedia]
+&lt;/td>&lt;td>
+  From Wikitravel, the free travel guide.
+&lt;/td>&lt;td>
+  {{MSGNW:fromwikipedia}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Whatlinkshere&amp;action=edit whatlinkshere]
+&lt;/td>&lt;td>
+  What links here
+&lt;/td>&lt;td>
+  {{MSGNW:whatlinkshere}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Search&amp;action=edit search]
+&lt;/td>&lt;td>
+  Search
+&lt;/td>&lt;td>
+  {{MSGNW:search}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Go&amp;action=edit go]
+&lt;/td>&lt;td>
+  Go
+&lt;/td>&lt;td>
+  {{MSGNW:go}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:History&amp;action=edit history]
+&lt;/td>&lt;td>
+  Page history
+&lt;/td>&lt;td>
+  {{MSGNW:history}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Printableversion&amp;action=edit printableversion]
+&lt;/td>&lt;td>
+  Printable version
+&lt;/td>&lt;td>
+  {{MSGNW:printableversion}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Editthispage&amp;action=edit editthispage]
+&lt;/td>&lt;td>
+  Edit this page
+&lt;/td>&lt;td>
+  {{MSGNW:editthispage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Deletethispage&amp;action=edit deletethispage]
+&lt;/td>&lt;td>
+  Delete this page
+&lt;/td>&lt;td>
+  {{MSGNW:deletethispage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Protectthispage&amp;action=edit protectthispage]
+&lt;/td>&lt;td>
+  Protect this page
+&lt;/td>&lt;td>
+  {{MSGNW:protectthispage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unprotectthispage&amp;action=edit unprotectthispage]
+&lt;/td>&lt;td>
+  Unprotect this page
+&lt;/td>&lt;td>
+  {{MSGNW:unprotectthispage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Newpage&amp;action=edit newpage]
+&lt;/td>&lt;td>
+  New page
+&lt;/td>&lt;td>
+  {{MSGNW:newpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Talkpage&amp;action=edit talkpage]
+&lt;/td>&lt;td>
+  Discuss this page
+&lt;/td>&lt;td>
+  {{MSGNW:talkpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Postcomment&amp;action=edit postcomment]
+&lt;/td>&lt;td>
+  Post a comment
+&lt;/td>&lt;td>
+  {{MSGNW:postcomment}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Articlepage&amp;action=edit articlepage]
+&lt;/td>&lt;td>
+  View article
+&lt;/td>&lt;td>
+  {{MSGNW:articlepage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Subjectpage&amp;action=edit subjectpage]
+&lt;/td>&lt;td>
+  View subject
+&lt;/td>&lt;td>
+  {{MSGNW:subjectpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Userpage&amp;action=edit userpage]
+&lt;/td>&lt;td>
+  View user page
+&lt;/td>&lt;td>
+  {{MSGNW:userpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Wikipediapage&amp;action=edit wikipediapage]
+&lt;/td>&lt;td>
+  View meta page
+&lt;/td>&lt;td>
+  {{MSGNW:wikipediapage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Imagepage&amp;action=edit imagepage]
+&lt;/td>&lt;td>
+  View image page
+&lt;/td>&lt;td>
+  {{MSGNW:imagepage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Viewtalkpage&amp;action=edit viewtalkpage]
+&lt;/td>&lt;td>
+  View discussion
+&lt;/td>&lt;td>
+  {{MSGNW:viewtalkpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Otherlanguages&amp;action=edit otherlanguages]
+&lt;/td>&lt;td>
+  Other sites/languages
+&lt;/td>&lt;td>
+  {{MSGNW:otherlanguages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Redirectedfrom&amp;action=edit redirectedfrom]
+&lt;/td>&lt;td>
+  (Redirected from $1)
+&lt;/td>&lt;td>
+  {{MSGNW:redirectedfrom}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Lastmodified&amp;action=edit lastmodified]
+&lt;/td>&lt;td>
+  This page was last modified $1.
+&lt;/td>&lt;td>
+  {{MSGNW:lastmodified}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Viewcount&amp;action=edit viewcount]
+&lt;/td>&lt;td>
+  This page has been accessed $1 times.
+&lt;/td>&lt;td>
+  {{MSGNW:viewcount}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Gnunote&amp;action=edit gnunote]
+&lt;/td>&lt;td>
+  &amp;lt;br /&amp;gt;&amp;lt;center&amp;gt;&amp;lt;!-- Creative Commons License --&amp;gt;
+	       &amp;lt;a href=&amp;#39;http&amp;#58;//creativecommons.org/licenses/by-sa/1.0/&amp;#39;&amp;gt;
+	       &amp;lt;img alt=&amp;#39;Creative Commons License&amp;#39; border=&amp;#39;0&amp;#39;
+    	            src=&amp;#39;http&amp;#58;//creativecommons.org/images/public/somerights&amp;#39; /&amp;gt;&amp;lt;/a&amp;gt;
+	       &amp;lt;br /&amp;gt;
+	       Article text and images licensed under a
+	       &amp;lt;a href=&amp;#39;http&amp;#58;//creativecommons.org/licenses/by-sa/1.0/&amp;#39;&amp;gt;Creative Commons License&amp;lt;/a&amp;gt;.
+&lt;/td>&lt;td>
+  {{MSGNW:gnunote}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Printsubtitle&amp;action=edit printsubtitle]
+&lt;/td>&lt;td>
+  (From http&amp;#58;//www.wikitravel.org)
+&lt;/td>&lt;td>
+  {{MSGNW:printsubtitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Protectedpage&amp;action=edit protectedpage]
+&lt;/td>&lt;td>
+  Protected page
+&lt;/td>&lt;td>
+  {{MSGNW:protectedpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Administrators&amp;action=edit administrators]
+&lt;/td>&lt;td>
+  Wikitravel:Administrators
+&lt;/td>&lt;td>
+  {{MSGNW:administrators}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Sysoptitle&amp;action=edit sysoptitle]
+&lt;/td>&lt;td>
+  Sysop access required
+&lt;/td>&lt;td>
+  {{MSGNW:sysoptitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Sysoptext&amp;action=edit sysoptext]
+&lt;/td>&lt;td>
+  The action you have requested can only be
+performed by users with &amp;quot;sysop&amp;quot; status.
+See $1.
+&lt;/td>&lt;td>
+  {{MSGNW:sysoptext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Developertitle&amp;action=edit developertitle]
+&lt;/td>&lt;td>
+  Developer access required
+&lt;/td>&lt;td>
+  {{MSGNW:developertitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Developertext&amp;action=edit developertext]
+&lt;/td>&lt;td>
+  The action you have requested can only be
+performed by users with &amp;quot;developer&amp;quot; status.
+See $1.
+&lt;/td>&lt;td>
+  {{MSGNW:developertext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nbytes&amp;action=edit nbytes]
+&lt;/td>&lt;td>
+  $1 bytes
+&lt;/td>&lt;td>
+  {{MSGNW:nbytes}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Ok&amp;action=edit ok]
+&lt;/td>&lt;td>
+  OK
+&lt;/td>&lt;td>
+  {{MSGNW:ok}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Sitetitle&amp;action=edit sitetitle]
+&lt;/td>&lt;td>
+  Wikitravel
+&lt;/td>&lt;td>
+  {{MSGNW:sitetitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Sitesubtitle&amp;action=edit sitesubtitle]
+&lt;/td>&lt;td>
+  The Free Travel Guide
+&lt;/td>&lt;td>
+  {{MSGNW:sitesubtitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Retrievedfrom&amp;action=edit retrievedfrom]
+&lt;/td>&lt;td>
+  Retrieved from &amp;quot;$1&amp;quot;
+&lt;/td>&lt;td>
+  {{MSGNW:retrievedfrom}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Newmessages&amp;action=edit newmessages]
+&lt;/td>&lt;td>
+  You have $1.
+&lt;/td>&lt;td>
+  {{MSGNW:newmessages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Newmessageslink&amp;action=edit newmessageslink]
+&lt;/td>&lt;td>
+  new messages
+&lt;/td>&lt;td>
+  {{MSGNW:newmessageslink}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Editsection&amp;action=edit editsection]
+&lt;/td>&lt;td>
+  edit
+&lt;/td>&lt;td>
+  {{MSGNW:editsection}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Toc&amp;action=edit toc]
+&lt;/td>&lt;td>
+  Table of contents
+&lt;/td>&lt;td>
+  {{MSGNW:toc}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Showtoc&amp;action=edit showtoc]
+&lt;/td>&lt;td>
+  show
+&lt;/td>&lt;td>
+  {{MSGNW:showtoc}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Hidetoc&amp;action=edit hidetoc]
+&lt;/td>&lt;td>
+  hide
+&lt;/td>&lt;td>
+  {{MSGNW:hidetoc}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Thisisdeleted&amp;action=edit thisisdeleted]
+&lt;/td>&lt;td>
+  View or restore $1?
+&lt;/td>&lt;td>
+  {{MSGNW:thisisdeleted}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Restorelink&amp;action=edit restorelink]
+&lt;/td>&lt;td>
+  $1 deleted edits
+&lt;/td>&lt;td>
+  {{MSGNW:restorelink}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nosuchaction&amp;action=edit nosuchaction]
+&lt;/td>&lt;td>
+  No such action
+&lt;/td>&lt;td>
+  {{MSGNW:nosuchaction}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nosuchactiontext&amp;action=edit nosuchactiontext]
+&lt;/td>&lt;td>
+  The action specified by the URL is not
+recognized by the wiki software
+&lt;/td>&lt;td>
+  {{MSGNW:nosuchactiontext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nosuchspecialpage&amp;action=edit nosuchspecialpage]
+&lt;/td>&lt;td>
+  No such special page
+&lt;/td>&lt;td>
+  {{MSGNW:nosuchspecialpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nospecialpagetext&amp;action=edit nospecialpagetext]
+&lt;/td>&lt;td>
+  You have requested a special page that is not
+recognized by the wiki software.
+&lt;/td>&lt;td>
+  {{MSGNW:nospecialpagetext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Error&amp;action=edit error]
+&lt;/td>&lt;td>
+  Error
+&lt;/td>&lt;td>
+  {{MSGNW:error}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Databaseerror&amp;action=edit databaseerror]
+&lt;/td>&lt;td>
+  Database error
+&lt;/td>&lt;td>
+  {{MSGNW:databaseerror}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Dberrortext&amp;action=edit dberrortext]
+&lt;/td>&lt;td>
+  A database query syntax error has occurred.
+This could be because of an illegal search query (see $5),
+or it may indicate a bug in the software.
+The last attempted database query was:
+&amp;lt;blockquote&amp;gt;&amp;lt;tt&amp;gt;$1&amp;lt;/tt&amp;gt;&amp;lt;/blockquote&amp;gt;
+from within function &amp;quot;&amp;lt;tt&amp;gt;$2&amp;lt;/tt&amp;gt;&amp;quot;.
+MySQL returned error &amp;quot;&amp;lt;tt&amp;gt;$3: $4&amp;lt;/tt&amp;gt;&amp;quot;.
+&lt;/td>&lt;td>
+  {{MSGNW:dberrortext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Dberrortextcl&amp;action=edit dberrortextcl]
+&lt;/td>&lt;td>
+  A database query syntax error has occurred.
+The last attempted database query was:
+&amp;quot;$1&amp;quot;
+from within function &amp;quot;$2&amp;quot;.
+MySQL returned error &amp;quot;$3: $4&amp;quot;.
+
+&lt;/td>&lt;td>
+  {{MSGNW:dberrortextcl}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Noconnect&amp;action=edit noconnect]
+&lt;/td>&lt;td>
+  Sorry! The wiki is experiencing some technical difficulties, and cannot contact the database server.
+&lt;/td>&lt;td>
+  {{MSGNW:noconnect}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nodb&amp;action=edit nodb]
+&lt;/td>&lt;td>
+  Could not select database $1
+&lt;/td>&lt;td>
+  {{MSGNW:nodb}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Cachederror&amp;action=edit cachederror]
+&lt;/td>&lt;td>
+  The following is a cached copy of the requested page, and may not be up to date.
+&lt;/td>&lt;td>
+  {{MSGNW:cachederror}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Readonly&amp;action=edit readonly]
+&lt;/td>&lt;td>
+  Database locked
+&lt;/td>&lt;td>
+  {{MSGNW:readonly}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Enterlockreason&amp;action=edit enterlockreason]
+&lt;/td>&lt;td>
+  Enter a reason for the lock, including an estimate
+of when the lock will be released
+&lt;/td>&lt;td>
+  {{MSGNW:enterlockreason}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Readonlytext&amp;action=edit readonlytext]
+&lt;/td>&lt;td>
+  The Wikitravel database is currently locked to new
+entries and other modifications, probably for routine database maintenance,
+after which it will be back to normal.
+The administrator who locked it offered this explanation:
+&amp;lt;p&amp;gt;$1
+&lt;/td>&lt;td>
+  {{MSGNW:readonlytext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Missingarticle&amp;action=edit missingarticle]
+&lt;/td>&lt;td>
+  The database did not find the text of a page
+that it should have found, named &amp;quot;$1&amp;quot;.
+
+&amp;lt;p&amp;gt;This is usually caused by following an outdated diff or history link to a
+page that has been deleted.
+
+&amp;lt;p&amp;gt;If this is not the case, you may have found a bug in the software.
+Please report this to an administrator, making note of the URL.
+&lt;/td>&lt;td>
+  {{MSGNW:missingarticle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Internalerror&amp;action=edit internalerror]
+&lt;/td>&lt;td>
+  Internal error
+&lt;/td>&lt;td>
+  {{MSGNW:internalerror}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Filecopyerror&amp;action=edit filecopyerror]
+&lt;/td>&lt;td>
+  Could not copy file &amp;quot;$1&amp;quot; to &amp;quot;$2&amp;quot;.
+&lt;/td>&lt;td>
+  {{MSGNW:filecopyerror}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Filerenameerror&amp;action=edit filerenameerror]
+&lt;/td>&lt;td>
+  Could not rename file &amp;quot;$1&amp;quot; to &amp;quot;$2&amp;quot;.
+&lt;/td>&lt;td>
+  {{MSGNW:filerenameerror}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Filedeleteerror&amp;action=edit filedeleteerror]
+&lt;/td>&lt;td>
+  Could not delete file &amp;quot;$1&amp;quot;.
+&lt;/td>&lt;td>
+  {{MSGNW:filedeleteerror}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Filenotfound&amp;action=edit filenotfound]
+&lt;/td>&lt;td>
+  Could not find file &amp;quot;$1&amp;quot;.
+&lt;/td>&lt;td>
+  {{MSGNW:filenotfound}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unexpected&amp;action=edit unexpected]
+&lt;/td>&lt;td>
+  Unexpected value: &amp;quot;$1&amp;quot;=&amp;quot;$2&amp;quot;.
+&lt;/td>&lt;td>
+  {{MSGNW:unexpected}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Formerror&amp;action=edit formerror]
+&lt;/td>&lt;td>
+  Error: could not submit form
+&lt;/td>&lt;td>
+  {{MSGNW:formerror}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Badarticleerror&amp;action=edit badarticleerror]
+&lt;/td>&lt;td>
+  This action cannot be performed on this page.
+&lt;/td>&lt;td>
+  {{MSGNW:badarticleerror}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Cannotdelete&amp;action=edit cannotdelete]
+&lt;/td>&lt;td>
+  Could not delete the page or image specified. (It may have already been deleted by someone else.)
+&lt;/td>&lt;td>
+  {{MSGNW:cannotdelete}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Badtitle&amp;action=edit badtitle]
+&lt;/td>&lt;td>
+  Bad title
+&lt;/td>&lt;td>
+  {{MSGNW:badtitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Badtitletext&amp;action=edit badtitletext]
+&lt;/td>&lt;td>
+  The requested page title was invalid, empty, or
+an incorrectly linked inter-language or inter-wiki title.
+&lt;/td>&lt;td>
+  {{MSGNW:badtitletext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Perfdisabled&amp;action=edit perfdisabled]
+&lt;/td>&lt;td>
+  Sorry! This feature has been temporarily disabled
+because it slows the database down to the point that no one can use
+the wiki.
+&lt;/td>&lt;td>
+  {{MSGNW:perfdisabled}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Perfdisabledsub&amp;action=edit perfdisabledsub]
+&lt;/td>&lt;td>
+  Here&amp;#39;s a saved copy from $1:
+&lt;/td>&lt;td>
+  {{MSGNW:perfdisabledsub}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Wrong_wfQuery_params&amp;action=edit wrong_wfQuery_params]
+&lt;/td>&lt;td>
+  Incorrect parameters to wfQuery()&amp;lt;br&amp;gt;
+Function: $1&amp;lt;br&amp;gt;
+Query: $2
+
+&lt;/td>&lt;td>
+  {{MSGNW:wrong_wfQuery_params}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Viewsource&amp;action=edit viewsource]
+&lt;/td>&lt;td>
+  View source
+&lt;/td>&lt;td>
+  {{MSGNW:viewsource}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Protectedtext&amp;action=edit protectedtext]
+&lt;/td>&lt;td>
+  This page has been locked to prevent editing; there are
+a number of reasons why this may be so, please see
+&amp;#91;&amp;#91;Wikitravel:Protected page]].
+
+You can view and copy the source of this page:
+&lt;/td>&lt;td>
+  {{MSGNW:protectedtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Logouttitle&amp;action=edit logouttitle]
+&lt;/td>&lt;td>
+  User logout
+&lt;/td>&lt;td>
+  {{MSGNW:logouttitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Logouttext&amp;action=edit logouttext]
+&lt;/td>&lt;td>
+  You are now logged out.
+You can continue to use Wikitravel anonymously, or you can log in
+again as the same or as a different user. Note that some pages may
+continue to be displayed as if you were still logged in, until you clear
+your browser cache
+
+&lt;/td>&lt;td>
+  {{MSGNW:logouttext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Welcomecreation&amp;action=edit welcomecreation]
+&lt;/td>&lt;td>
+  &amp;lt;h2&amp;gt;Welcome, $1!&amp;lt;/h2&amp;gt;&amp;lt;p&amp;gt;Your account has been created.
+Don&amp;#39;t forget to personalize your Wikitravel preferences.
+&lt;/td>&lt;td>
+  {{MSGNW:welcomecreation}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Loginpagetitle&amp;action=edit loginpagetitle]
+&lt;/td>&lt;td>
+  User login
+&lt;/td>&lt;td>
+  {{MSGNW:loginpagetitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Yourname&amp;action=edit yourname]
+&lt;/td>&lt;td>
+  Your user name
+&lt;/td>&lt;td>
+  {{MSGNW:yourname}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Yourpassword&amp;action=edit yourpassword]
+&lt;/td>&lt;td>
+  Your password
+&lt;/td>&lt;td>
+  {{MSGNW:yourpassword}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Yourpasswordagain&amp;action=edit yourpasswordagain]
+&lt;/td>&lt;td>
+  Retype password
+&lt;/td>&lt;td>
+  {{MSGNW:yourpasswordagain}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Newusersonly&amp;action=edit newusersonly]
+&lt;/td>&lt;td>
+   (new users only)
+&lt;/td>&lt;td>
+  {{MSGNW:newusersonly}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Remembermypassword&amp;action=edit remembermypassword]
+&lt;/td>&lt;td>
+  Remember my password across sessions.
+&lt;/td>&lt;td>
+  {{MSGNW:remembermypassword}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Loginproblem&amp;action=edit loginproblem]
+&lt;/td>&lt;td>
+  &amp;lt;b&amp;gt;There has been a problem with your login.&amp;lt;/b&amp;gt;&amp;lt;br&amp;gt;Try again!
+&lt;/td>&lt;td>
+  {{MSGNW:loginproblem}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Alreadyloggedin&amp;action=edit alreadyloggedin]
+&lt;/td>&lt;td>
+  &amp;lt;font color=red&amp;gt;&amp;lt;b&amp;gt;User $1, you are already logged in!&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;
+
+&lt;/td>&lt;td>
+  {{MSGNW:alreadyloggedin}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Login&amp;action=edit login]
+&lt;/td>&lt;td>
+  Log in
+&lt;/td>&lt;td>
+  {{MSGNW:login}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Loginprompt&amp;action=edit loginprompt]
+&lt;/td>&lt;td>
+  You must have cookies enabled to log in to Wikitravel.
+&lt;/td>&lt;td>
+  {{MSGNW:loginprompt}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Userlogin&amp;action=edit userlogin]
+&lt;/td>&lt;td>
+  Log in
+&lt;/td>&lt;td>
+  {{MSGNW:userlogin}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Logout&amp;action=edit logout]
+&lt;/td>&lt;td>
+  Log out
+&lt;/td>&lt;td>
+  {{MSGNW:logout}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Userlogout&amp;action=edit userlogout]
+&lt;/td>&lt;td>
+  Log out
+&lt;/td>&lt;td>
+  {{MSGNW:userlogout}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Notloggedin&amp;action=edit notloggedin]
+&lt;/td>&lt;td>
+  Not logged in
+&lt;/td>&lt;td>
+  {{MSGNW:notloggedin}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Createaccount&amp;action=edit createaccount]
+&lt;/td>&lt;td>
+  Create new account
+&lt;/td>&lt;td>
+  {{MSGNW:createaccount}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Createaccountmail&amp;action=edit createaccountmail]
+&lt;/td>&lt;td>
+  by eMail
+&lt;/td>&lt;td>
+  {{MSGNW:createaccountmail}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Badretype&amp;action=edit badretype]
+&lt;/td>&lt;td>
+  The passwords you entered do not match.
+&lt;/td>&lt;td>
+  {{MSGNW:badretype}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Userexists&amp;action=edit userexists]
+&lt;/td>&lt;td>
+  The user name you entered is already in use. Please choose a different name.
+&lt;/td>&lt;td>
+  {{MSGNW:userexists}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Youremail&amp;action=edit youremail]
+&lt;/td>&lt;td>
+  Your e-mail*
+&lt;/td>&lt;td>
+  {{MSGNW:youremail}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Yournick&amp;action=edit yournick]
+&lt;/td>&lt;td>
+  Your nickname (for signatures)
+&lt;/td>&lt;td>
+  {{MSGNW:yournick}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Emailforlost&amp;action=edit emailforlost]
+&lt;/td>&lt;td>
+  * Entering an email address is optional.  But it enables people to
+contact you through the website without you having to reveal your 
+email address to them, and it also helps you if you forget your   
+password.
+&lt;/td>&lt;td>
+  {{MSGNW:emailforlost}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Loginerror&amp;action=edit loginerror]
+&lt;/td>&lt;td>
+  Login error
+&lt;/td>&lt;td>
+  {{MSGNW:loginerror}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nocookiesnew&amp;action=edit nocookiesnew]
+&lt;/td>&lt;td>
+  The user account was created, but you are not logged in. Wikitravel uses cookies to log in users. You have cookies disabled. Please enable them, then log in with your new username and password.
+&lt;/td>&lt;td>
+  {{MSGNW:nocookiesnew}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nocookieslogin&amp;action=edit nocookieslogin]
+&lt;/td>&lt;td>
+  Wikitravel uses cookies to log in users. You have cookies disabled. Please enable them and try again.
+&lt;/td>&lt;td>
+  {{MSGNW:nocookieslogin}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Noname&amp;action=edit noname]
+&lt;/td>&lt;td>
+  You have not specified a valid user name.
+&lt;/td>&lt;td>
+  {{MSGNW:noname}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Loginsuccesstitle&amp;action=edit loginsuccesstitle]
+&lt;/td>&lt;td>
+  Login successful
+&lt;/td>&lt;td>
+  {{MSGNW:loginsuccesstitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Loginsuccess&amp;action=edit loginsuccess]
+&lt;/td>&lt;td>
+  You are now logged in to Wikitravel as &amp;quot;$1&amp;quot;.
+&lt;/td>&lt;td>
+  {{MSGNW:loginsuccess}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nosuchuser&amp;action=edit nosuchuser]
+&lt;/td>&lt;td>
+  There is no user by the name &amp;quot;$1&amp;quot;.
+Check your spelling, or use the form below to create a new user account.
+&lt;/td>&lt;td>
+  {{MSGNW:nosuchuser}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Wrongpassword&amp;action=edit wrongpassword]
+&lt;/td>&lt;td>
+  The password you entered is incorrect. Please try again.
+&lt;/td>&lt;td>
+  {{MSGNW:wrongpassword}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Mailmypassword&amp;action=edit mailmypassword]
+&lt;/td>&lt;td>
+  Mail me a new password
+&lt;/td>&lt;td>
+  {{MSGNW:mailmypassword}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Passwordremindertitle&amp;action=edit passwordremindertitle]
+&lt;/td>&lt;td>
+  Password reminder from Wikitravel
+&lt;/td>&lt;td>
+  {{MSGNW:passwordremindertitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Passwordremindertext&amp;action=edit passwordremindertext]
+&lt;/td>&lt;td>
+  Someone (probably you, from IP address $1)
+requested that we send you a new Wikitravel login password.
+The password for user &amp;quot;$2&amp;quot; is now &amp;quot;$3&amp;quot;.
+You should log in and change your password now.
+&lt;/td>&lt;td>
+  {{MSGNW:passwordremindertext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Noemail&amp;action=edit noemail]
+&lt;/td>&lt;td>
+  There is no e-mail address recorded for user &amp;quot;$1&amp;quot;.
+&lt;/td>&lt;td>
+  {{MSGNW:noemail}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Passwordsent&amp;action=edit passwordsent]
+&lt;/td>&lt;td>
+  A new password has been sent to the e-mail address
+registered for &amp;quot;$1&amp;quot;.
+Please log in again after you receive it.
+&lt;/td>&lt;td>
+  {{MSGNW:passwordsent}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Summary&amp;action=edit summary]
+&lt;/td>&lt;td>
+  Summary
+&lt;/td>&lt;td>
+  {{MSGNW:summary}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Subject&amp;action=edit subject]
+&lt;/td>&lt;td>
+  Subject/headline
+&lt;/td>&lt;td>
+  {{MSGNW:subject}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Minoredit&amp;action=edit minoredit]
+&lt;/td>&lt;td>
+  This is a minor edit
+&lt;/td>&lt;td>
+  {{MSGNW:minoredit}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Watchthis&amp;action=edit watchthis]
+&lt;/td>&lt;td>
+  Watch this article
+&lt;/td>&lt;td>
+  {{MSGNW:watchthis}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Savearticle&amp;action=edit savearticle]
+&lt;/td>&lt;td>
+  Save page
+&lt;/td>&lt;td>
+  {{MSGNW:savearticle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Preview&amp;action=edit preview]
+&lt;/td>&lt;td>
+  Preview
+&lt;/td>&lt;td>
+  {{MSGNW:preview}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Showpreview&amp;action=edit showpreview]
+&lt;/td>&lt;td>
+  Show preview
+&lt;/td>&lt;td>
+  {{MSGNW:showpreview}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Blockedtitle&amp;action=edit blockedtitle]
+&lt;/td>&lt;td>
+  User is blocked
+&lt;/td>&lt;td>
+  {{MSGNW:blockedtitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Blockedtext&amp;action=edit blockedtext]
+&lt;/td>&lt;td>
+  Your user name or IP address has been blocked by $1.
+The reason given is this:&amp;lt;br&amp;gt;&amp;#39;&amp;#39;$2&amp;#39;&amp;#39;&amp;lt;p&amp;gt;You may contact $1 or one of the other
+&amp;#91;&amp;#91;Wikitravel:Administrators|administrators]] to discuss the block. 
+
+Note that you may not use the &amp;quot;email this user&amp;quot; feature unless you have a valid email address registered in your &amp;#91;&amp;#91;Special:Preferences|user preferences]]. 
+
+Your IP address is $3. Please include this address in any queries you make.
+
+&amp;#61;=Note to AOL users==
+Due to continuing acts of vandalism by one particular AOL user, Wikipedia often blocks AOL proxies. Unfortunately, a single proxy server may be used by a large number of AOL users, and hence innocent AOL users are often inadvertently blocked. We apologise for any inconvenience caused. 
+
+If this happens to you, please email an administrator, using an AOL email address. Be sure to include the IP address given above.
+
+&lt;/td>&lt;td>
+  {{MSGNW:blockedtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Whitelistedittitle&amp;action=edit whitelistedittitle]
+&lt;/td>&lt;td>
+  Login required to edit
+&lt;/td>&lt;td>
+  {{MSGNW:whitelistedittitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Whitelistedittext&amp;action=edit whitelistedittext]
+&lt;/td>&lt;td>
+  You have to &amp;#91;&amp;#91;Special:Userlogin|login]] to edit articles.
+&lt;/td>&lt;td>
+  {{MSGNW:whitelistedittext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Whitelistreadtitle&amp;action=edit whitelistreadtitle]
+&lt;/td>&lt;td>
+  Login required to read
+&lt;/td>&lt;td>
+  {{MSGNW:whitelistreadtitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Whitelistreadtext&amp;action=edit whitelistreadtext]
+&lt;/td>&lt;td>
+  You have to &amp;#91;&amp;#91;Special:Userlogin|login]] to read articles.
+&lt;/td>&lt;td>
+  {{MSGNW:whitelistreadtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Whitelistacctitle&amp;action=edit whitelistacctitle]
+&lt;/td>&lt;td>
+  You are not allowed to create an account
+&lt;/td>&lt;td>
+  {{MSGNW:whitelistacctitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Whitelistacctext&amp;action=edit whitelistacctext]
+&lt;/td>&lt;td>
+  To be allowed to create accounts in this Wiki you have to &amp;#91;&amp;#91;Special:Userlogin|log]] in and have the appropriate permissions.
+&lt;/td>&lt;td>
+  {{MSGNW:whitelistacctext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Accmailtitle&amp;action=edit accmailtitle]
+&lt;/td>&lt;td>
+  Password sent.
+&lt;/td>&lt;td>
+  {{MSGNW:accmailtitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Accmailtext&amp;action=edit accmailtext]
+&lt;/td>&lt;td>
+  The Password for &amp;#39;$1&amp;#39; has been sent to $2.
+&lt;/td>&lt;td>
+  {{MSGNW:accmailtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Newarticle&amp;action=edit newarticle]
+&lt;/td>&lt;td>
+  (New)
+&lt;/td>&lt;td>
+  {{MSGNW:newarticle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Newarticletext&amp;action=edit newarticletext]
+&lt;/td>&lt;td>
+  You&amp;#39;ve followed a link to a page that doesn&amp;#39;t exist yet. If you want to get this page started, &amp;#91;&amp;#91;Wikitravel:plunge forward|plunge forward]] and just start typing in the box below. If you need help, see &amp;#91;&amp;#91;Wikitravel:How to start a new page|How to start a new page]]. If you are here by mistake, just click your browser&amp;#39;s &amp;#39;&amp;#39;&amp;#39;back&amp;#39;&amp;#39;&amp;#39; button.
+&lt;/td>&lt;td>
+  {{MSGNW:newarticletext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Anontalkpagetext&amp;action=edit anontalkpagetext]
+&lt;/td>&lt;td>
+  ---- &amp;#39;&amp;#39;This is the discussion page for an anonymous user who has not created an account yet or who does not use it. We therefore have to use the numerical &amp;#91;&amp;#91;IP address]] to identify him/her. Such an IP address can be shared by several users. If you are an anonymous user and feel that irrelevant comments have been directed at you, please &amp;#91;&amp;#91;Special:Userlogin|create an account or log in]] to avoid future confusion with other anonymous users.&amp;#39;&amp;#39; 
+&lt;/td>&lt;td>
+  {{MSGNW:anontalkpagetext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Noarticletext&amp;action=edit noarticletext]
+&lt;/td>&lt;td>
+  (There is currently no text in this page)
+&lt;/td>&lt;td>
+  {{MSGNW:noarticletext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Updated&amp;action=edit updated]
+&lt;/td>&lt;td>
+  (Updated)
+&lt;/td>&lt;td>
+  {{MSGNW:updated}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Note&amp;action=edit note]
+&lt;/td>&lt;td>
+  &amp;lt;strong&amp;gt;Note:&amp;lt;/strong&amp;gt; 
+&lt;/td>&lt;td>
+  {{MSGNW:note}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Previewnote&amp;action=edit previewnote]
+&lt;/td>&lt;td>
+  Remember that this is only a preview, and has not yet been saved!
+&lt;/td>&lt;td>
+  {{MSGNW:previewnote}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Previewconflict&amp;action=edit previewconflict]
+&lt;/td>&lt;td>
+  This preview reflects the text in the upper
+text editing area as it will appear if you choose to save.
+&lt;/td>&lt;td>
+  {{MSGNW:previewconflict}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Editing&amp;action=edit editing]
+&lt;/td>&lt;td>
+  Editing $1
+&lt;/td>&lt;td>
+  {{MSGNW:editing}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Sectionedit&amp;action=edit sectionedit]
+&lt;/td>&lt;td>
+   (section)
+&lt;/td>&lt;td>
+  {{MSGNW:sectionedit}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Commentedit&amp;action=edit commentedit]
+&lt;/td>&lt;td>
+   (comment)
+&lt;/td>&lt;td>
+  {{MSGNW:commentedit}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Editconflict&amp;action=edit editconflict]
+&lt;/td>&lt;td>
+  Edit conflict: $1
+&lt;/td>&lt;td>
+  {{MSGNW:editconflict}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Explainconflict&amp;action=edit explainconflict]
+&lt;/td>&lt;td>
+  Someone else has changed this page since you
+started editing it.
+The upper text area contains the page text as it currently exists.
+Your changes are shown in the lower text area.
+You will have to merge your changes into the existing text.
+&amp;lt;b&amp;gt;Only&amp;lt;/b&amp;gt; the text in the upper text area will be saved when you
+press &amp;quot;Save page&amp;quot;.
+&amp;lt;p&amp;gt;
+&lt;/td>&lt;td>
+  {{MSGNW:explainconflict}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Yourtext&amp;action=edit yourtext]
+&lt;/td>&lt;td>
+  Your text
+&lt;/td>&lt;td>
+  {{MSGNW:yourtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Storedversion&amp;action=edit storedversion]
+&lt;/td>&lt;td>
+  Stored version
+&lt;/td>&lt;td>
+  {{MSGNW:storedversion}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Editingold&amp;action=edit editingold]
+&lt;/td>&lt;td>
+  &amp;lt;strong&amp;gt;WARNING: You are editing an out-of-date
+revision of this page.
+If you save it, any changes made since this revision will be lost.&amp;lt;/strong&amp;gt;
+
+&lt;/td>&lt;td>
+  {{MSGNW:editingold}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Yourdiff&amp;action=edit yourdiff]
+&lt;/td>&lt;td>
+  Differences
+&lt;/td>&lt;td>
+  {{MSGNW:yourdiff}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Copyrightwarning&amp;action=edit copyrightwarning]
+&lt;/td>&lt;td>
+  Please note that all contributions to Wikitravel are
+considered to be released under the Creative Commons &amp;lt;strong&amp;gt;Attribution-ShareAlike 1.0&amp;lt;/strong&amp;gt; license.
+(see $1 for details).
+If you don&amp;#39;t want your writing to be edited mercilessly and redistributed
+at will, then don&amp;#39;t submit it here.&amp;lt;br&amp;gt;
+You are also promising us that you wrote this yourself, or copied it from a
+public domain or similar free resource.
+&amp;lt;strong&amp;gt;DO NOT SUBMIT COPYRIGHTED WORK WITHOUT PERMISSION!&amp;lt;/strong&amp;gt;
+&lt;/td>&lt;td>
+  {{MSGNW:copyrightwarning}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Longpagewarning&amp;action=edit longpagewarning]
+&lt;/td>&lt;td>
+  WARNING: This page is $1 kilobytes long; some
+browsers may have problems editing pages approaching or longer than 32kb.
+Please consider breaking the page into smaller sections.
+&lt;/td>&lt;td>
+  {{MSGNW:longpagewarning}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Readonlywarning&amp;action=edit readonlywarning]
+&lt;/td>&lt;td>
+  WARNING: The database has been locked for maintenance,
+so you will not be able to save your edits right now. You may wish to cut-n-paste
+the text into a text file and save it for later.
+&lt;/td>&lt;td>
+  {{MSGNW:readonlywarning}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Protectedpagewarning&amp;action=edit protectedpagewarning]
+&lt;/td>&lt;td>
+  WARNING:  This page has been locked so that only
+users with sysop privileges can edit it. Be sure you are following the
+&amp;lt;a href=&amp;#39;/wiki/Wikitravel:Protected_page_guidelines&amp;#39;&amp;gt;protected page
+guidelines&amp;lt;/a&amp;gt;.
+&lt;/td>&lt;td>
+  {{MSGNW:protectedpagewarning}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Revhistory&amp;action=edit revhistory]
+&lt;/td>&lt;td>
+  Revision history
+&lt;/td>&lt;td>
+  {{MSGNW:revhistory}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nohistory&amp;action=edit nohistory]
+&lt;/td>&lt;td>
+  There is no edit history for this page.
+&lt;/td>&lt;td>
+  {{MSGNW:nohistory}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Revnotfound&amp;action=edit revnotfound]
+&lt;/td>&lt;td>
+  Revision not found
+&lt;/td>&lt;td>
+  {{MSGNW:revnotfound}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Revnotfoundtext&amp;action=edit revnotfoundtext]
+&lt;/td>&lt;td>
+  The old revision of the page you asked for could not be found.
+Please check the URL you used to access this page.
+
+&lt;/td>&lt;td>
+  {{MSGNW:revnotfoundtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Loadhist&amp;action=edit loadhist]
+&lt;/td>&lt;td>
+  Loading page history
+&lt;/td>&lt;td>
+  {{MSGNW:loadhist}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Currentrev&amp;action=edit currentrev]
+&lt;/td>&lt;td>
+  Current revision
+&lt;/td>&lt;td>
+  {{MSGNW:currentrev}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Revisionasof&amp;action=edit revisionasof]
+&lt;/td>&lt;td>
+  Revision as of $1
+&lt;/td>&lt;td>
+  {{MSGNW:revisionasof}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Cur&amp;action=edit cur]
+&lt;/td>&lt;td>
+  cur
+&lt;/td>&lt;td>
+  {{MSGNW:cur}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Next&amp;action=edit next]
+&lt;/td>&lt;td>
+  next
+&lt;/td>&lt;td>
+  {{MSGNW:next}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Last&amp;action=edit last]
+&lt;/td>&lt;td>
+  last
+&lt;/td>&lt;td>
+  {{MSGNW:last}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Orig&amp;action=edit orig]
+&lt;/td>&lt;td>
+  orig
+&lt;/td>&lt;td>
+  {{MSGNW:orig}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Histlegend&amp;action=edit histlegend]
+&lt;/td>&lt;td>
+  Legend: (cur) = difference with current version,
+(last) = difference with preceding version, M = minor edit
+&lt;/td>&lt;td>
+  {{MSGNW:histlegend}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Difference&amp;action=edit difference]
+&lt;/td>&lt;td>
+  (Difference between revisions)
+&lt;/td>&lt;td>
+  {{MSGNW:difference}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Loadingrev&amp;action=edit loadingrev]
+&lt;/td>&lt;td>
+  loading revision for diff
+&lt;/td>&lt;td>
+  {{MSGNW:loadingrev}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Lineno&amp;action=edit lineno]
+&lt;/td>&lt;td>
+  Line $1:
+&lt;/td>&lt;td>
+  {{MSGNW:lineno}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Editcurrent&amp;action=edit editcurrent]
+&lt;/td>&lt;td>
+  Edit the current version of this page
+&lt;/td>&lt;td>
+  {{MSGNW:editcurrent}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Searchresults&amp;action=edit searchresults]
+&lt;/td>&lt;td>
+  Search results
+&lt;/td>&lt;td>
+  {{MSGNW:searchresults}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Searchhelppage&amp;action=edit searchhelppage]
+&lt;/td>&lt;td>
+  Wikitravel:Search help
+&lt;/td>&lt;td>
+  {{MSGNW:searchhelppage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Searchingwikipedia&amp;action=edit searchingwikipedia]
+&lt;/td>&lt;td>
+  Searching Wikitravel
+&lt;/td>&lt;td>
+  {{MSGNW:searchingwikipedia}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Searchresulttext&amp;action=edit searchresulttext]
+&lt;/td>&lt;td>
+  For more information about searching Wikitravel, see $1.
+&lt;/td>&lt;td>
+  {{MSGNW:searchresulttext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Searchquery&amp;action=edit searchquery]
+&lt;/td>&lt;td>
+  For query &amp;quot;$1&amp;quot;
+&lt;/td>&lt;td>
+  {{MSGNW:searchquery}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Badquery&amp;action=edit badquery]
+&lt;/td>&lt;td>
+  Badly formed search query
+&lt;/td>&lt;td>
+  {{MSGNW:badquery}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Badquerytext&amp;action=edit badquerytext]
+&lt;/td>&lt;td>
+  We could not process your query.
+This is probably because you have attempted to search for a
+word fewer than three letters long, which is not yet supported.
+It could also be that you have mistyped the expression, for
+example &amp;quot;fish and and scales&amp;quot;.
+Please try another query.
+&lt;/td>&lt;td>
+  {{MSGNW:badquerytext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Matchtotals&amp;action=edit matchtotals]
+&lt;/td>&lt;td>
+  The query &amp;quot;$1&amp;quot; matched $2 article titles
+and the text of $3 articles.
+&lt;/td>&lt;td>
+  {{MSGNW:matchtotals}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nogomatch&amp;action=edit nogomatch]
+&lt;/td>&lt;td>
+  No page with this exact title exists, trying full text search.
+&lt;/td>&lt;td>
+  {{MSGNW:nogomatch}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Titlematches&amp;action=edit titlematches]
+&lt;/td>&lt;td>
+  Article title matches
+&lt;/td>&lt;td>
+  {{MSGNW:titlematches}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Notitlematches&amp;action=edit notitlematches]
+&lt;/td>&lt;td>
+  No article title matches
+&lt;/td>&lt;td>
+  {{MSGNW:notitlematches}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Textmatches&amp;action=edit textmatches]
+&lt;/td>&lt;td>
+  Article text matches
+&lt;/td>&lt;td>
+  {{MSGNW:textmatches}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Notextmatches&amp;action=edit notextmatches]
+&lt;/td>&lt;td>
+  No article text matches
+&lt;/td>&lt;td>
+  {{MSGNW:notextmatches}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Prevn&amp;action=edit prevn]
+&lt;/td>&lt;td>
+  previous $1
+&lt;/td>&lt;td>
+  {{MSGNW:prevn}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nextn&amp;action=edit nextn]
+&lt;/td>&lt;td>
+  next $1
+&lt;/td>&lt;td>
+  {{MSGNW:nextn}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Viewprevnext&amp;action=edit viewprevnext]
+&lt;/td>&lt;td>
+  View ($1) ($2) ($3).
+&lt;/td>&lt;td>
+  {{MSGNW:viewprevnext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Showingresults&amp;action=edit showingresults]
+&lt;/td>&lt;td>
+  Showing below &amp;lt;b&amp;gt;$1&amp;lt;/b&amp;gt; results starting with #&amp;lt;b&amp;gt;$2&amp;lt;/b&amp;gt;.
+&lt;/td>&lt;td>
+  {{MSGNW:showingresults}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Showingresultsnum&amp;action=edit showingresultsnum]
+&lt;/td>&lt;td>
+  Showing below &amp;lt;b&amp;gt;$3&amp;lt;/b&amp;gt; results starting with #&amp;lt;b&amp;gt;$2&amp;lt;/b&amp;gt;.
+&lt;/td>&lt;td>
+  {{MSGNW:showingresultsnum}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nonefound&amp;action=edit nonefound]
+&lt;/td>&lt;td>
+  &amp;lt;strong&amp;gt;Note&amp;lt;/strong&amp;gt;: unsuccessful searches are
+often caused by searching for common words like &amp;quot;have&amp;quot; and &amp;quot;from&amp;quot;,
+which are not indexed, or by specifying more than one search term (only pages
+containing all of the search terms will appear in the result).
+&lt;/td>&lt;td>
+  {{MSGNW:nonefound}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Powersearch&amp;action=edit powersearch]
+&lt;/td>&lt;td>
+  Search
+&lt;/td>&lt;td>
+  {{MSGNW:powersearch}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Powersearchtext&amp;action=edit powersearchtext]
+&lt;/td>&lt;td>
+  
+Search in namespaces :&amp;lt;br&amp;gt;
+$1&amp;lt;br&amp;gt;
+$2 List redirects &amp;amp;nbsp; Search for $3 $9
+&lt;/td>&lt;td>
+  {{MSGNW:powersearchtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Searchdisabled&amp;action=edit searchdisabled]
+&lt;/td>&lt;td>
+  &amp;lt;p&amp;gt;Sorry! Full text search has been disabled temporarily, for performance reasons. In the meantime, you can use the Google search below, which may be out of date.&amp;lt;/p&amp;gt;
+
+&amp;lt;!-- SiteSearch Google --&amp;gt;
+&amp;lt;FORM method=GET action=&amp;quot;http&amp;#58;//www.google.com/search&amp;quot;&amp;gt;
+&amp;lt;TABLE bgcolor=&amp;quot;#FFFFFF&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;
+&amp;lt;A HREF=&amp;quot;http&amp;#58;//www.google.com/&amp;quot;&amp;gt;
+&amp;lt;IMG SRC=&amp;quot;http&amp;#58;//www.google.com/logos/Logo_40wht.gif&amp;quot;
+border=&amp;quot;0&amp;quot; ALT=&amp;quot;Google&amp;quot;&amp;gt;&amp;lt;/A&amp;gt;
+&amp;lt;/td&amp;gt;
+&amp;lt;td&amp;gt;
+&amp;lt;INPUT TYPE=text name=q size=31 maxlength=255 value=&amp;quot;$1&amp;quot;&amp;gt;
+&amp;lt;INPUT type=submit name=btnG VALUE=&amp;quot;Google Search&amp;quot;&amp;gt;
+&amp;lt;font size=-1&amp;gt;
+&amp;lt;input type=hidden name=domains value=&amp;quot;http&amp;#58;//www.wikitravel.org&amp;quot;&amp;gt;&amp;lt;br&amp;gt;&amp;lt;input type=radio name=sitesearch value=&amp;quot;&amp;quot;&amp;gt; WWW &amp;lt;input type=radio name=sitesearch value=&amp;quot;http&amp;#58;//www.wikitravel.org&amp;quot; checked&amp;gt; http&amp;#58;//www.wikitravel.org &amp;lt;br&amp;gt;
+&amp;lt;input type=&amp;#39;hidden&amp;#39; name=&amp;#39;ie&amp;#39; value=&amp;#39;$2&amp;#39;&amp;gt;
+&amp;lt;input type=&amp;#39;hidden&amp;#39; name=&amp;#39;oe&amp;#39; value=&amp;#39;$2&amp;#39;&amp;gt;
+&amp;lt;/font&amp;gt;
+&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/TABLE&amp;gt;
+&amp;lt;/FORM&amp;gt;
+&amp;lt;!-- SiteSearch Google --&amp;gt;
+&lt;/td>&lt;td>
+  {{MSGNW:searchdisabled}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Blanknamespace&amp;action=edit blanknamespace]
+&lt;/td>&lt;td>
+  (Main)
+&lt;/td>&lt;td>
+  {{MSGNW:blanknamespace}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Preferences&amp;action=edit preferences]
+&lt;/td>&lt;td>
+  Preferences
+&lt;/td>&lt;td>
+  {{MSGNW:preferences}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Prefsnologin&amp;action=edit prefsnologin]
+&lt;/td>&lt;td>
+  Not logged in
+&lt;/td>&lt;td>
+  {{MSGNW:prefsnologin}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Prefsnologintext&amp;action=edit prefsnologintext]
+&lt;/td>&lt;td>
+  You must be &amp;lt;a href=&amp;quot;/ro/articol/Special:Userlogin&amp;quot;&amp;gt;logged in&amp;lt;/a&amp;gt;
+to set user preferences.
+&lt;/td>&lt;td>
+  {{MSGNW:prefsnologintext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Prefslogintext&amp;action=edit prefslogintext]
+&lt;/td>&lt;td>
+  You are logged in as &amp;quot;$1&amp;quot;.
+Your internal ID number is $2.
+
+See &amp;#91;&amp;#91;Wikitravel:User preferences help]] for help deciphering the options.
+&lt;/td>&lt;td>
+  {{MSGNW:prefslogintext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Prefsreset&amp;action=edit prefsreset]
+&lt;/td>&lt;td>
+  Preferences have been reset from storage.
+&lt;/td>&lt;td>
+  {{MSGNW:prefsreset}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Qbsettings&amp;action=edit qbsettings]
+&lt;/td>&lt;td>
+  Quickbar settings
+&lt;/td>&lt;td>
+  {{MSGNW:qbsettings}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Changepassword&amp;action=edit changepassword]
+&lt;/td>&lt;td>
+  Change password
+&lt;/td>&lt;td>
+  {{MSGNW:changepassword}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Skin&amp;action=edit skin]
+&lt;/td>&lt;td>
+  Skin
+&lt;/td>&lt;td>
+  {{MSGNW:skin}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Math&amp;action=edit math]
+&lt;/td>&lt;td>
+  Rendering math
+&lt;/td>&lt;td>
+  {{MSGNW:math}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Dateformat&amp;action=edit dateformat]
+&lt;/td>&lt;td>
+  Date format
+&lt;/td>&lt;td>
+  {{MSGNW:dateformat}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Math_failure&amp;action=edit math_failure]
+&lt;/td>&lt;td>
+  Failed to parse
+&lt;/td>&lt;td>
+  {{MSGNW:math_failure}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Math_unknown_error&amp;action=edit math_unknown_error]
+&lt;/td>&lt;td>
+  unknown error
+&lt;/td>&lt;td>
+  {{MSGNW:math_unknown_error}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Math_unknown_function&amp;action=edit math_unknown_function]
+&lt;/td>&lt;td>
+  unknown function 
+&lt;/td>&lt;td>
+  {{MSGNW:math_unknown_function}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Math_lexing_error&amp;action=edit math_lexing_error]
+&lt;/td>&lt;td>
+  lexing error
+&lt;/td>&lt;td>
+  {{MSGNW:math_lexing_error}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Math_syntax_error&amp;action=edit math_syntax_error]
+&lt;/td>&lt;td>
+  syntax error
+&lt;/td>&lt;td>
+  {{MSGNW:math_syntax_error}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Saveprefs&amp;action=edit saveprefs]
+&lt;/td>&lt;td>
+  Save preferences
+&lt;/td>&lt;td>
+  {{MSGNW:saveprefs}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Resetprefs&amp;action=edit resetprefs]
+&lt;/td>&lt;td>
+  Reset preferences
+&lt;/td>&lt;td>
+  {{MSGNW:resetprefs}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Oldpassword&amp;action=edit oldpassword]
+&lt;/td>&lt;td>
+  Old password
+&lt;/td>&lt;td>
+  {{MSGNW:oldpassword}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Newpassword&amp;action=edit newpassword]
+&lt;/td>&lt;td>
+  New password
+&lt;/td>&lt;td>
+  {{MSGNW:newpassword}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Retypenew&amp;action=edit retypenew]
+&lt;/td>&lt;td>
+  Retype new password
+&lt;/td>&lt;td>
+  {{MSGNW:retypenew}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Textboxsize&amp;action=edit textboxsize]
+&lt;/td>&lt;td>
+  Textbox dimensions
+&lt;/td>&lt;td>
+  {{MSGNW:textboxsize}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Rows&amp;action=edit rows]
+&lt;/td>&lt;td>
+  Rows
+&lt;/td>&lt;td>
+  {{MSGNW:rows}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Columns&amp;action=edit columns]
+&lt;/td>&lt;td>
+  Columns
+&lt;/td>&lt;td>
+  {{MSGNW:columns}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Searchresultshead&amp;action=edit searchresultshead]
+&lt;/td>&lt;td>
+  Search result settings
+&lt;/td>&lt;td>
+  {{MSGNW:searchresultshead}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Resultsperpage&amp;action=edit resultsperpage]
+&lt;/td>&lt;td>
+  Hits to show per page
+&lt;/td>&lt;td>
+  {{MSGNW:resultsperpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Contextlines&amp;action=edit contextlines]
+&lt;/td>&lt;td>
+  Lines to show per hit
+&lt;/td>&lt;td>
+  {{MSGNW:contextlines}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Contextchars&amp;action=edit contextchars]
+&lt;/td>&lt;td>
+  Characters of context per line
+&lt;/td>&lt;td>
+  {{MSGNW:contextchars}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Stubthreshold&amp;action=edit stubthreshold]
+&lt;/td>&lt;td>
+  Threshold for stub display
+&lt;/td>&lt;td>
+  {{MSGNW:stubthreshold}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Recentchangescount&amp;action=edit recentchangescount]
+&lt;/td>&lt;td>
+  Number of titles in recent changes
+&lt;/td>&lt;td>
+  {{MSGNW:recentchangescount}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Savedprefs&amp;action=edit savedprefs]
+&lt;/td>&lt;td>
+  Your preferences have been saved.
+&lt;/td>&lt;td>
+  {{MSGNW:savedprefs}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Timezonetext&amp;action=edit timezonetext]
+&lt;/td>&lt;td>
+  Enter number of hours your local time differs
+from server time (UTC).
+&lt;/td>&lt;td>
+  {{MSGNW:timezonetext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Localtime&amp;action=edit localtime]
+&lt;/td>&lt;td>
+  Local time display
+&lt;/td>&lt;td>
+  {{MSGNW:localtime}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Timezoneoffset&amp;action=edit timezoneoffset]
+&lt;/td>&lt;td>
+  Offset
+&lt;/td>&lt;td>
+  {{MSGNW:timezoneoffset}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Servertime&amp;action=edit servertime]
+&lt;/td>&lt;td>
+  Server time is now
+&lt;/td>&lt;td>
+  {{MSGNW:servertime}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Guesstimezone&amp;action=edit guesstimezone]
+&lt;/td>&lt;td>
+  Fill in from browser
+&lt;/td>&lt;td>
+  {{MSGNW:guesstimezone}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Emailflag&amp;action=edit emailflag]
+&lt;/td>&lt;td>
+  Disable e-mail from other users
+&lt;/td>&lt;td>
+  {{MSGNW:emailflag}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Defaultns&amp;action=edit defaultns]
+&lt;/td>&lt;td>
+  Search in these namespaces by default:
+&lt;/td>&lt;td>
+  {{MSGNW:defaultns}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Changes&amp;action=edit changes]
+&lt;/td>&lt;td>
+  changes
+&lt;/td>&lt;td>
+  {{MSGNW:changes}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Recentchanges&amp;action=edit recentchanges]
+&lt;/td>&lt;td>
+  Recent changes
+&lt;/td>&lt;td>
+  {{MSGNW:recentchanges}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Recentchangestext&amp;action=edit recentchangestext]
+&lt;/td>&lt;td>
+  Track the most recent changes to Wikitravel on this page.
+			See the &amp;#91;&amp;#91;Wikitravel:Recent changes help|Recent changes help]] page for more info on how to use Recent changes.&amp;lt;br&amp;gt;
+			&amp;lt;br&amp;gt;
+			Se also: &amp;#91;&amp;#91;Wikitravel:Requests for articles|Requests for articles]], &amp;#91;&amp;#91;Wikitravel:votes for deletion|votes for deletion]]
+&lt;/td>&lt;td>
+  {{MSGNW:recentchangestext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Rcloaderr&amp;action=edit rcloaderr]
+&lt;/td>&lt;td>
+  Loading recent changes
+&lt;/td>&lt;td>
+  {{MSGNW:rcloaderr}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Rcnote&amp;action=edit rcnote]
+&lt;/td>&lt;td>
+  Below are the last &amp;lt;strong&amp;gt;$1&amp;lt;/strong&amp;gt; changes in last &amp;lt;strong&amp;gt;$2&amp;lt;/strong&amp;gt; days.
+&lt;/td>&lt;td>
+  {{MSGNW:rcnote}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Rcnotefrom&amp;action=edit rcnotefrom]
+&lt;/td>&lt;td>
+  Below are the changes since &amp;lt;b&amp;gt;$2&amp;lt;/b&amp;gt; (up to &amp;lt;b&amp;gt;$1&amp;lt;/b&amp;gt; shown).
+&lt;/td>&lt;td>
+  {{MSGNW:rcnotefrom}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Rclistfrom&amp;action=edit rclistfrom]
+&lt;/td>&lt;td>
+  Show new changes starting from $1
+&lt;/td>&lt;td>
+  {{MSGNW:rclistfrom}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Showhideminor&amp;action=edit showhideminor]
+&lt;/td>&lt;td>
+  $1 minor edits
+&lt;/td>&lt;td>
+  {{MSGNW:showhideminor}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Rclinks&amp;action=edit rclinks]
+&lt;/td>&lt;td>
+  Show last $1 changes in last $2 days; $3
+&lt;/td>&lt;td>
+  {{MSGNW:rclinks}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Rchide&amp;action=edit rchide]
+&lt;/td>&lt;td>
+  in $4 form; $1 minor edits; $2 secondary namespaces; $3 multiple edits.
+&lt;/td>&lt;td>
+  {{MSGNW:rchide}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Rcliu&amp;action=edit rcliu]
+&lt;/td>&lt;td>
+  ; $1 edits from logged in users
+&lt;/td>&lt;td>
+  {{MSGNW:rcliu}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Diff&amp;action=edit diff]
+&lt;/td>&lt;td>
+  diff
+&lt;/td>&lt;td>
+  {{MSGNW:diff}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Hist&amp;action=edit hist]
+&lt;/td>&lt;td>
+  hist
+&lt;/td>&lt;td>
+  {{MSGNW:hist}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Hide&amp;action=edit hide]
+&lt;/td>&lt;td>
+  hide
+&lt;/td>&lt;td>
+  {{MSGNW:hide}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Show&amp;action=edit show]
+&lt;/td>&lt;td>
+  show
+&lt;/td>&lt;td>
+  {{MSGNW:show}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Tableform&amp;action=edit tableform]
+&lt;/td>&lt;td>
+  table
+&lt;/td>&lt;td>
+  {{MSGNW:tableform}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Listform&amp;action=edit listform]
+&lt;/td>&lt;td>
+  list
+&lt;/td>&lt;td>
+  {{MSGNW:listform}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nchanges&amp;action=edit nchanges]
+&lt;/td>&lt;td>
+  $1 changes
+&lt;/td>&lt;td>
+  {{MSGNW:nchanges}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Minoreditletter&amp;action=edit minoreditletter]
+&lt;/td>&lt;td>
+  M
+&lt;/td>&lt;td>
+  {{MSGNW:minoreditletter}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Newpageletter&amp;action=edit newpageletter]
+&lt;/td>&lt;td>
+  N
+&lt;/td>&lt;td>
+  {{MSGNW:newpageletter}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Upload&amp;action=edit upload]
+&lt;/td>&lt;td>
+  Upload file
+&lt;/td>&lt;td>
+  {{MSGNW:upload}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploadbtn&amp;action=edit uploadbtn]
+&lt;/td>&lt;td>
+  Upload file
+&lt;/td>&lt;td>
+  {{MSGNW:uploadbtn}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploadlink&amp;action=edit uploadlink]
+&lt;/td>&lt;td>
+  Upload images
+&lt;/td>&lt;td>
+  {{MSGNW:uploadlink}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Reupload&amp;action=edit reupload]
+&lt;/td>&lt;td>
+  Re-upload
+&lt;/td>&lt;td>
+  {{MSGNW:reupload}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Reuploaddesc&amp;action=edit reuploaddesc]
+&lt;/td>&lt;td>
+  Return to the upload form.
+&lt;/td>&lt;td>
+  {{MSGNW:reuploaddesc}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploadnologin&amp;action=edit uploadnologin]
+&lt;/td>&lt;td>
+  Not logged in
+&lt;/td>&lt;td>
+  {{MSGNW:uploadnologin}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploadnologintext&amp;action=edit uploadnologintext]
+&lt;/td>&lt;td>
+  You must be &amp;lt;a href=&amp;quot;/ro/articol/Special:Userlogin&amp;quot;&amp;gt;logged in&amp;lt;/a&amp;gt;
+to upload files.
+&lt;/td>&lt;td>
+  {{MSGNW:uploadnologintext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploadfile&amp;action=edit uploadfile]
+&lt;/td>&lt;td>
+  Upload images, sounds, documents etc.
+&lt;/td>&lt;td>
+  {{MSGNW:uploadfile}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploaderror&amp;action=edit uploaderror]
+&lt;/td>&lt;td>
+  Upload error
+&lt;/td>&lt;td>
+  {{MSGNW:uploaderror}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploadtext&amp;action=edit uploadtext]
+&lt;/td>&lt;td>
+  &amp;lt;strong&amp;gt;STOP!&amp;lt;/strong&amp;gt; Before you upload here,
+make sure to read and follow the &amp;lt;a href=&amp;quot;/ro/articol/Wikitravel:Image_use_policy&amp;quot;&amp;gt;image use policy&amp;lt;/a&amp;gt;.
+&amp;lt;p&amp;gt;If a file with the name you are specifying already
+exists on the wiki, it&amp;#39;ll be replaced without warning.
+So unless you mean to update a file, it&amp;#39;s a good idea
+to first check if such a file exists.
+&amp;lt;p&amp;gt;To view or search previously uploaded images,
+go to the &amp;lt;a href=&amp;quot;/ro/articol/Special:Imagelist&amp;quot;&amp;gt;list of uploaded images&amp;lt;/a&amp;gt;.
+Uploads and deletions are logged on the &amp;lt;a href=&amp;quot;/ro/articol/Wikitravel:Upload_log&amp;quot;&amp;gt;upload log&amp;lt;/a&amp;gt;.
+&amp;lt;p&amp;gt;Use the form below to upload new image files for use in
+illustrating your articles.
+On most browsers, you will see a &amp;quot;Browse...&amp;quot; button, which will
+bring up your operating system&amp;#39;s standard file open dialog.
+Choosing a file will fill the name of that file into the text
+field next to the button.
+You must also check the box affirming that you are not
+violating any copyrights by uploading the file.
+Press the &amp;quot;Upload&amp;quot; button to finish the upload.
+This may take some time if you have a slow internet connection.
+&amp;lt;p&amp;gt;The preferred formats are JPEG for photographic images and PNG
+for drawings and other iconic images.
+Please name your files descriptively to avoid confusion.
+To include the image in an article, use a link in the form
+&amp;lt;b&amp;gt;&amp;#91;&amp;#91;image:file.jpg]]&amp;lt;/b&amp;gt; or &amp;lt;b&amp;gt;&amp;#91;&amp;#91;image:file.png|alt text]]&amp;lt;/b&amp;gt;.
+&amp;lt;p&amp;gt;Please note that as with Wikitravel pages, others may edit or
+delete your uploads if they think it serves the travel guide, and
+you may be blocked from uploading if you abuse the system.
+&lt;/td>&lt;td>
+  {{MSGNW:uploadtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploadlog&amp;action=edit uploadlog]
+&lt;/td>&lt;td>
+  upload log
+&lt;/td>&lt;td>
+  {{MSGNW:uploadlog}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploadlogpage&amp;action=edit uploadlogpage]
+&lt;/td>&lt;td>
+  Upload_log
+&lt;/td>&lt;td>
+  {{MSGNW:uploadlogpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploadlogpagetext&amp;action=edit uploadlogpagetext]
+&lt;/td>&lt;td>
+  Below is a list of the most recent file uploads.
+All times shown are server time (UTC).
+&amp;lt;ul&amp;gt;
+&amp;lt;/ul&amp;gt;
+
+&lt;/td>&lt;td>
+  {{MSGNW:uploadlogpagetext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Filename&amp;action=edit filename]
+&lt;/td>&lt;td>
+  Filename
+&lt;/td>&lt;td>
+  {{MSGNW:filename}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Filedesc&amp;action=edit filedesc]
+&lt;/td>&lt;td>
+  Summary
+&lt;/td>&lt;td>
+  {{MSGNW:filedesc}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Filestatus&amp;action=edit filestatus]
+&lt;/td>&lt;td>
+  Copyright status
+&lt;/td>&lt;td>
+  {{MSGNW:filestatus}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Filesource&amp;action=edit filesource]
+&lt;/td>&lt;td>
+  Source
+&lt;/td>&lt;td>
+  {{MSGNW:filesource}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Affirmation&amp;action=edit affirmation]
+&lt;/td>&lt;td>
+  I affirm that the copyright holder of this file
+agrees to license it under the terms of the $1.
+&lt;/td>&lt;td>
+  {{MSGNW:affirmation}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Copyrightpage&amp;action=edit copyrightpage]
+&lt;/td>&lt;td>
+  Wikitravel:Copyleft
+&lt;/td>&lt;td>
+  {{MSGNW:copyrightpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Copyrightpagename&amp;action=edit copyrightpagename]
+&lt;/td>&lt;td>
+  Wikitravel copyleft
+&lt;/td>&lt;td>
+  {{MSGNW:copyrightpagename}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploadedfiles&amp;action=edit uploadedfiles]
+&lt;/td>&lt;td>
+  Uploaded files
+&lt;/td>&lt;td>
+  {{MSGNW:uploadedfiles}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Noaffirmation&amp;action=edit noaffirmation]
+&lt;/td>&lt;td>
+  You must affirm that your upload does not violate
+any copyrights.
+&lt;/td>&lt;td>
+  {{MSGNW:noaffirmation}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Ignorewarning&amp;action=edit ignorewarning]
+&lt;/td>&lt;td>
+  Ignore warning and save file anyway.
+&lt;/td>&lt;td>
+  {{MSGNW:ignorewarning}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Minlength&amp;action=edit minlength]
+&lt;/td>&lt;td>
+  Image names must be at least three letters.
+&lt;/td>&lt;td>
+  {{MSGNW:minlength}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Badfilename&amp;action=edit badfilename]
+&lt;/td>&lt;td>
+  Image name has been changed to &amp;quot;$1&amp;quot;.
+&lt;/td>&lt;td>
+  {{MSGNW:badfilename}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Badfiletype&amp;action=edit badfiletype]
+&lt;/td>&lt;td>
+  &amp;quot;.$1&amp;quot; is not a recommended image file format.
+&lt;/td>&lt;td>
+  {{MSGNW:badfiletype}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Largefile&amp;action=edit largefile]
+&lt;/td>&lt;td>
+  It is recommended that images not exceed 100k in size.
+&lt;/td>&lt;td>
+  {{MSGNW:largefile}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Successfulupload&amp;action=edit successfulupload]
+&lt;/td>&lt;td>
+  Successful upload
+&lt;/td>&lt;td>
+  {{MSGNW:successfulupload}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Fileuploaded&amp;action=edit fileuploaded]
+&lt;/td>&lt;td>
+  File &amp;quot;$1&amp;quot; uploaded successfully.
+Please follow this link: ($2) to the description page and fill
+in information about the file, such as where it came from, when it was
+created and by whom, and anything else you may know about it.
+&lt;/td>&lt;td>
+  {{MSGNW:fileuploaded}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploadwarning&amp;action=edit uploadwarning]
+&lt;/td>&lt;td>
+  Upload warning
+&lt;/td>&lt;td>
+  {{MSGNW:uploadwarning}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Savefile&amp;action=edit savefile]
+&lt;/td>&lt;td>
+  Save file
+&lt;/td>&lt;td>
+  {{MSGNW:savefile}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uploadedimage&amp;action=edit uploadedimage]
+&lt;/td>&lt;td>
+  uploaded &amp;quot;$1&amp;quot;
+&lt;/td>&lt;td>
+  {{MSGNW:uploadedimage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Imagelist&amp;action=edit imagelist]
+&lt;/td>&lt;td>
+  Image list
+&lt;/td>&lt;td>
+  {{MSGNW:imagelist}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Imagelisttext&amp;action=edit imagelisttext]
+&lt;/td>&lt;td>
+  Below is a list of $1 images sorted $2.
+&lt;/td>&lt;td>
+  {{MSGNW:imagelisttext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Getimagelist&amp;action=edit getimagelist]
+&lt;/td>&lt;td>
+  fetching image list
+&lt;/td>&lt;td>
+  {{MSGNW:getimagelist}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Ilshowmatch&amp;action=edit ilshowmatch]
+&lt;/td>&lt;td>
+  Show all images with names matching
+&lt;/td>&lt;td>
+  {{MSGNW:ilshowmatch}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Ilsubmit&amp;action=edit ilsubmit]
+&lt;/td>&lt;td>
+  Search
+&lt;/td>&lt;td>
+  {{MSGNW:ilsubmit}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Showlast&amp;action=edit showlast]
+&lt;/td>&lt;td>
+  Show last $1 images sorted $2.
+&lt;/td>&lt;td>
+  {{MSGNW:showlast}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:All&amp;action=edit all]
+&lt;/td>&lt;td>
+  all
+&lt;/td>&lt;td>
+  {{MSGNW:all}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Byname&amp;action=edit byname]
+&lt;/td>&lt;td>
+  by name
+&lt;/td>&lt;td>
+  {{MSGNW:byname}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Bydate&amp;action=edit bydate]
+&lt;/td>&lt;td>
+  by date
+&lt;/td>&lt;td>
+  {{MSGNW:bydate}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Bysize&amp;action=edit bysize]
+&lt;/td>&lt;td>
+  by size
+&lt;/td>&lt;td>
+  {{MSGNW:bysize}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Imgdelete&amp;action=edit imgdelete]
+&lt;/td>&lt;td>
+  del
+&lt;/td>&lt;td>
+  {{MSGNW:imgdelete}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Imgdesc&amp;action=edit imgdesc]
+&lt;/td>&lt;td>
+  desc
+&lt;/td>&lt;td>
+  {{MSGNW:imgdesc}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Imglegend&amp;action=edit imglegend]
+&lt;/td>&lt;td>
+  Legend: (desc) = show/edit image description.
+&lt;/td>&lt;td>
+  {{MSGNW:imglegend}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Imghistory&amp;action=edit imghistory]
+&lt;/td>&lt;td>
+  Image history
+&lt;/td>&lt;td>
+  {{MSGNW:imghistory}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Revertimg&amp;action=edit revertimg]
+&lt;/td>&lt;td>
+  rev
+&lt;/td>&lt;td>
+  {{MSGNW:revertimg}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Deleteimg&amp;action=edit deleteimg]
+&lt;/td>&lt;td>
+  del
+&lt;/td>&lt;td>
+  {{MSGNW:deleteimg}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Imghistlegend&amp;action=edit imghistlegend]
+&lt;/td>&lt;td>
+  Legend: (cur) = this is the current image, (del) = delete
+this old version, (rev) = revert to this old version.
+&amp;lt;br&amp;gt;&amp;lt;i&amp;gt;Click on date to see image uploaded on that date&amp;lt;/i&amp;gt;.
+&lt;/td>&lt;td>
+  {{MSGNW:imghistlegend}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Imagelinks&amp;action=edit imagelinks]
+&lt;/td>&lt;td>
+  Image links
+&lt;/td>&lt;td>
+  {{MSGNW:imagelinks}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Linkstoimage&amp;action=edit linkstoimage]
+&lt;/td>&lt;td>
+  The following pages link to this image:
+&lt;/td>&lt;td>
+  {{MSGNW:linkstoimage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nolinkstoimage&amp;action=edit nolinkstoimage]
+&lt;/td>&lt;td>
+  There are no pages that link to this image.
+&lt;/td>&lt;td>
+  {{MSGNW:nolinkstoimage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Statistics&amp;action=edit statistics]
+&lt;/td>&lt;td>
+  Statistics
+&lt;/td>&lt;td>
+  {{MSGNW:statistics}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Sitestats&amp;action=edit sitestats]
+&lt;/td>&lt;td>
+  Site statistics
+&lt;/td>&lt;td>
+  {{MSGNW:sitestats}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Userstats&amp;action=edit userstats]
+&lt;/td>&lt;td>
+  User statistics
+&lt;/td>&lt;td>
+  {{MSGNW:userstats}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Sitestatstext&amp;action=edit sitestatstext]
+&lt;/td>&lt;td>
+  There are &amp;lt;b&amp;gt;$1&amp;lt;/b&amp;gt; total pages in the database.
+This includes &amp;quot;talk&amp;quot; pages, pages about Wikitravel, minimal &amp;quot;stub&amp;quot;
+pages, redirects, and others that probably don&amp;#39;t qualify as articles.
+Excluding those, there are &amp;lt;b&amp;gt;$2&amp;lt;/b&amp;gt; pages that are probably legitimate
+articles.&amp;lt;p&amp;gt;
+There have been a total of &amp;lt;b&amp;gt;$3&amp;lt;/b&amp;gt; page views, and &amp;lt;b&amp;gt;$4&amp;lt;/b&amp;gt; page edits
+since Wikitravel started (July 24, 2003).
+That comes to &amp;lt;b&amp;gt;$5&amp;lt;/b&amp;gt; average edits per page, and &amp;lt;b&amp;gt;$6&amp;lt;/b&amp;gt; views per edit.
+&lt;/td>&lt;td>
+  {{MSGNW:sitestatstext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Userstatstext&amp;action=edit userstatstext]
+&lt;/td>&lt;td>
+  There are &amp;lt;b&amp;gt;$1&amp;lt;/b&amp;gt; registered users.
+&amp;lt;b&amp;gt;$2&amp;lt;/b&amp;gt; of these are administrators (see $3).
+&lt;/td>&lt;td>
+  {{MSGNW:userstatstext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Maintenance&amp;action=edit maintenance]
+&lt;/td>&lt;td>
+  Maintenance page
+&lt;/td>&lt;td>
+  {{MSGNW:maintenance}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Maintnancepagetext&amp;action=edit maintnancepagetext]
+&lt;/td>&lt;td>
+  This page includes several handy tools for everyday maintenance. Some of these functions tend to stress the database, so please do not hit reload after every item you fixed ;-)
+&lt;/td>&lt;td>
+  {{MSGNW:maintnancepagetext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Maintenancebacklink&amp;action=edit maintenancebacklink]
+&lt;/td>&lt;td>
+  Back to Maintenance Page
+&lt;/td>&lt;td>
+  {{MSGNW:maintenancebacklink}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Disambiguations&amp;action=edit disambiguations]
+&lt;/td>&lt;td>
+  Disambiguation pages
+&lt;/td>&lt;td>
+  {{MSGNW:disambiguations}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Disambiguationspage&amp;action=edit disambiguationspage]
+&lt;/td>&lt;td>
+  Wikitravel:Links_to_disambiguating_pages
+&lt;/td>&lt;td>
+  {{MSGNW:disambiguationspage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Disambiguationstext&amp;action=edit disambiguationstext]
+&lt;/td>&lt;td>
+  The following articles link to a &amp;lt;i&amp;gt;disambiguation page&amp;lt;/i&amp;gt;. They should link to the appropriate topic instead.&amp;lt;br&amp;gt;A page is treated as dismbiguation if it is linked from $1.&amp;lt;br&amp;gt;Links from other namespaces are &amp;lt;i&amp;gt;not&amp;lt;/i&amp;gt; listed here.
+&lt;/td>&lt;td>
+  {{MSGNW:disambiguationstext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Doubleredirects&amp;action=edit doubleredirects]
+&lt;/td>&lt;td>
+  Double Redirects
+&lt;/td>&lt;td>
+  {{MSGNW:doubleredirects}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Doubleredirectstext&amp;action=edit doubleredirectstext]
+&lt;/td>&lt;td>
+  &amp;lt;b&amp;gt;Attention:&amp;lt;/b&amp;gt; This list may contain false positives. That usually means there is additional text with links below the first #REDIRECT.&amp;lt;br&amp;gt;
+Each row contains links to the first and second redirect, as well as the first line of the second redirect text, usually giving the &amp;quot;real&amp;quot; taget article, which the first redirect should point to.
+&lt;/td>&lt;td>
+  {{MSGNW:doubleredirectstext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Brokenredirects&amp;action=edit brokenredirects]
+&lt;/td>&lt;td>
+  Broken Redirects
+&lt;/td>&lt;td>
+  {{MSGNW:brokenredirects}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Brokenredirectstext&amp;action=edit brokenredirectstext]
+&lt;/td>&lt;td>
+  The following redirects link to a non-existing article.
+&lt;/td>&lt;td>
+  {{MSGNW:brokenredirectstext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Selflinks&amp;action=edit selflinks]
+&lt;/td>&lt;td>
+  Pages with Self Links
+&lt;/td>&lt;td>
+  {{MSGNW:selflinks}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Selflinkstext&amp;action=edit selflinkstext]
+&lt;/td>&lt;td>
+  The following pages contain a link to themselves, which they should not.
+&lt;/td>&lt;td>
+  {{MSGNW:selflinkstext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Mispeelings&amp;action=edit mispeelings]
+&lt;/td>&lt;td>
+  Pages with misspellings
+&lt;/td>&lt;td>
+  {{MSGNW:mispeelings}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Mispeelingstext&amp;action=edit mispeelingstext]
+&lt;/td>&lt;td>
+  The following pages contain a common misspelling, which are listed on $1. The correct spelling might be given (like this).
+&lt;/td>&lt;td>
+  {{MSGNW:mispeelingstext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Mispeelingspage&amp;action=edit mispeelingspage]
+&lt;/td>&lt;td>
+  List of common misspellings
+&lt;/td>&lt;td>
+  {{MSGNW:mispeelingspage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Missinglanguagelinks&amp;action=edit missinglanguagelinks]
+&lt;/td>&lt;td>
+  Missing Language Links
+&lt;/td>&lt;td>
+  {{MSGNW:missinglanguagelinks}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Missinglanguagelinksbutton&amp;action=edit missinglanguagelinksbutton]
+&lt;/td>&lt;td>
+  Find missing language links for
+&lt;/td>&lt;td>
+  {{MSGNW:missinglanguagelinksbutton}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Missinglanguagelinkstext&amp;action=edit missinglanguagelinkstext]
+&lt;/td>&lt;td>
+  These articles do &amp;lt;i&amp;gt;not&amp;lt;/i&amp;gt; link to their counterpart in $1. Redirects and subpages are &amp;lt;i&amp;gt;not&amp;lt;/i&amp;gt; shown.
+&lt;/td>&lt;td>
+  {{MSGNW:missinglanguagelinkstext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Orphans&amp;action=edit orphans]
+&lt;/td>&lt;td>
+  Orphaned pages
+&lt;/td>&lt;td>
+  {{MSGNW:orphans}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Lonelypages&amp;action=edit lonelypages]
+&lt;/td>&lt;td>
+  Orphaned pages
+&lt;/td>&lt;td>
+  {{MSGNW:lonelypages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unusedimages&amp;action=edit unusedimages]
+&lt;/td>&lt;td>
+  Unused images
+&lt;/td>&lt;td>
+  {{MSGNW:unusedimages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Popularpages&amp;action=edit popularpages]
+&lt;/td>&lt;td>
+  Popular pages
+&lt;/td>&lt;td>
+  {{MSGNW:popularpages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nviews&amp;action=edit nviews]
+&lt;/td>&lt;td>
+  $1 views
+&lt;/td>&lt;td>
+  {{MSGNW:nviews}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Wantedpages&amp;action=edit wantedpages]
+&lt;/td>&lt;td>
+  Wanted pages
+&lt;/td>&lt;td>
+  {{MSGNW:wantedpages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nlinks&amp;action=edit nlinks]
+&lt;/td>&lt;td>
+  $1 links
+&lt;/td>&lt;td>
+  {{MSGNW:nlinks}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Allpages&amp;action=edit allpages]
+&lt;/td>&lt;td>
+  All pages
+&lt;/td>&lt;td>
+  {{MSGNW:allpages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Randompage&amp;action=edit randompage]
+&lt;/td>&lt;td>
+  Random page
+&lt;/td>&lt;td>
+  {{MSGNW:randompage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Shortpages&amp;action=edit shortpages]
+&lt;/td>&lt;td>
+  Short pages
+&lt;/td>&lt;td>
+  {{MSGNW:shortpages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Longpages&amp;action=edit longpages]
+&lt;/td>&lt;td>
+  Long pages
+&lt;/td>&lt;td>
+  {{MSGNW:longpages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Deadendpages&amp;action=edit deadendpages]
+&lt;/td>&lt;td>
+  Dead-end pages
+&lt;/td>&lt;td>
+  {{MSGNW:deadendpages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Listusers&amp;action=edit listusers]
+&lt;/td>&lt;td>
+  User list
+&lt;/td>&lt;td>
+  {{MSGNW:listusers}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Specialpages&amp;action=edit specialpages]
+&lt;/td>&lt;td>
+  Special pages
+&lt;/td>&lt;td>
+  {{MSGNW:specialpages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Spheading&amp;action=edit spheading]
+&lt;/td>&lt;td>
+  Special pages for all users
+&lt;/td>&lt;td>
+  {{MSGNW:spheading}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Sysopspheading&amp;action=edit sysopspheading]
+&lt;/td>&lt;td>
+  For sysop use only
+&lt;/td>&lt;td>
+  {{MSGNW:sysopspheading}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Developerspheading&amp;action=edit developerspheading]
+&lt;/td>&lt;td>
+  For developer use only
+&lt;/td>&lt;td>
+  {{MSGNW:developerspheading}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Protectpage&amp;action=edit protectpage]
+&lt;/td>&lt;td>
+  Protect page
+&lt;/td>&lt;td>
+  {{MSGNW:protectpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Recentchangeslinked&amp;action=edit recentchangeslinked]
+&lt;/td>&lt;td>
+  Related changes
+&lt;/td>&lt;td>
+  {{MSGNW:recentchangeslinked}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Rclsub&amp;action=edit rclsub]
+&lt;/td>&lt;td>
+  (to pages linked from &amp;quot;$1&amp;quot;)
+&lt;/td>&lt;td>
+  {{MSGNW:rclsub}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Debug&amp;action=edit debug]
+&lt;/td>&lt;td>
+  Debug
+&lt;/td>&lt;td>
+  {{MSGNW:debug}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Newpages&amp;action=edit newpages]
+&lt;/td>&lt;td>
+  New pages
+&lt;/td>&lt;td>
+  {{MSGNW:newpages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Ancientpages&amp;action=edit ancientpages]
+&lt;/td>&lt;td>
+  Oldest articles
+&lt;/td>&lt;td>
+  {{MSGNW:ancientpages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Intl&amp;action=edit intl]
+&lt;/td>&lt;td>
+  Interlanguage links
+&lt;/td>&lt;td>
+  {{MSGNW:intl}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Movethispage&amp;action=edit movethispage]
+&lt;/td>&lt;td>
+  Move this page
+&lt;/td>&lt;td>
+  {{MSGNW:movethispage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unusedimagestext&amp;action=edit unusedimagestext]
+&lt;/td>&lt;td>
+  &amp;lt;p&amp;gt;Please note that other web sites
+such as the related multilanguage projects may link to an image with
+a direct URL, and so may still be listed here despite being
+in active use.
+&lt;/td>&lt;td>
+  {{MSGNW:unusedimagestext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Booksources&amp;action=edit booksources]
+&lt;/td>&lt;td>
+  Book sources
+&lt;/td>&lt;td>
+  {{MSGNW:booksources}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Booksourcetext&amp;action=edit booksourcetext]
+&lt;/td>&lt;td>
+  Below is a list of links to other sites that
+sell new and used books, and may also have further information
+about books you are looking for.
+Wikitravel is not affiliated with any of these businesses, and
+this list should not be construed as an endorsement.
+&lt;/td>&lt;td>
+  {{MSGNW:booksourcetext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Alphaindexline&amp;action=edit alphaindexline]
+&lt;/td>&lt;td>
+  $1 to $2
+&lt;/td>&lt;td>
+  {{MSGNW:alphaindexline}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Mailnologin&amp;action=edit mailnologin]
+&lt;/td>&lt;td>
+  No send address
+&lt;/td>&lt;td>
+  {{MSGNW:mailnologin}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Mailnologintext&amp;action=edit mailnologintext]
+&lt;/td>&lt;td>
+  You must be &amp;lt;a href=&amp;quot;/ro/articol/Special:Userlogin&amp;quot;&amp;gt;logged in&amp;lt;/a&amp;gt;
+and have a valid e-mail address in your &amp;lt;a href=&amp;quot;/ro/articol/Special:Preferences&amp;quot;&amp;gt;preferences&amp;lt;/a&amp;gt;
+to send e-mail to other users.
+&lt;/td>&lt;td>
+  {{MSGNW:mailnologintext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Emailuser&amp;action=edit emailuser]
+&lt;/td>&lt;td>
+  E-mail this user
+&lt;/td>&lt;td>
+  {{MSGNW:emailuser}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Emailpage&amp;action=edit emailpage]
+&lt;/td>&lt;td>
+  E-mail user
+&lt;/td>&lt;td>
+  {{MSGNW:emailpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Emailpagetext&amp;action=edit emailpagetext]
+&lt;/td>&lt;td>
+  If this user has entered a valid e-mail address in
+his or her user preferences, the form below will send a single message.
+The e-mail address you entered in your user preferences will appear
+as the &amp;quot;From&amp;quot; address of the mail, so the recipient will be able
+to reply.
+&lt;/td>&lt;td>
+  {{MSGNW:emailpagetext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Noemailtitle&amp;action=edit noemailtitle]
+&lt;/td>&lt;td>
+  No e-mail address
+&lt;/td>&lt;td>
+  {{MSGNW:noemailtitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Noemailtext&amp;action=edit noemailtext]
+&lt;/td>&lt;td>
+  This user has not specified a valid e-mail address,
+or has chosen not to receive e-mail from other users.
+&lt;/td>&lt;td>
+  {{MSGNW:noemailtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Emailfrom&amp;action=edit emailfrom]
+&lt;/td>&lt;td>
+  From
+&lt;/td>&lt;td>
+  {{MSGNW:emailfrom}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Emailto&amp;action=edit emailto]
+&lt;/td>&lt;td>
+  To
+&lt;/td>&lt;td>
+  {{MSGNW:emailto}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Emailsubject&amp;action=edit emailsubject]
+&lt;/td>&lt;td>
+  Subject
+&lt;/td>&lt;td>
+  {{MSGNW:emailsubject}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Emailmessage&amp;action=edit emailmessage]
+&lt;/td>&lt;td>
+  Message
+&lt;/td>&lt;td>
+  {{MSGNW:emailmessage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Emailsend&amp;action=edit emailsend]
+&lt;/td>&lt;td>
+  Send
+&lt;/td>&lt;td>
+  {{MSGNW:emailsend}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Emailsent&amp;action=edit emailsent]
+&lt;/td>&lt;td>
+  E-mail sent
+&lt;/td>&lt;td>
+  {{MSGNW:emailsent}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Emailsenttext&amp;action=edit emailsenttext]
+&lt;/td>&lt;td>
+  Your e-mail message has been sent.
+&lt;/td>&lt;td>
+  {{MSGNW:emailsenttext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Watchlist&amp;action=edit watchlist]
+&lt;/td>&lt;td>
+  My watchlist
+&lt;/td>&lt;td>
+  {{MSGNW:watchlist}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Watchlistsub&amp;action=edit watchlistsub]
+&lt;/td>&lt;td>
+  (for user &amp;quot;$1&amp;quot;)
+&lt;/td>&lt;td>
+  {{MSGNW:watchlistsub}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nowatchlist&amp;action=edit nowatchlist]
+&lt;/td>&lt;td>
+  You have no items on your watchlist.
+&lt;/td>&lt;td>
+  {{MSGNW:nowatchlist}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Watchnologin&amp;action=edit watchnologin]
+&lt;/td>&lt;td>
+  Not logged in
+&lt;/td>&lt;td>
+  {{MSGNW:watchnologin}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Watchnologintext&amp;action=edit watchnologintext]
+&lt;/td>&lt;td>
+  You must be &amp;lt;a href=&amp;quot;/ro/articol/Special:Userlogin&amp;quot;&amp;gt;logged in&amp;lt;/a&amp;gt;
+to modify your watchlist.
+&lt;/td>&lt;td>
+  {{MSGNW:watchnologintext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Addedwatch&amp;action=edit addedwatch]
+&lt;/td>&lt;td>
+  Added to watchlist
+&lt;/td>&lt;td>
+  {{MSGNW:addedwatch}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Addedwatchtext&amp;action=edit addedwatchtext]
+&lt;/td>&lt;td>
+  The page &amp;quot;$1&amp;quot; has been added to your &amp;lt;a href=&amp;quot;/ro/articol/Special:Watchlist&amp;quot;&amp;gt;watchlist&amp;lt;/a&amp;gt;.
+Future changes to this page and its associated Talk page will be listed there,
+and the page will appear &amp;lt;b&amp;gt;bolded&amp;lt;/b&amp;gt; in the &amp;lt;a href=&amp;quot;/ro/articol/Special:Recentchanges&amp;quot;&amp;gt;list of recent changes&amp;lt;/a&amp;gt; to
+make it easier to pick out.&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;If you want to remove the page from your watchlist later, click &amp;quot;Stop watching&amp;quot; in the sidebar.
+&lt;/td>&lt;td>
+  {{MSGNW:addedwatchtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Removedwatch&amp;action=edit removedwatch]
+&lt;/td>&lt;td>
+  Removed from watchlist
+&lt;/td>&lt;td>
+  {{MSGNW:removedwatch}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Removedwatchtext&amp;action=edit removedwatchtext]
+&lt;/td>&lt;td>
+  The page &amp;quot;$1&amp;quot; has been removed from your watchlist.
+&lt;/td>&lt;td>
+  {{MSGNW:removedwatchtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Watchthispage&amp;action=edit watchthispage]
+&lt;/td>&lt;td>
+  Watch this page
+&lt;/td>&lt;td>
+  {{MSGNW:watchthispage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unwatchthispage&amp;action=edit unwatchthispage]
+&lt;/td>&lt;td>
+  Stop watching
+&lt;/td>&lt;td>
+  {{MSGNW:unwatchthispage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Notanarticle&amp;action=edit notanarticle]
+&lt;/td>&lt;td>
+  Not an article
+&lt;/td>&lt;td>
+  {{MSGNW:notanarticle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Watchnochange&amp;action=edit watchnochange]
+&lt;/td>&lt;td>
+  None of your watched items were edited in the time period displayed.
+&lt;/td>&lt;td>
+  {{MSGNW:watchnochange}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Watchdetails&amp;action=edit watchdetails]
+&lt;/td>&lt;td>
+  ($1 pages watched not counting talk pages;
+$2 total pages edited since cutoff;
+$3...
+&amp;lt;a href=&amp;#39;$4&amp;#39;&amp;gt;show and edit complete list&amp;lt;/a&amp;gt;.)
+&lt;/td>&lt;td>
+  {{MSGNW:watchdetails}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Watchmethod-recent&amp;action=edit watchmethod-recent]
+&lt;/td>&lt;td>
+  checking recent edits for watched pages
+&lt;/td>&lt;td>
+  {{MSGNW:watchmethod-recent}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Watchmethod-list&amp;action=edit watchmethod-list]
+&lt;/td>&lt;td>
+  checking watched pages for recent edits
+&lt;/td>&lt;td>
+  {{MSGNW:watchmethod-list}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Removechecked&amp;action=edit removechecked]
+&lt;/td>&lt;td>
+  Remove checked items from watchlist
+&lt;/td>&lt;td>
+  {{MSGNW:removechecked}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Watchlistcontains&amp;action=edit watchlistcontains]
+&lt;/td>&lt;td>
+  Your watchlist contains $1 pages.
+&lt;/td>&lt;td>
+  {{MSGNW:watchlistcontains}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Watcheditlist&amp;action=edit watcheditlist]
+&lt;/td>&lt;td>
+  Here&amp;#39;s an alphabetical list of your
+watched pages. Check the boxes of pages you want to remove
+from your watchlist and click the &amp;#39;remove checked&amp;#39; button
+at the bottom of the screen.
+&lt;/td>&lt;td>
+  {{MSGNW:watcheditlist}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Removingchecked&amp;action=edit removingchecked]
+&lt;/td>&lt;td>
+  Removing requested items from watchlist...
+&lt;/td>&lt;td>
+  {{MSGNW:removingchecked}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Couldntremove&amp;action=edit couldntremove]
+&lt;/td>&lt;td>
+  Couldn&amp;#39;t remove item &amp;#39;$1&amp;#39;...
+&lt;/td>&lt;td>
+  {{MSGNW:couldntremove}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Iteminvalidname&amp;action=edit iteminvalidname]
+&lt;/td>&lt;td>
+  Problem with item &amp;#39;$1&amp;#39;, invalid name...
+&lt;/td>&lt;td>
+  {{MSGNW:iteminvalidname}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Wlnote&amp;action=edit wlnote]
+&lt;/td>&lt;td>
+  Below are the last $1 changes in the last &amp;lt;b&amp;gt;$2&amp;lt;/b&amp;gt; hours.
+&lt;/td>&lt;td>
+  {{MSGNW:wlnote}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Wlshowlast&amp;action=edit wlshowlast]
+&lt;/td>&lt;td>
+  Show last $1 hours $2 days $3
+&lt;/td>&lt;td>
+  {{MSGNW:wlshowlast}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Deletepage&amp;action=edit deletepage]
+&lt;/td>&lt;td>
+  Delete page
+&lt;/td>&lt;td>
+  {{MSGNW:deletepage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Confirm&amp;action=edit confirm]
+&lt;/td>&lt;td>
+  Confirm
+&lt;/td>&lt;td>
+  {{MSGNW:confirm}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Excontent&amp;action=edit excontent]
+&lt;/td>&lt;td>
+  content was:
+&lt;/td>&lt;td>
+  {{MSGNW:excontent}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Exbeforeblank&amp;action=edit exbeforeblank]
+&lt;/td>&lt;td>
+  content before blanking was:
+&lt;/td>&lt;td>
+  {{MSGNW:exbeforeblank}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Exblank&amp;action=edit exblank]
+&lt;/td>&lt;td>
+  page was empty
+&lt;/td>&lt;td>
+  {{MSGNW:exblank}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Confirmdelete&amp;action=edit confirmdelete]
+&lt;/td>&lt;td>
+  Confirm delete
+&lt;/td>&lt;td>
+  {{MSGNW:confirmdelete}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Deletesub&amp;action=edit deletesub]
+&lt;/td>&lt;td>
+  (Deleting &amp;quot;$1&amp;quot;)
+&lt;/td>&lt;td>
+  {{MSGNW:deletesub}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Historywarning&amp;action=edit historywarning]
+&lt;/td>&lt;td>
+  Warning: The page you are about to delete has a history: 
+&lt;/td>&lt;td>
+  {{MSGNW:historywarning}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Confirmdeletetext&amp;action=edit confirmdeletetext]
+&lt;/td>&lt;td>
+  You are about to permanently delete a page
+or image along with all of its history from the database.
+Please confirm that you intend to do this, that you understand the
+consequences, and that you are doing this in accordance with
+&amp;#91;&amp;#91;Wikitravel:Policy]].
+&lt;/td>&lt;td>
+  {{MSGNW:confirmdeletetext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Confirmcheck&amp;action=edit confirmcheck]
+&lt;/td>&lt;td>
+  Yes, I really want to delete this.
+&lt;/td>&lt;td>
+  {{MSGNW:confirmcheck}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Actioncomplete&amp;action=edit actioncomplete]
+&lt;/td>&lt;td>
+  Action complete
+&lt;/td>&lt;td>
+  {{MSGNW:actioncomplete}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Deletedtext&amp;action=edit deletedtext]
+&lt;/td>&lt;td>
+  &amp;quot;$1&amp;quot; has been deleted.
+See $2 for a record of recent deletions.
+&lt;/td>&lt;td>
+  {{MSGNW:deletedtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Deletedarticle&amp;action=edit deletedarticle]
+&lt;/td>&lt;td>
+  deleted &amp;quot;$1&amp;quot;
+&lt;/td>&lt;td>
+  {{MSGNW:deletedarticle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Dellogpage&amp;action=edit dellogpage]
+&lt;/td>&lt;td>
+  Deletion_log
+&lt;/td>&lt;td>
+  {{MSGNW:dellogpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Dellogpagetext&amp;action=edit dellogpagetext]
+&lt;/td>&lt;td>
+  Below is a list of the most recent deletions.
+All times shown are server time (UTC).
+&amp;lt;ul&amp;gt;
+&amp;lt;/ul&amp;gt;
+
+&lt;/td>&lt;td>
+  {{MSGNW:dellogpagetext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Deletionlog&amp;action=edit deletionlog]
+&lt;/td>&lt;td>
+  deletion log
+&lt;/td>&lt;td>
+  {{MSGNW:deletionlog}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Reverted&amp;action=edit reverted]
+&lt;/td>&lt;td>
+  Reverted to earlier revision
+&lt;/td>&lt;td>
+  {{MSGNW:reverted}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Deletecomment&amp;action=edit deletecomment]
+&lt;/td>&lt;td>
+  Reason for deletion
+&lt;/td>&lt;td>
+  {{MSGNW:deletecomment}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Imagereverted&amp;action=edit imagereverted]
+&lt;/td>&lt;td>
+  Revert to earlier version was successful.
+&lt;/td>&lt;td>
+  {{MSGNW:imagereverted}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Rollback&amp;action=edit rollback]
+&lt;/td>&lt;td>
+  Roll back edits
+&lt;/td>&lt;td>
+  {{MSGNW:rollback}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Rollbacklink&amp;action=edit rollbacklink]
+&lt;/td>&lt;td>
+  rollback
+&lt;/td>&lt;td>
+  {{MSGNW:rollbacklink}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Rollbackfailed&amp;action=edit rollbackfailed]
+&lt;/td>&lt;td>
+  Rollback failed
+&lt;/td>&lt;td>
+  {{MSGNW:rollbackfailed}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Cantrollback&amp;action=edit cantrollback]
+&lt;/td>&lt;td>
+  Cannot revert edit; last contributor is only author of this article.
+&lt;/td>&lt;td>
+  {{MSGNW:cantrollback}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Alreadyrolled&amp;action=edit alreadyrolled]
+&lt;/td>&lt;td>
+  Cannot rollback last edit of &amp;#91;&amp;#91;$1]]
+by &amp;#91;&amp;#91;User:$2|$2]] (&amp;#91;&amp;#91;User talk:$2|Talk]]); someone else has edited or rolled back the article already. 
+
+Last edit was by &amp;#91;&amp;#91;User:$3|$3]] (&amp;#91;&amp;#91;User talk:$3|Talk]]). 
+&lt;/td>&lt;td>
+  {{MSGNW:alreadyrolled}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Editcomment&amp;action=edit editcomment]
+&lt;/td>&lt;td>
+  The edit comment was: &amp;quot;&amp;lt;i&amp;gt;$1&amp;lt;/i&amp;gt;&amp;quot;.
+&lt;/td>&lt;td>
+  {{MSGNW:editcomment}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Revertpage&amp;action=edit revertpage]
+&lt;/td>&lt;td>
+  Reverted to last edit by $1
+&lt;/td>&lt;td>
+  {{MSGNW:revertpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Protectlogpage&amp;action=edit protectlogpage]
+&lt;/td>&lt;td>
+  Protection_log
+&lt;/td>&lt;td>
+  {{MSGNW:protectlogpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Protectlogtext&amp;action=edit protectlogtext]
+&lt;/td>&lt;td>
+  Below is a list of page locks/unlocks.
+See &amp;#91;&amp;#91;Wikitravel:Protected page]] for more information.
+&lt;/td>&lt;td>
+  {{MSGNW:protectlogtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Protectedarticle&amp;action=edit protectedarticle]
+&lt;/td>&lt;td>
+  protected &amp;#91;&amp;#91;$1]]
+&lt;/td>&lt;td>
+  {{MSGNW:protectedarticle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unprotectedarticle&amp;action=edit unprotectedarticle]
+&lt;/td>&lt;td>
+  unprotected &amp;#91;&amp;#91;$1]]
+&lt;/td>&lt;td>
+  {{MSGNW:unprotectedarticle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Undelete&amp;action=edit undelete]
+&lt;/td>&lt;td>
+  Restore deleted page
+&lt;/td>&lt;td>
+  {{MSGNW:undelete}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Undeletepage&amp;action=edit undeletepage]
+&lt;/td>&lt;td>
+  View and restore deleted pages
+&lt;/td>&lt;td>
+  {{MSGNW:undeletepage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Undeletepagetext&amp;action=edit undeletepagetext]
+&lt;/td>&lt;td>
+  The following pages have been deleted but are still in the archive and
+can be restored. The archive may be periodically cleaned out.
+&lt;/td>&lt;td>
+  {{MSGNW:undeletepagetext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Undeletearticle&amp;action=edit undeletearticle]
+&lt;/td>&lt;td>
+  Restore deleted article
+&lt;/td>&lt;td>
+  {{MSGNW:undeletearticle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Undeleterevisions&amp;action=edit undeleterevisions]
+&lt;/td>&lt;td>
+  $1 revisions archived
+&lt;/td>&lt;td>
+  {{MSGNW:undeleterevisions}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Undeletehistory&amp;action=edit undeletehistory]
+&lt;/td>&lt;td>
+  If you restore the page, all revisions will be restored to the history.
+If a new page with the same name has been created since the deletion, the restored
+revisions will appear in the prior history, and the current revision of the live page
+will not be automatically replaced.
+&lt;/td>&lt;td>
+  {{MSGNW:undeletehistory}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Undeleterevision&amp;action=edit undeleterevision]
+&lt;/td>&lt;td>
+  Deleted revision as of $1
+&lt;/td>&lt;td>
+  {{MSGNW:undeleterevision}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Undeletebtn&amp;action=edit undeletebtn]
+&lt;/td>&lt;td>
+  Restore!
+&lt;/td>&lt;td>
+  {{MSGNW:undeletebtn}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Undeletedarticle&amp;action=edit undeletedarticle]
+&lt;/td>&lt;td>
+  restored &amp;quot;$1&amp;quot;
+&lt;/td>&lt;td>
+  {{MSGNW:undeletedarticle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Undeletedtext&amp;action=edit undeletedtext]
+&lt;/td>&lt;td>
+  The article &amp;#91;&amp;#91;$1]] has been successfully restored.
+See &amp;#91;&amp;#91;Wikitravel:Deletion_log]] for a record of recent deletions and restorations.
+&lt;/td>&lt;td>
+  {{MSGNW:undeletedtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Contributions&amp;action=edit contributions]
+&lt;/td>&lt;td>
+  User contributions
+&lt;/td>&lt;td>
+  {{MSGNW:contributions}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Mycontris&amp;action=edit mycontris]
+&lt;/td>&lt;td>
+  My contributions
+&lt;/td>&lt;td>
+  {{MSGNW:mycontris}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Contribsub&amp;action=edit contribsub]
+&lt;/td>&lt;td>
+  For $1
+&lt;/td>&lt;td>
+  {{MSGNW:contribsub}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nocontribs&amp;action=edit nocontribs]
+&lt;/td>&lt;td>
+  No changes were found matching these criteria.
+&lt;/td>&lt;td>
+  {{MSGNW:nocontribs}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Ucnote&amp;action=edit ucnote]
+&lt;/td>&lt;td>
+  Below are this user&amp;#39;s last &amp;lt;b&amp;gt;$1&amp;lt;/b&amp;gt; changes in the last &amp;lt;b&amp;gt;$2&amp;lt;/b&amp;gt; days.
+&lt;/td>&lt;td>
+  {{MSGNW:ucnote}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uclinks&amp;action=edit uclinks]
+&lt;/td>&lt;td>
+  View the last $1 changes; view the last $2 days.
+&lt;/td>&lt;td>
+  {{MSGNW:uclinks}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Uctop&amp;action=edit uctop]
+&lt;/td>&lt;td>
+   (top)
+&lt;/td>&lt;td>
+  {{MSGNW:uctop}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Notargettitle&amp;action=edit notargettitle]
+&lt;/td>&lt;td>
+  No target
+&lt;/td>&lt;td>
+  {{MSGNW:notargettitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Notargettext&amp;action=edit notargettext]
+&lt;/td>&lt;td>
+  You have not specified a target page or user
+to perform this function on.
+&lt;/td>&lt;td>
+  {{MSGNW:notargettext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Linklistsub&amp;action=edit linklistsub]
+&lt;/td>&lt;td>
+  (List of links)
+&lt;/td>&lt;td>
+  {{MSGNW:linklistsub}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Linkshere&amp;action=edit linkshere]
+&lt;/td>&lt;td>
+  The following pages link to here:
+&lt;/td>&lt;td>
+  {{MSGNW:linkshere}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Nolinkshere&amp;action=edit nolinkshere]
+&lt;/td>&lt;td>
+  No pages link to here.
+&lt;/td>&lt;td>
+  {{MSGNW:nolinkshere}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Isredirect&amp;action=edit isredirect]
+&lt;/td>&lt;td>
+  redirect page
+&lt;/td>&lt;td>
+  {{MSGNW:isredirect}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Blockip&amp;action=edit blockip]
+&lt;/td>&lt;td>
+  Block user
+&lt;/td>&lt;td>
+  {{MSGNW:blockip}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Blockiptext&amp;action=edit blockiptext]
+&lt;/td>&lt;td>
+  Use the form below to block write access
+from a specific IP address or username.
+This should be done only only to prevent vandalism, and in
+accordance with &amp;#91;&amp;#91;Wikitravel:Policy|Wikitravel policy]].
+Fill in a specific reason below (for example, citing particular
+pages that were vandalized).
+&lt;/td>&lt;td>
+  {{MSGNW:blockiptext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Ipaddress&amp;action=edit ipaddress]
+&lt;/td>&lt;td>
+  IP Address/username
+&lt;/td>&lt;td>
+  {{MSGNW:ipaddress}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Ipbreason&amp;action=edit ipbreason]
+&lt;/td>&lt;td>
+  Reason
+&lt;/td>&lt;td>
+  {{MSGNW:ipbreason}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Ipbsubmit&amp;action=edit ipbsubmit]
+&lt;/td>&lt;td>
+  Block this user
+&lt;/td>&lt;td>
+  {{MSGNW:ipbsubmit}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Badipaddress&amp;action=edit badipaddress]
+&lt;/td>&lt;td>
+  No user exists by that name
+&lt;/td>&lt;td>
+  {{MSGNW:badipaddress}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Noblockreason&amp;action=edit noblockreason]
+&lt;/td>&lt;td>
+  You must supply a reason for the block.
+&lt;/td>&lt;td>
+  {{MSGNW:noblockreason}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Blockipsuccesssub&amp;action=edit blockipsuccesssub]
+&lt;/td>&lt;td>
+  Block succeeded
+&lt;/td>&lt;td>
+  {{MSGNW:blockipsuccesssub}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Blockipsuccesstext&amp;action=edit blockipsuccesstext]
+&lt;/td>&lt;td>
+  &amp;quot;$1&amp;quot; has been blocked.
+&amp;lt;br&amp;gt;See &amp;#91;&amp;#91;Special:Ipblocklist|IP block list]] to review blocks.
+&lt;/td>&lt;td>
+  {{MSGNW:blockipsuccesstext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unblockip&amp;action=edit unblockip]
+&lt;/td>&lt;td>
+  Unblock user
+&lt;/td>&lt;td>
+  {{MSGNW:unblockip}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unblockiptext&amp;action=edit unblockiptext]
+&lt;/td>&lt;td>
+  Use the form below to restore write access
+to a previously blocked IP address or username.
+&lt;/td>&lt;td>
+  {{MSGNW:unblockiptext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Ipusubmit&amp;action=edit ipusubmit]
+&lt;/td>&lt;td>
+  Unblock this address
+&lt;/td>&lt;td>
+  {{MSGNW:ipusubmit}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Ipusuccess&amp;action=edit ipusuccess]
+&lt;/td>&lt;td>
+  &amp;quot;$1&amp;quot; unblocked
+&lt;/td>&lt;td>
+  {{MSGNW:ipusuccess}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Ipblocklist&amp;action=edit ipblocklist]
+&lt;/td>&lt;td>
+  List of blocked IP addresses and usernames
+&lt;/td>&lt;td>
+  {{MSGNW:ipblocklist}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Blocklistline&amp;action=edit blocklistline]
+&lt;/td>&lt;td>
+  $1, $2 blocked $3
+&lt;/td>&lt;td>
+  {{MSGNW:blocklistline}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Blocklink&amp;action=edit blocklink]
+&lt;/td>&lt;td>
+  block
+&lt;/td>&lt;td>
+  {{MSGNW:blocklink}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unblocklink&amp;action=edit unblocklink]
+&lt;/td>&lt;td>
+  unblock
+&lt;/td>&lt;td>
+  {{MSGNW:unblocklink}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Contribslink&amp;action=edit contribslink]
+&lt;/td>&lt;td>
+  contribs
+&lt;/td>&lt;td>
+  {{MSGNW:contribslink}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Autoblocker&amp;action=edit autoblocker]
+&lt;/td>&lt;td>
+  Autoblocked because you share an IP address with &amp;quot;$1&amp;quot;. Reason &amp;quot;$2&amp;quot;.
+&lt;/td>&lt;td>
+  {{MSGNW:autoblocker}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Blocklogpage&amp;action=edit blocklogpage]
+&lt;/td>&lt;td>
+  Block_log
+&lt;/td>&lt;td>
+  {{MSGNW:blocklogpage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Blocklogentry&amp;action=edit blocklogentry]
+&lt;/td>&lt;td>
+  blocked &amp;quot;$1&amp;quot;
+&lt;/td>&lt;td>
+  {{MSGNW:blocklogentry}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Blocklogtext&amp;action=edit blocklogtext]
+&lt;/td>&lt;td>
+  This is a log of user blocking and unblocking actions. Automatically 
+blocked IP addresses are not be listed. See the &amp;#91;&amp;#91;Special:Ipblocklist|IP block list]] for
+the list of currently operational bans and blocks.
+&lt;/td>&lt;td>
+  {{MSGNW:blocklogtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unblocklogentry&amp;action=edit unblocklogentry]
+&lt;/td>&lt;td>
+  unblocked &amp;quot;$1&amp;quot;
+&lt;/td>&lt;td>
+  {{MSGNW:unblocklogentry}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Lockdb&amp;action=edit lockdb]
+&lt;/td>&lt;td>
+  Lock database
+&lt;/td>&lt;td>
+  {{MSGNW:lockdb}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unlockdb&amp;action=edit unlockdb]
+&lt;/td>&lt;td>
+  Unlock database
+&lt;/td>&lt;td>
+  {{MSGNW:unlockdb}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Lockdbtext&amp;action=edit lockdbtext]
+&lt;/td>&lt;td>
+  Locking the database will suspend the ability of all
+users to edit pages, change their preferences, edit their watchlists, and
+other things requiring changes in the database.
+Please confirm that this is what you intend to do, and that you will
+unlock the database when your maintenance is done.
+&lt;/td>&lt;td>
+  {{MSGNW:lockdbtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unlockdbtext&amp;action=edit unlockdbtext]
+&lt;/td>&lt;td>
+  Unlocking the database will restore the ability of all
+users to edit pages, change their preferences, edit their watchlists, and
+other things requiring changes in the database.
+Please confirm that this is what you intend to do.
+&lt;/td>&lt;td>
+  {{MSGNW:unlockdbtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Lockconfirm&amp;action=edit lockconfirm]
+&lt;/td>&lt;td>
+  Yes, I really want to lock the database.
+&lt;/td>&lt;td>
+  {{MSGNW:lockconfirm}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unlockconfirm&amp;action=edit unlockconfirm]
+&lt;/td>&lt;td>
+  Yes, I really want to unlock the database.
+&lt;/td>&lt;td>
+  {{MSGNW:unlockconfirm}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Lockbtn&amp;action=edit lockbtn]
+&lt;/td>&lt;td>
+  Lock database
+&lt;/td>&lt;td>
+  {{MSGNW:lockbtn}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unlockbtn&amp;action=edit unlockbtn]
+&lt;/td>&lt;td>
+  Unlock database
+&lt;/td>&lt;td>
+  {{MSGNW:unlockbtn}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Locknoconfirm&amp;action=edit locknoconfirm]
+&lt;/td>&lt;td>
+  You did not check the confirmation box.
+&lt;/td>&lt;td>
+  {{MSGNW:locknoconfirm}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Lockdbsuccesssub&amp;action=edit lockdbsuccesssub]
+&lt;/td>&lt;td>
+  Database lock succeeded
+&lt;/td>&lt;td>
+  {{MSGNW:lockdbsuccesssub}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unlockdbsuccesssub&amp;action=edit unlockdbsuccesssub]
+&lt;/td>&lt;td>
+  Database lock removed
+&lt;/td>&lt;td>
+  {{MSGNW:unlockdbsuccesssub}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Lockdbsuccesstext&amp;action=edit lockdbsuccesstext]
+&lt;/td>&lt;td>
+  The Wikitravel database has been locked.
+&amp;lt;br&amp;gt;Remember to remove the lock after your maintenance is complete.
+&lt;/td>&lt;td>
+  {{MSGNW:lockdbsuccesstext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Unlockdbsuccesstext&amp;action=edit unlockdbsuccesstext]
+&lt;/td>&lt;td>
+  The Wikitravel database has been unlocked.
+&lt;/td>&lt;td>
+  {{MSGNW:unlockdbsuccesstext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Asksql&amp;action=edit asksql]
+&lt;/td>&lt;td>
+  SQL query
+&lt;/td>&lt;td>
+  {{MSGNW:asksql}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Asksqltext&amp;action=edit asksqltext]
+&lt;/td>&lt;td>
+  Use the form below to make a direct query of the
+Wikitravel database.
+Use single quotes (&amp;#39;like this&amp;#39;) to delimit string literals.
+This can often add considerable load to the server, so please use
+this function sparingly.
+&lt;/td>&lt;td>
+  {{MSGNW:asksqltext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Sqlislogged&amp;action=edit sqlislogged]
+&lt;/td>&lt;td>
+  Please note that all queries are logged.
+&lt;/td>&lt;td>
+  {{MSGNW:sqlislogged}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Sqlquery&amp;action=edit sqlquery]
+&lt;/td>&lt;td>
+  Enter query
+&lt;/td>&lt;td>
+  {{MSGNW:sqlquery}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Querybtn&amp;action=edit querybtn]
+&lt;/td>&lt;td>
+  Submit query
+&lt;/td>&lt;td>
+  {{MSGNW:querybtn}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Selectonly&amp;action=edit selectonly]
+&lt;/td>&lt;td>
+  Queries other than &amp;quot;SELECT&amp;quot; are restricted to
+Wikitravel developers.
+&lt;/td>&lt;td>
+  {{MSGNW:selectonly}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Querysuccessful&amp;action=edit querysuccessful]
+&lt;/td>&lt;td>
+  Query successful
+&lt;/td>&lt;td>
+  {{MSGNW:querysuccessful}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Movepage&amp;action=edit movepage]
+&lt;/td>&lt;td>
+  Move page
+&lt;/td>&lt;td>
+  {{MSGNW:movepage}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Movepagetext&amp;action=edit movepagetext]
+&lt;/td>&lt;td>
+  Using the form below will rename a page, moving all
+of its history to the new name.
+The old title will become a redirect page to the new title.
+Links to the old page title will not be changed; be sure to
+&amp;#91;&amp;#91;Special:Maintenance|check]] for double or broken redirects.
+You are responsible for making sure that links continue to
+point where they are supposed to go.
+
+Note that the page will &amp;#39;&amp;#39;&amp;#39;not&amp;#39;&amp;#39;&amp;#39; be moved if there is already
+a page at the new title, unless it is empty or a redirect and has no
+past edit history. This means that you can rename a page back to where
+it was just renamed from if you make a mistake, and you cannot overwrite
+an existing page.
+
+&amp;lt;b&amp;gt;WARNING!&amp;lt;/b&amp;gt;
+This can be a drastic and unexpected change for a popular page;
+please be sure you understand the consequences of this before
+proceeding.
+&lt;/td>&lt;td>
+  {{MSGNW:movepagetext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Movepagetalktext&amp;action=edit movepagetalktext]
+&lt;/td>&lt;td>
+  The associated talk page, if any, will be automatically moved along with it &amp;#39;&amp;#39;&amp;#39;unless:&amp;#39;&amp;#39;&amp;#39;
+*You are moving the page across namespaces,
+*A non-empty talk page already exists under the new name, or
+*You uncheck the box below.
+
+In those cases, you will have to move or merge the page manually if desired.
+&lt;/td>&lt;td>
+  {{MSGNW:movepagetalktext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Movearticle&amp;action=edit movearticle]
+&lt;/td>&lt;td>
+  Move page
+&lt;/td>&lt;td>
+  {{MSGNW:movearticle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Movenologin&amp;action=edit movenologin]
+&lt;/td>&lt;td>
+  Not logged in
+&lt;/td>&lt;td>
+  {{MSGNW:movenologin}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Movenologintext&amp;action=edit movenologintext]
+&lt;/td>&lt;td>
+  You must be a registered user and &amp;lt;a href=&amp;quot;/ro/articol/Special:Userlogin&amp;quot;&amp;gt;logged in&amp;lt;/a&amp;gt;
+to move a page.
+&lt;/td>&lt;td>
+  {{MSGNW:movenologintext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Newtitle&amp;action=edit newtitle]
+&lt;/td>&lt;td>
+  To new title
+&lt;/td>&lt;td>
+  {{MSGNW:newtitle}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Movepagebtn&amp;action=edit movepagebtn]
+&lt;/td>&lt;td>
+  Move page
+&lt;/td>&lt;td>
+  {{MSGNW:movepagebtn}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Pagemovedsub&amp;action=edit pagemovedsub]
+&lt;/td>&lt;td>
+  Move succeeded
+&lt;/td>&lt;td>
+  {{MSGNW:pagemovedsub}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Pagemovedtext&amp;action=edit pagemovedtext]
+&lt;/td>&lt;td>
+  Page &amp;quot;&amp;#91;&amp;#91;$1]]&amp;quot; moved to &amp;quot;&amp;#91;&amp;#91;$2]]&amp;quot;.
+&lt;/td>&lt;td>
+  {{MSGNW:pagemovedtext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Articleexists&amp;action=edit articleexists]
+&lt;/td>&lt;td>
+  A page of that name already exists, or the
+name you have chosen is not valid.
+Please choose another name.
+&lt;/td>&lt;td>
+  {{MSGNW:articleexists}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Talkexists&amp;action=edit talkexists]
+&lt;/td>&lt;td>
+  The page itself was moved successfully, but the
+talk page could not be moved because one already exists at the new
+title. Please merge them manually.
+&lt;/td>&lt;td>
+  {{MSGNW:talkexists}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Movedto&amp;action=edit movedto]
+&lt;/td>&lt;td>
+  moved to
+&lt;/td>&lt;td>
+  {{MSGNW:movedto}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Movetalk&amp;action=edit movetalk]
+&lt;/td>&lt;td>
+  Move &amp;quot;talk&amp;quot; page as well, if applicable.
+&lt;/td>&lt;td>
+  {{MSGNW:movetalk}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Talkpagemoved&amp;action=edit talkpagemoved]
+&lt;/td>&lt;td>
+  The corresponding talk page was also moved.
+&lt;/td>&lt;td>
+  {{MSGNW:talkpagemoved}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Talkpagenotmoved&amp;action=edit talkpagenotmoved]
+&lt;/td>&lt;td>
+  The corresponding talk page was &amp;lt;strong&amp;gt;not&amp;lt;/strong&amp;gt; moved.
+&lt;/td>&lt;td>
+  {{MSGNW:talkpagenotmoved}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Export&amp;action=edit export]
+&lt;/td>&lt;td>
+  Export pages
+&lt;/td>&lt;td>
+  {{MSGNW:export}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Exporttext&amp;action=edit exporttext]
+&lt;/td>&lt;td>
+  You can export the text and editing history of a particular
+page or set of pages wrapped in some XML; this can then be imported into another
+wiki running MediaWiki software, transformed, or just kept for your private
+amusement.
+&lt;/td>&lt;td>
+  {{MSGNW:exporttext}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Exportcuronly&amp;action=edit exportcuronly]
+&lt;/td>&lt;td>
+  Include only the current revision, not the full history
+&lt;/td>&lt;td>
+  {{MSGNW:exportcuronly}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Allmessages&amp;action=edit allmessages]
+&lt;/td>&lt;td>
+  All_messages
+&lt;/td>&lt;td>
+  {{MSGNW:allmessages}}
+&lt;/td>&lt;/tr>&lt;tr>&lt;td>
+  [http://www.wikitravel.org/ro/wiki/wiki.phtml?title=MediaWiki:Allmessagestext&amp;action=edit allmessagestext]
+&lt;/td>&lt;td>
+  This is a list of all messages available in the MediaWiki: namespace
+&lt;/td>&lt;td>
+  {{MSGNW:allmessagestext}}
+&lt;/td>&lt;/tr>&lt;/table>

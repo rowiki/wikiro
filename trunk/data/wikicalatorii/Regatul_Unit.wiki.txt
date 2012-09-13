@@ -1,0 +1,53 @@
+'''Regatul Unit''' este un regat care cuprinde patru ţări pe insula Marea Britanie şi partea de nord a insulii Irlanda, în [[Europa de Vest]].
+
+==Ţări==
+
+*[[Anglia]]
+*[[Scoţia]]
+*[[Ţara Galilor]]
+*[[Irlanda de Nord]]
+
+==Destinaţii==
+
+*[[Londra]]
+*[[Glasgow]]
+*[[Cardiff]]
+*[[Belfast]]
+*[[Manchester]]
+*[[Birmingham]]
+*[[Leeds]]
+*[[Bristol]]
+*[[Edinburg]]
+*[[York]]
+*[[Dover]]
+*[[Southampton]]
+*[[Liverpool]]
+*[[Llanfair]]
+*[[Oxford]]
+*[[Cambridge]]
+
+{{IsIn|Europa_de_Vest}}
+{{ciot}}
+
+&lt;!--[[nl:Verenigd Koninkrijk]]-->
+[[WikiPedia:Regatul Unit]]
+[[Dmoz:Europa/Regatul Unit/]]
+
+
+
+[[ar:المملكة المتحدة]]
+[[ca:Regne Unit]]
+[[de:Vereinigtes Königreich]]
+[[en:United Kingdom]]
+[[eo:Britio]]
+[[es:Reino Unido]]
+[[fi:Iso-Britannia]]
+[[fr:Royaume-Uni]]
+[[hu:Egyesült Királyság]]
+[[it:Regno Unito]]
+[[ja:イギリス]]
+[[pl:Wielka Brytania]]
+[[pt:Reino Unido]]
+[[ru:Великобритания]]
+[[sv:Storbritannien]]
+[[wts:Category:United Kingdom]]

@@ -1,0 +1,9 @@
+
+'''Această pagină sau secţiune a fost propusă pentru ştergere.'''
+
+'''''Motivul:''''' {{{1}}}
+
+''[[Wikitravel:Administratori|Administratori]] - Nu uitaţi să verificaţi [[Special:Whatlinkshere/{{NAMESPACE}}:{{PAGENAME}}|dacă există vreo legătură către această pagină]], precum şi [{{SERVER}}{{localurl:{{NAMESPACE}}:{{PAGENAME}}|action=history}} istoricul paginii] înainte de a o şterge.''
+&lt;/div>
+&lt;includeonly>[[Categorie:Articole de şters]]&lt;/includeonly>
+&lt;noinclude>[[Categorie:Formate Wikitravel]]&lt;/noinclude>

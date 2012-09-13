@@ -1,0 +1,31 @@
+'''Los Angeles''' este cel mai mare oraş din [[California]], [[Statele Unite ale Americii]].
+
+==De văzut==
+
+*'''Cartierul chinezesc''' (''Chinatown'')
+*'''Micul Tokio''' (''Little Tokyo'')
+*'''Museul Artei Contemporane''' (''Museum of Contemporary Art, MOCA'')
+
+==De mâncat==
+
+*'''Empress Pavillion''' în cartierul chinezesc
+{{IsIn|California}}
+{{ciot}}
+
+[[WikiPedia:Los Angeles]]
+
+
+
+
+[[de:Los Angeles]]
+[[en:Los Angeles]]
+[[es:Los Angeles]]
+[[fi:Los Angeles]]
+[[fr:Los Angeles]]
+[[hi:लॉसैंजिलीज़]]
+[[it:Los Angeles]]
+[[ja:ロサンゼルス]]
+[[nl:Los Angeles]]
+[[pt:Los Angeles]]
+[[sv:Los Angeles]]
+[[wts:Category:Los Angeles]]

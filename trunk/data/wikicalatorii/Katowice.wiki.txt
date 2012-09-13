@@ -1,0 +1,7 @@
+'''Katowice''' este un oraş în [[Polonia]].
+{{IsIn|Polonia}}
+{{ciot}}
+
+[[de:Kattowitz]]
+[[en:Katowice]]
+[[pl:Katowice]]

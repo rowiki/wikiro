@@ -1,0 +1,3 @@
+'''Rockhampton''' este un oraş în [[Australia]].
+{{IsIn|Australia}}
+{{ciot}}

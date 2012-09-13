@@ -1,0 +1,23 @@
+'''Frankfurt''' este un oraş în [[Germania]].
+[[Image:Alte Oper Frankfurt Germany 326-v3.jpg|thumb|250px|Alte Oper Frankfurt]]
+
+{{ciot}}
+
+&lt;!--[[es:Fráncfort]]-->
+&lt;!--[[fr:Francfort]]-->
+&lt;!--[[sv:Frankfurt]]-->
+
+[[WikiPedia:Frankfurt]]
+
+
+
+[[de:Frankfurt am Main]]
+[[en:Frankfurt]]
+[[es:Frankfurt]]
+[[fi:Frankfurt]]
+[[it:Francoforte sul Meno]]
+[[ja:フランクフルト]]
+[[nl:Frankfurt am Main]]
+[[pl:Frankfurt nad Menem]]
+[[pt:Frankfurt]]
+[[wts:Category:Frankfurt am Main]]

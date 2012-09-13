@@ -1,0 +1,18 @@
+'''Boston''' este un oraş în [[Statele Unite ale Americii]].
+{{IsIn|Massachusetts}}
+{{ciot}}
+
+[[WikiPedia:Boston]]
+
+[[ca:Boston]]
+[[de:Boston]]
+[[en:Boston]]
+[[es:Boston]]
+[[fi:Boston]]
+[[fr:Boston]]
+[[it:Boston]]
+[[ja:ボストン]]
+[[nl:Boston]]
+[[pl:Boston]]
+[[pt:Boston]]
+[[sv:Boston]]

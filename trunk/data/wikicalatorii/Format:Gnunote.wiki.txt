@@ -1,0 +1,7 @@
+
+	       &lt;a href='http://creativecommons.org/licenses/by-sa/1.0/'>
+	       &lt;img alt='Creative Commons License' border='0'
+    	            src='http://creativecommons.org/images/public/somerights' />&lt;/a>
+	       &lt;br />
+	       Article text and images licensed under a
+	       &lt;a href='http://creativecommons.org/licenses/by-sa/1.0/'>Creative Commons License&lt;/a>.

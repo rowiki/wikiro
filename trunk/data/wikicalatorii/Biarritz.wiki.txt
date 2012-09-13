@@ -1,0 +1,11 @@
+'''Biarritz''' este un oraş în [[Franţa]].
+{{IsIn|Franţa}}
+{{ciot}}
+
+
+
+[[en:Biarritz]]
+[[fi:Biarritz]]
+[[fr:Biarritz]]
+[[nl:Biarritz]]
+[[pt:Biarritz]]

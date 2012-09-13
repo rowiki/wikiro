@@ -1,0 +1,10 @@
+'''Denver''' este un oraş în [[Statele Unite ale Americii]].
+{{IsIn|Colorado}}
+{{ciot}}
+
+[[de:Denver]]
+[[en:Denver]]
+[[fi:Denver]]
+[[it:Denver]]
+[[ja:デンバー]]
+[[nl:Denver]]

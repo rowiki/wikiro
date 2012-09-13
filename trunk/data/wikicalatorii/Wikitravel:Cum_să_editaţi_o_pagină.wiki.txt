@@ -1,0 +1,46 @@
+[[Wikitravel:Plonjaţi înainte|Dumneavoastră]] puteţi edita '''orice articol''' pe Wikitravel făcând click pe legătura 'Editează pagina'. Când faceţi click pe această legătură, va apărea o cutie albă cu tot conţinutul paginii formatat în stil Wiki.
+
+Puteţi modifica pagini cum doriţi, dar modificările voastre trebuie să fie compatibile cu [[Wikitravel:Copyleft|Copyleft]], ţelurile şi regulile noastre. Ar fi bine şi să consultaţi înainte de a vă apuca de modificări [[Wikitravel:Manual de stil|manualul de stil]].
+
+Este mai bine să adăugaţi ceva la un articol acum decât să amânaţi până aveţi ceva perfect de adăugat. Sigur că ar fi excelent dacă aţi adăuga ceva foarte bine informat şi structurat, dar dacă ştiţi doar puţin despre o destinaţie, va fi un lucru bun contribuţia dumneavoastră la proiectul Wikitravel.
+
+După ce aţi făcut schimbările dorite, puteţi să previzualizaţi pagina făcând clic pe butonul '''Arată previzualizare'''. Această acţiune vă va arată pagina, fără a salva încă schimbările dumneavoastră în baza de date. Previzualizarea este o modalitate bună de verificare a modului cum vor arăta modificările dumneavoastră în pagină.
+
+Când sunteţi mulţumiţi cu toate schimbările, apăsaţi pe butonul '''Salvează pagina'''. Această acţiune va salva pagina şi schimbările dumneavoastră vor putea fi văzute de toţi vizitatorii şi colaboratorii proiectului Wikitravel. Această acţiune face din ghidul turistic Wikitravel un ghid unic, fiind editabil de oricine, oricând. Bineînţeles, rezultate editării dumneavoastră sunt disponibile şi vizibile imediat, nu numai de Dvs. dar şi de toată lumea care accesează articolul respectiv!
+
+Dacă vreţi să renunţaţi la o modificare - de exemplu v-aţi răzgândit, ajunge să faceţi doar clic pe '''Renunţă''', şi veţi reveni la articolul original nemodificar. Legătura '''Ajutor pentru editare''', vă va aduce aici - la articolul despre cum să editaţi o pagină!
+
+Sub cutia de editare există încă o cutie de un rând ('''Sumar''') unde puteţi pune o descriere succintă despre modificările dumneavoastră - de exemplu, ce părţi ale articolului aţi modificat, ce anume aţi adăugat, ce schimbări concrete aţi făcut, etc. De exemplu, la sumar puteţi pune "Adăugat detalii despre transport în Paris" dacă aţi adăugat aceste informaţii în articol. Sau puteţi scrie "Corectat informaţii despre hotelul Peralta din Barcelona", dacă acesta au fost modificările dumneavoastră în articolul [[Barcelona]]. Sumarul de editare ajută alţi utilizatori Wikitravel care se uită la pagina de [[Special:Recentchanges|Schimbări recente]] să îşi facă o idee rapidă asupra schimbărilor operate de dumneavoastră asupra articolelor.
+
+Mai există o cutiuţă numită '''Aceasta este o editare minoră'''. Bifaţi-o făcând click pe ea dacă schimbările dumneavoastră ţin de formatare, exprimare, structură sau gramatică şi nu afectează în mod esenţial conţinutul articolului. '''Atenţie''': schimbările informaţiilor turistice (informaţii despre hoteluri, transport) '''nu''' sunt considerate minore! Marcarea modificărilor ca fiind minore ajută persoanele care vor revizui schimbările să le "filtreze" pe cele care nu trebuie neapărat revizuite. Aduceţi-vă aminte că Wikitravel este un proiect comun şi probabil că mulţi alţi utilizatori se vor uita peste editările dumneavoastră! Această căsuţă este disponibilă doar utilizatorilor înregistraţi!
+
+Dacă aveţi un [[Wikitravel:Cum să faceţi un cont de utilizator|cont de utilizator]], va fi prezentă de asemenea o cutiuţă pătrată denumită '''Urmăreşte această pagină'''. Bifarea ei pune articolul pe care îl modificaţi în lista voastră de articole urmărite. Această listă vă va arăta orice modificare ulterioară a articolului, sau la pagina de discuţii a articolului. Adăugând un articol la lista de urmărire vă dă oportunitatea să vedeţi ce modificări s-au făcut după cele ale dumneavoastră, şi dacă acestea au interferat cu munca dumneavoastră. Lista de articole urmărite este de asemenea importantă pentru articole la care faceţi multe sau dese modificări.
+
+Ca o notă finală, marcajul Wiki, în care se editează paginile, este mult mai simplu decât HTML, limbajul de codificare a paginilor de pe Internet. Marcajul Wiki vă lasă să editaţi pagini şi dacă nu aveţi multă experienţă de codificare sau programare HTML, pentru că, la urma urmei, Wikitravel este un ghid turistic pentru toţi, nu un sit exclusiv pentru programatori sau experţi tehnici. Totuşi, şi marcajul Wiki necesită puţin efort pentru a fi învăţat - de exemplu, cum să fac legături la alte pagini Wikitravel, sau tabele, sau chiar titluri structurate! Pentru toate aceste chestiuni, ghidul de [[Wikitravel:Cum să formataţi cu Wiki|marcaj Wiki]] vă va ajuta. Totuşi, puteţi să adăugaţi sau să schimbaţi conţinut la pagini şi fără o cunoştinţă a marcajului Wiki, care oricum este foarte uşor de folosit şi abia se interferează cu conţinutul paginii! Excepţia este [[Portal|portalul]] nostru, sau pagina principală, care este codificată şi cu puţin HTML, utilizând tabele HTML.
+
+Dacă aveţi nevoie de orice fel de ajutor mai detaliat despre modificarea unei pagini, sunteţi mereu bineveniţi la [[Wikitravel:Hanul călătorilor|Hanul călătorilor]], unde alţi utilizatori Wikitravel vă pot oferi acest ajutor!
+
+În concluzie, spor la editarea articolelor!
+
+Vedeţi şi: [[Wikitravel:Ajutor|Ajutor]]
+
+
+
+
+
+
+
+
+
+[[ca:Wikitravel:Com editar una pàgina]]
+[[de:Wikitravel:Wie du eine Seite bearbeitest]]
+[[en:Wikitravel:How to edit a page]]
+[[es:Wikitravel:Cómo editar una página]]
+[[fr:Wikitravel:Comment éditer une page]]
+[[it:Wikitravel:Come modificare una pagina]]
+[[ja:Wikitravel:編集の仕方]]
+[[nl:Wikitravel:Hoe een pagina te bewerken]]
+[[pt:Wikitravel:Como editar uma página]]
+[[ru:Wikitravel:Как править статью]]
+[[sv:Wikitravel:Hur redigerar man en sida]]
+[[zh:Wikitravel:如何編輯頁面]]

@@ -1,0 +1,9 @@
+'''Sacramento''' este un oraş în [[Statele Unite ale Americii]].
+{{IsIn|California}}
+{{ciot}}
+
+&lt;!--[[fr:Sacramento]]-->
+[[de:Sacramento]]
+[[en:Sacramento]]
+[[ja:サクラメント]]
+[[pt:Sacramento]]

@@ -1,0 +1,9 @@
+'''Caransebeş''' este un oraş din [[Judeţul Caraş-Severin]], [[Banat]], [[România]].
+
+==Hoteluri==
+* &lt;sleep name="Hotel Imperial" alt="" address="Calea Severinului, nr. 176, Caransebes, Caras Severin" directions="" phone="+40(255)515268" url="" checkin="" checkout="" price="" lat="" long="" email="hotelimperial@caransebes.ro">Hotel Imperial din Caransebeş pentru cazare şi petreceri.&lt;/sleep>
+
+
+{{ciot}}
+
+[[en:Caransebeş]]

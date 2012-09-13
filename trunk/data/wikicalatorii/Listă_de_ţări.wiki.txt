@@ -1,0 +1,355 @@
+__FARACUPRINS__
+
+Mai jos se află o listă de ţări ale lumii în ordine alfabetică.
+
+==A==
+
+[[Afganistan]], 
+[[Africa de Sud]], 
+[[Albania]], 
+[[Algeria]],  
+[[Andorra]], 
+[[Angola]], 
+[[Anguilla]], 
+[[Antarctica]], 
+[[Antigua şi Barbuda]], 
+[[Antilele Olandeze]], 
+[[Arabia Saudită]], 
+[[Argentina]], 
+[[Armenia]], 
+[[Aruba]], 
+[[Atolul Johnston]], 
+[[Atolul Palmyra]], 
+[[Australia]], 
+[[Austria]], 
+[[Azerbaijan]]
+
+==B==
+
+[[Bahamas]], 
+[[Bahrain]], 
+[[Bangladesh]], 
+[[Barbados]], 
+[[Bassas da India]], 
+[[Belarus]], 
+[[Belgia]], 
+[[Belize]], 
+[[Benin]], 
+[[Bermuda]], 
+[[Birmania]], 
+[[Bhutan]], 
+[[Bolivia]], 
+[[Bosnia şi Herţegovina]], 
+[[Botswana]], 
+[[Brazilia]], 
+[[British Indian Ocean Territory]],  
+[[Brunei]], 
+[[Bulgaria]], 
+[[Burkina Faso]], 
+[[Burundi]]
+
+==C==
+
+[[Cambodgia]], 
+[[Camerun]], 
+[[Canada]], 
+[[Cape Verde]], 
+[[Cehia]]
+[[Chad]], 
+[[Chile]], 
+[[China]],
+[[Cipru]],
+[[Coasta de Fildeş]], 
+[[Columbia]], 
+[[Comoros]], 
+[[Coreea de Nord]], 
+[[Coreea de Sud]], 
+[[Costa Rica]],  
+[[Croaţia]], 
+[[Cuba]],  
+
+==D==
+
+[[Danemarca]], 
+[[Djibouti]], 
+[[Dominica]] 
+
+==E==
+
+[[Ecuador]], 
+[[Egipt]], 
+[[Elveţia]], 
+[[El Salvador]], 
+[[Emiratele Arabe Unite]], 
+[[Eritrea]], 
+[[Estonia]], 
+[[Etiopia]]
+
+==F==
+
+[[Fiji]], 
+[[Filipine]], 
+[[Finlanda]], 
+[[Franţa]], 
+
+==G==
+
+[[Gabon]], 
+[[Gambia]], 
+[[Georgia (ţară)|Georgia]], 
+[[Georgia de Sud şi Insulele Sandwich de Sud]], 
+[[Germania]], 
+[[Ghana]], 
+[[Gibraltar]], 
+[[Grecia]], 
+[[Greenland]], 
+[[Grenada]], 
+[[Guadeloupe]], 
+[[Guam]], 
+[[Guatemala]], 
+[[Guernsey]], 
+[[Guineea]], 
+[[Guineea-Bissau]], 
+[[Guineea Ecuatorială]], 
+[[Guyana]]
+[[Guyana Franceză]], 
+
+==H==
+
+[[Haiti]], 
+[[Honduras]], 
+[[Hong Kong]]
+
+==I==
+
+[[Islanda]], 
+[[India]], 
+[[Indonezia]], 
+[[Insulele Ashmore şi Cartier]],
+[[Insula Baker]], 
+[[Insula Bouvet]], 
+[[Insula Jarvis]], 
+[[Insula Clipperton]],
+[[Insula Crăciun]],
+[[Insula Europa]], 
+[[Insula Juan de Nova]], 
+[[Insulele Cayman]], 
+[[Insulele Cocos (Keeling)]], 
+[[Insulele Cook]], 
+[[Insulele Faroe]], 
+[[Insulele Glorioso]], 
+[[Insula Heard şi Insulele McDonald]], 
+[[Insula Howland]], 
+[[Insula Wake]], 
+[[Insulele Malvine]], 
+[[Insulele Marea de Corali]], 
+[[Insulele Mariana de Nord]], 
+[[Insulele Marshall]], 
+[[Insulele Midway]], 
+[[Insula Navassa]], 
+[[Insulele Paracel]], 
+[[Insulele Pitcairn]], 
+[[Insulele Solomon]], 
+[[Insulele Spratly]], 
+[[Insula Tromelin]], 
+[[Insulele Turks şi Caicos]], 
+[[Insulele Virgine]], 
+[[Insulele Virgine Britanice]],
+[[Iran]], 
+[[Irak]], 
+[[Irlanda]], 
+[[Isle of Man]], 
+[[Israel]], 
+[[Italia]]
+
+==J==
+
+[[Jamaica]], 
+[[Jan Mayen]], 
+[[Japonia]], 
+[[Jersey]], 
+[[Jordan]]
+
+==K==
+
+[[Kazakhstan]], 
+[[Kenya]], 
+[[Kiribati]], 
+[[Kuwait]], 
+[[Kyrgyzstan]]
+
+==L==
+
+[[Laos]], 
+[[Lesoto]], 
+[[Letonia]], 
+[[Liberia]], 
+[[Liban]], 
+[[Libia]], 
+[[Liechtenstein]], 
+[[Lituania]], 
+[[Luxemburg]]
+
+==M==
+
+[[Macau]], 
+[[Macedonia]], 
+[[Madagascar]], 
+[[Malawi]], 
+[[Malaezia]], 
+[[Maldive]], 
+[[Mali]], 
+[[Malta]], 
+[[Martinique]], 
+[[Mauritania]], 
+[[Mauritius]], 
+[[Maroc]], 
+[[Mayotte]], 
+[[Mexic]], 
+[[Monaco]], 
+[[Mongolia]], 
+[[Montserrat]], 
+[[Mozambic]],
+[[Muntenegru]]
+
+==N==
+
+[[Namibia]], 
+[[Nauru]], 
+[[Nepal]], 
+[[New Caledonia]], 
+[[New Zealand]], 
+[[Nicaragua]], 
+[[Niger]], 
+[[Nigeria]], 
+[[Niue]], 
+[[Norvegia]]
+
+==O==
+
+[[Olanda]], 
+[[Oman]]
+
+==P==
+
+[[Pakistan]], 
+[[Palau]], 
+[[Panama]], 
+[[Papua Noua Guinee]], 
+[[Paraguay]], 
+[[Peru]], 
+[[Polinezia Franceză]], 
+[[Polonia]], 
+[[Portugalia]], 
+[[Puerto Rico]]
+
+==Q==
+
+[[Qatar]]
+
+==R==
+
+[[Reciful Kingman]], 
+[[Regatul Unit]], 
+[[Republica Centra-Africană]], 
+[[Republica Congo]], 
+[[Republica Democrată Congo]], 
+[[Republica Dominicană]], 
+[[Republica Moldova]], 
+[[Reunion]], 
+[[România]], 
+[[Rusia]], 
+[[Ruanda]]
+
+==S==
+
+[[Sfânta Helena]], 
+[[Sfântul Kitts şi Nevis]], 
+[[Sfânta Lucia]], 
+[[Sfântul Pierre şi Miquelon]], 
+[[Sfântul Vincent şi Grenadinele]], 
+[[Sahara Vestică]]
+[[Samoa]], 
+[[Samoa Americană]],
+[[San Marino]], 
+[[Sao Tome şi Principe]], 
+[[Senegal]], 
+[[Serbia]], 
+[[Seychelles]], 
+[[Sierra Leone]], 
+[[Siria]]
+[[Singapore]], 
+[[Slovacia]], 
+[[Slovenia]], 
+[[Somalia]], 
+[[Spania]], 
+[[Sri Lanka]], 
+[[Statele Federate ale Microneziei]], 
+[[Statele Unite ale Americii]], 
+[[Strâmtoarea Gaza]], 
+[[Sudan]], 
+[[Suedia]], 
+[[Suriname]], 
+[[Svalbard]], 
+[[Swaziland]]
+
+==T==
+
+[[Tailanda]], 
+[[Taiwan]], 
+[[Tajikistan]], 
+[[Tanzania]], 
+[[Teritoriile Sudice şi Antarctice Franceze]]
+[[Timorul de Est]], 
+[[Togo]], 
+[[Tokelau]], 
+[[Tonga]], 
+[[Trinidad şi Tobago]], 
+[[Tunisia]], 
+[[Turcia]], 
+[[Turkmenistan]], 
+[[Tuvalu]]
+
+==U==
+
+[[Ucraina]], 
+[[Uguanda]], 
+[[Ungaria]], 
+[[Uruguay]], 
+[[Uzbekistan]]
+
+==V==
+
+[[Vanuatu]], 
+[[Vatican]], 
+[[Venezuela]], 
+[[Vietnam]]
+
+==W==
+
+[[Wallis şi Futuna]], 
+[[West Bank]]
+
+==Y==
+
+[[Yemen]]
+
+==Z==
+
+[[Zambia]], 
+[[Zimbabwe]]
+
+
+
+[[ca:Wikitravel:Llistat de països]]
+[[de:Länder von A-Z]]
+[[en:List of countries]]
+[[fi:Luettelo valtioista]]
+[[fr:Liste des pays]]
+[[it:Lista di nazioni]]
+[[ja:国の一覧]]
+[[nl:Landen van de wereld]]
+[[sv:Lista över alla länder]]
+
+
+[[WikiPedia:Listă de ţări în care ninge]]

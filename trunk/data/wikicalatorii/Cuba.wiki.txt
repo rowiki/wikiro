@@ -1,0 +1,25 @@
+'''Cuba''' este o ţară din America Latină.
+
+
+{{ciot}}
+
+
+
+
+
+[[de:Kuba]]
+[[en:Cuba]]
+[[eo:Kubo]]
+[[es:Cuba]]
+[[fi:Kuuba]]
+[[fr:Cuba]]
+[[hi:कूबा]]
+[[hu:Kuba]]
+[[it:Cuba]]
+[[ja:キューバ]]
+[[nl:Cuba]]
+[[pl:Kuba]]
+[[pt:Cuba]]
+[[ru:Куба]]
+[[sv:Kuba]]
+[[wts:Category:Cuba]]

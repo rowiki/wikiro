@@ -1,0 +1,14 @@
+'''Aachen''' este un oraş în [[Germania]].
+{{IsIn|Germania}}
+{{ciot}}
+
+
+
+[[de:Aachen]]
+[[en:Aachen]]
+[[fr:Aix-la-Chapelle]]
+[[it:Aquisgrana]]
+[[ja:アーヘン]]
+[[nl:Aken]]
+[[pt:Aquisgrano]]
+[[wts:Category:Aachen]]

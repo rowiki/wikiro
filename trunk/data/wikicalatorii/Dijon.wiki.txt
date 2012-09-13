@@ -1,0 +1,9 @@
+'''Dijon''' este un oraş în [[Franţa]].
+{{IsIn|Franţa}}
+{{ciot}}
+
+[[en:Dijon]]
+[[es:Dijon]]
+[[fr:Dijon]]
+[[nl:Dijon]]
+[[pt:Dijon]]

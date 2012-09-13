@@ -1,0 +1,101 @@
+==Regiuni==
+[[Image:Asiacolour.PNG|thumb|noborder|500px|Regiuni Asiei]]
+
+* '''[[#Asia Centrală|&lt;font color=red>Asia Centrală&lt;/font>]]'''
+
+* '''[[#Asia de Est|&lt;font color=blue>Asia de Est&lt;/font>]]'''
+
+* '''[[#Orientul Mijlociu|&lt;font color=green>Orientul Mijlociu&lt;/font>]]'''
+
+* '''[[#Asia de Sud|&lt;font color=magenta>Asia de Sud&lt;/font>]]'''
+
+* '''[[#Asia de Sud-est|&lt;font color=cyan>Asia de Sud-est&lt;/font>]]'''
+
+* '''[[#Rusia şi Caucazul|&lt;font color=#ff5500>Rusia&lt;/font>]]''' and the '''[[#Rusia şi Caucazul|&lt;font color=#ff5500>Caucasus&lt;/font>]]'''
+
+==Ţări==
+
+===[[Asia Centrală|&lt;font color=red>Asia Centrală&lt;/font>]]===
+* [[Afganistan]]
+* [[Kazakhstan]]
+* [[Kyrgyzstan]]
+* [[Uzbekistan]]
+* [[Tajikistan]]
+* [[Turkmenistan]]
+
+===[[Asia de Est|&lt;font color=blue>Asia de Est&lt;/font>]]===
+* [[China]]
+* [[Coreea de Sud]]
+* [[Coreea de Nord]]
+* [[Japonia]]
+* [[Mongolia]]
+
+===[[Orientul Mijlociu|&lt;font color=green>Orientul Mijlociu&lt;/font>]]===
+* [[Arabia Saudită]]
+* [[Bahrain]]
+* [[Emiratele Arabe Unite]]
+* [[Iordania]]
+* [[Irak]]
+* [[Iran]]
+* [[Israel]]
+* [[Katar]]
+* [[Kuwait]]
+* [[Liban]]
+* [[Oman]]
+* [[Siria]]
+* [[Yemen]]
+
+===[[Asia de Sud|&lt;font color=magenta>Asia de Sud&lt;/font>]]===
+* [[Bangladeş]]
+* [[Bhutan]]
+* [[India]]
+* [[Maldivas]]
+* [[Nepal]]
+* [[Pakistan]]
+* [[Sri Lanka]]
+
+===[[Asia de Sud-est|&lt;font color=cyan>Asia de Sud-est&lt;/font>]]===
+* [[Brunei]]
+* [[Cambogia]]
+* [[Filipine]]
+* [[Indonezia]]
+* [[Laos]]
+* [[Malaezia]]
+* [[Singapore]]
+* [[Tailanda]]
+* [[Timorul de Est]]
+* [[Vietnam]]
+
+===[[Rusia|&lt;font color=#ff5500>Rusia&lt;/font>]] şi [[Caucazul|&lt;font color=#ff5500>Caucazul&lt;/font>]]===
+* [[Armenia]]
+* [[Azerbaijan]]
+* [[Georgia]]
+* [[Rusia]]
+
+[[WikiPedia:Asia]]
+[[Dmoz:Asia/]]
+
+
+
+
+
+[[ar:آسيا]]
+[[ca:Àsia]]
+[[de:Asien]]
+[[en:Asia]]
+[[eo:Azio]]
+[[es:Asia]]
+[[fi:Aasia]]
+[[fr:Asie]]
+[[he:אסיה]]
+[[hi:एशिया]]
+[[hu:Ázsia]]
+[[it:Asia]]
+[[ja:アジア]]
+[[nl:Azië]]
+[[pl:Azja]]
+[[pt:Ásia]]
+[[ru:Азия]]
+[[sv:Asien]]
+[[zh:亞洲]]
+[[wts:Category:Asia]]

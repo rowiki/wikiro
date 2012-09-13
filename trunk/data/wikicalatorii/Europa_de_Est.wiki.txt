@@ -1,0 +1,36 @@
+'''Europa de Est''' este o regiune a [[Europa|Europei]], formată din următoarele ţari:
+*[[Armenia]]
+*[[Belarus]]
+*[[Bulgaria]]
+*[[Estonia]]
+*[[Georgia]]
+*[[Letonia]]
+*[[Lithuania]]
+*[[Republica Moldova]]
+*[[România]]
+*[[Rusia]]
+*[[Ucraina]]
+
+{{ciot}}
+
+{{IsIn|Europa}}
+
+&lt;!--[[pl:Europa Wschodnia]]-->
+
+
+
+[[ca:Europa de l'Est]]
+[[de:Osteuropa]]
+[[en:Eastern Europe]]
+[[es:Europa del Este]]
+[[fi:Itä-Eurooppa]]
+[[fr:Europe de l'Est]]
+[[hu:Kelet-Európa]]
+[[it:Europa orientale]]
+[[ja:東ヨーロッパ]]
+[[nl:Oost Europa]]
+[[pt:Europa Oriental]]
+[[ru:Восточная Европа]]
+[[sv:Östeuropa]]
+[[zh:東歐]]
+[[wts:Category:Eastern Europe]]

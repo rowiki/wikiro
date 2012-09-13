@@ -1,0 +1,12 @@
+'''Tampa''' este un oraş în [[Statele Unite ale Americii]].
+{{IsIn|Florida}}
+{{ciot}}
+
+
+
+[[de:Tampa]]
+[[en:Tampa]]
+[[fr:Tampa]]
+[[pt:Tampa]]
+[[ru:Тампа]]
+[[wts:Category:Tampa]]

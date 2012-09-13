@@ -1,0 +1,42 @@
+Wikitravel este disponibil în mai multe limbi pe lângă română. Aceasta ne dă posibilitatea să oferim informaţii călătorilor care nu vorbesc română şi să primim cunoştiinţe de la călători care nu scriu în română.  
+
+Următoarele versiuni de limbă sunt în anumite etape de dezvoltare:
+
+{|
+|+ Versiuni de limbă Wikitravel
+|''limbă''||''expediţie''||''URL''||''început''||''stare''
+|-
+|Română
+|[[:en:Wikitravel:Romanian Wikitravel Expedition|Wikitravel în română]]
+|http://www.wikitravel.org/ro/
+|2003
+|Lansat la 27 decembrie 2003
+|-
+|Engleză
+|[[:en:Wikitravel:About|Wikitravel în engleză]]
+|http://www.wikitravel.org/en/
+|2003
+|Lansat la 24 iulie 2003
+|-
+|Franceză
+|[[:en:Wikitravel:French Wikitravel Expedition|Wikitravel în franceză]]
+|http://www.wikitravel.org/fr/
+|2003
+|Lansat la 12 februarie 2004
+|}
+
+Începerea şi întreţinerea versiunilor de limbă ale Wikitravel sunt guvernate de [[:en:Wikitravel:language version policy|politica pentru versiuni de limbă]].
+
+
+
+
+
+[[ca:Wikitravel:Versions lingüistiques de Wikitravel]]
+[[de:Wikitravel:Anderssprachige Versionen von Wikitravel]]
+[[en:Wikitravel:Language versions of Wikitravel]]
+[[fr:Wikitravel:Différentes langues de Wikitravel]]
+[[hu:Wikitravel:Wikitravel más nyelveken]]
+[[it:Wikitravel:Versioni linguistiche di Wikitravel]]
+[[ja:Wikitravel:他言語版ウィキトラベル]]
+[[pt:Wikitravel:Versões de línguas do Wikitravel]]
+[[wts:Language versions]]

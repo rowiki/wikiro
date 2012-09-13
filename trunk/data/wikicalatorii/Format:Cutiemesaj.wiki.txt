@@ -1,0 +1,4 @@
+{| align=center class="{{{id}}}" style="background: {{{culoarefond}}}; border: 1px solid #aaa; padding: .2em; margin-bottom: 3px; font-size: 95%; width: auto;"
+| style="padding-right: 4px; padding-left: 4px;" | [[Imagine:{{{imagine}}}|40px|]]
+| '''{{{sus}}}'''&lt;br>&lt;small>{{{mesaj}}}&lt;/small>
+|}

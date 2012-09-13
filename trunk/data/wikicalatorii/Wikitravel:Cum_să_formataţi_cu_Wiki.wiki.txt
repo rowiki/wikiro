@@ -1,0 +1,154 @@
+Wikitravel foloseşte un cod special numit '''''marcaj Wiki''''' pentru formatarea textului şi imaginilor într-un articol. Marcajul Wiki folosit în timpul [[Wikitravel:Cum să editaţi o pagină|editării unei pagini]] va determina modul în care arată textul şi ce legături şi imagini se află în pagină.
+
+Atunci când modificaţi articole Wikitravel, încercaţi să urmaţi convenţiile din [[Wikitravel:Manual de stil|Manual de stil]]. Acestea sunt norme pentru realizarea unui articol Wikitravel "bun"; dacă nu le înţelegeţi pe toate, încercaţi să faceţi tot ceea ce vă stă în putinţă în această direcţie şi probabil un alt colaborator va modifica ulterior pentru a întregi formatarea articolul scris.
+
+==Cum se fac legăturile==
+
+&lt;table width='100%' border='1'>
+&lt;tr>
+&lt;th>Pentru a realiza aceasta...&lt;/th>
+&lt;th>...folosiţi acest cod.&lt;/th>
+&lt;tr>
+&lt;td>
+Puteţi lega la un articol ca [[Portal]] prin adăugarea titlului acestuia şi două paranteze drepte de o parte şi de alta.
+&lt;/td>
+&lt;td>
+&lt;nowiki>Puteţi lega la un articol ca [[Portal]] prin adăugarea titlului acestuia şi două paranteze drepte de o parte şi de alta.&lt;/nowiki>
+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>
+Puteţi scrie o legătură cu un text alternativ, cum ar fi [[Portal|mergeţi la portal]], adăugând o bară verticală după titlu, şi apoi textul pe care doriţi să îl folosiţi.
+&lt;/td>
+&lt;td>
+&lt;nowiki>Puteţi scrie o legătură cu un text alternativ, cum ar fi [[Portal|mergeţi la portal]], adăugând o bară verticală după titlu, şi apoi textul pe care doriţi să îl folosiţi.&lt;/nowiki>
+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>
+Legăturile la diferite domenii, ca [[Wikitravel:Întrebări frecvente]] sau [[Utilizator:Ronline]], funcţionează în acelaşi mod.
+&lt;/td>
+&lt;td>
+&lt;nowiki>Legăturile la diferite domenii, ca [[Wikitravel:Întrebări frecvente]] sau [[Utilizator:Ronline]], funcţionează în acelaşi mod.&lt;/nowiki>
+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>
+Folosind o bară verticală la sfârşitul legăturii (înainte de parantezele drepte) vor ascunde domeniul, ca [[Wikitravel:Întrebări frecvente|Întrebări frecvente]] sau [[Utilizator:Ronline|Ronline]].
+&lt;/td>
+&lt;td>
+&lt;nowiki>Folosind o bară verticală la sfârşitul legăturii (înainte de parantezele drepte) vor ascunde domeniul, ca [[Wikitravel:Întrebări frecvente|]] sau [[Utilizator:Ronline|]].
+&lt;/nowiki>
+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>
+Nu este nici o problemă în a pune legături la [[o pagină care nu există încă]].
+&lt;/td>
+&lt;td>
+&lt;nowiki>
+Nu este nici o problemă în a pune legături la [[o pagină care nu există încă]].
+&lt;/nowiki>
+&lt;/td>
+&lt;tr>
+&lt;td>
+Introducerea unui URL ca http://ro.wikipedia.org/ în text, îl transformă într-o legătură externă în mod automat.
+&lt;/td>
+&lt;td>
+&lt;nowiki>Introducerea unui URL ca http://ro.wikipedia.org/ în text, îl transformă într-o legătură externă în mod automat.&lt;/nowiki>
+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>
+Puteţi da unei legături externe un text care să explice legătura, ca [http://ro.wikipedia.org/ Wikipedia în limba română], folosind o singură paranteză dreaptă, URL-ul, un spaţiu, titlul pe care vreţi să-l folosiţi, şi paranteza închisă.
+&lt;/td>
+&lt;td>
+&lt;nowiki>Puteţi da unei legături externe un text care să explice legătura, ca [http://ro.wikipedia.org/ Wikipedia în limba română], folosind o singură paranteză dreaptă, URL-ul, un spaţiu, titlul pe care vreţi să-l folosiţi, şi paranteza închisă.&lt;/nowiki>
+&lt;/td>
+&lt;/tr>
+&lt;/table>
+
+==Formatare de text==
+
+&lt;table width='100%' border='1'>
+&lt;tr>
+&lt;th>Pentru a realiza aceasta...&lt;/th>
+&lt;th>...folosiţi acest cod.&lt;/th>
+
+&lt;tr>
+&lt;td>
+'''Textul aldin''' este înconjurat de trei apostrofuri.
+&lt;/td>
+&lt;td>
+&lt;nowiki>'''Textul aldin''' este înconjurat de trei apostrofuri.&lt;/nowiki>
+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>
+''Textul cursiv'' este înconjurat de două apostrofuri.
+&lt;/td>
+&lt;td>
+&lt;nowiki>''Textul cursiv'' este înconjurat de două apostrofuri.&lt;/nowiki>
+&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>
+Pentru o listă cu cerculeţie, puneţi înainte de fiecare item, o steluţă:
+*Ala
+*Bala
+*Portocala
+&lt;/td>
+&lt;td>
+Pentru o listă cu cerculeţie, puneţi înainte de fiecare item, o steluţă&lt;br>
+&lt;nowiki>
+*Ala
+&lt;/nowiki>&lt;br>
+&lt;nowiki>
+*Bala
+&lt;/nowiki>&lt;br>
+&lt;nowiki>
+*Portocala
+&lt;/nowiki>
+&lt;/td>
+&lt;tr>
+&lt;td>
+O listă cu itemuri numărate este asemănătoare celei cu cerculeţe, dar fiecare item începe cu un diez:
+#Unu
+#Doi
+#Trei
+&lt;/td>
+&lt;td>
+O listă cu itemuri numărate este asemănătoare celei cu cerculeţe, dar fiecare item începe cu un diez:&lt;br>
+&lt;nowiki>
+#Unu
+&lt;/nowiki>&lt;br>
+&lt;nowiki>
+#Doi
+&lt;/nowiki>&lt;br>
+&lt;nowiki>
+#Trei
+&lt;/nowiki>
+&lt;/td>
+&lt;/table>
+
+==Vezi şi==
+
+*[http://ro.wikipedia.org/wiki/Wikipedia:Cum_să_modifici_o_pagină Cum să modifici o pagină pe Wikipedia în limba română]
+
+
+
+
+
+[[ca:Wikitravel:Sintaxi Wiki]]
+[[de:Wikitravel:Wiki Markup]]
+[[en:Wikitravel:Wiki markup]]
+[[es:Wikitravel:Sintaxis Wiki]]
+[[fi:Wikitravel:Koodiopas]]
+[[fr:Wikitravel:Syntaxe wikitravel]]
+[[it:Wikitravel:Sintassi Wiki]]
+[[ja:Wikitravel:ウィキマークアップ]]
+[[nl:Wikitravel:Wiki markup]]
+[[pl:Wikitravel:Wiki znaczniki]]
+[[pt:Wikitravel:Sintaxe Wiki]]
+[[ru:Wikitravel:Разметка Вики]]
+[[sv:Wikitravel:Wikiformatering]]

@@ -1,0 +1,3 @@
+'''Alice Springs''' este un oraş în [[Australia]].
+{{IsIn|Australia}}
+{{ciot}}

@@ -1,0 +1,35 @@
+'''Canada''' este o ţară în [[America de Nord]].
+
+==Destinaţii==
+
+*[[Montreal]]
+*[[Edmonton]]
+*[[Calgary]]
+*[[Vancouver]]
+*[[Toronto]]
+*[[Ottawa]]
+*[[Saskatoon]]
+
+{{ciot}}
+{{IsIn|America_de_Nord}}
+[[WikiPedia:Canada]]
+[[Dmoz:America de Nord/Canada/]]
+
+
+
+[[ca:Canadà]]
+[[de:Kanada]]
+[[en:Canada]]
+[[eo:Kanado]]
+[[es:Canadá]]
+[[fi:Kanada]]
+[[fr:Canada]]
+[[hu:Kanada]]
+[[it:Canada]]
+[[ja:カナダ]]
+[[nl:Canada]]
+[[pl:Kanada]]
+[[pt:Canadá]]
+[[ru:Канада]]
+[[sv:Kanada]]
+[[wts:Category:Canada]]

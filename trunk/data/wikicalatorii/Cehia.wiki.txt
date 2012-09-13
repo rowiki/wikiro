@@ -1,0 +1,37 @@
+'''Cehia''' este o ţară în [[Europa Centrală]].
+
+==Destinaţii==
+
+*[[Praga]]
+*[[Brno]]
+*[[Ceský Krumlov]]
+*[[Ostrava]]
+*[[Hradec Kralove]]
+
+* [http://www.czech.cz/ Czech Republic - Official Website]
+
+{{IsIn|Europa_Centrală}}
+{{ciot}}
+
+[[WikiPedia:Republica Cehă]]
+[[Dmoz:Europa/Cehia/]]
+
+
+
+[[ca:Txèquia]]
+[[de:Tschechien]]
+[[en:Czech Republic]]
+[[eo:Ĉeĥio]]
+[[es:República Checa]]
+[[fi:Tšekki]]
+[[fr:République Tchèque]]
+[[hi:चेक गणाज्य]]
+[[hu:Csehország]]
+[[it:Repubblica Ceca]]
+[[ja:チェコ]]
+[[nl:Tsjechië]]
+[[pl:Czechy]]
+[[pt:República Tcheca]]
+[[ru:Чехия]]
+[[sv:Tjeckien]]
+[[wts:Category:Czech Republic]]

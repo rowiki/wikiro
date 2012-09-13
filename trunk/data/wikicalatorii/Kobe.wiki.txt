@@ -1,0 +1,16 @@
+'''Kobe''' este un oraş în [[Japonia]].
+{{IsIn|Japonia}}
+{{Ciot}}
+
+
+
+
+
+[[de:Kobe]]
+[[en:Kobe]]
+[[fi:Kobe]]
+[[fr:Kobe]]
+[[ja:神戸市]]
+[[sv:Kobe]]
+[[zh:神戶市]]
+[[wts:Category:Kobe]]

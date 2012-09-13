@@ -1,0 +1,6 @@
+{{#tag:rdf|
+&lt;http://wikitravel.org/ro/{{PAGENAMEE}}> dcterms:spatial &lt;urn:x-wikitravel:ro:{{PAGENAMEE}}> .
+&lt;http://wikitravel.org/ro/{{{1}}}> dcterms:spatial &lt;urn:x-wikitravel:ro:{{{1}}}> .
+
+&lt;urn:x-wikitravel:ro:{{PAGENAMEE}}> dcterms:isPartOf &lt;urn:x-wikitravel:ro:{{{1}}}> .
+}}

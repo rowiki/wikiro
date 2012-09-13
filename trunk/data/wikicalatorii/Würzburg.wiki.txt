@@ -1,0 +1,8 @@
+'''Würzburg''' este un oraş în [[Germania]].
+{{IsIn|Germania}}
+{{ciot}}
+
+[[de:Würzburg]]
+[[en:Würzburg]]
+[[fi:Würzburg]]
+[[it:Würzburg]]

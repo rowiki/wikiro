@@ -1,0 +1,96 @@
+&lt;!---
+{{quickbar
+| image=[[Image:Parthenon acropolis.jpg|250px]]
+| location=[[Image:LocationGreece.png|noframe|250px]]
+| flag=[[Image:gr-flag.png]]
+| capital=[[Athens]]
+| government=parliamentary republic
+| currency=euro (EUR)
+| area=131,940 sq km
+| population=10,688,058 (July 2006 est.)
+| language=[[Greek]] 99% (official)
+| religion=Greek Orthodox 98%, Muslim 1.3%, other 0.7%
+| electricity=220V/50Hz (European plug)
+| timezone=UTC +2
+| callingcode=+30
+| tld=.gr
+}}
+--->
+[[Image:gr-map.png|frame|Grecia]]
+
+
+'''Grecia''' este o ţară mediterană în [[Europa de Sud]].
+
+==Destinaţii==
+
+*[[Attica]], ([[Atena]])
+*[[Creta]], ([[Heraklion]], [[Rethymnon]], [[Chania]])
+*[[Grecia Centrală]]
+*[[Macedonia Centrală]], ([[Salonica]])
+*[[Macedonia de Est]] şi [[Tracia]], 
+*[[Macedonia de Vest]]
+*[[Insulele Ioniene]], ([[Corfu]])
+*[[Peloponezia]], ([[Arcadia]], [[Argolida]], [[Corintia]], [[Laconia]], [[Messinia]], [[Ahaia]], [[Elida]])
+*[[Tesalia]], ([[Larisa]], [[Magnesia]], [[Trikala]], [[Karditsa]], [[Volos]])
+*[[Epirus]]
+*[[Egeea de Nord]]
+*[[Egeea de Sud]]
+*[[Grecia de Vest]]
+
+&lt;div style="float: {{{float|none}}}; clear: {{{float|none}}}; width: 420px">
+&lt;div style="position: relative; font-size: 10pt; line-height: 13px;">
+[[Image:Greece colour.png|500px]]
+{{Image label|x=0.276|y=0.126|scale={{{width|500}}}|text='''[[Macedonia (Grecia)|Macedonia]]'''}}
+{{Image label|x=0.228|y=0.264|scale={{{width|500}}}|text='''[[Tesalia]]'''}}
+{{Image label|x=0.360|y=0.300|scale={{{width|500}}}|text='''[[Sporades]]'''}}
+{{Image label|x=0.106|y=0.268|scale={{{width|500}}}|text='''[[Epirus]]'''}}
+{{Image label|x=0.168|y=0.376|scale={{{width|500}}}|text='''[[Grecia Centrală]]'''}}
+{{Image label|x=0.56|y=0.092|scale={{{width|500}}}|text='''[[Tracia]]'''}}
+{{Image label|x=0.192|y=0.518|scale={{{width|500}}}|text='''[[Peloponezia]]'''}}
+{{Image label|x=0.402|y=0.438|scale={{{width|500}}}|text='''[[Attica]]'''}}
+{{Image label|x=0.532|y=0.522|scale={{{width|500}}}|text='''[[Egeea de Sud]]'''}}
+{{Image label|x=0.532|y=0.25|scale={{{width|500}}}|text='''[[Egeea de Nord]]'''}}
+{{Image label|x=0.512|y=0.766|scale={{{width|500}}}|text='''[[Creta]]'''}}
+{{Image label|x=0.028|y=0.326|scale={{{width|500}}}|text='''[[Insulele Ioniene]]'''}}
+{{Image label|x=0.034|y=0.152|scale={{{width|500}}}|text=[[Albania|&lt;span style="color: #48A3B5;">Albania&lt;/span>]]}}
+{{Image label|x=0.13|y=0.042|scale={{{width|500}}}|text=[[Macedonia|&lt;span style="color: #48A3B5;">Republica Macedonia&lt;/span>]]}}
+{{Image label|x=0.434|y=0.02|scale={{{width|500}}}|text=[[Bulgaria|&lt;span style="color: #48A3B5;">Bulgaria&lt;/span>]]}}
+{{Image label|x=0.726|y=0.08|scale={{{width|500}}}|text=[[Turcia|&lt;span style="color: #48A3B5;">Turcia&lt;/span>]]}}
+{{Image label|x=0.778|y=0.356|scale={{{width|500}}}|text=[[Turcia|&lt;span style="color: #48A3B5;">Turcia&lt;/span>]]}}
+{{Image label|x=0.074|y=0.766|scale={{{width|500}}}|text=[[Europa de Sud|&lt;span style="color: #48A3B5;">Mediterană&lt;/span>]]}}
+{{Image label|x=0.028|y=0.458|scale={{{width|500}}}|text=[[Ioniene|&lt;span style="color: #48A3B5;">Ioniene&lt;/span>]]}}
+{{Image label|x=0.534|y=0.35|scale={{{width|500}}}|text=[[Egeea|&lt;span style="color: #48A3B5;">Egeea&lt;/span>]]}}
+&lt;/div>&lt;/div>
+
+==Oraşe==
+
+*[[Atena]]
+*[[Salonica]]
+*[[Volos]]
+*[[Patras]]
+
+
+{{IsIn|Europa_de_Sud}}
+{{ciot}}
+
+[[WikiPedia:Grecia]]
+[[Dmoz:Europa/Grecia/]]
+
+
+
+[[ca:Grècia]]
+[[de:Griechenland]]
+[[en:Greece]]
+[[eo:Grekio]]
+[[es:Grecia]]
+[[fi:Kreikka]]
+[[fr:Grèce]]
+[[hu:Görögország]]
+[[it:Grecia]]
+[[ja:ギリシア]]
+[[nl:Griekenland]]
+[[pl:Grecja]]
+[[pt:Grécia]]
+[[ru:Греция]]
+[[sv:Grekland]]
+[[wts:Category:Greece]]

@@ -1,0 +1,18 @@
+'''Osaka''' este un oraş în [[Japonia]].
+{{IsIn|Japonia}}
+{{ciot}}
+
+[[WikiPedia:Osaka]]
+
+
+
+[[de:Osaka]]
+[[en:Osaka]]
+[[fi:Osaka]]
+[[fr:Osaka]]
+[[ja:大阪市]]
+[[nl:Osaka]]
+[[pt:Osaka]]
+[[sv:Osaka]]
+[[zh:大阪市]]
+[[wts:Category:Osaka]]

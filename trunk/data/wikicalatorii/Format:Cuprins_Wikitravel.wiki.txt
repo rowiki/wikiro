@@ -1,0 +1,91 @@
+{| class="toccolours collapsible infobox" width=100% valign="top" style="background:honeydew"
+! Cuprins [[Portal|Wikitravel]] 
+|-
+|
+{| class="plainlinks" style="width:100%; background:none; border:0; font-size:90%; margin=auto; padding:0em"
+|-valign="top"
+| align="right" style="width:5.5em;background:#def"|'''[[Wikitravel:Ajutor|Ajutor]]:'''&amp;nbsp;
+| style="background:#def"| &lt;small>
+[[Wikitravel:Cum să faceţi un cont de utilizator|Înregistrare]]  &amp;middot; [[Special:Userlogin|Autentificare]] &amp;middot; 
+[[Special:Preferences|Preferinţe]] &amp;middot; 
+[[Wikitravel:Cum să editaţi o pagină|Editare]] &amp;middot;
+[[Wikitravel:Drepturi de autor|Drepturi de autor]] &amp;middot; 
+[[Special:Statistics|Statistici]] &amp;middot;
+[[Special:Search|Căutare]] &lt;/small>
+
+|-valign="top"
+| align="right" | '''[[Special:Allpages|Pagini]]:'''&amp;nbsp;
+| &lt;small>
+[[Special:Specialpages|Speciale]]&amp;middot; 
+[[Special:Watchlist|Urmărite]] &amp;middot; 
+[[Special:Newpages|Noi]] &amp;middot; 
+[[Special:Ancientpages|Vechi]] &amp;middot; 
+[[Special:Longpages|Lungi]] &amp;middot; 
+[[Special:Shortpages|Scurte]] &amp;middot; 
+[[Special:Lonelypages|Orfane]] &amp;middot; 
+[[Special:Deadendpages|Fără legături]] &amp;middot;
+[[Special:WithoutInterwiki|Fără interwiki]] &amp;middot;
+[[Special:Wantedpages|Dorite]] &amp;middot; 
+[[Special:Mostlinked|Căutate]] &amp;middot; 
+[[Special:Uncategorizedpages|Necategorizate]] &amp;middot; [[Special:Mostcategories|Multicategorizate]] &amp;middot; [[Special:Mostrevisions|Multirevizuite]] &amp;middot; [[Special:Disambiguations|Dezambiguizate]] &amp;middot; [[Special:Protectedpages|Protejate]] &amp;middot; [[Special:Listredirects|Redirecţionate]] &amp;middot; [[Special:Doubleredirects|Dublu redirecţionate]] &amp;middot; [[Special:Brokenredirects|Greşit redirecţionate]] &amp;middot; [[Special:Export|Export]] &amp;middot; [[Special:Import|Import]] &amp;middot; [[Special:Prefixindex|Toate articolele]] &lt;/small>
+
+|-valign="top"
+| align="right" | '''[[Special:ImageList|Imagini]]:'''&amp;nbsp;
+| &lt;small>
+[[Special:Newimages|Noi]] &amp;middot; 
+[[Special:Mostimages|Căutate]] &amp;middot; 
+[[Special:Unusedimages|Nefolosite]] &amp;middot; [[Special:Uncategorizedimages|Necategorizate]] &amp;middot;
+[[Special:Upload|Trimite]] &lt;/small>
+
+|-valign="top"
+| align="right" | '''[[:Categorie:Formate Wikitravel|Formate]]:'''&amp;nbsp;
+| &lt;small> 
+[[Special:Mostlinkedtemplates|Folosite]] &amp;middot; 
+[[Special:Unusedtemplates|Nefolosite]] &amp;middot; 
+[[Special:Uncategorizedtemplates|Necategorizate]] &lt;/small>
+
+|-valign="top"
+| align="right" | '''[[:Categorie:Wikitravel|Categorii]]:'''&amp;nbsp;
+| &lt;small>
+[[Special:Wantedcategories|Dorite]] &amp;middot; 
+[[Special:Mostlinkedcategories|Căutate]] &amp;middot; 
+[[Special:Unusedcategories|Nefolosite]] &amp;middot;
+[[Special:Uncategorizedcategories|Necategorizate]]&lt;/small>
+|-valign="top"
+| align="right" | '''[[:Categorie:Servicii|Servicii]]:'''&amp;nbsp;
+| &lt;small>
+[[:Categorie:Pagini de şters|De şters]] &amp;middot; 
+[[:Categorie:Pagini de mutat|De mutat]] &amp;middot; 
+[[:Categorie:Articole de unit|De unit]] &amp;middot; 
+[[:Categorie:Articole care au nevoie de traducere|De tradus]] &amp;middot; [[:Categorie:Articole de curăţat|De curăţat]] &amp;middot; 
+[[:Categorie:Pagini care violează drepturile de autor|Copyvio]] &amp;middot;  
+[[:Categorie:Dispute PDVN|PDVN]] &amp;middot; 
+[[:Categorie:În construcţie|În construcţie]] &amp;middot;
+[[:Categorie:Pagini fără diacritice|Fără diacritice]] &amp;middot;
+{{Flux rss}}&lt;/small>
+
+|-valign="top"
+| align="right" | '''[[Special:ListUsers|Utilizatori]]:'''&amp;nbsp;
+| &lt;small>
+[[Special:Log/newusers|Noi]] &amp;middot; 
+[[:Categorie:Utilizatori inactivi|Inactivi]] &amp;middot; 
+[[Wikitravel:Administratori|Administratori]] &amp;middot; 
+[[Wikitravel:Birocraţi|Birocraţi]] &amp;middot; 
+[[Special:Log/rights|Drepturi]] &amp;middot; 
+[[Special:IpBlockList|Conturi blocate]] &amp;middot; [[Special:Contributions|Contribuţii]] &amp;middot; [[Special:Contributions/newbies|Contribuţii începători]] &amp;middot;
+[[Special:Prefixindex/User:|Lista subpaginilor]] &lt;/small>
+
+|-valign="top"
+| align="right" | '''[[Special:Log|Jurnale]]:'''&amp;nbsp;
+| &lt;small>
+[[Special:Log/upload|Trimise]] &amp;middot; 
+[[Special:Log/delete|Ştergeri]] &amp;middot; 
+[[Special:Log/move|Mutări]] &amp;middot; 
+[[Special:Log/block|Blocări]] &amp;middot;
+[[Special:Log/pr_rep_log|Raportări]] &amp;middot;
+[[Special:Log/patrol|Patrulări]] &amp;middot;  
+[[Special:Log/protect|Protecţii]] &amp;middot; 
+[[Special:Log/import|Importuri]] &lt;/small>
+|}
+__FARAEDITSECTIUNE__
+|}&lt;noinclude>[[Categorie:Formate Wikitravel|{{PAGENAME}}]]&lt;/noinclude>

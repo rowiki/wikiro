@@ -1,0 +1,33 @@
+'''Coreea de Sud''' este o ţară în [[Asia de Est]].
+
+==Destinaţii==
+
+*[[Seul]]
+*[[Busan]]
+
+{{ciot}}
+
+{{EsteÎn|Asia_de_Est}}
+
+&lt;!--[[nl:Zuid-Korea]]-->
+[[WikiPedia:Coreea de Sud]]
+
+
+
+[[ca:Corea del Sud]]
+[[de:Südkorea]]
+[[en:South Korea]]
+[[eo:Sud-Koreio]]
+[[es:Corea del Sur]]
+[[fi:Etelä-Korea]]
+[[fr:Corée du Sud]]
+[[hi:दक्षिण कोरिया]]
+[[hu:Dél-Korea]]
+[[it:Corea del Sud]]
+[[ja:韓国]]
+[[pl:Korea Południowa]]
+[[pt:Coréia do Sul]]
+[[ru:Южная Корея]]
+[[sv:Sydkorea]]
+[[zh:韓國]]
+[[wts:Category:South Korea]]

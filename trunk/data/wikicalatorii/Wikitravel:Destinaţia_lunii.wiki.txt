@@ -1,0 +1,24 @@
+'''Destinaţia lunii''' este un proiect de a îmbunătăţii calitatea Wikitravel şi pentru a menţine un ghid turistic dinamic. Este şi un mod prin care vizitatorii noştri pot afla despre locuri noi şi interesante unde pot călătorii. Idea unei destinaţii a lunii este originar de la Wikitravel în limba română (după aceea, a fost adoptată de toate celelate versiuni Wikitravel)!
+
+În fiecare lună, este alesă o destinaţie, şi în cursul acelei lunii, editorii Wikitravel lucrează ca să îmbunătăţească articolul despre destinaţia aceea.
+
+În octombrie 2004 destinaţia lunii a fost '''[[Avignon]]''' în [[Franţa]], [[Uniunea Europeană|UE]].
+
+==Propuneri pentru destinaţia lunii în noiembrie 2004==
+
+*[[Florenţa]]
+
+==Foste destinaţii ale lunii==
+
+Vezi: [[Wikitravel:Foste destinaţii ale lunii|pagina aceasta]] pentru o arhivă a destinaţilor ale lunii.
+
+
+[[de:Wikitravel:Kandidaten für das Reiseziel des Monats]]
+[[en:Wikitravel:Destination of the Month candidates]]
+[[es:Wikitravel:Candidato Destino del mes]]
+[[fi:Wikitravel:Kuukauden kohde]]
+[[fr:Wikitravel:Nominations des destinations du mois]]
+[[it:Wikitravel:Candidature alla destinazione del mese]]
+[[ja:Wikitravel:今月の旅行先の選考]]
+[[pt:Wikitravel:Candidatos a Destino do Mês]]
+[[ru:Wikitravel:Кандидаты на направление месяца]]

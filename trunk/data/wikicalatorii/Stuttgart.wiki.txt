@@ -1,0 +1,15 @@
+'''Stuttgart''' este un oraş în [[Germania]].
+{{IsIn|Germania}}
+{{ciot}}
+
+
+[[de:Stuttgart]]
+[[en:Stuttgart]]
+[[es:Stuttgart]]
+[[fi:Stuttgart]]
+[[fr:Stuttgart]]
+[[ja:シュトゥットガルト]]
+[[nl:Stuttgart]]
+[[pt:Stuttgart]]
+[[sv:Stuttgart]]
+[[wts:Category:Stuttgart]]

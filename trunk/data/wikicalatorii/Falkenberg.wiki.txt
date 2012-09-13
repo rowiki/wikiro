@@ -1,0 +1,3 @@
+'''Falkenberg''' este un oraş în [[Suedia]].
+{{IsIn|Suedia}}
+{{ciot}}

@@ -1,0 +1,27 @@
+După ce aţi fost Wikitravel pentru un timp, este recomandat să vă creaţi un '''cont de utilizator''' că să aveţi o identitate mai stabilă pe Wikitravel. Utilizatori înregistraţi la Wikitravel primesc o pagină de utilizator, şi o pagină de discuţii personală, unde pot purta discuţii despre articole sau teme Wikitravel cu alţi utilizatori. De asemenea, numele lor de utilizator (bineînţeles, acesta nu este neapărat să fie numele real - poate să fie doar o poreclă) va fi folosit pentru istoria paginilor de pe site. Utilizatorii înregistraţi au şi posibilitatea de a marca editările lor ca ''editări minore'', şi pot să urmărească pagini în lista lor personală de pagini urmărite.
+
+Ca să vă faceţi un cont de utilizator, este de ajuns faceţi clic pe [[Special:Userlogin|Autentificare]] de pe bara albastră de sus. Legătura acesta apare de pe orice pagină Wikitravel.
+
+Când s-a încărcat pagina, alegeţi-vă un nume de utilizator. Preferabil, acesta ar trebui să fie scurt şi uşor de reţinut. Numele de utilizator este unic, sistemul nepermiţându-vă să vă alegeţi un nume de utilizator care a fost ales deja. Numele de utilizator poate să conţină litere şi cifre, dar nu este recomandat să conţină spaţii sau semne de punctuaţie. 
+
+După alegerea numelui de utilizator, este important să alegeţi o parolă, preferabil una care este uşor de ţinut minte pentru dumneavoastră, dar greu de ghicit pentru ceilalţi. Scrieţi-vă parola aleasă în cutia de editare '''Parola''', şi repetaţi-o în cutiuţa '''Repetaţi parola'''.
+
+Dacă vreţi, puteţi să vă scrieţi adresa de e-mail în cutiuţa '''Adresa de mail'''. Acest lucru este total opţional, dar este benefic dacă vreodată vă uitaţi parola, o nouă parolă poate să vă fie trimisă prin e-mail, sau dacă doriţi să permiteţi altor utilizatori să vă contacteze direct prin e-mail (fără să vă cunoască adresa de e-mail).
+
+După ce aţi ales numele de utilizator, şi aţi introdus parola (de două ori), şi eventual aţi introdus adresa de e-mail, faceţi clic pe butonul '''Creează cont nou'''.
+
+După ce v-aţi creat contul nou, puteţi să vă schimbaţi, dacă doriţi, interfaţa şi preferinţele mergând la pagina de [[Special:Preferences|Preferinţe]], de pe bara de navigaţie din dreapta sus la orice pagină.
+
+
+
+[[ca:Wikitravel:Com crear un compte d'usuari]]
+[[de:Wikitravel:Wie du einen Benutzer-Account anlegst]]
+[[en:Wikitravel:How to create a user account]]
+[[es:Wikitravel:Cómo crear una cuenta de usuario]]
+[[fi:Wikitravel:Kuinka luoda käyttäjätunnus]]
+[[fr:Wikitravel:Comment créer un compte utilisateur]]
+[[it:Wikitravel:Come creare un nuovo utente]]
+[[ja:Wikitravel:ユーザーアカウントの取得]]
+[[pl:Wikitravel:Jak utworzyć konto użytkownika]]
+[[pt:Wikitravel:Como criar uma conta de usuário]]
+[[sv:Wikitravel:Hur man skaffar sig ett användarnamn]]

@@ -1,0 +1,8 @@
+Administratori pe Wikitravel în limba română sunt:
+
+* [[Utilizator:EvanProdromou|EvanProdromou]] (sysop, developer)
+* [[Utilizator:Ronline|Ronline]] (sysop)
+* [[Utilizator:Texugo|Texugo]] (sysop)
+* [[Utilizator:Vlad|Vlad]] (sysop)
+
+O listă în timp real a administratorilor este disponibilă [[Special:Listadmins|aici]].

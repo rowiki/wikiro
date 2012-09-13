@@ -1,0 +1,10 @@
+'''Cleveland''' este un oraş în statul [[Ohio]], [[Statele Unite ale Americii]].
+{{IsIn|Ohio}}
+{{ciot}}
+
+
+
+[[de:Cleveland]]
+[[en:Cleveland]]
+[[nl:Cleveland (Ohio)]]
+[[pl:Cleveland]]

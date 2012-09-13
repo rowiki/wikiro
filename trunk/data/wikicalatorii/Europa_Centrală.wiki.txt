@@ -1,0 +1,35 @@
+'''Europa Centrală''' este o regiune a [[Europa|Europei]], formată din următoarele ţări:
+
+*[[Austria]]
+*[[Cehia]]
+*[[Germania]]
+*[[Ungaria]]
+*[[Liechtenstein]]
+*[[Polonia]]
+*[[Slovacia]]
+*[[Slovenia]]
+*[[Elveţia]]
+
+{{IsIn|Europa}}
+{{ciot}}
+
+[[WikiPedia:Europa Centrală]]
+
+
+
+[[ca:Europa Central]]
+[[de:Mitteleuropa]]
+[[en:Central Europe]]
+[[es:Europa Central]]
+[[fi:Keski-Eurooppa]]
+[[fr:Europe centrale]]
+[[hu:Közép-Európa]]
+[[it:Europa centrale]]
+[[ja:中央ヨーロッパ]]
+[[nl:Centraal-Europa]]
+[[pl:Europa Centralna]]
+[[pt:Europa Central]]
+[[ru:Центральная Европа]]
+[[sv:Centraleuropa]]
+[[zh:中歐]]
+[[wts:Category:Central Europe]]

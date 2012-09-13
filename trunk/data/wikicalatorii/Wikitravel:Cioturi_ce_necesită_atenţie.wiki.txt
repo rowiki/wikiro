@@ -1,0 +1,52 @@
+Următoarele [[Wikitravel:articole ciot|articole ciot]] necesită atenţia dumneavoastră.
+
+Vă rugăm adăugaţi cioturi la această listă, în categoria în care se încadrează. Dacă puteţi, vă rugăm adăugaţi următorul text în pagina articolului ciot:
+
+:&lt;nowiki>''Acest articol încă este un [[Wikitravel:Articole ciot|ciot]] şi are nevoie de [[Wikitravel:Cioturi ce necesită atenţie|atenţia]] dvs. [[Wikitravel:Plonjaţi înainte|Plonjaţi înainte]] şi [[Wikitravel:Cum să editaţi o pagină|ajutaţi-l să crească]]!''&lt;/nowiki>
+
+'''sau'''
+
+:&lt;nowiki>{{MSJ:ciot}}&lt;/nowiki>
+
+Mai mult, [[Wikitravel:plonjaţi înainte|plonjaţi înainte]] şi completaţi chiar dvs. articolul! O [[Wikitravel:schiţă de articole|schiţă de articole]] poate facilita creşterea unui ciot.
+
+----
+
+=Destinaţii=
+
+==Rusia==
+
+==Africa==
+
+==Asia==
+
+[[Kolkata]]
+
+==Australia şi Oceania==
+
+[[Melbourne]]
+
+==Europa== 
+
+[[Vilnius]] | [[Madrid]]
+
+==America de Nord==
+
+[[Montreal]]
+
+==America de Sud==
+
+[[America de Sud]]
+
+==Oceane şi insule==
+
+
+
+
+
+[[de:Wikitravel:Stubs, die überarbeitet werden müssen]]
+[[fr:Wikitravel:Bouchons nécessitant de l'attention]]
+[[pt:Wikitravel:Esboços carentes de atenção]]
+
+
+Oceanul pacific este cel mai mare ocean din lume.Este foarte adanc.Este foarte periculos

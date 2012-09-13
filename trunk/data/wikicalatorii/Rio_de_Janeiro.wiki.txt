@@ -1,0 +1,19 @@
+'''Rio de Janeiro''' este un oraş în [[Brazilia]].
+{{IsIn|Brazilia}}
+{{ciot}}
+
+
+[[ca:Rio de Janeiro]]
+[[de:Rio de Janeiro]]
+[[en:Rio de Janeiro]]
+[[eo:Rio-de-Ĵanejro]]
+[[es:Rio de Janeiro]]
+[[fr:Rio de Janeiro]]
+[[it:Rio de Janeiro]]
+[[ja:リオデジャネイロ市]]
+[[nl:Rio de Janeiro]]
+[[pt:Rio de Janeiro]]
+[[sv:Rio de Janeiro]]
+[[wts:Category:Rio de Janeiro]]
+
+[[WikiPedia:Rio de Janeiro]]
