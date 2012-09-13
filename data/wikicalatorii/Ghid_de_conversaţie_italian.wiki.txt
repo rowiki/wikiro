@@ -1,0 +1,471 @@
+'''Italiana''' este limbă oficială în [[Italia]], [[San Marino]] şi cantonul eleveţian [[Ticino]]. Este de asemenea vorbită în Croaţia(Istria), Vatican, Malta şi Argentina.
+
+Chiar şi dacă în majoritatea staţiunilor turistice din Italia, engelza şi germana sunt răspândite, majoritatea italienilor nu vorbesc o limbă străină (suntem leneşi, ştiu) aşa că ar trebui să aveţi câteva cunoştinţe bazice de italiană, pentru a vă face înţeles.
+
+În italiană, se foloseşte forma de politeţe ("lei") cu orice om pe care nu-l cunoaşteţi; nu contează dacă este mai bătrân sau mai tânăr decât dvs. Folosiţi forma amicală ("tu") cu persoanele pe care le ştiţi. Cele două forme diferă prin folosirea persoanelor a doua şi a treia în verbe.
+
+==Ghid de pronunţie==
+
+===Vocale===
+
+; a : ca în "tată"
+; e : ca în "femeie"
+; i : ca în "maşină"
+; o : ca în "botă"
+; u : ca în "cutie"
+
+===Consoane===
+
+; b : ca 'b' în "bere"
+; c : precum 'c' în "cireaşă", 'c' în "copil"
+; d : ca 'd' în "daună"
+; f : ca 'f' în "foame"
+; g : ca 'g' în "gorilă", 'g' în "genă"
+; h : tăcut
+; l : ca 'l' în "lună"
+; m : ca 'm' în "mamă"
+; n : ca 'n' în "nor"
+; p : ca 'p' în "porc"
+; q : precum 'c' în "cuestă" (cu "u", aproape întodeauna)
+; r : ca 'r' în "roşu"
+; s : ca 's' în "sunet"
+; t : ca 't' în "tont"
+; v : ca 'v' în "victorie"
+; x : ca 'x' în "xilofon"
+; z : ca 'ţ' în "ţigară"
+
+===Diftongi importanţi===
+
+; ai : ca 'ai' în "rai"
+; au : ca 'au' în "scaun"
+
+; ei : ca 'ei' în "tei"
+; eu : ca 'eu' în "meu"
+
+; ia : ca "ia" în "familiar", ca 'ea' în "ea"
+; ie : ca 'ie' în "cuier"
+; ii : nu este un diftong, ci hiat, ca 'ii' în "ştiinţă"
+; io : ca "io" în "iobag"
+; iu : ca "iu" în "regiune"
+
+; oi : ca 'oi' în "gunoi"
+
+; ch : ca 'ch' în "chema"
+; sc : înainte de "e" sau "i", ca 'ş' în "ieşire"
+; gh : ca "gh" în "ghetou"
+
+==Listă de fraze uzuale==
+
+În acest ghid de conversaţie, am folosit forma de politeţe în toate propoziţiile, presupunând că veţi discuta de cele mai multe ori cu oameni pe care nu-i cunoaşteţi deja.
+
+
+
+; Bună ziua. : Buongiorno. (''buon-GIOR-no'')
+; Salut. : Ciao. (''ciao'')
+; Ce mai faci? : Come sta? (''co-me STA?'')
+; Bine, mulţumesc. : Bene, grazie. (''BE-ne, GRA-ţie'')
+; Cum vă cheamă? : Come si chiama? (''CO-me si CHIA-ma?'')
+; Mă cheamă ______ . : Mi chiamo ______ . (''mi chia-mo _____'')
+; Încântat de cunoştiinţă. : Piacere di conoscerla. (''pia-CE-re di co-no-ŞER-la'')
+; Vă rog. : Per favore. (''PER fa-VO-re'')
+; Mulţumesc. : Grazie. (''GRA-ţie'')
+; Cu plăcere. : Prego. (''PRE-go'')
+; Da : Si. (''Si'')
+; Nu : No. (''NO'')
+; Mă scuzaţi : Mi scusi. (''mi SCU-zi'')
+; Îmi pare rău. : Mi scusi. (''mi SCU-zi'')
+; La revedere. : Arrivederci. (''ar-RI-ve-DER-ci'')
+; Nu vorbesc italiana. : Non parlo Italiano. (''no PAR-lo i-TAL-i-A-no'')
+; Vorbiţi româna? : Parla Rumeno? (''PAR-la ru-ME-no?'')
+; Vorbeşte cineva româna? : Qualcuno parla Rumeno? (''CUAL-cu-no PAR-la ru-ME-no?'')
+; Ajutor! : Aiuto! (''a-IU-to!'')
+; Bună dimineaţa. : Buongiorno. (''buon-GIOR-no'')
+; Bună ziua. : Buongiorno. (''buon-GIOR-no'')
+; Bună seara. : Buonasera. (''BuO-na-SE-ra'')
+; Noapte bună. : Buonanotte. (''buo-na-NO-te'')
+; Nu înţeleg. : Non capisco. (''NON ca-PIS-co'')
+; Unde este baia? : Dove è il bagno? (''DO-ve E il BAN-io?'')'''
+
+===Probleme===
+
+; Lasă-mă în pace. : Lasciami in pace (''La-şa-mi in Pa-ce'')
+; Nu mă atinge / atingeţi! : Non mi toccare (''Non Mi Toc-ca-re'')
+; Chem poliţia. : Chiamo la polizia (''Chia-mo la PO-LI-ŢIA'') 
+; Poliţia! : Polizia (''Po-LI-ŢIA'')
+; Stai! Hoţ! : Fermati! Ladro (''Fer-ma-ti La-dro'')
+; Am nevoie de ajutor. : Ho bisognio di aiuto (''Ho Ne-ces-si-TA di Aiu-to'') 
+; Este o urgenţă. : È un'emergenza (''E un e-mer-ge-nţă'')
+; M-am pierdut. : Mi sono perduto (''MI so-no Per-du-to'')
+; Mi-am pierdut bagajele. : Ho perduto la borsa (''HO per-so la Bor-sa'')
+; Mi-am pierdut portmoneul. : Ho perso il portafoglio (''Ho per-so il POr-ta-fo-glio'')
+; Sunt bolnav. : Sono malato (''So-no ma-LA-to'')
+; Sunt rănit. : Sono ferito (''So-no Fe-ri-to'')
+; Am nevoie de un doctor. : Ho bisogno di un dottore (''Ho Bi-zo-gno di un Dot-to-re'')
+; Pot să folosesc telefonul tău / dvs.? : Posso usare il tuo telefono? (''Pos-so uza-re il tuo Te-LE-fo-no'')
+
+===Numere===
+
+; 1 : Uno (''uno'')
+; 2 : Due (''due'')
+; 3 : Tre (''trE'')
+; 4 : Quatro (''cuatro'')
+; 5 : Cinque (''cincue'')
+; 6 : Sei (''sei'')
+; 7 : Sette (''sette'')
+; 8 : Otto (''otto'')
+; 9 : Nove (''nove'')
+; 10 : Dieci (''dieci'')
+; 11 : Undici (''undici'')
+; 12 : Dodici (''dodici'')
+; 13 : Tredici (''trEdici'')
+; 14 : Quattordici (''cuattordici'')
+; 15 : Quindici (''cuindici'')
+; 16 : Sedici (''sedici'')
+; 17 : Diciassette (''diciassette'')
+; 18 : Diciotto (''diciotto'')
+; 19 : Diciannove (''diciannove'')
+; 20 : Venti (''venti'')
+; 21 : Ventuno (''ventuno'')
+; 22 : Ventidue (''ventidue'')
+; 23 : Ventitrè (''ventitrE'')
+; 30 : Trenta (''trenta'')
+; 40 : Quaranta (''cuaranta'')
+; 50 : Cinquanta (''cincuanta'')
+; 60 : Sessanta (''sessanta'')
+; 70 : Settanta (''settanta'')
+; 80 : Ottanta (''ottanta'')
+; 90 : Novanta (''novanta'')
+; 100 : Cento (''cento'')
+; 200 : Duecento (''duecento'')
+; 300 : Trecento (''trecento'')
+; 1000 : Mille (''mille'')
+; 2000 : Duemila (''duemila'')
+; 1.000.000 : Un milione (''un milione'')
+; 1.000.000.000 : Un miliardo (''un miliardo'')
+; 1.000.000.000.000 : Mille miliardi (''mille miliardi'')
+; numărul : Numero. (''numero'')
+; jumătate : Mezzo. (''mezzo'')
+; mai puţin : Meno. (''meno'')
+; mai mult : Più. (''piU'')
+
+===Timp===
+
+; acum : Adesso. (''ADE-sso'')
+; mai târziu : Più tardi. (''PiU tar-di'')
+; înainte : Prima. (''prI-ma'') - Innanzi. (''in-NAn-ţi'')
+; dimineaţă : Mattina. (''MAt-TI-na'')
+; mâine dimineaţă : Domani mattina (''DO-ma-ni Mat-ti-na'')
+; după-amiază : Pomeriggio. (''PO-me-rig-gio'')
+; seară : Sera. (''SE-ra'')
+; noapte : Notte. (''NOt-te'')
+
+
+====Ceasul====
+
+; ora unu : L'una. (''LU-na'')
+; ora două : Le due. (''LE due'')
+; prânz : Mezzogiorno. (''MEz-zO-GIOr-no'')
+; ora treisprezece : L'una. (''LU-na'')
+; ora paisprezece : Le due. (''LE due'')
+; miez de nopţii : Mezzanotte. (''MEz-zA-not-te'')
+
+====Durată====
+
+; minut(e) : Minuto(i). (''MIn-uto'')
+; oră(ore) : Ora(e). (''Ora'')
+; zi(le) : Giorno(i). (''GIOr-no'')
+; săptămână(săptămâni) : Settimana(e). (''SEt-ti-MA-na'')
+; lună(luni) : Mese(i). (''ME-se'')
+; an(i) : Anno(i). (''AN-no'')
+
+====Zile====
+
+; astăzi : Oggi. (''OG-gi'')
+; ieri : Ieri. (''IE-ri'')
+; mâine : Domani. (''DO-ma-ni'')
+; săptămâna aceasta : Questa settimana. (''QUE-sta SEt-ti-ma-na'')
+; ultima săptămână : Ultima settimana. (''UL-ti-ma SEt-ti-ma-na'')
+; săptămâna viitoare : Prossima settimana (''PROs-si-ma SEt-ti-ma-na'')
+
+====Luni====
+
+; Ianuarie : Gennaio (''GEN-na-io'')
+; Februarie : Febbraio (''FEb-bra-io'')
+; Martie : Marzo (''MAR-zo'')
+; Aprilie : Aprile (''AP-ri-le'')
+; Mai : Maggio (''MAg-gio'')
+; Iunie : Giugno (''GIU-gno'')
+; Iulie : Luglio (''LUg-lio'')
+; August : Agosto (''AGO-sto'')
+; Septembrie : Settembre (''SET-tem-bre'')
+; Octombrie : Ottobre (''OT-to-bre'')
+; Noiembrie : Novembre (''NO-vem-bre'')
+; Decembrie : Dicembre (''DI-cem-bre'')
+
+===Scrierea ceasului şi a datei===
+
+07:30
+
+Sono le 7 e 30 (SO-no LE set-te e tren-ta)
+
+
+09/11/2005
+
+Il 9 novembre 2005 (IL NO-ve NO-vem-bre DUE-mila-cincue)
+
+===Culori===
+
+; negru : Nero (''NE-ro'')
+; alb : Bianco (''BIAn-co'')
+; gri : Grigio (''GRI-gio'')
+; roşu : Rosso (''ROS-so'')
+; albastru : Blu (''BLU'')
+; galben : Giallo (''GIAl-lo'')
+; verde : Verde (''VER-de'')
+; portocaliu : Arancione (''ARAn-cio-ne'')
+; roz : Rosa (''RO-sa'')
+; maro : Marrone (''MAR-ro-ne'')
+
+===Transport===
+
+====Autobuz şi tren====
+; Cât costă biletul spre _____? (tren) : Quanto costa un biglietto per _____? (treno) (''CUAn-to CO-sta un bi-GLIE-tto per_____?,TRE-no'')
+; Cât costă un bilet spre _____? (avion) : Quanto costa un biglietto per _____? (aereo) (''CUAn-to CO-sta un bi-GLIE-tto per_____?,AE-reo'')
+; Un bilet până la _______, vă rog. : Un biglietto per _______, per favore (''un bi-GLIE-tto per_____, per FA-vo-re'')
+; Unde merge acest tren/autobuz? : Dove arriva questo treno/autobus (''DO-ve AR-ri-va QUE-sto TRE-no/AU-to-bus?'')
+; Unde este trenul/autobuzul spre _____? : Dovè il treno/autobus per_____? (''DO-VE il TRE-no/L AU-to-bus per_____?'')
+; Opreşte acest tren/autobuz în _____? : Dove si ferma questo treno/autobus? (''DO-ve SI FEr-ma questo TRE-no/AU-to-bus?'')
+; Când pleacă acest tren/autobuz la _____? : Quando parte questo treno/autobus per _____? (''CUAn-do PAr-te CUE-sto TRE-no/AU-to-bus per?'')
+; La ce oră ajunge acest tren/autobuz în _____? : A che ora arriva questo treno/autobus? (''A CHE ora AR-ri-va CUE-sto TRE-no/AU-to-bus?'')
+
+====Direcţii====
+; Cum ajung la _____ ? (oraşe) : Come si arriva a ______ (''come si ariva'')
+; Cum ajung la _____ ? (locuri, străzi) : X (''X'')
+; ...gară? : ...alla stazione ferroviaria? (''ala staţione feroviaria'')
+; ...staţia de autobuz? : ...alla stazione dell'autobus? fermata?(''X'')
+; ...aeroport? : all'aeroporto? (''X'')
+; ...centru? : ...in centro? (''X'')
+; ...căminul pentru tineri? : ...all'ostello della gioventù? (''X'')
+; ...hotelul  _____ ? : ...all'albergo ____ / all'hotel ___? (''X'')
+; ...consulatul Român/Moldova?  ...al consolato Rumania (''X'')
+; Unde se află multe... : Dove ci sono molti (''X'')
+; ...hoteluri? : alberghi ...hotels? (''X'')
+; ...restaurante? : ...ristoranti? (''X'')
+; ...cluburi de noapte?: night (''X'')
+; ...cluburi?: X (''X'')
+; ...atracţii turistice? : ...cose da vedere? or luoghi da vedere (''X'')
+; Poţi / Puteţi să-mi arătaţi pe hartă: Potete mostrarmelo sulla carta? (''X'')
+; stradă : strada (''X'')
+; La stânga. : Giri a sinistra (''X'')
+; La dreapta. : Giri a destra (''X'')
+; stânga : sinistra (''X'')
+; dreapta : destra(''X'')
+; înainte : diritto (''X'')
+; spre _____ : verso il ______(''X'')
+; după _____ : dopo il ______(''X'')
+; înainte de _____ : prima del (''X'')
+; Atenţie la _____. : Guarda il _____ (''X'')
+; intersecţie : incrocio (''X'')
+; nord : nord (''X'')
+; sud : sud (''X'')
+; est : est (''X'')
+; vest : ovest (''X'')
+; în sus : (in) su (''X'')
+; în jos : (in) giù (''X'')
+
+====Taxi====
+; Taxi! : Taxi (''taxi'')
+; Duceţi-mă la _____, vă rog. : Portatemi a _____, per favore. (''portatemi a ____, per favore'')
+; Cât costă până la _____? : Quanto costa andare a _____? (''cuanto costa andare a _____?'')
+; Duceţi-mă acolo, vă rog. : Portatemi lì, per favore. (''portatemi li, per favore'')
+
+===Gazdă===
+
+; Aveţi câteva camere disponibile? : Avete camere libere? (''X'')
+; Cât costă o cameră pentru o persoană/două persoane? : Quanto costa una stanza singola/doppia? (''X'')
+; Are camera... : La stanza ha ... (''X'')
+; ...cearşafuri? : ...lenzuola? (''X'')
+; ...o baie? (toaletă): ...un bagno? (''X'')
+; ...un duş? 	doccia (shower):  (''X'')
+; ...un telefon? : ...un telefono? (''X'')
+; ...un TV? : ...un televisore? (''X'')
+; Pot să văd camera mai întâi? : Posso prima vedere la stanza? (''X'')
+; Aveţi ceva mai liniştit? : Ha una stanza più silenziosa? (''X'')
+; ...mai mare? : ...più grande? (''X'')
+; ...mai curat? : ...più pulita? (''X'')
+; ...mai ieftin? : ...più economica? (''X'')
+; OK, o iau. : Va bene, la prendo. (''X'') 
+; Voi sta _____ noapte (nopţi). : Mi fermo per _____ notte/i.(''X'')
+; Puteţi să-mi sugeraţi un alt hotel? : Potete suggerirmi un altro hotel? (''X'')
+; Aveţi un seif? : Avete una cassaforte (centrale)? (''X'')
+; ...vestiare? : ...Avete una cassaforte (nella stanza)? (''X'')
+; Este inclus micul-dejun/cina? :prima colazione/ la cena  (''X'')
+
+; La ce oră este micul-dejun /cina? : A che ora è la colazione / la cena? (''X'')
+; Vă rog să-mi curăţaţi camera. : Pulite la mia camera, per favore. (''X'')
+; Mă puteţi trezi la _____? : Potete svegliarmi alle _____? (''X'')
+; Vreau să plec. : Voglio andare via. (...) or voglio partire (''X'')
+
+===Bani===
+
+; Acceptaţi lei româneşti / moldoveneşti? : Accettate (''X'')
+; Acceptaţi cărţi de credit? : Accettate carte di credito? (''X'')
+; Puteţi să-mi schimbaţi nişte bani? : Potete cambiare delle banconote per me? (''X'')
+; Unde pot să schimbi bani? : Dove posso cambiare delle banconote? (''X'')
+; Puteţi să-mi schimbaţi un cec de călătorie? : Potete cambiare questi traveller's cheque per me? (''X'')
+; Unde pot să schimb un cec de călătorie? : Dove posso cambiare un traveller's cheque?(''X'')
+; Care este rata de schimb? : Quanto è il (tasso di) cambio? (''X'')
+; Unde este un bancomat (ATM)? : Dove posso trovare un Bancomat? (''X'')
+
+===Mâncare===
+
+; O masă pentru o persoană/doi oameni, vă rog. : Un tavolo per uno/due, per favore. (''X'')
+; Pot să văd meniul, vă rog? : Posso vedere il menù, per favore? (''X'')
+; Aveţi o specialitate a casei? : Vi è una specialità della casa? (''X'')
+; Există o specialitate locală? : È una specialità locale? (''X'')
+; Sunt vegetarian. : Sono vegetariano/a  (''X'')
+; Nu mănânc porc. : Non mangio il maiale. (''X'')
+; Nu mănânc decât cuşer. : Mangio solamente cibo kosher (''X'')
+; Puteţi să îl/o faceţi mai puţin gras(ă)? : Potete farlo leggero, per favore? (...) 
+or Potete farlo con pochi grassi? (with little fat) or Potete farlo con poco olio? (with little oil) 
+; meniul zilei : menu del giorno X (''X'')
+; a la carte : à la carte (''X'')
+; mic-dejun : la prima colazione (''X'')
+; pachet : il pranzo (''X'')
+; cafea :  caffe(''X'')
+; mâncare de prânz : X (''X'')
+; Aş vrea _____. : Vorrei _____. (''X'')
+; Vreau de mâncare cu ____ : Vorrei un piatto con _____. (''X'')
+; pui : il pollo (''X'')
+; carne de vită : il manzo (''X'')
+; peşte : il pesce (''X'')
+; şuncă : il prosciutto (''X'')
+; crenvuşti : salsiccia (''X'')
+; brânză : il formaggio (''X'')
+; ouă : le uova (''X'')
+; salată : l'insalata (''X'')
+; legume (proaspete) : le verdure fresche (''X'')
+; fructe (proaspete) : la frutta fresca (''X'')
+; pâine : il pane (''X'')
+; pâine prăjită : toast (''X'')
+; găluşte : tagliatelle (''X'')
+; orez : il riso (''X'')
+; fasole : i fagioli (...) or fagiolini (similar to beans but different) (''X'')
+; Îmi aduceţi un pahar de _____? : Posso avere un bicchiere di _____? (''X'')
+; Îmi aduceţi o cană cu _____? : Posso avere una tazza di _____? (''X'')
+; Îmi aduceţi o sticlă de _____? : Posso avere una bottiglia di _____? (''X'')
+; cafea : il caffè (''X'')
+; ceai : il tè (''X'')
+; suc : il succo (''X'')
+; apă : l'acqua (''X'')
+; apă (plată): l'acqua frizzante (''X'')
+; bere : la birra (''X'')
+; vin roşu/alb : il vino rosso/bianco (''X'')
+; Îmi daţi puţin(ă) _____? : Posso aver del _____? (...) or Posso avere un po' di ____? (''X'')
+; sare : il sale (''X'')
+; piper : il pepe (''X'')
+; unt : il burro (''X'')
+; Mă scuzaţi, ospătar! (''captarea atenţiei chelnerilor''): Scusi? (''X'')
+; Am terminat. : Ho finito. (''X'')
+; A fost delicios. : É squisito. (''X'')
+; Vă rog luaţi farfuriile. : Potete pulire il tavolo, per favore. (''X'')
+; Nota, vă rog. : Il conto, per favore. (''X'')
+
+===Baruri===
+
+; Serviţi alcool? : servite alcolici? (''X'')
+; Este cu servire la masă? : C'è il servizio al tavolo? (''X'')
+; O bere/două beri, vă rog. : Una birra/due birre, per favore. (''X'')
+; Un pahar de vin roşu/alb, vă rog. : Un bicchiere di vino rosso/bianco, per favore. (''X'')
+; Un sfert/O optime de vin roşu, vă rog. : un quartto di vino rosso, per favore (''X'')
+; La jumătate, vă rog. (o halbă de bere): X (''X'')
+; O sticlă, vă rog. : Una bottiglia, per favore. (''X'')
+; Un cola cu rom, vă rog. : X (''X'')
+; whiskey : whisky (''X'')
+; vodka : vodka (''X'')
+; rom : rum (''X'')
+; apă : acqua (''X'')
+; suc de club : club soda (''X'')
+; apă tonică : acqua tonica (''X'')
+; suc de portocale : succo di arancia (''X'')
+; Cola (''suc'') : Coca Cola (''X'')
+; Aveţi cumva ceva gustări? : C'è un bar con spuntini? (''X'')
+; Încă unul(m)/una(f), vă rog. : Un altro, per favore. (''X'')
+; Încă un rând, vă rog. : Un altro giro, per favore. (''X'')
+; Când se închide? : Qual è l'ora di chiusura? (''X'')
+
+===Cumpărături===
+
+; Aveţi aşa ceva, mărimea mea? : Avete questo nella mia taglia? (''X'')
+; Cât costă? : Quanto costa questo? (''X'')
+; E prea scump. : È troppo caro/a. (''X'')
+; Acceptaţi _____? : Prendereste _____? (''X'')
+; scump : caro (''X'')
+; ieftin : economico (''X'')
+; Nu-mi permit. : Non posso permettermelo. (''X'')
+; Nu-l/N-o vreau. : Non lo voglio. (''X'')
+; Ştiu că acesta nu este preţul normal. : (''X'')
+; Mă înşelaţi. : Mi state imbrogliando. (''X'')
+; Nu mă interesează. : Non son interessato. (''X'')
+; OK, îl/o iau. : Va bene, lo prendo (''X'')
+; Îmi daţi o pungă? : Posso avere una busta? (''X'')
+; Expediaţi (în străinătate)? : invia all'estero? (''X'')
+; Am nevoie de ... : Ho bisogno di...  (''X'')
+; ...pastă de dinţi. : ...dentifricio. (''X'')
+; ...o periuţă de dinţi. : ...uno spazzolino. (''X'')
+; ...tampoane. : ...tampone/assorbente. (''X'')
+; ...săpun. : ...sapone.(''X'')
+; ...şampon. : ...shampoo. (''X'') 
+; ...ceva pentru dureri. (''ex. aspirină sau nurofen'') : ...analgesico (aspirina). (''X'')
+; ...ceva pentru răceală. : ...medicina per il raffreddore. (''X'')
+; ...tablete pentru stomac. : ...medicina per lo stomaco. (''X'')
+; ...un brici. : ...un rasoio. (''X'')
+; ...o lamă. (de ras):  (''X'')
+; ...o umbrelă. : ...un ombrello. (''X'')
+; ...loţiune de plajă. : ...lozione/crema solare. (''X'')
+; ...o vedere. : ...una cartolina. (''X'')
+; ...timbre. : ...francobolli. (''X'')
+; ...baterii. : ...batterie. (''X'')
+; ...hârtie pentru scris. : ...carta. (''X'')
+; ...un pix. : ...una penna. (''X'')
+; ...cărţi în română. :  ...libri in rumeno. (''X'')
+; ...reviste în română. : ...riviste in rumeno. (''X'')
+; ...un ziar în română. : ...un giornale in rumeno. (''X'')
+; ...un dicţionar român-italian. : ...un dizionario Rumeno-Italiano. (''X'')
+
+===Maşini===
+
+; Vreau să închiriez o maşină. : Desidero noleggiare una macchina. (...) or Voglio noleggiare una macchina (''X'')
+; Primesc asigurare? : Posso avere un'assicurazione? (''X'')
+; stop (''semn de circulaţie'') : stop (''X'')
+; sens unic : senso unico (''X'')
+; a da prioritate : dare la precedenza ''X'')
+; parcarea interzisă : vietata la sosta (...) or vietato parcheggiare (''X'')
+; limită de viteză : limite di velocità (''X'')
+; benzinărie : benzinaio (...) or stazione di rifornimento or (in an highway) area di servizio (''X'')
+; benzină : benzina (''X'')
+; motorină : diesel (...) or gasolio (''X'')
+
+===Autoritate===
+
+; N-am făcut nimic. : Non ho fatto niente.
+; A fost o neînţelegere. : Non ci siamo capiti.
+; Unde mă duceţi? : Dove mi portate?
+; Sunt arestat? : Sono in arresto?
+; Sunt un cetăţean român/moldovean. : Sono un/una cittadino/a rumeno. 
+; Vreau să vorbesc cu ambasada/consulatul român/moldovean. : Vorrei parlare con il consolato rumeno.
+; Vreau să consult un avocat. : Voglio consultare un avvocato.
+; Pot doar să plătesc o amendă acum? : Posso pagare solamente la multa adesso?
+
+==Învăţând mai mult==
+
+*[http://en.wikibooks.org/wiki/Italian Curs de italiană în stil wiki (în engleză)]
+
+[[de:Sprachführer Italienisch]]
+[[en:Italian phrasebook]]
+[[fi:Italian matkasanakirja]]
+[[fr:Guide linguistique italien]]
+[[hu:Olasz szószedet]]
+[[ja:イタリア語会話集]]
+
+[[WikiPedia:Limba italiană]]

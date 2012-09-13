@@ -1,0 +1,10 @@
+'''Caen''' este un oraş în [[Franţa]].
+{{IsIn|Franţa}}
+{{ciot}}
+
+[[WikiPedia:Caen]]
+
+[[en:Caen]]
+[[es:Caen]]
+[[fr:Caen]]
+[[nl:Caen]]

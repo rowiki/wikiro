@@ -1,0 +1,24 @@
+'''California''' este un stat în [[Statele Unite ale Americii]] şi cuprindre unele dintre cele mai vizitate locuri din această ţară.
+
+==Destinaţii==
+
+*[[Los Angeles]]
+**[[Hollywood]]
+**[[Beverly Hills]]
+*[[San Diego]]
+*[[Sacramento]]
+*[[Santa Monica]]
+{{IsIn|Statele_Unite_ale_Americii}}
+{{ciot}}
+
+[[ca:Califòrnia]]
+[[de:Kalifornien]]
+[[en:California]]
+[[es:California]]
+[[fi:Kalifornia]]
+[[fr:Californie]]
+[[it:California]]
+[[ja:カリフォルニア州]]
+[[nl:Californië]]
+[[pt:Califórnia]]
+[[sv:Kalifornien]]

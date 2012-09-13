@@ -1,0 +1,15 @@
+'''Malmö''' este un oraş în [[Suedia]].
+
+{{ciot}}
+{{IsIn|Suedia}}
+
+
+
+[[de:Malmö]]
+[[en:Malmö]]
+[[fi:Malmö]]
+[[ja:マルメ]]
+[[pl:Malmö]]
+[[pt:Malmö]]
+[[sv:Malmö]]
+[[wts:Category:Malmö]]

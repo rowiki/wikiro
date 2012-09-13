@@ -1,0 +1,26 @@
+Wikitravel încearcă se menţină un '''punct de vedere neutru''' (PDVN sau NPOV) în articole.
+
+Prin punct de vedere neutru se înţelege că toate aprecierile asupra panoramelor, hotelurilor, restaurantelor, barurilor ş.a. sunt excluse, lăsându-i astfel pe citiorii noştrii să decidă ei înşişi nivelul de calitate. Noi avem misiunea de a crea un ghid de voiaj fiabil şi complet ; un ghid care nu oferă informaţii calificate în legătură cu ceea ce se află în el nu mai este fiabil şi complet.
+
+&lt;CENTER>
+{| width=50% bgcolor=white align=center style=border-style:dotted;border-width:1mm;border-color:lightblue
+|''Acest articol încă este un [[Wikitravel:Articole ciot|ciot]] şi are nevoie de [[Wikitravel:Cioturi ce necesită atenţie|atenţia]] dvs. [[Wikitravel:Plonjaţi înainte|Plonjaţi înainte]] şi [[Wikitravel:Cum să editaţi o pagină|ajutaţi-l să crească]]!''
+|}
+&lt;/CENTER>
+
+
+
+
+
+
+[[ca:Wikitravel:Ser just]]
+[[de:Wikitravel:Neutraler Standpunkt]]
+[[en:Wikitravel:Be fair]]
+[[es:Wikitravel:Ser justo]]
+[[fi:Wikitravel:Ole reilu]]
+[[fr:Wikitravel:Point de vue neutre]]
+[[it:Wikitravel:Be fair]]
+[[ja:Wikitravel:中立的な観点]]
+[[nl:Wikitravel:Wees redelijk]]
+[[ru:Wikitravel:Будьте справедливым]]
+[[sv:Wikitravel:Skriv från en neutral utgångspunkt]]

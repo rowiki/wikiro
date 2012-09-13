@@ -1,0 +1,12 @@
+'''Lille''' este un oraş în [[Franţa]].
+
+{{ciot}}
+{{IsIn|Franţa}}
+[[WikiPedia:Lille]]
+
+[[en:Lille]]
+[[es:Lille]]
+[[fi:Lille]]
+[[fr:Lille]]
+[[ja:リール]]
+[[nl:Rijsel]]

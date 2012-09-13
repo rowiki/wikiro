@@ -1,0 +1,3 @@
+'''Szolnok''' este un oraş în [[Ungaria]].
+{{IsIn|Ungaria}}
+{{ciot}}

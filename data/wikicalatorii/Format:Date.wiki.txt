@@ -1,0 +1,46 @@
+
+&lt;div style="float: right; margin: 0 0 1em 1em">
+{| cellpadding="2" cellspacing="0" style="border: 1px solid #9866FF; background-color: #f3f3ff" width="250"
+{{if|test={{{imagine|}}}|then={{quickbar topimage|image={{{imagine|}}}}}}}
+{{if|test={{{aşezare|}}}|then={{quickbar image|heading=Aşezare|image={{{aşezare|}}}}}}}
+{{if|test={{steag|}}}|then={{quickbar image|heading=Steag|image={{{steag|}}}}}}}
+|-
+| colspan="2" style="text-align: center; border-bottom: 1px solid #C9AFFF; border-top: 1px solid #C9AFFF; background-color: #ddddff" | '''Informaţii de bază'''
+{{if|test={{{capitalã|}}}|then={{quickbar item|heading=Capitalã|value={{{capitalã|}}}}}|else={{quickbar empty}}}}
+{{if|test={{{guvernământ|}}}|then={{quickbar item|heading=Guvernământ|value={{{guvernământ|}}}}}|else={{quickbar empty}}}}
+{{if|test={{{monedă|}}}|then={{quickbar item|heading=Monedă|value={{{monedă|}}}}}|else={{quickbar empty}}}}
+{{if|test={{{suprafaţă|}}}|then={{quickbar item|heading=Suprafaţă|value={{{suprafaţă|}}}}}|else={{quickbar empty}}}}
+{{if|test={{{populaţie|}}}|then={{quickbar item|heading=Populaţie|value={{{populaţie|}}}}}|else={{quickbar empty}}}}
+{{if|test={{{limbă|}}}|then={{quickbar item|heading=Limbă|value={{{limbă|}}}}}|else={{quickbar empty}}}}
+{{if|test={{{religie|}}}|then={{quickbar item|heading=Religie|value={{{religie|}}}}}|else={{quickbar empty}}}}
+{{if|test={{{electricitate|}}}|then={{quickbar item|heading=Electricitate|value={{{electricitate|}}}}}|else={{quickbar empty}}}}
+{{if|test={{{prefixtelefonic|}}}|then={{quickbar item|heading=Prefix telefonic|value={{{prefixtelefonic|}}}}}|else={{quickbar empty}}}}
+{{if|test={{{domeniuinternet|}}}|then={{quickbar item|heading=Domeniu internet|value={{{domeniuinternet|}}}}}|else={{quickbar empty}}}}
+{{if|test={{{fusorar|}}}|then={{quickbar item|heading=Fus orar|value={{{fusorar|}}}}}|else={{quickbar empty}}}}
+|}
+&lt;/div>
+&lt;!-- end quick bar -->
+
+&lt;noinclude>
+
+&lt;pre>
+&lt;nowiki>
+{{date
+| imagine=[[Image:250px|noframe]]
+| aşezare=[[Image:|250px|noframe]]
+| steag=[[Image:]]
+| capitală=[[]]
+| guvernământ=
+| monedă=
+| suprafaţă= km²
+| populaţie=
+| limbă=[[Ghid de conversaţie limbă|limbă]]
+| religie=
+| electricitate=
+| prefixtelefonic=
+| domeniuinternet=
+| fusorar=
+}}
+&lt;/nowiki>
+&lt;/pre>
+&lt;/noinclude>

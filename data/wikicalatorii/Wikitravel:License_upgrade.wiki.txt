@@ -1,0 +1,58 @@
+&lt;!-- 
+{{disclaimerbox|This is a draft, please discuss changes on [[:shared:Talk:License upgrade]] or [[{{TALKPAGENAME}}]].}}
+-->
+Wikitravel plans to upgrade its [[:shared:Copyleft|license]] from the present [http://creativecommons.org/licenses/by-sa/1.0/ Creative Commons Attribution-ShareAlike 1.0] ("CC&amp;nbsp;1.0") to [http://creativecommons.org/licenses/by-sa/3.0/ Creative Commons Attribution-ShareAlike 3.0] ("CC&amp;nbsp;3.0").  Statements indicating [[#Consent|consent]] and [[#Refuse|refusal]] to relicense your own content are accepted until '''December 1, 2009'''; if there is a broad [[:en:Wikitravel:Consensus|consensus]] in favor, the license upgrade will take place on '''January 1, 2010'''.
+
+
+
+[[ar:Wikitravel:License upgrade]]
+[[ca:Wikitravel:License upgrade]]
+[[de:Wikitravel:License upgrade]]
+[[en:Wikitravel:License upgrade]]
+[[eo:Wikitravel:License upgrade]]
+[[es:Wikitravel:Actualización de licencia]]
+[[fi:Wikitravel:Lisenssipäivitys]]
+[[fr:Wikitravel:License upgrade]]
+[[he:ויקיטיול:License upgrade]]
+[[hi:विकिट्रैवल:License upgrade]]
+[[hu:Wikitravel:License upgrade]]
+[[it:Wikitravel:License upgrade]]
+[[ja:Wikitravel:ライセンス・アップグレード]]
+[[nl:Wikitravel:Licentie-upgrade]]
+[[pl:Wikitravel:License upgrade]]
+[[pt:Wikitravel:Atualização de licença]]
+[[sv:Wikitravel:Uppgradering av vår upphovsrättslicens]]
+[[zh:Wikitravel:授權條款升級]]
+[[wts:License upgrade]]
+
+==Rationale==
+By upgrading from the older CC 1.0 to the latest CC 3.0, Wikitravel will...
+
+* '''Be able to use text contributions''' from other CC 2.0+ licensed projects.  This includes [http://wikipedia.org/ Wikipedia], [http://world66.com/ World66], [http://hitchwiki.org/ HitchWiki], [http://travellerspoint.com/guide/ Travellerspoint] and [http://wiki.creativecommons.org/Casestudies many, many more].
+* '''Simplify reuse'''.  Currently, Wikitravel text is CC 1.0, but many images are CC 3.0, creating a licensing headache.  After the upgrade, the entire site will be CC 3.0.
+* '''Become more international'''.  CC 1.0 is limited to American copyright law.  CC 3.0 is available in jurisdiction-specific versions, giving you extra protection for reuse outside the United States.
+* '''Have a more secure legal position.'''  Creative Commons has worked hard on patching loopholes in the original CC 1.0, and will continue to do so in the future.
+* '''Become future compatible'''.  CC 1.0 does not have provisions for automatic updating (which is why this process is necessary), but CC 3.0 will automatically upgrade to the latest version.
+
+Your Attribution and ShareAlike rights as a contributor are protected as well as or better by CC 3.0 than by CC 1.0.  CC 1.0 was originally chosen only because there were [[:shared:Why Wikitravel isn't GFDL|no other practical options]] when Wikitravel was launched, and Wikitravel is now the only open content project of any size still using it.  A detailed discussion of the differences is available at Creative Commons:
+* [http://creativecommons.org/weblog/entry/4216 Announcing (and explaining) our new 2.0 licenses]
+* [http://creativecommons.org/weblog/entry/7249 Version 3.0 Launched]
+
+==So what should I do?==
+You have three options:
+
+# '''Consent''' by signing the [[#Consent|Consent]] section below.  This means you consent to relicense all your contributions to all Wikitravel versions under CC 3.0.
+# '''Refuse''' by signing the [[#Refuse|Refuse]] section below.  This means that you oppose the license change, and '''do ''not'' consent to relicense''' your written work. If community consensus is to proceed with the migration, your contributions may be removed from Wikitravel.
+# '''Do nothing'''.  If the community proceeds with the migration, your contributions may be either kept or deleted at the discretion of the site's other users.  If you want to discuss your support or opposition to the license change, add a comment to [[:shared:Talk:License upgrade]] or [[{{TALKPAGENAME}}]].  You can later return and sign under '''Consent''' or '''Refuse'''.
+
+==Consent==
+''I, the undersigned, hereby agree to release all my past, present and future text and image contributions on all language versions of Wikitravel under Version 3.0 of the Creative Commons Attribution Share-Alike License.''
+
+: To sign, login to the site, edit this page and enter &lt;nowiki># ~~~~&lt;/nowiki>.
+
+# [[Utilizator:Tatata|Tatata]] ([[User:Tatatabot|Tatatabot]]) 2 noiembrie 2009 18:15 (EET)
+
+==Refuse==
+''I, the undersigned, hereby state that I do not wish to relicense my Wikitravel contributions under Version 3.0 of the Creative Commons Attribution Share-Alike License, and hereby require their removal from this site.'''
+
+: To sign, login to the site, edit this page and enter &lt;nowiki># ~~~~&lt;/nowiki>.

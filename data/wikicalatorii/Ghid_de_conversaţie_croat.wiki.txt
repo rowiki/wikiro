@@ -1,0 +1,506 @@
+'''Limba croată''' este o limbă slavă, oficială în [[Croaţia]] şi în [[Bosnia şi Herţegovina]], aproape identică cu limba sârbă, limba bosniacă şi limba muntenegreană, deci turistul poate comunica cu ajutorul ei şi în [[Serbia]], în toată Bosnia şi Herţegovina şi în [[Muntenegru]].
+
+Particularităţi ale limbii, care se reflectă în acest ghid:
+*lipsa articolelor;
+*declinarea substantivelor, adjectivelor şi pronumelor (şapte cazuri);
+*acordul în gen şi număr al participiului la timpul trecut.
+
+== Pronunţarea ==
+
+Limba croată prezintă avantajul unei corespondenţe aproape totale între pronunţare şi scriere.
+
+=== Vocale ===
+
+Fiecare vocală poate fi lungă sau scurtă:
+
+;a : ca în "A!" sau ca în "ac"
+;e : ca în "Eh!" sau ca în "elev"
+;i : ca în "Tii!" sau ca în "inel"
+;o : ca în "O!" sau ca în "om"
+;u : ca în "Huu!" sau ca în "ulei"
+
+=== Consoane ===
+
+;b : ca în "bun"
+;c : ca "ţ" în "ţară"
+;č : ca "c" în "cer"
+;ć : între "c" în "cer" şi "te" în "teacă", în graiul maramureşean, muiat
+;d : ca în "dor"
+;đ : între "g" în "ger" şi "de" în "deal", în graiul maramureşean, muiat
+;dž : ca "g" în "ger"
+;f : ca în "film"
+;g : ca în "gură"
+;h : ca în "horă"
+;j : neprecedat de "l" sau "n", ca "i" în "iată"
+;k : ca în "kilogram"
+;l : aproximativ ca în "loc"
+;lj : ca "le" în "leac", în graiul maramureşean, muiat
+;m : ca în "mal"
+;n : ca în "nor"
+;nj : ca "ne" în "neam", în graiul maramureşean, muiat
+;p : ca în "pas"
+;r : ca în "rar"
+;š : ca "ş" în "şapcă"
+;s : ca în "sac"
+;t : ca în "turn"
+;v : ca în "voce"
+;z : ca în "zare"
+;ž : ca "j" în "jar"
+
+Literele "q", "w", "x" şi "y" se folosesc numai în cuvinte străine.
+
+Accentul poate să cadă pe orice silabă a cuvintelor cu mai multe silabe, în afară de ultima. Unele cuvinte nu se accentuează: pronumele la forma neaccentuată, unele prepoziţii, unele conjuncţii, unele adverbe.
+
+== Listă de enunţuri ==
+
+Limba croată distinge două grade de politeţe. Prima se caracterizează prin adresarea cu ''ti'', corespunzător cu "tu" şi cu ''vi'', corespunzător cu "voi", a doua prin adresarea cu ''vi'' şi la singular şi la plural, corespunzător cu "dumneavoastră". În acest ghid folosim aproape numai adresarea cu ''vi'' de politeţe.
+
+=== Enunţuri de bază ===
+
+;Bună dimineaţa. :Dobro jutro.
+;Bună ziua. :Dobar dan.
+;Bună seara. :Dobra večer.
+;Noapte bună. :Laku noć.
+;Salut. :Bog.
+;Bine aţi venit.:Dobro došli.
+;La revedere. :Doviđenja.
+;Ce mai faceţi? :Kako ste?
+;Mulţumesc, bine.:Dobro sam, hvala.
+;Cum vă numiţi? :Kako se zovete?
+;Mă numesc ______. :Zovem se _____.
+;Îmi pare bine (de cunoştinţă). :Drago mi je.
+;Vă rog. :Molim.
+;Mulţumesc (mult). :Hvala (lijepa).
+;Cu plăcere. :Nema na čemu.
+;Da. :Da.
+;Nu. :Ne.
+;Scuzaţi-mă. :Oprostite.
+;Pardon.:Pardon.
+;Îmi pare rău. :Žao mi je.
+;Nu înţeleg. :Ne razumijem.
+;Nu vorbesc (bine) limba croată.:Ne govorim (dobro) hrvatski.
+;Sunt român(că) / din Republica Moldova. :Ja sam rumun(ka) / iz Republike Moldavije.
+;Vorbiţi româneşte / engleza? :Govorite li rumunski / engleski?
+;Este cineva (aici) care vorbeşte româneşte / engleza?:Govori li ovdje netko rumunski / engleski?
+;Atenţie! :Pazite!
+;Unde este toaleta? :Gdje se nalazi WC?
+
+=== Probleme ===
+
+;Ajutor! :Upomoć!
+;Lasă-mă în pace! :Ostavi me na miru!
+;Nu mă atinge! :Prestani me dirati!
+;Chem poliţia! :Zvat ću policiju!
+;Poliţia! :Policija!
+;Hoţul! :Zaustavite lopova!
+;Am nevoie de ajutorul dv.:Trebam vašu pomoć.
+;E urgent!:Hitno je!
+;M-am rătăcit.:Izgubio ''(masc.)'' / Izgubila ''(fem.)'' sam se.
+;Mi-am pierdut geanta.:Izgubio ''(masc.)'' / Izgubila ''(fem.)'' sam torbu.
+;Mi-am pierdut portofelul.:Izgubio ''(masc.)'' / Izgubila ''(fem.)'' sam novčanik.
+;Sunt bolnav(ă).:Bolestan/Bolesna sam.
+;Sunt rănit(ă).:Povrijedio ''(masc.)'' / Povrijedila ''(fem.)'' sam se.
+;Am nevoie de un medic.:Treba mi doktor.
+;Pot folosi telefonul dumneavoastră?:Mogu li se poslužiti vašim telefonom?
+
+=== Numere ===
+
+;1 :jedan
+;2 :dva
+;3 :tri
+;4 :četiri
+;5 :pet
+;6 :šest
+;7 :sedam
+;8 :osam
+;9 :devet
+;10 :deset
+;11 :jedanaest
+;12 :dvanaest
+;13 :trinaest
+;14 :četrnaest
+;15 :petnaest
+;16 :šestnaest
+;17 :sedamnaest
+;18 :osamnaest
+;19 :devetnaest
+;20 :dvadeset
+;21 :dvadeset jedan
+;22 :dvadeset dva
+;23 :dvadeset tri
+;30 :trideset
+;40 :četrdeset
+;50 :pedeset
+;60 :šezdeset
+;70 :sedamdeset
+;80 :osamdeset
+;90 :devedeset
+;100 :sto
+;200 :dvijesto
+;300 :trista
+;1000 :tisuća
+;1001:tisuća i jedan
+;1002:tisuća i dva
+;2000 :dvije tisuće
+;10.000:deset tisuća
+;20.000:dvadeset tisuća
+;1.000.000 :milijun
+;numărul _____:broj _____
+;jumătate :pola
+;mult :mnogo
+;puţin :malo
+;mai mult :više
+;mai puţin :manje
+
+=== Timp ===
+
+;acum :sad
+;mai târziu :kasnije
+;înainte :prije
+;după :nakon
+;dimineaţă:jutro
+;dimineaţa :ujutro
+;înainte de masă :popodne
+;după amiază :poslije podne
+;seară:večer
+;seara :navečer
+;noapte:noć
+;noaptea :u noći
+
+==== Oră ====
+
+;Cât e ceasul?:Koliko je sati?
+;ora unu noaptea:jedan sat ujutro
+;ora două noaptea:dva sata ujutro
+;ora cinci:pet sati
+;ora 12 ziua / amiază:podne
+;ora unu după amiază / ora 13:jedan sat poslije podne / trinaest sati
+;ora şapte seara / ora 19:sedam sati navečer / devetnaest sati
+;ora şapte şi jumătate / ora 19.30:pola osam / devetnaest sati i trideset minuta
+;ora 12 noaptea / miezul nopţii. :ponoć
+
+==== Durată ====
+
+;_____ minut(e) :_____ minuta (minuta)
+;_____ oră (ore) :_____ sat(i)
+;_____ zi(le) :_____ dan(a)
+;_____ săptămână (săptămâni) :_____ tjedan (tjedana)
+;_____ lună (luni) :_____ mjesec(i)
+;_____ an(i) :_____ godina (godina)
+
+==== Zile ====
+
+;azi :danas
+;ieri :jučer
+;mâine :sutra
+;în săptămâna aceasta :ovaj tjedan
+;săptămâna trecută :prošli tjedan
+;săptămâna viitoare :sljedeći tjedan
+
+;luni :ponedjeljak
+;marţi :utorak
+;miercuri :srijeda
+;joi :četvrtak
+;vineri :petak
+;sâmbătă :subota
+;duminică :nedjelja
+
+==== Luni ====
+
+;ianuarie : siječanj 
+;februarie : veljača 
+;martie : ožujak 
+;aprilie : travanj 
+;mai : svibanj 
+;iunie : lipanj 
+;iulie : srpanj 
+;august : kolovoz 
+;septembrie : rujan 
+;octombrie : listopad 
+;noiembrie : studeni 
+;decembrie : prosinac
+
+==== Exprimarea datei ====
+
+Datele se scriu ca în română, în forma ''zi.lună.an'', dar se folosesc numeralele ordinale şi totul se exprimă la cazul genitiv fără prepoziţie. De exemplu, "pe 11.12.2007" se spune ''jedanaestog prosinca, dvije tisuće sedme (godine)''.
+
+=== Denumirile culorilor ===
+
+;alb:bijelo
+;albastru:plavo
+;galben:žuto
+;gri :sivo
+;maro:smeđe
+;negru:crno
+;portocaliu:narančasto
+;roşu:crveno
+;verde:zeleno
+;violet:ljubičasto
+
+=== Transporturi ===
+
+==== Tren şi autocar ====
+
+;Cât costă un bilet până la _____? :Koliko košta karta za _____?
+;Vă rog un bilet / două bilete până la _____. :Molim Vas, jednu kartu / dvije karte za _____.
+;Unde merge trenul / autocarul ăsta? :Kamo ide ovaj vlak / autobus?
+;Unde este trenul / autocarul de _____? :Gdje se nalazi vlak / autobus za _____?
+;Trenul / Autocarul ăsta opreşte la _____? :Zaustavlja li se ovaj vlak / autobus u _____?
+;Când pleacă trenul / autocarul la _____? :Kada polazi vlak / autobus za _____?
+;Când soseşte trenul / autocarul la _____? :Kada stiže vlak / autobus u _____?
+;Trenul are 10 minute întârziere. :Vlak kasni deset minuta.
+
+==== Direcţii ====
+
+;Cum pot să ajung la _____:Kojim putem mogu stići do _____
+;... aeroport? :... zračne luke?
+;... ambasada / consulatul României / Moldovei? :... rumunskog / moldavskog poslanstva / konzulata?
+;... autogară? :... autobusnog kolodvora?
+;... centrul oraşului? :... središta grada?
+;... gară? :... željezničkog kolodvora?
+;... hotelul _____? :... hotela _____?
+;... port? :... luke?
+;... staţia de autobuz cea mai apropiată? :... najbliže autobusne stanice?
+;Unde este _____:Gdje se nalazi _____
+;... un hotel? :... hotel?
+;... un hotel pentru tineret? :... hostel?
+;Unde sunt ... :Gdje se nalaze _____
+;... baruri? :... barovi?
+;... locuri de vizitat? :... znamenitosti?
+;... restaurante? :... restorani?
+;Puteţi să-mi arătaţi pe hartă? :Možete li mi pokazati na karti?
+;stradă :ulica
+;şosea :cesta
+;autostradă :autocesta
+;Cotiţi la stânga. :Skrenite uljevo.
+;Cotiţi la dreapta. :Skrenite udesno.
+;drept înainte :pravo
+;spre:prema
+;după:pokraj
+;înainte de:prije
+;intersecţie :raskrižje
+;nord :sjever
+;sud :jug
+;est :istok
+;vest :zapad
+;sus :gore
+;jos :dole
+;în sus :uzbrdo
+;în jos :nizbrdo
+
+==== Taxi ====
+
+;Taxi! :Taksi!
+;Duceţi-mă la _____, vă rog. :Molim Vas, odvedite me do _____.
+;Cât costă până la _____? :Koliko košta vožnja do _____?
+;Cobor aici.:Ovdje silazim.
+
+=== Cazare ===
+
+;Aveţi camere libere? :Imate li slobodnih soba?
+;Cât costă o cameră pentru o persoană / două persoane? :Koliko košta soba za jednu osobu / dvije osobe?
+;În cameră este _____ :Ima li soba _____
+;... baie? :... kupaonicu?
+;... conexiune la Internet:... internet vezu?
+;... lenjerie de pat? :... posteljinu?
+;... telefon? :... telefon?
+;... televizor? :... televizor?
+;Pot să văd camera? :Mogu li pogledati sobu?
+;Aveţi vreo cameră _____ :Imate li nešto _____
+;... mai curată? :... čišće?
+;... mai ieftină? :... jeftinije?
+;... mai liniştită? :... tiše?
+;... mai luminoasă? :... svijetlije?
+;... mai mare? :... veće?
+;... mai mică? :... manje?
+;Bine, o iau. :U redu, uzet ću je.
+;Vreau să stau o noapte / _____ nopţi. :Ostajem jednu noć / _____ noći.
+;Puteţi să-mi recomandaţi alt hotel? :Možete li mi preporučiti drugi hotel?
+;Aveţi _____:Imate li _____
+;... safe?:... sef?
+;... boxe?:... ormariće?
+;Micul dejun este inclus în preţ? :Je li doručak uključen u cijenu?
+;Când serviţi micul dejun? :Kada servirate doručak?
+;Aţi putea să-mi faceţi curat în cameră?:Biste li mogli očistiti moju sobu?
+;Puteţi să mă treziţi la ora _____? :Možete li me probuditi u _____?
+;Vreau să vă anunţ că plec. :Želim da se odjavim.
+
+=== Bani ===
+
+;Pot să plătesc cu euro / dolari americani? :Mogu li platiti u eurima / američkim dolarima?
+;Pot să plătesc cu card de credit? :Mogu li platiti kreditnom karticom?
+;Puteţi să-mi schimbaţi bani? :Možete li mi razmijeniti novac?
+;Unde pot să schimb bani? :Gdje mogu razmijeniti novac?
+;Care este cursul de schimb? :Koliki je tečaj?
+;Unde este un bancomat? :Gdje se nalazi bankomat?
+
+=== Mâncare ===
+
+;Vă rog o masă pentru o persoană / două persoane.:Molim Vas, stol za jednu osobu / dvije osobe.
+;Meniul, vă rog! :Jelovnik, molim Vas!
+;Care este specialitatea casei? :Koji je specijalitet kuće?
+;Aveţi vreo specialitate locală? :Imate li mjesni specijalitet?
+;Sunt vegetarian(ă). :Vegetarijanac(Vegetarijanka) sam.
+;Nu mănânc carne de porc. :Ne jedem svinjetinu.
+;meniu fix :fiksni meni
+;à la carte :a la kart
+;micul dejun :doručak
+;prânz :ručak
+;cină :večera
+;Aş vrea _____ :Želim _____
+;... brânză / caşcaval. :... sir.
+;... carne de miel. :... janjetinu.
+;... carne de porc. :... svinjetinu.
+;... carne de pui. :... piletinu.
+;... carne de vită. :... govedinu.
+;... cârnaţi. :... kobasicu.
+;... crenvurşti. :... viršle.
+;... fructe. :... voće.
+;... legume. :... povrće.
+;... orez. :... rižu.
+;... ouă. :... jaja.
+;... pâine (prăjită). :... (prženi) kruh.
+;... paste. :... rezance.
+;... peşte. :... ribu.
+;... salată. :... salatu.
+;... şuncă. :... šunku.
+;Vă rog un pahar _____:Molim Vas, čašu _____
+;... cu apă.:... vode.
+;... cu apă minerală.:... mineralne vode.
+;... de bere.:... piva.
+;... de suc (de fructe).:... (voćnog) soka.
+;... de vin alb / roşu.:... bijelog / crvenog vina.
+;Vă rog o ceaşcă de _____:Molim Vas, šalicu _____
+;... cafea.:... kave.
+;... ceai.:... čaja.
+;... lapte.:... mlijeka.
+;Vă rog o sticlă de _____ :Molim Vas, bocu _____
+;... apă.:... vode.
+;... apă minerală.:... mineralne vode.
+;... bere.:... piva.
+;... suc (de fructe).:... (voćnog) soka.
+;... vin alb / roşu.:... bijelog / crvenog vina.
+;Vă rog nişte _____:Molim Vas, malo _____
+;... sare.:... soli.
+;... piper.:... papra.
+;... unt.:... maslaca.
+;Ospătar! / Domnişoară! :Oprostite!
+;Am terminat. :Završio ''(masc.)'' / Završila ''(fem.)'' sam.
+;A fost foarte bun(ă). :Bilo je ukusno.
+;Vă rog să strângeţi masa.:Molim Vas, sklonite tanjure.
+;Plata, vă rog.:Račun, molim.
+
+=== Baruri ===
+
+;Serviţi băuturi alcoolice? :Poslužujete li alkoholna pića?
+;O bere / Două beri, vă rog. :Jedno pivo / Dva piva, molim.
+;O halbă, vă rog.:Jednu kriglu, molim.
+;O sticlă, vă rog.:Jednu bocu, molim.
+;_____ (''alcool tare'') şi _____ (''băutură nealcoolică pentru amestec''):_____ i _____
+;Rom ...:Rum ...
+;Votcă ...:Votku ...
+;Whisky ...:Viski ...
+;... apă, ...:... vodu, ...
+;... apă tonică, ...:... tonik, ...
+;... sifon, ...:... sodu, ...
+;... suc de portocale, ...:... sok od naranče, ...
+;_____ vă rog.:_____ molim.
+;Aveţi ceva de ronţăit? :Imate li nešto za grickanje?
+;Încă unul/una, vă rog. :Još jedno/jednu, molim.
+;Încă un rând, vă rog. :Još jednu rundu, molim.
+;La ce oră închideţi? :Kada zatvarate?
+
+=== Cumpărături ===
+
+;Aveţi aşa ceva pe mărimea mea? :Imate li ovo u mojoj veličini?
+;Cât costă? :Koliko košta?
+;E prea scump. :To je preskupo.
+;ieftin :jeftino
+;N-am destui bani. :Nemam dovoljno novca.
+;Nu-l/N-o vreau. :Ne želim to.
+;Nu mă interesează. :Nisam zainteresiran(a).
+;Vrei să mă înşeli! :Vi me hoćete varati!
+;Bine, îl/o/îi/le cumpăr. :U redu, uzet ću.
+;Puteţi să-mi daţi o pungă? :Mogu li dobiti vrečicu?
+;Am nevoie de _____:Trebam _____
+;... baterii. :... baterije.
+;... cremă solară. :... kremu za sunčanje.
+;... hârtie de scris. :... papir za pisanje.
+;... o carte în română / engleză. :... knjigu na rumunskom / engleskom.
+;... o periuţă dinţi. :... četkicu za zube.
+;... o revistă în română / engleză.:... časopis na rumunskom / engleskom.
+;... o umbrelă. ''(de soare)'':... suncobran.
+;... o umbrelă. ''(pentru ploaie)'':... kišobran.
+;... o vedere. :... razglednicu.
+;... pastă dinţi. :... pastu za zube.
+;... săpun. :... sapun.
+;... şampon. :... šampon.
+;... tampoane. :... tampone.
+;... timbre. :... marke.
+;... un aparat ras. :... britvicu.
+;... un calmant. :... lijek za bolove.
+;... un dicţionar englez-croat / croat-englez. :... englesko-hrvatski / hrvatsko-engleski riječnik.
+;... un dicţionar român-croat / croat-român. :... rumunsko-hrvatski / hrvatsko-rumunski riječnik.
+;... un medicament pentru dureri de stomac.:... lijek za bolove u trbuhu.
+;... un medicament pentru răceală.:... lijek za prehladu.
+;... un pix / stilou. :... pero.
+;... un ziar în română / engleză. :... novine na rumunskom / engleskom.
+
+=== Conducere auto ===
+
+;Aş vrea să închiriez o maşină. :Želim unajmiti auto.
+;Pot să închei o asigurare? :Mogu li dobiti osiguranje?
+;benzinărie :benzinska crpka
+;benzină :benzin
+;motorină :dizel
+
+==== Inscripţii pe indicatoare şi pe carosabil ====
+
+;spital:Bolnica
+;vamă:CARINA
+;punct de plată ''(pe autostradă)'':CESTARINA
+;stingeţi motorul:GASI MOTOR
+;gara centrală:Gl. kolodvor
+;făgaşuri:Kolotrazi
+;ocolire:Obilazak
+;parcarea _____ ''(pe autostradă)'':Odmorište _____
+;cu excepţia riveranilor:OSIM STANARA
+;zonă pietonală:Pješačka zona
+;gaz:Plin
+;poliţia:POLICIJA
+;rezervat vehiculelor _____:Rezervirano za vozila _____
+;şcoală:ŠKOLA ''(pe carosabil)''
+;patrulă şcolară:Školska patrola
+;tramvai:TRAM ''(pe carosabil)''
+;tren:VLAK ''(pe carosabil)''
+;zonă de protecţie a apelor:Vodozaštitno područje
+;sfârşitul zonei pietonale:Završetak pješačke zone
+
+=== Autorităţi ===
+
+;N-am încălcat legea. :Nisam prekršio ''(masc.)'' / prekršila ''(fem.)'' zakon.
+;E o greşeală. :Radi se o nesporazumu.
+;Unde mă duceţi? :Kamo me odvodite?
+;Sunt arestat(ă)? :Je li sam uhičen(a)?
+;Sunt de cetăţenie română / moldovenească. :Ja sam rumunski / moldavski građanin. ''(masc.)'' / Ja sam rumunska / moldavska građanka. ''(fem.)''
+;Aş vrea să vorbesc cu ambasada / consulatul României / Moldovei. :Želim pričati sa rumunskom / moldavskom poslanstvom / konzulatom.
+;Aş vrea să vorbesc cu un avocat. :Želim pričati s odvjetnikom.
+;Aş putea doar să plătesc o amendă? :Mogu li samo platiti kaznu?
+
+== Pentru a învăţa mai mult ==
+
+*[http://www.hr/hrvatska/language/index.en.htm Ghid de conversaţie englez-croat cu înregistrări sonore]
+*[http://www.travlang.com/languages/cgi-bin/langchoice.cgi Ghid de conversaţie englez-croat cu teste]
+*[http://skeravec.chez-alice.fr Ghid de conversaţie francez-croat cu înregistrări sonore]
+*[http://www.amb-croatie.fr/croatie/dictionnaire.htm Ghid de conversaţie francez-croat]
+*[http://learn-croatian.com Learn-Croatian.com]
+
+[[Categorie:Ghiduri de conversaţie|Croat]]
+
+[[en:Croatian phrasebook]]
+[[fi:Kroatian matkasanakirja]]
+[[fr:Guide linguistique croate]]
+[[hu:Horvát szószedet]]
+[[it:Frasario croato]]
+[[ja:クロアチア語会話集]]
+[[nl:Taalgids Kroatisch]]

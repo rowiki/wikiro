@@ -1,0 +1,3 @@
+'''Charleroi''' este un oraş în [[Belgia]].
+{{IsIn|Belgia}}
+{{ciot}}

@@ -1,0 +1,7 @@
+{{Cutiemesaj|
+id	=PDVN|
+culoarefond =AntiqueWhite|
+imagine	=Stop_hand.png|
+sus	=[[Wikipedia:Punct_de_vedere_neutru|Punctul de vedere neutru]] al acestui articol este [[Dispute PDVN|disputat]].|
+mesaj = Vă rugăm vedeţi părerile exprimate în [[:Discuţie {{NAMESPACE}}:{{PAGENAME}}|discuţie]].}}
+[[Category:Dispute PDVN]]

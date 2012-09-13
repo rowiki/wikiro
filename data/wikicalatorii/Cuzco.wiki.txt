@@ -1,0 +1,3 @@
+'''Cuzco''' este un oraş în [[Peru]].
+{{IsIn|Peru}}
+{{ciot}}

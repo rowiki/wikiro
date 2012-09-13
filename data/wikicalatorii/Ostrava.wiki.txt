@@ -1,0 +1,3 @@
+'''Ostrava''' este un oraş în [[Cehia]].
+{{IsIn|Cehia}}
+{{ciot}}

@@ -1,0 +1,9 @@
+'''Brno''' este un oraş în [[Cehia]].
+{{IsIn|Cehia}}
+{{ciot}}
+
+[[de:Brünn]]
+[[en:Brno]]
+[[fi:Brno]]
+[[ja:ブルノ]]
+[[nl:Brno]]

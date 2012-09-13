@@ -1,0 +1,3 @@
+'''Novi Sad''' este un oraş în [[Voievodina]], [[Serbia şi Muntenegru]].
+{{IsIn|Voievodina}}
+{{ciot}}

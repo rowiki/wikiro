@@ -1,0 +1,31 @@
+'''Irlanda''' este o ţară în [[Europa de Vest]].
+
+==Destinaţii==
+
+*[[Dublin]]
+*[[Cork]]
+*[[Limerick]]
+
+{{IsIn|Europa_de_Vest}}
+{{ciot}}
+
+[[WikiPedia:Irlanda]]
+
+
+
+[[ca:Irlanda]]
+[[de:Irland (Republik)]]
+[[en:Ireland]]
+[[eo:Irlando]]
+[[es:Irlanda]]
+[[fi:Irlanti]]
+[[fr:République d'Irlande]]
+[[hu:Írország]]
+[[it:Irlanda]]
+[[ja:アイルランド]]
+[[nl:Ierland]]
+[[pl:Irlandia]]
+[[pt:Irlanda]]
+[[ru:Ирландия]]
+[[sv:Irland]]
+[[wts:Category:Ireland]]

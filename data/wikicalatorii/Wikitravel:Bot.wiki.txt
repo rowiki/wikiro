@@ -1,0 +1,54 @@
+== Aprobat roboţii ==
+	
+=== Active ===
+
+* [[Utilizator:Tatatabot]] &amp;mdash; update inter-language links.
+
+=== Latente ===
+	
+== Referinte ==
+
+* [[Wikitravel:Bot/Run]]
+* [[Special:Listusers/bot|Lista completă a utilizatorilor cu statutul de robot]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[[ar:Wikitravel:Bot]]
+[[ca:Wikitravel:Bots]]
+[[de:Wikitravel:Regeln für Skripte]]
+[[en:Wikitravel:Script policy]]
+[[eo:Wikitravel:Roboto]]
+[[es:Wikitravel:Bots]]
+[[fi:Wikitravel:Botit]]
+[[fr:Wikitravel:Règles concernant les scripts]]
+[[he:ויקיטיול:Bot]]
+[[hi:विकिट्रैवल:यंत्रमानव]]
+[[hu:Wikitravel:Botok]]
+[[it:Wikitravel:Politica script]]
+[[ja:Wikitravel:スクリプトの基本方針]]
+[[ko:Wikitravel:스크립트 정책]]
+[[nl:Wikitravel:Richtlijnen scripting]]
+[[pl:Wikitravel:Boty]]
+[[pt:Wikitravel:Robôs]]
+[[sv:Wikitravel:Robotar]]
+[[zh:Wikitravel:機器人方針]]
+[[wts:Script policy]]
+
+[[wikipedia:Wikipedia:Bot]]

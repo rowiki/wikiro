@@ -1,0 +1,23 @@
+
+&lt;noinclude>
+* '''x''': (coordinate for horizontal placement of text. Values between 0 and 1) 
+* '''y''': (coordinate for vertical placement of text. Values between 0 and 1) 
+* '''scale''': &lt;nowiki>{{{size|scale of text, given the pixel width of text}}}&lt;/nowiki> 
+* '''text''': Text content&lt;/p>
+&lt;p>, For further text placing info check [http://mujibab.googlepages.com/labelledimageeditor Labelled Image Editor] .&lt;/p>
+{|
+! Code || 
+|-
+|&lt;nowiki>&lt;div style="float: {{{float|none}}}; clear: {{{float|none}}}; position: relative; font-size: 7pt; line-height: 10px;">&lt;/nowiki>&lt;/tt> || 
+|-
+| || 
+|-
+|
+| 
+|-
+|
+| 
+|-
+| || 
+|}
+&lt;/noinclude>

@@ -1,0 +1,527 @@
+'''Germana''' este vorbită ca limbă oficială în [[Germania]], [[Austria]], părţi din [[Elveţia]], [[Liechtenstein]]. Este de asemenea vorbită în departamentul francez [[Alsacia|Alsace]] (germană: ''Elsass''), în provincia [[Italia|italiană]] [[Tirolul de Sud|Alto Adige]] (germană ''Südtirol''), părţi din [[Luxemburg]] şi o mică parte din [[Belgia]].
+
+Ca şi în multe alte limbi europene, există două conjugări ale verbului pentru persoana a II, pentru a exprima felul relaţiei între vorbitor şi ascultător. Dacă eşti familiarizat cu cineva, foloseşte ''du''; dacă relaţia este pur formală, foloseşte ''Sie''. În comparaţie cu limba română, "du" este folosit pentru "tu", iar "Sie" pentru "Dumneavoastră". Dacă vorbeşti cu cineva, pe care-l apelezi cu numele mic foloeşte forma ''du''. Din punct de vedere gramatical, forma ''Sie'' este persoana a III-a plural. (Nu întreba de ce.) În ghidul de conversaţie, prima formă este ''du'', a doua este ''Sie''.
+
+Există trei genuri ale substantivului: feminin, masculin şi neutru. Articolul substantivului depinde de genul său: ''die'' (f), ''der'' (m) şi ''das'' (n).
+
+În plus, limba germană foloseşte declinări pentru substantive. Există patru cazuri gramaticale: nominativ, genitiv, dativ şi acusativ. Fiecare dintre ele depinde de genul şi numărul substantivului.
+
+O particularitate a limbii germane, este că '''toate''' substantivele, chiar şi cele din mijlocul propoziţiei, încep cu literă mare.
+
+Există foarte multe şi foarte diferite dialecte în ţările vorbitoare de germană. Un german din nord şu unul din sud s-ar înţelege foarte greu, dacă ambii şi-ar vorbi dialectele regionale. Binenţeles, toată lumea înţelege limba standard, dar nu toată lumea poate să o vorbească corect. În general, cu cât vi de mai din sud, cu atât înţelegi mai greu dialectul.
+
+Pe linia de coastă din nord, multă lume vorbeşte un dialect numit ''Plattdüütsch''. Unii spun că ar fi o limbă distinctă, de sine stătătoare, apropiată de [[Ghid de conversaţie olandez|olandeză]] şi germană.
+
+Germana vorbită în partea germană a Elveţiei se numeşte ''Schwyyzerdüütsch''.
+
+==Ghid de pronunţie==
+
+În cele mai multe cazuri, pronunţia germană nu este vagă, dacă urmăreşti câteva reguli. Invers, să ştii cum se scrie un cuvânt când îl auzi, este ceva mai mult de lucru.
+
+===Vocale===
+Vocalele germane sunt vorbite asemănător în mai toate regiunile.
+
+; a : ca şi 'a' în "masă"
+; e : ca şi 'e' în "tren"
+; i : ca şi 'i' în "bingo"
+; o : ca şi 'o' în "dor"
+; u : ca şi 'u' în "tu"
+; ä : ca şi 'e' în "tren"
+; ö : ca şi 'oe'
+; ü : ca şi 'u' 
+; y : ca şi 'iu' în "ciuc" (la fel ca 'ü')
+
+===Lungirea vocalelor===
+O vocală este mai scurtă dacă urmează un dublet de consoană. Asta se întămplă doar din cauza dubletului.
+
+Pe de altă parte, dacă urmează un 'h', acesta nu este pronunţat, dar lungeşte vocala. O mică excepţie este 'i', care este lungit prin adăugarea lui 'e' sau a grupului 'eh'. Deci, ''h''-ul în ''Hahr'' face pe ''a''-ul mai lung ''e''-ul din ''Tier'' face ''i''-ul mai lung. (Vezi "Diftongi" mai jos.)
+
+===Consoane===
+
+Consoanele tind să fie pronunţate destul de tare (probabil cu excepţia lui 'r').
+
+; b : ca şi 'b' în "bară"
+; c : ca şi 'ţ' în ţară înainte de 'i' şi 'e'; va şi 'c' în "cameră" altfel
+; d : ca şi 'd' în "dinte"
+; f : ca şi 'f' în "fotoliu"
+; g : ca şi 'g' în "gang"
+; h : ca şi 'h' în "hamster"
+; j : ca şi 'i' în "iobag"
+; k : ca şi 'c' in "cameră"
+; l : ca şi 'l' in "liţă"
+; m : ca şi 'm' in "mamă"
+; n : ca şi 'n' in "niţă"
+; p : ca şi 'p' in "porc"
+; q : ca şi 'q' in "quantum" (urmat de "u", aproape întodeauna)
+; r : ca şi 'r' în "rob", dar nu atât de tare, 'r' în "Arm" se pronunţă mai încet
+; s : ca şi 'z' în "zarzavat"
+; t : ca şi 't' în "top"
+; v : ca şi 'f' în "fată" 
+; w : ca şi 'v' în "victorie"
+; x : ca şi 'x' în "xilofon"
+; z : ca şi 'ţ' în ţară
+; ß : ca şi 's' în "sirop"
+
+===Diftongi uzuali şi legaturi===
+
+; au : ca şi 'au' în "miau"
+; ae : transcriere pentru 'ä' dacă nu este disponibilă tastatura germană
+; ah : ca şi 'a' în "bar", mai lug decât 'a'.
+; äu : ca şi 'oi' în "căsoi"
+
+; ei : ca şi 'ai' în "mai"
+; eu : ca şi 'oi' în "căsoi"
+; eh : 'e' lung
+
+; ie : ca şi 'ii' în "copii", mai lung decât 'i'.
+; ieh : la fel ca 'ie'.
+
+; oe : transcrierea lui 'ö' în lipsa tastaturii germane
+; oh : ca şi 'oo' în "alcool", mai lung decât 'o'.
+
+; ue : transcrierea lui 'ü' în lipsa tastaturii germane
+; uh : ca şi 'u' în "mult", mai lung ca 'u'.
+
+; ch după 'a', 'o' şi 'u: ca şi 'h' în "hartă"
+; ch după 'i' şi 'e': între 'h' din "hartă" şi 'ş' din "şiret", ca şi 'ci(â)' în "ciumă"
+; ch la începutul cuvântului: ca şi 'c' în "caracter"
+; ck : ca şi 'cc' în "accident"
+; ng : ca şi 'ng' în "împung"
+; ph : ca şi 'f' în "faţă"
+; sch : ca şi 'ş' în "şiret"
+; sp la începutul cuvântului: ca şi 'şp' în "şpriţ"
+; ss : ca şi 's' în "vis", spre deosebire de 'ß', scuretează vocale pe care o succede. Folosit şi pentru transcrierea lui 'ß' în lipsa tastaturii germane
+; st la începutul cuvântului: ca şi 'şt' în "şterge"
+
+==Listă de fraze uzuale==
+
+===De bază===
+
+; Salut. Alo. : Hallo. (''Halo'')
+; Bună. (''informal'') : Hi. (''HAI'')
+; Ce mai faci? / Ce mai faceţi?: Wie geht's? (''Vii ghets?'')&lt;br>NOTĂ: ''În germană, asta este chiar o întrebare, nu doar o formă de salutare. Deci, mai bine rămâneţi la 'Hallo' ''.
+; Bine, mulţumesc. : Danke, gut. (''Danche, gut'')
+; Cum te cheamă? : Wie heißt du? / Wie heißen Sie? (''Vii haist du?'' / ''Vii haisăn Zii?'')
+; Numele meu este ______ . : Ich heiße ______ . (''Ihi haise _____ .'')
+; Încântat de cunoştiinţă. : Sehr angenehm. (''Zer anghenem'')&lt;br>NOTĂ: ''Mai degrabă în utilizarea formală a limbii.''
+; Te rog / Vă rog. : Bitte. (''Bitte'')
+; Mulţumesc. : Danke. (''Danche'')
+; Cu plăcere. : Bitte. (''Bitte'')
+; Da. : Ja. (''Ia'')
+; Nu. : Nein. (''Nain'')
+; Scuză-mă / Scuzaţi-mă. (''captarea atenţiei'') : Entschuldigung. (''Entşuldigung'')
+; Scuză-mă / Scuzaţi-mă. (''pardon'') : Entschuldigung. (''Entşuldigung'')
+; Îmi pare rău. : Tut mir Leid. (''Tut mir laid'')
+; La revedere : Auf Wiedersehen. (''Auf Viiderzeeăn.'')
+; Pa (''informal'') : Tschüß. (''Cius'')
+; Nu vobesc [bine] germana. : Ich kann nicht [so gut] deutsch. (''IŞ can niŞt  [zo gut] doitş'')
+; Vorbiţi româna? : Sprichst du / Sprechen Sie rumänisch? (''Şprihst du / Şprehăn zII RU-me-niŞ?'')
+; Vorbeşte cineva de aici româna? Kann hier jemand rumänisch? (''Can hir iemand rumeniş?'')
+; Ajutor! : Hilfe! (''Hilfe!'')
+; Bună dimineaţa. : Guten Morgen. (''Gutăn Morghen'')
+; Bună seara. : Guten Abend. (''Gutăn Abănd'')
+; Noapte bună. : Gute Nacht. (''Gute Naht'')
+; Nu înţeleg. : Ich verstehe es nicht. (''IŞ fărŞtee niŞt'')
+; Unde este baia? : Wo ist die Toilette? (''Vo ist di toalette?'')
+
+===Probleme===
+
+; Lasă-mă în pace. : Lass / Lassen Sie mich in Ruhe . (''Las / Lasăn Zii miŞ in Ruee'')
+; Nu mă atinge / atingeţi! : Fass / Fassen Sie mich nicht an! (''Fas / Fasăn Zii miŞ niŞt an'')
+; Chem poliţia. : Ich rufe die Polizei. (''Ih rufe dii Poliţai'') 
+; Poliţia! : Polizei! (''Poliţai!'')
+; Stai! Hoţ! : Halt! Ein Dieb! (''Halt! Ain Diib!'')
+; Am nevoie de ajutor. : Ich brauche deine/Ihre Hilfe. (''IŞ brauhe daine / Ire Hilfe'') 
+; Este o urgenţă. : Das ist ein Notfall. (''Das ist Ain Notfal'')
+; M-am pierdut. : Ich habe mich verirrt. (''IŞ habe miŞ fărirt'')
+; Mi-am pierdut bagajele. : Ich habe meine Tasche verloren. (''IŞ habe maine Taşe fărloren'')
+; Mi-am pierdut portmoneul. : Ich habe mein Portemonnaie verloren. (''...IŞ habe main portmonéh fărloren'')&lt;br>Notă: Portmonnaie ''este de origine franceză, dar folosit în germană.''
+; Sunt bolnav. : Ich bin krank. (''IŞ bin cranc'')
+; Sunt rănit. : Ich bin verletzt. (''IŞ bin fărleţt'')
+; Am nevoie de un doctor. : Ich brauche einen Arzt. (''IŞ brauhe ainăn Arţt'')
+; Pot să folosesc telefonul tău / dvs.? : Kann ich dein/Ihr Telefon benutzen? (''Can iŞ dain / Ir Telefon benuţăn'')
+
+===Numere===
+
+; 1 : eins (''ains'')
+; 2 : zwei (''ţvai'')
+; 3 : drei (''drai'')
+; 4 : vier (''fir'')
+; 5 : fünf (''fiunf'')
+; 6 : sechs (''zex'')
+; 7 : sieben (''ziiben'')
+; 8 : acht (''aht'')
+; 9 : neun (''noin'')
+; 10 : zehn (''ţen'')
+; 11 : elf (''elf'')
+; 12 : zwölf (''zvoelf'')
+; 13 : dreizehn (''draiţen'')
+; 14 : vierzehn (''firţen'')
+; 15 : fünfzehn (''fiunfţen'')
+; 16 : sechzehn (''zexţen'')
+; 17 : siebzehn (''zibţen'')
+; 18 : achtzehn (''ahtţen'')
+; 19 : neunzehn (''noinţen'')
+; 20 : zwanzig (''ţvanţig'')
+; 21 : einundzwanzig (''ain und ţvanţig'')
+; 22 : zweiundzwanzig (''ţvei und ţvanţig'')
+; 23 : dreiundzwanzig (''drai und ţvanţig'')
+; 30 : dreißig (''draisih'')
+; 40 : vierzig (''firţih'')
+; 50 : fünfzig (''fiunfţih'')
+; 60 : sechzig (''zexţih'')
+; 70 : siebzig (''zibţih'')
+; 80 : achtzig (''ahtţih'')
+; 90 : neunzig (''noinţih'')
+; 100 : (ein)hundert (''hundărt'')
+; 200 : zweihundert (''ţvei hundărt'')
+; 300 : dreihundert (''drai hundărt'')
+; 1000 : (ein)tausend (''tauzănd'')
+; 2000 : zweitausend (''ţvai tauzănd'')
+; 1.000.000 : eine Million (''aine milion'')
+; 1.000.000.000 : eine Milliarde (''aine miliarde'')
+; 1.000.000.000.000 : eine Billion (''aine bilion'')
+; numărul _____ (''tren, autobuz, etc.'') : Nummer _____ (''număr'')
+; jumătate : halb (''halb'')
+; jumătatea : die Hälfte (''dii helfte'')
+; mai puţin : weniger (''venigăr'')
+; mai mult : mehr (''mer'')
+
+===Timp===
+
+; acum : jetzt (''ieţt'')
+; mai târziu : später (''spetăr'')
+; înainte : vor (''for'')
+; dimineaţă : Morgen (''morgăn'')
+; dimineaţa : morgens (''morgăns'')
+; mâine dimineaţă : morgen früh (''morgăn friu'')
+; după-amiază : Nachmittag (''nahmittag'')
+; după-amiaza : nachmittags (''nahmittags'')
+; seară : Abend (''abănd'')
+; seara : abends (''abănds'')
+; noapte : Nacht (''naht'')
+; noaptea : nachts (''nahts'')
+
+====Ceasul====
+
+; ora unu : ein Uhr (''ain Ur'')
+; ora două : 2 Uhr (''ţvei Ur'')
+; prânz : 12 Uhr ''sau'' Mittag (''ţvoelf Ur'' sau ''Mittag'')
+; ora treisprezece : 13 Uhr (''draiţen Ur'')
+; ora paisprezece : 14 Uhr (''firţen Ur'')
+; miez de nopţii : Mitternacht ''sau'' 0 Uhr ''sau'' 24 Uhr (''mittărnaht'' sau ''nul Ur'' sau ''firundţvanţih Ur'')
+
+====Durată====
+
+; _____ minut(e) : _____ Minute(n) (''Minute (Minutăn)'')
+; _____ oră(ore) : _____ Stunde(n) (''Ştunde (Ştundăn)'')
+; _____ zi(le) : _____ Tag(e) (''Tag(e)'')
+; _____ săptămână(săptămâni) : _____ Woche(n) (''Vohe (Vohăn)'')
+; _____ lună(luni) : _____ Monat(e) (''Monat (Monate)'')
+; _____ an(i) : _____ Jahr(e) (''Iar(e)'')
+
+====Zile====
+
+; astăzi : heute (''hoi-te'')
+; ieri : gestern (''GES-tàrn'')
+; mâine : morgen (''MOR-găn'')
+; săptămâna aceasta : diese Woche (''DII-ze VO-he'')
+; ultima săptămână : letzte Woche (''LEŢ-te VO-he'')
+; săptămâna următoare : nächste Woche (''NEX-te VO-he'')
+
+; Luni : Montag (''MON-tak'')
+; Marţi : Dienstag (''DIINS-tak'')
+; Miercuri : Mittwoch (''MIT-voh'')
+; Joi : Donnerstag (''DO-nărs-tak'')
+; Vineri : Freitag (''FRAI-tak'')
+; Sâmbătă : Samstag (''ZAMS-tak'')
+; Duminică : Sonntag (''ZON-tac'')
+
+====Luni====
+
+; Ianuarie : Januar (''Ianuar'')
+; Februarie : Februar (''Februar'')
+; Martie : März (''Merţ'')
+; Aprilie : April (''April'')
+; Mai : Mai (''Mai'')
+; Iunie : Juni (''Iuni'')
+; Iulie : July (''Iuli'')
+; August : August (''August'')
+; Septembrie : September (''Zeptembăr'')
+; Octombrie : Oktober (''Octobăr'')
+; Noiembrie : November (''Novembăr'')
+; Decembrie : Dezember (''Deţembăr'')
+
+===Scrierea ceasului şi a datei===
+
+Data şi ceasul se scriu exact în aceaşi formă ca şi în română, lucru care se întâmplă şi în multe alte limbi europene. De exemplu, data şi timpul se scrie:
+
+*24. Aug 2004, 15.30 (''notaţi punctul după numărul 24'')
+
+===Culori===
+
+; negru : schwarz (''şvarţ'')
+; alb : weiß (''vais'')
+; gri : grau (''grau'')
+; roşu : rot (''rot'')
+; albastru : blau (''blau'')
+; galben : gelb (''gelb'')
+; verde : grün (''griun'')
+; portocaliu : orange (''o-RANJ'')
+; roz : rosa (''RO-za'')
+; maro : braun (''braun'')
+
+===Transport===
+
+====Autobuz şi tren====
+; Cât costă biletul spre _____? (autobuz, tren) : Wieviel kostet eine Fahrkarte nach _____? (''Vifiil costăt aine Farcarte nah _____'')
+; Cât costă un bilet spre _____? (avion) : Wieviel kostet ein Ticket nach _____? (''Vifiil costăt ain Tichet nah _____'')
+; Un bilet până la _______, vă rog. : Bitte eine Fahrkarte nach _____. (''Bitte aine Farcarte nah _____.'')
+; Unde merge acest tren/autobuz? : Wohin fährt dieser Zug/Bus? (''Vohin fert diizăr Ţug/Bus?'')
+; Unde este trenul/autobuzul spre _____? : Wo ist der Zug/Bus nach _____? (''Vo ist der Ţug/Bus nah _____?'')
+; Opreşte acest tren/autobuz în _____? : Hält dieser Zug/Bus in _____? (''Helt diizăr Ţug/Bus in _____?'')
+; Când pleacă acest tren/autobuz la _____? : Wann fährt der Zug/Bus nach _____ ab? (''Van fert der Ţug/Bus nah _____?'')
+; La ce oră ajunge acest tren/autobuz în _____? : Wann kommt dieser Zug/Bus in _____ an? (''Van comt diizer Ţug/Bus in _____ an?'')
+
+====Direcţii====
+; Cum ajung la _____ ? (oraşe) : Wie komme ich nach _____ ? (''Vii come iŞ nah _____ ?'')
+; Cum ajung la _____ ? (locuri, străzi) : Wie komme ich zu _____ ? (''Vii come iŞ ţu  _____ ?'')
+; ...gară? : ...der Bahnhof? (''der Banhof?'')
+; ...staţia de autobuz? : ...die Bushaltestelle? (''dii Bushalteştele?'')
+; ...aeroport? : ...der Flughafen? (''der Flughafăn?'')
+; ...centru? : ...Stadtmitte? (''...'')
+; ...căminul pentru tineri? : ...die Jugendherberge? (''dii Iugănherberge?'')
+; ...hotelul  _____ ? : ...das _____ Hotel? (''das _____ Hotel'')
+; ...consulatul Român/Moldovean? : ...das ____ Konsulat? (''das _____ Consulat?'')
+; Unde se află multe... : Wo gibt es viele... (?) (''Vo gibt es file...?'')
+; ...hoteluri? : ...Hotels? (''Hotels?'')
+; ...restaurante? : ...Restaurants? (''Restorants?'')
+; ...cluburi de noapte?: ...Bars? (''Bars?'')
+; ...cluburi?: ...Kneipen? (''Cnaipăn?'')
+; ...atracţii turistice? : ...Sehenswürdigkeiten? (''Zeănsviurdihcaităn?'')
+; Poţi / Puteţi să-mi arătaţi pe hartă: Kannst du / Können Sie mir das auf der Karte zeigen? (''Canst du / Kionăn Zii mir das auf der Carte ţaigăn'')
+; stradă : Straße (''Ştrase'')
+; La stânga. : Links abbiegen. (''Linx abbiigăn.'')
+; La dreapta. : Rechts abbiegen. (''Rehţ abbiigăn.'')
+; stânga : links (''linx'')
+; dreapta : rechts (''rehţ'')
+; înainte : geradeaus (''gheradeaus'')
+; spre _____ : Richtung _____ (''Rihtung'')
+; după _____ : nach dem(m)/der(f)/dem(n) _____ (''nah dem(m) / der(f) / dem(n)_____'')
+; înainte de _____ : vor dem(m)/der(f)/dem(n) _____ (''for dem(m) / der(f) / dem(n)_____'')
+; Atenţie la _____. : Achte/Achten Sie auf den(m)/die(f)/das(n) _____. (''Ahte / Ahtăn Zii auf den(m) / die(f) / das(n) _____.'')
+; intersecţie : Kreuzung (''Croiţung'')
+; nord : Norden (''Nordăn'')
+; sud : Süden (''Siudăn'')
+; est : Osten (''Ostăn'')
+; vest : Westen (''Vestăn'')
+; în sus : bergauf (''bergauf'')
+; în jos : bergab (''bergap'')
+
+====Taxi====
+; Taxi! : Taxi! (''Taxi!'')
+; Duceţi-mă la _____, vă rog. : Bitte bringen Sie mich zu/nach _____. (''Bitte bringen Zii mih ţu / nah _____.'')
+&lt;br>Notă: ''Folosiţi'' 'zu' pentru străzi şi locuri şi 'nach' pentru oraşe şi sate.''
+; Cât costă până la _____? : Wieviel kostet es zu/nach _____? (''Viifil costăt es ţu / nah _____?'')
+; Duceţi-mă acolo, vă rog. : Bringen Sie mich bitte dahin. (''Bringen Zii mih bitte dahin.'')
+
+===Gazdă===
+
+; Aveţi câteva camere disponibile? : Sind noch Zimmer frei? (''Zind noh Ţimer frai?'')
+; Cât costă o cameră pentru o persoană/două persoane? : Wieviel kostet ein Einzelzimmer/Doppelzimmer? (''Vifiil costăt ain Ainţălţimer/Dopălţimăr...'')
+; Are camera... : Hat das Zimmer... (''Hat da Ţimăr...'')
+; ...cearşafuri? : ...Bettlaken?  (''Betlakăn?'')
+
+; ...o baie? (toaletă): ...eine Toilette? (''aine Toilete'')
+; ...un duş? (shower): ...eine Dusche? (''aine Duşe'')
+; ...un telefon? : ...ein Telefon? (''ain Telefon'')
+; ...un TV? : ...einen Fernseher? (''ainăn Fernzehăr'')
+; Pot să văd camera mai întâi? : Kann ich das Zimmer zuerst sehen? (''Can iŞ das Ţimăr ţuerst zehăn?'')
+; Aveţi ceva mai liniştit? : Haben Sie etwas ruhigeres? (''Hanăn Zii etvas ru-i-găs'')
+; ...mai mare? : ...größeres? (''groesărăs'')
+; ...mai curat? : ...sauberes? (''zaubărăs'')
+; ...mai ieftin? : ...billigeres? (''biligărăs'')
+; OK, o iau. : OK, ich nehme es. (''Ochei, iŞ neme es.'') 
+; Voi sta _____ noapte (nopţi). : Ich bleibe eine Nacht (_____ Nächte). (''IŞ blaibe aine Naht (_____ Nehte).'')&lt;br>Notă: ''Plural pentru'' 'Nacht' ''este'' 'Nächte' ''.''
+; Puteţi să-mi sugeraţi un alt hotel? : Können Sie mir ein anderes Hotel empfehlen? (''Coenăn Zii mir ain andărăs Hotel empfelăn?'')
+; Aveţi un seif? : Haben Sie einen Safe? (''Habăn Zii ainăn Zafe?'')
+; ...vestiare? : ...Schließfächer? (''Şliisfehăr?'')
+; Este inclus micul-dejun/cina? : Ist Frühstück/Abendessen inklusive? (''Ist Friuştiuc / Abăndesăn?'')
+
+; La ce oră este micul-dejun /cina? : Wann gibt es Frühstück/Abendessen? (''Van gibt es Friuştiuc / Abăndesăn?'')
+; Vă rog să-mi curăţaţi camera. : Würden sie bitte mein Zimmer sauber machen. (''Viurdăn Zii bitte main Ţimăr zaubăr mahăn?'')
+; Mă puteţi trezi la _____? : Können Sie mich um _____ Uhr wecken? (''Coenăn Zii miş um _____ Ur vecăn?'')
+; Vreau să plec. : Ich möchte gehen. (''IŞ moehte gheăn.'')
+
+===Bani===
+
+; Acceptaţi lei româneşti / moldoveneşti? : Nehmen Sie rumänische / moldawische lei? (''Nemăn Zii rumenişe / moldavişe lei?'')
+; Acceptaţi cărţi de credit? : Kann ich mit Kreditkarte zahlen? (''Can iŞ mit Creditcarte ţalăn?'')
+; Puteţi să-mi schimbaţi nişte bani? : Können Sie für mich Geld wechseln? (''Coenăn Zii fiur miŞ geld vecsăln?'')
+; Unde pot să schimbi bani? : Wo kann ich Geld wechseln? (''Vo can iŞ geld vecsăln?'')
+; Puteţi să-mi schimbaţi un cec de călătorie? : Kann ich hier Traveler-Schecks einlösen? (''Can iŞ hiir Trevelăr-Şecs ainloesăn?'')
+; Unde pot să schimb un cec de călătorie? : Wo kann ich Traveler-Schecks tauschen? (''Vo can iŞ Trevelăr-Şecs tauşăn?'')
+; Care este rata de schimb? : Was ist der Wechselkurs? (''Vas ist der Vecsălcurs?'')
+; Unde este un bancomat (ATM)? : Wo ist ein Geldautomat? (''Vo ist ain Geldautomat?'')
+
+===Mâncare===
+
+; O masă pentru o persoană/doi oameni, vă rog. : Ein Tisch für eine Person/zwei Personen, bitte. (''Ain tiŞ fiur aine perzon/ţvai perzonăn, bitte.'')
+; Pot să văd meniul, vă rog? : Ich hätte gerne die Speisekarte? (''IŞ hete gherne di Şpaizecarte?'')
+; Aveţi o specialitate a casei? : Gibt es eine Spezialität des Hauses? (''Gibt es aine Şpeţialitet des Hauzăs?'')
+; Există o specialitate locală? : Gibt es eine Spezialität aus dieser Gegend? (''Gibt es aine Şpeţialitet au diezăr Gegănd?'')
+; Sunt vegetarian. : Ich bin Vegetarier. (''IŞ bin Veghetariăr.'')
+; Nu mănânc porc. : Ich esse kein Schweinefleisch. (''IŞ ese kain Şvainflaiş'')
+; Nu mănânc decât cuşer. : Ich esse nur koscher. (''IŞ ese nur cuşer.'')
+; Puteţi să îl/o faceţi mai puţin gras(ă)? : Könnten Sie es bitte nicht so fett machen? (''Coentăn Zii es bitte niht zo fet mahăn?'')
+; meniul zilei : Tagesessen (''Tagăsesen'')
+; a la carte : a la carte (''...'')
+; mic-dejun : Frühstück (''Friuştiuc'')
+; pachet : Lunch ''sau'' zweites Frühstück (''Lunci'' '''''sau''''' ''Friuştiuc'')
+; cafea : Kaffee (''Cafee'')
+; mâncare de prânz : Mittagessen (''Mittagesăn'')
+; Aş vrea _____. : Ich möchte _____. (''IŞ moechte _____.'')
+; Vreau de mâncare cu ____ : Ich möchte etwas mit ____ (''IŞ moechte etwas mit ____'')
+; pui : Huhn (''Hun'')
+; carne de vită : Rindfleisch (''Rindfleiş'')
+; peşte : Fisch (''Fiş'')
+; şuncă : Schinken (''Şincăn'')
+; crenvuşti : Wurst (''Vurst'')
+; brânză : Käse (''Cheze'')
+; ouă : Eier (''Aiăr'')
+; salată : Salat (''Zalat'')
+; legume (proaspete) : (frisches) Gemüse (''(frişăs) Gemiuze'')
+; fructe (proaspete) : (frisches) Obst (''(frişăs) Obst'')
+; pâine : Brot (''Brot'')
+; pâine prăjită : Toast (''Toast'')
+; găluşte : Nudeln (''Nudăln'')
+; orez : Reis (''Rais'')
+; fasole : Bohnen (''Bonăn'')
+; Îmi aduceţi un pahar de _____? : Könnte ich ein Glas _____ haben? (''Coente iŞ ain Glas _____ habăn?'')
+; Îmi aduceţi o cană cu _____? : Könnte ich eine Tasse _____ haben? (''Coente iŞ aine Tase _____ habăn'')
+; Îmi aduceţi o sticlă de _____? : Könnte ich eine Flasche _____ haben? (''Coente iŞ aine Flaşe _____ habăn?'')
+; cafea : Kaffee (''Cafee'')
+; ceai : Tee (''Tee'')
+; suc : Saft (''Saft'')
+; apă minerală : Mineralwasser ''sau'' Sprudel(-wasser) (''Mineralvasăr'' '''''sau''''' ''Şprudăl'')
+; apă (plată): Leitungswasser (''Laitungsvasăr'')
+; bere : Bier (''Biir'')&lt;br>Notă: ''Măcar în Germania şi Austria, ar trebui să menţionaţi ce fel de bere vă trebuie. Există:'' Export ('Lager' ''în Elveţia''), Pils, Hefeweizen ('Weißbier' ''în Bavaria''), dunkels Hefeweizen, Alt (''în Rheinland''), Kölsch ("în Köln"), Bockbier (''câteodată în sudul Germaniei'').
+; vin roşu/alb : Rot-/Weiß-wein (''Rot-/Vais-vain'')
+; Îmi daţi puţin(ă) _____? : Kann ich etwas _____ haben? (''Can iŞ etwas _____ habăn?'')
+; sare : Salz (''Salţ'')
+; piper : Pfeffer (''Pfefăr'')
+; unt : Butter (''buttăr'')
+; Mă scuzaţi, ospătar! (''captarea atenţiei chelnerilor''): Entschuldigung! (''Entşuldigug!'')
+; Am terminat. : Ich bin fertig. (''IŞ bin fertig.'')
+; A fost delicios. : Es war hervorragend. (''Es var herfor-ragănd.'')
+; Vă rog luaţi farfuriile. : Würden Sie bitte abräumen? (''Viurdăn Zii bitte abroimăn'')
+; Nota, vă rog. : Die Rechnung, bitte. (''Dii Rehnung, bitte.'')
+
+===Baruri===
+
+; Serviţi alcool? : Haben Sie alkoholische Getränke? (''Habăn Zii alcoolişe Getrenche?'')
+; Este cu servire la masă? : Kommt eine Bedienung zum Tisch? (''Comt aine Bediinung ţum Tiş?'')
+; O bere/două beri, vă rog. : Ein Bier/zwei Bier, bitte. (''Ain Biir/ţvai Biir, bitte'')&lt;br>Notă: ''Măcar în Germania şi Austria, ar trebui să menţionaţi ce fel de bere vă trebuie. Există:'' Export ('Lager' ''în Elveţia''), Pils, Hefeweizen ('Weißbier' ''în Bavaria''), dunkels Hefeweizen, Alt (''în Rheinland''), Kölsch ("în Köln"), Bockbier (''câteodată în sudul Germaniei'').
+; Un pahar de vin roşu/alb, vă rog. : Ein Glas Rot-/Weißwein, bitte. (''Ain Glas Rot-/Vaisvein, bitte'')
+; Un sfert/O optime de vin roşu, vă rog. : Ein Viertel/Achtel Rotwein, bitte. (''Ain Fiirtăl/Ahtăl Rotvain, bitte'')&lt;br>Notă: Este un obicei comandarea vinului la sfert sau optime (dintr-un litru).
+; O bere mică/mare, vă rog: Ein großes/kleines Bier, bitte. (''Ain grosăs/clainăs Biir, bitte'')
+; La jumătate, vă rog. (o halbă de bere): Eine Halbe, bitte. (''Aine Halbe, bitte'')&lt;br>Notă: ''Probabil, acest lucru nu va fi înţeles în nordul Germaniei.''
+; O sticlă, vă rog. : Eine Flasche, bitte. (''Aine Flaşe, bitte'')
+; Un cola cu rom, vă rog. : Bitte eine Cola mit Rum. (''Bitte aine Cola mit Rum'')&lt;br>Notă: ''În germană, la fel ca în română produsul în care se toarnă aroma, este pus pe primul loc.''
+; whiskey : Whiskey (''Uiski'')
+; vodka : Wodka (''Vodca'')
+; rom : Rum (''Rum'')
+; apă : Wasser (''Vasăr'')
+; suc de club : ??? (''...'')
+; apă tonică : tonic water (''tonic uatăr'')
+; suc de portocale : Orangensaft ''sau doar'' O-Saft (''Oranjănzaft'' '''sau''' ''O-Zaft'')
+; Cola (''suc'') : Cola (''Cola'')
+; Aveţi cumva ceva gustări? : Haben Sie irgendwelche Snacks? (''Habăn Zii irgăndvelhe Snecs?'')
+; Încă unul(m)/una(f), vă rog. : Noch einen(m)/eine(f)/eins(n), bitte. (''Noh ainăm(m)/aine(f)/ains(n), bitte'')
+; Încă un rând, vă rog. : Noch eine Runde, bitte. (''Noh aine Runde, bitte'')
+; Când se închide? : Wann schließen Sie? (''Van şliisăn Zii?'')
+
+===Cumpărături===
+
+; Aveţi aşa ceva, mărimea mea? : Haben Sie das in meiner Größe? (''Habăn Zii das in mainăr Groese?'')
+; Cât costă? : Was kostet das? (''Vas kostăt das?'')
+; E prea scump. : Das ist zu teuer. (''Das ist ţu toiăr'')
+; Acceptaţi _____? : Nehmen Sie _____? (''Nemăn Zii _____?'')
+; scump : teuer (''toiăr'')
+; ieftin : billig / günstig (''bilih / giunstih'')
+; Nu-mi permit. : Ich kann es mir nicht leisten. (''IŞ can es mir niht laistăn'')
+; Nu-l/N-o vreau. : Ich will es nicht. (''IŞ vil es niht'')
+; Ştiu că acesta nu este preţul normal. : Ich weiß, dass das nicht der normale Preis ist. (''IŞ vais, das das niht der normale Prais ist'')
+; Mă înşelaţi. : Sie wollen mich abzocken. (''Zii volăn mih abţocăn'')&lt;br>Notă: ''De fapt, traducerea ar fi:'' Sie betrügen mich. ''Dar sună prea dur. Cuvântul'' abzocken ''este mai degrabă familiar.''
+; Nu mă interesează. : Ich bin nicht daran interessiert. (''IŞ bin niht daran interesiirt'')
+; OK, îl/o iau. : OK, ich nehme es. (''OK, IŞ neme es'')
+; Îmi daţi o pungă? : Kann ich eine Tüte haben? (''Can iŞ aine Tiute habăn?'')
+; Expediaţi (în străinătate)? : Versenden Sie auch (nach Übersee)? (''Verzendăn Zii auh (nah Ueberze)?'')
+; Am nevoie de ... : Ich brauche ... (''IŞ brauhe ...'')
+; ...pastă de dinţi. : ...Zahnpasta. (''...Ţanpasta'')
+; ...o periuţă de dinţi. : ...eine Zahnbürste. (''...aine Ţan briuste'')
+; ...tampoane. : ...Tampons. (''...Tampons'')
+; ...săpun. : ...Seife. (''...Zaife'')
+; ...şampon. : ...Shampoo. (''...Şampu'') 
+; ...ceva pentru dureri. (''ex. aspirină sau nurofen'') : ...Schmerzmittel. (''...Şmerţmităl'')&lt;br>Notă: ''Medicamente găsiţi doar în farmacii''
+; ...ceva pentru răceală. : ...etwas gegen Erkältung. (''...etvas gegpn Ercheltung'')
+; ...tablete pentru stomac. : ....Magentabletten (''...Magpntabletăn'')
+; ...un brici. : ...ein Rasierer. (''...ain Raziirăr'')
+; ...o lamă. (de ras): ...eine Rasierklinge. (''...aine Taziirclinge'')
+; ...o umbrelă. : ...ein Regenschirm. (''ain Regănşirm'')
+; ...loţiune de plajă. : ...Sonnencreme. (''...Zonăncreme'')
+; ...o vedere. : ...eine Postkarte. (''...aine Postcarte'')
+; ...timbre. : ...Briefmarken. (''...Briifmarcăn'')
+; ...baterii. : ...Batterien. (''...Bateriăn'')
+; ...hârtie pentru scris. : ...Schreibpapier. (''...Şraibpapiir'')
+; ...un pix. : ...ein Stift. (''...ain Ştift'')
+; ...cărţi în română. : ...rumänischsprachige Bücher. (''...rumeniş-şprahige Biuhăr'')
+; ...reviste în română. : ...rumänischsprachige Zeitschriften. (''...rumeniş-şprahige Ţaitşriftăn'')
+
+; ...un ziar în română. : ...eine rumänischsprachige Zeitung. (''...aine rumeniş-şprahige Ţaitung'')
+; ...un dicţionar român-german. : ...ein Rumänisch-Deutsch Wörterbuch. (''...ain Rumeniş-Doitş Voertărbuh'')
+
+===Maşini===
+
+; Vreau să închiriez o maşină. : Ich möchte ein Auto leihen. (''IŞ moehte ain Auto laiăn'')
+; Primesc asigurare? : Kann ich es versichern? (''Can IŞ es fărziihărn?'')
+; stop (''semn de circulaţie'') : stop (''stop'')
+; sens unic : Einbahnstraße (''Ainbanştrase'')
+; a da prioritate : Vorfahrt gewähren (''Forfart gheverăn'')
+; parcarea interzisă : Parkverbot (''Parcvărbot'')
+; limită de viteză : Geschwindigkeitsbeschränkung (''Geşvindihcaits-beşrencung'')
+; benzinărie : Tankstelle (''Tancştele'')
+; benzină : Benzin (''Benţin')
+; motorină : Diesel (''Diizăl'')
+
+===Autoritate===
+
+; N-am făcut nimic. : Ich habe nichts getan. (''iŞ HAbe nihts geTAN'')
+; A fost o neînţelegere. : Das war ein Missverständnis. (''Das var ain mis-văr-STEND-nis'')
+; Unde mă duceţi? : Wohin bringen Sie mich? (''vohin bringăn Zii mih?'')
+; Sunt arestat? : Bin ich verhaftet? (''BIN iŞ vărhaftăt'')
+; Sunt un cetăţean român/moldovean. : Ich bin rumänischer/moldawisher Staatsbürger. (''IŞ bin rumenişăr / moldavişăr Ştatsbiurgăr'')
+; Vreau să vorbesc cu ambasada/consulatul român/moldovean. : Ich will die rumänische/moldawisch Botschaft / das rumänische/moldawische Konsulat sprechen. (''IŞ vil dii rumenişe/moldavişe Botşaft / das rumenişe/moldavişe Consulat sprehăn'')
+; Vreau să consult un avocat. : Ich will mit einem Anwalt sprechen. (''IŞ vil mit ainăm Anvalt sprehăn'')
+; Pot doar să plătesc o amendă acum? : Kann ich jetzt einfach die Strafe zahlen? (''Can IŞ ieţt ainfah dii Ştrafe beţalăn?'')
+
+==Învăţând mai mult==
+
+*[http://www.dwelle.de/romanian/sprachkurs.html Cursuri de germană pe Deutschewelle (în română)]
+*[http://en.wikibooks.org/wiki/German Curs de germană în stil wiki (în engleză)]
+
+[[WikiPedia:Limba germană]]
+
+
+
+
+
+[[en:German phrasebook]]
+[[fr:Guide linguistique allemand]]
+[[hu:Német szószedet]]
+[[it:Frasario tedesco]]
+[[ja:ドイツ語会話集]]
+[[pl:Rozmówki niemieckie]]
+[[pt:Guia de conversação alemão]]
+[[ru:Немецкий разговорник]]
+[[sv:Tysk parlör]]

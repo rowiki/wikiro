@@ -1,0 +1,46 @@
+Wikitravel este un concern în creştere -- sub formă de proiect şi ghid de călătorie. Această pagină are rolul de a nota câteva pietre de hotar înregistrate în istoria Wikitravel (sau viitorul) şi pentru a stabili câteva pietre de hotar pentru drum. Nea ajută în măsurarea procesului nostru de creştere, privind înainte şi înapoi.
+
+===Sit web===
+
+; '''Înregistrarea domeniului''' : 20 noiembrie 2003 (iniţial la http://ro.wikitravel.org, ulterior mutat la adresa actuală http://wikitravel.org/ro)
+; '''Instalarea software-ului MediaWiki şi darea lui în folosinţă''' : 27 decembrie 2003
+; '''Prima prăbuşire importantă a server-ului''': Baza de date s-a prăbuşit pe 20 februarie 2004
+
+===Articole===
+
+; '''Primul articol''' : [[Portal]] (iniţial [[Pagina principală]]), 27 decembrie 2003
+; '''Al 100-lea articol''' : [[Bhutan]], 12 februarie 2004
+; '''Al 1.000-lea articol''' : ?
+; '''Al 10.000-lea articol''' : ?
+; '''Ultima renunţare la statisticile din CIA World Factbook 2002 într-un articol referitor la o ţară''': ?
+
+===Utilizatori===
+
+; '''Primul utilizator''' : 27 decembrie 2003
+; '''Al 100-lea utilizator''' : ?
+; '''Al 1.000-lea utilzator''' : ?
+; '''Al 10.000-lea utilizator''' : ?
+; '''Prima adresă IP interzisă''' : ?
+; '''Primul utilizator interzis''' : ?
+
+===Folosinţă===
+
+; '''Prima înştiinţare a folosirii articolelor Wikitravel în călătorii''' : ?
+; '''Prima înştiinţare a folosirii articolelor Wikitravel în ''exclusivitate'' pentru călătorii''' : ?
+; '''Prima publicare tipărită a unui articol Wikitravel''' : ?
+; '''Prima includere a conţinutului Wikitravel într-un ghid turistic''' : ?
+; '''Primul ghid de călătorie cu conţinut ''exclusiv'' din Wikitravel''' : ?
+; '''Prima violare a licenţei copyleft a Wikitravel''' : ?
+; '''Prima dată când în urma unei căutări pe Google, Wikitravel a apărut ca primul rezultat''' : ?
+
+===Popularitate===
+
+; '''Primul articol referitor la Wikitravel''' : ?
+; '''Prima discuţie pe Internet menţionând Wikitravel''' : ?
+; '''Primul articol dedicat complet Wikitravel-ului''' : ?
+; '''Primul sit extern despre Wikitravel (ex. "urascwikitravel.ro")''' : ?
+
+[[de:Wikitravel:Meilensteine]]
+[[en:Wikitravel:Milestones]]
+[[ja:Wikitravel:マイルストーン]]
+[[ru:Wikitravel:Вехи]]

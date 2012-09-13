@@ -1,0 +1,3 @@
+'''Szeged''' este un oraş în [[Ungaria]].
+{{IsIn|Ungaria}}
+{{ciot}}

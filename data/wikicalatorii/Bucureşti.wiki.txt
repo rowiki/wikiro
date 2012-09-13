@@ -1,0 +1,461 @@
+'''Bucureşti''', situat în regiunea [[Câmpia Română]] pe râul [[Dâmboviţa]] este capitala, cel mai mare oraş şi cel mai important centru industrial şi comercial al [[România|României]].
+
+===Cartiere===
+
+În ordine alfabetică cartierele din oraşul Bucureşti:
+
+{| class="wikitable"
+|- valign="top"
+|
+* 13 Septembrie
+* Aviaţiei
+* Aviatorilor
+* Balta Albă
+* Băneasa
+* Berceni
+* Bucureştii Noi
+* Colentina
+* Crângaşi
+|
+* Cotroceni
+* Domenii
+* Dorobanţilor
+* Dristor
+* Drumul Taberei
+* Ferentari
+* Floreasca
+* Ghencea
+* Giuleşti
+|
+* Griviţei
+* Iancului
+* Militari
+* Moşilor
+* Muncii
+* Obor
+* Pajura
+* Pantelimon
+* Primăverii
+|
+* Rahova
+* Romană
+* Ştefan cel Mare
+* Tei
+* Tineretului
+* Titan
+* Vatra Luminoasă
+* Vitan
+|}
+
+===Limbă===
+
+În oraş, la fel ca şi în zonele înconjurătoare, limba oficială este prin constituţie româna.
+
+===Climat===
+
+Bucureştiul are, la fel ca România, o climă temperat-continentală cu veri calde şi ierni reci. În această regiune din România, sunt prezente toate cele patru anotimpuri, cu toate că primăvara, se manifestă puţin, mai ales în luna aprilie. Temperatura medie vară este de 23 ºC iar în iarnă de -2 ºC.
+
+===Fus orar===
+
+Bucureştiul se află în zona orară est-[[Europa|europeană]] (UTC+2, UTC+3 din aprilie până în octombrie).
+
+===Împrejurimile===
+
+==De înţeles==
+
+==Intră/Ieşi/Circula==
+
+===Cu maşina===
+
+=== Cu Autobuzul ===
+
+=== Cu Trolibuzul ===
+
+=== Cu Tramvaiul ===
+
+=== Cu Metroul ===
+
+===Cu trenul===
+
+===Cu avionul===
+
+===Distanţele dintre Bucureşti şi alte oraşe din România===
+
+{| width="60%"
+!Oraş
+!Distanţa pe şosea
+!Distanţa pe cale ferată
+!Direcţia
+|-
+| [[Alexandria]] 
+| 87 km 
+| 133 km 
+| sud-vest
+|-
+| [[Arad]] 
+| 555 km 
+| 604 km 
+| nord-vest
+|-
+| [[Bacău]] 
+| 285 km 
+| 301 km 
+| nord
+|-
+| [[Baia Mare]] 
+| 560 km 
+| 624 km 
+| nord
+|-
+| [[Braşov]] 
+| 161 km 
+| 166 km 
+| nord
+|-
+| [[Brăila]] 
+| 218 km 
+| 199 km 
+| nord-est
+|-
+| [[Buzău]] 
+| 110 km 
+| 128 km 
+| nord-est
+|-
+| [[Călăraşi]] 
+| 118 km 
+| 136 km 
+| sud-est
+|-
+| [[Cluj-Napoca]] 
+| 426 km 
+| 497 km 
+| nord-vest
+|-
+| [[Constanţa]] 
+| 225 km 
+| 225 km 
+| est
+|-
+| [[Craiova]] 
+| 234 km 
+| 209 km 
+| sud-vest
+|-
+| [[Deva]] 
+| 389 km 
+| 450 km 
+| nord-vest
+|-
+| [[Drobeta Turnu Severin]] 
+| 353 km 
+| 353 km 
+| vest
+|-
+| [[Galaţi]] 
+| 250 km 
+| 230 km 
+| nord-est
+|-
+| [[Giurgiu]] 
+| 56 km 
+| 85 km 
+| sud
+|-
+| [[Iaşi]] 
+| 406 km 
+| 406 km 
+| nord-vest
+|-
+| [[Oradea]] 
+| 580 km 
+| 650 km 
+| nord-vest
+|-
+| [[Ploieşti]] 
+| 60 km 
+| 59 km 
+| nord
+|-
+| [[Piteşti]] 
+| 108 km 
+| 108 km 
+| nord-vest
+|-
+| [[Sibiu]] 
+| 273 km 
+| 315 km 
+| nord-vest
+|-
+| [[Slatina]] 
+| 170 km 
+| 189 km 
+| vest
+|-
+| [[Slobozia]] 
+| 121 km 
+| 130 km 
+| est
+|-
+| [[Suceava]] 
+| 435 km 
+| 447 km 
+| nord
+|-
+| [[Târgovişte]] 
+| 83 km 
+| 80 km 
+| nord
+|-
+| [[Timişoara]] 
+| 538 km 
+| 533 km 
+| vest
+|-
+| [[Tulcea]] 
+| 277 km 
+| 334 km 
+| nord-est
+|}
+
+===Distanţele pe şosea faţa de principalele oraşe din Europa===
+{| class="wikitable"
+! Nume român
+! Nume original
+! Ţară
+! Distanţă
+! Direcţie
+|-
+| [[Amsterdam]]
+| ''Amsterdam''
+| [[Olanda]]
+| 2.398 km
+| nord-vest
+|-
+| [[Atena]]
+| ''Αθήνα'' – ''Athína''
+| [[Grecia]]
+| 1.106 km
+| sud
+|-
+| [[Barcelona]]
+| ''Barcelona''
+| [[Spania]]
+| 2.597 km
+| vest
+|-
+| [[Belgrad]]
+| ''Београд'' – ''Beograd''
+| [[Serbia]]
+| 619 km
+| vest
+|-
+| [[Berlin]]
+| ''Berlin''
+| [[Germania]]
+| 1.646 km
+| nord-vest
+|-
+| [[Berna]]
+| ''Bern'', ''Berne''
+| [[Elveţia]]
+| 1.893 km
+| vest
+|-
+| [[Bruxelles]]
+| ''Brussel''
+| [[Belgia]]
+| 2.136 km
+| nord-vest
+|-
+| [[Budapesta]]
+| ''Budapest''
+| [[Ungaria]]
+| 788 km
+| vest
+|-
+| [[Chişinău]]
+| ''Chişinău''
+| [[Republica Moldova]]
+| 436 km
+| nord
+|-
+| [[Copenhaga]]
+| ''København''
+| [[Danemarca]]
+| 2.231 km
+| nord-vest
+|-
+| [[Frankfurt pe Main]]
+| ''Frankfurt am Main''
+| [[Germania]]
+| 1.744 km
+| vest
+|-
+| [[Kiev]]
+| ''Київ'' – ''Kiiv''
+| [[Ucraina]]
+| 888 km
+| nord
+|-
+| [[Istanbul]]
+| ''İstanbul''
+| [[Turcia]]
+| 681 km
+| sud
+|-
+| [[Londra]]
+| ''London''
+| [[Regatul Unit]]
+| 2.502 km
+| nord-vest
+|-
+| [[Madrid]]
+| ''Madrid''
+| [[Spania]]
+| 3.189 km
+| vest
+|-
+| [[Marsilia]]
+| ''Marseille''
+| [[Franţa]]
+| 2.141 km
+| vest
+|-
+| [[Milano]]
+| ''Milano''
+| [[Italia]]
+| 1.642 km
+| vest
+|-
+| [[Moscova]]
+| ''Москва'' – ''Moscva''
+| [[Rusia]]
+| 1.758 km
+| nord-est
+|-
+| [[Paris]]
+| ''Paris''
+| [[Franţa]]
+| 2.295 km
+| nord-vest
+|-
+| [[Roma]]
+| ''Roma''
+| [[Italia]]
+| 1.898 km
+| sud-vest
+|-
+| [[Sofia]]
+| ''София'' – ''Sofiia''
+| [[Bulgaria]]
+| 373 km
+| sud
+|-
+| [[Stockholm]]
+| ''Stockholm''
+| [[Suedia]]
+| 2.846 km
+| nord
+|-
+| [[Varşovia]]
+| ''Warszawa''
+| [[Polonia]]
+| 1.240 km
+| nord-vest
+|-
+| [[Viena]]
+| ''Wien''
+| [[Austria]]
+| 1.022 km
+| vest
+|}
+
+==Ajuns acolo==
+
+===Educatie===
+
+===Ambasade===
+
+===Transport în comun===
+
+===Autogari===
+
+===Taxi===
+
+===Rent-A-Car===
+
+Puteţi închiria o maşină de la următorii operatori rent-a-car:
+
+*'''Carsrent''', [http://www.carsrent.ro/] - Rent a car in Bucharest, Brasov, Timisoara, Cluj 
+*'''Allrent''', [http://www.allrent.ro/] - Rent a car Bucharest, accommodation, hotels
+*'''Budget''', [http://www.budget.ro/]
+
+==De văzut==
+
+palatul parlamentului
+
+===Muzee===
+*'''Muzeul Naţional de Artă al României''' - Calea Victoriei 49-53 - în Palatul Regal;  
+*'''Muzeul Naţional de Istorie a României''' - Calea Victoriei 12 - în Palatul Poştei; 
+*'''Muzeul Colecţiilor''' - Calea Victoriei 111;  
+*'''Muzeul George Enescu''' - Calea Victoriei 141;  
+*'''Muzeul de Istorie Naturală Gr. Antipa''' - Şoseaua Kiseleff 1; 
+*'''Muzeul Ţăranului Român''' - Şoseaua Kiseleff 3; 
+*'''Muzeul Satului''' - Şoseaua Kiseleff 28-30; 
+*'''Muzeul Curtea Veche''' - Str. Franceză 31; 
+*'''Muzeul de Istorie al Municipiului Bucureşti''' - Bd. I.C. Brătianu 2; 
+*'''Muzeul de Artă Veche Apuseană D. Minovici''' - Str. N. Minovici 3; 
+*'''Muzeul Th. Pallady''' - Str. Spătarului 22; 
+*'''Muzeul Frederik şi Cecilia Storck''' - Str. Vasile Alecsandri 16
+
+==Hoteluri==
+
+===Buget redus===
+
+===Buget mediu===
+
+===De lux===
+
+===Cămine pentru tineri, pensiuni===
+
+==De mâncat==
+'''Carul cu Bere''' - restaurant cu specific romanesc, intr-o atmosfera de inceput de secol 19. Mrita orice efort! Il gasiti vizavi de cladirea CEC de pe Calea Victoriei, 50 m pe straduta
+
+'''Tratoria As del Cuore''' - Str. Marcel Andreescu - bucatarie mediteraneana
+
+'''La Pergola''' - langa Autogara Filaret - pizza, bucatarie italiana, Bucatarie romaneasca
+
+==Bani şi cumpărături==
+
+==Cluburi==
+
+==Teatre==
+* Teatrul Naţional
+
+==Cinematografe==
+
+==Reprezentanţe străine şi Consulate==
+
+==Centre Culturale==
+
+{{IsIn|România}}
+
+[[WikiPedia:Bucureşti]]
+[[Dmoz:Europa/România/Bucureşti/]]
+
+
+
+[[de:Bukarest]]
+[[en:Bucharest]]
+[[eo:Bukareŝto]]
+[[es:Bucarest]]
+[[fi:Bukarest]]
+[[fr:Bucarest]]
+[[hu:Bukarest]]
+[[it:Bucarest]]
+[[ja:ブカレスト]]
+[[nl:Boekarest]]
+[[pl:Bukareszt]]
+[[sv:Bukarest]]
+[[wts:Category:Bucharest]]

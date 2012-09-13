@@ -1,0 +1,19 @@
+'''Kioto''' este un oraş în [[Japonia]].
+{{IsIn|Japonia}}
+{{Ciot}}
+
+[[WikiPedia:Kyoto]]
+
+
+
+[[de:Kyoto]]
+[[en:Kyoto]]
+[[fi:Kioto]]
+[[fr:Kyoto]]
+[[ja:京都市]]
+[[nl:Kyoto]]
+[[pl:Kioto]]
+[[pt:Quioto]]
+[[sv:Kyoto]]
+[[zh:京都市]]
+[[wts:Category:Kyoto]]

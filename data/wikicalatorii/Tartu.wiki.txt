@@ -1,0 +1,3 @@
+'''Tartu''' este cel mai mare oraş [[Estonia|estonian]] după [[Talin]].
+{{IsIn|Estonia}}
+{{ciot}}

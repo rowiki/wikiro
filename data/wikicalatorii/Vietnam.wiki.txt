@@ -1,0 +1,29 @@
+'''Vietnam''' este o ţară în [[Asia de sud-est]].
+
+==Destinaţii==
+
+*[[Ho Chi Minh]]
+*[[Hanoi]]
+*[[Delta Mekong]]
+{{IsIn|Asia_de_Sud-est}}
+{{ciot}}
+
+&lt;!--[[nl:Vietnam]]-->
+[[WikiPedia:Vietnam]]
+[[Dmoz:Asia/Vietnam/]]
+
+[[ca:Vietnam]]
+[[de:Vietnam]]
+[[en:Vietnam]]
+[[eo:Vjetnamio]]
+[[es:Vietnam]]
+[[fi:Vietnam]]
+[[fr:Viêtnam]]
+[[hu:Vietnám]]
+[[it:Vietnam]]
+[[ja:ベトナム]]
+[[pt:Vietnã]]
+[[ru:Вьетнам]]
+[[sv:Vietnam]]
+[[zh:越南]]
+[[wts:Category:Vietnam]]

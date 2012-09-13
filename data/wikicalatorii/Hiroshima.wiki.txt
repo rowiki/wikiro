@@ -1,0 +1,13 @@
+'''Hiroshima''' este un oraş în [[Japonia]].
+{{IsIn|Japonia}}
+{{Ciot}}
+
+[[de:Hiroshima]]
+[[en:Hiroshima]]
+[[fi:Hiroshima]]
+[[fr:Hiroshima]]
+[[ja:広島市]]
+[[nl:Hiroshima]]
+[[pt:Hiroshima]]
+[[zh:廣島市]]
+[[wts:Category:Hiroshima]]

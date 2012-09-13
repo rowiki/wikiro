@@ -1,0 +1,16 @@
+'''Graz''' este un oraş în [[Austria]].
+{{IsIn|Austria}}
+{{ciot}}
+
+[[WikiPedia:Graz]]
+
+
+
+[[de:Graz]]
+[[en:Graz]]
+[[fi:Graz]]
+[[fr:Graz]]
+[[hu:Graz]]
+[[it:Graz]]
+[[ja:グラーツ]]
+[[nl:Graz]]

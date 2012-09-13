@@ -1,0 +1,3 @@
+'''Caracas''' este capitala [[Venezuela|Venezuelei]].
+{{IsIn|Venezuela}}
+{{ciot}}

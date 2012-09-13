@@ -1,0 +1,31 @@
+'''Monaco''' este o ţară în [[Europa de Sud]].
+
+==Destinaţii==
+
+*[[Monaco (oraş)|Monaco]]
+*[[Monte Carlo]]
+
+{{IsIn|Europa_de_Sud}}
+{{ciot}}
+
+&lt;!--[[pt:Mónaco]]-->
+[[WikiPedia:Monaco]]
+
+
+
+
+
+[[ca:Mònaco]]
+[[de:Monaco]]
+[[en:Monaco]]
+[[eo:Monako]]
+[[es:Mónaco]]
+[[fi:Monaco]]
+[[fr:Monaco]]
+[[hu:Monaco]]
+[[it:Principato di Monaco]]
+[[ja:モナコ]]
+[[nl:Monaco]]
+[[ru:Монако]]
+[[sv:Monaco]]
+[[wts:Category:Monaco]]

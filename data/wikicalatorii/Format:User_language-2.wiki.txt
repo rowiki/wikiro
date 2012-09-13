@@ -1,0 +1,5 @@
+
+{| cellspacing="0" style="width:238px;background:#d0f8ff;"
+! style="width:45px;height:45px;background:#77e0e8;font-size:14pt" | &lt;span lang="en">{{{1}}}-2&lt;/span>
+| style="text-align:left;vertical-align:middle;font-size:8pt;padding:4pt;line-height:1.25em" lang="{{{1}}}" dir="{{{2}}}" | {{{3}}}
+|} &lt;/div>

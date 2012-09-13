@@ -1,0 +1,3 @@
+'''Rotterdam''' este un oraş în [[Ţările de Jos]].
+{{IsIn|Ţările de Jos}}
+{{ciot}}

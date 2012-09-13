@@ -1,0 +1,3 @@
+'''Gijon''' este un oraş în [[Spania]].
+{{IsIn|Spania}}
+{{ciot}}

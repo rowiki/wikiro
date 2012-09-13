@@ -1,0 +1,21 @@
+'''Lyon''' este un oraş în [[Franţa]].
+{{IsIn|Franţa}}
+{{ciot}}
+
+[[WikiPedia:Lyon]]
+
+
+
+[[de:Lyon]]
+[[en:Lyon]]
+[[es:Lyon]]
+[[fi:Lyon]]
+[[fr:Lyon]]
+[[hu:Lyon]]
+[[it:Lione]]
+[[ja:リヨン]]
+[[nl:Lyon]]
+[[pl:Lyon]]
+[[pt:Lyon]]
+[[sv:Lyon]]
+[[wts:Category:Lyon]]

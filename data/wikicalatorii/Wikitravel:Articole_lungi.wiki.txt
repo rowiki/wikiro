@@ -1,0 +1,51 @@
+
+&lt;li>&lt;a href="/ro/articol/Rom%C3%A2nia" class='internal' title ="România">România&lt;/a> (27071 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Cluj-Napoca" class='internal' title ="Cluj-Napoca">Cluj-Napoca&lt;/a> (24743 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Bucure%C5%9Fti" class='internal' title ="Bucureşti">Bucureşti&lt;/a> (19661 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Tur_feroviar_%C3%AEn_triunghiul_transilv%C4%83nean" class='internal' title ="Tur feroviar în triunghiul transilvănean">Tur feroviar în triunghiul transilvănean&lt;/a> (15605 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/New_York_(ora%C5%9F)" class='internal' title ="New York (oraş)">New York (oraş)&lt;/a> (13724 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Ghid_de_conversa%C5%A3ie_englez" class='internal' title ="Ghid de conversaţie englez">Ghid de conversaţie englez&lt;/a> (12465 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Talin" class='internal' title ="Talin">Talin&lt;/a> (7820 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Patrimoniul_Mondial_al_UNESCO" class='internal' title ="Patrimoniul Mondial al UNESCO">Patrimoniul Mondial al UNESCO&lt;/a> (7576 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Dubrovnik" class='internal' title ="Dubrovnik">Dubrovnik&lt;/a> (6793 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Portal" class='internal' title ="Portal">Portal&lt;/a> (6417 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Granada" class='internal' title ="Granada">Granada&lt;/a> (5300 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/C%C3%A2nd_ajungi_%C3%AEntr-un_ora%C5%9F_nou" class='internal' title ="Când ajungi într-un oraş nou">Când ajungi într-un oraş nou&lt;/a> (5265 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/List%C4%83_de_%C5%A3%C4%83ri" class='internal' title ="Listă de ţări">Listă de ţări&lt;/a> (5200 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Helsinki" class='internal' title ="Helsinki">Helsinki&lt;/a> (4940 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Sydney" class='internal' title ="Sydney">Sydney&lt;/a> (4551 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Tirana" class='internal' title ="Tirana">Tirana&lt;/a> (4463 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Praga" class='internal' title ="Praga">Praga&lt;/a> (4107 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Barcelona" class='internal' title ="Barcelona">Barcelona&lt;/a> (2864 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/S%C3%A3o_Paulo" class='internal' title ="São Paulo">São Paulo&lt;/a> (2760 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Transilvania" class='internal' title ="Transilvania">Transilvania&lt;/a> (1903 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Europa" class='internal' title ="Europa">Europa&lt;/a> (1637 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Beli%C5%9F" class='internal' title ="Beliş">Beliş&lt;/a> (1605 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Sydney/Sydney_Opera_House" class='internal' title ="Sydney/Sydney Opera House">Sydney/Sydney Opera House&lt;/a> (1354 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Africa" class='internal' title ="Africa">Africa&lt;/a> (1312 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Blaj" class='internal' title ="Blaj">Blaj&lt;/a> (1211 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Stockholm" class='internal' title ="Stockholm">Stockholm&lt;/a> (1210 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Delta_Dun%C4%83rii" class='internal' title ="Delta Dunării">Delta Dunării&lt;/a> (1185 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Jidvei" class='internal' title ="Jidvei">Jidvei&lt;/a> (1035 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Spania" class='internal' title ="Spania">Spania&lt;/a> (999 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Barcelona/Sagrada_Familia" class='internal' title ="Barcelona/Sagrada Familia">Barcelona/Sagrada Familia&lt;/a> (972 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Fort%C4%83re%C5%A3e_dace_din_Mun%C5%A3ii_Or%C4%83%C5%9Ftie" class='internal' title ="Fortăreţe dace din Munţii Orăştie">Fortăreţe dace din Munţii Orăştie&lt;/a> (966 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Asia" class='internal' title ="Asia">Asia&lt;/a> (897 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Barcelona/Casa_Mil%C3%A0" class='internal' title ="Barcelona/Casa Milà">Barcelona/Casa Milà&lt;/a> (735 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/A%C5%9Fez%C4%83ri_s%C4%83te%C5%9Fti_cu_biserici_fortificate_din_Transilvania" class='internal' title ="Aşezări săteşti cu biserici fortificate din Transilvania">Aşezări săteşti cu biserici fortificate din Transilvania&lt;/a> (700 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Barcelona/Parc_Guell" class='internal' title ="Barcelona/Parc Guell">Barcelona/Parc Guell&lt;/a> (682 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Salzburg" class='internal' title ="Salzburg">Salzburg&lt;/a> (669 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Barcelona/Palatul_Guell" class='internal' title ="Barcelona/Palatul Guell">Barcelona/Palatul Guell&lt;/a> (662 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Linii_aeriene_ieftine_din_Europa" class='internal' title ="Linii aeriene ieftine din Europa">Linii aeriene ieftine din Europa&lt;/a> (635 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Australia" class='internal' title ="Australia">Australia&lt;/a> (622 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Ir%C3%BAn" class='internal' title ="Irún">Irún&lt;/a> (612 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Biserici_de_lemn_din_Maramure%C5%9F" class='internal' title ="Biserici de lemn din Maramureş">Biserici de lemn din Maramureş&lt;/a> (602 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/M%C4%83n%C4%83stirea_Horezu" class='internal' title ="Mănăstirea Horezu">Mănăstirea Horezu&lt;/a> (600 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Regatul_Unit" class='internal' title ="Regatul Unit">Regatul Unit&lt;/a> (588 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Windhoek" class='internal' title ="Windhoek">Windhoek&lt;/a> (569 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Australia_%C5%9Fi_Oceania" class='internal' title ="Australia şi Oceania">Australia şi Oceania&lt;/a> (551 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Sundsvall" class='internal' title ="Sundsvall">Sundsvall&lt;/a> (524 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Paris" class='internal' title ="Paris">Paris&lt;/a> (498 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Ume%C3%A5" class='internal' title ="Umeå">Umeå&lt;/a> (497 octeţi)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Melbourne" class='internal' title ="Melbourne">Melbourne&lt;/a> (469 octeţi)&lt;/li>
+&lt;/ol>

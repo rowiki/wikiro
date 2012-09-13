@@ -1,0 +1,36 @@
+'''Europa''', poreclită ''bătrânul continent'', este una din destinaţiile principale ale turismului mondial. Deşi destinaţiile europene sunt vizitate şi răs-vizitate, ele rămân aproape obligatorii pentru orice călător! Oferind istorie şi cultură unică, infrastructură de turism foarte avansată şi un nivel de trai bun, destinaţiile Europei te vor impresiona şi vor rămâne cu tine pentru mult timp. Nu uitaţi însă că Europa e mult mai mare decât triunghiul [[Franţa]], [[Spania]], [[Italia]]!
+
+==Ţări==
+[[Image:EuropeRegions.PNG|thumb|350px|European Regions: &lt;font color="red">Europa de Vest&lt;/font>, &lt;font color="green">Europa Centrală&lt;/font>, &lt;font color="blue">Europa de Nord&lt;/font>, &lt;font color="#ff8040">Europa de Est&lt;/font>, &lt;font color="cyan">Europa de Sud (Mediterana)&lt;/font>]]
+
+* '''[[Europa de Vest|&lt;font color ="red">Europa de Vest&lt;/font>]]''' - [[Belgia]],[[Ţările de Jos|Ţările de Jos (Olanda)]],  [[Luxemburg]], [[Regatul Unit]], [[Irlanda]], [[Franţa]];
+* '''[[Europa de Nord|&lt;font color ="blue">Europa de Nord&lt;/font>]]''' - [[Finlanda]], [[Islanda]], [[Norvegia]], [[Suedia]], [[Danemarca]];
+* '''[[Europa Centrală|&lt;font color ="green">Europa Centrală&lt;/font>]]''' - [[Austria]], [[Cehia]], [[Germania]], [[Ungaria]], [[Liechtenstein]], [[Polonia]], [[Slovacia]],  [[Slovenia]], [[Elveţia]];
+* '''[[Europa de Est|&lt;font color ="#ff8040">Europa de Est&lt;/font>]]''' - [[Belarus]], [[Bulgaria]], [[Estonia]], [[Georgia]], [[Letonia]], [[Lituania]], [[Republica Moldova]], [[România]], [[Rusia]] şi [[Ucraina]];
+* '''[[Europa de Sud|&lt;font color="cyan">Europa de Sud (Mediterana)&lt;/font>]]''' - [[Albania]], [[Andora]], [[Bosnia şi Herţegovina]], [[Croaţia]], [[Cipru]], [[Grecia]], [[Italia]], [[Macedonia]], [[Malta]], [[Monaco]], [[Portugalia]], [[San Marino]], [[Serbia]], [[Muntenegru]], [[Spania]], [[Turcia]] europeană
+
+{{ciot}}
+
+[[WikiPedia:Europa]]
+[[Dmoz:Europa/]]
+
+[[ar:أوروبا]]
+[[ca:Europa]]
+[[de:Europa]]
+[[en:Europe]]
+[[eo:Eŭropo]]
+[[es:Europa]]
+[[fi:Eurooppa]]
+[[fr:Europe]]
+[[he:אירופה]]
+[[hi:यूरोप]]
+[[hu:Európa]]
+[[it:Europa]]
+[[ja:ヨーロッパ]]
+[[nl:Europa]]
+[[pl:Europa]]
+[[pt:Europa]]
+[[ru:Европа]]
+[[sv:Europa]]
+[[zh:歐洲]]
+[[wts:Category:Europe]]

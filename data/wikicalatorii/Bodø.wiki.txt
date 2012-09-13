@@ -1,0 +1,7 @@
+'''Bodø''' este un oraş în [[Norvegia]].
+{{IsIn|Norvegia}}
+{{ciot}}
+
+[[de:Bodø]]
+[[en:Bodø]]
+[[nl:Bodø]]

@@ -1,0 +1,3 @@
+'''Busan''' este un oraş în [[Coreea de Sud]].
+{{IsIn|Coreea_de_Sud}}
+{{ciot}}

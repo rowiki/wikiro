@@ -1,0 +1,25 @@
+'''Copenhaga''' este capitala şi cel mai mare oraş în [[Danemarca]].
+{{IsIn|Danemarca}}
+{{ciot}}
+
+&lt;!--[[es:Copenhague]]-->
+
+
+
+
+
+[[de:Kopenhagen]]
+[[en:Copenhagen]]
+[[eo:Kopenhago]]
+[[fi:Kööpenhamina]]
+[[fr:Copenhague]]
+[[hu:Koppenhága]]
+[[it:Copenaghen]]
+[[ja:コペンハーゲン]]
+[[nl:Kopenhagen]]
+[[pt:Copenhague]]
+[[ru:Копенгаген]]
+[[sv:Köpenhamn]]
+[[wts:Category:Copenhagen]]
+
+[[WikiPedia:Copenhaga]]

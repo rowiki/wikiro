@@ -1,0 +1,1 @@
+{{User language-1|hu|ltr|Ez a szerkesztő '''alapszinten''' beszéli a '''magyar''' nyelvet.}}

@@ -1,0 +1,3 @@
+'''Saraievo''' este un oraş în [[Bosnia şi Herţegovina|Bosnia]].
+{{IsIn|Bosnia_şi_Herţegovina}}
+{{ciot}}

@@ -1,0 +1,22 @@
+'''München''' este un oraş în [[Germania]].
+
+{{ciot}}
+
+&lt;!--[[nl:München]]-->
+
+
+[[de:München]]
+[[en:Munich]]
+[[es:Múnich]]
+[[fi:München]]
+[[fr:Munich]]
+[[it:Monaco]]
+[[ja:ミュンヘン]]
+[[pl:Monachium]]
+[[pt:Munique]]
+[[wts:Category:München]]
+
+
+&lt;!--[[sv:München]]-->
+
+[[WikiPedia:München]]

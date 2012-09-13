@@ -1,0 +1,10 @@
+'''Lausanne''' este un oraş în [[Elveţia]].
+
+{{ciot}}
+
+[[de:Lausanne]]
+[[en:Lausanne]]
+[[fr:Lausanne]]
+[[ja:ローザンヌ]]
+[[nl:Lausanne]]
+[[pt:Lausanne]]

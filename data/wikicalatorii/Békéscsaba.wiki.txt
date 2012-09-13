@@ -1,0 +1,3 @@
+'''Békéscsaba''' este un oraş în [[Ungaria]].
+{{IsIn|Üngaria}}
+{{ciot}}

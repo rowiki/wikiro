@@ -1,0 +1,3 @@
+'''Belfast''' este un oraş în [[Regatul Unit]].
+{{IsIn|Regatul_Unit}}
+{{ciot}}

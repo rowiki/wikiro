@@ -1,0 +1,12 @@
+'''Innsbruck''' este un oraş în [[Austria]].
+{{IsIn|Austria}}
+{{ciot}}
+
+
+
+[[de:Innsbruck]]
+[[en:Innsbruck]]
+[[es:Innsbruck]]
+[[ja:インスブルック]]
+[[nl:Innsbruck]]
+[[sv:Innsbruck]]

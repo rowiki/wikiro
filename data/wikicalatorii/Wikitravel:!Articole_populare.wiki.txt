@@ -1,0 +1,51 @@
+
+&lt;li>&lt;a href="/ro/articol/Cluj-Napoca" class='internal' title ="Cluj-Napoca">Cluj-Napoca&lt;/a> (2749 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Rom%C3%A2nia" class='internal' title ="România">România&lt;/a> (1070 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/New_York_(ora%C5%9F)" class='internal' title ="New York (oraş)">New York (oraş)&lt;/a> (957 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Bucure%C5%9Fti" class='internal' title ="Bucureşti">Bucureşti&lt;/a> (850 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Europa" class='internal' title ="Europa">Europa&lt;/a> (719 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Oradea" class='internal' title ="Oradea">Oradea&lt;/a> (683 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Patrimoniul_Mondial_al_UNESCO" class='internal' title ="Patrimoniul Mondial al UNESCO">Patrimoniul Mondial al UNESCO&lt;/a> (677 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Barcelona" class='internal' title ="Barcelona">Barcelona&lt;/a> (589 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Budapesta" class='internal' title ="Budapesta">Budapesta&lt;/a> (578 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Suedia" class='internal' title ="Suedia">Suedia&lt;/a> (567 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Spania" class='internal' title ="Spania">Spania&lt;/a> (530 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Statele_Unite_ale_Americii" class='internal' title ="Statele Unite ale Americii">Statele Unite ale Americii&lt;/a> (526 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Barcelona/Sagrada_Familia" class='internal' title ="Barcelona/Sagrada Familia">Barcelona/Sagrada Familia&lt;/a> (514 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Talin" class='internal' title ="Talin">Talin&lt;/a> (505 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Paris" class='internal' title ="Paris">Paris&lt;/a> (497 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Italia" class='internal' title ="Italia">Italia&lt;/a> (455 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Barcelona/Parc_Guell" class='internal' title ="Barcelona/Parc Guell">Barcelona/Parc Guell&lt;/a> (450 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Dubrovnik" class='internal' title ="Dubrovnik">Dubrovnik&lt;/a> (439 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Ghid_de_conversa%C5%A3ie_german" class='internal' title ="Ghid de conversaţie german">Ghid de conversaţie german&lt;/a> (434 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Praga" class='internal' title ="Praga">Praga&lt;/a> (432 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Barcelona/Palatul_Guell" class='internal' title ="Barcelona/Palatul Guell">Barcelona/Palatul Guell&lt;/a> (398 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Barcelona/Casa_Mil%C3%A0" class='internal' title ="Barcelona/Casa Milà">Barcelona/Casa Milà&lt;/a> (398 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Germania" class='internal' title ="Germania">Germania&lt;/a> (388 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Ghid_de_conversa%C5%A3ie_englez" class='internal' title ="Ghid de conversaţie englez">Ghid de conversaţie englez&lt;/a> (383 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Europa_de_Vest" class='internal' title ="Europa de Vest">Europa de Vest&lt;/a> (367 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Transilvania" class='internal' title ="Transilvania">Transilvania&lt;/a> (350 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Australia" class='internal' title ="Australia">Australia&lt;/a> (347 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Fran%C5%A3a" class='internal' title ="Franţa">Franţa&lt;/a> (343 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Tur_feroviar_%C3%AEn_triunghiul_transilv%C4%83nean" class='internal' title ="Tur feroviar în triunghiul transilvănean">Tur feroviar în triunghiul transilvănean&lt;/a> (342 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Belarus" class='internal' title ="Belarus">Belarus&lt;/a> (333 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Europa_Central%C4%83" class='internal' title ="Europa Centrală">Europa Centrală&lt;/a> (324 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Grecia" class='internal' title ="Grecia">Grecia&lt;/a> (307 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Ungaria" class='internal' title ="Ungaria">Ungaria&lt;/a> (296 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Maroc" class='internal' title ="Maroc">Maroc&lt;/a> (296 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Cipru" class='internal' title ="Cipru">Cipru&lt;/a> (295 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Madrid" class='internal' title ="Madrid">Madrid&lt;/a> (294 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Europa_de_Nord" class='internal' title ="Europa de Nord">Europa de Nord&lt;/a> (291 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Granada" class='internal' title ="Granada">Granada&lt;/a> (287 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Montreal" class='internal' title ="Montreal">Montreal&lt;/a> (286 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Helsinki" class='internal' title ="Helsinki">Helsinki&lt;/a> (285 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/America_de_Sud" class='internal' title ="America de Sud">America de Sud&lt;/a> (283 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Europa_de_Sud" class='internal' title ="Europa de Sud">Europa de Sud&lt;/a> (280 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/India" class='internal' title ="India">India&lt;/a> (279 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Austria" class='internal' title ="Austria">Austria&lt;/a> (277 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Australia_%C5%9Fi_Oceania" class='internal' title ="Australia şi Oceania">Australia şi Oceania&lt;/a> (277 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Cehia" class='internal' title ="Cehia">Cehia&lt;/a> (273 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Sydney" class='internal' title ="Sydney">Sydney&lt;/a> (271 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Los_Angeles" class='internal' title ="Los Angeles">Los Angeles&lt;/a> (268 accesări)&lt;/li>
+&lt;li>&lt;a href="/ro/articol/Stockholm" class='internal' title ="Stockholm">Stockholm&lt;/a> (263 accesări)&lt;/li>
+&lt;/ol>

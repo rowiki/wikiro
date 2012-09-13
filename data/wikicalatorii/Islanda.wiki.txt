@@ -1,0 +1,50 @@
+'''Islanda''' este o ţară în [[Europa de Nord]].
+
+==Destinaţii==
+
+===Oraşe principale===
+
+*[[Reykjavik]]
+*[[Hafnafjörður]]
+
+Denumirea oficiala: Republica Islanda
+
+Capitala: Reykjavik
+
+Limba oficiala: islandeza
+
+Suprafata: 103000 km2
+
+Locuitori: 271000 mil.
+
+Religia: protestantism 93%, catolicism
+
+Moneda: krona
+
+Forma de guvernamant: republica
+
+Ziua nationala: 17 iunie
+
+
+{{IsIn|Europa_de_Nord}}
+{{ciot}}
+
+[[WikiPedia:Islanda]]
+
+
+
+[[ca:Islàndia]]
+[[de:Island]]
+[[en:Iceland]]
+[[eo:Islando]]
+[[es:Islandia]]
+[[fi:Islanti]]
+[[fr:Islande]]
+[[hu:Izland]]
+[[it:Islanda]]
+[[ja:アイスランド]]
+[[nl:IJsland]]
+[[pt:Islândia]]
+[[ru:Исландия]]
+[[sv:Island]]
+[[wts:Category:Iceland]]

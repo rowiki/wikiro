@@ -1,0 +1,563 @@
+'''Franceza''' este o limbă romanică vorbită în principal în [[Franţa]], dar şi în multe alte părţi ale lumii. În Europa se vorbeşte în [[Luxemburg]], sudul [[Balgia|Belgiei]] şi vestul [[Elveţia|Elveţiei]]). În America de Nord franceza este vorbită în ([[Québec]], [[New Brunswick]], [[Ontario]] şi alte regiuni din [[Canada]], precum şi în unele zone din statul [[Louisiana]], din [[Statele Unite ale Americii]]. Alte ţări în care se vorbeşte franceza sunt fostele colonii franceze din [[Africa de Nord]] şi de [[Africa de Vest|Vest]], [[Haiti]], [[Martinica]] şi [[Guadelupa]] (în Marea Caraibelor), [[Guiana Franceză]] (în [[America de Sud]]), [[Tahiti]] şi multe alte insule din [[Oceania]]. Franceza a fost multă vreme limba diplomaţiei şi a comunicării internaţionale şi, cu toate că după al Doilea Război Mondial a fost în mare măsură înlocuită cu engleza, rămâne o cerinţă pentru oamenii cu şcoală din lumea întreagă să aibă competenţe cel puţin de bază în folosirea limbii franceze.
+
+[[:fr:Francophonie|Francophonie]] vă poate ajuta în pregătirea planurilor dumneavoastră de călătorie dacă sunteţi în căutarea unei ţări sau a unui oraş de limbă franceză.
+
+== Pronunţarea ==
+
+Spre deosebire de a celorlalte limbi romanice şi în mod asemănător cu cea a englezei, scrierea franceză nu este fonetică. Aceeaşi literă poate reda sunete diferite, şi de multe ori unele litere nu se pronunţă.
+
+În general, consoanele finale de cuvânt nu se pronunţă: ''allez'' (mergeţi) se pronunţă "ale", nu "alez"; ''tard'' (târziu) se rosteşte "tar", nu "tard". Şi ''e'' final este de obicei mut. În schimb, dacă cuvântul următor începe cu o vocală, consoana finală este deseori pronunţată; acest fenomen se numeşte ''liaison'' (legătură).
+
+Cuvintele se accentuează pe ultima silabă pronunţată, dar unele cuvinte nu se accentuează. Acestea sunt articolele, prepoziţiile şi unele conjuncţii, care formează împreună cu cuvântul următor un grup cu un singur accent.
+
+=== Vocale ===
+
+==== Vocale orale ====
+
+Uneori vocalele scrise poartă accente, care în general nu influenţează pronunţarea. Cel care are importanţă este ''é'', în opoziţie cu ''è''.
+
+; a, à, â: ca "a" în "tată"
+; e: uneori un sunet între "ă" şi "ö" din germană, alteori nepronunţat, alteori pronunţat la fel ca ''é'' sau ca ''è''
+; é: asemănător cu "e" din "Petre", dar pronunţat cu gura mai închisă
+; è, ê, ai: asemănător cu "e" din "Petre", dar pronunţat cu gura mai deschisă
+; i, î: ca "i" în "inel"
+; o, ô, au, eau: aproximativ ca "o" în "om"
+; u, ù, û: pronunţat ca "ü" în germană, cu buzele ţinute ca pentru "u", dar cu limba ţinută ca pentru "i"
+; ou: ca "u" în "uşă"
+; eu, œ, œu: pronunţat ca "ö" în germană, cu buzele ţinute ca pentru "o", dar cu limba ţinută ca pentru "e"
+; y: ca "i" în "inel", uneori ca "i" în "iată"
+
+Pe vocale poate să apară semnul diacritic tremă ( '''¨''' ), care împiedică participarea vocalei la perechile de litere care se pronunţă ca un singur sunet. Exemplu: '''maïs''' (porumb), care se pronunţă „mais”, în opoziţie cu '''mais''' (dar), pronunţat „me”.
+
+Vocala '''a''' din '''la''' articol hotărât şi pronume, precum şi vocala '''e''' din '''le''' articol hotărât/pronume şi negaţia '''ne''' pot să cadă şi să fie înlocuite în scris cu un apostrof ( ' ). Aceasta se întâmplă când cuvântul următor începe cu o vocală sau cu '''h''' mut [ex. '''l'homme''' (pronunţat „lom”) – „omul”].
+
+==== Vocale nazale ====
+
+Se întâlnesc înaintea altor consoane decât dublu „n” sau „m”, ori la sfârşit de cuvânt. Se pronunţă ca şi cum ar fi urmate de sunetul „n” pronunţat fără ca vârful limbii să atingă dinţii.
+
+;an, en, em : „a” nazal
+;ain, in, im : „e” nazal
+;on : „o” nazal
+;un : aproximativ „ö” nazal
+
+=== Semivocale ===
+
+Acestea formează diftongi cu vocala care le precedă sau care le urmează, adică se pronunţă într-o silabă cu acestea.
+
+;''i, y, ll'' (ex. ''pied'' – „picior”, ''yeux'' – „ochi”, ''billet'' – „bilet”) : formează diftongi cu vocala următoare, pronunţându-se ca „i” în „iepure”
+;''il, ill'' (în unele cazuri) (ex. ''sommeil'' – „somn”, ''fille'' – „fată”) : formează diftongi cu vocala precedentă, ca „i” în „temei”, „ii”
+;''o'' (înainte de ''i'' sau ''y'', care în acest caz se pronunţă „a”, respectiv „ai”) (ex. ''trois'' – „trei”, ''envoyer'' – „a trimite”), ''ou'' (înainte de ''a, e, i'') (ex. ''douane'' – „vamă”, ''jouet'' – „joc”, ''oui'' – „da”), ''u'' (în grupul de litere ''qua'') (ex. ''équateur'' – „ecuator”) : aproximativ ca „o” în „oare”, ca „w” în cuvintele englezeşti „way”, „winter”
+;''u'' (nu după ''o'', înainte de ''a, e, i'') (ex. ''persuader'' – „a convinge”, ''muet'' – „mut”, ''nuit'' – „noapte”) : „ü” pronunţat într-o silabă cu vocala următoare
+
+===Consoane===
+
+; b: ca "b" în "băiat"
+; c: uneori ca "c" în "caiet" (înaintea consoanelor şi înainte de ''a'', ''o'' şi ''u''), alteori ca "s" în "sat" (înainte de ''e'', ''i'' şi ''y'')
+; ç: ca "s" în "sat" (înainte de ''a'', ''o'' şi ''u'')
+; ch: în general ca "ş" în "şopron", uneori ca "c" în "caiet"
+; d: ca "d" în "dor"
+; f: ca "f" în "fată"
+; g: uneori ca "g" în "gură" (înaintea consoanelor şi înainte de ''a'', ''o'' şi ''u''), alteori ca "j" în "joc" (înainte de ''e'', ''i'' şi ''y'')
+; ge + vocală: ca "j" în "joc" ('''e''' fiind mut)
+; gu + vocală: ca "g" în "gură" ('''u''' fiind în general mut)
+; gn: "n" muiat, ca în "neam" în graiul maramureşean
+; h: de obicei nu se pronunţă, dar uneori împiedică legătura cu cuvântul precedent sau căderea vocalei din '''la''', '''le''', '''ne'''
+; j: ca "j" în "joc"
+; k: numai în cuvinte străine, ca "k" în "kilogram"
+; l, ll (uneori): ca "l" în "loc"
+; m: ca "m" în "mal"
+; n: ca "n" în "nor"
+; p: ca "p" în "păr"
+; ph: ca "f" în "fată"
+; q(u): în general ca "c" în "caiet"
+; r: poate fi pronunţat ca "r" în "rol", dar fără a rula puternic limba
+; s: uneori ca "s" în "sat" (înaintea unei consoane, alta decât ''s''), alteori ca "z" în "zori" (între două vocale)
+; ss: ca "s" în "sat"
+; t, th: ca "t" în "tun"
+; v: ca "v" în "vagon"
+; w: numai în cuvinte străine, ca "v" în "vagon" sau ca "o" în "oare"
+; x: ca "x" în "extrem" sau în "exemplu"
+; z: ca "z" în "zero"
+
+== Listă de enunţuri ==
+
+În franceză sunt două grade principale de politeţe. Unul se caracterizează în primul rând prin adresarea cu ''tu'' (tu), celălalt prin adresarea cu ''vous'' (dumneavoastră). În Franţa adresarea cu ''vous'' este mai frecventă decât în Canada. În acest ghid se foloseşte numai adresarea cu ''vous'', în afară de enunţurile de genul "Pleacă de-aici!" care sunt ofensive prin definiţie.
+
+Enunţurile din acest ghid sunt în franceza vorbită în Franţa. Chiar dacă unele par ciudate în alte ţări francofone, ele sunt totuşi înţelese.
+
+=== Enunţuri de bază ===
+
+; Bună ziua. : Bonjour.
+; Bună dimineaţa. : Bonjour.
+; Bună seara. : Bonsoir.
+; Noapte bună : Bonne nuit.
+; La revedere : Au revoir.
+; Salut. : Salut.
+; Pa. : Salut.
+; Ce mai faceţi? : Comment allez-vous ?
+; Mulţumesc, bine. : Bien, merci.
+; Cum vă numiţi? : Comment vous appelez-vous ?
+; Cum te cheamă? : Comment tu t'appelles?
+; Mă numesc ______ . : Je m'appelle ______ .
+; Îmi pare bine (de cunoştinţă). : Enchanté(e).
+; Vă rog. : S'il vous plaît.
+; Mulţumesc. : Merci.
+; Cu plăcere. : Il n'y a pas de quoi. (În Québec: Bienvenue.)
+; Da. : Oui.
+; Nu. : Non.
+; Scuzaţi-mă. : Pardon., Excusez-moi.
+; Ïmi pare rău. : (Je suis) désolé(e)., Excusez-moi.
+; Nu înţeleg. : Je ne comprends pas.
+; Nu vorbesc (bine) franceza. : Je ne parle pas (bien) français.
+; Vorbiţi româneşte? : Parlez-vous roumain ?
+; Este cineva (aici) care vorbeşte româneşte? : Est-ce qu'il y a quelqu'un (ici) qui parle roumain?
+; Atenţie! : Attention !
+; Unde este toaleta? : Où sont les toilettes ?
+
+===Probleme===
+
+; Lasă-mă în pace! : Laissez-moi tranquille !
+; Pleacă de-aici! : Allez-vous-en !
+; Nu mă atinge! : Ne me touchez pas !
+; Chem poliţia! : J'appelle la police!
+; Poliţia! : Police !
+; Hoţul! : Au voleur !
+; Ajutor! : Au secours !
+; Ajutaţi-mă, vă rog! : Aidez-moi, s'il vous plaît !
+; E nevoie urgentă de ajutor. : C'est une urgence.
+; M-am rătăcit. : Je suis perdu(e).
+; Mi-am pierdut sacoşa / poşeta. : J'ai perdu mon sac.
+; Mi-am pierdut portofelul. : J'ai perdu mon portefeuille.
+; Mi-e rău. : J'ai un malaise.
+; Sunt bolnav(ă). : Je suis malade.
+; Sunt rănit(ă). : Je suis blessé(e).
+; Am nevoie de un medic. : J'ai besoin d'un médecin.
+; Pot folosi telefonul dumneavoastră? : Est-ce que je peux utiliser votre téléphone ?
+
+===Numere===
+
+; 1 : un
+; 2 : deux
+; 3 : trois
+; 4 : quatre
+; 5 : cinq
+; 6 : six
+; 7 : sept
+; 8 : huit
+; 9 : neuf
+; 10 : dix
+; 11 : onze
+; 12 : douze
+; 13 : treize
+; 14 : quatorze
+; 15 : quinze
+; 16 : seize
+; 17 : dix-sept
+; 18 : dix-huit
+; 19 : dix-neuf
+; 20 : vingt
+; 21 : vingt-et-un
+; 22 : vingt-deux
+; 23 : vingt-trois
+; 30 : trente
+; 40 : quarante
+; 50 : cinquante
+; 60 : soixante
+; 70 : soixante-dix ''sau'' septante (în Belgia şi în Elveţia)
+; 80 : quatre-vingt ''sau'' huitante (în Belgia şi în Elveţia, cu excepţia Genevei), ''sau'' octante (în Elveţia)
+; 90 : quatre-vingt-dix ''sau'' nonante (în Belgia şi în Elveţia)
+; 100 : cent
+; 200 : deux cents
+; 300 : trois cents
+; 1000 : mille
+; 2000 : deux mille
+; 1.000.000 : un million
+; numărul _____ (''tren, autobuz, telefon etc.'') : numéro _____
+; jumătate : demi, moitié
+; mai puţin : moins
+; mai mult : plus
+
+===Timp===
+
+; acum : maintenant
+; mai târziu : plus tard
+; mai devreme : plus tôt
+; înainte : avant
+; după : après
+; dimineaţa : le matin
+; azi dimineaţă : ce matin
+; înainte de masă : dans la matinée
+; după amiază : l'après-midi
+; azi după amiază : cet après-midi
+; seara : le soir
+; astă seară : ce soir
+; în timpul serii: dans la soirée
+; noaptea : la nuit
+
+==== Oră ====
+
+; Cât e ceasul? : Quelle heure est-il ?
+; Este _____ : Il est _____
+; ... ora unu noaptea. : ... une heure du matin.
+; ... ora două noaptea. : ... deux heures du matin.
+; ... ora 12 ziua / amiază. : ... midi.
+; ... ora două după-amiază / ora 14. : ... deux heures de l'après-midi / quatorze heures.
+; ... ora şase seara / ora 18. : ... six heures du soir / dix-huit heures.
+; ... ora şapte fără un sfert / ora 18.45. : ... sept heures moins le quart / dix-huit heures quarante-cinq.
+; ... ora şapte şi un sfert / ora 19.15. : ... sept heures et quart / dix-neuf heures quinze.
+; ... ora şapte şi jumătate / ora 19.30. : ... sept heures et demi / dix-neuf heures trente.
+; ... ora 12 noaptea. : ... minuit.
+
+==== Durată ====
+
+; _____ minut(e) : _____ minute(s)
+; _____ oră (ore) : _____ heure(s)
+; _____ zi(le) : _____ jour(s)
+; _____ săptămână (săptămâni) : _____ semaine(s)
+; _____ lună (luni) : _____ mois
+; _____ an(i) : _____ an(s), année(s)
+; zilnic(ă) : quotidien(ne)
+; săptămânal(ă) : hebdomadaire
+; lunar(ă) : mensuel(le)
+; anual(ă) : annuel(le)
+
+==== Zile ====
+
+; azi : aujourd'hui
+; ieri : hier
+; mâine : demain
+; săptămâna asta : cette semaine
+; săptămâna trecută : la semaine dernière
+; săptămâna viitoare : la semaine prochaine
+
+; luni : lundi
+; marţi : mardi
+; miercuri : mercredi
+; joi : jeudi
+; vineri : vendredi
+; sâmbătă : samedi
+; duminică : dimanche
+
+==== Luni ====
+
+; ianuarie : janvier
+; februarie : février
+; martie : mars
+; aprilie : avril
+; mai : mai
+; iunie : juin
+; iulie : juillet
+; august : août
+; septembrie : septembre
+; octombrie : octobre
+; noiembrie : novembre
+; decembrie : décembre
+
+==== Scrierea datelor şi a orelor ====
+
+Datele sunt scrise sub forma ''zi.lună.an''. şi se exprimă complet în felul următor: 18.12.1963 – ''le dix-huit décembre dix-neuf cent'' (sau ''mille neuf cent'') ''soixante-trois''. Cele două moduri de exprimare se pot folosi pentru anii de la 1100 la 1999. Pentru prima zi din lună se foloseşte numeralul ordinal (''le premier'').
+
+Orele se notează cu litera ''h'' după număr: 18 h 30 ("dix-huit heures trente").
+
+=== Culori ===
+
+; negru (neagră) : noir(e)
+; alb(ă) : blanc (blanche)
+; gri : gris(e)
+; roşu (roşie) : rouge
+; albastru (albastră) : bleu(e)
+; galben(ă) : jaune
+; verde : vert(e)
+; portocaliu (portocalie) : orange
+; violet(ă) : violet(te)
+; brun(ă) : brun(e)
+; maro : marron
+; roz:  rose
+
+=== Transporturi ===
+
+==== Autocar şi tren ====
+
+; Cât costă un bilet până la _____? : Combien coûte le billet pour _____ ?
+; Vă rog un bilet până la _____. : Un billet pour _____, je vous prie.
+; un bilet numai dus: un aller simple
+; un bilet dus-întors: un aller-retour
+; Unde merge trenul / autocarul ăsta? : Où va ce train / bus ?
+; Unde este trenul / autocarul de _____? : Où est le train / bus pour _____ ?
+; Trenul / Autocarul ăsta opreşte la _____? : Est-ce que ce train / bus s'arrête à _____ ?
+; Când pleacă trenul / autocarul la _____? : Quand part le train / bus pour _____ ?
+; Când soseşte trenul / autocarul la _____? : Quand est-ce que le train / bus arrive à _____ ?
+; biroul de bagaje : la consigne
+; linia  : la voie
+; peronul : le quai
+; naveta : la navette
+
+==== Direcţii ====
+
+; Unde este _____ : Où se trouve _____
+; ... gara? : ... la gare ?
+; ... autogara? : ... la gare routière ?
+; ... aeroportul? : ... l'aéroport ?
+; ... centrul oraşului? : ... le centre-ville ?
+; ... hotelul pentru tineri ? : ... l'auberge de jeunesse ?
+; ... hotelul _____? : ... l'hôtel _____ ?
+; ... ambasada / consulatul României / Moldovei? : ... l'ambassade / le consulat de Roumanie / Moldavie ?
+; Unde se găseşte _____ : Où est-ce qu'il y a _____
+; ... un hotel? : ... un hôtel ?
+; ... un hotel pentru tineri? : ... une auberge de jeunesse ?
+; Unde sunt _____ : Où est-qu'il y a _____
+; ... hoteluri? : ... des hôtels ?
+; ... restaurante? : ... des restaurants ?
+; ... baruri? : ... des bars ?
+; ... locuri de vizitat? : ... des sites à visiter ?
+; Puteţi să-mi arătaţi pe hartă? : Pouvez-vous me montrer sur la carte ?
+; stradă : rue
+; şosea : route
+; autostradă : autoroute
+; Cotiţi la stânga. : Tournez à gauche.
+; Cotiţi la dreapta. : Tournez à droite.
+; drept înainte : tout droit
+; spre _____ : vers le/la _____
+; după _____ : après le/la _____
+; înainte de _____ : avant le/la _____
+; Uitaţi-vă după _____. : Repérez le/la/les _____.
+; intersecţie : carrefour
+; nord : nord
+; sud : sud
+; est : est
+; vest : ouest
+; în sus : en haut
+; în jos : en bas
+
+==== Taxi ====
+
+; Taxi! : Taxi !
+; Duceţi-mă la _____, vă rog. : Emmenez-moi à _____, je vous prie.
+;
+
+=== Cazare ===
+
+; Aveţi camere libere? : Avez-vous des chambres libres ?
+; Cât costă o cameră pentru o persoană / două persoane? : Combien coûte une chambre pour une personne / deux personnes ?
+; În cameră este / sunt ... : Est-ce que dans la chambre il y a...
+; ... cearşafuri? : ...des draps ?
+; ... baie? : ...une salle de bain ?
+; ... telefon? : ... le téléphone ?
+; ... televizor? : ... la télé ?
+; ... conexiune internet? : ... une connexion à l'internet ?
+; Pot să văd camera? : Je peux voir la chambre ?
+; Nu aveţi vreo cameră _____ : Vous n'avez pas de chambre _____
+; ... mai curată? : ... plus propre ?
+; ... mai ieftină? : ... moins chère ?
+; ... mai liniştită? : ... plus tranquille ?
+; ... mai mare? : ... plus grande ?
+; ... mai mică? : ... plus petite ?
+; Bine, o iau. : Bien, je la prends.
+; Vreau să stau _____ noapte/nopţi. : Je compte rester _____ nuit(s).
+; Puteţi să-mi recomandaţi alt hotel? : Pouvez-vous me conseiller un autre hôtel ?
+; Aveţi ... : Avez-vous ...
+; ... safe? : ... un coffre-fort ?
+; ... boxe? : ... des casiers ?
+; Micul dejun este inclus în preţ? : Est-ce que le petit déjeuner est compris ?
+; La ce oră este micul dejun? : À quelle heure est le petit déjeuner ?
+; Vă rog să-mi faceţi curat în cameră. : Veuillez nettoyer ma chambre.
+; Puteţi să mă treziţi la ora _____? : Pouvez-vous me réveiller à _____ heures ?
+; Vreau să vă anunţ că plec. : Je veux vous signaler mon départ.
+
+=== Bani ===
+
+; Pot să plătesc cu dolari americani? : Acceptez-vous les dollars américains ?
+; Pot să plătesc cu card de credit? : Acceptez-vous les cartes de crédit ?
+; Pot să schimb bani aici? : Je peux changer de l'argent ici ?
+; Unde pot să schimb bani? : Où est-ce que je peux changer de l'argent ?
+; Puteţi să-mi schimbaţi un cec de călătorie? : Pouvez-vous me changer un chèque de voyage ?
+; Unde pot să schimb un cec de călătorie? : Où est-ce que je peux changer un chèque de voyage ?
+; Care este cursul de schimb? : Quel est le taux de change ?
+; Unde este un bancomat? : Où je peux trouver un distributeur de billets ?
+
+=== Mâncare ===
+
+; O masă pentru o persoană / două persoane, vă rog. : Une table pour une personne / deux personnes, je vous prie.
+; Meniul, vă rog! : La carte, s'il vous plaît !
+; Care este specialitatea casei? : Quelle est la spécialité de la maison ?
+; Aveţi vreo specialitate locală? : Est-ce que vous avez une spécialité locale ?
+; Sunt vegetarian(ă). : Je suis végétarien(ne).
+; Nu mănânc carne de porc. : Je ne mange pas de porc.
+; Puteţi să gătiţi ceva uşor? : Pouvez-vous préparer quelque chose de léger ?
+; meniu fix : menu
+; à la carte : à la carte
+; micul dejun : '''Franţa''': petit-déjeuner; '''Belgia, Canada, nordul Franţei''': déjeuner
+; prânz : '''Franţa''': déjeuner; '''Belgia, Canada, nordul Franţei''': dîner
+; cină : '''Franţa''': dîner; '''Belgia, Canada, nordul Franţei''': souper
+; Aş vrea _____. : Je voudrais _____.
+; ... brânză. / caşcaval. : ... du fromage.
+; ... cârnaţi. : ... des saucisses.
+; ... carne de cerb. : ... du cerf.
+; ... carne de mistreţ. : ... du sanglier.
+; ... carne de porc. : ... du porc.
+; ... carne de pui. : ... du poulet.
+; ... carne de vită. : ... du boeuf.
+; ... cod. : ... de la morue.
+; ... fasole. : ... des haricots.
+; ... fructe de mare. : ... des fruits de mer.
+; ... fructe. : ... des fruits.
+; ... homar. : ... du homard.
+; ... legume. : ... des légumes.
+; ... melci. : ... des escargots.
+; ... o salată. : ... une salade.
+; ... orez. : ... du riz.
+; ... ouă. : ... des oeufs.
+; ... pâine (prăjită). : ... du pain (grillé).
+; ... paste. : ... des pâtes.
+; ... peşte. : ... du poisson.
+; ... pui de baltă. : ... des grenouilles.
+; ... somon. : ... du saumon.
+; ... stridii. : ... des huîtres.
+; ... şuncă. : ... du jambon.
+; ... tăiţei. : ... des nouilles.
+; ... ton. : ... du thon.
+; Un pahar _____, vă rog. : Un verre _____, s'il vous plaît.
+; ... cu apă (minerală) ... : ... d'eau (minérale) ...
+; ... cu apă carbogazoasă ... : ... d'eau gazeuse ...
+; ... cu apă plată ... : d'eau plate ...
+; ... de suc de fructe ... : ... de jus de fruits ...
+; ... de vin alb / roşu ... : ... de vin blanc / rouge ...
+; O ceaşcă _____, vă rog. : Une tasse _____, s'il vous plaît.
+; ... de cafea ... : ... de café ...
+; ... de ceai ... : ... de thé ...
+; ... de lapte ... : ... de lait ...
+; O sticlă _____, vă rog. : Une bouteille _____, s'il vous plaît.
+; ... de apă (minerală) ... : ... d'eau (minérale) ...
+; ... de apă carbogazoasă ... : ... d'eau gazeuse ...
+; ... de apă plată ... : d'eau plate ...
+; ... de suc de fructe ... : ... de jus de fruits ...
+; ... de vin alb / roşu ... : ... de vin blanc / rouge ...
+; Nişte _____, vă rog! : Je peux avoir du _____
+; ... sare ... : ... sel ?
+; ... piper ... : poivre ?
+; ... unt : ... beurre ?
+; Ospătar! / Domnişoară! / Doamnă! : S'il vous plaît !
+; Am terminat. : J'ai fini.
+; A fost foarte bun(ă). : C'était délicieux.
+; Puteţi strânge masa. : Vous pouvez débarrasser la table.
+; Plata, vă rog! : L'addition, s'il vous plaît!
+
+=== Baruri ===
+
+; Serviţi băuturi alcoolice? : Servez-vous des boissons alcoolisées ?
+; Serviţi la masă? : Est-ce que vous servez à table ?
+; O bere / Două beri, vă rog. : Une bière / Deux bières, s'il vous plaît.
+; Un pahar de bere, vă rog : Un demi, s'il vous plaît.
+; O halbă de bere, vă rog. : Une pinte, s'il vous plaît.
+; O sticlă, vă rog. : Une bouteille, s'il vous plaît.
+; _____ (''alcool tare'') şi _____ (''băutură nealcoolică pentru amestec''), vă rog. : _____ et _____, s'il vous plaît.
+; ... whisky : ... du whisky
+; ... votcă : ... de la vodka
+; ... rom : ... du rhum
+; ... apă ... : de l'eau
+; ... apă tonică ... : de l'eau tonique
+; ... cola ... : du cola
+; ... sifon ... : du soda
+; ... suc de portocale ... : du jus d'orange
+; Aveţi ceva de ronţăit? : Est-ce que vous avez des amuse-gueule ?
+; Încă unul/una, vă rog. : Encore un/une, s'il vous plaît.
+; Încă un rând, vă rog. : Un autre pour la table, s'il vous plaît.
+; La ce oră închideţi? : À quelle heure fermez-vous ?
+
+=== Cumpărături ===
+
+; Aveţi asta pe mărimea mea? : Est-ce qur vous avez ça dans ma taille ?
+; Cât costă? : Combien ça coûte ?
+; E prea scump. : C'est trop cher.
+; ieftin : bon marché, pas cher
+; N-am destui bani. : Je n'ai pas assez d'argent.
+; Nu-l/N-o vreau. : Je n'en veux pas.
+; Vrei să mă înşeli! : Vous essayez de me faire avoir !
+; Nu mă interesează. : Je ne suis pas intéressé(e).
+; Bine, îl/o/îi/le cumpăr. : D'accord, je le/la/les prends.
+; Puteţi să-mai daţi o pungă? : Je pourrais avoir un sac ?
+; Livraţi în străinătate? : Est-ce que vous livrez-vous à l'étranger ?
+; Am nevoie _____ : J'ai besoin _____
+; ... cărţi în română. : ... de livres en roumain.
+; ... de baterii. : ... de piles.
+; ... de cremă solară. : ... de crème solaire.
+; ... de hârtie de scris. : ... de papier à lettres.
+; ... de o periuţă de dinţi. : ... d'une brosse à dents.
+; ... de o revistă în română. : ... d'un magazine en roumain.
+; ... de o umbrelă. (''de soare'') : ... d'une ombrelle.
+; ... de o umbrelă. (''pentru ploaie'') : ... d'un parapluie.
+; ... de o vedere. : ... d'une carte postale.
+; ... de pastă de dinţi. : ... de dentifrice.
+; ... de săpun. : ... de savon.
+; ... de şampon. : ... de shampooing.
+; ... de tampoane. : ...de tampons.
+; ... de timbre. : ... de timbres.
+; ... de un aparat de ras. : ... d'un rasoir.
+; ... de un calmant. : ... d'un calmant.
+; ... de un dicţionar român-francez / francez-român. : ... d'un dictionnaire roumain-français / français-roumain.
+; ... de un medicament pentru răceală : ... d'un médicament pour un rhume.
+; ... de un medicament pentru stomac. : ... d'un médicament pour l'estomac.
+; ... de un pix, un stilou. : ... d'un stylo.
+; ... de un ziar în română. : ... d'un journal en roumain.
+
+=== Conducere auto ===
+
+; Aş vrea să închiriez o maşină. : Je voudrais louer une voiture.
+; Pot să închei o asigurare? : Je peux prendre une assurance ?
+; benzinărie : station-service
+; benzină : essence
+; motorină : diesel
+
+==== Inscripţii pe indicatoare ====
+
+;parcarea _____ ''(pe autostradă)'':Aire de _____
+;aprindeţi farurile:ALLUMEZ VOS FEUX
+;oprire permisă pe trotuar:ARRÊT AUTORISÉ SUR TROTTOIR
+;atenţie la foc:ATTENTION AU FEU
+;intersecţie:CARREFOUR
+;cedaţi trecerea:CÉDEZ LE PASSAGE
+;ocolire:Déviation
+;vamă:DOUANE
+;sfârşitul zonei de aprindere a farurilor:FIN D'ALLUMAGE DES FEUX
+;sfârşit de şantier:FIN DE CHANTIER
+;sfârşit de ocolire:Fin de déviation
+;sfârşit de zonă:FIN DE ZONE
+;sfârşit de interdicţie pentru skiori:FIN D'INTERDICTION AUX SKIEURS
+;gara de plată a austostrăzii de la _____:GARE DE PÉAGE DE _____
+;stai! jandarmeria:HALTE GENDARMERIE
+;stai! punct de plată ''(pe autostradă)'':HALTE PÉAGE
+;stai! poliţia:HALTE POLICE
+;aparat de taxare ''(în parcare)'':HORODATEUR
+;interzis turmelor:INTERDIT AUX TROUPEAUX
+;interzis din _____ până în _____ ale lunii:INTERDIT DU _____ AU _____ DU MOIS
+;interzis cu excepţia _____:INTERDIT SAUF _____
+;deschisă ''(trecătoare în munţi)'':OUVERT
+;următoarea ieşire ''(de pe autostradă)'':Prochaine sortie: _____
+;produse regionale:Produits Régionaux
+;remorci şi semiremorci:REMORQUES ET SEMI-REMORQUES
+;secţiune cu plată ''(pe autostradă)'':SECTION À PÉAGE
+;staţionare cu taxă:STATIONNEMENT PAYANT
+;urmaţi ''(un anumit indicator sau şosea)'':suivre
+;lucrări pe _____ km:TRAVAUX SUR _____ KM
+;înapoia unui tren mai poate fi şi altul:UN TRAIN PEUT EN CACHER UN AUTRE
+;circulaţia permisă vehiculelor agricole:VÉHICULES AGRICOLES AUTORISÉS
+;zonă:ZONE
+
+=== Autorităţi ===
+
+; N-am făcut nimic (rău). : Je n'ai rien fait (de mal).
+; E o greşeală. : C'est une erreur.
+; Unde mă duceţi? : Où est-ce que vous m'emmenez ?
+; Sunt arestat(ă)? : Est-ce que je suis arrêté(e) ?
+; Sunt de cetăţenie română / moldovenească : Je suis citoyen(ne) roumain(e) / moldave.
+; Trebuie să contactez ambasada / consulatul României / Moldovei. : Je dois parler à l'ambassade / au consulat de Roumanie / Moldavie.
+; Aş vrea să vorbesc cu un avocat. : Je voudrais parler à un avocat.
+; Aş putea doar să plătesc o amendă? : Je pourrais simplement payer une amende ?
+
+[[de:Sprachführer Französisch]]
+[[en:French phrasebook]]
+[[hu:Francia szószedet]]
+[[it:Frasario francese]]
+[[ja:フランス語会話集]]
+[[nl:Taalgids Frans]]
+[[sv:Fransk parlör]]

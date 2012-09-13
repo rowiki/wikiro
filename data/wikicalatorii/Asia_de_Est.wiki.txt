@@ -1,0 +1,32 @@
+'''Asia de Est''' este una din cele mai bine dezvoltate regiuni a continentul [[Asia|asiatic]] şi este formată din următoarele ţări:
+
+*[[China]]
+*[[Coreea de Nord]]
+*[[Coreea de Sud]]
+*[[Japonia]]
+
+{{ciot}}
+{{EsteÎn|Asia}}
+
+[[WikiPedia:Asia Răsăriteană]]
+
+
+
+
+
+[[ca:Àsia Oriental]]
+[[de:Ostasien]]
+[[en:East Asia]]
+[[es:Extremo Oriente]]
+[[fi:Itä-Aasia]]
+[[fr:Extrême-Orient]]
+[[hi:पूर्व एशिया]]
+[[it:Estremo Oriente]]
+[[ja:東アジア]]
+[[nl:Oost-Azië]]
+[[pl:Daleki Wschód]]
+[[pt:Extremo Oriente]]
+[[ru:Восточная Азия]]
+[[sv:Östasien]]
+[[zh:東亞]]
+[[wts:Category:East Asia]]

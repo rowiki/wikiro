@@ -1,0 +1,60 @@
+Dacă vă trebuie ajutor despre editarea ghidului turistic Wikitravel, aţi venit la pagina bună! Mai jos sunt nişte articole importante despre Wikitravel şi cum să o folosiţi. Dacă aveţi întrebări care nu sunt răspunse aici, vedeţi pagina de [[Wikitravel:Întrebări frecvente|Întrebări frecvente]] sau întrebaţi la [[Wikitravel:Hanul călătorilor]].
+
+==Informaţii generale==
+
+*[[Wikitravel:Despre|Despre Wikitravel]]
+*[[Wikitravel:Bun venit|Bun venit la Wikitravel]]
+*[[Wikitravel:Întrebări frecvente|Întrebări frecvente]]
+*[[Wikitravel:Copyleft|Copyleft]]
+*[[Wikitravel:Modalităţi de a contribui la Wikitravel|Modalităţi de a contribui la Wikitravel]]
+
+==Instrucţiuni==
+
+*[[Wikitravel:Cum să faceţi un cont de utilizator|Cum să faceţi un cont de utilizator]]
+*[[Wikitravel:Cum să editaţi o pagină|Cum să editaţi o pagină]]
+*[[Wikitravel:Cum să formataţi cu Wiki|Cum să formataţi cu Wiki]]
+*[[Wikitravel:Cum să începeţi o pagină nouă|Cum să începeţi o pagină nouă]]
+*[[Wikitravel:Cum să ştergeţi o pagină|Cum să ştergeţi o pagină]]
+*[[Wikitravel:Cum să renumiţi o pagină|Cum să renumiţi o pagină]]
+*[[Wikitravel:Cum să adăugaţi o imagine|Cum să adăugaţi o imagine]]
+*[[Wikitravel:Cum să folosiţi paginiile de discuţie|Cum să folosiţi paginile de discuţie]]
+*[[Wikitravel:Cum să restauraţi o pagină|Cum să restauraţi o pagină]]
+
+==Explicarea interfeţei==
+
+*[[Wikitravel:Ajutor cu preferinţele utilizatorului|Ajutor cu preferinţele utilizatorului]]
+*[[Wikitravel:Ajutor cu articole urmărite|Ajutor cu articole urmărite]]
+*[[Wikitravel:Ajutor cu versiuni mai vechi a unei pagini|Ajutor cu versiuni mai vechi a unei pagini]]
+*[[Wikitravel:Ajutor cu schimbări recente|Ajutor cu schimbări recente]]
+*[[Wikitravel:Ajutor cu pagina utilizatorului|Ajutor cu pagina utilizatorului]]
+*[[Wikitravel:Ajutor cu căutarea|Ajutor cu căutarea]]
+
+==Politica Wikitravel==
+
+*[[Wikitravel:Ţeluri|Ţelurile Wikitravel]]
+*[[Wikitravel:Drepturi de autor|Despre drepturi de autor]]
+*[[Wikitravel:Politici şi convenţii Wikitravel|Politici şi convenţii Wikitravel]]
+*[[Wikitravel:Manual de stil|Manual de stil]]
+
+
+
+
+
+
+[[de:Wikitravel:Hilfe]]
+[[en:Wikitravel:Help]]
+[[es:Wikitravel:Ayuda]]
+[[fi:Wikitravel:Ohje]]
+[[fr:Wikitravel:Aide]]
+[[he:ויקיטיול:עזרה]]
+[[hu:Wikitravel:Segítség]]
+[[it:Wikitravel:Aiuto]]
+[[ja:Wikitravel:ヘルプ]]
+[[ko:Wikitravel:도움말]]
+[[nl:Wikitravel:Help]]
+[[pl:Wikitravel:Pomoc]]
+[[pt:Wikitravel:Ajuda]]
+[[ru:Wikitravel:Справка]]
+[[sv:Wikitravel:Hjälp]]
+[[zh:Wikitravel:帮助]]
+[[wts:Help]]
