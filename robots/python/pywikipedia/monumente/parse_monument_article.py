@@ -1,4 +1,4 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8  -*-
 '''
 Parse the monument pages (articles and images) and put the output in a json file
@@ -95,7 +95,7 @@ def closeLog():
     _flog.close()
 
 def log(string):
-    //wikipedia.output(string.encode("utf8") + "\n")
+    #wikipedia.output(string.encode("utf8") + "\n")
     _flog.write(string.encode("utf8") + "\n")
 
 def dms2dec(deg, min, sec, sign):
