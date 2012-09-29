@@ -80,6 +80,26 @@ countries = {
 		    'dest' : u'commons',
 		    'conv' : u'',
 		    },
+		    {
+		    'source' : u'NotăCod',
+		    'dest' : u'notacod',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'FostCod',
+		    'dest' : u'fostcod',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Cod92',
+		    'dest' : u'cod92',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'CodRan',
+		    'dest' : u'codran',
+		    'conv' : u'',
+		    },
 		    ],
 	},
 }
