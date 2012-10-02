@@ -336,8 +336,12 @@ def processImagePage(text, page, conf):
     pass
 
 def main():
+    PARSE_QUICK = 0
+    PARSE_NORMAL = 1
+    PARSE_FULL = 2
     lang = u'ro'
     textfile = u''
+    parse_type = PARSE_NORMAL
 
     for arg in wikipedia.handleArgs():
         if arg.startswith('-lang:'):
@@ -345,6 +349,11 @@ def main():
             user.mylang = lang
         if arg.startswith('-family'):
             user.family = arg [len('-family:'):]
+	if arg.startswith('-parse'):
+            if  arg [len('-parse:'):] == "full":
+		parse_type = PARSE_FULL
+	    elif arg [len('-parse:'):] == "quick":
+                parse_type = PARSE_QUICK
 
     site = wikipedia.getSite()
     lang = site.language()
@@ -392,6 +401,7 @@ def main():
                 content = []
                 vallist = jsonFile.values() # extract list of values
                 if len(vallist):
+		    # extract all existing data about the page
                     #print vallist
                     content = [vallist[i][j] for i in range(len(vallist)) for j in range(len(vallist[i])) if vallist[i][j]["name"] == page.title()]
                 #print content
@@ -405,7 +415,10 @@ def main():
                         code = content['code']
                     else:
                         code = 0
-                    if page.editTime() <= lastedit:
+		    # on quick parse, we just use the previous values, even if the page has changed
+		    # on normal parse, we first check if the page has changed
+		    if parse_type == PARSE_QUICK or \
+		    		(parse_type == PARSE_NORMAL and page.editTime() <= lastedit):
                         if code in fullDict:
                             fullDict[code].append(content)
                         else:
