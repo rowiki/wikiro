@@ -155,6 +155,19 @@
       "quality": false
     }
   ], 
+  "HD-II-m-A-03440": [
+    {
+      "project": "commons", 
+      "code": "HD-II-m-A-03440", 
+      "lastedit": "20120930133925", 
+      "name": "Category:Biserica Neme\u0219ilor, S\u0103la\u0219u de Sus", 
+      "author": null, 
+      "lat": 0, 
+      "image": null, 
+      "quality": false, 
+      "long": 0
+    }
+  ], 
   "VS-II-m-A-06708": [
     {
       "code": "VS-II-m-A-06708", 
@@ -175,9 +188,9 @@
       "name": "Category:St. Constantine and Helena (Apostol din Tabaci) Church, Bucharest", 
       "author": null, 
       "image": null, 
-      "long": 26.113991944444, 
+      "long": 26.113991944443999, 
       "project": "commons", 
-      "lat": 44.418804, 
+      "lat": 44.418804000000002, 
       "quality": false
     }
   ], 
@@ -266,9 +279,9 @@
       "name": "Category:Wessel\u00e9nyi Monument", 
       "author": null, 
       "image": null, 
-      "long": 23.059444444444, 
+      "long": 23.059444444444001, 
       "project": "commons", 
-      "lat": 47.175827777778, 
+      "lat": 47.175827777777997, 
       "quality": false
     }
   ], 
@@ -283,6 +296,19 @@
       "project": "commons", 
       "lat": 0, 
       "quality": false
+    }
+  ], 
+  "PH-III-m-A-16868": [
+    {
+      "project": "commons", 
+      "code": "PH-III-m-A-16868", 
+      "lastedit": "20121001041509", 
+      "name": "Category:Statue of Liberty (Ploie\u0219ti)", 
+      "author": null, 
+      "lat": 0, 
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "B-II-a-A-19464": [
@@ -342,6 +368,19 @@
       "code": "BV-II-a-A-11294", 
       "lastedit": "20120909102248", 
       "name": "Category:Fortifications in Bra\u015fov", 
+      "author": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "AG-II-a-A-13805": [
+    {
+      "code": "AG-II-a-A-13805", 
+      "lastedit": "20120827073753", 
+      "name": "Category:Ansamblul conacului Br\u0103tianu - \"Florica\"", 
       "author": null, 
       "image": null, 
       "long": 0, 
@@ -415,6 +454,19 @@
       "quality": false
     }
   ], 
+  "B-II-m-B-19427": [
+    {
+      "code": "B-II-m-B-19427", 
+      "lastedit": "20120925205307", 
+      "name": "Category:Constantin Geblescu Villa, Bucharest", 
+      "author": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "HR-II-m-B-12916.01": [
     {
       "code": "HR-II-m-B-12916.01", 
@@ -474,7 +526,7 @@
       "name": "Category:Museum of the Romanian Peasant", 
       "author": null, 
       "image": null, 
-      "long": 26.083667, 
+      "long": 26.083666999999998, 
       "project": "commons", 
       "lat": 44.454368888889, 
       "quality": false
@@ -937,28 +989,28 @@
   ], 
   "CJ-II-m-A-07271": [
     {
+      "project": "commons", 
       "code": "CJ-II-m-A-07271", 
-      "lastedit": "20120907132717", 
+      "lastedit": "20120930153628", 
       "name": "Category:Bethlen Bastion", 
       "author": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "commons", 
       "lat": 0, 
-      "quality": false
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "AB-II-a-A-00172": [
     {
+      "project": "commons", 
       "code": "AB-II-a-A-00172", 
-      "lastedit": "20120907122131", 
+      "lastedit": "20120930140611", 
       "name": "Category:Cetatea Aiudului", 
       "author": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "commons", 
       "lat": 0, 
-      "quality": false
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "AB-I-s-A-00028": [
@@ -996,7 +1048,7 @@
       "image": null, 
       "long": 23.792358, 
       "project": "commons", 
-      "lat": 44.319254, 
+      "lat": 44.319254000000001, 
       "quality": false
     }
   ], 
@@ -1237,7 +1289,7 @@
   "AR-II-m-A-00624": [
     {
       "code": "AR-II-m-A-00624", 
-      "lastedit": "20120801175803", 
+      "lastedit": "20120922123526", 
       "name": "Category:Sf. Mucenic Gheorghe church in Lunc\u0219oara, Arad", 
       "author": null, 
       "image": null, 
@@ -1514,9 +1566,9 @@
       "name": "Category:Geology Museum in Bucharest", 
       "author": null, 
       "image": null, 
-      "long": 26.085277, 
+      "long": 26.085277000000001, 
       "project": "commons", 
-      "lat": 44.454843888889, 
+      "lat": 44.454843888889002, 
       "quality": false
     }
   ], 
@@ -1705,7 +1757,7 @@
   "TM-II-m-A-06173": [
     {
       "code": "TM-II-m-A-06173", 
-      "lastedit": "20120907162012", 
+      "lastedit": "20120927140727", 
       "name": "Category:Catedrala Ortodoxa Sarba Timisoara", 
       "author": null, 
       "image": null, 
@@ -2186,7 +2238,7 @@
   "BV-II-m-A-11589": [
     {
       "code": "BV-II-m-A-11589", 
-      "lastedit": "20120907124330", 
+      "lastedit": "20120923215625", 
       "name": "Category:St Nicholas church from Bra\u015fov", 
       "author": null, 
       "image": null, 
@@ -2246,6 +2298,19 @@
       "project": "commons", 
       "lat": 0, 
       "quality": false
+    }
+  ], 
+  "HD-II-a-A-03363": [
+    {
+      "project": "commons", 
+      "code": "HD-II-a-A-03363", 
+      "lastedit": "20120930130313", 
+      "name": "Category:Cetatea M\u0103l\u0103ie\u0219ti", 
+      "author": null, 
+      "lat": 0, 
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "BV-II-m-A-11530.01": [
@@ -2623,6 +2688,19 @@
       "project": "commons", 
       "lat": 0, 
       "quality": false
+    }
+  ], 
+  "CJ-II-a-A-07240": [
+    {
+      "project": "commons", 
+      "code": "CJ-II-a-A-07240", 
+      "lastedit": "20120930164920", 
+      "name": "Category:Citadel of Cluj-Napoca", 
+      "author": null, 
+      "lat": 0, 
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "GL-II-m-A-03066.01": [
@@ -3256,9 +3334,9 @@
       "name": "Category:National Museum of the Union", 
       "author": null, 
       "image": null, 
-      "long": 23.570695, 
+      "long": 23.570695000000001, 
       "project": "commons", 
-      "lat": 46.068262, 
+      "lat": 46.068261999999997, 
       "quality": false
     }
   ], 
@@ -3629,8 +3707,21 @@
   "B-II-m-A-18220.01": [
     {
       "code": "B-II-m-A-18220.01", 
-      "lastedit": "20120907112837", 
+      "lastedit": "20120922053418", 
       "name": "Category:Col\u0163ea Church, Bucharest", 
+      "author": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "IS-II-m-B-04041": [
+    {
+      "code": "IS-II-m-B-04041", 
+      "lastedit": "20120907142713", 
+      "name": "Category:Saints Atanasie and Chiril Church in Ia\u0219i", 
       "author": null, 
       "image": null, 
       "long": 0, 
@@ -3795,11 +3886,11 @@
       "quality": false
     }
   ], 
-  "IS-II-m-B-04041": [
+  "PH-II-m-A-16691.01": [
     {
-      "code": "IS-II-m-B-04041", 
-      "lastedit": "20120907142713", 
-      "name": "Category:Saints Atanasie and Chiril Church in Ia\u0219i", 
+      "code": "PH-II-m-A-16691.01", 
+      "lastedit": "20120925065900", 
+      "name": "Category:Sinaia biserica veche", 
       "author": null, 
       "image": null, 
       "long": 0, 
@@ -4536,6 +4627,19 @@
       "quality": false
     }
   ], 
+  "AG-IV-m-A-13942": [
+    {
+      "project": "commons", 
+      "code": "AG-IV-m-A-13942", 
+      "lastedit": "20120930110528", 
+      "name": "Category:Manole's Fountain", 
+      "author": null, 
+      "lat": 0, 
+      "image": null, 
+      "quality": false, 
+      "long": 0
+    }
+  ], 
   "IF-II-m-A-15298.01": [
     {
       "code": "IF-II-m-A-15298.01", 
@@ -4846,6 +4950,32 @@
       "quality": false
     }
   ], 
+  "HD-II-m-A-03445": [
+    {
+      "project": "commons", 
+      "code": "HD-II-m-A-03445", 
+      "lastedit": "20120930141100", 
+      "name": "Category:Biserica reformat\u0103 din S\u00e2nt\u0103m\u0103ria-Orlea", 
+      "author": null, 
+      "lat": 0, 
+      "image": null, 
+      "quality": false, 
+      "long": 0
+    }
+  ], 
+  "HD-II-m-A-03442": [
+    {
+      "project": "commons", 
+      "code": "HD-II-m-A-03442", 
+      "lastedit": "20120930134420", 
+      "name": "Category:Biserica \"Sf. Atanasie \u0219i Chiril\", S\u0103la\u0219u de Sus", 
+      "author": null, 
+      "lat": 0, 
+      "image": null, 
+      "quality": false, 
+      "long": 0
+    }
+  ], 
   "AG-II-m-A-13710.05": [
     {
       "code": "AG-II-m-A-13710.05", 
@@ -4924,11 +5054,11 @@
       "quality": false
     }
   ], 
-  "AG-II-a-A-13805": [
+  "TM-II-a-A-06097": [
     {
-      "code": "AG-II-a-A-13805", 
-      "lastedit": "20120827073753", 
-      "name": "Category:Ansamblul conacului Br\u0103tianu - \"Florica\"", 
+      "code": "TM-II-a-A-06097", 
+      "lastedit": "20120912111651", 
+      "name": "Category:Neptun Public Bath, Timi\u015foara", 
       "author": null, 
       "image": null, 
       "long": 0, 
@@ -4979,7 +5109,7 @@
   "AR-II-m-B-00625": [
     {
       "code": "AR-II-m-B-00625", 
-      "lastedit": "20120801175955", 
+      "lastedit": "20120922123530", 
       "name": "Category:Wooden church in Lunc\u0219oara-Vojdoci", 
       "author": null, 
       "image": null, 
@@ -4998,7 +5128,7 @@
       "image": null, 
       "long": 26.09423, 
       "project": "commons", 
-      "lat": 44.442095, 
+      "lat": 44.442095000000002, 
       "quality": false
     }
   ], 
@@ -5223,6 +5353,19 @@
       "quality": false
     }
   ], 
+  "CJ-II-a-B-07243": [
+    {
+      "code": "CJ-II-a-B-07243", 
+      "lastedit": "20120919165912", 
+      "name": "Category:Cluj-Napoca Central Park", 
+      "author": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "IS-III-m-B-04312": [
     {
       "code": "IS-III-m-B-04312", 
@@ -5366,6 +5509,19 @@
       "quality": false
     }
   ], 
+  "AR-II-m-A-00656": [
+    {
+      "code": "AR-II-m-A-00656", 
+      "lastedit": "20120801191248", 
+      "name": "Category:Wooden church in \u021a\u0103rmure, Arad", 
+      "author": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "NT-II-m-A-10627.01": [
     {
       "code": "NT-II-m-A-10627.01", 
@@ -5397,6 +5553,19 @@
       "code": "B-II-m-B-18938", 
       "lastedit": "20120907112759", 
       "name": "Category:Adriatica-Trieste Society Palace", 
+      "author": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "PH-II-a-A-16673": [
+    {
+      "code": "PH-II-a-A-16673", 
+      "lastedit": "20120914204809", 
+      "name": "Category:Sinaia train station", 
       "author": null, 
       "image": null, 
       "long": 0, 
@@ -5613,17 +5782,17 @@
       "quality": false
     }
   ], 
-  "AR-II-m-A-00656": [
+  "CJ-II-a-A-07242": [
     {
-      "code": "AR-II-m-A-00656", 
-      "lastedit": "20120801191248", 
-      "name": "Category:Wooden church in \u021a\u0103rmure, Arad", 
-      "author": null, 
-      "image": null, 
-      "long": 0, 
       "project": "commons", 
+      "code": "CJ-II-a-A-07242", 
+      "lastedit": "20120930152823", 
+      "name": "Category:Fortification of Cluj-Napoca", 
+      "author": null, 
       "lat": 0, 
-      "quality": false
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "IS-II-m-B-04101": [
@@ -5663,6 +5832,19 @@
       "project": "commons", 
       "lat": 0, 
       "quality": false
+    }
+  ], 
+  "CJ-III-m-B-07814": [
+    {
+      "project": "commons", 
+      "code": "CJ-III-m-B-07814", 
+      "lastedit": "20120930105629", 
+      "name": "Category:Capitoline Wolf, Cluj-Napoca", 
+      "author": null, 
+      "lat": 0, 
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "B-III-m-A-20004": [
@@ -5854,9 +6036,9 @@
       "name": "Category:Matthias Corvinus Statue, Cluj-Napoca", 
       "author": null, 
       "image": null, 
-      "long": 23.58983, 
+      "long": 23.589829999999999, 
       "project": "commons", 
-      "lat": 46.76954, 
+      "lat": 46.769539999999999, 
       "quality": false
     }
   ], 
@@ -6101,7 +6283,7 @@
       "name": "Category:Tomb of the Unknown Soldier in Bucharest", 
       "author": null, 
       "image": null, 
-      "long": 26.096666666667, 
+      "long": 26.096666666667002, 
       "project": "commons", 
       "lat": 44.411388888889, 
       "quality": false
@@ -7345,9 +7527,9 @@
       "name": "Category:Turnul Sfatului (Sibiu)", 
       "author": null, 
       "image": null, 
-      "long": 24.151944444444, 
+      "long": 24.151944444443998, 
       "project": "commons", 
-      "lat": 45.797777777778, 
+      "lat": 45.797777777778002, 
       "quality": false
     }
   ], 
@@ -7462,9 +7644,9 @@
       "name": "Category:Muzeul Na\u0163ional de Art\u0103 al Rom\u00e2niei", 
       "author": null, 
       "image": null, 
-      "long": 26.09575, 
+      "long": 26.095749999999999, 
       "project": "commons", 
-      "lat": 44.440172, 
+      "lat": 44.440171999999997, 
       "quality": false
     }
   ], 
@@ -7869,19 +8051,6 @@
       "quality": false
     }
   ], 
-  "B-II-m-B-19437": [
-    {
-      "code": "B-II-m-B-19437", 
-      "lastedit": "20120907112845", 
-      "name": "Category:Constantin Geblescu Villa, Bucharest", 
-      "author": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "commons", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
   "IS-II-m-B-04023": [
     {
       "code": "IS-II-m-B-04023", 
@@ -8095,6 +8264,19 @@
       "code": "AG-II-m-B-13396", 
       "lastedit": "20120802095057", 
       "name": "Category:Casa Racoviceanu", 
+      "author": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "SM-II-a-A-05261": [
+    {
+      "code": "SM-II-a-A-05261", 
+      "lastedit": "20120925194325", 
+      "name": "Category:Cetatea Ardud", 
       "author": null, 
       "image": null, 
       "long": 0, 
@@ -8656,9 +8838,9 @@
       "name": "Category:Communal Palace (Buz\u0103u)", 
       "author": null, 
       "image": null, 
-      "long": 26.820555555556, 
+      "long": 26.820555555555998, 
       "project": "commons", 
-      "lat": 45.153611111111, 
+      "lat": 45.153611111110997, 
       "quality": false
     }
   ], 
@@ -8734,9 +8916,9 @@
       "name": "Category:National Bank of Romania, Craiova", 
       "author": null, 
       "image": null, 
-      "long": 23.793978, 
+      "long": 23.793977999999999, 
       "project": "commons", 
-      "lat": 44.319801, 
+      "lat": 44.319800999999998, 
       "quality": false
     }
   ], 
@@ -8846,15 +9028,15 @@
   ], 
   "B-II-m-A-18157": [
     {
-      "project": "commons", 
       "code": "B-II-m-A-18157", 
       "lastedit": "20120911211140", 
       "name": "Category:M\u0103rcu\u0163a Monastery, Bucharest", 
       "author": null, 
-      "lat": 0, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "AG-II-m-B-13391": [
@@ -9050,6 +9232,19 @@
       "project": "commons", 
       "lat": 0, 
       "quality": false
+    }
+  ], 
+  "HD-II-a-A-03441": [
+    {
+      "project": "commons", 
+      "code": "HD-II-a-A-03441", 
+      "lastedit": "20120930133907", 
+      "name": "Category:Curtea cnezilor C\u00e2ndre\u0219", 
+      "author": null, 
+      "lat": 0, 
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "BV-II-m-A-11294.04": [
