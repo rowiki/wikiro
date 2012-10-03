@@ -227,6 +227,7 @@ def main():
 		allPages = list()
 		article = None
 		picture = None
+		pic_author = None
 		#wikipedia.output(str(page))
 		try:
 			#wikipedia.output("OK: " + str(page[code]))
@@ -244,7 +245,15 @@ def main():
 					picture = pages_commons[code][0]["name"]
 				elif monument["Imagine"].strip() == "": #no image in list, multiple available
 					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
+					author_list = ""
 					for pic in pages_commons[code]:
+						if pic_author == None and author_list == "" and pic["author"] <> None:
+							pic_author = pic["author"]
+							author_list += u"[[:%s]], " % pic["name"]
+						elif pic["author"] <> None and pic_author <> pic["author"]:
+							#multiple authors, ignore and report error
+							author_list += u"[[:%s]], " % pic["name"]
+							pic_author = None
 						msg += u"[[:%s]], " % pic["name"]
 						if pic["quality"] == True: #choose the first quality picture
 							picture = pic["name"]
@@ -252,6 +261,8 @@ def main():
 					if picture == None: #no quality pictures, but do not log - we'll choose a random one
 						pass
 						#log(msg)
+					if pic_author == None and author_list <> "":
+						log(u"*'''E''': ''[%s]'' În lista de imagini sunt trecuți mai multi autori: %s" % (code, author_list))
 				allPages.extend(pages_commons[code])
 			if code in categories_commons:
 				allPages.extend(categories_commons[code])
@@ -285,17 +296,19 @@ def main():
 				
 		#author from article
 		if article <> None and article["author"] <> None and article["author"].strip() <> "":
-			author = strainu.stripLink(article["author"]).strip()
+			#author = strainu.stripLink(article["author"]).strip()
+			author = article["author"].strip()
 			if author == None or author == "":
 				wikipedia.output("Wrong link: %s" % article["author"])
 			elif monument["Arhitect"] == "":
 				wikipedia.output(author)
 				articleText = updateTableData(monument["source"], code, "Arhitect", author, text=articleText)
 			else:
-				a1 = author.split("<ref")[0].strip()
-				a2 = strainu.stripLink(monument["Arhitect"]).strip()
+				a1 = author.strip()
+				a2 = monument["Arhitect"].strip()
 				if a1 <> a2:
-					log(u"*''W'': ''[%s]'' Câmpul Arhitect este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
+					articleText = updateTableData(monument["source"], code, "Arhitect", a1, text=articleText)
+				#	log(u"*''W'': ''[%s]'' Câmpul Arhitect este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
 
 		#add the author(s) extracted from author pages
 		elif code in authors_ro:
@@ -311,6 +324,10 @@ def main():
 				articleText = updateTableData(monument["source"], code, "Arhitect", authors, text=articleText)
 			else:
 				wikipedia.output("The authors list is unchanged for %s: %s" % (code, authors))
+
+		elif pic_author <> None:
+			if pic_author <> strainu.stripLink(monument["Arhitect"]).strip():
+				articleText = updateTableData(monument["source"], code, "Arhitect", pic_author, text=articleText)
 	
 		#image from Commons, none in the list
 		if picture <> None and monument["Imagine"].strip() == "":
