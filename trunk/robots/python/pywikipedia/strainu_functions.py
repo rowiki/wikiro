@@ -180,6 +180,9 @@ def stripExternalLink(text):
         return text[start+1:end]
     else:
         return text[start+1:sep]
+
+def stripNamespace(link):
+    return link[link.find(':')+1:]
     
         
     # def getDeg(self, decimal):
