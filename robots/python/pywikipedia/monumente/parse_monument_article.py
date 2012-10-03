@@ -1,4 +1,4 @@
-#!/usr/bin/python
+﻿#!/usr/bin/python
 # -*- coding: utf-8  -*-
 '''
 Parse the monument pages (articles and images) and put the output in a json file
@@ -29,28 +29,28 @@ options = {
         [
         {
             'name': u'Infocaseta Monument',
-            'author': u'artist',
+            'author': [u'artist', u'artist1', u'artist2'],
             'image': u'imagine',
         },
         {
             'name': u'Clădire Istorică|Cutie Edificiu Religios|Infocaseta Edificiu religios|Infocaseta Monument|Infocaseta Lăcaș de cult',
-            'author': u'arhitect',
+            'author': [u'arhitect'],
             'image': u'imagine',
         },
         {
             'name': u'Castru|Infocaseta Castru|Infocaseta Gară|Mănăstire',
             #'artist' does not really exist, putting it here to prevent errors
-            'author': u'artist',
+            'author': [u'artist'],
             'image': u'imagine',
         },
         {
             'name': u'Infocaseta Biserică din lemn',
-            'author': u'meșteri',
+            'author': [u'meșteri'],
             'image': u'imagine',
         },
         {
             'name': u'Infocaseta Lăcaș de cult',
-            'author': u'constructor',
+            'author': [u'constructor'],
             'image': u'imagine',
         },
         ],
@@ -64,8 +64,17 @@ options = {
     'commons':
     {
         'namespaces': [14, 6],
+        #'namespaces': [6],
         'codeTemplate': "Monument_istoric",
-        'infoboxes': [],
+        'infoboxes': 
+	[
+	{
+	    #the format is actually {{Creator:Name}} without parameters
+            'name': u'Creator',
+            'author': [u'_name'],
+            'image': u'imagine',
+        },
+	],
         'qualityTemplates':
         [
         u'Valued image',
@@ -256,6 +265,22 @@ def checkAllCodes(result, title, logMsg = True):
     else:
         return result[0][0]#first regular expression
 
+def commaRepl(matchobj):
+    if matchobj.group(1) == u"și":
+        return u"și "
+    else:
+	return u", "	
+
+def formatAuthor(author):
+	ref = ""
+	if author.find("<ref") > -1:
+		ref = "".join(re.findall("<ref.*>", author))
+		author = author.split("<ref")[0]
+	author = strainu.stripNamespace(author.strip())
+	#print author
+	author = re.sub(u"((,|și)??)\s*<br\s*\/?\s*>", commaRepl, author, flags=re.I)
+	return author + ref
+
 def processArticle(text, page, conf):
     title = page.title()
     wikipedia.output(u'Working on "%s"' % title)
@@ -289,11 +314,29 @@ def processArticle(text, page, conf):
         if tl == None:
             continue
         (_dict, _keys) = strainu.tl2Dict(tl)
-        if box['author'] in _dict:
-            author = _dict[box['author']]
-            #if we're using some strange attribution, mention it explicitly
-            if box['author'] <> "arhitect" and box['author'] <> "artist":
-                author += " (" + box['author'] + ")"
+	#print _dict
+	author = ""
+	for author_key in box['author']:
+            if author_key in _dict:
+		if _dict[author_key].strip() == "":
+		    #empty author, ignore
+		    continue
+                author_key_type = "tip_" + author_key
+		if author_key_type in _dict:
+		    author_type =  _dict[author_key_type].strip().lower()
+		else:
+		    author_type = author_key.lower()
+                if author_type.find("arhitect") == -1 and \
+			author_type.find("artist") == -1 and \
+			author_type.find("_name") == -1 and \
+			author_type <> "":
+                    author += formatAuthor(_dict[author_key]) + " (" + author_type + "), "
+		else:
+		    author = formatAuthor(_dict[author_key]) + ", " + author #architects always go first
+	if author == "":
+	    author = None
+	else:
+            author = author[:-2] #remove the final comma
             #wikipedia.output(author)
         if box['image'] in _dict:
             #TODO:prefix with the namespace
