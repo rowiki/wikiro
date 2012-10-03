@@ -243,17 +243,22 @@ def main():
 			if code in pages_commons:
 				if len(pages_commons[code]) == 1: #exactly one picture
 					picture = pages_commons[code][0]["name"]
-				elif monument["Imagine"].strip() == "": #no image in list, multiple available
+					if pic_author == None:
+						pic_author = pages_commons[code][0]["author"]
+				elif monument["Imagine"].strip() == "" or monument["Arhitect"].strip() == "": 
+					#no image in list, multiple available
 					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
 					author_list = ""
 					for pic in pages_commons[code]:
 						if pic_author == None and author_list == "" and pic["author"] <> None:
 							pic_author = pic["author"]
 							author_list += u"[[:%s]], " % pic["name"]
+							print pic_author
 						elif pic["author"] <> None and pic_author <> pic["author"]:
 							#multiple authors, ignore and report error
 							author_list += u"[[:%s]], " % pic["name"]
 							pic_author = None
+							print "pic_author removed"
 						msg += u"[[:%s]], " % pic["name"]
 						if pic["quality"] == True: #choose the first quality picture
 							picture = pic["name"]
