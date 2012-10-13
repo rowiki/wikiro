@@ -216,7 +216,7 @@ class w2oWikiLinks:
 			self.loge(u"An error occurred while getting the page, skipping...")
 			return None
 		
-		village_templates = "(CutieSate|CasetăSate|Infocaseta Așezare|Infobox așezare|Casetă așezare|Cutie așezare)"
+		village_templates = "(CutieSate|CutieSate2|CasetăSate|Infocaseta Așezare|Infobox așezare|Casetă așezare|Cutie așezare)"
 		code = self.getTemplateParam(village_templates, "codpoștal", "([0-9]{5,6})", text)
 		latd = self.getTemplateParam(village_templates, "latd", "([0-9\.]+)", text)
 		if latd <> None:
