@@ -32,6 +32,7 @@ __version__ = '$Id: osm2wiki.py 8448 2010-08-24 08:25:57Z xqt $'
 
 import re, pagegenerators, urllib2, urllib
 import wikipedia as pywikibot
+import strainu_functions as strainu
 import codecs, config
 import xml.dom.minidom
 import csv
@@ -76,64 +77,6 @@ class o2wVillageData:
 	def logd(self, string):
 		self.log("* Debug (%s): " % time.strftime("%Y-%m-%d %H:%M:%S"), repr(string))
 		
-	#extract the first instance of a template 
-	#from the page text
-	def extractTemplate(self, text, template):
-		pywikibot.output(text)
-		match = re.search("\{\{\s*" + template, text)
-		if match == None:
-			return None
-		tl = text[match.start():]
-		text = text[match.start() + 2:]
-		open = 0
-		close = 1
-		innerTlCount = 0
-		while open < close and open <> -1:
-			open = text.find("{")
-			close = text.find("}") + 1
-			if open > close or open == -1:
-				while innerTlCount > 0:
-					print str(close) + " "  + str(innerTlCount)
-					close = text.find("}", close) + 1
-					innerTlCount -= 1
-			if open < close:
-				innerTlCount += text[open + 1:close].count('{')
-			print str(open) + " " + str(close) + " " + str(innerTlCount)
-			text = text[close:]
-		tl = tl.replace(text[1:], "") #the [1:] is because we want to grab the second '}'
-		self.logd("I have extracted template: " + tl)
-		return tl
-	
-	#convert a template to a dictionary
-	#since we're using python2, the dictionary
-	#class is unordered. We therefore need to 
-	#keep the order of the keys in order to be
-	#able to reconstruct the tmeplate
-	def tl2Dict(self, template):
-		template = re.sub(r'(\r|\n)', '', template)
-		template = template[0:len(template)-2]#get rid of '}}'
-		params = template.split('|')
-		key = ""
-		value = ""
-		for line in params:
-			line = line.split('=')
-			#pywikibot.output(str(line))
-			if (len(line) > 1):
-				key = line[0].encode("utf8")
-				key = re.sub(r'\s', '', key)
-				value = "=".join(line[1:]).encode("utf8")
-				self._dict[key] = str(value)
-				self.insertKeyInKeyList(key)
-			elif line[0].startswith('{{') and not "_name" in self._dict: #name of the template
-				#pywikibot.output("Name: " + line[0][2:])
-				self._dict["_name"] = line[0][2:]
-				self.insertKeyInKeyList("_name")
-			elif line[0] != "" and key != "":#the first line might not begin with {{
-				self._dict[key] = self._dict[key] + "|" + line[0].encode("utf8")
-				self.insertKeyInKeyList(key)
-			#print self._dict
-		return self._dict
-		
 	def getDeg(self, decimal):
 		if decimal < 0:
 			decimal = -decimal
@@ -163,25 +106,25 @@ class o2wVillageData:
 		  return
 		index = len(self._keyList)
 		try:
-			if key == "latd":
-				index = 1 + self._keyList.index("codpoștal")
+			if key == u"latd":
+				index = 1 + self._keyList.index(u"codpoștal")
 				 #if it doesn't exist, the default value will be used
-			elif key == "latm":
-				index = 1 + self._keyList.index("latd")
-			elif key == "lats":
-				index = 1 + self._keyList.index("latm")
-			elif key == "latNS":
-				index = 1 + self._keyList.index("lats")
-			elif key == "longd":
-				index = 1 + self._keyList.index("latNS")
-			elif key == "longm":
-				index = 1 + self._keyList.index("longd")
-			elif key == "longs":
-				index = 1 + self._keyList.index("longm")
-			elif key == "longEV":
-				index = 1 + self._keyList.index("longs")
-			elif key == "codpoștal":
-				index = 1 + self._keyList.index("tip_cod_poștal")
+			elif key == u"latm":
+				index = 1 + self._keyList.index(u"latd")
+			elif key == u"lats":
+				index = 1 + self._keyList.index(u"latm")
+			elif key == u"latNS":
+				index = 1 + self._keyList.index(u"lats")
+			elif key == u"longd":
+				index = 1 + self._keyList.index(u"latNS")
+			elif key == u"longm":
+				index = 1 + self._keyList.index(u"longd")
+			elif key == u"longs":
+				index = 1 + self._keyList.index(u"longm")
+			elif key == u"longEV":
+				index = 1 + self._keyList.index(u"longs")
+			elif key == u"codpoștal":
+				index = 1 + self._keyList.index(u"tip_cod_poștal")
 		except:
 			pass #we're ok with the default value
 		self._keyList.insert(index, key)
@@ -193,7 +136,7 @@ class o2wVillageData:
 			start = 0
 		site = pywikibot.getSite(lang)
 		reader = csv.reader(open(self._osmFilename, "r"), delimiter='\t')
-		village_templates = "(CutieSate|CasetăSate|Infocaseta Așezare|Infobox așezare|Casetă așezare|Cutie așezare)".decode('utf8')
+		village_templates = "(CutieSate|CutieSate2|CasetăSate|Infocaseta Așezare|Infobox așezare|Casetă așezare|Cutie așezare|CasetăOrașe)".decode('utf8')
 		for row in reader:
 			self._keyList = []
 			self._dict = {}
@@ -225,142 +168,150 @@ class o2wVillageData:
 				self.loge(u"Unknown error in getPageValue, exiting: %s" % inst);
 				continue
 				
-			oldTl = self.extractTemplate(text, village_templates)
+			oldTl = strainu.extractTemplate(text, village_templates)
 			if oldTl == None:
 				self.loge("No template in page %s" % title)
 				continue
-			self.tl2Dict(oldTl)#populate self._dict
-			print self._dict
+			(self._dict, self._keyList) = strainu.tl2Dict(oldTl)#populate self._dict
+			#print self._dict
 				
 			try:
-				latd = self._dict["latd"]
-				latd = latd.replace(",", ".") #make sure we're dealing with US-style numbers
+				latd = self._dict[u"latd"]
+				latd = latd.replace(u",", u".") #make sure we're dealing with US-style numbers
 				latd = int(latd)
 				if latd <> osmLatd:
-					self._dict["latd"] = str(osmLatd)
+					self._dict[u"latd"] = str(osmLatd)
 				else:
 					self.logi("The latitude degrees field is already correct");
 			except:
-				self._dict["latd"] = str(osmLatd)
-				self.insertKeyInKeyList("latd")
+				self._dict[u"latd"] = str(osmLatd)
+				self.insertKeyInKeyList(u"latd")
 				
 			try:
-				latm = self._dict["latm"]
-				latm = latm.replace(",", ".") #make sure we're dealing with US-style numbers
+				latm = self._dict[u"latm"]
+				latm = latm.replace(u",", u".") #make sure we're dealing with US-style numbers
 				latm = int(latm)
 				if latm <> osmLatm:
-					self._dict["latm"] = str(osmLatm)
+					self._dict[u"latm"] = str(osmLatm)
 				else:
 					self.logi("The latitude minutes field is already correct");
 			except:
-				self._dict["latm"] = str(osmLatm)
-				self.insertKeyInKeyList("latm")
+				self._dict[u"latm"] = str(osmLatm)
+				self.insertKeyInKeyList(u"latm")
 				
 			try:
-				lats = self._dict["lats"]
-				lats = lats.replace(",", ".") #make sure we're dealing with US-style numbers
+				lats = self._dict[u"lats"]
+				lats = lats.replace(u",", u".") #make sure we're dealing with US-style numbers
 				lats = int(lats)
 				if lats<> osmLats:
-					self._dict["lats"] = str(osmLats)
+					self._dict[u"lats"] = str(osmLats)
 				else:
 					self.logi("The latitude seconds field is already correct");
 			except:
-				self._dict["lats"] = str(osmLats)
-				self.insertKeyInKeyList("lats")
+				self._dict[u"lats"] = str(osmLats)
+				self.insertKeyInKeyList(u"lats")
 				
 			try:
-				latNS = self._dict["latNS"]
-				if latNS == 'N' or latNS == 'S':
+				latNS = self._dict[u"latNS"]
+				if latNS == u'N' or latNS == u'S':
 				  self.logi("The latNS field already exists")
 				else:
-				  self._dict["latNS"] = "N"
+				  self._dict[u"latNS"] = u"N"
 			except:
-				self._dict["latNS"] = "N"
-				self.insertKeyInKeyList("latNS")
+				self._dict[u"latNS"] = u"N"
+				self.insertKeyInKeyList(u"latNS")
 				
 			try:
-				longd = self._dict["longd"]
-				longd = longd.replace(",", ".") #make sure we're dealing with US-style numbers
+				longd = self._dict[u"longd"]
+				longd = longd.replace(u",", u".") #make sure we're dealing with US-style numbers
 				longd = int(longd)
 				if longd <> osmLongd:
-					self._dict["longd"] = str(osmLongd)
+					self._dict[u"longd"] = str(osmLongd)
 				else:
 					self.logi("The longitude degrees field is already correct");
 			except:
-				self._dict["longd"] = str(osmLongd)
-				self.insertKeyInKeyList("longd")
+				self._dict[u"longd"] = str(osmLongd)
+				self.insertKeyInKeyList(u"longd")
 				
 			try:
-				longm = self._dict["longm"]
-				longm = longm.replace(",", ".") #make sure we're dealing with US-style numbers
+				longm = self._dict[u"longm"]
+				longm = longm.replace(u",", u".") #make sure we're dealing with US-style numbers
 				longm = int(longm)
 				if longm <> osmLongm:
-					self._dict["longm"] = str(osmLongm)
+					self._dict[u"longm"] = str(osmLongm)
 				else:
 					self.logi("The longitude minutes field is already correct");
 			except:
-				self._dict["longm"] = str(osmLongm)
-				self.insertKeyInKeyList("longm")
+				self._dict[u"longm"] = str(osmLongm)
+				self.insertKeyInKeyList(u"longm")
 				
 			try:
-				longs = self._dict["longs"]
-				longs = longs.replace(",", ".") #make sure we're dealing with US-style numbers
+				longs = self._dict[u"longs"]
+				longs = longs.replace(u",", u".") #make sure we're dealing with US-style numbers
 				longs = int(longs)
 				if longs <> osmLongs:
-					self._dict["longs"] = str(osmLongs)
+					self._dict[u"longs"] = str(osmLongs)
 				else:
 					self.logi("The longitude seconds field is already correct");
 			except:
-				self._dict["longs"] = str(osmLongs)
-				self.insertKeyInKeyList("longs")
+				self._dict[u"longs"] = str(osmLongs)
+				self.insertKeyInKeyList(u"longs")
 				
 			try:
-				longEV = self._dict["longEV"]
-				if longEV == 'E' or longEV == 'V':
+				longEV = self._dict[u"longEV"]
+				if longEV == u'E' or longEV == u'V':
 				  self.logi("The longEV field already exists")
 				else:
-				  self._dict["longEV"] = "E"
+				  self._dict[u"longEV"] = u"E"
 			except:
-				  self._dict["longEV"] = "E"
-				  self.insertKeyInKeyList("longEV")
+				  self._dict[u"longEV"] = u"E"
+				  self.insertKeyInKeyList(u"longEV")
 				
 			try:
-				code = self._dict["codpoștal"]
+				code = self._dict[u"codpoștal"]
 				print code
 				print osmCode
 				if code <> osmCode:
-					self._dict["codpoștal"] = str(osmCode)
+					self._dict[u"codpoștal"] = str(osmCode)
 				else:
 					self.logi("The postal code field is already correct");
 			except:
-				self._dict["codpoștal"] = str(osmCode)
-				self.insertKeyInKeyList("codpoștal")
+				self._dict[u"codpoștal"] = str(osmCode)
+				self.insertKeyInKeyList(u"codpoștal")
 				
 			try:
 				#the same key might be present more than
 				#once in the list, but not the dictionary
-				while "coordonate" in self._keyList:
-					self._keyList.remove("coordonate")
-				del self._dict["coordonate"]
+				while u"coordonate" in self._keyList:
+					self._keyList.remove(u"coordonate")
+				del self._dict[u"coordonate"]
 			except:
 				self.logi("Problems deleting coordonate key");
 			
 			tl = u""
 			for key in self._keyList:
-				if key == "_name":
-					tl += "{{" + self._dict[key] + "\n"
+				if key == u"_name":
+					tl += u"{{" + self._dict[key] + u"\n"
 				else:
-					tl += "| " + key.decode("utf8") + " = " 
-					tl += self._dict[key].decode("utf8") + "\n"
-			tl += "}}"
-			print self._dict		
-			self.logd("New template: " + tl)
+					tl += u"| " + key + u" = " 
+					tl += self._dict[key].strip() + u"\n"
+			tl += u"}}"
+			#print self._dict		
+			#self.logd("New template: " + tl)
 			# we compare the 2 templates without whitespace 
 			# to determine if we made any replacement
 			if cmp(re.sub(r'\s', '', oldTl), re.sub(r'\s', '', tl)):
-				text = text.replace(oldTl, tl)
+				newtext = text.replace(oldTl, tl)
+				pywikibot.showDiff(text, newtext)
 				comment = pywikibot.translate(site, msg) % title.decode("utf8")
-				generator.put(text, comment)
+				if self.acceptall:
+					answer = 'y'
+				else:
+					answer = pywikibot.input(u"Upload change? ([y]es/[n]o/[a]lways)")
+				if answer == 'y':
+					generator.put(newtext, comment)
+				elif answer == 'a':
+					self.acceptall = True
 			else:
 				self.logi("No change for current page")
 		
