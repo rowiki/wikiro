@@ -10,9 +10,11 @@ import static org.wikipedia.Wiki.USER_TALK_NAMESPACE;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -24,6 +26,7 @@ import java.util.regex.Pattern;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.Wiki;
 import org.wikipedia.Wiki.Revision;
 
@@ -54,21 +57,21 @@ public class AutoSigner {
     /**
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
         wiki = new Wiki("ro.wikipedia.org");
-        Properties credentials = new Properties();
+        final Properties credentials = new Properties();
 
         try {
             credentials.load(AutoSigner.class.getClassLoader().getResourceAsStream("credentials.properties"));
 
-            String username = credentials.getProperty("Username");
-            String password = credentials.getProperty("Password");
+            final String username = credentials.getProperty("Username");
+            final String password = credentials.getProperty("Password");
             wiki.login(username, password.toCharArray());
             wiki.setMarkBot(true);
-            Revision[] revisions = wiki.recentChanges(20, HIDE_BOT | HIDE_SELF, new int[] { TALK_NAMESPACE,
+            final Revision[] revisions = wiki.recentChanges(20, HIDE_BOT | HIDE_SELF, new int[] { TALK_NAMESPACE,
                 USER_TALK_NAMESPACE, PROJECT_TALK_NAMESPACE, PROJECT_NAMESPACE, CATEGORY_TALK_NAMESPACE });
-            revisions: for (Revision rev : revisions) {
+            revisions: for (final Revision rev : revisions) {
                 System.out.println(rev.getPage() + "\t" + rev.getRevid());
                 if (rev.getRevid() == 0) {
                     continue revisions;
@@ -76,18 +79,18 @@ public class AutoSigner {
                 if (rev.getPage().startsWith("Wikipedia:") && !projectPages.contains(rev.getPage())) {
                     continue revisions;
                 }
-                Long lastRevVer = lastReviewedVersion.get(rev.getPage());
+                final Long lastRevVer = lastReviewedVersion.get(rev.getPage());
                 if (null != lastRevVer && lastRevVer < rev.getRevid()) {
                     continue revisions;
                 } else {
                     lastReviewedVersion.put(rev.getPage(), rev.getRevid());
                 }
-                String crtText = rev.getText();
-                String crtAuthor = rev.getUser();
+                final String crtText = rev.getText();
+                final String crtAuthor = rev.getUser();
 
                 // get a chunk of history large enough to compare
-                Calendar now = Calendar.getInstance();
-                Calendar yesterday = Calendar.getInstance();
+                final Calendar now = Calendar.getInstance();
+                final Calendar yesterday = Calendar.getInstance();
                 yesterday.roll(Calendar.DATE, false);
                 Revision[] pageHistory = wiki.getPageHistory(rev.getPage(), now, yesterday);
                 while (pageHistory.length < 2 && countEditors(pageHistory) < 2
@@ -110,7 +113,7 @@ public class AutoSigner {
                     }
                     // for edits spaced larger than 1 hour, we consider them
                     // different messages
-                    long timediff = pageHistory[0].getTimestamp().getTimeInMillis()
+                    final long timediff = pageHistory[0].getTimestamp().getTimeInMillis()
                         - pageHistory[i].getTimestamp().getTimeInMillis();
                     if (!pageHistory[i].getUser().equals(crtAuthor) || timediff > 1000 * 60 * 60) {
                         lastMessageByOther = pageHistory[i];
@@ -123,13 +126,13 @@ public class AutoSigner {
                 }
                 analyzeDiff(rev, lastMessageByOther);
             }
-        } catch (FailedLoginException e) {
+        } catch (final FailedLoginException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (LoginException e) {
+        } catch (final LoginException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
@@ -139,27 +142,40 @@ public class AutoSigner {
         }
     }
 
-    private static void analyzeDiff(Revision crtRev, Revision prevRev) throws IOException {
+    private static void analyzeDiff(final Revision crtRev, final Revision prevRev) throws IOException {
         // TODO Auto-generated method stub
-        DiffParser dp = new DiffParser(prevRev, crtRev);
+        final DiffParser dp = new DiffParser(prevRev, crtRev);
         dp.analyze(crtRev.getUser());
-        
+
         if (!dp.isSigned()) {
-            StringBuilder signature = composeAutoSignature(crtRev);
+            final StringBuilder signature = composeAutoSignature(crtRev);
             System.out.println("I should add: " + signature);
             System.out.println("    ... at line " + dp.getLine());
+            System.out.println("Line should become: ");
+
+            final List<String> crtContents = Arrays.asList(crtRev.getText().split("\\r?\\n"));
+            final String modifiedLine = crtContents.get(dp.getLine() - 1) + composeAutoSignature(crtRev);
+            crtContents.set(dp.getLine() - 1, modifiedLine);
+            final String newContents = StringUtils.join(crtContents, "\\r\\n");
+            try {
+                if (crtRev.getPage().contains("Andrei Stroe")) {
+                    wiki.edit(crtRev.getPage(), newContents, "Mesaj nesemnat de " + crtRev.getUser(), crtRev.getTimestamp());
+                }
+            } catch (final LoginException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private static void analyzeText(Revision revision) throws IOException, LoginException {
-        String text = revision.getText();
+    private static void analyzeText(final Revision revision) throws IOException, LoginException {
+        final String text = revision.getText();
         if (isTemplatesOnly(text)) {
             System.out.println("Page made up only of templates");
             return;
         }
         System.out.println(text);
-        Pattern userPageDetector = Pattern.compile("\\[\\[\\:?((Utilizator\\:)|(User\\:))" + revision.getUser());
-        Pattern userTalkPageDetector = Pattern.compile("\\[\\[\\:?((Discu\u021Bie Utilizator\\:)|(User talk\\:))"
+        final Pattern userPageDetector = Pattern.compile("\\[\\[\\:?((Utilizator\\:)|(User\\:))" + revision.getUser());
+        final Pattern userTalkPageDetector = Pattern.compile("\\[\\[\\:?((Discu\u021Bie Utilizator\\:)|(User talk\\:))"
             + revision.getUser());
         Matcher matcher = userPageDetector.matcher(text);
         if (matcher.find()) {
@@ -168,25 +184,25 @@ public class AutoSigner {
         }
         matcher = userTalkPageDetector.matcher(text);
         if (matcher.find()) {
-            System.out.println("Mesaj de " + revision.getUser() + " semnat cu link spre pagina de discuţii utilizator.");
+            System.out
+                .println("Mesaj de " + revision.getUser() + " semnat cu link spre pagina de discu\u021Bii utilizator.");
             return;
         }
 
-        StringBuilder textToAdd = composeAutoSignature(revision);
+        final StringBuilder textToAdd = composeAutoSignature(revision);
 
-        System.out.println("I should append " + textToAdd);
-        // actually append the template
-        // TODO uncomment
-        // wiki.edit(revision.getPage(), revision.getText() + textToAdd, defaultSummary, revision.getTimestamp());
+        if (revision.getPage().contains("Andrei Stroe")) {
+            wiki.edit(revision.getPage(), revision.getText() + textToAdd, defaultSummary, revision.getTimestamp());
+        }
     }
 
-    protected static StringBuilder composeAutoSignature(Revision revision) {
-        StringBuilder textToAdd = new StringBuilder("{{subst:nesemnat|");
+    protected static StringBuilder composeAutoSignature(final Revision revision) {
+        final StringBuilder textToAdd = new StringBuilder("{{subst:nesemnat|");
         textToAdd.append(revision.getUser());
         textToAdd.append("|data=");
-        Calendar timestamp = revision.getTimestamp();
-        TimeZone zone = TimeZone.getTimeZone("EET");
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("d MMMM yyyy HH:mm", new Locale("ro"));
+        final Calendar timestamp = revision.getTimestamp();
+        final TimeZone zone = TimeZone.getTimeZone("EET");
+        final SimpleDateFormat dateFormatter = new SimpleDateFormat("d MMMM yyyy HH:mm", new Locale("ro"));
         textToAdd.append(dateFormatter.format(timestamp.getTime()));
         textToAdd.append(" (");
         textToAdd.append(zone.getDisplayName(true, TimeZone.SHORT));
@@ -194,27 +210,27 @@ public class AutoSigner {
         return textToAdd;
     }
 
-    private static boolean isTemplatesOnly(String text) {
-        Pattern templatesDetectorPattern = Pattern.compile("\\s*(\\{\\{.*\\}\\}\\s*)+");
-        Matcher matcher = templatesDetectorPattern.matcher(text);
+    private static boolean isTemplatesOnly(final String text) {
+        final Pattern templatesDetectorPattern = Pattern.compile("\\s*(\\{\\{.*\\}\\}\\s*)+");
+        final Matcher matcher = templatesDetectorPattern.matcher(text);
         return matcher.matches();
     }
 
-    private static int countEditors(Revision[] pageHistory) {
-        Set<String> editors = new HashSet<String>();
-        for (Revision rev : pageHistory) {
+    private static int countEditors(final Revision[] pageHistory) {
+        final Set<String> editors = new HashSet<String>();
+        for (final Revision rev : pageHistory) {
             editors.add(rev.getUser());
         }
         return editors.size();
     }
 
-    private static boolean isNew(Revision rev) throws IOException {
+    private static boolean isNew(final Revision rev) throws IOException {
         if (rev.isNew()) {
             return true;
         }
 
-        String page = rev.getPage();
-        Revision firstPageRev = wiki.getFirstRevision(page);
+        final String page = rev.getPage();
+        final Revision firstPageRev = wiki.getFirstRevision(page);
         return firstPageRev.getRevid() == rev.getRevid();
     }
 }
