@@ -8,42 +8,51 @@ import java.util.regex.Pattern;
 
 import org.wikipedia.Wiki.Revision;
 
+import difflib.ChangeDelta;
 import difflib.Delta;
 import difflib.DiffUtils;
 import difflib.InsertDelta;
 import difflib.Patch;
 
 public class DiffParser {
-    private Revision prevRevision;
-    private Revision crtRevision;
+    private final Revision prevRevision;
+    private final Revision crtRevision;
     private boolean signed = true;
     private int line = 0;
 
-    public DiffParser(Revision prevRevision, Revision crtRevision) {
+    public DiffParser(final Revision prevRevision, final Revision crtRevision) {
         super();
         this.prevRevision = prevRevision;
         this.crtRevision = crtRevision;
     }
 
-    public void analyze(String ownerName) throws IOException {
-        List<String> prevContents = Arrays.asList(prevRevision.getText().split("\\r?\\n"));
-        List<String> crtContents = Arrays.asList(crtRevision.getText().split("\\r?\\n"));
+    public void analyze(final String ownerName) throws IOException {
+        final List<String> prevContents = Arrays.asList(prevRevision.getText().split("\\r?\\n"));
+        final List<String> crtContents = Arrays.asList(crtRevision.getText().split("\\r?\\n"));
         
-        Patch diff = DiffUtils.diff(prevContents, crtContents);
-        for (Delta delta : diff.getDeltas()) {
+        final Patch diff = DiffUtils.diff(prevContents, crtContents);
+        for (final Delta delta : diff.getDeltas()) {
             //System.out.println(delta);
+            List addedLines = null;
             if (delta instanceof InsertDelta) {
-                InsertDelta insertion = (InsertDelta) delta;
+                final InsertDelta insertion = (InsertDelta) delta;
                 line = insertion.getRevised().getPosition();
-                List addedLines = insertion.getRevised().getLines();
+                addedLines = insertion.getRevised().getLines();
+            }
+            if (delta instanceof ChangeDelta) {
+                final ChangeDelta insertion = (ChangeDelta) delta;
+                line = insertion.getRevised().getPosition();
+                addedLines = insertion.getRevised().getLines();
+            }
+            if (null != addedLines && addedLines.size() > 0) {
                 signed = false;
-                Pattern userPageDetector = Pattern.compile("\\[\\[\\:?((Utilizator\\:)|(User\\:))" + ownerName);
-                Pattern userTalkPageDetector = Pattern.compile("\\[\\[\\:?((Discu\u021Bie Utilizator\\:)|(User talk\\:))"
+                final Pattern userPageDetector = Pattern.compile("\\[\\[\\:?((Utilizator\\:)|(User\\:))" + ownerName);
+                final Pattern userTalkPageDetector = Pattern.compile("\\[\\[\\:?((Discu\u021Bie Utilizator\\:)|(User talk\\:))"
                     + ownerName);
-                for (Object lineObj: addedLines) {
-                    String line = lineObj.toString();
-                    Matcher userPageDetectorMatcher = userPageDetector.matcher(line);
-                    Matcher userTalkPageDetectorMatcher = userTalkPageDetector.matcher(line);
+                for (final Object lineObj: addedLines) {
+                    final String line = lineObj.toString();
+                    final Matcher userPageDetectorMatcher = userPageDetector.matcher(line);
+                    final Matcher userTalkPageDetectorMatcher = userTalkPageDetector.matcher(line);
                     if (userPageDetectorMatcher.find()) {
                         signed = true;
                     }
