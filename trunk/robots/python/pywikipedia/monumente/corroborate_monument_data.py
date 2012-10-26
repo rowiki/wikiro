@@ -35,57 +35,83 @@ countries = {
 	'table' : u'monuments_ro_(ro)',
 	'truncate' : False, 
 	'primkey' : u'Cod',
-	'fields' : [
-		{
-		'source' : u'Cod',
-		'dest' : u'cod',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Denumire',
-		'dest' : u'denumire',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Localitate',
-		'dest' : u'localitate',
-		'conv' : u'',
-		},
-			{
-		'source' : u'Adresă',
-		'dest' : u'adresa',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Datare',
-		'dest' : u'datare',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Arhitect',
-		'dest' : u'arhitect',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Lat',
-		'dest' : u'lat',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Coordonate',
-		'dest' : u'',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Lon',
-		'dest' : u'lon',
-		'conv' : u'',
-		},
-		{
-		'source' : u'Imagine',
-		'dest' : u'imagine',
-		'conv' : u'',
-		},
+	'fields' : 
+		[
+		    {
+		    'source' : u'Cod',
+		    'dest' : u'cod',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Denumire',
+		    'dest' : u'denumire',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Localitate',
+		    'dest' : u'localitate',
+		    'conv' : u'',
+		    },
+			    {
+		    'source' : u'Adresă',
+		    'dest' : u'adresa',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Datare',
+		    'dest' : u'datare',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Arhitect',
+		    'dest' : u'arhitect',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Lat',
+		    'dest' : u'lat',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Coordonate',
+		    'dest' : u'',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Lon',
+		    'dest' : u'lon',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Imagine',
+		    'dest' : u'imagine',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Commons',
+		    'dest' : u'commons',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'NotăCod',
+		    'dest' : u'notacod',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'FostCod',
+		    'dest' : u'fostcod',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'Cod92',
+		    'dest' : u'cod92',
+		    'conv' : u'',
+		    },
+		    {
+		    'source' : u'CodRan',
+		    'dest' : u'codran',
+		    'conv' : u'',
+		    },
 		],
 	},
 }
@@ -228,6 +254,8 @@ def main():
 		article = None
 		picture = None
 		pic_author = None
+		lmi92 = None
+		ran = None
 		#wikipedia.output(str(page))
 		try:
 			#wikipedia.output("OK: " + str(page[code]))
@@ -240,16 +268,23 @@ def main():
 					log(msg)
 				elif len(allPages) == 1:
 					article = allPages[0]
+					ran = allPages[0]['ran']
 			if code in pages_commons:
 				if len(pages_commons[code]) == 1: #exactly one picture
 					picture = pages_commons[code][0]["name"]
 					if pic_author == None:
 						pic_author = pages_commons[code][0]["author"]
-				elif monument["Imagine"].strip() == "" or monument["Arhitect"].strip() == "": 
-					#no image in list, multiple available
-					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
-					author_list = ""
+					if "lmi92" in pages_commons[code]:
+						lmi92 = pages_commons[code]["lmi92"]
+				elif monument["Imagine"].strip() == "" or \
+						monument["Arhitect"].strip() == "" or \
+						monument["Cod92"].strip() == "": 
+					#multiple images available, we need to parse them
 					for pic in pages_commons[code]:
+						if "lmi92" in pic:
+							lmi92 = pic["lmi92"]
+						msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
+						author_list = ""
 						if pic_author == None and author_list == "" and pic["author"] <> None:
 							pic_author = pic["author"]
 							author_list += u"[[:%s]], " % pic["name"]
@@ -304,7 +339,7 @@ def main():
 			#author = strainu.stripLink(article["author"]).strip()
 			author = article["author"].strip()
 			if author == None or author == "":
-				wikipedia.output("Wrong link: %s" % article["author"])
+				wikipedia.output("Wrong author link: \"%s\"@%s" % (article["author"], article["name"]))
 			elif monument["Arhitect"] == "":
 				wikipedia.output(author)
 				articleText = updateTableData(monument["source"], code, "Arhitect", author, text=articleText)
@@ -348,7 +383,7 @@ def main():
 				wikipedia.output(monument["Imagine"])
 				artimage = strainu.extractImageLink(article["image"]).strip()
 				if artimage == None or artimage == "":
-					wikipedia.output("Wrong link: %s" % article["image"])
+					wikipedia.output("Wrong image link: \"%s\"@%s" % (article["image"], article["name"]))
 				if artimage.find(':') < 0:#no namespace
 					artimage = "File:" + artimage
 				#wikipedia.output("Upload?" + artimage)
@@ -361,7 +396,7 @@ def main():
 				wikipedia.output(monument["Imagine"])
 				artimage = strainu.extractImageLink(article["image"]).strip()
 				if artimage == None or artimage == "":
-					wikipedia.output("Wrong link: %s" % article["image"])
+					wikipedia.output("Wrong article image link: \"%s\"@%s" % (article["image"], article["name"]))
 				if artimage.find(':') < 0:#no namespace
 					artimage = "File:" + artimage
 				#wikipedia.output("Upload?" + artimage)
@@ -412,6 +447,9 @@ def main():
 	
 		if lat <> 0 and artLat <> 0 and (math.fabs(artLat - lat) > 0.01 or math.fabs(artLong - long) > 0.01):
 			log(u"*''E'': ''[%s]'' Coordonate diferite între [[:%s]] (%f,%f) și listă (%f,%f)" % (code, artCoord, artLat, artLong, lat, long))
+			
+		if lmi92 <> None:
+			articleText = updateTableData(monument["source"], code, "Cod92", lmi92, upload = True, text = articleText)
 	
 	closeLog()
 

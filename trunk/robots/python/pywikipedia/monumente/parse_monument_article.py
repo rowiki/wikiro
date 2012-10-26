@@ -17,6 +17,7 @@ import re
 sys.path.append("..")
 import wikipedia
 import pagegenerators
+import catlib
 import config as user
 import strainu_functions as strainu
 
@@ -25,33 +26,58 @@ options = {
     {
         'namespaces': [0],
         'codeTemplate': "codLMI",
+        'codeTemplateParams': 
+        [
+        ],
         'infoboxes':
         [
         {
-            'name': u'Infocaseta Monument',
-            'author': [u'artist', u'artist1', u'artist2'],
+            'name': u'Infocaseta Monument|Cutie Monument',
+            'author': [u'artist', u'artist1', u'artist2', u'arhitect'],
             'image': u'imagine',
+            'ran': u'',#TODO
         },
         {
-            'name': u'Clădire Istorică|Cutie Edificiu Religios|Infocaseta Edificiu religios|Infocaseta Monument|Infocaseta Lăcaș de cult',
+            'name': u'Clădire Istorică',
             'author': [u'arhitect'],
             'image': u'imagine',
+            'ran': u'cod-ran',
         },
         {
-            'name': u'Castru|Infocaseta Castru|Infocaseta Gară|Mănăstire',
-            #'artist' does not really exist, putting it here to prevent errors
-            'author': [u'artist'],
+            'name': u'Cutie Edificiu Religios|Infocaseta Edificiu religios|Infocaseta Lăcaș de cult',
+            'author': [u'arhitect'],
             'image': u'imagine',
+            'ran': u'',#nada yet
+        },
+        {
+            'name': u'Castru|Infocaseta Castru|Infocaseta Cetate dacică',
+            'author': [],
+            'image': u'imagine',
+            'ran': u'cod RAN',
+        },
+        {
+            'name': u'Infocasetă Davă|Infocaseta Davă',
+            'author': [],
+            'image': u'imagine',
+            'ran': u'ref:RO:RAN',
+        },
+        {
+            'name': u'Infocaseta Gară|Mănăstire',
+            'author': [],
+            'image': u'imagine',
+            'ran': u'',
         },
         {
             'name': u'Infocaseta Biserică din lemn',
             'author': [u'meșteri'],
             'image': u'imagine',
+            'ran': u'cod RAN'
         },
         {
             'name': u'Infocaseta Lăcaș de cult',
-            'author': [u'constructor'],
+            'author': [u'arhitect'],
             'image': u'imagine',
+            'ran': u'codRAN'
         },
         ],
         'qualityTemplates':
@@ -66,21 +92,26 @@ options = {
         'namespaces': [14, 6],
         #'namespaces': [6],
         'codeTemplate': "Monument_istoric",
+        'codeTemplateParams': 
+        [
+			u'lmi92',
+        ],
         'infoboxes': 
-	[
-	{
-	    #the format is actually {{Creator:Name}} without parameters
-            'name': u'Creator',
-            'author': [u'_name'],
-            'image': u'imagine',
-        },
-	],
+		[
+			{
+				#the format is actually {{Creator:Name}} without parameters
+				'name': u'Creator',
+				'author': [u'_name'],
+				'image': u'imagine',
+				'ran': u'',
+			},
+		],
         'qualityTemplates':
         [
-        u'Valued image',
-        u'QualityImage',
-        u'Assessments',
-        u'Wiki Loves Monuments 2011 Europe nominee'
+			u'Valued image',
+			u'QualityImage',
+			u'Assessments',
+			u'Wiki Loves Monuments 2011 Europe nominee'
         ],
     }
 }
@@ -282,98 +313,107 @@ def formatAuthor(author):
 	return author + ref
 
 def processArticle(text, page, conf):
-    title = page.title()
-    wikipedia.output(u'Working on "%s"' % title)
-    global codeRegexp
-    code = checkAllCodes(re.findall(codeRegexp, text), title)
-    if code is None: #no valid code
-        wikipedia.output("No valid code in page " + title)
-        return
-    elif code == "": #more than one code, juse use the one that is marked as {{codLMI|code}}
-        code = checkAllCodes(re.findall(templateRegexp, text), title, False)
-        if code is None or code == "": # either no code or more than one code is marked; just ignore
-               wikipedia.output("Too many codes in page " + title)
-               return
-    if re.search(errorRegexp, text) <> None:
-        log(u"*''E'': [[:%s]] a fost marcat de un editor ca având o eroare în" \
-            " codul LMI %s" % (title, code))
-        return
+	title = page.title()
+	wikipedia.output(u'Working on "%s"' % title)
+	global codeRegexp
+	code = checkAllCodes(re.findall(codeRegexp, text), title)
+	if code is None: #no valid code
+		wikipedia.output("No valid code in page " + title)
+		return
+	elif code == "": #more than one code, juse use the one that is marked as {{codLMI|code}}
+		code = checkAllCodes(re.findall(templateRegexp, text), title, False)
+		if code is None or code == "": # either no code or more than one code is marked; just ignore
+			   wikipedia.output("Too many codes in page " + title)
+			   return
+	if re.search(errorRegexp, text) <> None:
+		log(u"*''E'': [[:%s]] a fost marcat de un editor ca având o eroare în" \
+			" codul LMI %s" % (title, code))
+		return
 
-    if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
-        quality = True
-    else:
-        quality = False
-
-    lat, long = parseGeohackLinks(page)
-
-    author = None
-    image = None
-
-    for box in conf['infoboxes']:
-        tl = strainu.extractTemplate(text, box['name'])
-        if tl == None:
-            continue
-        (_dict, _keys) = strainu.tl2Dict(tl)
-	#print _dict
-	author = ""
-	for author_key in box['author']:
-            if author_key in _dict:
-		if _dict[author_key].strip() == "":
-		    #empty author, ignore
-		    continue
-                author_key_type = "tip_" + author_key
-		if author_key_type in _dict:
-		    author_type =  _dict[author_key_type].strip().lower()
-		else:
-		    author_type = author_key.lower()
-                if author_type.find("arhitect") == -1 and \
-			author_type.find("artist") == -1 and \
-			author_type.find("_name") == -1 and \
-			author_type <> "":
-                    author += formatAuthor(_dict[author_key]) + " (" + author_type + "), "
-		else:
-		    author = formatAuthor(_dict[author_key]) + ", " + author #architects always go first
-	if author == "":
-	    author = None
+	if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
+		quality = True
 	else:
-            author = author[:-2] #remove the final comma
-            #wikipedia.output(author)
-        if box['image'] in _dict:
-            #TODO:prefix with the namespace
-            image = _dict[box['image']]
-            #wikipedia.output(image)
-        if author <> None and image <> None:
-            break # stop only if we have all the information we need
+		quality = False
 
-    if image == None:
-    # if there are images in the article, use the first image
-    # I'm deliberately skipping images in templates (they have been treated
-    # above) and galleries, which usually contain non-selected images
-        for img in page.linkedPages(withImageLinks = True):
-            if img.isImage() and image == None:
-                image = img.title()
-                break
+	lat, long = parseGeohackLinks(page)
 
-    if code in fullDict:
-        for elem in fullDict[code]:
-            if elem['name'] == title:
-                fullDict[code].remove(elem)
-                break
-        fullDict[code].append({'name': title,
-                'project': page.site().language(),
-                'lat': lat, 'long': long,
-                'author': author, 'image': image,
-                'quality': quality,
-                'lastedit': page.editTime(),
-                'code': code})
-    else:
-        fullDict[code] = [{'name': title,
-                'project': page.site().language(),
-                'lat': lat, 'long': long,
-                'author': author, 'image': image,
-                'quality': quality,
-                'lastedit': page.editTime(),
-                'code': code}]
+	author = None
+	image = None
+	ran = None
+
+	for box in conf['infoboxes']:
+		tl = strainu.extractTemplate(text, box['name'])
+		if tl == None:
+			continue
+		(_dict, _keys) = strainu.tl2Dict(tl)
+		#print _dict
+		author = ""
+		for author_key in box['author']:
+			if (not author_key in _dict) or _dict[author_key].strip() == "":
+				#empty author, ignore
+				continue
+			author_key_type = "tip_" + author_key
+			if author_key_type in _dict:
+				author_type =  _dict[author_key_type].strip().lower()
+			else:
+				author_type = author_key.lower()
+				if author_type.find("arhitect") == -1 and \
+					author_type.find("artist") == -1 and \
+					author_type.find("_name") == -1 and \
+					author_type <> "":
+					author += formatAuthor(_dict[author_key]) + " (" + author_type + "), "
+				else:
+					author = formatAuthor(_dict[author_key]) + ", " + author #architects always go first
+		if author == "":
+			author = None
+		else:
+			author = author[:-2] #remove the final comma
+			#wikipedia.output(author)
+		if box['image'] in _dict and _dict[box['image']].strip() <> "":
+			#TODO:prefix with the namespace
+			image = _dict[box['image']]
+			#wikipedia.output(image)
+		if box['ran'] in _dict and _dict[box['ran']].strip() <> "":
+			ran = _dict[box['ran']]
+			#wikipedia.output(ran)
+		if author <> None and image <> None and ran <> None:
+			break # stop only if we have all the information we need
+
+	if image == None:
+	# if there are images in the article, use the first image
+	# I'm deliberately skipping images in templates (they have been treated
+	# above) and galleries, which usually contain non-selected images
+		for img in page.linkedPages(withImageLinks = True):
+			if img.isImage() and image == None:
+				image = img.title()
+				break
+				
+	dictElem = {'name': title,
+				'project': page.site().language(),
+				'lat': lat, 'long': long,
+				'author': author, 'image': image,
+				'quality': quality,
+				'lastedit': page.editTime(),
+				'code': code,
+				'ran': ran
+			   }
+
+	if len(conf['codeTemplateParams']):
+		tl = strainu.extractTemplate(text, conf['codeTemplate'])
+		(tlcont, tlparam) = strainu.tl2Dict(tl)
+							
+		for param in conf['codeTemplateParams']:
+			if param in tlcont:
+				dictElem[param] = tlcont[param]
+		
+	if code in fullDict:
+		for elem in fullDict[code]:
+			if elem['name'] == title:
+				fullDict[code].remove(elem)
+				break
+		fullDict[code].append(dictElem)
+	else:
+		fullDict[code] = [dictElem]
 
 def processImagePage(text, page, conf):
     pass
@@ -425,6 +465,7 @@ def main():
     for namespace in langOpt.get('namespaces'):
         transGen = pagegenerators.ReferringPageGenerator(rowTemplate,
                                     onlyTemplateInclusion=True)
+        #transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, "Category:Schitul_Crivina"))
         filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen,
                                     [namespace], site)
         pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 125)
@@ -444,7 +485,7 @@ def main():
                 content = []
                 vallist = jsonFile.values() # extract list of values
                 if len(vallist):
-		    # extract all existing data about the page
+					# extract all existing data about the page
                     #print vallist
                     content = [vallist[i][j] for i in range(len(vallist)) for j in range(len(vallist[i])) if vallist[i][j]["name"] == page.title()]
                 #print content
@@ -479,7 +520,7 @@ def main():
 
 if __name__ == "__main__":
     try:
-        #cProfile.run('main()', './parseprofile.txt')
-        main()
+        cProfile.run('main()', './parseprofile.txt')
+        #main()
     finally:
         wikipedia.stopme()
