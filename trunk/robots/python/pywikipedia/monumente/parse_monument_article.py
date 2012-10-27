@@ -357,13 +357,13 @@ def processArticle(text, page, conf):
 				author_type =  _dict[author_key_type].strip().lower()
 			else:
 				author_type = author_key.lower()
-				if author_type.find("arhitect") == -1 and \
+			if author_type.find("arhitect") == -1 and \
 					author_type.find("artist") == -1 and \
 					author_type.find("_name") == -1 and \
 					author_type <> "":
-					author += formatAuthor(_dict[author_key]) + " (" + author_type + "), "
-				else:
-					author = formatAuthor(_dict[author_key]) + ", " + author #architects always go first
+				author += formatAuthor(_dict[author_key]) + " (" + author_type + "), "
+			else:
+				author = formatAuthor(_dict[author_key]) + ", " + author #architects always go first
 		if author == "":
 			author = None
 		else:
