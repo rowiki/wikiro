@@ -69,71 +69,72 @@ public class AutoSigner {
             final String password = credentials.getProperty("Password");
             wiki.login(username, password.toCharArray());
             wiki.setMarkBot(true);
-            final Revision[] revisions = wiki.recentChanges(20, HIDE_BOT | HIDE_SELF, new int[] { TALK_NAMESPACE,
-                USER_TALK_NAMESPACE, PROJECT_TALK_NAMESPACE, PROJECT_NAMESPACE, CATEGORY_TALK_NAMESPACE });
-            revisions: for (final Revision rev : revisions) {
-                System.out.println(rev.getPage() + "\t" + rev.getRevid());
-                if (rev.getRevid() == 0) {
-                    continue revisions;
-                }
-                if (rev.getPage().startsWith("Wikipedia:") && !projectPages.contains(rev.getPage())) {
-                    continue revisions;
-                }
-                final Long lastRevVer = lastReviewedVersion.get(rev.getPage());
-                if (null != lastRevVer && lastRevVer < rev.getRevid()) {
-                    continue revisions;
-                } else {
-                    lastReviewedVersion.put(rev.getPage(), rev.getRevid());
-                }
-                final String crtText = rev.getText();
-                final String crtAuthor = rev.getUser();
+            while (true) {
+                final Revision[] revisions = wiki.recentChanges(20, HIDE_BOT | HIDE_SELF, new int[] { TALK_NAMESPACE,
+                    USER_TALK_NAMESPACE, PROJECT_TALK_NAMESPACE, PROJECT_NAMESPACE, CATEGORY_TALK_NAMESPACE });
+                revisions: for (final Revision rev : revisions) {
+                    System.out.println(rev.getPage() + "\t" + rev.getRevid());
+                    if (rev.getRevid() == 0) {
+                        continue revisions;
+                    }
+                    if (rev.getPage().startsWith("Wikipedia:") && !projectPages.contains(rev.getPage())) {
+                        continue revisions;
+                    }
+                    final Long lastRevVer = lastReviewedVersion.get(rev.getPage());
+                    if (null != lastRevVer && lastRevVer < rev.getRevid()) {
+                        continue revisions;
+                    } else {
+                        lastReviewedVersion.put(rev.getPage(), rev.getRevid());
+                    }
+                    final String crtAuthor = rev.getUser();
 
-                // get a chunk of history large enough to compare
-                final Calendar now = Calendar.getInstance();
-                final Calendar yesterday = Calendar.getInstance();
-                yesterday.roll(Calendar.DATE, false);
-                Revision[] pageHistory = wiki.getPageHistory(rev.getPage(), now, yesterday);
-                while (pageHistory.length < 2 && countEditors(pageHistory) < 2
-                    && !isNew(pageHistory[pageHistory.length - 1])) {
-                    yesterday.add(Calendar.MONTH, -1);
-                    pageHistory = wiki.getPageHistory(rev.getPage(), now, yesterday);
-                }
+                    // get a chunk of history large enough to compare
+                    final Calendar now = Calendar.getInstance();
+                    final Calendar yesterday = Calendar.getInstance();
+                    yesterday.roll(Calendar.DATE, false);
+                    Revision[] pageHistory = wiki.getPageHistory(rev.getPage(), now, yesterday);
+                    while (pageHistory.length < 2 && countEditors(pageHistory) < 2
+                        && !isNew(pageHistory[pageHistory.length - 1])) {
+                        yesterday.add(Calendar.MONTH, -1);
+                        pageHistory = wiki.getPageHistory(rev.getPage(), now, yesterday);
+                    }
 
-                if (isNew(pageHistory[0])) {
-                    analyzeText(pageHistory[0]);
-                    continue revisions;
-                }
-                // locate the last message entered by another user
-                int i;
-                Revision lastMessageByOther = pageHistory[0];
-                for (i = 1; i < pageHistory.length; i++) {
-                    if (isNew(pageHistory[i])) {
+                    if (isNew(pageHistory[0])) {
                         analyzeText(pageHistory[0]);
                         continue revisions;
                     }
-                    // for edits spaced larger than 1 hour, we consider them
-                    // different messages
-                    final long timediff = pageHistory[0].getTimestamp().getTimeInMillis()
-                        - pageHistory[i].getTimestamp().getTimeInMillis();
-                    if (!pageHistory[i].getUser().equals(crtAuthor) || timediff > 1000 * 60 * 60) {
-                        lastMessageByOther = pageHistory[i];
-                        break;
+                    // locate the last message entered by another user
+                    int i;
+                    Revision lastMessageByOther = pageHistory[0];
+                    for (i = 1; i < pageHistory.length; i++) {
+                        if (isNew(pageHistory[i])) {
+                            analyzeText(pageHistory[0]);
+                            continue revisions;
+                        }
+                        // for edits spaced larger than 1 hour, we consider them
+                        // different messages
+                        final long timediff = pageHistory[0].getTimestamp().getTimeInMillis()
+                            - pageHistory[i].getTimestamp().getTimeInMillis();
+                        if (!pageHistory[i].getUser().equals(crtAuthor) || timediff > 1000 * 60 * 60) {
+                            lastMessageByOther = pageHistory[i];
+                            break;
+                        }
                     }
+                    if (lastMessageByOther.getRevid() == rev.getRevid()) {
+                        analyzeText(rev);
+                        continue revisions;
+                    }
+                    analyzeDiff(rev, lastMessageByOther);
                 }
-                if (lastMessageByOther.getRevid() == rev.getRevid()) {
-                    analyzeText(rev);
-                    continue revisions;
-                }
-                analyzeDiff(rev, lastMessageByOther);
+                Thread.sleep(60000);
             }
         } catch (final FailedLoginException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (final IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (final LoginException e) {
-            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (final InterruptedException e) {
             e.printStackTrace();
         } finally {
             if (null != wiki) {
@@ -151,15 +152,15 @@ public class AutoSigner {
             final StringBuilder signature = composeAutoSignature(crtRev);
             System.out.println("I should add: " + signature);
             System.out.println("    ... at line " + dp.getLine());
-            System.out.println("Line should become: ");
 
             final List<String> crtContents = Arrays.asList(crtRev.getText().split("\\r?\\n"));
             final String modifiedLine = crtContents.get(dp.getLine() - 1) + composeAutoSignature(crtRev);
+            System.out.println("Line should become: " + modifiedLine);
             crtContents.set(dp.getLine() - 1, modifiedLine);
-            final String newContents = StringUtils.join(crtContents, "\\r\\n");
+            final String newContents = StringUtils.join(crtContents, "\r\n");
             try {
                 if (crtRev.getPage().contains("Andrei Stroe")) {
-                    wiki.edit(crtRev.getPage(), newContents, "Mesaj nesemnat de " + crtRev.getUser(), crtRev.getTimestamp());
+                    wiki.edit(crtRev.getPage(), newContents, "Robot:semnãturã automatã pentru mesajul lui " + crtRev.getUser(), crtRev.getTimestamp());
                 }
             } catch (final LoginException e) {
                 e.printStackTrace();
@@ -173,13 +174,13 @@ public class AutoSigner {
             System.out.println("Page made up only of templates");
             return;
         }
-        System.out.println(text);
+        // System.out.println(text);
         final Pattern userPageDetector = Pattern.compile("\\[\\[\\:?((Utilizator\\:)|(User\\:))" + revision.getUser());
         final Pattern userTalkPageDetector = Pattern.compile("\\[\\[\\:?((Discu\u021Bie Utilizator\\:)|(User talk\\:))"
             + revision.getUser());
         Matcher matcher = userPageDetector.matcher(text);
         if (matcher.find()) {
-            System.out.println("Mesaj de " + revision.getUser() + " semnat cu link spre pagina de utilizator.");
+            System.out.println("----Mesaj de " + revision.getUser() + " semnat cu link spre pagina de utilizator.");
             return;
         }
         matcher = userTalkPageDetector.matcher(text);
