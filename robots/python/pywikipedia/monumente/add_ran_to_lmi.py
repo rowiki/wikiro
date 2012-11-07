@@ -1,19 +1,16 @@
 ﻿#!/usr/bin/python
 # -*- coding: utf-8  -*-
 '''
-Based on the output from parse_monument_article.py and update_database.py 
-identify different improvements and further errors in the monument pages and database
-* să adauge linkuri către articolul despre un monument acolo unde există - d
-* să adauge coordonate în listă dacă ele există în articol - d
-* să adauge automat poza în listă dacă există una singură cu monumentul respectiv - d
-* să raporteze la [[Proiect:Monumente istorice/Erori/Automate]] următoarele situații:
-** în listă nu există codul respectiv, dar codul are formatul corect în articol/imagine
-** în listă nu există imagine și există mai multe imagini disponibile la commons - i
-** în listă și articol coordonatele sunt diferite (diferențe mai mari de 0,01 grade sau ~35 de secunde de grad) - i
+Parse a csv containing a RAN code and the corresponding LMI code and
+ update the database with the correct RAN code.
+
+Due to the weak quality of RAN data, we also make some guesswork and
+ adjustments
 '''
 
 import sys, time, warnings, json, string, random
 import math, urlparse, csv
+import cProfile
 sys.path.append("..")
 import wikipedia, re, pagegenerators
 import config as user
@@ -90,17 +87,7 @@ countries = {
 	},
 }
 
-_log = "link.err.log"
-_flog = None
 origtext = None
-
-def initLog():
-	global _flog, _log;
-	_flog = open(_log, 'w+')
-
-def closeLog():
-	global _flog
-	_flog.close()
 
 def log(string):
 	wikipedia.output(string.encode("utf8") + "\n")
@@ -166,10 +153,10 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 	(before, code, after) = text.partition(rawCode)
 	after = after.replace(orig, new, 1)
 	text = "".join((before, code, after))
-	if upload == True:
+	if upload == True and origtext <> text:
 		wikipedia.showDiff(origtext, text)
-		answer = wikipedia.input(u"Upload change? ([y]es/[n]o/[l]og)")
-		#answer = 'y'
+		answer = 'y'
+		#answer = wikipedia.input(u"Upload change? ([y]es/[n]o/[l]og)")
 		if answer == 'y':
 			#wikipedia.output(text)
 			comment = u"Actualizez câmpul %s în lista de monumente" % field
@@ -198,12 +185,12 @@ def main():
 
 	simple_ran = csv.reader(open("ran_lmi.csv", "r"))
 
+	regexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2})?))", re.I)
 	for monument in simple_ran:
 		if monument[1] == "" or monument[0] == "":#we have LMI
 			continue
 
 		ran = monument[0].strip()
-		regexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2})?))", re.I)
 		codes = monument[1].split(',')
 		for lmi in codes:
 			lmi = lmi.replace(lmi[0:2], lmi[0:2].upper(), 1)
@@ -243,7 +230,8 @@ def main():
 
 if __name__ == "__main__":
 	try:
-		main()
+		cProfile.run('main()', 'profiling/ranprofile.txt')
+		#main()
 	finally:
 		wikipedia.stopme()
 	
