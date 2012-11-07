@@ -57,7 +57,7 @@ def main():
 				page = page.getRedirectTarget()
 			text = page.get()
 		except Exception:
-			log("I: Local image %s for code %s" % (image, code))
+			log("I: Local image [[:%s]] for code %s" % (image, code))
 			continue
 			
 		templates = page.templatesWithParams(thistxt=text)
