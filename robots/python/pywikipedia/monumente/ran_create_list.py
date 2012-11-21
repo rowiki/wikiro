@@ -4,7 +4,9 @@
 Script that parses the CSV file offered by CIMEC and generates a series 
 of {{ElementRAN}} templates
 '''
-import csv, sys
+import csv
+import sys
+import json
 import cProfile
 import sirutalib
 sys.path.append("..")
@@ -24,25 +26,60 @@ siruta_db = sirutalib.SirutaDatabase()
 
 class RanDatabase:
     def __init__(self):
-        ran = csv.reader(open("ran_full.csv", "r"))
+        ran = csv.reader(open("ran_full_mod.csv", "r"))
+        
+        f = open("db.json", "r+")
+        self.lmi_db = {}
+        wikipedia.output("Reading database file...")
+        db = json.load(f)
+        for monument in db:
+            self.lmi_db[monument["Cod"]] = monument
+        wikipedia.output("...done")
+        
+        f.close();
         complete_page = u""
         self.full_dict = {}
+        self.lmi_regexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2})?))", re.I)
+        
         for line in ran:
-            #complete_page += parseLine(line)
             tldict = self.parseLine(line)
-            if tldict and 'ran' in tldict:
+            if tldict:
                 self.full_dict[tldict['ran']] = tldict
             else:
                 pass
-        for ran in self.full_dict:
-            for elem in ['county','siruta','village','commune']:
-                if self.full_dict[ran][elem].strip() == u"":
-                    self.full_dict[ran][elem] = self.getElemFromSup(ran, elem)
                 
         for ran in self.full_dict:
-            if self.full_dict[ran]['county'] <> u"Botoșani":
-                continue
+            for elem in ['county','siruta','village','commune','address']:
+                if self.full_dict[ran][elem].strip() == u"":
+                    self.full_dict[ran][elem] = self.getElemFromSup(ran, elem)
+            lmi = self.full_dict[ran]['lmi']
+            if self.full_dict[ran]['name'].strip() == u"" and \
+                     lmi in self.lmi_db:
+                self.full_dict[ran]['name'] = self.lmi_db[lmi]['Denumire']
+                self.full_dict[ran]['image'] = self.lmi_db[lmi]['Imagine']
+                    
+        codes = self.full_dict.keys()
+        codes.sort()
+        for ran in codes:
+            #if self.full_dict[ran]['county'] <> u"Botoșani":
+            #    continue
             print self.buildTemplate(self.full_dict[ran]).encode("utf8")
+            
+    def sanitizeLmiCode(self, lmi):
+        if lmi == u"":
+            return u""
+        lmi = lmi.replace(lmi[0:2], lmi[0:2].upper(), 1)
+        lmi = lmi.replace(' ', '').replace('--','-').replace('..','.').replace('_','-').replace('i','I')
+        lmi = re.sub("([IV])([msa])", "\g<1>-\g<2>", lmi, count=1)
+        lmi = re.sub("([AB])([0-9])", "\g<1>-\g<2>", lmi, count=1)
+        lmi = re.sub("([msa])\.?([AB])", "\g<1>-\g<2>", lmi, count=1)
+        lmi = re.sub("([A-Z][A-Z])\.-?I", "\g<1>-I", lmi, count=1)
+        if self.lmi_regexp.search(lmi) == None:
+            return u""
+        elif lmi in self.lmi_db:
+            return lmi
+        else:
+            return "<!--" + lmi + "-->"#comment it so it doesn't show up
     
     def parseComplexity(self, line):
         com = Entity._UNKNOWN
@@ -58,7 +95,7 @@ class RanDatabase:
     def getCustomSirutaType(self, siruta):
         try:
             siruta = int(siruta)
-        except ValueError:
+        except Exception:
             return u""
         type = siruta_db.get_type(siruta)
         if type == 1 or type == 4 or type == 9:
@@ -80,8 +117,6 @@ class RanDatabase:
         except ValueError:
             return u""
         siruta_sup = siruta_db.get_sup_code(siruta)
-        if siruta_sup == None:
-            return u""
         return self.getCustomSirutaType(siruta_sup)
         
     def buildTemplate(self, tldict):
@@ -89,17 +124,18 @@ class RanDatabase:
         template += u"| Cod = %s\n" % tldict['ran']
         template += u"| CodLMI = %s\n" % tldict['lmi']
         template += u"| CodSIRUTA = %s\n" % tldict['siruta']
-        template += u"| TipCod = %s\n" % tldict['com']
         template += u"| Nume = %s\n" % tldict['name']
-        if tldict['altName'] <> u"":
-            template += u"| NumeAlternative = %s\n" % tldict['altName']
+        template += u"| Imagine = %s\n" % tldict['image']
+        template += u"| TipCod = %s\n" % tldict['com']
+        template += u"| NumeAlternative = %s\n" % tldict['altName']
         template += u"| Adresă = %s\n" % tldict['address']
         type_str = self.getCustomSirutaType(tldict['siruta'])
         type_sup_str = self.getCustomSirutaSupType(tldict['siruta'])
         if type_sup_str == u"comuna":
             place_prefix = u"Comuna "
         else:
-            place_prefix = ""
+            place_prefix = u""
+        place = u""
         if type_str == u"sat" or type_str == u"localitate componentă":
             place = u"%s [[%s, %s]], %s [[%s%s, %s]]" % (type_str,
                                                         tldict['village'], 
@@ -108,17 +144,18 @@ class RanDatabase:
                                                         place_prefix,
                                                         tldict['commune'], 
                                                         tldict['county'])
-        else:
+        elif type_str <> u"":
             place = u"%s [[%s, %s]]" % (type_str,
                                         tldict['village'], 
                                         tldict['county'])
         template += u"| Localitate = %s\n" % place
         template += u"| Datare = %s\n" % tldict['dates']
-        template += u"| Perioada = %s\n" % tldict['period']
         template += u"| Cultura = %s\n" % tldict['culture']
+        template += u"| Faza = %s\n" % tldict['phase']
         template += u"| Descoperit = %s\n" % tldict['discovery']
         template += u"| Descoperitor = %s\n" % tldict['discoverer']
         template += u"| Stare = %s\n" % tldict['state']
+        template += u"| Categorie = %s\n" % tldict['category']
         template += u"}}"
         return template
         
@@ -133,11 +170,7 @@ class RanDatabase:
         #35 - Perioada,Cultura,Faza_culturala,Descriere,Observatii,
         #40 - Atestare_documentara,Data_descoperirii,Descoperitor,Stare_conservare,COD-LMI-2004,
         #45 - Utilizare_teren,Data-actualizarii
-        county = unicode(line[14], "utf8")
-        #if county <> u"Botoșani":
-        #    return None
         tldict = {}
-        tldict['county'] = county
         tldict['com'] = self.parseComplexity(line)
         tldict['siruta'] = unicode(line[3], "utf8")
         tldict['ran'] = unicode(line[4], "utf8")
@@ -150,22 +183,24 @@ class RanDatabase:
         tldict['altName'] = unicode(line[9], "utf8")
         tldict['village'] = unicode(line[12], "utf8")
         tldict['commune'] = unicode(line[13], "utf8")
+        tldict['county'] = unicode(line[14], "utf8")
         tldict['address'] = unicode(line[15], "utf8")
         if unicode(line[16], "utf8").strip() <> u"":
             if tldict['address'] <> u"":
-                tldict['address'] += u", "
+                tldict['address'] += u", punct"
             tldict['address'] += unicode(line[16], "utf8")
         if unicode(line[17], "utf8").strip() <> u"" and tldict['address'] <> u"":
             tldict['address'] == u" (%s)" % unicode(line[17], "utf8")
+        #datare și perioada sunt întotdeauna la fel
         tldict['dates'] = unicode(line[34], "utf8").strip()
-        tldict['period'] = unicode(line[34], "utf8").strip() 
-        tldict['culture'] = unicode(line[35], "utf8").strip()  
-        if unicode(line[36], "utf8").strip() <> u"":
-            tldict['culture'] += u" (faza %s)" % unicode(line[36], "utf8").strip() 
+        tldict['culture'] = unicode(line[35], "utf8").strip() 
+        tldict['phase'] = unicode(line[36], "utf8").strip() 
         tldict['discovery'] = unicode(line[41], "utf8")
         tldict['discoverer'] = unicode(line[42], "utf8")
         tldict['state'] = unicode(line[43], "utf8")
-        tldict['lmi'] = unicode(line[44], "utf8")
+        lmi = unicode(line[44], "utf8")
+        tldict['lmi'] = self.sanitizeLmiCode(lmi)
+        tldict['image'] = u""
         return tldict
             
     def getRanSup(self, ran):
