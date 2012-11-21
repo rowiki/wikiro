@@ -9,6 +9,7 @@ import sys
 import json
 import cProfile
 import sirutalib
+import string
 sys.path.append("..")
 import wikipedia, re, pagegenerators
 import config as user
@@ -57,13 +58,22 @@ class RanDatabase:
                      lmi in self.lmi_db:
                 self.full_dict[ran]['name'] = self.lmi_db[lmi]['Denumire']
                 self.full_dict[ran]['image'] = self.lmi_db[lmi]['Imagine']
-                    
+                   
         codes = self.full_dict.keys()
         codes.sort()
+        counties = siruta_db.get_all_counties(prefix=False)
+        counties.append(u"")#it seems we have some empty counties
+        pages_txt = {}
+        for county in counties:
+            county = county.replace(u"-", u" ")
+            county = string.capwords(county)
+            pages_txt[county] = []
+            
         for ran in codes:
-            #if self.full_dict[ran]['county'] <> u"Botoșani":
-            #    continue
-            print self.buildTemplate(self.full_dict[ran]).encode("utf8")
+            pages_txt[self.full_dict[ran]['county']].append(self.buildTemplate(self.full_dict[ran]))
+            
+        for elem in pages_txt:
+            print u"".join(pages_txt[elem]).encode('utf8')
             
     def sanitizeLmiCode(self, lmi):
         if lmi == u"":
@@ -156,7 +166,7 @@ class RanDatabase:
         template += u"| Descoperitor = %s\n" % tldict['discoverer']
         template += u"| Stare = %s\n" % tldict['state']
         template += u"| Categorie = %s\n" % tldict['category']
-        template += u"}}"
+        template += u"}}\n"
         return template
         
     def parseLine(self, line):
