@@ -20,6 +20,7 @@ class Entity:
     _SITE = u"sit"
     _ENSEMBLE = u"ansamblu"
     _COMPLEX = u"complex"
+    _separator = u"_"
     
 copyrightMessage = u"© Institutul Național al Patrimoniului/CIMEC. Licență CC-BY-SA-3.0-RO"
 
@@ -29,15 +30,8 @@ class RanDatabase:
     def __init__(self):
         ran = csv.reader(open("ran_full_mod.csv", "r"))
         
-        f = open("db.json", "r+")
         self.lmi_db = {}
-        wikipedia.output("Reading database file...")
-        db = json.load(f)
-        for monument in db:
-            self.lmi_db[monument["Cod"]] = monument
-        wikipedia.output("...done")
-        
-        f.close();
+        self.readLmiDb()
         complete_page = u""
         self.full_dict = {}
         self.lmi_regexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2})?))", re.I)
@@ -45,22 +39,12 @@ class RanDatabase:
         for line in ran:
             tldict = self.parseLine(line)
             if tldict:
-                self.full_dict[tldict['ran']] = tldict
+                self.full_dict[tldict['com']] = tldict
             else:
                 pass
                 
-        for ran in self.full_dict:
-            for elem in ['county','siruta','village','commune','address']:
-                if self.full_dict[ran][elem].strip() == u"":
-                    self.full_dict[ran][elem] = self.getElemFromSup(ran, elem)
-            lmi = self.full_dict[ran]['lmi']
-            if self.full_dict[ran]['name'].strip() == u"" and \
-                     lmi in self.lmi_db:
-                self.full_dict[ran]['name'] = self.lmi_db[lmi]['Denumire']
-                self.full_dict[ran]['image'] = self.lmi_db[lmi]['Imagine']
+        self.getAdditionalInformation()
                    
-        codes = self.full_dict.keys()
-        codes.sort()
         counties = siruta_db.get_all_counties(prefix=False)
         counties.append(u"")#it seems we have some empty counties
         pages_txt = {}
@@ -69,11 +53,39 @@ class RanDatabase:
             county = string.capwords(county)
             pages_txt[county] = []
             
-        for ran in codes:
-            pages_txt[self.full_dict[ran]['county']].append(self.buildTemplate(self.full_dict[ran]))
+        indexes = self.full_dict.keys()
+        indexes.sort()
+        for com in indexes:
+            pages_txt[self.full_dict[com]['county']].append(self.buildTemplate(self.full_dict[com]))
             
         for elem in pages_txt:
             print u"".join(pages_txt[elem]).encode('utf8')
+            
+        self.writeRanDb()
+            
+    def readLmiDb(self):
+        f = open("db.json", "r+")
+        db = json.load(f)
+        for monument in db:
+            self.lmi_db[monument["Cod"]] = monument
+        f.close()
+        
+    def writeRanDb(self):
+        f = open("ran_db.json", "w+")
+        json.dump(self.full_dict, f, indent=2)
+        f.close()
+
+            
+    def getAdditionalInformation(self):
+        for com in self.full_dict:
+            for elem in ['county','siruta','village','commune','address']:
+                if self.full_dict[com][elem] == u"":
+                    self.full_dict[com][elem] = self.getElemFromSup(com, elem)
+            lmi = self.full_dict[com]['lmi']
+            if self.full_dict[com]['name'] == u"" and \
+                     lmi in self.lmi_db:
+                self.full_dict[com]['name'] = self.lmi_db[lmi]['Denumire']
+                self.full_dict[com]['image'] = self.lmi_db[lmi]['Imagine']
             
     def sanitizeLmiCode(self, lmi):
         if lmi == u"":
@@ -93,11 +105,11 @@ class RanDatabase:
     
     def parseComplexity(self, line):
         com = Entity._UNKNOWN
-        if line[2].strip() <> "":
+        if len(line) == 3:
             com = Entity._COMPLEX
-        elif line[1].strip() <> "":
+        elif len(line) == 2:
             com = Entity._ENSEMBLE
-        elif line[0].strip() <> "":
+        elif len(line) == 1:
             com = Entity._SITE
             
         return com
@@ -134,9 +146,10 @@ class RanDatabase:
         template += u"| Cod = %s\n" % tldict['ran']
         template += u"| CodLMI = %s\n" % tldict['lmi']
         template += u"| CodSIRUTA = %s\n" % tldict['siruta']
+        template += u"| Index = %s\n" % tldict['com']
         template += u"| Nume = %s\n" % tldict['name']
         template += u"| Imagine = %s\n" % tldict['image']
-        template += u"| TipCod = %s\n" % tldict['com']
+        template += u"| TipCod = %s\n" % self.parseComplexity(tldict['com'].split(Entity._separator))
         template += u"| NumeAlternative = %s\n" % tldict['altName']
         template += u"| Adresă = %s\n" % tldict['address']
         type_str = self.getCustomSirutaType(tldict['siruta'])
@@ -181,10 +194,11 @@ class RanDatabase:
         #40 - Atestare_documentara,Data_descoperirii,Descoperitor,Stare_conservare,COD-LMI-2004,
         #45 - Utilizare_teren,Data-actualizarii
         tldict = {}
-        tldict['com'] = self.parseComplexity(line)
+        tldict['com'] = Entity._separator.join([x for x in line[0:3] if x])
+        tldict['com_sup'] = self.getIndexSup(tldict['com'])
         tldict['siruta'] = unicode(line[3], "utf8")
         tldict['ran'] = unicode(line[4], "utf8")
-        if tldict['ran'].strip() == u"":
+        if tldict['ran'] == u"":
             #print u"Linia %s nu are un cod RAN valid" % str(line)
             return None
         tldict['monumentType'] = unicode(line[6], "utf8")
@@ -197,14 +211,14 @@ class RanDatabase:
         tldict['address'] = unicode(line[15], "utf8")
         if unicode(line[16], "utf8").strip() <> u"":
             if tldict['address'] <> u"":
-                tldict['address'] += u", punct"
+                tldict['address'] += u", punct "
             tldict['address'] += unicode(line[16], "utf8")
         if unicode(line[17], "utf8").strip() <> u"" and tldict['address'] <> u"":
             tldict['address'] == u" (%s)" % unicode(line[17], "utf8")
         #datare și perioada sunt întotdeauna la fel
-        tldict['dates'] = unicode(line[34], "utf8").strip()
-        tldict['culture'] = unicode(line[35], "utf8").strip() 
-        tldict['phase'] = unicode(line[36], "utf8").strip() 
+        tldict['dates'] = unicode(line[34], "utf8")
+        tldict['culture'] = unicode(line[35], "utf8") 
+        tldict['phase'] = unicode(line[36], "utf8") 
         tldict['discovery'] = unicode(line[41], "utf8")
         tldict['discoverer'] = unicode(line[42], "utf8")
         tldict['state'] = unicode(line[43], "utf8")
@@ -213,22 +227,23 @@ class RanDatabase:
         tldict['image'] = u""
         return tldict
             
-    def getRanSup(self, ran):
-        if ran.rfind(".") > -1:
-            return ran[0:ran.rfind(".")]
+    def getIndexSup(self, index):
+        sep = index.rfind(Entity._separator)
+        if sep > -1:
+            return index[0:sep]
         else:
             return None
             
-    def getElemFromSup(self, ran, elem):
-        ran_sup = self.getRanSup(ran)
-        if not ran_sup:
+    def getElemFromSup(self, com, elem):
+        com_sup = self.getIndexSup(com)
+        if not com_sup:
             return u""
-        if not ran_sup in self.full_dict:
+        if not com_sup in self.full_dict:
             return u""
-        if self.full_dict[ran_sup][elem].strip() == u"":
-            self.full_dict[ran_sup][elem] = self.getElemFromSup(ran_sup, elem)
+        if self.full_dict[com_sup][elem] == u"":
+            self.full_dict[com_sup][elem] = self.getElemFromSup(com_sup, elem)
             
-        return self.full_dict[ran_sup][elem]
+        return self.full_dict[com_sup][elem]
         
 def main():
     RanDatabase()
