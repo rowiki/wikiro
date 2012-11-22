@@ -195,7 +195,11 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 		#wikipedia.output(text)
 		if upload == True:
 			comment = u"Actualizez câmpul %s în lista de monumente" % field
-			page.put(text, comment)
+			try:
+				page.put(text, comment)
+			except wikipedia.exceptions.EditConflict:
+				#try again
+				page.put(text, comment)
 			return None
 	elif answer == 'l' or answer == '':
 		new = new.replace("\n", "<br/>")
