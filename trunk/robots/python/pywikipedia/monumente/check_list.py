@@ -79,6 +79,6 @@ def compareLists(file1, file2):
 if __name__ == "__main__":
     try:
         #processPageList()
-        compareLists("db.json", "db_true.json")
+        compareLists("lmi_db.json", "db_true.json")
     finally:
         wikipedia.stopme()

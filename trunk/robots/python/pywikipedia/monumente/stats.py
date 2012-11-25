@@ -13,7 +13,7 @@ def split_code(code):
 	return (parts[0], parts[1], parts[2], parts[3])
 
 def main():
-	f = open("db.json", "r+")
+	f = open("lmi_db.json", "r+")
 	wikipedia.output("Reading database file...")
 	db = json.load(f)
 	wikipedia.output("...done")

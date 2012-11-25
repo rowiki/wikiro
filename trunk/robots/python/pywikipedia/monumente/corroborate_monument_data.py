@@ -208,7 +208,7 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 	return text
 
 def main():
-	f = open("db.json", "r+")
+	f = open("lmi_db.json", "r+")
 	wikipedia.output("Reading database file...")
 	db = json.load(f)
 	wikipedia.output("...done")

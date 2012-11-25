@@ -214,7 +214,7 @@ u"width=\"100%\"\n|- align=\"center\""
         return text
 
     def readLmiDb(self):
-        f = open("db.json", "r+")
+        f = open("lmi_db.json", "r+")
         db = json.load(f)
         for monument in db:
             self.lmi_db[monument["Cod"]] = monument

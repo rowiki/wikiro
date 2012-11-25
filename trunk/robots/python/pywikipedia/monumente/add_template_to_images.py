@@ -27,7 +27,7 @@ def log(string):
 
 def main():
 	initLog()
-	f = open("db.json", "r+")
+	f = open("lmi_db.json", "r+")
 	wikipedia.output("Reading database file...")
 	db = json.load(f)
 	wikipedia.output("...done")
