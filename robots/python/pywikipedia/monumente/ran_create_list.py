@@ -10,6 +10,7 @@ import json
 import cProfile
 import sirutalib
 import string
+import locale
 sys.path.append("..")
 import wikipedia, re, pagegenerators
 import config as user
@@ -22,12 +23,46 @@ class Entity:
     _COMPLEX = u"complex"
     _separator = u"_"
     
-copyrightMessage = u"© Institutul Național al Patrimoniului/CIMEC. Licență CC-BY-SA-3.0-RO"
+license = u"Conținutul a fost eliberat sub licența CC-BY-SA-3.0-RO"
+owner = u"© Institutul Național al Patrimoniului/CIMEC"
+copyrightMessage = u"%s. %s." % (owner, license)
+
+pageText = u"'''{2}''' conține toate siturile arheologice {0} [[{1}]] "\
+u"înscrise în [[Repertoriul Arheologic Național]] (RAN){3}. RAN este "\
+u"administrat de [[Ministerul Culturii și Patrimoniului Național "\
+u"(România)|Ministerul Culturii și Patrimoniului Național]] și cuprinde "\
+u"date științifice, cartografice, topografice, imagini și planuri, "\
+u"precum și orice alte informații privitoare la zonele cu potențial "\
+u"arheologic, studiate sau nu, încă existente sau dispărute.\n\n"
+
+mainPageText = u"'''Datorită numărului mare de situri, această listă "\
+u"a fost împărțită după localitatea în care se află situl'''. "\
+u"Dacă știți localitatea (satul sau orașul) în care se află situl, "\
+u"alegeți localitatea din lista din această pagină. Dacă nu știți "\
+u"localitatea, puteți căuta un sit din județ folosind formularul de mai jos.\n\n"
+
+letterPageText = u"Puteți căuta un sit din localitățile care încep cu "\
+u"litera {0} folosind formularul de mai jos sau puteți naviga prin "\
+u"toate siturile din județ la [[{1}]].\n\n"
+
+searchBox = u"<inputbox>\n"\
+u"type=fulltext\n"\
+u"prefix={0}\n"\
+u"break=no\n"\
+u"width=30\n"\
+u"searchbuttonlabel=Căutare în liste\n"\
+u"</inputbox>\n\n"\
+u"{{{{CompactTOC6}}}}\n\n"
+
+discText = u"S-a primit permisiunea de reutilizare a informațiilor din RAN "\
+u"din partea deținătorului drepturilor (%s). %s prin tichetul OTRS "\
+"#2012031110010252.--~~~~\n"
 
 siruta_db = sirutalib.SirutaDatabase()
 
 class RanDatabase:
     def __init__(self):
+        locale.setlocale(locale.LC_ALL, "")
         ran = csv.reader(open("ran_full_mod.csv", "r"))
         
         self.lmi_db = {}
@@ -44,25 +79,140 @@ class RanDatabase:
                 pass
                 
         self.getAdditionalInformation()
-                   
+        del self.lmi_db
+        
         counties = siruta_db.get_all_counties(prefix=False)
         counties.append(u"")#it seems we have some empty counties
         pages_txt = {}
+        villages = {}
         for county in counties:
-            county = county.replace(u"-", u" ")
-            county = string.capwords(county)
-            pages_txt[county] = []
+            county = county.replace(u"-", u"* ")
+            county = string.capwords(county,)
+            county = county.replace(u"* ", u"-")
+            pages_txt[county] = {
+            u"1": [], u"2": [], u"3": [], u"4": [], u"5": [], 
+            u"6": [], u"7": [], u"8": [], u"9": [], u"": [],
+            u"A": [], u"B": [], u"C": [], u"D": [], u"E": [], 
+            u"F": [], u"G": [], u"H": [], u"I": [], u"Î": [],
+            u"J": [], u"L": [], u"M": [], u"N": [], u"O": [], 
+            u"P": [], u"R": [], u"S": [], u"Ș": [], u"T": [], 
+            u"Ț": [], u"U": [], u"V": [], u"Z": [],
+            }
+            villages[county] = {
+            u"1": [], u"2": [], u"3": [], u"4": [], u"5": [], 
+            u"6": [], u"7": [], u"8": [], u"9": [], u"": [],
+            u"A": [], u"B": [], u"C": [], u"D": [], u"E": [], 
+            u"F": [], u"G": [], u"H": [], u"I": [], u"Î": [],
+            u"J": [], u"L": [], u"M": [], u"N": [], u"O": [], 
+            u"P": [], u"R": [], u"S": [], u"Ș": [], u"T": [], 
+            u"Ț": [], u"U": [], u"V": [], u"Z": [],
+            }
+        del counties
             
         indexes = self.full_dict.keys()
         indexes.sort()
         for com in indexes:
-            pages_txt[self.full_dict[com]['county']].append(self.buildTemplate(self.full_dict[com]))
+            county = self.full_dict[com]['county']
+            village = self.full_dict[com]['village']
+            if len(village) > 0:
+                first = village[0]
+            else:
+                first = u""
+            pages_txt[county][first].append(self.buildTemplate(self.full_dict[com]))
+            villages[county][first].append(village)
+        del indexes
+            
+        site = wikipedia.getSite()
             
         for elem in pages_txt:
-            print u"".join(pages_txt[elem]).encode('utf8')
+            #if elem == u"Neamț" or elem == u"Timiș":
+            #    continue
+            if elem == "":
+                title = u"Lista siturilor arheologice cu județ necunoscut"
+                prefix = pageText.format(u"cu", u"județ necunoscut", title, "")
+                search = u""
+                continue
+            
+            county = u"județul {0}".format(elem)
+            title = u"Lista siturilor arheologice din %s" % county
+            prefix = pageText.format(u"din", county, title, "")
+            search = searchBox.format(title)
+            
+            page = wikipedia.Page(site, title)
+            page2 = wikipedia.Page(site, u"Discuție:" + title)
+        
+            letters = villages[elem].keys()
+            letters.sort(cmp=locale.strcoll)
+            
+            text2 = discText % (owner, license)
+            
+            if True:#not page.exists():
+                text = self.generateMainPageText(villages, elem, letters, 
+                        prefix, search)
+                #print text.encode("utf8")
+                page.put(text, copyrightMessage)
+            else:
+                print u"Skipping %s" % title
+            if not page2.exists():
+                page2.put(text2, copyrightMessage)
+            else:
+                print u"Skipping Discuție:%s" % title
+                
+            
+            for letter in letters:
+                if len(pages_txt[elem][letter]) == 0:
+                    continue
+                title_l = title + u" - %s" % letter
+                
+                page2_l = wikipedia.Page(site, u"Discuție:" + title_l)
+                page_l = wikipedia.Page(site, title_l)
+                if True:#not page_l.exists():
+                    prefix = pageText.format(u"din", county, title_l, 
+                            u" și aflate în localități al căror nume începe cu litera %s" % letter)
+                    details = letterPageText.format(letter, title)
+                    text_l = prefix + details + search + \
+                        u"{{ÎnceputTabelRAN}}\n" + \
+                        u"".join(pages_txt[elem][letter]) + \
+                        u"\n{{SfârșitTabelRAN}}\n" + \
+                        u"==Note==\n" + \
+                        u"<references>\n\n" + \
+                        u"[[Categorie:Repertoriul Arheologic Național|%s]]" % elem
+                    page_l.put(text_l, copyrightMessage)
+                else:
+                    print u"Skipping %s" % title_l
+                if not page2_l.exists():
+                    page2_l.put(text2, copyrightMessage)
+                else:
+                    print u"Skipping Discuție:%s" % title_l
+                #print text_l.encode("utf8")
             
         self.writeRanDb()
-            
+        
+    def generateMainPageText(self, villages, elem, letters, prefix, search):
+        text = prefix + mainPageText + search
+        text += u"{| border=\"0\" cellpadding=\"2\" cellspacing=\"1\" "\
+u"align=\"center\" style=\"margin-left:1em; background:#ffffff;\" "\
+u"width=\"100%\"\n|- align=\"center\""
+
+        for letter in letters:
+            if len(villages[elem][letter]) == 0:
+                continue
+            text += u"\n{{{{TOC ro tabele|{0}}}}}".format(letter)
+            count = 0
+            village_list = list(set(villages[elem][letter]))
+            village_list.sort(cmp=locale.strcoll)
+            for village in village_list:
+                if count % 5 == 0:
+                    text +="\n|-"
+                count += 1
+                text += u"\n| [[Lista siturilor arheologice din județul {2} - {0}|{1}]]".format(letter, village, elem)
+                    
+        text += u"\n|}\n\n" + \
+                u"==Note==\n" + \
+                u"<references/>\n\n" + \
+                u"[[Categorie:Repertoriul Arheologic Național|%s]]" % elem
+        return text
+
     def readLmiDb(self):
         f = open("db.json", "r+")
         db = json.load(f)
@@ -86,6 +236,8 @@ class RanDatabase:
                      lmi in self.lmi_db:
                 self.full_dict[com]['name'] = self.lmi_db[lmi]['Denumire']
                 self.full_dict[com]['image'] = self.lmi_db[lmi]['Imagine']
+                self.full_dict[com]['lat'] = self.lmi_db[lmi]['Lat']
+                self.full_dict[com]['lon'] = self.lmi_db[lmi]['Lon']
             
     def sanitizeLmiCode(self, lmi):
         if lmi == u"":
@@ -144,14 +296,21 @@ class RanDatabase:
     def buildTemplate(self, tldict):
         template = u"{{ElementRAN\n"
         template += u"| Cod = %s\n" % tldict['ran']
-        template += u"| CodLMI = %s\n" % tldict['lmi']
-        template += u"| CodSIRUTA = %s\n" % tldict['siruta']
+        if tldict['lmi'] <> u"":
+            template += u"| CodLMI = %s\n" % tldict['lmi']
+        if tldict['siruta'] <> u"":
+            template += u"| CodSIRUTA = %s\n" % tldict['siruta']
         template += u"| Index = %s\n" % tldict['com']
-        template += u"| Nume = %s\n" % tldict['name']
-        template += u"| Imagine = %s\n" % tldict['image']
-        template += u"| TipCod = %s\n" % self.parseComplexity(tldict['com'].split(Entity._separator))
-        template += u"| NumeAlternative = %s\n" % tldict['altName']
-        template += u"| Adresă = %s\n" % tldict['address']
+        if tldict['name'] <> u"":
+            template += u"| Nume = %s\n" % tldict['name']
+        if tldict['image'] <> u"":
+            template += u"| Imagine = %s\n" % tldict['image']
+        if tldict['com'] <> u"":
+            template += u"| TipCod = %s\n" % self.parseComplexity(tldict['com'].split(Entity._separator))
+        if tldict['altName'] <> u"":
+            template += u"| NumeAlternative = %s\n" % tldict['altName']
+        if tldict['address'] <> u"":
+            template += u"| Adresă = %s\n" % tldict['address']
         type_str = self.getCustomSirutaType(tldict['siruta'])
         type_sup_str = self.getCustomSirutaSupType(tldict['siruta'])
         if type_sup_str == u"comuna":
@@ -160,25 +319,45 @@ class RanDatabase:
             place_prefix = u""
         place = u""
         if type_str == u"sat" or type_str == u"localitate componentă":
-            place = u"%s [[%s, %s]], %s [[%s%s, %s]]" % (type_str,
-                                                        tldict['village'], 
-                                                        tldict['county'], 
-                                                        type_sup_str,
-                                                        place_prefix,
-                                                        tldict['commune'], 
-                                                        tldict['county'])
+            place = u"{0} [[{1}, {2}|{1}]]".format(
+                    type_str,
+                    tldict['village'], 
+                    tldict['county'])
+            if type_sup_str == u"comuna":
+                place += u", {1} [[{2}{3}, {0}|{3}]]".format(
+                            tldict['county'], 
+                            type_sup_str,
+                            place_prefix,
+                            tldict['commune'])
+            elif type_sup_str <> u"":
+                place += u", %s [[%s]]" % (type_sup_str,
+                                        tldict['village'])
         elif type_str <> u"":
-            place = u"%s [[%s, %s]]" % (type_str,
-                                        tldict['village'], 
-                                        tldict['county'])
-        template += u"| Localitate = %s\n" % place
-        template += u"| Datare = %s\n" % tldict['dates']
-        template += u"| Cultura = %s\n" % tldict['culture']
-        template += u"| Faza = %s\n" % tldict['phase']
-        template += u"| Descoperit = %s\n" % tldict['discovery']
-        template += u"| Descoperitor = %s\n" % tldict['discoverer']
-        template += u"| Stare = %s\n" % tldict['state']
-        template += u"| Categorie = %s\n" % tldict['category']
+            place = u"%s [[%s]]" % (type_str,
+                                        tldict['village'])
+                                        
+        if place <> u"":
+            template += u"| Localitate = %s\n" % place
+        if tldict['monumentType'] <> u"":
+            template += u"| TipMonument = %s\n" % tldict['monumentType']
+        if tldict['dates'] <> u"":
+            template += u"| Datare = %s\n" % tldict['dates']
+        if tldict['culture'] <> u"":
+            template += u"| Cultura = %s\n" % tldict['culture']
+        if tldict['phase'] <> u"":
+            template += u"| Faza = %s\n" % tldict['phase']
+        if tldict['discovery'] <> u"":
+            template += u"| Descoperit = %s\n" % tldict['discovery']
+        if tldict['discoverer'] <> u"":
+            template += u"| Descoperitor = %s\n" % tldict['discoverer']
+        if tldict['state'] <> u"":
+            template += u"| Stare = %s\n" % tldict['state']
+        if tldict['category'] <> u"":
+            template += u"| Categorie = %s\n" % tldict['category']
+        if tldict['lat'] <> u"":
+            template += u"| Lat = %s\n" % tldict['lat']
+        if tldict['lon'] <> u"":
+            template += u"| Lon = %s\n" % tldict['lon']
         template += u"}}\n"
         return template
         
@@ -225,6 +404,8 @@ class RanDatabase:
         lmi = unicode(line[44], "utf8")
         tldict['lmi'] = self.sanitizeLmiCode(lmi)
         tldict['image'] = u""
+        tldict['lat'] = u""
+        tldict['lon'] = u""
         return tldict
             
     def getIndexSup(self, index):
