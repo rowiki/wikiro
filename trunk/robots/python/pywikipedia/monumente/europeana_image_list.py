@@ -252,7 +252,7 @@ def processArticle(text, page, conf):
     urlPrefix = "http://commons.wikimedia.org/w/index.php?title="
     title = page.title()
     templates = page.templatesWithParams()
-    wikipedia.output(str(templates))
+    #wikipedia.output(str(templates))
     
     if re.search(errorRegexp, text) <> None:
         return
@@ -298,27 +298,31 @@ def processArticle(text, page, conf):
     if information:#search for {{Information}}
         author = extractParam(information[1], u"author")
         author = textlib.removeDisabledParts(author.replace("\n", "<br/>"))
-        wikipedia.output(author)
+        #wikipedia.output(author)
         author = strainu.stripLink(author).strip()
         author = strainu.stripExternalLink(author).strip()
-        wikipedia.output(author)
+        #wikipedia.output(author)
     else:#search for the author of the first upload
-        wikipedia.output(str(history))
+        #wikipedia.output(str(history))
         author = history[1]
         
     #date
     if dateTl: #search for {{Date}}
-        date = dateTl[1][0] + "-" + dateTl[1][1] + "-" + dateTl[1][2]
+        date = dateTl[1][0]
+        if len(dateTl[1]) > 1:
+            date += "-" + dateTl[1][1]
+        if len(dateTl[1]) > 2:
+			date += "-" + dateTl[1][2]
     elif information:#search for {{Information}}
         date = extractParam(information[1], u"date").strip()
         date = textlib.removeDisabledParts(date.replace("\n", "<br/>"))
-        wikipedia.output(date)
+        #wikipedia.output(date)
     else: #search for the date of the first upload
         date = history[0][:10]
     
     #license
     if findTemplate(templates, u'PD') or findTemplate(templates, u'PD-self'):
-        wikipedia.output("1")
+        #wikipedia.output("1")
         license = "DP"
     elif findTemplate(templates, u'Cc-by-sa-1.0') or \
             findTemplate(templates, u'Cc-by-sa-2.0') or \
@@ -326,62 +330,62 @@ def processArticle(text, page, conf):
             findTemplate(templates, u'Cc-by-sa-2.5') or \
             findTemplate(templates, u'Cc-by-sa-3.0-ro') or \
             findTemplate(templates, u'Cc-by-sa-3.0-migrated'):
-        wikipedia.output("2")
+        #wikipedia.output("2")
         license = "CCBYSA"
     elif findTemplate(templates, u'Cc-by-1.0') or \
             findTemplate(templates, u'Cc-by-2.0') or \
             findTemplate(templates, u'Cc-by-3.0') or \
             findTemplate(templates, u'Cc-by-2.5') or \
             findTemplate(templates, u'Cc-by-3.0-ro'):
-        wikipedia.output("3")
+        #wikipedia.output("3")
         license = "CCBY"
     elif findTemplate(templates, u'GFDL') or findTemplate(templates, u'GFDL-self') or findTemplate(templates, u'GFDL-user'):
-        wikipedia.output("4")
+        #wikipedia.output("4")
         license = "GFDL"
     elif findTemplate(templates, u'Self'):
-        wikipedia.output(str(findTemplate(templates, u'Self')[1]))
+        #wikipedia.output(str(findTemplate(templates, u'Self')[1]))
         lic = ",".join(findTemplate(templates, u'Self')[1])
         if lic[0:1] == "1=":
             lic = lic[2:]
         lic = lic.lower()
-        wikipedia.output(lic)
+        #wikipedia.output(lic)
         if lic.find(u'cc-by-sa-1.0') > -1 or \
                 lic.find(u'cc-by-sa-2.0') > -1 or \
                 lic.find(u'cc-by-sa-3.0') > -1 or \
                 lic.find(u'cc-by-sa-2.5') > -1 or \
                 lic.find(u'cc-by-sa-3.0-ro') > -1 or \
                 lic.find(u'cc-by-sa-3.0-migrated') > -1:
-            wikipedia.output("5.1")
+            #wikipedia.output("5.1")
             license = "CCBYSA"
         elif lic.find(u'cc-by-1.0') > -1 or \
                 lic.find(u'cc-by-2.0') > -1 or \
                 lic.find(u'cc-by-3.0') > -1 or \
                 lic.find(u'cc-by-2.5') > -1 or \
                 lic.find(u'cc-by-3.0-ro') > -1:
-            wikipedia.output("5.2")
+            #wikipedia.output("5.2")
             license = "CCBY"
         elif lic.find(u'gfdl') > -1:
-            wikipedia.output("5.3")
+            #wikipedia.output("5.3")
             license = "GFDL"
         elif lic.find(u'pd') > -1:
-            wikipedia.output("5.4")
+            #wikipedia.output("5.4")
             license = "DP"
     
     #alternative method, really shaky
     if license == "":
         if text.lower().find('cc-by-sa') or \
                 text.lower().find('ccbysa'):
-            wikipedia.output("6")
+            #wikipedia.output("6")
             license = "CCBYSA"
         elif text.lower().find('cc-by') or \
                 text.lower().find('ccby'):
-            wikipedia.output("7")
+            #wikipedia.output("7")
             license = "CCBY"
         elif text.find('{{PD-'):
-            wikipedia.output("8")
+            #wikipedia.output("8")
             license = "DP"
         elif information <> None:#search for {{Information}}
-            wikipedia.output("9")
+            #wikipedia.output("9")
             license = extractParam(templates['Information'], "Permission")
             
     #pretty title
