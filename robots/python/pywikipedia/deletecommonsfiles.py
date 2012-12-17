@@ -13,14 +13,18 @@ imgsterse = 0
 for page in gen:
     if page.isImage():
 	text = page.get()
-	ex = re.compile(u"\{\{NowCommons(\|([\w\:\-\_–\.\,\\\"\(\)\&\'\'§„”“\ żóéáìüäàăşţőâÉÎĂŞȘŢȚÂșțîáöéüíПийднкторуябБльавВерс]*))?")
+	ex = re.compile(u"\{\{(N|n)owCommons(\|([\w\:\-\_–\.\,\\\"\(\)\&\'\'§„”“\ żóéáìüäàăşţőâÉÎĂŞȘŢȚÂșțîáöéüíПийднкторуябБльавВерс]*))?")
+	ex2 = re.compile(u"\{\{(A|a)cumCommons(\|([\w\:\-\_–\.\,\\\"\(\)\&\'\'§„”“\ żóéáìüäàăşţőâÉÎĂŞȘŢȚÂșțîáöéüíПийднкторуябБльавВерс]*))?")
 	res = re.findall(ex, text)
- 	
- 	wikipedia.output(page.title())
- 	wikipedia.output("res: " + repr(res))
- 	if res:
+	
+	if not res:
+		res = re.findall(ex2, text)
+
+	wikipedia.output(page.title())
+	wikipedia.output("res: " + repr(res))
+	if res:
 		if res[0][1]:
-			newfname = res[0][1]
+			newfname = res[0][2]
 		else:
 			newfname = page.title()
 		
@@ -40,7 +44,7 @@ for page in gen:
 			cmGFDL = ((u"{{GFDL-user-w|ro|wikipedia|" + localfileuploader[0] + u"}}") in cmtext or u"{{self|gfdl" in cmtext.lower() or u"{{GFDL" in cmtext or u"{{picswiss" in cmtext.lower())
 
 			lcCC = u"{{cc-by" in text.lower() or u"{{creative commons" in text.lower() or u"{{cc-sa" in text.lower()
-			cmCC = (u"{{cc-by" in cmtext.lower() or u"{{self|cc-by" in cmtext.lower() or u"{{attribution" in cmtext.lower() or u"{{self|cc-by-" in cmtext.lower() or u"{{cc-sa" in cmtext.lower())
+			cmCC = (u"{{cc-by" in cmtext.lower() or u"{{self|cc-by" in cmtext.lower() or u"{{attribution" in cmtext.lower() or u"{{self|cc-by-" in cmtext.lower() or u"{{cc-sa" in cmtext.lower() or u"{{cc0" in cmtext.lower())
 			
 			cmCOA = (u"{{pd-romaniagov" in cmtext.lower() or u"{{pd-ro-exempt" in cmtext.lower() or u"{{pd-ro-symbol" in cmtext.lower() or u"{{PD-money-Romania}}" in cmtext)
 			localCOA = (u"{{stemă" in text.lower() or u"{{dp-ro" in text.lower())
