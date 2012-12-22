@@ -13,17 +13,20 @@ import wikipedia as pywikibot
 import pywikibot.textlib as textlib
 import math
 import time
+import string
 
 
 #extract the first instance of a template from the page text
 # @param text: the text of the page
-# @param tempalte: the name of the template we are looking for
+# @param template: the name of the template we are looking for
 # @return: the text of the template
 def extractTemplate(text, template):
     #pywikibot.output(text)
-    match = re.search("\{\{\s*" + template, text)
+    template = template.replace("_", " ")
+    template = template.replace(" ", "[ _]")
+    match = re.search("\{\{\s*" + template, text, re.I)
     if match == None:
-        return None
+		return None
     tl = text[match.start():]
     text = text[match.start() + 2:]
     open = 0
@@ -98,7 +101,7 @@ def tl2Dict(template):
         #pywikibot.output(str(line))
         if (len(line) > 1):
             key = line[0]#.encode("utf8")
-            key = re.sub(ur'\s', '', key)
+            key = key.strip()
             value = u"=".join(line[1:])
             _dict[key] = value
             if not key in _keyList:
@@ -192,6 +195,20 @@ def stripExternalLink(text):
 def stripNamespace(link):
     return link[link.find(':')+1:]
     
+def capitalizeWithSigns(text, keep=[]):
+    text = text.replace(u"-", u"* ")
+    i = 0
+    for term in keep:
+        text = text.replace(term, u"@@%d@@ " % i)
+        i += 1
+    text = text
+    text = string.capwords(text,)
+    i = 0
+    for term in keep:
+        text = text.replace(u"@@%d@@ " % i, term)
+        i += 1
+    text = text.replace(u"* ", u"-")
+    return text
         
     # def getDeg(self, decimal):
         # if decimal < 0:
@@ -217,6 +234,8 @@ def stripNamespace(link):
             # return 0 #this should really never happen
             
 if __name__ == "__main__":
+    print extractTemplate("{{Sema_2|a=b<ref>{{citat|}}</ref>|e=f}}", "Sema 2")
+    print extractTemplate("{{Sema 2|a=b<ref>{{citat|}}</ref>|e=f}}", "Sema_2")
     print tl2Dict(u"{{Sema|a=bș<ref>{{ciătat|c=d}}</ref>sd|e=f{{citat|c=d|c1=d1}}}}")
     print tl2Dict("{{Sema2|a=b<ref>{{citat|}}</ref>|e=f}}")
     print tl2Dict("{{Sema2|a={{citat|c=d|c1=d1}}|e=f}}")
