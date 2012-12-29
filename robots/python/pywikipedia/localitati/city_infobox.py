@@ -2,7 +2,7 @@
 # -*- coding: utf-8  -*-
 """
 
-python osm2wiki_template.py -summary:"Bot: Adding a coordinate" -lang:ro -start:Albac,_Alba
+python city_infobox.py -summary:"Bot: Adding a coordinate" -lang:ro -start:Albac,_Alba
 
 
 """
@@ -97,7 +97,7 @@ class o2wVillageData:
                 print unicode(row[11], 'utf8')
                 continue
                 
-            low = [u" DE ", u" CEL ", u" LA ", u" SUB ", u" DIN "]
+            low = [u" DE ", u" CEL ", u" LA ", u" SUB ", u" DIN ", u" LUI ", u" CU "]
             name = strainu.capitalizeWithSigns(name_without_prefix, keep=low)
             for word in low:
                 name = name.replace(word, string.lower(word))
@@ -110,6 +110,7 @@ class o2wVillageData:
                 u'nume': name,
                 u'pop': unicode(row[14], 'utf8'),
                 u'tip': siruta.get_type(int(row[0])),
+                u'codp': siruta.get_postal_code(int(row[0])),
             }
             
         reader = csv.reader(open(self._politicianName, "r"))
@@ -119,6 +120,17 @@ class o2wVillageData:
                 continue
             self._data[row[6]][u'primar'] = self.reverseName(strainu.capitalizeWithSigns(unicode(row[1], 'utf8'),))
             self._data[row[6]][u'partid'] = unicode(row[14], 'utf8')
+            
+    def extractFloat(self, text):
+        Rref = re.compile(ur'<ref.*?>[^<]+</ref>')
+        for m in Rref.finditer(text):
+            text = text.replace(m.group(), '')
+        Rfnum = re.compile(ur'{{formatnum:(.*)}}')
+        for m in Rfnum.finditer(text):
+            text = m.group(1)
+        text = text.replace(",",".")
+        return float(text)
+        
         
     def populateCommune(self, cod, _dict, _keyList):
         #primar, partid, ales, populație, recensământ, siruta - Casetă comune România
@@ -144,9 +156,9 @@ class o2wVillageData:
             _dict[u"populație"] = self._data[cod][u'pop']
             _keyList.append(u"populație")
         if u'recensământ' in _dict:
-            _dict[u"recensământ"] = u"2011"
+            _dict[u"recensământ"] = u"[[Recensământul populației din 2011 (România)|2011]]"
         else:
-            _dict[u"recensământ"] = u"2011"
+            _dict[u"recensământ"] = u"[[Recensământul populației din 2011 (România)|2011]]"
             _keyList.append(u"recensământ")
         if u'siruta' in _dict:
             _dict[u"siruta"] = self._data[cod][u'siruta']
@@ -155,13 +167,17 @@ class o2wVillageData:
             _keyList.append(u"siruta")
         if u"suprafață" in _dict and _dict[u"suprafață"].strip() <> u"":
             try:
-                sup = float(_dict[u"suprafață"].replace(",","."))
+                sup = self.extractFloat(_dict[u"suprafață"])
                 dens = float(self._data[cod][u'pop']) / sup
                 if u"densitate" not in _dict:
                     _keyList.append(u"densitate")
                 _dict[u"densitate"] = locale.format_string("%.2f", dens)
             except:
                 print "a" + _dict[u"suprafață"] + "b"
+        if u'cod-poștal' in _dict and self._data[cod][u'codp'] == 0:
+            #remove unused postal code - it should not appear for communes
+            del _dict[u'cod-poștal']
+            _keyList.remove(u'cod-poștal')
         return (_dict, _keyList)
         
     def populateSector(self, cod, _dict, _keyList):
@@ -188,9 +204,9 @@ class o2wVillageData:
             _dict[u"populație"] = self._data[cod][u'pop']
             _keyList.append(u"populație")
         if u'recensământ' in _dict:
-            _dict[u"recensământ"] = u"2011"
+            _dict[u"recensământ"] = u"[[Recensământul populației din 2011 (România)|2011]]"
         else:
-            _dict[u"recensământ"] = u"2011"
+            _dict[u"recensământ"] = u"[[Recensământul populației din 2011 (România)|2011]]"
             _keyList.append(u"recensământ")
         if u'siruta' in _dict:
             _dict[u"siruta"] = self._data[cod][u'siruta']
@@ -199,7 +215,7 @@ class o2wVillageData:
             _keyList.append(u"siruta")
         if u"suprafață" in _dict and _dict[u"suprafață"].strip() <> u"":
             try:
-                sup = float(_dict[u"suprafață"].replace(",","."))
+                sup = self.extractFloat(_dict[u"suprafață"])
                 dens = float(self._data[cod][u'pop']) / sup
                 if u"densitate" not in _dict:
                     _keyList.append(u"densitate")
@@ -236,10 +252,17 @@ class o2wVillageData:
         else:
             _dict[u"populație"] = self._data[cod][u'pop']
             _keyList.append(u"populație")
-        if u'recensământ' in _dict:
-            _dict[u"recensământ"] = u"2011"
+        rec_note = u"<ref name=\"rec_2011\">{{Citat web|title=Rezultatele preliminare ale recensământului din 2011|url=http://www.recensamantromania.ro/wp-content/uploads/2012/08/TS2.pdf}}</ref>"
+        if u'populație_note_subsol' in _dict:
+            _dict[u"populație_note_subsol"] = rec_note
         else:
-            _dict[u"recensământ"] = u"2011"
+            _dict[u"populație_note_subsol"] = rec_note
+            _keyList.append(u"populație_note_subsol")
+            
+        if u'recensământ' in _dict:
+            _dict[u"recensământ"] = u"[[Recensământul populației din 2011 (România)|2011]]"
+        else:
+            _dict[u"recensământ"] = u"[[Recensământul populației din 2011 (România)|2011]]"
             _keyList.append(u"recensământ")
         if u'cod_clasificare' in _dict:
             _dict[u"cod_clasificare"] = self._data[cod][u'siruta']
@@ -253,13 +276,40 @@ class o2wVillageData:
             _keyList.append(u"tip_cod_clasificare")
         if u"suprafață_totală_km2" in _dict and _dict[u"suprafață_totală_km2"].strip() <> u"":
             try:
-                sup = float(_dict[u"suprafață_totală_km2"].replace(",","."))
+                sup = self.extractFloat(_dict[u"suprafață_totală_km2"])
                 dens = float(self._data[cod][u'pop']) / sup
                 if u"densitate" not in _dict:
                     _keyList.append(u"densitate")
                 _dict[u"densitate"] = locale.format_string("%.2f", dens)
-            except:
+            except Exception as e:
+                print e
                 print "a" + _dict[u"suprafață_totală_km2"] + "b"
+        print _dict
+        print self._data[cod]
+        if u'population_blank1_title' in _dict and \
+        _dict[u'population_blank1_title'] == u'Rezultate provizorii 2011':
+            del _dict[u'population_blank1']
+            _keyList.remove(u'population_blank1')
+            del _dict[u'population_blank1_title']
+            _keyList.remove(u'population_blank1_title')
+        if u'codpoștal' in _dict and self._data[cod][u'codp'] == 0:
+            #remove unused postal code - it should not appear for communes
+            del _dict[u'codpoștal']
+            _keyList.remove(u'codpoștal')
+            if u'tip_cod_poștal' in _dict:
+                del _dict[u'tip_cod_poștal']
+                _keyList.remove(u'tip_cod_poștal')
+        #elif self._data[cod][u'codp'] > 0:
+        #    if u'codpoștal' in _dict:
+        #        _dict[u"codpoștal"] = str(self._data[cod][u'codp'])
+        #    else:
+        #        _dict[u"codpoștal"] = str(self._data[cod][u'codp'])
+        #        _keyList.append(u"codpoștal")
+        #    if u'tip_cod_poștal' in _dict:
+        #        _dict[u"tip_cod_poștal"] = u"Cod poștal"
+        #    else:
+        #        _dict[u"tip_cod_poștal"] = u"Cod poștal"
+        #        _keyList.append(u"tip_cod_poștal")
         return (_dict, _keyList)
 
     def putDataOnWiki(self, lang, firstArticle):
@@ -269,7 +319,7 @@ class o2wVillageData:
             start = 0
         site = pywikibot.getSite(lang)
         #village_templates = "(CutieSate|CutieSate2|CasetăSate|CasetăSate2|Infocaseta Așezare|Infobox așezare|Casetă așezare|Cutie așezare|CasetăOrașe)".decode('utf8')
-        commune_templates = "(Cutie Comune România|Casetă comune România|Infobox Sectoare București|Cutie așezare|Casetă așezare|Infocaseta Așezare|Infobox așezare)".decode('utf8')
+        commune_templates = u"(Cutie Comune România|Casetă comune România|Infobox Sectoare București|Cutie așezare|Casetă așezare|Infocaseta Așezare|Infobox așezare)"
         _parties = {}
         for cod in self._data:
             _keyList = []
@@ -294,6 +344,13 @@ class o2wVillageData:
                 self.loge(u"Unknown error in getPageValue, exiting: %s" % inst)
                 continue
                 
+            oldTl = strainu.extractTemplate(text, commune_templates)
+            if oldTl == None:
+                self.loge("No template in page %s" % title)
+                continue
+            (_dict, _keyList) = strainu.tl2Dict(oldTl)#populate _dict
+            #print _dict
+            
             if not row[u'partid'] in _parties:
                 party = row[u'partid']
                 ppage = pywikibot.Page(site, party)
@@ -307,26 +364,19 @@ class o2wVillageData:
                 _parties[row[u'partid']] = self._data[cod][u'partid']
             else:
                 self._data[cod][u'partid'] = _parties[row[u'partid']]
-                
-            oldTl = strainu.extractTemplate(text, commune_templates)
-            if oldTl == None:
-                self.loge("No template in page %s" % title)
-                continue
-            (_dict, _keyList) = strainu.tl2Dict(oldTl)#populate _dict
-            #print _dict
             
-            if _dict['_name'] == u"Cutie Comune România" or\
-                _dict['_name'] == u"Casetă comune România":
+            if _dict[u'_name'].lower() == u"cutie comune românia" or\
+                _dict[u'_name'].lower() == u"casetă comune românia":
                 (_dict, _keyList) = self.populateCommune(cod, _dict, _keyList)
-            elif _dict['_name'] == u"Infobox Sectoare București":
+            elif _dict[u'_name'] == u"Infobox Sectoare București":
                 (_dict, _keyList) = self.populateSector(cod, _dict, _keyList)
-            elif _dict['_name'] == u"Casetă așezare" or\
-                _dict['_name'] == u"Cutie așezare" or\
-                _dict['_name'] == u"Infocaseta Așezare" or\
-                _dict['_name'] == u"Infobox așezare":
+            elif _dict[u'_name'].lower() == u"casetă așezare" or\
+                _dict[u'_name'].lower() == u"cutie așezare" or\
+                _dict[u'_name'].lower() == u"infocaseta așezare" or\
+                _dict[u'_name'].lower() == u"infobox așezare":
                 (_dict, _keyList) = self.populateLocation(cod, _dict, _keyList)
             else:
-                self.loge("Unknown template for %s" % title)
+                self.loge("Unknown template for %s: %s" % (title, _dict[u'_name']))
             
             tl = u""
             for key in _keyList:
@@ -334,7 +384,10 @@ class o2wVillageData:
                     tl += u"{{" + _dict[key] + u"\n"
                 else:
                     tl += u"| " + key + u" = " 
-                    tl += _dict[key].strip() + u"\n"
+                    try:
+                        tl += _dict[key].strip() + u"\n"
+                    except:
+                        print key
             tl += u"}}"
             
             # we compare the 2 templates without whitespace 
@@ -348,7 +401,8 @@ class o2wVillageData:
                 else:
                     answer = pywikibot.input(u"Upload change? ([y]es/[n]o/[a]lways)")
                 if answer == 'y':
-                    pass#generator.put(newtext, comment)
+                    generator.put(newtext, comment)
+                    pass
                 elif answer == 'a':
                     self.acceptall = True
             else:
