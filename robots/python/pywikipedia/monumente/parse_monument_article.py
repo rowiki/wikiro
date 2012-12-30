@@ -50,7 +50,7 @@ options = {
 			'ran': u'',#nada yet
 		},
 		{
-			'name': u'Castru|Infocaseta Castru|Infocaseta Cetate dacică',
+			'name': u'Castru|Infocaseta Castru|Infocaseta Cetate dacică|Infocaseta Villa rustica',
 			'author': [],
 			'image': u'imagine',
 			'ran': u'cod RAN',
@@ -473,7 +473,7 @@ def main():
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen,
 									[namespace], site)
 		if preload:
-			pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 125)
+			pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 250)
 		else:
 			pregenerator = filteredGen
 
