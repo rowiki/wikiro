@@ -25,9 +25,16 @@ def main():
 	wikipedia.output("...done")
 	f.close();
 	
+	f = open("ro_pages.json", "r+")
+	wikipedia.output("Reading articles file...")
+	pages_ro = json.load(f)
+	wikipedia.output("...done")
+	f.close();
+	
 	images = 0
 	coords = 0
 	authors = 0
+	articles = 0
 	total = len(db)
 
 	total_county = {}
@@ -45,6 +52,9 @@ def main():
 		if county == None:
 			print monument
 			continue
+		
+		if monument["Denumire"].find("[[") >= 0:
+			articles += 1
 
 		if nature == "I":
 			nature = "arheologie"
@@ -111,11 +121,15 @@ def main():
 			authors += 1
 	
 	print "Imagini: %d/%d (%f%%)" % (images, total, images * 100.0 / total)
-	print "Potential imagini: %d" % len(pages_commons)
+	print "Potențial imagini: %d" % len(pages_commons)
 	print "Coordonate: %d/%d (%f%%)" % (coords, total, coords * 100.0 / total)
 	print "Arhitect: %d/%d (%f%%)" % (authors, total, authors * 100.0 / total)
+	print "Articole: %d/%d (%f%%)" % (articles, total, articles * 100.0 / total)
+	print "Potențial articole: %d" % len(pages_ro)
 
-	for county in image_county.keys():
+	image_keys = image_county.keys()
+	image_keys.sort()
+	for county in image_keys:
 		print "Imagini pentru judetul %s: %f%%" % (county, image_county[county] * 100.0 / total_county[county])
 	for nature in image_nature.keys():
 		print "Imagini pentru monumente de %s: %f%%" % (nature, image_nature[nature] * 100.0 / total_nature[nature])
