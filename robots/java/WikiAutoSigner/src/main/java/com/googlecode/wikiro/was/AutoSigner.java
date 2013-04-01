@@ -51,6 +51,8 @@ public class AutoSigner {
 
         {
             add("Wikipedia:Cafenea");
+            add("Wikipedia:Reclama\u021Bii");
+            add("Wikipedia:Pagini de \u2018ters");
         }
     };
 
@@ -91,7 +93,7 @@ public class AutoSigner {
                     // get a chunk of history large enough to compare
                     final Calendar now = Calendar.getInstance();
                     final Calendar yesterday = Calendar.getInstance();
-                    yesterday.roll(Calendar.DATE, false);
+                    yesterday.add(Calendar.DATE, -1);
                     Revision[] pageHistory = wiki.getPageHistory(rev.getPage(), now, yesterday);
                     while (pageHistory.length < 2 && countEditors(pageHistory) < 2
                         && !isNew(pageHistory[pageHistory.length - 1])) {
@@ -159,9 +161,9 @@ public class AutoSigner {
             crtContents.set(dp.getLine() - 1, modifiedLine);
             final String newContents = StringUtils.join(crtContents, "\r\n");
             try {
-                if (crtRev.getPage().contains("Andrei Stroe")) {
-                    wiki.edit(crtRev.getPage(), newContents, "Robot:semnãturã automatã pentru mesajul lui " + crtRev.getUser(), crtRev.getTimestamp());
-                }
+                //if (crtRev.getPage().contains("Andrei Stroe")) {
+                wiki.edit(crtRev.getPage(), newContents, "Robot:semnãturã automatã pentru mesajul lui " + crtRev.getUser(), crtRev.getTimestamp());
+                //}
             } catch (final LoginException e) {
                 e.printStackTrace();
             }
@@ -186,15 +188,15 @@ public class AutoSigner {
         matcher = userTalkPageDetector.matcher(text);
         if (matcher.find()) {
             System.out
-                .println("Mesaj de " + revision.getUser() + " semnat cu link spre pagina de discu\u021Bii utilizator.");
+            .println("Mesaj de " + revision.getUser() + " semnat cu link spre pagina de discu\u021Bii utilizator.");
             return;
         }
 
         final StringBuilder textToAdd = composeAutoSignature(revision);
 
-        if (revision.getPage().contains("Andrei Stroe")) {
-            wiki.edit(revision.getPage(), revision.getText() + textToAdd, defaultSummary, revision.getTimestamp());
-        }
+        //if (revision.getPage().contains("Andrei Stroe")) {
+        wiki.edit(revision.getPage(), revision.getText() + textToAdd, defaultSummary, revision.getTimestamp());
+        //}
     }
 
     protected static StringBuilder composeAutoSignature(final Revision revision) {
