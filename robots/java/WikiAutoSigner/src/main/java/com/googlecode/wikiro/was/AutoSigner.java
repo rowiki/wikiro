@@ -52,7 +52,13 @@ public class AutoSigner {
         {
             add("Wikipedia:Cafenea");
             add("Wikipedia:Reclama\u021Bii");
-            add("Wikipedia:Pagini de \u2018ters");
+        }
+    };
+    private static Set<String> projectSubpages = new HashSet<String>() {
+        private static final long serialVersionUID = -2245300967753508562L;
+
+        {
+            add("Wikipedia:Pagini de \u0219ters");
         }
     };
 
@@ -79,8 +85,19 @@ public class AutoSigner {
                     if (rev.getRevid() == 0) {
                         continue revisions;
                     }
-                    if (rev.getPage().startsWith("Wikipedia:") && !projectPages.contains(rev.getPage())) {
-                        continue revisions;
+                    if (rev.getPage().startsWith("Wikipedia:")) {
+                        boolean projectPageAcceptable = false;
+                        if (projectPages.contains(rev.getPage())) {
+                            projectPageAcceptable = true;
+                        }
+                        for (final String subpage : projectPages) {
+                            if (rev.getPage().startsWith(subpage + "/")) {
+                                projectPageAcceptable = true;
+                            }
+                        }
+                        if (!projectPageAcceptable) {
+                            continue revisions;
+                        }
                     }
                     final Long lastRevVer = lastReviewedVersion.get(rev.getPage());
                     if (null != lastRevVer && lastRevVer < rev.getRevid()) {
@@ -161,9 +178,10 @@ public class AutoSigner {
             crtContents.set(dp.getLine() - 1, modifiedLine);
             final String newContents = StringUtils.join(crtContents, "\r\n");
             try {
-                //if (crtRev.getPage().contains("Andrei Stroe")) {
-                wiki.edit(crtRev.getPage(), newContents, "Robot:semnãturã automatã pentru mesajul lui " + crtRev.getUser(), crtRev.getTimestamp());
-                //}
+                // if (crtRev.getPage().contains("Andrei Stroe")) {
+                wiki.edit(crtRev.getPage(), newContents, "Robot:semnãturã automatã pentru mesajul lui " + crtRev.getUser(),
+                    crtRev.getTimestamp());
+                // }
             } catch (final LoginException e) {
                 e.printStackTrace();
             }
@@ -194,9 +212,9 @@ public class AutoSigner {
 
         final StringBuilder textToAdd = composeAutoSignature(revision);
 
-        //if (revision.getPage().contains("Andrei Stroe")) {
+        // if (revision.getPage().contains("Andrei Stroe")) {
         wiki.edit(revision.getPage(), revision.getText() + textToAdd, defaultSummary, revision.getTimestamp());
-        //}
+        // }
     }
 
     protected static StringBuilder composeAutoSignature(final Revision revision) {
