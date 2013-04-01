@@ -50,11 +50,14 @@ public class DiffParser {
                 final Pattern userTalkPageDetector = Pattern.compile("\\[\\[\\:?((Discu\u021Bie Utilizator\\:)|(User talk\\:))"
                     + ownerName);
                 final Pattern signedForSomeoneElseDetector = Pattern.compile("\\[\\[\\:?Ajutor\\:Semn\u0103tura personal\u0103");
+                final Pattern talkbackDetector = Pattern.compile("\\{\\{(Format\\:)?(((R|r)\u0103spuns)|((T|t)alkback)|((M|m)esaj))");
+
                 for (final Object lineObj: addedLines) {
                     final String line = lineObj.toString();
                     final Matcher userPageDetectorMatcher = userPageDetector.matcher(line);
                     final Matcher userTalkPageDetectorMatcher = userTalkPageDetector.matcher(line);
                     final Matcher signedForSomeoneElseDetectorMatcher = signedForSomeoneElseDetector.matcher(line);
+                    final Matcher talkbackDetectorMatcher = talkbackDetector.matcher(line);
                     if (userPageDetectorMatcher.find()) {
                         signed = true;
                     }
@@ -64,6 +67,7 @@ public class DiffParser {
                     if (signedForSomeoneElseDetectorMatcher.find()) {
                         signed = true;
                     }
+                    signed = signed || talkbackDetectorMatcher.find();
                 }
                 if (!signed) {
                     line = line + addedLines.size();
