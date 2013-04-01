@@ -29,7 +29,7 @@ public class DiffParser {
     public void analyze(final String ownerName) throws IOException {
         final List<String> prevContents = Arrays.asList(prevRevision.getText().split("\\r?\\n"));
         final List<String> crtContents = Arrays.asList(crtRevision.getText().split("\\r?\\n"));
-        
+
         final Patch diff = DiffUtils.diff(prevContents, crtContents);
         for (final Delta delta : diff.getDeltas()) {
             //System.out.println(delta);
@@ -49,14 +49,19 @@ public class DiffParser {
                 final Pattern userPageDetector = Pattern.compile("\\[\\[\\:?((Utilizator\\:)|(User\\:))" + ownerName);
                 final Pattern userTalkPageDetector = Pattern.compile("\\[\\[\\:?((Discu\u021Bie Utilizator\\:)|(User talk\\:))"
                     + ownerName);
+                final Pattern signedForSomeoneElseDetector = Pattern.compile("\\[\\[\\:?Ajutor\\:Semn\u0103tura personal\u0103");
                 for (final Object lineObj: addedLines) {
                     final String line = lineObj.toString();
                     final Matcher userPageDetectorMatcher = userPageDetector.matcher(line);
                     final Matcher userTalkPageDetectorMatcher = userTalkPageDetector.matcher(line);
+                    final Matcher signedForSomeoneElseDetectorMatcher = signedForSomeoneElseDetector.matcher(line);
                     if (userPageDetectorMatcher.find()) {
                         signed = true;
                     }
                     if (userTalkPageDetectorMatcher.find()) {
+                        signed = true;
+                    }
+                    if (signedForSomeoneElseDetectorMatcher.find()) {
                         signed = true;
                     }
                 }
