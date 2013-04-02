@@ -1,11 +1,14 @@
 package com.googlecode.wikiro.was;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.Wiki.Revision;
 
 import difflib.ChangeDelta;
@@ -19,6 +22,7 @@ public class DiffParser {
     private final Revision crtRevision;
     private boolean signed = true;
     private int line = 0;
+    private String addedMessage = null;
 
     public DiffParser(final Revision prevRevision, final Revision crtRevision) {
         super();
@@ -42,12 +46,25 @@ public class DiffParser {
             if (delta instanceof ChangeDelta) {
                 final ChangeDelta insertion = (ChangeDelta) delta;
                 line = insertion.getRevised().getPosition();
-                addedLines = insertion.getRevised().getLines();
+                addedLines = new ArrayList(insertion.getRevised().getLines());
+                final List originalLines = new ArrayList(insertion.getOriginal().getLines());
+                final List<Integer> indicesToRemove = new ArrayList<Integer>();
+                for (int i = 0; i < addedLines.size() && i < originalLines.size(); i++) {
+                    if (StringUtils.getCommonPrefix(addedLines.get(i).toString(), originalLines.get(i).toString()).length() > 2) {
+                        indicesToRemove.add(i);
+                    }
+                }
+                Collections.sort(indicesToRemove);
+                int removedIndicesCnt = 0;
+                for (final Integer indexToRemove: indicesToRemove) {
+                    addedLines.remove(indexToRemove - removedIndicesCnt);
+                    removedIndicesCnt++;
+                }
             }
             if (null != addedLines && addedLines.size() > 0) {
                 signed = false;
                 final Pattern userPageDetector = Pattern.compile("\\[\\[\\:?((Utilizator\\:)|(User\\:))" + ownerName);
-                final Pattern userTalkPageDetector = Pattern.compile("\\[\\[\\:?((Discu\u021Bie Utilizator\\:)|(User talk\\:))"
+                final Pattern userTalkPageDetector = Pattern.compile("\\[\\[\\:?((Discu\u021Bie (U|u)tilizator\\:)|(User talk\\:))"
                     + ownerName);
                 final Pattern signedForSomeoneElseDetector = Pattern.compile("\\[\\[\\:?Ajutor\\:Semn\u0103tura personal\u0103");
                 final Pattern talkbackDetector = Pattern.compile("\\{\\{(Format\\:)?(((R|r)\u0103spuns)|((T|t)alkback)|((M|m)esaj))");
@@ -73,6 +90,9 @@ public class DiffParser {
                     line = line + addedLines.size();
                 }
             }
+            if (null != addedLines) {
+                addedMessage = StringUtils.join(addedLines, System.getProperty("line.separator"));
+            }
         }
     }
 
@@ -82,5 +102,9 @@ public class DiffParser {
 
     public int getLine() {
         return line;
+    }
+
+    public String getAddedMessage() {
+        return addedMessage;
     }
 }
