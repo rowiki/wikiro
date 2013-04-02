@@ -77,6 +77,7 @@ public class AutoSigner {
             final String password = credentials.getProperty("Password");
             wiki.login(username, password.toCharArray());
             wiki.setMarkBot(true);
+            wiki.setMarkMinor(true);
             while (true) {
                 final Revision[] revisions = wiki.recentChanges(20, HIDE_BOT | HIDE_SELF, new int[] { TALK_NAMESPACE,
                     USER_TALK_NAMESPACE, PROJECT_TALK_NAMESPACE, PROJECT_NAMESPACE, CATEGORY_TALK_NAMESPACE });
@@ -168,6 +169,14 @@ public class AutoSigner {
         dp.analyze(crtRev.getUser());
 
         if (!dp.isSigned()) {
+            final String addedMessage = dp.getAddedMessage();
+            if (null != addedMessage) {
+                System.out.println("User message: " + addedMessage);
+                if (isTemplatesOnly(addedMessage)) {
+                    System.out.println("--- Message is templates only; not signing");
+                    return;
+                }
+            }
             final StringBuilder signature = composeAutoSignature(crtRev);
             System.out.println("I should add: " + signature);
             System.out.println("    ... at line " + dp.getLine());
@@ -206,14 +215,15 @@ public class AutoSigner {
         matcher = userTalkPageDetector.matcher(text);
         if (matcher.find()) {
             System.out
-            .println("Mesaj de " + revision.getUser() + " semnat cu link spre pagina de discu\u021Bii utilizator.");
+            .println("----Mesaj de " + revision.getUser() + " semnat cu link spre pagina de discu\u021Bii utilizator.");
             return;
         }
 
         final StringBuilder textToAdd = composeAutoSignature(revision);
+        final String summary = "Robot: semnãturã automatã pentru mesajul lui " + revision.getUser();
 
         // if (revision.getPage().contains("Andrei Stroe")) {
-        wiki.edit(revision.getPage(), revision.getText() + textToAdd, defaultSummary, revision.getTimestamp());
+        wiki.edit(revision.getPage(), revision.getText() + textToAdd, summary, revision.getTimestamp());
         // }
     }
 
@@ -231,8 +241,8 @@ public class AutoSigner {
         return textToAdd;
     }
 
-    private static boolean isTemplatesOnly(final String text) {
-        final Pattern templatesDetectorPattern = Pattern.compile("\\s*(\\{\\{.*\\}\\}\\s*)+");
+    public static boolean isTemplatesOnly(final String text) {
+        final Pattern templatesDetectorPattern = Pattern.compile("\\s*(\\{\\{(.|\\s)*\\}\\}\\s*)+");
         final Matcher matcher = templatesDetectorPattern.matcher(text);
         return matcher.matches();
     }
