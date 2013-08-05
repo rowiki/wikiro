@@ -422,7 +422,7 @@ public class WikiTextGenerator2011 {
         if (min == Nationality.RO) {
             return "[[Români|" + StringUtils.lowerCase(min.getName()) + "]]";
         } else {
-            return "[[" + min.getName() + " din România|" + StringUtils.lowerCase(min.getName()) + "]]";
+            return "[[" + min.getName() + "i din România|" + StringUtils.lowerCase(min.getName()) + "]]";
         }
     }
 
