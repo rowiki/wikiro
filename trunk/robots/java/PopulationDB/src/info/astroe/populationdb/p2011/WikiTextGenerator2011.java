@@ -60,7 +60,8 @@ public class WikiTextGenerator2011 {
     }
 
     public static void main(final String[] args) {
-        generateCounty(/*10, 11, 12, 14, 26, 28, */41);
+        generateCounty(/* 10, 11, 12, */14/* , 26, 28 ,41 */);
+
         /*
          * for (int i = 1; i < 41; i++) { generateCounty(i); }
          */
@@ -77,7 +78,7 @@ public class WikiTextGenerator2011 {
         final Connection cn = getConnection();
         try {
             final PreparedStatement st = cn
-                .prepareStatement("select uta.siruta id,uta.tip tip,uta.populatie pop,judet.nume judet,uta.name nume from uta left join judet on judet.id=uta.judet where uta.judet=? limit 10");
+                .prepareStatement("select uta.siruta id,uta.tip tip,uta.populatie pop,judet.nume judet,uta.name nume from uta left join judet on judet.id=uta.judet where uta.judet=?");
             st.setInt(1, countyId);
             final ResultSet rs = st.executeQuery();
 
@@ -172,8 +173,8 @@ public class WikiTextGenerator2011 {
         plot.setForegroundAlpha(0.5f);
         plot.setBackgroundAlpha(0.0f);
         plot.setIgnoreZeroValues(true);
-        if (0 == paintMap.size()) {
-            initNatPaintMap(plot);
+        if (0 == religionMap.size()) {
+            initRelPaintMap(plot);
         }
         for (final Religion rel : Religion.values()) {
             plot.setSectionPaint(rel.getName(), paintMap.get(rel.getName()));
@@ -239,7 +240,7 @@ public class WikiTextGenerator2011 {
             textBuilder.append("% din populație, nu este cunoscută apartenența confesională.");
         }
         textBuilder
-        .append("<ref name=\"insse_2011_nat\">Rezultatele finale ale Recensământului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_TAB_13.xls|title=Tab13. Populaţia stabilă după religie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistică]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
+        .append("<ref name=\"insse_2011_rel\">Rezultatele finale ale Recensământului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_TAB_13.xls|title=Tab13. Populaţia stabilă după religie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistică]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
 
         return textBuilder.toString();
     }
@@ -453,10 +454,9 @@ public class WikiTextGenerator2011 {
             final Paint pm = plot.getDrawingSupplier().getNextPaint();
             paintMap.put(nat.getName(), pm);
         }
-        /*
-         * paintMap.put(Religion.ORTHO.getName(), new Color(85, 85, 255)); paintMap.put(Religion.MUSL.getName(), new
-         * Color(255, 85, 85)); paintMap.put(Religion.CALVINIST.getName(), new Color(85, 255, 85));
-         */
+        paintMap.put(Religion.ORTHO.getName(), new Color(85, 85, 255));
+        paintMap.put(Religion.MUSL.getName(), new Color(255, 85, 85));
+
     }
 
     private static final String formatPercentage(final double d) {
