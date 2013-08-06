@@ -37,6 +37,8 @@ public class WikiTextGenerator2011 {
 
     private static Connection conn;
 
+    private static Connection conn2002;
+
     private final static Map<String, Paint> paintMap = new HashMap<String, Paint>();
 
     private final static Map<String, Paint> religionMap = new HashMap<String, Paint>();
@@ -59,6 +61,24 @@ public class WikiTextGenerator2011 {
         return null;
     }
 
+    private static Connection getConnection2002() {
+        if (null != conn2002) {
+            return conn2002;
+        }
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn2002 = DriverManager.getConnection("jdbc:postgresql://localhost/populatie_2002", "postgres", "postgres");
+            return conn2002;
+        } catch (final ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (final SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(final String[] args) {
         generateCounty(/* 10, 11, 12, */14/* , 26, 28 ,41 */);
 
@@ -66,6 +86,7 @@ public class WikiTextGenerator2011 {
          * for (int i = 1; i < 41; i++) { generateCounty(i); }
          */
         closeConnection(conn);
+        closeConnection(conn2002);
     }
 
     private static void generateCounty(final int... ids) {
@@ -124,28 +145,30 @@ public class WikiTextGenerator2011 {
                     uta.getReligiousStructure().put(rel, pop);
                 }
 
-                final String wikiText = generateCountyNationalText(uta) + generateCountyReligiousText(uta);
+                final String wikiText = "<div style=\"float:left\">" + generateCountyNationalData(judet, uta)
+                    + generateCountyReligiousData(judet, uta) + "</div>\n" + generateCountyNationalText(uta)
+                    + generateCountyReligiousText(uta) + "<br clear=\"left\"/>";
                 System.out.println(wikiText);
                 System.out.println();
-
-                generateCountyNationalData(judet, uta);
-                generateCountyReligiousData(judet, uta);
             }
         } catch (final SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             closeConnection(conn);
+            closeConnection(conn2002);
             System.exit(1);
         } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             closeConnection(conn);
+            closeConnection(conn2002);
             System.exit(1);
         }
 
     }
 
-    private static void generateCountyReligiousData(final String judet, final PopulationDb2002Entry uta) throws IOException {
+    private static String generateCountyReligiousData(final String judet, final PopulationDb2002Entry uta)
+        throws IOException {
         final int populatie = uta.getPopulation();
 
         final DefaultPieDataset dataset = new DefaultPieDataset();
@@ -188,6 +211,31 @@ public class WikiTextGenerator2011 {
         final File outFile = new File(imgdir, "Romania 2011 population religion chart " + getCountyName(judet) + "_"
             + getShortedName(uta) + ".png");
         ImageIO.write(bufferedImage, "PNG", outFile);
+
+        final StringBuilder pieChart = new StringBuilder(
+            "{{Pie chart\n|thumb=left\n|style=clear:none;\n|caption=Componența confesională a ");
+        pieChart.append(getGenitiveFullName(uta));
+
+        int i = 1;
+        for (final Object k : dataset.getKeys()) {
+            pieChart.append("\n|label");
+            pieChart.append(i);
+            pieChart.append('=');
+            pieChart.append(k.toString());
+            pieChart.append("|value");
+            pieChart.append(i);
+            pieChart.append('=');
+            pieChart
+            .append((int) (100 * (dataset.getValue(k.toString()).doubleValue() * 100.0 / uta.getPopulation())) / 100.0);
+            pieChart.append("|color");
+            pieChart.append(i);
+            pieChart.append('=');
+            final Color color = (Color) plot.getSectionPaint(k.toString());
+            pieChart.append(colorToHtml(color));
+            i++;
+        }
+        pieChart.append("}}\n");
+        return pieChart.toString();
     }
 
     private static String generateCountyReligiousText(final PopulationDb2002Entry uta) {
@@ -312,7 +360,7 @@ public class WikiTextGenerator2011 {
         return null;
     }
 
-    private static void generateCountyNationalData(final String judet, final PopulationDb2002Entry uta) throws IOException {
+    private static String generateCountyNationalData(final String judet, final PopulationDb2002Entry uta) throws IOException {
         final int populatie = uta.getPopulation();
 
         final DefaultPieDataset dataset = new DefaultPieDataset();
@@ -355,19 +403,44 @@ public class WikiTextGenerator2011 {
         final File outFile = new File(imgdir, "Romania 2011 population nationality chart " + getCountyName(judet) + "_"
             + getShortedName(uta) + ".png");
         ImageIO.write(bufferedImage, "PNG", outFile);
+
+        final StringBuilder pieChart = new StringBuilder("{{Pie chart\n|thumb=left\n|caption=Componența etnică a ");
+        pieChart.append(getGenitiveFullName(uta));
+        int i = 1;
+        for (final Object k : dataset.getKeys()) {
+            pieChart.append("\n|label");
+            pieChart.append(i);
+            pieChart.append('=');
+            pieChart.append(k.toString());
+            pieChart.append("|value");
+            pieChart.append(i);
+            pieChart.append('=');
+            pieChart
+            .append((int) (100 * (dataset.getValue(k.toString()).doubleValue() * 100.0 / uta.getPopulation())) / 100.0);
+            pieChart.append("|color");
+            pieChart.append(i);
+            pieChart.append('=');
+            final Color color = (Color) plot.getSectionPaint(k.toString());
+            pieChart.append(colorToHtml(color));
+            i++;
+        }
+        pieChart.append("}}\n");
+        return pieChart.toString();
+    }
+
+    private static String colorToHtml(final Color color) {
+        final StringBuilder sb = new StringBuilder("#");
+        sb.append(StringUtils.substring(StringUtils.leftPad(Integer.toHexString(color.getRed()), 2, '0'), 0, 2));
+        sb.append(StringUtils.substring(StringUtils.leftPad(Integer.toHexString(color.getGreen()), 2, '0'), 0, 2));
+        sb.append(StringUtils.substring(StringUtils.leftPad(Integer.toHexString(color.getBlue()), 2, '0'), 0, 2));
+        return sb.toString();
     }
 
     private static String generateCountyNationalText(final PopulationDb2002Entry uta) {
         final int populatie = uta.getPopulation();
         final StringBuilder textBuilder = new StringBuilder();
-        textBuilder
-        .append("În urma [[Recensământul populației din 2011 (România)|recensământului efectuat în 2011]], populația ");
-        textBuilder.append(getGenitiveFullName(uta));
-        textBuilder.append(" se ridica la {{formatnum:");
-        textBuilder.append(uta.getPopulation());
-        textBuilder.append("}} ");
-        textBuilder.append(de(uta.getPopulation(), "locuitor", "locuitori"));
-        textBuilder.append(". ");
+        generateCountyIntroductionText(uta, textBuilder);
+
         final Nationality majority = findMajorityNationality(uta);
         final Map<Nationality, Double> minorities = findSignificantNationalMinorities(uta);
         if (majority != null) {
@@ -416,6 +489,88 @@ public class WikiTextGenerator2011 {
         textBuilder
         .append("<ref name=\"insse_2011_nat\">Rezultatele finale ale Recensământului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabilă după etnie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistică]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
         return textBuilder.toString();
+    }
+
+    private static void generateCountyIntroductionText(final PopulationDb2002Entry uta, final StringBuilder textBuilder) {
+        textBuilder
+        .append("În urma [[Recensământul populației din 2011 (România)|recensământului efectuat în 2011]], populația ");
+        textBuilder.append(getGenitiveFullName(uta));
+        textBuilder.append(" se ridica la {{formatnum:");
+        textBuilder.append(uta.getPopulation());
+        textBuilder.append("}} ");
+        textBuilder.append(de(uta.getPopulation(), "locuitor", "locuitori"));
+
+        final Connection c2011 = getConnection();
+        PreparedStatement comp2011St, comp2002St;
+        try {
+            comp2011St = c2011.prepareStatement("select localitate.populatie pop from localitate where localitate.uta=?");
+            comp2011St.setInt(1, uta.getSiruta());
+            final ResultSet comp2011rs = comp2011St.executeQuery();
+            int currentComponentCount = 0;
+            while (comp2011rs.next()) {
+                currentComponentCount++;
+            }
+
+            final Connection c2002 = getConnection2002();
+            comp2002St = c2002.prepareStatement("select localitate.populatie pop from localitate where localitate.uta=?");
+            comp2002St.setInt(1, uta.getSiruta());
+            final ResultSet comp2002rs = comp2002St.executeQuery();
+            int oldComponentCount = 0;
+            int oldPopulationSum = 0;
+            while (comp2002rs.next()) {
+                oldComponentCount++;
+                oldPopulationSum += comp2002rs.getInt("pop");
+            }
+            final PreparedStatement pop2002St = c2002
+                .prepareStatement("select uta.populatie pop from uta where uta.siruta=?");
+            pop2002St.setInt(1, uta.getSiruta());
+            final ResultSet pop2002rs = pop2002St.executeQuery();
+            int oldPopulationSelect = -1;
+            if (pop2002rs.next()) {
+                oldPopulationSelect = pop2002rs.getInt("pop");
+            }
+
+            if (oldPopulationSum == uta.getPopulation()) {
+                textBuilder
+                .append(", aceeași ca și la [[Recensământul populației din 2002 (România)|recensământul anterior din 2002]].");
+            } else if (oldPopulationSum > uta.getPopulation()) {
+                textBuilder
+                .append(", în scădere față de [[Recensământul populației din 2002 (România)|recensământul anterior din 2002]], când s-au înregistrat {{formatnum:");
+                textBuilder.append(oldPopulationSum);
+                textBuilder.append("}}&nbsp;");
+                textBuilder.append(de(oldPopulationSum, "locuitor", "locuitori"));
+                textBuilder.append('.');
+            } else {
+                textBuilder
+                .append(", în creștere față de [[Recensământul populației din 2002 (România)|recensământul anterior din 2002]], când s-au înregistrat {{formatnum:");
+                textBuilder.append(oldPopulationSum);
+                textBuilder.append("}}&nbsp;");
+                textBuilder.append(de(oldPopulationSum, "locuitor", "locuitori"));
+                textBuilder.append('.');
+            }
+            textBuilder.append("<ref name=\"kia.hu\">");
+            if (oldPopulationSelect < 0) {
+                textBuilder
+                .append("Populația satelor componente la recensământul din 2002. Pe atunci, comuna încă nu exista, ea fiind înființată la o dată ulterioară. ");
+            } else if (currentComponentCount != oldComponentCount) {
+                textBuilder
+                .append("Populația satelor aflate actualmente în componența comunei, ea având la acea vreme (2002) altă componență.");
+            }
+            textBuilder
+            .append("{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recensământul Populației și al Locuințelor 2002 - populația unităților administrative pe etnii|publisher=K");
+            textBuilder.append(StringUtils.lowerCase("ULTURÁLIS "));
+            textBuilder.append('I');
+            textBuilder.append(StringUtils.lowerCase("NNOVÁCIÓS "));
+            textBuilder.append('A');
+            textBuilder.append(StringUtils.lowerCase("LAPÍTVÁNY"));
+            textBuilder.append(" (KIA.hu - Fundația Culturală pentru Inovație)|accessdate=2013-08-06}}</ref> ");
+        } catch (final SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            closeConnection(conn2002);
+            closeConnection(conn);
+            System.exit(1);
+        }
     }
 
     private static String getNationalityLink(final Nationality min) {
@@ -522,13 +677,17 @@ public class WikiTextGenerator2011 {
         return sb.toString();
     }
 
-    private static Object de(final int number, final String singular, final String plural) {
+    private static String de(final int number, final String singular, final String plural) {
         if (number == 1) {
             return singular;
         }
+        if (number == 0) {
+            return plural;
+        }
+
         final int mod100 = number % 100;
         if (mod100 == 0 || mod100 > 19) {
-            return "de " + plural;
+            return "de&nbsp;" + plural;
         } else {
             return plural;
         }
