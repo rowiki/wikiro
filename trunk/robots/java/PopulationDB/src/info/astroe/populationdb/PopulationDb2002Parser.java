@@ -96,6 +96,7 @@ public class PopulationDb2002Parser {
                         crtEntry.setParentSiruta(communeSiruta);
                     } else if (crtEntry.getType() == null) {
                         crtEntry.setType(UTAType.COMUNA);
+                        communeSiruta = crtEntry.getSiruta();
                     } else {
                         communeSiruta = crtEntry.getSiruta();
                     }
@@ -113,7 +114,7 @@ public class PopulationDb2002Parser {
                     continue;
                 }
 
-                int idx = 0;
+                int idx = 1;
                 while (cellIterator.hasNext()) {
                     final Cell popCell = cellIterator.next();
                     if (popCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
