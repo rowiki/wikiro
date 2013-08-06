@@ -23,8 +23,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
+import javax.security.auth.login.FailedLoginException;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,6 +36,8 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot3D;
 import org.jfree.data.general.DefaultPieDataset;
+import org.wikipedia.Wiki;
+import org.wikipedia.Wiki.Revision;
 
 public class WikiTextGenerator2011 {
 
@@ -42,6 +48,15 @@ public class WikiTextGenerator2011 {
     private final static Map<String, Paint> paintMap = new HashMap<String, Paint>();
 
     private final static Map<String, Paint> religionMap = new HashMap<String, Paint>();
+
+    private static Pattern regexCCR = Pattern
+        .compile("\\{\\{((C|c)final utie Comune România|(C|c)aset(a|ă) comune Rom(a|â)nia)\\s*(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?\\}\\}\\s*");
+    private static Pattern regexInfocAsezare = Pattern
+        .compile("\\{\\{((C|c)asetă așezare|(I|i)nfocaseta Așezare)\\s*(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?\\}\\}\\s*");
+    private static Pattern footnotesRegex = Pattern.compile("(\\{\\{\\s*((L|l)istănote|(R|r)eflist))|\\<\\s*references");
+
+    private static int pop2002 = -1;
+    private static Wiki wiki;
 
     private static Connection getConnection() {
         if (null != conn) {
@@ -150,6 +165,105 @@ public class WikiTextGenerator2011 {
                     + generateCountyReligiousText(uta) + "<br clear=\"left\"/>";
                 System.out.println(wikiText);
                 System.out.println();
+
+                wiki = new Wiki("ro.wikipedia.org");
+                final Properties credentials = new Properties();
+
+                credentials.load(WikiTextGenerator2011.class.getClassLoader().getResourceAsStream("credentials.properties"));
+
+                final String username = credentials.getProperty("Username");
+                final String password = credentials.getProperty("Password");
+                wiki.login(username, password.toCharArray());
+                wiki.setMarkBot(true);
+
+                final String articleTitle = getArticleTitle(uta, judet);
+
+                final Long lastrevid = (Long) wiki.getPageInfo(articleTitle).get("lastrevid");
+                final Revision lastRev = wiki.getRevision(lastrevid);
+                final String pageText = lastRev.getText();
+
+                final Map sectionMap = wiki.getSectionMap(articleTitle);
+                final boolean generateDemographySection = !sectionMap.containsValue("Demografie")
+                    && !sectionMap.containsValue("Populație") && !sectionMap.containsValue("Populația")
+                    && !sectionMap.containsValue("Demografia");
+
+                String infoboxText = null;
+                String infoboxName = null;
+                final Matcher infoboxMatcher = regexInfocAsezare.matcher(pageText);
+                if (infoboxMatcher.find()) {
+                    infoboxText = infoboxMatcher.group();
+                    infoboxName = "Infocaseta Așezare";
+                    System.out.println("---Found infobox text: " + infoboxText);
+                } else {
+                    System.out.println("---Infobox Așezare not found");
+                    // search for CutieComune
+                    final Matcher ccrMatcher = regexCCR.matcher(pageText);
+                    if (ccrMatcher.find()) {
+                        infoboxText = ccrMatcher.group();
+                        infoboxName = "Casetă comune România";
+                    }
+                }
+                final ParameterReader reader = new ParameterReader(infoboxText);
+                reader.run();
+                final Map<String, String> params = reader.getParams();
+                // System.out.println(params);
+
+                if (StringUtils.equals(infoboxName, "Infocaseta Așezare")) {
+                    switch (uta.getType()) {
+                    case MUNICIPIU:
+                        params.put("tip_asezare", "[[Municipiile României|Municipiu]]");
+                        break;
+                    case ORAS:
+                        params.put("tip_asezare", "[[Orașele României|Oraș]]");
+                        break;
+                    case COMUNA:
+                        params.put("tip_asezare", "[[Comunele României|Comună]]");
+                    }
+                    params.put("tip_cod_clasificare", "[[SIRUTA]]");
+                    params.put("cod_clasificare", String.valueOf(uta.getSiruta()));
+                    params.put("recensământ", "[[Recensământul populației din 2011 (România)|2011]]");
+                    params.put("populație", getTendencyTemplate(uta.getPopulation()) + String.valueOf(uta.getPopulation()));
+                    if (params.get("population_blank1_title") == null) {
+                        params.put("population_blank1_title",
+                            "[[Recensământul populației din 2002 (România)|Recensământul anterior, 2002]]");
+                        params.put("population_blank1", String.valueOf(pop2002));
+                    }
+
+                } else if (StringUtils.equals(infoboxName, "Casetă comune România")) {
+                    params.put("recensământ", "[[Recensământul populației din 2011 (România)|2011]]");
+                    params.put("populație", getTendencyTemplate(uta.getPopulation()) + String.valueOf(uta.getPopulation()));
+                    params.put("siruta", String.valueOf(uta.getSiruta()));
+                }
+
+                final StringBuilder poprefBuilder = new StringBuilder("<ref name=\"kia.hu\"");
+                if (!generateDemographySection) {
+                    poprefBuilder
+                    .append(">{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recensământul Populației și al Locuințelor 2002 - populația unităților administrative pe etnii|publisher=K");
+                    poprefBuilder.append(StringUtils.lowerCase("ULTURÁLIS "));
+                    poprefBuilder.append('I');
+                    poprefBuilder.append(StringUtils.lowerCase("NNOVÁCIÓS "));
+                    poprefBuilder.append('A');
+                    poprefBuilder.append(StringUtils.lowerCase("LAPÍTVÁNY"));
+                    poprefBuilder.append(" (KIA.hu - Fundația Culturală pentru Inovație)|accessdate=2013-08-06}}</ref> ");
+                } else {
+                    poprefBuilder.append("/>");
+                }
+                poprefBuilder.append("<ref name=\"insse_2011_nat\"");
+                if (!generateDemographySection) {
+                    poprefBuilder
+                    .append(">Rezultatele finale ale Recensământului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabilă după etnie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistică]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
+                } else {
+                    poprefBuilder.append("/>");
+                }
+                params.put("populație_note_subsol", poprefBuilder.toString());
+
+                final String newInfoboxText = generateNewInfobox(params, infoboxName);
+
+                final String newPageText = pageText.replace(infoboxText, newInfoboxText);
+
+                final boolean hasReferences = footnotesRegex.matcher(pageText).matches();
+
+                System.out.println(pageText);
             }
         } catch (final SQLException e) {
             // TODO Auto-generated catch block
@@ -163,8 +277,57 @@ public class WikiTextGenerator2011 {
             closeConnection(conn);
             closeConnection(conn2002);
             System.exit(1);
+        } catch (final FailedLoginException ex) {
+            ex.printStackTrace();
+            closeConnection(conn);
+            closeConnection(conn2002);
+            System.exit(1);
+        } finally {
+            if (null != wiki) {
+                wiki.logout();
+            }
         }
 
+    }
+
+    private static String generateNewInfobox(final Map<String, String> params, final String infoboxName) {
+        final StringBuilder ibBuilder = new StringBuilder("{{");
+        ibBuilder.append(infoboxName);
+        ibBuilder.append('\n');
+        for (final String paramname : params.keySet()) {
+            ibBuilder.append("|");
+            ibBuilder.append(paramname);
+            ibBuilder.append(" = ");
+            ibBuilder.append(params.get(paramname));
+            ibBuilder.append('\n');
+        }
+        ibBuilder.append("}}");
+        return ibBuilder.toString();
+    }
+
+    private static String getTendencyTemplate(final int population) {
+        if (pop2002 == population) {
+            return "{{stabil}} ";
+        }
+        return (pop2002 > population ? "{{de" : "{{in") + "crease}} ";
+    }
+
+    private static String getArticleTitle(final PopulationDb2002Entry uta, final String judet) throws IOException {
+        wiki.setResolveRedirects(true);
+        final StringBuilder sb = new StringBuilder();
+        if (uta.getType() == UTAType.COMUNA) {
+            sb.append("Comuna ");
+            sb.append(capitalizeName(uta.getName()));
+            sb.append(", ");
+            sb.append(capitalizeName(judet));
+        } else {
+            sb.append(capitalizeName(uta.getName()));
+            sb.append(", ");
+            sb.append(capitalizeName(judet));
+        }
+
+        final Map pageInfo = wiki.getPageInfo(sb.toString());
+        return pageInfo.get("displaytitle").toString();
     }
 
     private static String generateCountyReligiousData(final String judet, final PopulationDb2002Entry uta)
@@ -529,6 +692,7 @@ public class WikiTextGenerator2011 {
             if (pop2002rs.next()) {
                 oldPopulationSelect = pop2002rs.getInt("pop");
             }
+            pop2002 = oldPopulationSum;
 
             if (oldPopulationSum == uta.getPopulation()) {
                 textBuilder
