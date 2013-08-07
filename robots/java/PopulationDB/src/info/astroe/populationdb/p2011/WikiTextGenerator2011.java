@@ -50,7 +50,7 @@ public class WikiTextGenerator2011 {
     private final static Map<String, Paint> religionMap = new HashMap<String, Paint>();
 
     private static Pattern regexCCR = Pattern
-        .compile("\\{\\{((C|c)final utie Comune România|(C|c)aset(a|ă) comune Rom(a|â)nia)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
+        .compile("\\{\\{((C|c)utie Comune România|(C|c)aset(a|ă) comune Rom(a|â)nia)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
     private static Pattern regexInfocAsezare = Pattern
         .compile("\\{\\{(?:(?:C|c)asetă așezare|(?:I|i)nfocaseta Așezare|(?:C|c)utie așezare)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
     private static Pattern footnotesRegex = Pattern
@@ -96,11 +96,12 @@ public class WikiTextGenerator2011 {
     }
 
     public static void main(final String[] args) {
-        generateCounty(/* 10, 11, 12, 14 , 26 , */28 /* ,41 */);
+        // generateCounty(/* 10, 11, 12, 14 , 26 , */28 /* ,41 */);
 
-        /*
-         * for (int i = 1; i < 41; i++) { generateCounty(i); }
-         */
+        for (int i = 2; i < 41; i++) {
+            generateCounty(i);
+        }
+
         closeConnection(conn);
         closeConnection(conn2002);
     }
@@ -115,7 +116,7 @@ public class WikiTextGenerator2011 {
         final Connection cn = getConnection();
         try {
             final PreparedStatement st = cn
-                .prepareStatement("select uta.siruta id,uta.tip tip,uta.populatie pop,judet.nume judet,uta.name nume from uta left join judet on judet.id=uta.judet where uta.judet=?");
+                .prepareStatement("select uta.siruta id,uta.tip tip,uta.populatie pop,judet.nume judet,uta.name nume from uta left join judet on judet.id=uta.judet where uta.judet=? order by uta.tip asc, uta.name asc");
             st.setInt(1, countyId);
             final ResultSet rs = st.executeQuery();
 
@@ -213,6 +214,7 @@ public class WikiTextGenerator2011 {
                     // System.out.println(params);
 
                     if (StringUtils.equals(infoboxName, "Infocaseta Așezare")) {
+                        params.put("nume", uta.getName());
                         switch (uta.getType()) {
                         case MUNICIPIU:
                             params.put("tip_asezare", "[[Municipiile României|Municipiu]]");
@@ -267,7 +269,10 @@ public class WikiTextGenerator2011 {
                     newInfoboxText = generateNewInfobox(params, infoboxName);
                     summaryBuilder.append(" actualizare populație, tip, cod siruta în infocasetă;");
                 }
-                String newPageText = pageText.replace(infoboxText, newInfoboxText);
+                String newPageText = pageText;
+                if (infoboxText != null) {
+                    newPageText = newPageText.replace(infoboxText, newInfoboxText);
+                }
 
                 final boolean hasReferences = footnotesRegex.matcher(pageText).find();
 
@@ -301,7 +306,7 @@ public class WikiTextGenerator2011 {
                         final StringBuilder sectionTextBuilder = new StringBuilder(sectionText);
                         sectionTextBuilder.append("\n== Demografie ==\n");
                         sectionTextBuilder.append(StringUtils.chomp(StringUtils.trim(wikiText)));
-                        sectionTextBuilder.append("\n");
+                        sectionTextBuilder.append("\n\n");
 
                         newPageText = newPageText.replace(sectionText, sectionTextBuilder.toString());
 
@@ -309,7 +314,7 @@ public class WikiTextGenerator2011 {
                     } else if (postSection != null) {
                         final String sectionText = wiki.getSectionText(articleTitle, postSectionIndex);
                         final StringBuilder sectionTextBuilder = new StringBuilder(sectionText);
-                        sectionTextBuilder.insert(0, "\n");
+                        sectionTextBuilder.insert(0, "\n\n");
                         sectionTextBuilder.insert(0, StringUtils.chomp(StringUtils.trim(wikiText)));
                         sectionTextBuilder.insert(0, "\n== Demografie ==\n");
 
@@ -322,6 +327,7 @@ public class WikiTextGenerator2011 {
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Comune"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Județ"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orașe"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{Orase"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{DN"));
                         endIndices.add(StringUtils.indexOf(newPageText, "[[Categori"));
                         while (endIndices.contains(-1)) {
@@ -880,7 +886,8 @@ public class WikiTextGenerator2011 {
         religionMap.put(Religion.ROM_CATH.getName(), new Color(255, 255, 85));
         religionMap.put(Religion.SR_ORTHO.getName(), new Color(192, 0, 0));
         religionMap.put(Religion.OTH.getName(), new Color(128, 128, 128));
-        religionMap.put(Religion.PENTICOST.getName(), new Color(255, 255, 64));
+        religionMap.put(Religion.PENTICOST.getName(), new Color(0, 192, 0));
+        religionMap.put(Religion.CR_EVANGH.getName(), new Color(255, 255, 64));
         religionMap.put(Religion.UNIT.getName(), new Color(0, 192, 192));
         religionMap.put(Religion.MUSL.getName(), new Color(255, 85, 85));
         blandifyColors(religionMap);
@@ -990,11 +997,11 @@ public class WikiTextGenerator2011 {
         final String[] lowerItems = StringUtils.splitByCharacterType(onlyLower);
         final StringBuilder sb = new StringBuilder();
 
-        final List<String> notCapitalized = Arrays.asList("de", "din", "pe", "sub", "peste", "la");
+        final List<String> notCapitalized = Arrays.asList("de", "din", "pe", "sub", "peste", "la", "cel");
 
         for (final String item : lowerItems) {
             sb.append(notCapitalized.contains(item) ? item : StringUtils.capitalize(item));
         }
-        return sb.toString();
+        return StringUtils.capitalize(sb.toString());
     }
 }
