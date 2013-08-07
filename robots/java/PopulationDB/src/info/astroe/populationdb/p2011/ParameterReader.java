@@ -6,6 +6,10 @@ import java.util.Stack;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * A self-made push-down automaton that receives the text of a template declaration and identifies its arguments
+ * @author andrei.stroe@gmail.com
+ */
 public class ParameterReader {
 
     private final String analyzedText;

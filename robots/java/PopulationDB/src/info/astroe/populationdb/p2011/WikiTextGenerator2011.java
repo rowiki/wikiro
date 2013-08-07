@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,7 +29,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
-import javax.security.auth.login.FailedLoginException;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -50,10 +50,11 @@ public class WikiTextGenerator2011 {
     private final static Map<String, Paint> religionMap = new HashMap<String, Paint>();
 
     private static Pattern regexCCR = Pattern
-        .compile("\\{\\{((C|c)final utie Comune România|(C|c)aset(a|ă) comune Rom(a|â)nia)\\s*(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?\\}\\}\\s*");
+        .compile("\\{\\{((C|c)final utie Comune România|(C|c)aset(a|ă) comune Rom(a|â)nia)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
     private static Pattern regexInfocAsezare = Pattern
-        .compile("\\{\\{((C|c)asetă așezare|(I|i)nfocaseta Așezare)\\s*(\\|(?:\\{\\{[^{}]*\\}\\}|[^{}])*)?\\}\\}\\s*");
-    private static Pattern footnotesRegex = Pattern.compile("(\\{\\{\\s*((L|l)istănote|(R|r)eflist))|\\<\\s*references");
+        .compile("\\{\\{(?:(?:C|c)asetă așezare|(?:I|i)nfocaseta Așezare|(?:C|c)utie așezare)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
+    private static Pattern footnotesRegex = Pattern
+        .compile("\\{\\{(?:(?:L|l)istănote|(?:R|r)eflist)|(?:\\<\\s*references\\s*\\/\\>)");
 
     private static int pop2002 = -1;
     private static Wiki wiki;
@@ -95,7 +96,7 @@ public class WikiTextGenerator2011 {
     }
 
     public static void main(final String[] args) {
-        generateCounty(/* 10, 11, 12, */14/* , 26, 28 ,41 */);
+        generateCounty(/* 10, 11, 12, 14 , 26 , */28 /* ,41 */);
 
         /*
          * for (int i = 1; i < 41; i++) { generateCounty(i); }
@@ -166,6 +167,7 @@ public class WikiTextGenerator2011 {
                 System.out.println(wikiText);
                 System.out.println();
 
+                final StringBuilder summaryBuilder = new StringBuilder("Robot:");
                 wiki = new Wiki("ro.wikipedia.org");
                 final Properties credentials = new Properties();
 
@@ -193,7 +195,7 @@ public class WikiTextGenerator2011 {
                 if (infoboxMatcher.find()) {
                     infoboxText = infoboxMatcher.group();
                     infoboxName = "Infocaseta Așezare";
-                    System.out.println("---Found infobox text: " + infoboxText);
+                    // System.out.println("---Found infobox text: " + infoboxText);
                 } else {
                     System.out.println("---Infobox Așezare not found");
                     // search for CutieComune
@@ -203,67 +205,141 @@ public class WikiTextGenerator2011 {
                         infoboxName = "Casetă comune România";
                     }
                 }
-                final ParameterReader reader = new ParameterReader(infoboxText);
-                reader.run();
-                final Map<String, String> params = reader.getParams();
-                // System.out.println(params);
+                String newInfoboxText = infoboxText;
+                if (null != infoboxName) {
+                    final ParameterReader reader = new ParameterReader(infoboxText);
+                    reader.run();
+                    final Map<String, String> params = reader.getParams();
+                    // System.out.println(params);
 
-                if (StringUtils.equals(infoboxName, "Infocaseta Așezare")) {
-                    switch (uta.getType()) {
-                    case MUNICIPIU:
-                        params.put("tip_asezare", "[[Municipiile României|Municipiu]]");
-                        break;
-                    case ORAS:
-                        params.put("tip_asezare", "[[Orașele României|Oraș]]");
-                        break;
-                    case COMUNA:
-                        params.put("tip_asezare", "[[Comunele României|Comună]]");
+                    if (StringUtils.equals(infoboxName, "Infocaseta Așezare")) {
+                        switch (uta.getType()) {
+                        case MUNICIPIU:
+                            params.put("tip_asezare", "[[Municipiile României|Municipiu]]");
+                            break;
+                        case ORAS:
+                            params.put("tip_asezare", "[[Orașele României|Oraș]]");
+                            break;
+                        case COMUNA:
+                            params.put("tip_asezare", "[[Comunele României|Comună]]");
+                        }
+                        params.put("tip_cod_clasificare", "[[SIRUTA]]");
+                        params.put("cod_clasificare", String.valueOf(uta.getSiruta()));
+                        params.put("recensământ", "[[Recensământul populației din 2011 (România)|2011]]");
+                        params.put("populație",
+                            getTendencyTemplate(uta.getPopulation()) + String.valueOf(uta.getPopulation()));
+                        if (params.get("population_blank1_title") == null) {
+                            params.put("population_blank1_title",
+                                "[[Recensământul populației din 2002 (România)|Recensământul anterior, 2002]]");
+                            params.put("population_blank1", String.valueOf(pop2002));
+                        }
+
+                    } else if (StringUtils.equals(infoboxName, "Casetă comune România")) {
+                        params.put("recensământ", "[[Recensământul populației din 2011 (România)|2011]]");
+                        params.put("populație",
+                            getTendencyTemplate(uta.getPopulation()) + String.valueOf(uta.getPopulation()));
+                        params.put("siruta", String.valueOf(uta.getSiruta()));
                     }
-                    params.put("tip_cod_clasificare", "[[SIRUTA]]");
-                    params.put("cod_clasificare", String.valueOf(uta.getSiruta()));
-                    params.put("recensământ", "[[Recensământul populației din 2011 (România)|2011]]");
-                    params.put("populație", getTendencyTemplate(uta.getPopulation()) + String.valueOf(uta.getPopulation()));
-                    if (params.get("population_blank1_title") == null) {
-                        params.put("population_blank1_title",
-                            "[[Recensământul populației din 2002 (România)|Recensământul anterior, 2002]]");
-                        params.put("population_blank1", String.valueOf(pop2002));
+
+                    final StringBuilder poprefBuilder = new StringBuilder("<ref name=\"kia.hu\"");
+                    if (!generateDemographySection) {
+                        poprefBuilder
+                        .append(">{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recensământul Populației și al Locuințelor 2002 - populația unităților administrative pe etnii|publisher=K");
+                        poprefBuilder.append(StringUtils.lowerCase("ULTURÁLIS "));
+                        poprefBuilder.append('I');
+                        poprefBuilder.append(StringUtils.lowerCase("NNOVÁCIÓS "));
+                        poprefBuilder.append('A');
+                        poprefBuilder.append(StringUtils.lowerCase("LAPÍTVÁNY"));
+                        poprefBuilder
+                        .append(" (KIA.hu - Fundația Culturală pentru Inovație)|accessdate=2013-08-06}}</ref> ");
+                    } else {
+                        poprefBuilder.append("/>");
+                    }
+                    poprefBuilder.append("<ref name=\"insse_2011_nat\"");
+                    if (!generateDemographySection) {
+                        poprefBuilder
+                        .append(">Rezultatele finale ale Recensământului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabilă după etnie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistică]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
+                    } else {
+                        poprefBuilder.append("/>");
+                    }
+                    params.put("populație_note_subsol", poprefBuilder.toString());
+
+                    newInfoboxText = generateNewInfobox(params, infoboxName);
+                    summaryBuilder.append(" actualizare populație, tip, cod siruta în infocasetă;");
+                }
+                String newPageText = pageText.replace(infoboxText, newInfoboxText);
+
+                final boolean hasReferences = footnotesRegex.matcher(pageText).find();
+
+                if (generateDemographySection) {
+                    final List<String> sectionsBefore = Arrays.asList("Geografie", "Geografia", "Așezare", "Așezarea",
+                        "Amplasare", "Amplasarea", "Date geografice", "Poziție", "Poziția");
+                    final List<String> sectionsAfter = Arrays.asList("Monumente istorice", "Atracții turistice",
+                        "Personalități", "Note", "Vezi și", "Legături externe", "Bibliografie");
+
+                    String preSection = null;
+                    String postSection = null;
+                    int preSectionIndex = 0;
+                    int postSectionIndex = 0;
+                    int sectionIndex = 1;
+                    for (final Object sectionKey : sectionMap.keySet()) {
+                        final String sectionTitle = sectionMap.get(sectionKey).toString();
+                        if (sectionsBefore.contains(sectionTitle)) {
+                            preSection = sectionTitle;
+                            preSectionIndex = sectionIndex;
+                        }
+                        // the first postsection found remains
+                        if (sectionsAfter.contains(sectionTitle) && postSection == null) {
+                            postSection = sectionTitle;
+                            postSectionIndex = sectionIndex;
+                        }
+                        sectionIndex++;
                     }
 
-                } else if (StringUtils.equals(infoboxName, "Casetă comune România")) {
-                    params.put("recensământ", "[[Recensământul populației din 2011 (România)|2011]]");
-                    params.put("populație", getTendencyTemplate(uta.getPopulation()) + String.valueOf(uta.getPopulation()));
-                    params.put("siruta", String.valueOf(uta.getSiruta()));
+                    if (preSection != null) {
+                        final String sectionText = wiki.getSectionText(articleTitle, preSectionIndex);
+                        final StringBuilder sectionTextBuilder = new StringBuilder(sectionText);
+                        sectionTextBuilder.append("\n== Demografie ==\n");
+                        sectionTextBuilder.append(StringUtils.chomp(StringUtils.trim(wikiText)));
+                        sectionTextBuilder.append("\n");
+
+                        newPageText = newPageText.replace(sectionText, sectionTextBuilder.toString());
+
+                        System.out.println(sectionTextBuilder);
+                    } else if (postSection != null) {
+                        final String sectionText = wiki.getSectionText(articleTitle, postSectionIndex);
+                        final StringBuilder sectionTextBuilder = new StringBuilder(sectionText);
+                        sectionTextBuilder.insert(0, "\n");
+                        sectionTextBuilder.insert(0, StringUtils.chomp(StringUtils.trim(wikiText)));
+                        sectionTextBuilder.insert(0, "\n== Demografie ==\n");
+
+                        newPageText = newPageText.replace(sectionText, sectionTextBuilder.toString());
+
+                        System.out.println(sectionTextBuilder);
+                    } else {
+                        final List<Integer> endIndices = new ArrayList<Integer>();
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{ciot"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{Comune"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{Județ"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{Orașe"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{DN"));
+                        while (endIndices.contains(-1)) {
+                            endIndices.remove(new Integer(-1));
+                        }
+                        final int endIndex = Collections.min(endIndices);
+                        final StringBuilder articleTextBuilder = new StringBuilder(newPageText);
+                        articleTextBuilder.insert(endIndex - 1, "\n");
+                        articleTextBuilder.insert(endIndex - 1, StringUtils.chomp(StringUtils.trim(wikiText)));
+                        articleTextBuilder.insert(endIndex - 1, "\n== Demografie ==\n");
+
+                        System.out.println(articleTextBuilder);
+
+                        newPageText = articleTextBuilder.toString();
+                    }
+                    summaryBuilder.append(" adăugare secțiune demografie");
                 }
 
-                final StringBuilder poprefBuilder = new StringBuilder("<ref name=\"kia.hu\"");
-                if (!generateDemographySection) {
-                    poprefBuilder
-                    .append(">{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recensământul Populației și al Locuințelor 2002 - populația unităților administrative pe etnii|publisher=K");
-                    poprefBuilder.append(StringUtils.lowerCase("ULTURÁLIS "));
-                    poprefBuilder.append('I');
-                    poprefBuilder.append(StringUtils.lowerCase("NNOVÁCIÓS "));
-                    poprefBuilder.append('A');
-                    poprefBuilder.append(StringUtils.lowerCase("LAPÍTVÁNY"));
-                    poprefBuilder.append(" (KIA.hu - Fundația Culturală pentru Inovație)|accessdate=2013-08-06}}</ref> ");
-                } else {
-                    poprefBuilder.append("/>");
-                }
-                poprefBuilder.append("<ref name=\"insse_2011_nat\"");
-                if (!generateDemographySection) {
-                    poprefBuilder
-                    .append(">Rezultatele finale ale Recensământului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabilă după etnie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistică]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
-                } else {
-                    poprefBuilder.append("/>");
-                }
-                params.put("populație_note_subsol", poprefBuilder.toString());
-
-                final String newInfoboxText = generateNewInfobox(params, infoboxName);
-
-                final String newPageText = pageText.replace(infoboxText, newInfoboxText);
-
-                final boolean hasReferences = footnotesRegex.matcher(pageText).matches();
-
-                System.out.println(pageText);
+                // wiki.edit(articleTitle, newPageText, summaryBuilder.toString());
             }
         } catch (final SQLException e) {
             // TODO Auto-generated catch block
@@ -277,7 +353,7 @@ public class WikiTextGenerator2011 {
             closeConnection(conn);
             closeConnection(conn2002);
             System.exit(1);
-        } catch (final FailedLoginException ex) {
+        } catch (final Exception ex) {
             ex.printStackTrace();
             closeConnection(conn);
             closeConnection(conn2002);
@@ -363,7 +439,7 @@ public class WikiTextGenerator2011 {
             initRelPaintMap(plot);
         }
         for (final Religion rel : Religion.values()) {
-            plot.setSectionPaint(rel.getName(), paintMap.get(rel.getName()));
+            plot.setSectionPaint(rel.getName(), religionMap.get(rel.getName()));
         }
 
         final BufferedImage bufferedImage = chart.createBufferedImage(640, 480);
@@ -656,9 +732,9 @@ public class WikiTextGenerator2011 {
 
     private static void generateCountyIntroductionText(final PopulationDb2002Entry uta, final StringBuilder textBuilder) {
         textBuilder
-        .append("În urma [[Recensământul populației din 2011 (România)|recensământului efectuat în 2011]], populația ");
+        .append("Conform [[Recensământul populației din 2011 (România)|recensământului efectuat în 2011]], populația ");
         textBuilder.append(getGenitiveFullName(uta));
-        textBuilder.append(" se ridica la {{formatnum:");
+        textBuilder.append(" se ridică la {{formatnum:");
         textBuilder.append(uta.getPopulation());
         textBuilder.append("}} ");
         textBuilder.append(de(uta.getPopulation(), "locuitor", "locuitori"));
@@ -699,14 +775,14 @@ public class WikiTextGenerator2011 {
                 .append(", aceeași ca și la [[Recensământul populației din 2002 (România)|recensământul anterior din 2002]].");
             } else if (oldPopulationSum > uta.getPopulation()) {
                 textBuilder
-                .append(", în scădere față de [[Recensământul populației din 2002 (România)|recensământul anterior din 2002]], când s-au înregistrat {{formatnum:");
+                .append(", în scădere față de [[Recensământul populației din 2002 (România)|recensământul anterior din 2002]], când se înregistraseră {{formatnum:");
                 textBuilder.append(oldPopulationSum);
                 textBuilder.append("}}&nbsp;");
                 textBuilder.append(de(oldPopulationSum, "locuitor", "locuitori"));
                 textBuilder.append('.');
             } else {
                 textBuilder
-                .append(", în creștere față de [[Recensământul populației din 2002 (România)|recensământul anterior din 2002]], când s-au înregistrat {{formatnum:");
+                .append(", în creștere față de [[Recensământul populației din 2002 (România)|recensământul anterior din 2002]], când se înregistraseră {{formatnum:");
                 textBuilder.append(oldPopulationSum);
                 textBuilder.append("}}&nbsp;");
                 textBuilder.append(de(oldPopulationSum, "locuitor", "locuitori"));
@@ -766,16 +842,47 @@ public class WikiTextGenerator2011 {
         paintMap.put(Nationality.NONE.getName(), new Color(128, 128, 128));
         paintMap.put(Nationality.HE.getName(), new Color(192, 192, 192));
         paintMap.put(Nationality.OTH.getName(), new Color(64, 64, 64));
+
+        blandifyColors(paintMap);
+    }
+
+    private static void blandifyColors(final Map<String, Paint> map) {
+        for (final String key : map.keySet()) {
+            final Color color = (Color) map.get(key);
+            final int[] colorcomps = new int[3];
+            colorcomps[0] = color.getRed();
+            colorcomps[1] = color.getGreen();
+            colorcomps[2] = color.getBlue();
+
+            for (int i = 0; i < colorcomps.length; i++) {
+                if (colorcomps[i] == 0) {
+                    colorcomps[i] = 0x3f;
+                } else if (colorcomps[i] == 85) {
+                    colorcomps[i] = 128;
+                } else if (colorcomps[i] == 64) {
+                    colorcomps[i] = 85;
+                } else if (colorcomps[i] == 128) {
+                    colorcomps[i] = 0x9f;
+                }
+            }
+            map.put(key, new Color(colorcomps[0], colorcomps[1], colorcomps[2]));
+        }
     }
 
     private static void initRelPaintMap(final PiePlot3D plot) {
-        for (final Religion nat : Religion.values()) {
+        for (final Religion rel : Religion.values()) {
             final Paint pm = plot.getDrawingSupplier().getNextPaint();
-            paintMap.put(nat.getName(), pm);
+            religionMap.put(rel.getName(), pm);
         }
-        paintMap.put(Religion.ORTHO.getName(), new Color(85, 85, 255));
-        paintMap.put(Religion.MUSL.getName(), new Color(255, 85, 85));
-
+        religionMap.put(Religion.ORTHO.getName(), new Color(85, 85, 255));
+        religionMap.put(Religion.MUSL.getName(), new Color(255, 85, 85));
+        religionMap.put(Religion.ROM_CATH.getName(), new Color(255, 255, 85));
+        religionMap.put(Religion.SR_ORTHO.getName(), new Color(192, 0, 0));
+        religionMap.put(Religion.OTH.getName(), new Color(128, 128, 128));
+        religionMap.put(Religion.PENTICOST.getName(), new Color(255, 255, 64));
+        religionMap.put(Religion.UNIT.getName(), new Color(0, 192, 192));
+        religionMap.put(Religion.MUSL.getName(), new Color(255, 85, 85));
+        blandifyColors(religionMap);
     }
 
     private static final String formatPercentage(final double d) {
