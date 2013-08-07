@@ -323,6 +323,7 @@ public class WikiTextGenerator2011 {
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Județ"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orașe"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{DN"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "[[Categori"));
                         while (endIndices.contains(-1)) {
                             endIndices.remove(new Integer(-1));
                         }
