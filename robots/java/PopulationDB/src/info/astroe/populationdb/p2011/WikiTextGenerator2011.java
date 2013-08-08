@@ -20,11 +20,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,12 +98,11 @@ public class WikiTextGenerator2011 {
     }
 
     public static void main(final String[] args) {
-        // generateCounty(/* 10, 11, 12, 14 , 26 , */28 /* ,41 */);
+        generateCounty(/* 10, 11, 12, 14 , 26 ,28 , */41 /**/);
 
-        for (int i = 2; i < 41; i++) {
-            generateCounty(i);
-        }
-
+        /*
+         * for (int i = 5; i < 41; i++) { generateCounty(i); }
+         */
         closeConnection(conn);
         closeConnection(conn2002);
     }
@@ -214,7 +215,7 @@ public class WikiTextGenerator2011 {
                     // System.out.println(params);
 
                     if (StringUtils.equals(infoboxName, "Infocaseta Așezare")) {
-                        params.put("nume", uta.getName());
+                        params.put("nume", capitalizeName(uta.getName()));
                         switch (uta.getType()) {
                         case MUNICIPIU:
                             params.put("tip_asezare", "[[Municipiile României|Municipiu]]");
@@ -233,7 +234,7 @@ public class WikiTextGenerator2011 {
                         if (params.get("population_blank1_title") == null) {
                             params.put("population_blank1_title",
                                 "[[Recensământul populației din 2002 (România)|Recensământul anterior, 2002]]");
-                            params.put("population_blank1", String.valueOf(pop2002));
+                            params.put("population_blank1", String.valueOf(pop2002) + " locuitori");
                         }
 
                     } else if (StringUtils.equals(infoboxName, "Casetă comune România")) {
@@ -244,7 +245,7 @@ public class WikiTextGenerator2011 {
                     }
 
                     final StringBuilder poprefBuilder = new StringBuilder("<ref name=\"kia.hu\"");
-                    if (!generateDemographySection) {
+                    if (!generateDemographySection && StringUtils.countMatches(pageText, "<ref name=\"kia.hu\">") >= 2) {
                         poprefBuilder
                         .append(">{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recensământul Populației și al Locuințelor 2002 - populația unităților administrative pe etnii|publisher=K");
                         poprefBuilder.append(StringUtils.lowerCase("ULTURÁLIS "));
@@ -258,7 +259,9 @@ public class WikiTextGenerator2011 {
                         poprefBuilder.append("/>");
                     }
                     poprefBuilder.append("<ref name=\"insse_2011_nat\"");
-                    if (!generateDemographySection) {
+                    if (!generateDemographySection
+                        && StringUtils.countMatches(pageText, "<ref name=\"insse_2011_nat\">") >= 2) {
+
                         poprefBuilder
                         .append(">Rezultatele finale ale Recensământului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabilă după etnie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistică]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
                     } else {
@@ -346,7 +349,55 @@ public class WikiTextGenerator2011 {
                     summaryBuilder.append(" adăugare secțiune demografie");
                 }
 
-                // wiki.edit(articleTitle, newPageText, summaryBuilder.toString());
+                if (!hasReferences) {
+                    String postSectionRef = null;
+                    int postSectionRefIndex = -1;
+                    final List<String> sectionsAfterRefs = Arrays.asList("Bibliografie", "Referințe", "Legături externe",
+                        "Vezi și", "Vezi de asemenea");
+                    int idx = 1;
+                    for (final Object sectionKey : sectionMap.keySet()) {
+                        final String sectionTitle = sectionMap.get(sectionKey).toString();
+                        // the first postsection found remains
+                        if (sectionsAfterRefs.contains(sectionTitle) && postSectionRef == null) {
+                            postSectionRef = sectionTitle;
+                            postSectionRefIndex = idx;
+                            break;
+                        }
+                        idx++;
+                    }
+
+                    if (postSectionRef != null) {
+                        final String sectionText = wiki.getSectionText(articleTitle, postSectionRefIndex);
+                        final StringBuilder sectionTextBuilder = new StringBuilder(sectionText);
+                        sectionTextBuilder.insert(0, "\n\n");
+                        sectionTextBuilder.insert(0, "{{Reflist}}");
+                        sectionTextBuilder.insert(0, "\n== Note ==\n");
+
+                        newPageText = newPageText.replace(sectionText, sectionTextBuilder.toString());
+
+                    } else {
+                        final List<Integer> endIndices = new ArrayList<Integer>();
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{ciot"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{Comune"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{Județ"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{Orașe"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{Orase"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{DN"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "[[Categori"));
+                        while (endIndices.contains(-1)) {
+                            endIndices.remove(new Integer(-1));
+                        }
+                        final int endIndex = Collections.min(endIndices);
+                        final StringBuilder articleTextBuilder = new StringBuilder(newPageText);
+                        articleTextBuilder.insert(endIndex - 1, "\n\n");
+                        articleTextBuilder.insert(endIndex - 1, "{{Reflist}}");
+                        articleTextBuilder.insert(endIndex - 1, "\n== Note ==\n");
+
+                        newPageText = articleTextBuilder.toString();
+                    }
+                }
+
+                wiki.edit(articleTitle, newPageText, summaryBuilder.toString());
             }
         } catch (final SQLException e) {
             // TODO Auto-generated catch block
@@ -749,17 +800,21 @@ public class WikiTextGenerator2011 {
         final Connection c2011 = getConnection();
         PreparedStatement comp2011St, comp2002St;
         try {
-            comp2011St = c2011.prepareStatement("select localitate.populatie pop from localitate where localitate.uta=?");
+            comp2011St = c2011
+                .prepareStatement("select localitate.siruta cod from localitate where localitate.uta=?");
             comp2011St.setInt(1, uta.getSiruta());
             final ResultSet comp2011rs = comp2011St.executeQuery();
             int currentComponentCount = 0;
+            final Set<Integer> villagesSirutas = new HashSet<Integer>();
             while (comp2011rs.next()) {
                 currentComponentCount++;
+                villagesSirutas.add(comp2011rs.getInt("cod"));
             }
 
             final Connection c2002 = getConnection2002();
-            comp2002St = c2002.prepareStatement("select localitate.populatie pop from localitate where localitate.uta=?");
-            comp2002St.setInt(1, uta.getSiruta());
+            comp2002St = c2002.prepareStatement("select localitate.populatie pop from localitate where localitate.siruta in ("
+                + StringUtils.join(villagesSirutas, ",") + ")");
+            //comp2002St.setInt(1, uta.getSiruta());
             final ResultSet comp2002rs = comp2002St.executeQuery();
             int oldComponentCount = 0;
             int oldPopulationSum = 0;
