@@ -98,11 +98,11 @@ public class WikiTextGenerator2011 {
     }
 
     public static void main(final String[] args) {
-        generateCounty(/* 10, 11, 12, 14 , 26 ,28 , */41 /**/);
+        //generateCounty(/* 10, 11, 12, 14 , 26 ,28 , */41 /**/);
 
-        /*
-         * for (int i = 5; i < 41; i++) { generateCounty(i); }
-         */
+
+        for (int i = 7; i < 41; i++) { generateCounty(i); }
+
         closeConnection(conn);
         closeConnection(conn2002);
     }
@@ -307,9 +307,8 @@ public class WikiTextGenerator2011 {
                     if (preSection != null) {
                         final String sectionText = wiki.getSectionText(articleTitle, preSectionIndex);
                         final StringBuilder sectionTextBuilder = new StringBuilder(sectionText);
-                        sectionTextBuilder.append("\n== Demografie ==\n");
+                        sectionTextBuilder.append("\n\n== Demografie ==\n");
                         sectionTextBuilder.append(StringUtils.chomp(StringUtils.trim(wikiText)));
-                        sectionTextBuilder.append("\n\n");
 
                         newPageText = newPageText.replace(sectionText, sectionTextBuilder.toString());
 
@@ -329,6 +328,9 @@ public class WikiTextGenerator2011 {
                         endIndices.add(StringUtils.indexOf(newPageText, "{{ciot"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Comune"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Județ"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{județ"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{" + capitalizeName(uta.getName())));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{Comuna"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orașe"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orase"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{DN"));
@@ -380,6 +382,9 @@ public class WikiTextGenerator2011 {
                         endIndices.add(StringUtils.indexOf(newPageText, "{{ciot"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Comune"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Județ"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{județ"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{" + capitalizeName(uta.getName())));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{Comuna"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orașe"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orase"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{DN"));
@@ -397,7 +402,7 @@ public class WikiTextGenerator2011 {
                     }
                 }
 
-                wiki.edit(articleTitle, newPageText, summaryBuilder.toString());
+                //wiki.edit(articleTitle, newPageText, summaryBuilder.toString());
             }
         } catch (final SQLException e) {
             // TODO Auto-generated catch block
@@ -1052,7 +1057,7 @@ public class WikiTextGenerator2011 {
         final String[] lowerItems = StringUtils.splitByCharacterType(onlyLower);
         final StringBuilder sb = new StringBuilder();
 
-        final List<String> notCapitalized = Arrays.asList("de", "din", "pe", "sub", "peste", "la", "cel");
+        final List<String> notCapitalized = Arrays.asList("de", "din", "pe", "sub", "peste", "la", "cel", "lui");
 
         for (final String item : lowerItems) {
             sb.append(notCapitalized.contains(item) ? item : StringUtils.capitalize(item));
