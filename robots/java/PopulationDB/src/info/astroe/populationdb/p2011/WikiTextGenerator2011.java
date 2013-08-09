@@ -101,7 +101,7 @@ public class WikiTextGenerator2011 {
         //generateCounty(/* 10, 11, 12, 14 , 26 ,28 , */41 /**/);
 
 
-        for (int i = 14; i < 41; i++) { generateCounty(i); }
+        for (int i = 16; i < 41; i++) { generateCounty(i); }
 
         closeConnection(conn);
         closeConnection(conn2002);
@@ -1064,7 +1064,7 @@ public class WikiTextGenerator2011 {
         final String[] lowerItems = StringUtils.splitByCharacterType(onlyLower);
         final StringBuilder sb = new StringBuilder();
 
-        final List<String> notCapitalized = Arrays.asList("de", "din", "pe", "sub", "peste", "la", "cel", "lui");
+        final List<String> notCapitalized = Arrays.asList("de", "din", "pe", "sub", "peste", "la", "cel", "lui", "cu");
 
         for (final String item : lowerItems) {
             sb.append(notCapitalized.contains(item) ? item : StringUtils.capitalize(item));
