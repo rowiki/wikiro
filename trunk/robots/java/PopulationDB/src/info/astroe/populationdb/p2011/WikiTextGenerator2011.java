@@ -101,7 +101,7 @@ public class WikiTextGenerator2011 {
         //generateCounty(/* 10, 11, 12, 14 , 26 ,28 , */41 /**/);
 
 
-        for (int i = 7; i < 41; i++) { generateCounty(i); }
+        for (int i = 14; i < 41; i++) { generateCounty(i); }
 
         closeConnection(conn);
         closeConnection(conn2002);
@@ -165,7 +165,7 @@ public class WikiTextGenerator2011 {
 
                 final String wikiText = "<div style=\"float:left\">" + generateCountyNationalData(judet, uta)
                     + generateCountyReligiousData(judet, uta) + "</div>\n" + generateCountyNationalText(uta)
-                    + generateCountyReligiousText(uta) + "<br clear=\"left\"/>";
+                    + generateCountyReligiousText(uta);
                 System.out.println(wikiText);
                 System.out.println();
 
@@ -349,6 +349,13 @@ public class WikiTextGenerator2011 {
                         newPageText = articleTextBuilder.toString();
                     }
                     summaryBuilder.append(" adăugare secțiune demografie");
+                } else {
+                    //propose in talk page
+                    final String talkPageTitle = wiki.getTalkPage(articleTitle);
+
+                    String talkPageText = wiki.exists(talkPageTitle)[0] ? wiki.getPageText(talkPageTitle) : "";
+                    talkPageText += "\n== Noi date demografice 2011 ==\n" + wikiText;
+                    //wiki.edit(talkPageTitle, talkPageText, "Robot: propunere text actualizat pentru secțiunea demografie");
                 }
 
                 if (!hasReferences) {
@@ -371,9 +378,9 @@ public class WikiTextGenerator2011 {
                     if (postSectionRef != null) {
                         final String sectionText = wiki.getSectionText(articleTitle, postSectionRefIndex);
                         final StringBuilder sectionTextBuilder = new StringBuilder(sectionText);
-                        sectionTextBuilder.insert(0, "\n\n");
-                        sectionTextBuilder.insert(0, "{{Reflist}}");
-                        sectionTextBuilder.insert(0, "\n== Note ==\n");
+                        sectionTextBuilder.insert(0, "\n");
+                        sectionTextBuilder.insert(0, "{{Reflist}}\n");
+                        sectionTextBuilder.insert(0, "<br clear=\"left\"/>\n== Note ==\n");
 
                         newPageText = newPageText.replace(sectionText, sectionTextBuilder.toString());
 
