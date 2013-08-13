@@ -8,7 +8,9 @@ import info.astroe.populationdb.UTAType;
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,6 +20,7 @@ import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,8 +35,10 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.StrBuilder;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot3D;
@@ -98,10 +103,11 @@ public class WikiTextGenerator2011 {
     }
 
     public static void main(final String[] args) {
-        //generateCounty(/* 10, 11, 12, 14 , 26 ,28 , */41 /**/);
+        // generateCounty(/* 10, 11, 12, 14 , 26 ,28 , */41 /**/);
 
-
-        for (int i = 16; i < 41; i++) { generateCounty(i); }
+        for (int i = 1; i < 42; i++) {
+            generateCounty(i);
+        }
 
         closeConnection(conn);
         closeConnection(conn2002);
@@ -115,16 +121,35 @@ public class WikiTextGenerator2011 {
 
     private static void generateCounty(final int countyId) {
         final Connection cn = getConnection();
+        BufferedWriter notTouchingArticles = null;
         try {
+            String judet = null;
+            final PreparedStatement cnameStatement = cn.prepareStatement("select judet.nume judnume from judet where judet.id=?");
+            cnameStatement.setInt(1, countyId);
+            final ResultSet cnameRS = cnameStatement.executeQuery();
+            if (cnameRS.next()) {
+                judet = cnameRS.getString("judnume");
+            }
+            notTouchingArticles = new BufferedWriter(new FileWriter(new File("E:\\var\\wki\\doc\\rec2011finale\\log\\", getCountyName(judet))));
+
             final PreparedStatement st = cn
                 .prepareStatement("select uta.siruta id,uta.tip tip,uta.populatie pop,judet.nume judet,uta.name nume from uta left join judet on judet.id=uta.judet where uta.judet=? order by uta.tip asc, uta.name asc");
             st.setInt(1, countyId);
             final ResultSet rs = st.executeQuery();
 
+            wiki = new Wiki("ro.wikipedia.org");
+            final Properties credentials = new Properties();
+
+            credentials.load(WikiTextGenerator2011.class.getClassLoader().getResourceAsStream("credentials.properties"));
+
+            final String username = credentials.getProperty("Username");
+            final String password = credentials.getProperty("Password");
+            wiki.login(username, password.toCharArray());
+            wiki.setMarkBot(true);
+
             while (rs.next()) {
                 final int utaId = rs.getInt("id");
                 final UTAType utaType = UTAType.fromId(rs.getInt("tip"));
-                final String judet = rs.getString("judet");
                 final PopulationDb2002Entry uta = new PopulationDb2002Entry();
                 uta.setSiruta(utaId);
                 uta.setName(rs.getString("nume"));
@@ -163,22 +188,11 @@ public class WikiTextGenerator2011 {
                     uta.getReligiousStructure().put(rel, pop);
                 }
 
-                final String wikiText = "<div style=\"float:left\">" + generateCountyNationalData(judet, uta)
+                String wikiText = "<div style=\"float:left\">" + generateCountyNationalData(judet, uta)
                     + generateCountyReligiousData(judet, uta) + "</div>\n" + generateCountyNationalText(uta)
                     + generateCountyReligiousText(uta);
-                System.out.println(wikiText);
-                System.out.println();
 
                 final StringBuilder summaryBuilder = new StringBuilder("Robot:");
-                wiki = new Wiki("ro.wikipedia.org");
-                final Properties credentials = new Properties();
-
-                credentials.load(WikiTextGenerator2011.class.getClassLoader().getResourceAsStream("credentials.properties"));
-
-                final String username = credentials.getProperty("Username");
-                final String password = credentials.getProperty("Password");
-                wiki.login(username, password.toCharArray());
-                wiki.setMarkBot(true);
 
                 final String articleTitle = getArticleTitle(uta, judet);
 
@@ -279,11 +293,59 @@ public class WikiTextGenerator2011 {
 
                 final boolean hasReferences = footnotesRegex.matcher(pageText).find();
 
+                final List<String> historicalPopTemplateTitles = new ArrayList<String>();
+                historicalPopTemplateTitles.add("Format:Demografie/" + articleTitle);
+                if (uta.getType() == UTAType.MUNICIPIU) {
+                    historicalPopTemplateTitles.add("Format:Demografie/" + capitalizeName(uta.getName()));
+                }
+                String historicalPopTemplate = null;
+                final NumberFormat popNumberFormatter = NumberFormat.getNumberInstance(new Locale("ro"));
+                for (final String historicalPopTemplateTitle : historicalPopTemplateTitles) {
+                    if (wiki.exists(historicalPopTemplateTitle)[0]) {
+                        historicalPopTemplate = "\n<div style=\"float:left;clear:none\">{{" + historicalPopTemplateTitle
+                            + "}}</div>";
+                        final String templateText = wiki.getPageText(historicalPopTemplateTitle);
+                        if (!StringUtils.contains(templateText, " bar:2011 text:2011")) {
+                            final StrBuilder templateTextBuilder = new StrBuilder(templateText);
+                            final int whereToInsertBarData = templateTextBuilder.indexOf("\n",
+                                templateTextBuilder.indexOf(" bar:2002 text:2002"));
+                            if (whereToInsertBarData < 0) {
+                                break;
+                            }
+                            templateTextBuilder.insert(whereToInsertBarData, "\n  bar:2011 text:2011");
+                            final int whereToInsertPlotDataValue = templateTextBuilder.indexOf("\n",
+                                templateTextBuilder.indexOf(" bar:2002 from:"));
+                            if (whereToInsertPlotDataValue < 0) {
+                                break;
+                            }
+                            templateTextBuilder.insert(whereToInsertPlotDataValue,
+                                "\n  bar:2011 from:0 till: " + uta.getPopulation());
+                            final int whereToInsertPlotDataLabel = templateTextBuilder.indexOf("\n",
+                                templateTextBuilder.indexOf(" bar:2002 at:"));
+                            if (whereToInsertPlotDataLabel < 0) {
+                                break;
+                            }
+                            templateTextBuilder.insert(
+                                whereToInsertPlotDataLabel,
+                                "\n  bar: 2011 at: " + uta.getPopulation() + " fontsize:S text:"
+                                    + popNumberFormatter.format(uta.getPopulation()) + " shift(-15,5)");
+                            /*wiki.edit(historicalPopTemplateTitle, templateTextBuilder.toString(),
+                                "Robot: adăugare date recensământ 2011");*/
+                        }
+                        break;
+                    }
+                }
+
                 if (generateDemographySection) {
+                    wikiText = wikiText + StringUtils.defaultString(historicalPopTemplate);
+                    System.out.println(wikiText);
+                    System.out.println();
+
                     final List<String> sectionsBefore = Arrays.asList("Geografie", "Geografia", "Așezare", "Așezarea",
                         "Amplasare", "Amplasarea", "Date geografice", "Poziție", "Poziția");
                     final List<String> sectionsAfter = Arrays.asList("Monumente istorice", "Atracții turistice",
-                        "Personalități", "Note", "Vezi și", "Legături externe", "Bibliografie");
+                        "Personalități", "Note", "Vezi și", "Legături externe", "Bibliografie", "Imagini",
+                        "Galerie de imagini");
 
                     String preSection = null;
                     String postSection = null;
@@ -350,12 +412,36 @@ public class WikiTextGenerator2011 {
                     }
                     summaryBuilder.append(" adăugare secțiune demografie");
                 } else {
-                    //propose in talk page
+                    // propose in talk page
                     final String talkPageTitle = wiki.getTalkPage(articleTitle);
 
                     String talkPageText = wiki.exists(talkPageTitle)[0] ? wiki.getPageText(talkPageTitle) : "";
-                    talkPageText += "\n== Noi date demografice 2011 ==\n" + wikiText;
-                    //wiki.edit(talkPageTitle, talkPageText, "Robot: propunere text actualizat pentru secțiunea demografie");
+                    if (!talkPageText.contains("== Noi date demografice 2011 ==")) {
+                        talkPageText += "\n== Noi date demografice 2011 ==\n" + wikiText;
+                        // wiki.edit(talkPageTitle, talkPageText,
+                        // "Robot: propunere text actualizat pentru secțiunea demografie");
+                    }
+                    notTouchingArticles.write(articleTitle);
+                    notTouchingArticles.newLine();
+                    notTouchingArticles.flush();
+
+                    final String logTitle = "Utilizator:Andrebot/Pagini cu secțiune de demografie";
+
+                    String log = "";
+                    Calendar timeStamp = null;
+                    if (wiki.exists(logTitle)[0]) {
+                        final Long lastlogrevid = (Long) wiki.getPageInfo(logTitle).get("lastrevid");
+                        final Revision lastLogRev = wiki.getRevision(lastlogrevid);
+                        timeStamp = lastLogRev.getTimestamp();
+                        log = lastLogRev.getText();
+                    }
+
+                    log = log + "\n* [[" + articleTitle + "]]";
+                    if (null == timeStamp) {
+                        wiki.edit(logTitle, log, "Robot: adăugare la log pagină cu secțiune demografie");
+                    } else {
+                        wiki.edit(logTitle, log, "Robot: adăugare la log pagină cu secțiune demografie", timeStamp);
+                    }
                 }
 
                 if (!hasReferences) {
@@ -395,7 +481,7 @@ public class WikiTextGenerator2011 {
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orașe"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orase"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{DN"));
-                        endIndices.add(StringUtils.indexOf(newPageText, "[[Categori"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "[[Categor"));
                         while (endIndices.contains(-1)) {
                             endIndices.remove(new Integer(-1));
                         }
@@ -409,7 +495,7 @@ public class WikiTextGenerator2011 {
                     }
                 }
 
-                //wiki.edit(articleTitle, newPageText, summaryBuilder.toString());
+                // wiki.edit(articleTitle, newPageText, summaryBuilder.toString());
             }
         } catch (final SQLException e) {
             // TODO Auto-generated catch block
@@ -429,6 +515,7 @@ public class WikiTextGenerator2011 {
             closeConnection(conn2002);
             System.exit(1);
         } finally {
+            IOUtils.closeQuietly(notTouchingArticles);
             if (null != wiki) {
                 wiki.logout();
             }
@@ -812,8 +899,7 @@ public class WikiTextGenerator2011 {
         final Connection c2011 = getConnection();
         PreparedStatement comp2011St, comp2002St;
         try {
-            comp2011St = c2011
-                .prepareStatement("select localitate.siruta cod from localitate where localitate.uta=?");
+            comp2011St = c2011.prepareStatement("select localitate.siruta cod from localitate where localitate.uta=?");
             comp2011St.setInt(1, uta.getSiruta());
             final ResultSet comp2011rs = comp2011St.executeQuery();
             int currentComponentCount = 0;
@@ -824,9 +910,10 @@ public class WikiTextGenerator2011 {
             }
 
             final Connection c2002 = getConnection2002();
-            comp2002St = c2002.prepareStatement("select localitate.populatie pop from localitate where localitate.siruta in ("
-                + StringUtils.join(villagesSirutas, ",") + ")");
-            //comp2002St.setInt(1, uta.getSiruta());
+            comp2002St = c2002
+                .prepareStatement("select localitate.populatie pop from localitate where localitate.siruta in ("
+                    + StringUtils.join(villagesSirutas, ",") + ")");
+            // comp2002St.setInt(1, uta.getSiruta());
             final ResultSet comp2002rs = comp2002St.executeQuery();
             int oldComponentCount = 0;
             int oldPopulationSum = 0;
