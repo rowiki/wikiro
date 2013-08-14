@@ -105,7 +105,7 @@ public class WikiTextGenerator2011 {
     public static void main(final String[] args) {
         // generateCounty(/* 10, 11, 12, 14 , 26 ,28 , */41 /**/);
 
-        for (int i = 1; i < 42; i++) {
+        for (int i = 5; i < 28; i++) {
             generateCounty(i);
         }
 
@@ -124,13 +124,15 @@ public class WikiTextGenerator2011 {
         BufferedWriter notTouchingArticles = null;
         try {
             String judet = null;
-            final PreparedStatement cnameStatement = cn.prepareStatement("select judet.nume judnume from judet where judet.id=?");
+            final PreparedStatement cnameStatement = cn
+                .prepareStatement("select judet.nume judnume from judet where judet.id=?");
             cnameStatement.setInt(1, countyId);
             final ResultSet cnameRS = cnameStatement.executeQuery();
             if (cnameRS.next()) {
                 judet = cnameRS.getString("judnume");
             }
-            notTouchingArticles = new BufferedWriter(new FileWriter(new File("E:\\var\\wki\\doc\\rec2011finale\\log\\", getCountyName(judet))));
+            notTouchingArticles = new BufferedWriter(new FileWriter(new File("E:\\var\\wki\\doc\\rec2011finale\\log\\",
+                getCountyName(judet))));
 
             final PreparedStatement st = cn
                 .prepareStatement("select uta.siruta id,uta.tip tip,uta.populatie pop,judet.nume judet,uta.name nume from uta left join judet on judet.id=uta.judet where uta.judet=? order by uta.tip asc, uta.name asc");
@@ -146,6 +148,7 @@ public class WikiTextGenerator2011 {
             final String password = credentials.getProperty("Password");
             wiki.login(username, password.toCharArray());
             wiki.setMarkBot(true);
+            final StrBuilder countyLog = new StrBuilder();
 
             while (rs.next()) {
                 final int utaId = rs.getInt("id");
@@ -204,6 +207,24 @@ public class WikiTextGenerator2011 {
                 final boolean generateDemographySection = !sectionMap.containsValue("Demografie")
                     && !sectionMap.containsValue("Populație") && !sectionMap.containsValue("Populația")
                     && !sectionMap.containsValue("Demografia");
+
+                final StrBuilder histDemog = new StrBuilder();
+                int i = 1;
+                int histSectionIndex = -1;
+                for (final Object key : sectionMap.keySet()) {
+                    if (Arrays.asList("Demografie istorică", "Populație istorică", "Istoricul populației",
+                        "Demografie (istoric)", "Demografie (evoluție istorică)", "Demografie (evoluția istorică)").contains(sectionMap.get(key))) {
+                        histSectionIndex = i;
+                    }
+                    i++;
+                }
+                String histSectionText = null;
+                if (histSectionIndex > 0) {
+                    histDemog.append("\n=== Evoluție istorică ===\n");
+                    histSectionText = wiki.getSectionText(articleTitle, histSectionIndex);
+                    final String histSectionBody = StringUtils.substringAfter(histSectionText, "==\n");
+                    histDemog.append(StringUtils.replace(histSectionBody, "===", "===="));
+                }
 
                 String infoboxText = null;
                 String infoboxName = null;
@@ -303,7 +324,7 @@ public class WikiTextGenerator2011 {
                 for (final String historicalPopTemplateTitle : historicalPopTemplateTitles) {
                     if (wiki.exists(historicalPopTemplateTitle)[0]) {
                         historicalPopTemplate = "\n<div style=\"float:left;clear:none\">{{" + historicalPopTemplateTitle
-                            + "}}</div>";
+                            + "}}</div><br clear=\"left\"/>";
                         final String templateText = wiki.getPageText(historicalPopTemplateTitle);
                         if (!StringUtils.contains(templateText, " bar:2011 text:2011")) {
                             final StrBuilder templateTextBuilder = new StrBuilder(templateText);
@@ -327,17 +348,17 @@ public class WikiTextGenerator2011 {
                             }
                             templateTextBuilder.insert(
                                 whereToInsertPlotDataLabel,
-                                "\n  bar: 2011 at: " + uta.getPopulation() + " fontsize:S text:"
-                                    + popNumberFormatter.format(uta.getPopulation()) + " shift(-15,5)");
-                            /*wiki.edit(historicalPopTemplateTitle, templateTextBuilder.toString(),
-                                "Robot: adăugare date recensământ 2011");*/
+                                "\n  bar:2011 at: " + uta.getPopulation() + " fontsize:S text: "
+                                    + popNumberFormatter.format(uta.getPopulation()) + " shift:(-15,5)");
+                            wiki.edit(historicalPopTemplateTitle, templateTextBuilder.toString(),
+                                "Robot: adăugare date recensământ 2011");
                         }
                         break;
                     }
                 }
 
                 if (generateDemographySection) {
-                    wikiText = wikiText + StringUtils.defaultString(historicalPopTemplate);
+                    wikiText = wikiText + histDemog.toString() + "\n" + StringUtils.defaultString(historicalPopTemplate);
                     System.out.println(wikiText);
                     System.out.println();
 
@@ -418,30 +439,16 @@ public class WikiTextGenerator2011 {
                     String talkPageText = wiki.exists(talkPageTitle)[0] ? wiki.getPageText(talkPageTitle) : "";
                     if (!talkPageText.contains("== Noi date demografice 2011 ==")) {
                         talkPageText += "\n== Noi date demografice 2011 ==\n" + wikiText;
-                        // wiki.edit(talkPageTitle, talkPageText,
-                        // "Robot: propunere text actualizat pentru secțiunea demografie");
+                        wiki.edit(talkPageTitle, talkPageText,
+                            "Robot: propunere text actualizat pentru secțiunea demografie");
                     }
                     notTouchingArticles.write(articleTitle);
                     notTouchingArticles.newLine();
                     notTouchingArticles.flush();
 
-                    final String logTitle = "Utilizator:Andrebot/Pagini cu secțiune de demografie";
-
-                    String log = "";
-                    Calendar timeStamp = null;
-                    if (wiki.exists(logTitle)[0]) {
-                        final Long lastlogrevid = (Long) wiki.getPageInfo(logTitle).get("lastrevid");
-                        final Revision lastLogRev = wiki.getRevision(lastlogrevid);
-                        timeStamp = lastLogRev.getTimestamp();
-                        log = lastLogRev.getText();
-                    }
-
-                    log = log + "\n* [[" + articleTitle + "]]";
-                    if (null == timeStamp) {
-                        wiki.edit(logTitle, log, "Robot: adăugare la log pagină cu secțiune demografie");
-                    } else {
-                        wiki.edit(logTitle, log, "Robot: adăugare la log pagină cu secțiune demografie", timeStamp);
-                    }
+                    countyLog.append("\n* [[");
+                    countyLog.append(articleTitle);
+                    countyLog.append("]]");
                 }
 
                 if (!hasReferences) {
@@ -490,12 +497,36 @@ public class WikiTextGenerator2011 {
                         articleTextBuilder.insert(endIndex - 1, "\n\n");
                         articleTextBuilder.insert(endIndex - 1, "{{Reflist}}");
                         articleTextBuilder.insert(endIndex - 1, "\n== Note ==\n");
+                        articleTextBuilder.insert(endIndex - 1, "<br clear=\"left\"/>");
 
                         newPageText = articleTextBuilder.toString();
                     }
                 }
+                if (histDemog.length() > 0) {
+                    newPageText = StringUtils.replace(newPageText, histSectionText, "");
+                }
 
-                // wiki.edit(articleTitle, newPageText, summaryBuilder.toString());
+                wiki.edit(articleTitle, newPageText, summaryBuilder.toString());
+            }
+            if (countyLog.length() > 0) {
+                final String logTitle = "Utilizator:Andrebot/Pagini cu secțiune de demografie";
+
+                String log = "";
+                Calendar timeStamp = null;
+                if (wiki.exists(logTitle)[0]) {
+                    final Long lastlogrevid = (Long) wiki.getPageInfo(logTitle).get("lastrevid");
+                    final Revision lastLogRev = wiki.getRevision(lastlogrevid);
+                    timeStamp = lastLogRev.getTimestamp();
+                    log = lastLogRev.getText();
+                }
+
+                /*
+                 * if (null == timeStamp) { wiki.edit(logTitle, log + countyLog,
+                 * "Robot: adăugare la log pagină cu secțiune demografie pentru județul " + getCountyName(judet)); } else {
+                 * wiki.edit(logTitle, log + countyLog,
+                 * "Robot: adăugare la log pagini cu secțiune demografie pentru județul " + getCountyName(judet), timeStamp);
+                 * }
+                 */
             }
         } catch (final SQLException e) {
             // TODO Auto-generated catch block

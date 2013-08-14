@@ -65,7 +65,7 @@ public enum Nationality {
         case OTH:
             return "Altă etnie";
         default:
-            return "Necunoscut";
+            return "Necunoscută";
         }
     }
 }
