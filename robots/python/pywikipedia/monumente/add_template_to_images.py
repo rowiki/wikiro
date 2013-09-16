@@ -5,10 +5,12 @@ Add {{Monument istoric}} to all the images that illustrate the list,
 but don't have the template in commons.
 '''
 
-import sys, time, warnings, json, string
+import sys, time, warnings, json, string, re
 sys.path.append("..")
-import wikipedia, re, pagegenerators
-import config as user
+import pywikibot
+from pywikibot import pagegenerators
+from pywikibot import config as user
+
 
 _log = "link2.err.log"
 _flog = None
@@ -22,15 +24,15 @@ def closeLog():
 	_flog.close()
 
 def log(string):
-	wikipedia.output(string.encode("utf8") + "\n")
+	pywikibot.output(string.encode("utf8") + "\n")
 	_flog.write(string.encode("utf8") + "\n")
 
 def main():
 	initLog()
 	f = open("lmi_db.json", "r+")
-	wikipedia.output("Reading database file...")
+	pywikibot.output("Reading database file...")
 	db = json.load(f)
-	wikipedia.output("...done")
+	pywikibot.output("...done")
 	f.close();
 	
 	#this is the big loop that should only happen once
@@ -42,7 +44,7 @@ def main():
 			code = result[0][0]
 		else:
 			code = rawCode
-		wikipedia.output(code)
+		pywikibot.output(code)
 		
 		image = monument["Imagine"]
 		if image == None or image.strip() == "":
@@ -50,9 +52,9 @@ def main():
 			
 		image = image.replace(u'Fișier', u'File')
 		image = image.replace(u'Imagine', u'File')
-		site = wikipedia.getSite('commons', 'commons')
+		site = pywikibot.getSite('commons', 'commons')
 		try:
-			page = wikipedia.Page(site, image)
+			page = pywikibot.Page(site, image)
 			if page.isRedirectPage():
 				page = page.getRedirectTarget()
 			text = page.get()
@@ -60,12 +62,12 @@ def main():
 			log("I: Local image [[:%s]] for code %s" % (image, code))
 			continue
 			
-		templates = page.templatesWithParams(thistxt=text)
+		templates = page.templatesWithParams()
 		info_params = None
 		found = 0
 		for (template, params) in templates:
 			#print template
-			if unicode(template) == u"Monument istoric":
+			if unicode(template.title(withNamespace = False)) == u"Monument istoric":
 				found = 1
 				if code <> str(params[0]):
 					log(u"W: Nepotrivire între codul din listă (%s) și unul din codurile din imagine (%s)" % (code, params[0]))
@@ -99,4 +101,4 @@ if __name__ == "__main__":
 	try:
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()

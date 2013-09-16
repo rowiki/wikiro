@@ -4,9 +4,11 @@
 Update the monuments database either from a text file or from some wiki page(s)
 
 '''
-import sys, time, warnings, json
-sys.path.append("..")
-import wikipedia, config, re, pagegenerators
+import sys, time, warnings, json, re
+#sys.path.append("..")
+import pywikibot
+from pywikibot import pagegenerators
+from pywikibot import config
 
 countries = {
 	('ro', 'ro') : {
@@ -119,11 +121,9 @@ def processMonument(params, source, countryconfig, title):
 		contents[field.get(u'source')]=u''
 
 	for param in params:
-		#Split at =
-		(field, sep, value) = param.partition(u'=')
 		# Remove leading or trailing spaces
-		field = field.strip()
-		value = value.split("<ref")[0].strip()
+		field = param
+		value = params[param].split("<ref")[0].strip()
 		
 		#Check first that field is not empty
 		if field:
@@ -136,28 +136,23 @@ def processMonument(params, source, countryconfig, title):
 						contents[field] = value.encode("utf8") # Do this somewhere else.replace("'", "\\'")
 				else:
 					#FIXME: Include more information where it went wrong
-					wikipedia.output(u'Found unknown field: %s on page %s' % (field, title) )
-					wikipedia.output(u'Field: %s' % field)
-					wikipedia.output(u'Value: %s' % value)
-					wikipedia.output(u'Params: %s\n%s' % (params, param))
+					pywikibot.output(u'Found unknown field: %s on page %s' % (field, title) )
+					pywikibot.output(u'Field: %s' % field)
+					pywikibot.output(u'Value: %s' % value)
+					pywikibot.output(u'Params: %s\n%s' % (params, param))
 					#time.sleep(5)
 	return contents
 
-def processText(text, source, countryconfig, page=None):
+def processText(source, countryconfig, page=None):
 	'''
 	Process a text containing one or multiple instances of the monument row template
 	'''
-	
-	if not page:
-		site = site = wikipedia.getSite(countryconfig.get('lang'), countryconfig.get('project'))
-		page = wikipedia.Page(site, u'User:Multichill/Zandbak')
-	templates = page.templatesWithParams(thistxt=text)
-	wikipedia.output(u'Working on page "%s"' % page.title(True))
+	templates = pywikibot.extract_templates_and_params(page.get())
+	title = page.title(True)
+	pywikibot.output(u'Working on page "%s"' % title)
 	for (template, params) in templates:
 		if template==countryconfig.get('rowTemplate'):
-			#print template
-			#print params
-			monuments_db.append(processMonument(params, source, countryconfig, page.title(True)))
+			monuments_db.append(processMonument(params, source, countryconfig, title))
 			#time.sleep(5)
  
 
@@ -166,8 +161,8 @@ def processCountry(countryconfig):
 	Process all the monuments of one country
 	'''
 
-	site = wikipedia.getSite(countryconfig.get('lang'), countryconfig.get('project'))
-	rowTemplate = wikipedia.Page(site, u'%s:%s' % (site.namespace(10), countryconfig.get('rowTemplate')))
+	site = pywikibot.getSite(countryconfig.get('lang'), countryconfig.get('project'))
+	rowTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), countryconfig.get('rowTemplate')))
 
 	transGen = pagegenerators.ReferringPageGenerator(rowTemplate, onlyTemplateInclusion=True)
 	filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen, countryconfig.get('namespaces'))
@@ -175,7 +170,7 @@ def processCountry(countryconfig):
 	for page in pregenerator:
 		if page.exists() and not page.isRedirectPage():
 			# Do some checking
-			processText(page.get(), page.permalink(), countryconfig, page=page)
+			processText(page.permalink(), countryconfig, page=page)
 			
 	f = open("lmi_db.json", "w+")
 	json.dump(monuments_db, f, indent=2)
@@ -199,33 +194,33 @@ def main():
 	countrycode = u'ro'
 	textfile = u''
 
-	for arg in wikipedia.handleArgs():
+	for arg in pywikibot.handleArgs():
 		if arg.startswith('-countrycode:'):
 			countrycode = arg [len('-countrycode:'):]
 		elif arg.startswith('-textfile:'):
 			textfile = arg [len('-textfile:'):]
 
 	if countrycode:
-		lang = wikipedia.getSite().language()
+		lang = pywikibot.getSite().language()
 		if not countries.get((countrycode, lang)):
-			wikipedia.output(u'I have no config for countrycode "%s" in language "%s"' % (countrycode, lang))
+			pywikibot.output(u'I have no config for countrycode "%s" in language "%s"' % (countrycode, lang))
 			return False
-		wikipedia.output(u'Working on countrycode "%s" in language "%s"' % (countrycode, lang))
+		pywikibot.output(u'Working on countrycode "%s" in language "%s"' % (countrycode, lang))
 		if textfile:
-			wikipedia.output(u'Going to work on textfile.')
+			pywikibot.output(u'Going to work on textfile.')
 			processTextfile(textfile, countries.get((countrycode, lang)))
 		else:
 			processCountry(countries.get((countrycode, lang)))
 	else:
 		for (countrycode, lang), countryconfig in countries.iteritems():
-			wikipedia.output(u'Working on countrycode "%s" in language "%s"' % (countrycode, lang))
+			pywikibot.output(u'Working on countrycode "%s" in language "%s"' % (countrycode, lang))
 			processCountry(countryconfig,)
 	'''
 
 
 	generator = genFactory.getCombinedGenerator()
 	if not generator:
-		wikipedia.output(u'You have to specify what to work on. This can either be -textfile:<filename> to work on a local file or you can use one of the standard pagegenerators (in pagegenerators.py)')
+		pywikibot.output(u'You have to specify what to work on. This can either be -textfile:<filename> to work on a local file or you can use one of the standard pagegenerators (in pagegenerators.py)')
 	else:
 		pregenerator = pagegenerators.PreloadingGenerator(generator)
 		for page in pregenerator:
@@ -238,4 +233,4 @@ if __name__ == "__main__":
 	try:
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()

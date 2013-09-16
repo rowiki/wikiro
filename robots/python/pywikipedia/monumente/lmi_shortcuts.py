@@ -39,21 +39,20 @@ def main():
 		#if page.exists() and not page.isRedirect():
 		#		wikipedia.output(u"Page %s is not a redirect" % page.title())
 		#else:
-		page.put(u"#redirect [[%s]]" % pages_ro[code][0]["name"], "Redirecting code to the Wikipedia article")
+		page.put(u"#redirecteaza[[%s]]" % pages_ro[code][0]["name"], "Redirecting code to the Wikipedia article")
 			
 	for monument in db:
 		if monument["Cod"] in pages_ro:
 			continue
 		page = wikipedia.Page(site, u"Cod:LMI:" + monument["Cod"])
 		wikipedia.output(page.title())
-		#if page.exists() and not page.isRedirect():
-		#		wikipedia.output(u"Page %s is not a redirect" % page.title())
-		#else:
-		if not page.exists():
-			source_page = wikipedia.url2link(monument["source"][monument["source"].find(u'=')+1:monument["source"].find(u'&')], site, site)
-			#wikipedia.output(source_page)
-			source_page = wikipedia.Page(site, source_page)
-			page.put(u"#redirect [[{0}#{1}]]".format(source_page.title(), monument["Cod"]), "Redirecting code to the Wikipedia article")
+
+		source_page = wikipedia.url2link(monument["source"][monument["source"].find(u'=')+1:monument["source"].find(u'&')], site, site)
+		#wikipedia.output(source_page)
+		source_page = wikipedia.Page(site, source_page)
+		page_text = u"#redirect [[{0}#{1}]]".format(source_page.title(), monument["Cod"])
+		if not page.exists() or page.get(False, True) <> page_text:
+			page.put(page_text, "Redirecting code to the Wikipedia article")
 
 if __name__ == "__main__":
 	try:
