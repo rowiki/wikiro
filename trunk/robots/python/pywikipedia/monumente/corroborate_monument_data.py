@@ -9,15 +9,17 @@ identify different improvements and further errors in the monument pages and dat
 * să raporteze la [[Proiect:Monumente istorice/Erori/Automate]] următoarele situații:
 ** în listă nu există codul respectiv, dar codul are formatul corect în articol/imagine
 ** în listă nu există imagine și există mai multe imagini disponibile la commons - i
-** în listă și articol coordonatele sunt diferite (diferențe mai mari de 0,01 grade sau ~35 de secunde de grad) - i
+** în listă și articol coordonatele sunt diferite (diferențe mai mari de 0,001 grade sau ~3,6 de secunde de grad) - i
 '''
 
-import sys, time, warnings, json, string, random
+import sys, time, warnings, json, string, random, re
 import math, urlparse
 sys.path.append("..")
-import wikipedia, re, pagegenerators
-import config as user
 import strainu_functions as strainu
+
+import pywikibot
+from pywikibot import pagegenerators
+from pywikibot import config as user
 
 countries = {
 	('ro', 'ro') : {
@@ -128,114 +130,123 @@ def closeLog():
 	_flog.close()
 
 def log(string):
-	#wikipedia.output(string.encode("utf8") + "\n")
+	#pywikibot.output(string.encode("utf8") + "\n")
 	_flog.write(string.encode("utf8") + "\n")
+	
+def rebuildTemplate(params):
+	my_template = u"{{" + countries.get(('ro', 'ro')).get('rowTemplate') + u"\n"
+	for name in [u"Cod", u"NotăCod", u"FostCod", u"CodRan", u"Cod92", u"Denumire", u"Localitate", u"Adresă", u"Datare", u"Arhitect", u"Lat", u"Lon", u"Imagine", u"Commons"]:
+		if name in params and params[name] <> u"":
+			my_template += u"| " + name + u" = " + params[name] + u"\n"
+			
+	my_template += u"}}\n"
+	return my_template
 
 #TODO: Hardcoded order of parameters
 def updateTableData(url, code, field, newvalue, upload = True, text = None):
-	wikipedia.output("Uploading %s for %s; value \"%s\"" % (field, code, newvalue))
-	site = wikipedia.getSite()
-	title = urlparse.parse_qs(urlparse.urlparse(url).query)['title'][0]
-	page = wikipedia.Page(site, title)
+	pywikibot.output("Uploading %s for %s; value \"%s\"" % (field, code, newvalue))
+	site = pywikibot.getSite()
+	title = urlparse.parse_qs(urlparse.urlparse(str(url)).query)['title'][0].decode('utf8')
+	page = pywikibot.Page(site, title)
 	if text == None:
-		wikipedia.output("Getting page contents")
+		pywikibot.output("Getting page contents")
 		text = page.get()
 	oldtext = text
-	templates = page.templatesWithParams(thistxt=text)
+	#templates = page.templatesWithParams()
+	templates = pywikibot.extract_templates_and_params(text)
 	codeFound = False
-	orig = None
 	last = None
 	rawCode = None
-	#wikipedia.output("1")
+	my_params = {}
+	#pywikibot.output("1")
 	for (template, params) in templates:
 		if template==countries.get(('ro', 'ro')).get('rowTemplate'):
 			for param in params:
-				(fld, sep, val) = param.partition(u'=')
-				fld = fld.strip()
+				val = params[param]
+				fld = param.strip()
 				val = val.split("<ref")[0].strip()
 				val2 = re.sub(r'\s', '', val)
 				if fld == "Cod" and val2 == code:
 					codeFound = True
 					rawCode = val
-				elif fld == field:
-					orig = param.strip()
-				elif codeFound and orig == None and param == params[-1]: #keep the last element
-					last = param.strip()
+					my_params = params
+					break
 			if codeFound:
 				break
-			else:
-				orig = None
-	#wikipedia.output("2")
+	#pywikibot.output("2")
 	if not codeFound:
-		log(u"*''E'': ''[%s]'' Codul nu este prezent în [[%s|listă]]" % (code, title))
-		wikipedia.output(u"Code not found: %s" % code)
+		log(u"*''E'': ''[%s]'' Codul nu este prezent în [[%s|listă]]" % (rawCode, title))
+		pywikibot.output(u"Code not found: %s" % code)
 		return None
 	else:
-		wikipedia.output(u"\n" + str(params) + u"\n")
-	#wikipedia.output("3")
-	if orig != None:
-		new = field + " = " + newvalue
-	elif last != None:
-		orig = last
-		new = last + "\n| " + field + " = " + newvalue
-	else: #No orig, no last? Something wrong!
-		wikipedia.output("I don't have enough information to modify this template!")
-		return None
-	#wikipedia.output("4")
+		pywikibot.output(u"\n" + str(params) + u"\n")
+	#pywikibot.output("3")
+	orig = rebuildTemplate(my_params)
+	my_params[field] = newvalue
+	new = rebuildTemplate(my_params)
+	#pywikibot.output("4")
 	if orig.strip() == new.strip():
-		wikipedia.output("No change, nothing to upload!")
+		pywikibot.output("No change, nothing to upload!")
 		return text
-	#wikipedia.output("5")
-	wikipedia.showDiff(orig, new)
-	answer = wikipedia.input(u"Upload change? ([y]es/[n]o/[l]og)")
+	#pywikibot.output("5")
+	pywikibot.showDiff(orig, new)
+	answer = pywikibot.input(u"Upload change? ([y]es/[n]o/[l]og)")
 	if answer == 'y':
 		(before, code, after) = text.partition(rawCode)
-		after = after.replace(orig, new, 1)
-		text = "".join((before, code, after))
-		#wikipedia.output(text)
+		#we need to clean the whole template from both before and after
+		clivb = before.rfind(u"{{" + countries.get(('ro', 'ro')).get('rowTemplate'))
+		cliva = after.find(u"{{" + countries.get(('ro', 'ro')).get('rowTemplate'))
+		if cliva >= 0 and clivb >= 0:
+			after = after[cliva:]
+			before = before[:clivb]
+		else:
+			pywikibot.output("Could not find the current template, aborting!")
+			return text
+		after = new + after
+		text = "".join((before, after))
+		#pywikibot.output(text)
 		if upload == True:
 			comment = u"Actualizez câmpul %s în lista de monumente" % field
 			try:
 				page.put(text, comment)
-			except wikipedia.exceptions.EditConflict:
-				#try again
-				page.put(text, comment)
+			except pywikibot.exceptions.Error:
+				pywikibot.output("Some error occured, let's move on and hope for the best!")
 			return None
 	elif answer == 'l' or answer == '':
 		new = new.replace("\n", "<br/>")
 		log(u"*''W'': ''[%s]'' De verificat dacă înlocuirea câmpului ''%s'' cu ''%s'' este corectă (inclusiv legăturile adăugate)" % (code, orig, new))
-	#wikipedia.output("6")
+	#pywikibot.output("6")
 	return text
 
 def main():
 	f = open("lmi_db.json", "r+")
-	wikipedia.output("Reading database file...")
+	pywikibot.output("Reading database file...")
 	db = json.load(f)
-	wikipedia.output("...done")
+	pywikibot.output("...done")
 	f.close();
 
 	f = open("ro_pages.json", "r+")
-	wikipedia.output("Reading ro.wp pages file...")
+	pywikibot.output("Reading ro.wp pages file...")
 	pages_ro = json.load(f)
-	wikipedia.output("...done")
+	pywikibot.output("...done")
 	f.close();
 
 	f = open("ro_authors.json", "r+")
-	wikipedia.output("Reading ro.wp authors file...")
+	pywikibot.output("Reading ro.wp authors file...")
 	authors_ro = json.load(f)
-	wikipedia.output("...done")
+	pywikibot.output("...done")
 	f.close();
 
 	f = open("commons_Category_pages.json", "r+")
-	wikipedia.output("Reading commons categories file...")
+	pywikibot.output("Reading commons categories file...")
 	categories_commons = json.load(f)
-	wikipedia.output("...done")
+	pywikibot.output("...done")
 	f.close();
 
 	f = open("commons_File_pages.json", "r+")
-	wikipedia.output("Reading commons images file...")
+	pywikibot.output("Reading commons images file...")
 	pages_commons = json.load(f)
-	wikipedia.output("...done")
+	pywikibot.output("...done")
 	f.close();
 
 	initLog()
@@ -253,16 +264,16 @@ def main():
 			code = result[0][0]
 		else:
 			code = rawCode
-		wikipedia.output(code)
+		pywikibot.output(code)
 		allPages = list()
 		article = None
 		picture = None
 		pic_author = None
 		lmi92 = None
 		ran = None
-		#wikipedia.output(str(page))
+		#pywikibot.output(str(page))
 		try:
-			#wikipedia.output("OK: " + str(page[code]))
+			#pywikibot.output("OK: " + str(page[code]))
 			if code in pages_ro:
 				allPages.extend(pages_ro[code])
 				if len(allPages) > 1:
@@ -311,28 +322,29 @@ def main():
 			if code in categories_commons:
 				allPages.extend(categories_commons[code])
 				if len(categories_commons[code]) > 1:
-					msg = u"*''E'': ''[%s]'' Codului îi corespund mai multe categorii la Commons: " % code
+					msg = u"*''E'': ''[%s]'' Codului îi corespund mai multe categorii la Commons: <span lang=\"x-sic\">" % code
 					for page in categories_commons[code]:
-						msg += (u"[[:commons:%s]] " % page["name"])
+						msg += (u"[[:commons:%s]], " % page["name"])
+					msg += "</span>"
 					log(msg)
-			#wikipedia.output(str(allPages))
+			#pywikibot.output(str(allPages))
 		except Exception as e:
-			wikipedia.output("Error: " + str(e))
+			pywikibot.output("Error: " + str(e))
 			pass #ignore errors
 	
 		#monument name and link
 		if article <> None and article["name"] <> None and article["name"] <> "":
 			if monument["Denumire"].find("[[") == -1:
 				link = u"[[" + article["name"] + "|" + monument["Denumire"] + "]]"
-				#wikipedia.output(link)
+				#pywikibot.output(link)
 				articleText = updateTableData(monument["source"], code, "Denumire", link, text=articleText)
 			else: # check if the 2 links are the same
 				link = strainu.extractLink(monument["Denumire"])
 				if link == None:
 					log(u"*''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire" % code)
 				else:
-					page1 = wikipedia.Page(wikipedia.getSite(), link)
-					page2 = wikipedia.Page(wikipedia.getSite(), article["name"])
+					page1 = pywikibot.Page(pywikibot.getSite(), link)
+					page2 = pywikibot.Page(pywikibot.getSite(), article["name"])
 					if page1 <> page2 and \
 					(not page1.isRedirectPage() or page1.getRedirectTarget() <> page2) and \
 					(not page2.isRedirectPage() or page2.getRedirectTarget() <> page1):
@@ -343,9 +355,9 @@ def main():
 			#author = strainu.stripLink(article["author"]).strip()
 			author = article["author"].strip()
 			if author == None or author == "":
-				wikipedia.output("Wrong author link: \"%s\"@%s" % (article["author"], article["name"]))
+				pywikibot.output("Wrong author link: \"%s\"@%s" % (article["author"], article["name"]))
 			elif monument["Arhitect"] == "":
-				wikipedia.output(author)
+				pywikibot.output(author)
 				articleText = updateTableData(monument["source"], code, "Arhitect", author, text=articleText)
 			else:
 				a1 = author.strip()
@@ -364,10 +376,10 @@ def main():
 					else:
 						authors = author
 			if authors <> monument["Arhitect"]: # if something changed, update the text
-				wikipedia.output(authors)
+				pywikibot.output(authors)
 				articleText = updateTableData(monument["source"], code, "Arhitect", authors, text=articleText)
 			else:
-				wikipedia.output("The authors list is unchanged for %s: %s" % (code, authors))
+				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
 
 		elif pic_author <> None:
 			if pic_author <> strainu.stripLink(monument["Arhitect"]).strip():
@@ -375,7 +387,7 @@ def main():
 	
 		#image from Commons, none in the list
 		if picture <> None and monument["Imagine"].strip() == "":
-			#wikipedia.output("Upload?" + picture)
+			#pywikibot.output("Upload?" + picture)
 			if picture.find(':') < 0:#no namespace
 				picture = "File:" + picture
 			articleText = updateTableData(monument["source"], code, "Imagine", picture, text=articleText)
@@ -384,26 +396,26 @@ def main():
 			#from commons and we don't have a picture in the list
 			if picture == None and article <> None and article["image"] <> None and \
 			article["image"] <> "" and monument["Imagine"].strip() == "":
-				wikipedia.output(monument["Imagine"])
+				pywikibot.output(monument["Imagine"])
 				artimage = strainu.extractImageLink(article["image"]).strip()
 				if artimage == None or artimage == "":
-					wikipedia.output("Wrong image link: \"%s\"@%s" % (article["image"], article["name"]))
+					pywikibot.output("Wrong image link: \"%s\"@%s" % (article["image"], article["name"]))
 				if artimage.find(':') < 0:#no namespace
 					artimage = "File:" + artimage
-				#wikipedia.output("Upload?" + artimage)
+				#pywikibot.output("Upload?" + artimage)
 				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
 
 		if picture == None and monument["Imagine"].strip() == "":
 			#use image from article only if none is available (or was selected) 
 			#from commons and we don't have a picture in the list
 			if article <> None and article["image"] <> None and article["image"] <> "":
-				wikipedia.output(monument["Imagine"])
+				pywikibot.output(monument["Imagine"])
 				artimage = strainu.extractImageLink(article["image"]).strip()
 				if artimage == None or artimage == "":
-					wikipedia.output("Wrong article image link: \"%s\"@%s" % (article["image"], article["name"]))
+					pywikibot.output("Wrong article image link: \"%s\"@%s" % (article["image"], article["name"]))
 				if artimage.find(':') < 0:#no namespace
 					artimage = "File:" + artimage
-				#wikipedia.output("Upload?" + artimage)
+				#pywikibot.output("Upload?" + artimage)
 				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
 			#final option: choose a random image from commons
 			elif (code in pages_commons) and len(pages_commons[code]) > 0:
@@ -418,7 +430,7 @@ def main():
 			if monument["Commons"] == "":
 				articleText = updateTableData(monument["source"], code, "Commons", "commons:" + cat["name"], text=articleText)
 			elif monument["Commons"].strip() <> ("commons:" + cat["name"].strip()):
-				log(u"*''E'': ''[%s]'' Există mai multe categorii pentru acest cod: <span lang=\"x-sic\">[[:%s]] și [[:%s]]<span>" % (code, "commons:" + cat["name"], monument["Commons"]))
+				log(u"*''E'': ''[%s]'' Există mai multe categorii pentru acest cod: <span lang=\"x-sic\">[[:%s]] și [[:%s]]</span>" % (code, "commons:" + cat["name"], monument["Commons"]))
 	
 		#latitude and longitude
 		if monument["Lat"] == "":
@@ -436,7 +448,7 @@ def main():
 		for page in allPages:
 			if page["lat"] <> 0 and page["long"] <> 0:
 				if artLat <> 0: #this also means artLong <> 0
-					if math.fabs(artLat - page["lat"]) > 0.01 or math.fabs(artLong - page["long"]) > 0.01:
+					if math.fabs(artLat - page["lat"]) > 0.001 or math.fabs(artLong - page["long"]) > 0.001:
 						log(u"*''E'': ''[%s]'' Coordonate diferite între [[:%s]] (%f,%f) și [[:%s]] (%f,%f)" % (code, page["name"], page["lat"], page["long"], artCoord, artLat, artLong))
 						updateCoord = False
 				else:
@@ -445,7 +457,7 @@ def main():
 					artCoord = page["name"]
 				
 		if lat == 0 and artLat <> 0 and updateCoord:
-			wikipedia.output(str(artLat) + " " + str(artLong))
+			pywikibot.output(str(artLat) + " " + str(artLong))
 			articleText = updateTableData(monument["source"], code, "Lat", str(artLat), upload = False, text=articleText)
 			articleText = updateTableData(monument["source"], code, "Lon", str(artLong), upload = True, text = articleText)
 	
@@ -461,5 +473,5 @@ if __name__ == "__main__":
 	try:
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()
 	

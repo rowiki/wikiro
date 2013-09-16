@@ -2,8 +2,11 @@
 # -*- coding: utf-8  -*-
 
 import sys, json
-sys.path.append("..")
-import wikipedia
+#sys.path.append("..")
+import pywikibot
+#from pywikibot import pagegenerators
+#from pywikibot import config
+
 
 def split_code(code):
 	parts = code.split('-')
@@ -14,21 +17,21 @@ def split_code(code):
 
 def main():
 	f = open("lmi_db.json", "r+")
-	wikipedia.output("Reading database file...")
+	pywikibot.output("Reading database file...")
 	db = json.load(f)
-	wikipedia.output("...done")
+	pywikibot.output("...done")
 	f.close();
 	
 	f = open("commons_File_pages.json", "r+")
-	wikipedia.output("Reading commons images file...")
+	pywikibot.output("Reading commons images file...")
 	pages_commons = json.load(f)
-	wikipedia.output("...done")
+	pywikibot.output("...done")
 	f.close();
 	
 	f = open("ro_pages.json", "r+")
-	wikipedia.output("Reading articles file...")
+	pywikibot.output("Reading articles file...")
 	pages_ro = json.load(f)
-	wikipedia.output("...done")
+	pywikibot.output("...done")
 	f.close();
 	
 	images = 0
@@ -52,6 +55,10 @@ def main():
 		if county == None:
 			print monument
 			continue
+		if county == "B":
+			i = monument["source"].find(u"sector")
+			sector = monument["source"][i+7:i+8]
+			county = county + sector
 		
 		if monument["Denumire"].find("[[") >= 0:
 			articles += 1
@@ -119,9 +126,13 @@ def main():
 			coords += 1
 		if monument["Arhitect"] <> "":
 			authors += 1
+			
+	total_images = 0
+	for mon in pages_commons:
+		total_images += len(pages_commons[mon])
 	
+	print "Total imagini: %d" % total_images
 	print "Imagini: %d/%d (%f%%)" % (images, total, images * 100.0 / total)
-	print "Potențial imagini: %d" % len(pages_commons)
 	print "Coordonate: %d/%d (%f%%)" % (coords, total, coords * 100.0 / total)
 	print "Arhitect: %d/%d (%f%%)" % (authors, total, authors * 100.0 / total)
 	print "Articole: %d/%d (%f%%)" % (articles, total, articles * 100.0 / total)
@@ -130,7 +141,7 @@ def main():
 	image_keys = image_county.keys()
 	image_keys.sort()
 	for county in image_keys:
-		print "Imagini pentru judetul %s: %f%%" % (county, image_county[county] * 100.0 / total_county[county])
+		print "Imagini pentru judetul %s: %f%% (%d/%d)" % (county, image_county[county] * 100.0 / total_county[county], image_county[county], total_county[county])
 	for nature in image_nature.keys():
 		print "Imagini pentru monumente de %s: %f%%" % (nature, image_nature[nature] * 100.0 / total_nature[nature])
 	for type in image_type.keys():
@@ -142,5 +153,5 @@ if __name__ == "__main__":
 	try:
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()
 

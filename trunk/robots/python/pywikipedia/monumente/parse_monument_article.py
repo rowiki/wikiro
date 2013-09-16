@@ -14,11 +14,13 @@ import json
 import string
 import cProfile
 import re
+
+import pywikibot
+from pywikibot import pagegenerators
+from pywikibot import config as user
+from pywikibot import catlib
+
 sys.path.append("..")
-import wikipedia
-import pagegenerators
-import catlib
-import config as user
 import strainu_functions as strainu
 
 options = {
@@ -95,6 +97,7 @@ options = {
 		'codeTemplateParams': 
 		[
 			u'lmi92',
+			u'ran',
 		],
 		'infoboxes': 
 		[
@@ -135,7 +138,7 @@ def closeLog():
 	_flog.close()
 
 def log(string):
-	#wikipedia.output(string.encode("utf8") + "\n")
+	#pywikibot.output(string.encode("utf8") + "\n")
 	_flog.write(string.encode("utf8") + "\n")
 
 def dms2dec(deg, min, sec, sign):
@@ -152,8 +155,8 @@ def geosign(check, plus, minus):
 def parseGeohackLinks(page):
 	#title = page.title()
 	#html = page.site().getUrl( "/wiki/" + page.urlname(), True)
-	output = page.site().getUrl("/w/api.php?action=parse&format=json&page=" +
-			page.urlname() + "&prop=externallinks&uselang=ro")
+	output = pywikibot.comms.http.request(page.site, "/w/api.php?action=parse&format=json&page=" +
+			page.title(asUrl=True) + "&prop=externallinks&uselang=ro")
 	linksdb = json.loads(output)
 	title = linksdb["parse"]["title"]
 	links = linksdb["parse"]["externallinks"]
@@ -166,7 +169,7 @@ def parseGeohackLinks(page):
 			#print geohack_match.group(3)
 			break
 	if geohack_match == None or link == None or link == "":
-		#wikipedia.output("No geohack link found in article")
+		#pywikibot.output("No geohack link found in article")
 		return 0,0
 	#valid formats:
 	# D_M_S_N_D_M_S_E
@@ -196,7 +199,7 @@ def parseGeohackLinks(page):
 			return 0,0
 	elif numElem == 9: # D_N_D_E_to_D_N_D_E or D_M_S_N_D_M_S_E_something
 		if tokens[4] <> "to":
-			wikipedia.output(u"*[[%s]] We should ignore parameter 9: %s (%s)" %
+			pywikibot.output(u"*[[%s]] We should ignore parameter 9: %s (%s)" %
 							(title, tokens[8], link))
 			deg1 = float(tokens[0])
 			min1 = float(tokens[1])
@@ -314,16 +317,16 @@ def formatAuthor(author):
 
 def processArticle(text, page, conf):
 	title = page.title()
-	wikipedia.output(u'Working on "%s"' % title)
+	pywikibot.output(u'Working on "%s"' % title)
 	global codeRegexp
 	code = checkAllCodes(re.findall(codeRegexp, text), title)
 	if code is None: #no valid code
-		wikipedia.output("No valid code in page " + title)
+		pywikibot.output("No valid code in page " + title)
 		return
 	elif code == "": #more than one code, juse use the one that is marked as {{codLMI|code}}
 		code = checkAllCodes(re.findall(templateRegexp, text), title, False)
 		if code is None or code == "": # either no code or more than one code is marked; just ignore
-			   wikipedia.output("Too many codes in page " + title)
+			   pywikibot.output("Too many codes in page " + title)
 			   return
 	if re.search(errorRegexp, text) <> None:
 		log(u"*''E'': [[:%s]] a fost marcat de un editor ca având o eroare în" \
@@ -368,14 +371,14 @@ def processArticle(text, page, conf):
 			author = None
 		else:
 			author = author[:-2] #remove the final comma
-			#wikipedia.output(author)
+			#pywikibot.output(author)
 		if box['image'] in _dict and _dict[box['image']].strip() <> "":
 			#TODO:prefix with the namespace
 			image = _dict[box['image']]
-			#wikipedia.output(image)
+			#pywikibot.output(image)
 		if box['ran'] in _dict and _dict[box['ran']].strip() <> "":
 			ran = _dict[box['ran']]
-			#wikipedia.output(ran)
+			#pywikibot.output(ran)
 		if author <> None and image <> None and ran <> None:
 			break # stop only if we have all the information we need
 
@@ -383,17 +386,18 @@ def processArticle(text, page, conf):
 	# if there are images in the article, use the first image
 	# I'm deliberately skipping images in templates (they have been treated
 	# above) and galleries, which usually contain non-selected images
-		for img in page.linkedPages(withImageLinks = True):
-			if img.isImage() and image == None:
-				image = img.title()
-				break
+	#	for img in page.imagelinks(total=1):
+		for img in strainu.linkedImages(page):
+			#print img
+			image = img.title()
+			break
 				
 	dictElem = {'name': title,
-				'project': page.site().language(),
+				'project': user.mylang,
 				'lat': lat, 'long': long,
 				'author': author, 'image': image,
 				'quality': quality,
-				'lastedit': page.editTime(),
+				'lastedit': page.editTime().totimestampformat(),
 				'code': code,
 				'ran': ran
 			   }
@@ -427,7 +431,7 @@ def main():
 	parse_type = PARSE_NORMAL
 	preload = True
 
-	for arg in wikipedia.handleArgs():
+	for arg in pywikibot.handleArgs():
 		if arg.startswith('-lang:'):
 			lang = arg [len('-lang:'):]
 			user.mylang = lang
@@ -442,15 +446,15 @@ def main():
 				parse_type = PARSE_QUICK
 				preload = False
 
-	site = wikipedia.getSite()
-	lang = site.language()
+	site = pywikibot.getSite()
+	lang = user.mylang
 	if not options.get(lang):
-		wikipedia.output(u'I have no options for language "%s"' % lang)
+		pywikibot.output(u'I have no options for language "%s"' % lang)
 		return False
 
 	langOpt = options.get(lang)
 
-	rowTemplate = wikipedia.Page(site, u'%s:%s' % (site.namespace(10), \
+	rowTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), \
 								langOpt.get('codeTemplate')))
 	global _log
 	global fullDict
@@ -468,16 +472,16 @@ def main():
 
 	for namespace in langOpt.get('namespaces'):
 		transGen = pagegenerators.ReferringPageGenerator(rowTemplate,
-									onlyTemplateInclusion=True)
+									onlyTemplateInclusion=True, step=1000)
 		#transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, "Category:Schitul_Crivina"))
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen,
 									[namespace], site)
 		if preload:
-			pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 250)
+			pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 125)
 		else:
 			pregenerator = filteredGen
 
-		#page = wikipedia.Page(site, "File:Biserica_Sf._Maria,_sat_Drumul_Carului,_'La_Cetate'-Gradistea._Moeciu,_jud._BRASOV.jpg")
+		#page = pywikibot.Page(site, "File:Biserica_Sf._Maria,_sat_Drumul_Carului,_'La_Cetate'-Gradistea._Moeciu,_jud._BRASOV.jpg")
 		count = 0
 		if namespace == 0:
 			namespaceName = ""
@@ -519,7 +523,7 @@ def main():
 					useCache = True
 				elif parse_type == PARSE_NORMAL:
 					# if we preloaded the page, we already have the time
-					pageEdit = page.editTime(force=(not preload))
+					pageEdit = page.editTime().totimestampformat()
 					if int(pageEdit) <= int(lastedit):
 						useCache = True
 				else:
@@ -529,12 +533,13 @@ def main():
 					fullDict[code].append(content)
 				else:
 					fullDict[code] = [content]
-				wikipedia.output(u'Skipping "%s"' % page.title())
+				pywikibot.output(u'Skipping "%s"' % page.title())
 				continue
 			elif page.exists() and not page.isRedirectPage():
 				processArticle(page.get(), page, langOpt)
 				count += 1
 		print count
+		#print fullDict
 		f = open(filename, "w+")
 		json.dump(fullDict, f, indent = 2)
 		f.close();
@@ -546,4 +551,4 @@ if __name__ == "__main__":
 		#cProfile.run('main()', './parseprofile.txt')
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()

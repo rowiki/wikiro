@@ -3,10 +3,14 @@
 import locale
 import sys
 import json
+import re
+import urllib
+
 sys.path.append("..")
-import wikipedia, re, pagegenerators
-import config as user
 import strainu_functions as strainu
+import pywikibot
+from pywikibot import pagegenerators
+from pywikibot import config as user
 
 pageText = u"[[Fișier:Monument istoric.svg|thumb|100px|Simbol pentru monumentele istorice]]\n"\
 u"'''Lista monumentelor istorice din județul {0}''' cuprinde "\
@@ -117,12 +121,12 @@ def custom_compare(item1, item2):
 def main():
 	locale.setlocale(locale.LC_ALL, "")
 	f = open("lmi_db.json", "r+")
-	wikipedia.output("Reading database file...")
+	pywikibot.output("Reading database file...")
 	db = json.load(f)
-	wikipedia.output("...done")
+	pywikibot.output("...done")
 	f.close();
 	
-	county = "Sibiu"
+	county = u"Argeș"
 	
 	pages_txt = {
             u"1": [], u"2": [], u"3": [], u"4": [], u"5": [], 
@@ -142,9 +146,10 @@ def main():
             u"P": [], u"R": [], u"S": [], u"Ș": [], u"T": [], 
             u"Ț": [], u"U": [], u"V": [], u"Z": [], u"*": [],
 	}
-
+	
+	cnt = urllib.quote(county.encode("utf8"))
 	for monument in db:
-		if monument["source"].find(county) == -1:
+		if monument["source"].find(cnt) == -1:
 			continue
 		first_link_end = monument['Localitate'].find(u']')+2
 		if first_link_end > 1:
@@ -160,7 +165,7 @@ def main():
 		pages_txt[first].append(monument)
 		villages[first].append(village)
 		
-	site = wikipedia.getSite()
+	site = pywikibot.getSite()
 	
 	title = u"Lista monumentelor istorice din județul %s" % county
 	prefix = pageText.format(county)
@@ -169,7 +174,7 @@ def main():
 	letters = villages.keys()
 	letters.sort(cmp=locale.strcoll)
 	
-	page = wikipedia.Page(site, title)
+	page = pywikibot.Page(site, title)
 	text = prefix + search
 	text += u"{| border=\"0\" cellpadding=\"2\" cellspacing=\"1\" "\
 u"align=\"center\" style=\"margin-left:1em; background:#ffffff;\" "\
@@ -202,7 +207,7 @@ u"width=\"100%\"\n|- align=\"center\""
 			continue
 		title_l = title + u" - %s" % letter
 		
-		page_l = wikipedia.Page(site, title_l)
+		page_l = pywikibot.Page(site, title_l)
 		text_l = letterPageText.format(county, letter)
 		pages_txt[letter].sort(cmp=custom_compare)
 		text_l += search + \

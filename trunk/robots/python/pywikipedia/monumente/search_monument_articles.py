@@ -5,12 +5,14 @@ Search for all the pages in a given wiki that contain a LMI code
 
 '''
 
-import sys, time, warnings, json, string
+import sys, time, warnings, json, string, re
 import cProfile
 sys.path.append("..")
-import wikipedia, re, pagegenerators
-import config as user
+#sys.path.append("..")
 import strainu_functions as strainu
+import pywikibot
+from pywikibot import pagegenerators
+from pywikibot import config as user
 
 codeRegexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
 templateRegexp = re.compile("\{\{([aA]utorCodLMI|[cC]odLMI)")
@@ -31,7 +33,7 @@ def log(string):
 
 def processArticle(page):
 	text = page.get()
-	# wikipedia.output(u'Working on "%s"' % title)
+	# pywikibot.output(u'Working on "%s"' % title)
 	global codeRegexp
 	global templateRegexp
 	result  = re.findall(codeRegexp, text)
@@ -41,14 +43,14 @@ def processArticle(page):
 		for res in result:
 			msg += res[0] + ", "
 		log(msg)
-		wikipedia.output(msg)
+		pywikibot.output(msg)
 		
 def main():
 	lang = u'ro'
 	textfile = u''
 	start = "!"
 
-	for arg in wikipedia.handleArgs():
+	for arg in pywikibot.handleArgs():
 		if arg.startswith('-lang:'):
 			lang = arg [len('-lang:'):]
 			user.mylang = lang
@@ -57,7 +59,7 @@ def main():
 		if arg.startswith('-start'):
 			start = arg [len('-start:'):]
 	
-	site = wikipedia.getSite()
+	site = pywikibot.getSite()
 	lang = site.language()
 	
 	global _log
@@ -66,15 +68,15 @@ def main():
 	transGen = pagegenerators.AllpagesPageGenerator(start, includeredirects=False)
 	pregenerator = pagegenerators.PreloadingGenerator(transGen, 100)
 		
-	#page = wikipedia.Page(site, "File:Biserica_Sf._Maria,_sat_Drumul_Carului,_'La_Cetate'-Gradistea._Moeciu,_jud._BRASOV.jpg")
+	#page = pywikibot.Page(site, "File:Biserica_Sf._Maria,_sat_Drumul_Carului,_'La_Cetate'-Gradistea._Moeciu,_jud._BRASOV.jpg")
 	count = 0
 	for page in pregenerator:
 		# Do some checking
 		processArticle(page)
 		count += 1
 		if count % 100 == 0:
-			wikipedia.output(page.title())
-			time.sleep(3)
+			pywikibot.output(page.title())
+			#time.sleep(3)
 	closeLog()
 
 if __name__ == "__main__":
@@ -82,4 +84,4 @@ if __name__ == "__main__":
 		#cProfile.run('main()', './parseprofile.txt')
 		main()
 	finally:
-		wikipedia.stopme()
+		pywikibot.stopme()
