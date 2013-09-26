@@ -2,6 +2,7 @@
 # -*- coding: utf-8  -*-
 
 import sys, json
+import operator
 #sys.path.append("..")
 import pywikibot
 #from pywikibot import pagegenerators
@@ -81,7 +82,7 @@ def main():
 		elif type == "s":
 			type = "situri"
 		elif type == "a":
-			type = "amsambluri"
+			type = "ansambluri"
 		else:
 			type = "eroare tip"
 			print type
@@ -138,16 +139,20 @@ def main():
 	print "Articole: %d/%d (%f%%)" % (articles, total, articles * 100.0 / total)
 	print "Potențial articole: %d" % len(pages_ro)
 
-	image_keys = image_county.keys()
-	image_keys.sort()
-	for county in image_keys:
-		print "Imagini pentru judetul %s: %f%% (%d/%d)" % (county, image_county[county] * 100.0 / total_county[county], image_county[county], total_county[county])
 	for nature in image_nature.keys():
 		print "Imagini pentru monumente de %s: %f%%" % (nature, image_nature[nature] * 100.0 / total_nature[nature])
 	for type in image_type.keys():
 		print "Imagini pentru %s: %f%%" % (type, image_type[type] * 100.0 / total_type[type])
 	for interest in image_interest.keys():
 		print "Imagini pentru monumente de interes %s: %f%%" % (interest, image_interest[interest] * 100.0 / total_interest[interest])
+	#image_keys = image_county.keys()
+	#image_keys.sort()
+	images_percent = {}
+	for county in image_county.keys():
+		images_percent[county] = image_county[county] * 100.0 / total_county[county]
+	sorted_images = sorted(images_percent.iteritems(), key=operator.itemgetter(1), reverse=True)
+	for county,number in sorted_images:
+		print "Imagini pentru judetul %s: %f%% (%d/%d)" % (county, number , image_county[county], total_county[county])
 
 if __name__ == "__main__":
 	try:
