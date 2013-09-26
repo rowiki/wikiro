@@ -26,83 +26,24 @@ countries = {
 	    'table' : u'monuments_ro_(ro)',
 	    'truncate' : False, 
 	    'primkey' : u'Cod',
-	    'fields' : [
-		    {
-		    'source' : u'Cod',
-		    'dest' : u'cod',
-		    'conv' : u'',
+	    'fields' : {
+		    u'Cod': u'Cod',
+		    u'Denumire': u'Denumire',
+		    u'Localitate': u'Localitate',
+		    u'Adresă': u'Adresă',
+		    u'Datare': u'Datare',
+		    u'Arhitect': u'Arhitect',
+		    u'Creatori': u'Arhitect',
+		    u'Lat': u'Lat',
+		    u'Coordonate': u'Coordonate',
+		    u'Lon': u'Lon',
+		    u'Imagine': u'Imagine',
+		    u'Commons': u'Commons',
+		    u'NotăCod': u'Notăcod',
+		    u'FostCod': u'FostCod',
+		    u'Cod92': u'Cod92',
+		    u'CodRan': u'CodRan',
 		    },
-		    {
-		    'source' : u'Denumire',
-		    'dest' : u'denumire',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Localitate',
-		    'dest' : u'localitate',
-		    'conv' : u'',
-		    },
-			    {
-		    'source' : u'Adresă',
-		    'dest' : u'adresa',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Datare',
-		    'dest' : u'datare',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Arhitect',
-		    'dest' : u'arhitect',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Lat',
-		    'dest' : u'lat',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Coordonate',
-		    'dest' : u'',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Lon',
-		    'dest' : u'lon',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Imagine',
-		    'dest' : u'imagine',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Commons',
-		    'dest' : u'commons',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'NotăCod',
-		    'dest' : u'notacod',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'FostCod',
-		    'dest' : u'fostcod',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Cod92',
-		    'dest' : u'cod92',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'CodRan',
-		    'dest' : u'codran',
-		    'conv' : u'',
-		    },
-		    ],
 	},
 }
 
@@ -117,8 +58,9 @@ def processMonument(params, source, countryconfig, title):
 	contents = {}
 	# Add the source of information (permalink)
 	contents['source'] = source
-	for field in countryconfig.get('fields'):
-		contents[field.get(u'source')]=u''
+	fields = countryconfig.get('fields')
+	for field in fields:
+		contents[fields[field]] = u''
 
 	for param in params:
 		# Remove leading or trailing spaces
@@ -127,20 +69,20 @@ def processMonument(params, source, countryconfig, title):
 		
 		#Check first that field is not empty
 		if field:
-				#Is it in the fields list?
-				if field in contents:
-					#Load it with Big fucking escape hack. Stupid mysql lib
-					if field == "Cod":
-						contents[field] = re.sub(r'\s', '', value.encode("utf8")) # Do this somewhere else.replace("'", "\\'")
-					else:
-						contents[field] = value.encode("utf8") # Do this somewhere else.replace("'", "\\'")
+			#Is it in the fields list?
+			if field in fields:
+				#Load it with Big fucking escape hack. Stupid mysql lib
+				if field == "Cod":
+					contents[field] = re.sub(r'\s', '', value.encode("utf8")) # Do this somewhere else.replace("'", "\\'")
 				else:
-					#FIXME: Include more information where it went wrong
-					pywikibot.output(u'Found unknown field: %s on page %s' % (field, title) )
-					pywikibot.output(u'Field: %s' % field)
-					pywikibot.output(u'Value: %s' % value)
-					pywikibot.output(u'Params: %s\n%s' % (params, param))
-					#time.sleep(5)
+					contents[field] = value.encode("utf8") # Do this somewhere else.replace("'", "\\'")
+			else:
+				#FIXME: Include more information where it went wrong
+				pywikibot.output(u'Found unknown field: %s on page %s' % (field, title) )
+				pywikibot.output(u'Field: %s' % field)
+				pywikibot.output(u'Value: %s' % value)
+				pywikibot.output(u'Params: %s\n%s' % (params, param))
+				#time.sleep(5)
 	return contents
 
 def processText(source, countryconfig, page=None):
