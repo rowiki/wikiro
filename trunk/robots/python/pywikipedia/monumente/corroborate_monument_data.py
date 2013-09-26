@@ -258,7 +258,7 @@ def main():
 			articleText = None
 			lastSource = monument["source"]
 		rawCode = monument["Cod"]
-		regexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2})?))", re.I)
+		regexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
 		result = re.findall(regexp, rawCode)
 		if len(result) > 0:
 			code = result[0][0]
@@ -387,7 +387,7 @@ def main():
 	
 		#image from Commons, none in the list
 		if picture <> None and monument["Imagine"].strip() == "":
-			#pywikibot.output("Upload?" + picture)
+			pywikibot.output("Upload?" + picture)
 			if picture.find(':') < 0:#no namespace
 				picture = "File:" + picture
 			articleText = updateTableData(monument["source"], code, "Imagine", picture, text=articleText)
