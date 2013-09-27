@@ -1,4 +1,4 @@
-package info.astroe.populationdb.p2011;
+package info.astroe.populationdb.ro.p2011;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -90,8 +90,8 @@ public class SirutaParser {
                     crtJudetId = rs.getInt("id");
                 }
                 conn2.close();
-                if ("MUNICIPIUL BUCUREȘTI".equals(eachLine[1])) {
-                    nume = "BUCUREȘTI";
+                if ("MUNICIPIUL BUCURE�?TI".equals(eachLine[1])) {
+                    nume = "BUCURE�?TI";
                     crtJudetId++;
 
                 }
@@ -102,7 +102,7 @@ public class SirutaParser {
                 insertJud.executeUpdate();
 
             } else if (Arrays.asList("1", "2", "3", "4").contains(eachLine[5])
-                || ("MUNICIPIUL BUCUREȘTI".equals(eachLine[1]) && "9".equals(eachLine[5]))) {
+                || ("MUNICIPIUL BUCURE�?TI".equals(eachLine[1]) && "9".equals(eachLine[5]))) {
                 int utaType = Integer.parseInt(eachLine[5]);
                 utaType = (9 == utaType) ? 1 : utaType;
                 utaType = 1 + ((utaType - 1) % 3);
@@ -114,10 +114,10 @@ public class SirutaParser {
                     break;
                 case 2:
                     System.out.println(eachLine[1] + " identificat ca oraș");
-                    name = eachLine[1].substring("ORAȘ ".length()).trim();
+                    name = eachLine[1].substring("ORA�? ".length()).trim();
                     break;
                 default:
-                    System.out.println(eachLine[1] + " identificată drept comună");
+                    System.out.println(eachLine[1] + " identificat�? drept comun�?");
                     name = eachLine[1].trim();
                     break;
                 }
@@ -151,6 +151,6 @@ public class SirutaParser {
     }
 
     private static String removeDiacritics(final String s) {
-        return s.replace("Ă", "A").replace("Ș", "S").replace("Ț", "T").replace("Î", "I").replace("Â", "A");
+        return s.replace("Ă", "A").replace("�?", "S").replace("Ț", "T").replace("Î", "I").replace("Â", "A");
     }
 }
