@@ -105,7 +105,7 @@ public class WikiTextGenerator2011 {
     public static void main(final String[] args) {
         // generateCounty(/* 10, 11, 12, 14 , 26 ,28 , */41 /**/);
 
-        for (int i = 5; i < 28; i++) {
+        for (int i = 40; i < 42; i++) {
             generateCounty(i);
         }
 
@@ -213,7 +213,8 @@ public class WikiTextGenerator2011 {
                 int histSectionIndex = -1;
                 for (final Object key : sectionMap.keySet()) {
                     if (Arrays.asList("Demografie istorică", "Populație istorică", "Istoricul populației",
-                        "Demografie (istoric)", "Demografie (evoluție istorică)", "Demografie (evoluția istorică)").contains(sectionMap.get(key))) {
+                        "Demografie (istoric)", "Demografie (evoluție istorică)", "Demografie (evoluția istorică)")
+                        .contains(sectionMap.get(key))) {
                         histSectionIndex = i;
                     }
                     i++;
@@ -266,7 +267,8 @@ public class WikiTextGenerator2011 {
                         params.put("recensământ", "[[Recensământul populației din 2011 (România)|2011]]");
                         params.put("populație",
                             getTendencyTemplate(uta.getPopulation()) + String.valueOf(uta.getPopulation()));
-                        if (params.get("population_blank1_title") == null) {
+                        if (params.get("population_blank1_title") == null
+                            || StringUtils.equals(params.get("population_blank1_title"), "Rezultate provizorii 2011")) {
                             params.put("population_blank1_title",
                                 "[[Recensământul populației din 2002 (România)|Recensământul anterior, 2002]]");
                             params.put("population_blank1", String.valueOf(pop2002) + " locuitori");
@@ -280,7 +282,7 @@ public class WikiTextGenerator2011 {
                     }
 
                     final StringBuilder poprefBuilder = new StringBuilder("<ref name=\"kia.hu\"");
-                    if (!generateDemographySection && StringUtils.countMatches(pageText, "<ref name=\"kia.hu\">") >= 2) {
+                    if (!generateDemographySection && StringUtils.countMatches(pageText, "<ref name=\"kia.hu\">") < 2) {
                         poprefBuilder
                         .append(">{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recensământul Populației și al Locuințelor 2002 - populația unităților administrative pe etnii|publisher=K");
                         poprefBuilder.append(StringUtils.lowerCase("ULTURÁLIS "));
@@ -295,7 +297,7 @@ public class WikiTextGenerator2011 {
                     }
                     poprefBuilder.append("<ref name=\"insse_2011_nat\"");
                     if (!generateDemographySection
-                        && StringUtils.countMatches(pageText, "<ref name=\"insse_2011_nat\">") >= 2) {
+                        && StringUtils.countMatches(pageText, "<ref name=\"insse_2011_nat\">") < 2) {
 
                         poprefBuilder
                         .append(">Rezultatele finale ale Recensământului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabilă după etnie – județe, municipii, orașe, comune|publisher=[[Institutul Național de Statistică]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
@@ -346,10 +348,8 @@ public class WikiTextGenerator2011 {
                             if (whereToInsertPlotDataLabel < 0) {
                                 break;
                             }
-                            templateTextBuilder.insert(
-                                whereToInsertPlotDataLabel,
-                                "\n  bar:2011 at: " + uta.getPopulation() + " fontsize:S text: "
-                                    + popNumberFormatter.format(uta.getPopulation()) + " shift:(-15,5)");
+                            templateTextBuilder.insert(whereToInsertPlotDataLabel, "\n  bar:2011 at: " + uta.getPopulation()
+                                + " fontsize:S text: " + popNumberFormatter.format(uta.getPopulation()) + " shift:(-15,5)");
                             wiki.edit(historicalPopTemplateTitle, templateTextBuilder.toString(),
                                 "Robot: adăugare date recensământ 2011");
                         }
@@ -366,7 +366,7 @@ public class WikiTextGenerator2011 {
                         "Amplasare", "Amplasarea", "Date geografice", "Poziție", "Poziția");
                     final List<String> sectionsAfter = Arrays.asList("Monumente istorice", "Atracții turistice",
                         "Personalități", "Note", "Vezi și", "Legături externe", "Bibliografie", "Imagini",
-                        "Galerie de imagini");
+                        "Galerie de imagini", "Referințe");
 
                     String preSection = null;
                     String postSection = null;
@@ -390,7 +390,7 @@ public class WikiTextGenerator2011 {
                     if (preSection != null) {
                         final String sectionText = wiki.getSectionText(articleTitle, preSectionIndex);
                         final StringBuilder sectionTextBuilder = new StringBuilder(sectionText);
-                        sectionTextBuilder.append("\n\n== Demografie ==\n");
+                        sectionTextBuilder.append("\n== Demografie ==\n");
                         sectionTextBuilder.append(StringUtils.chomp(StringUtils.trim(wikiText)));
 
                         newPageText = newPageText.replace(sectionText, sectionTextBuilder.toString());
@@ -399,7 +399,7 @@ public class WikiTextGenerator2011 {
                     } else if (postSection != null) {
                         final String sectionText = wiki.getSectionText(articleTitle, postSectionIndex);
                         final StringBuilder sectionTextBuilder = new StringBuilder(sectionText);
-                        sectionTextBuilder.insert(0, "\n\n");
+                        sectionTextBuilder.insert(0, "\n");
                         sectionTextBuilder.insert(0, StringUtils.chomp(StringUtils.trim(wikiText)));
                         sectionTextBuilder.insert(0, "\n== Demografie ==\n");
 
@@ -414,6 +414,7 @@ public class WikiTextGenerator2011 {
                         endIndices.add(StringUtils.indexOf(newPageText, "{{județ"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{" + capitalizeName(uta.getName())));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Comuna"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{Casete de navigare"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orașe"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orase"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{DN"));
@@ -437,7 +438,7 @@ public class WikiTextGenerator2011 {
                     final String talkPageTitle = wiki.getTalkPage(articleTitle);
 
                     String talkPageText = wiki.exists(talkPageTitle)[0] ? wiki.getPageText(talkPageTitle) : "";
-                    if (!talkPageText.contains("== Noi date demografice 2011 ==")) {
+                    if (!talkPageText.contains("== Noi date demografice 2011 ==") && !pageText.contains("{{Pie chart")) {
                         talkPageText += "\n== Noi date demografice 2011 ==\n" + wikiText;
                         wiki.edit(talkPageTitle, talkPageText,
                             "Robot: propunere text actualizat pentru secțiunea demografie");
@@ -485,6 +486,7 @@ public class WikiTextGenerator2011 {
                         endIndices.add(StringUtils.indexOf(newPageText, "{{județ"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{" + capitalizeName(uta.getName())));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Comuna"));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{Casete de navigare"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orașe"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orase"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{DN"));
