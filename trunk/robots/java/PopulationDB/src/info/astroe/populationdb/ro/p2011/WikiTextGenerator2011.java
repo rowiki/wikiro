@@ -1,9 +1,9 @@
-package info.astroe.populationdb.p2011;
+package info.astroe.populationdb.ro.p2011;
 
-import info.astroe.populationdb.Nationality;
-import info.astroe.populationdb.PopulationDb2002Entry;
-import info.astroe.populationdb.Religion;
-import info.astroe.populationdb.UTAType;
+import info.astroe.populationdb.ro.p2002.Nationality;
+import info.astroe.populationdb.ro.p2002.PopulationDb2002Entry;
+import info.astroe.populationdb.ro.p2002.Religion;
+import info.astroe.populationdb.ro.p2002.UTAType;
 
 import java.awt.Color;
 import java.awt.Paint;
@@ -57,11 +57,11 @@ public class WikiTextGenerator2011 {
     private final static Map<String, Paint> religionMap = new HashMap<String, Paint>();
 
     private static Pattern regexCCR = Pattern
-        .compile("\\{\\{((C|c)utie Comune România|(C|c)aset(a|ă) comune Rom(a|â)nia)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
+        .compile("\\{\\{((C|c)utie Comune România|(C|c)aset(a|�?) comune Rom(a|â)nia)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
     private static Pattern regexInfocAsezare = Pattern
-        .compile("\\{\\{(?:(?:C|c)asetă așezare|(?:I|i)nfocaseta Așezare|(?:C|c)utie așezare)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
+        .compile("\\{\\{(?:(?:C|c)aset�? așezare|(?:I|i)nfocaseta Așezare|(?:C|c)utie așezare)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
     private static Pattern footnotesRegex = Pattern
-        .compile("\\{\\{(?:(?:L|l)istănote|(?:R|r)eflist)|(?:\\<\\s*references\\s*\\/\\>)");
+        .compile("\\{\\{(?:(?:L|l)ist�?note|(?:R|r)eflist)|(?:\\<\\s*references\\s*\\/\\>)");
 
     private static int pop2002 = -1;
     private static Wiki wiki;
@@ -212,8 +212,8 @@ public class WikiTextGenerator2011 {
                 int i = 1;
                 int histSectionIndex = -1;
                 for (final Object key : sectionMap.keySet()) {
-                    if (Arrays.asList("Demografie istorică", "Populație istorică", "Istoricul populației",
-                        "Demografie (istoric)", "Demografie (evoluție istorică)", "Demografie (evoluția istorică)")
+                    if (Arrays.asList("Demografie istoric�?", "Populație istoric�?", "Istoricul populației",
+                        "Demografie (istoric)", "Demografie (evoluție istoric�?)", "Demografie (evoluția istoric�?)")
                         .contains(sectionMap.get(key))) {
                         histSectionIndex = i;
                     }
@@ -221,7 +221,7 @@ public class WikiTextGenerator2011 {
                 }
                 String histSectionText = null;
                 if (histSectionIndex > 0) {
-                    histDemog.append("\n=== Evoluție istorică ===\n");
+                    histDemog.append("\n=== Evoluție istoric�? ===\n");
                     histSectionText = wiki.getSectionText(articleTitle, histSectionIndex);
                     final String histSectionBody = StringUtils.substringAfter(histSectionText, "==\n");
                     histDemog.append(StringUtils.replace(histSectionBody, "===", "===="));
@@ -240,7 +240,7 @@ public class WikiTextGenerator2011 {
                     final Matcher ccrMatcher = regexCCR.matcher(pageText);
                     if (ccrMatcher.find()) {
                         infoboxText = ccrMatcher.group();
-                        infoboxName = "Casetă comune România";
+                        infoboxName = "Caset�? comune România";
                     }
                 }
                 String newInfoboxText = infoboxText;
@@ -260,22 +260,22 @@ public class WikiTextGenerator2011 {
                             params.put("tip_asezare", "[[Orașele României|Oraș]]");
                             break;
                         case COMUNA:
-                            params.put("tip_asezare", "[[Comunele României|Comună]]");
+                            params.put("tip_asezare", "[[Comunele României|Comun�?]]");
                         }
                         params.put("tip_cod_clasificare", "[[SIRUTA]]");
                         params.put("cod_clasificare", String.valueOf(uta.getSiruta()));
-                        params.put("recensământ", "[[Recensământul populației din 2011 (România)|2011]]");
+                        params.put("recens�?mânt", "[[Recens�?mântul populației din 2011 (România)|2011]]");
                         params.put("populație",
                             getTendencyTemplate(uta.getPopulation()) + String.valueOf(uta.getPopulation()));
                         if (params.get("population_blank1_title") == null
                             || StringUtils.equals(params.get("population_blank1_title"), "Rezultate provizorii 2011")) {
                             params.put("population_blank1_title",
-                                "[[Recensământul populației din 2002 (România)|Recensământul anterior, 2002]]");
+                                "[[Recens�?mântul populației din 2002 (România)|Recens�?mântul anterior, 2002]]");
                             params.put("population_blank1", String.valueOf(pop2002) + " locuitori");
                         }
 
-                    } else if (StringUtils.equals(infoboxName, "Casetă comune România")) {
-                        params.put("recensământ", "[[Recensământul populației din 2011 (România)|2011]]");
+                    } else if (StringUtils.equals(infoboxName, "Caset�? comune România")) {
+                        params.put("recens�?mânt", "[[Recens�?mântul populației din 2011 (România)|2011]]");
                         params.put("populație",
                             getTendencyTemplate(uta.getPopulation()) + String.valueOf(uta.getPopulation()));
                         params.put("siruta", String.valueOf(uta.getSiruta()));
@@ -284,14 +284,14 @@ public class WikiTextGenerator2011 {
                     final StringBuilder poprefBuilder = new StringBuilder("<ref name=\"kia.hu\"");
                     if (!generateDemographySection && StringUtils.countMatches(pageText, "<ref name=\"kia.hu\">") < 2) {
                         poprefBuilder
-                        .append(">{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recensământul Populației și al Locuințelor 2002 - populația unităților administrative pe etnii|publisher=K");
-                        poprefBuilder.append(StringUtils.lowerCase("ULTURÁLIS "));
+                        .append(">{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recens�?mântul Populației și al Locuințelor 2002 - populația unit�?ților administrative pe etnii|publisher=K");
+                        poprefBuilder.append(StringUtils.lowerCase("ULTUR�?LIS "));
                         poprefBuilder.append('I');
-                        poprefBuilder.append(StringUtils.lowerCase("NNOVÁCIÓS "));
+                        poprefBuilder.append(StringUtils.lowerCase("NNOV�?CIÓS "));
                         poprefBuilder.append('A');
-                        poprefBuilder.append(StringUtils.lowerCase("LAPÍTVÁNY"));
+                        poprefBuilder.append(StringUtils.lowerCase("LAPÍTV�?NY"));
                         poprefBuilder
-                        .append(" (KIA.hu - Fundația Culturală pentru Inovație)|accessdate=2013-08-06}}</ref> ");
+                        .append(" (KIA.hu - Fundația Cultural�? pentru Inovație)|accessdate=2013-08-06}}</ref> ");
                     } else {
                         poprefBuilder.append("/>");
                     }
@@ -300,14 +300,14 @@ public class WikiTextGenerator2011 {
                         && StringUtils.countMatches(pageText, "<ref name=\"insse_2011_nat\">") < 2) {
 
                         poprefBuilder
-                        .append(">Rezultatele finale ale Recensământului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabilă după etnie – județe, municipii, orașe, comune|publisher=[[Institutul Național de Statistică]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
+                        .append(">Rezultatele finale ale Recens�?mântului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabil�? dup�? etnie – județe, municipii, orașe, comune|publisher=[[Institutul Național de Statistic�?]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
                     } else {
                         poprefBuilder.append("/>");
                     }
                     params.put("populație_note_subsol", poprefBuilder.toString());
 
                     newInfoboxText = generateNewInfobox(params, infoboxName);
-                    summaryBuilder.append(" actualizare populație, tip, cod siruta în infocasetă;");
+                    summaryBuilder.append(" actualizare populație, tip, cod siruta în infocaset�?;");
                 }
                 String newPageText = pageText;
                 if (infoboxText != null) {
@@ -351,7 +351,7 @@ public class WikiTextGenerator2011 {
                             templateTextBuilder.insert(whereToInsertPlotDataLabel, "\n  bar:2011 at: " + uta.getPopulation()
                                 + " fontsize:S text: " + popNumberFormatter.format(uta.getPopulation()) + " shift:(-15,5)");
                             wiki.edit(historicalPopTemplateTitle, templateTextBuilder.toString(),
-                                "Robot: adăugare date recensământ 2011");
+                                "Robot: ad�?ugare date recens�?mânt 2011");
                         }
                         break;
                     }
@@ -365,7 +365,7 @@ public class WikiTextGenerator2011 {
                     final List<String> sectionsBefore = Arrays.asList("Geografie", "Geografia", "Așezare", "Așezarea",
                         "Amplasare", "Amplasarea", "Date geografice", "Poziție", "Poziția");
                     final List<String> sectionsAfter = Arrays.asList("Monumente istorice", "Atracții turistice",
-                        "Personalități", "Note", "Vezi și", "Legături externe", "Bibliografie", "Imagini",
+                        "Personalit�?ți", "Note", "Vezi și", "Leg�?turi externe", "Bibliografie", "Imagini",
                         "Galerie de imagini", "Referințe");
 
                     String preSection = null;
@@ -432,7 +432,7 @@ public class WikiTextGenerator2011 {
 
                         newPageText = articleTextBuilder.toString();
                     }
-                    summaryBuilder.append(" adăugare secțiune demografie");
+                    summaryBuilder.append(" ad�?ugare secțiune demografie");
                 } else {
                     // propose in talk page
                     final String talkPageTitle = wiki.getTalkPage(articleTitle);
@@ -455,7 +455,7 @@ public class WikiTextGenerator2011 {
                 if (!hasReferences) {
                     String postSectionRef = null;
                     int postSectionRefIndex = -1;
-                    final List<String> sectionsAfterRefs = Arrays.asList("Bibliografie", "Referințe", "Legături externe",
+                    final List<String> sectionsAfterRefs = Arrays.asList("Bibliografie", "Referințe", "Leg�?turi externe",
                         "Vezi și", "Vezi de asemenea");
                     int idx = 1;
                     for (final Object sectionKey : sectionMap.keySet()) {
@@ -524,9 +524,9 @@ public class WikiTextGenerator2011 {
 
                 /*
                  * if (null == timeStamp) { wiki.edit(logTitle, log + countyLog,
-                 * "Robot: adăugare la log pagină cu secțiune demografie pentru județul " + getCountyName(judet)); } else {
+                 * "Robot: ad�?ugare la log pagin�? cu secțiune demografie pentru județul " + getCountyName(judet)); } else {
                  * wiki.edit(logTitle, log + countyLog,
-                 * "Robot: adăugare la log pagini cu secțiune demografie pentru județul " + getCountyName(judet), timeStamp);
+                 * "Robot: ad�?ugare la log pagini cu secțiune demografie pentru județul " + getCountyName(judet), timeStamp);
                  * }
                  */
             }
@@ -642,7 +642,7 @@ public class WikiTextGenerator2011 {
         ImageIO.write(bufferedImage, "PNG", outFile);
 
         final StringBuilder pieChart = new StringBuilder(
-            "{{Pie chart\n|thumb=left\n|style=clear:none;\n|caption=Componența confesională a ");
+            "{{Pie chart\n|thumb=left\n|style=clear:none;\n|caption=Componența confesional�? a ");
         pieChart.append(getGenitiveFullName(uta));
 
         int i = 1;
@@ -687,7 +687,7 @@ public class WikiTextGenerator2011 {
                 textBuilder.append(formatPercentage(100.0 * minorities.get(min)));
                 textBuilder.append("%).");
             } else if (minorities.size() > 1) {
-                textBuilder.append(", dar există și minorități de ");
+                textBuilder.append(", dar exist�? și minorit�?ți de ");
                 final List<String> religii = new ArrayList<String>();
                 for (final Religion min : minorities.keySet()) {
                     religii.add(getReligionLink(min) + " (" + formatPercentage(100.0 * minorities.get(min)) + "%)");
@@ -700,7 +700,7 @@ public class WikiTextGenerator2011 {
                 textBuilder.append(".");
             }
         } else {
-            textBuilder.append("nu există o religie majoritară, locuitorii fiind ");
+            textBuilder.append("nu exist�? o religie majoritar�?, locuitorii fiind ");
             final List<String> religii = new ArrayList<String>();
             for (final Religion min : minorities.keySet()) {
                 religii.add(getReligionLink(min) + " (" + formatPercentage(100.0 * minorities.get(min)) + "%)");
@@ -714,10 +714,10 @@ public class WikiTextGenerator2011 {
         if (0 < unknownRel) {
             textBuilder.append(" Pentru ");
             textBuilder.append(formatPercentage(100.0 * unknownRel / uta.getPopulation()));
-            textBuilder.append("% din populație, nu este cunoscută apartenența confesională.");
+            textBuilder.append("% din populație, nu este cunoscut�? apartenența confesional�?.");
         }
         textBuilder
-        .append("<ref name=\"insse_2011_rel\">Rezultatele finale ale Recensământului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_TAB_13.xls|title=Tab13. Populaţia stabilă după religie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistică]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
+        .append("<ref name=\"insse_2011_rel\">Rezultatele finale ale Recens�?mântului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_TAB_13.xls|title=Tab13. Populaţia stabil�? dup�? religie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistic�?]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
 
         return textBuilder.toString();
     }
@@ -725,35 +725,35 @@ public class WikiTextGenerator2011 {
     private static String getReligionLink(final Religion religion) {
         switch (religion) {
         case ORTHO:
-            return "[[Biserica Ortodoxă Română|ortodocși]]";
+            return "[[Biserica Ortodox�? Român�?|ortodocși]]";
         case ROM_CATH:
-            return "[[Biserica Romano-Catolică din România|romano-catolici]]";
+            return "[[Biserica Romano-Catolic�? din România|romano-catolici]]";
         case EVANGH:
-            return "[[Biserica Evanghelică Română|evanghelici]]";
+            return "[[Biserica Evanghelic�? Român�?|evanghelici]]";
         case AUGUST:
-            return "[[Biserica Evanghelică de Confesiune Augustană din România|luterani de confesiune augustană]]";
+            return "[[Biserica Evanghelic�? de Confesiune Augustan�? din România|luterani de confesiune augustan�?]]";
         case LUTH:
-            return "[[Biserica Evanghelică-Luterană din România|evanghelici-luterani]]";
+            return "[[Biserica Evanghelic�?-Luteran�? din România|evanghelici-luterani]]";
         case MUSL:
             return "[[Islamul în România|musulmani]]";
         case CALVINIST:
-            return "[[Biserica Reformată din România|reformați]]";
+            return "[[Biserica Reformat�? din România|reformați]]";
         case ADV7:
-            return "[[Biserica Adventistă de Ziua a Șaptea|adventiști de ziua a șaptea]]";
+            return "[[Biserica Adventist�? de Ziua a �?aptea|adventiști de ziua a șaptea]]";
         case JEHOVA:
-            return "[[Organizația Religioasă Martorii lui Iehova|martori ai lui Iehova]]";
+            return "[[Organizația Religioas�? Martorii lui Iehova|martori ai lui Iehova]]";
         case CR_EVANGH:
-            return "[[Biserica Creștină după Evanghelie|creștini după evanghelie]]";
+            return "[[Biserica Creștin�? dup�? Evanghelie|creștini dup�? evanghelie]]";
         case OLD_ORTHO:
-            return "[[Biserica Ortodoxă Rusă de Rit Vechi din România|ortodocși de rit vechi]]";
+            return "[[Biserica Ortodox�? Rus�? de Rit Vechi din România|ortodocși de rit vechi]]";
         case SR_ORTHO:
-            return "[[Biserica Ortodoxă Sârbă|ortodocși sârbi]]";
+            return "[[Biserica Ortodox�? Sârb�?|ortodocși sârbi]]";
         case JEWISH:
             return "[[Iudaism|mozaici]]";
         case ARM:
-            return "[[Biserica Armeano-Catolică|armeni]]";
+            return "[[Biserica Armeano-Catolic�?|armeni]]";
         case NONE:
-            return "[[Umanism secular|fără religie]]";
+            return "[[Umanism secular|f�?r�? religie]]";
         case ATHEISM:
             return "[[Ateismul în România|atei]]";
         default:
@@ -833,7 +833,7 @@ public class WikiTextGenerator2011 {
             + getShortedName(uta) + ".png");
         ImageIO.write(bufferedImage, "PNG", outFile);
 
-        final StringBuilder pieChart = new StringBuilder("{{Pie chart\n|thumb=left\n|caption=Componența etnică a ");
+        final StringBuilder pieChart = new StringBuilder("{{Pie chart\n|thumb=left\n|caption=Componența etnic�? a ");
         pieChart.append(getGenitiveFullName(uta));
         int i = 1;
         for (final Object k : dataset.getKeys()) {
@@ -886,7 +886,7 @@ public class WikiTextGenerator2011 {
                 textBuilder.append(formatPercentage(100.0 * minorities.get(min)));
                 textBuilder.append("%).");
             } else if (minorities.size() > 1) {
-                textBuilder.append(". Principalele minorități sunt cele de ");
+                textBuilder.append(". Principalele minorit�?ți sunt cele de ");
                 final List<String> etnii = new ArrayList<String>();
                 for (final Nationality min : minorities.keySet()) {
                     etnii.add(getNationalityLink(min) + " (" + formatPercentage(100.0 * minorities.get(min)) + "%)");
@@ -899,7 +899,7 @@ public class WikiTextGenerator2011 {
                 textBuilder.append(".");
             }
         } else {
-            textBuilder.append("Nu există o etnie majoritară, locuitorii fiind ");
+            textBuilder.append("Nu exist�? o etnie majoritar�?, locuitorii fiind ");
             final List<String> etnii = new ArrayList<String>();
             for (final Nationality min : minorities.keySet()) {
                 etnii.add(getNationalityLink(min) + " (" + formatPercentage(100.0 * minorities.get(min)) + "%)");
@@ -913,18 +913,18 @@ public class WikiTextGenerator2011 {
         if (0 < unknownNat) {
             textBuilder.append(" Pentru ");
             textBuilder.append(formatPercentage(100.0 * unknownNat / populatie));
-            textBuilder.append("% din populație, apartenența etnică nu este cunoscută.");
+            textBuilder.append("% din populație, apartenența etnic�? nu este cunoscut�?.");
         }
         textBuilder
-        .append("<ref name=\"insse_2011_nat\">Rezultatele finale ale Recensământului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabilă după etnie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistică]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
+        .append("<ref name=\"insse_2011_nat\">Rezultatele finale ale Recens�?mântului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabil�? dup�? etnie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistic�?]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
         return textBuilder.toString();
     }
 
     private static void generateCountyIntroductionText(final PopulationDb2002Entry uta, final StringBuilder textBuilder) {
         textBuilder
-        .append("Conform [[Recensământul populației din 2011 (România)|recensământului efectuat în 2011]], populația ");
+        .append("Conform [[Recens�?mântul populației din 2011 (România)|recens�?mântului efectuat în 2011]], populația ");
         textBuilder.append(getGenitiveFullName(uta));
-        textBuilder.append(" se ridică la {{formatnum:");
+        textBuilder.append(" se ridic�? la {{formatnum:");
         textBuilder.append(uta.getPopulation());
         textBuilder.append("}} ");
         textBuilder.append(de(uta.getPopulation(), "locuitor", "locuitori"));
@@ -966,17 +966,17 @@ public class WikiTextGenerator2011 {
 
             if (oldPopulationSum == uta.getPopulation()) {
                 textBuilder
-                .append(", aceeași ca și la [[Recensământul populației din 2002 (România)|recensământul anterior din 2002]].");
+                .append(", aceeași ca și la [[Recens�?mântul populației din 2002 (România)|recens�?mântul anterior din 2002]].");
             } else if (oldPopulationSum > uta.getPopulation()) {
                 textBuilder
-                .append(", în scădere față de [[Recensământul populației din 2002 (România)|recensământul anterior din 2002]], când se înregistraseră {{formatnum:");
+                .append(", în sc�?dere faț�? de [[Recens�?mântul populației din 2002 (România)|recens�?mântul anterior din 2002]], când se înregistraser�? {{formatnum:");
                 textBuilder.append(oldPopulationSum);
                 textBuilder.append("}}&nbsp;");
                 textBuilder.append(de(oldPopulationSum, "locuitor", "locuitori"));
                 textBuilder.append('.');
             } else {
                 textBuilder
-                .append(", în creștere față de [[Recensământul populației din 2002 (România)|recensământul anterior din 2002]], când se înregistraseră {{formatnum:");
+                .append(", în creștere faț�? de [[Recens�?mântul populației din 2002 (România)|recens�?mântul anterior din 2002]], când se înregistraser�? {{formatnum:");
                 textBuilder.append(oldPopulationSum);
                 textBuilder.append("}}&nbsp;");
                 textBuilder.append(de(oldPopulationSum, "locuitor", "locuitori"));
@@ -985,19 +985,19 @@ public class WikiTextGenerator2011 {
             textBuilder.append("<ref name=\"kia.hu\">");
             if (oldPopulationSelect < 0) {
                 textBuilder
-                .append("Populația satelor componente la recensământul din 2002. Pe atunci, comuna încă nu exista, ea fiind înființată la o dată ulterioară. ");
+                .append("Populația satelor componente la recens�?mântul din 2002. Pe atunci, comuna înc�? nu exista, ea fiind înființat�? la o dat�? ulterioar�?. ");
             } else if (currentComponentCount != oldComponentCount) {
                 textBuilder
-                .append("Populația satelor aflate actualmente în componența comunei, ea având la acea vreme (2002) altă componență.");
+                .append("Populația satelor aflate actualmente în componența comunei, ea având la acea vreme (2002) alt�? componenț�?.");
             }
             textBuilder
-            .append("{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recensământul Populației și al Locuințelor 2002 - populația unităților administrative pe etnii|publisher=K");
-            textBuilder.append(StringUtils.lowerCase("ULTURÁLIS "));
+            .append("{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recens�?mântul Populației și al Locuințelor 2002 - populația unit�?ților administrative pe etnii|publisher=K");
+            textBuilder.append(StringUtils.lowerCase("ULTUR�?LIS "));
             textBuilder.append('I');
-            textBuilder.append(StringUtils.lowerCase("NNOVÁCIÓS "));
+            textBuilder.append(StringUtils.lowerCase("NNOV�?CIÓS "));
             textBuilder.append('A');
-            textBuilder.append(StringUtils.lowerCase("LAPÍTVÁNY"));
-            textBuilder.append(" (KIA.hu - Fundația Culturală pentru Inovație)|accessdate=2013-08-06}}</ref> ");
+            textBuilder.append(StringUtils.lowerCase("LAPÍTV�?NY"));
+            textBuilder.append(" (KIA.hu - Fundația Cultural�? pentru Inovație)|accessdate=2013-08-06}}</ref> ");
         } catch (final SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

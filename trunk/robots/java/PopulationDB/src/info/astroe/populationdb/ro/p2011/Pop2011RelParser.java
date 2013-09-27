@@ -1,7 +1,7 @@
-package info.astroe.populationdb.p2011;
+package info.astroe.populationdb.ro.p2011;
 
-import info.astroe.populationdb.PopulationDb2002Entry;
-import info.astroe.populationdb.Religion;
+import info.astroe.populationdb.ro.p2002.PopulationDb2002Entry;
+import info.astroe.populationdb.ro.p2002.Religion;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -139,7 +139,7 @@ public class Pop2011RelParser {
     private static int getCountyId(final String countyName) {
         final Connection conn = getConnection();
         try {
-            final PreparedStatement st = conn.prepareStatement("select id from judet where ?=replace(replace(replace(replace(replace(judet.nume, 'Î', 'I'), 'Ț', 'T'), 'Â', 'A'), 'Ă', 'A'), 'Ș', 'S')");
+            final PreparedStatement st = conn.prepareStatement("select id from judet where ?=replace(replace(replace(replace(replace(judet.nume, 'Î', 'I'), 'Ț', 'T'), 'Â', 'A'), 'Ă', 'A'), '�?', 'S')");
             st.setString(1, countyName);
             final ResultSet rs = st.executeQuery();
             if (rs.next()) {
@@ -188,7 +188,7 @@ public class Pop2011RelParser {
     private static int getUtaId(final String name) {
         final Connection conn = getConnection();
         try {
-            final PreparedStatement st = conn.prepareStatement("select uta.siruta id from uta left join judet on uta.judet=judet.id where ?=replace(replace(replace(replace(replace(uta.name, 'Î', 'I'), 'Ț', 'T'), 'Â', 'A'), 'Ă', 'A'), 'Ș', 'S') and judet.id=?");
+            final PreparedStatement st = conn.prepareStatement("select uta.siruta id from uta left join judet on uta.judet=judet.id where ?=replace(replace(replace(replace(replace(uta.name, 'Î', 'I'), 'Ț', 'T'), 'Â', 'A'), 'Ă', 'A'), '�?', 'S') and judet.id=?");
             st.setString(1, name);
             st.setInt(2, countyId);
             final ResultSet rs = st.executeQuery();
