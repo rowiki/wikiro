@@ -1,9 +1,11 @@
-package info.astroe.populationdb.ro.p2011;
+package info.astroe.populationdb.ro;
 
 import info.astroe.populationdb.ro.p2002.Nationality;
 import info.astroe.populationdb.ro.p2002.PopulationDb2002Entry;
 import info.astroe.populationdb.ro.p2002.Religion;
 import info.astroe.populationdb.ro.p2002.UTAType;
+import info.astroe.populationdb.util.ParameterReader;
+import info.astroe.populationdb.util.Utilities;
 
 import java.awt.Color;
 import java.awt.Paint;
@@ -251,7 +253,7 @@ public class WikiTextGenerator2011 {
                     // System.out.println(params);
 
                     if (StringUtils.equals(infoboxName, "Infocaseta Așezare")) {
-                        params.put("nume", capitalizeName(uta.getName()));
+                        params.put("nume", Utilities.capitalizeName(uta.getName()));
                         switch (uta.getType()) {
                         case MUNICIPIU:
                             params.put("tip_asezare", "[[Municipiile României|Municipiu]]");
@@ -319,7 +321,7 @@ public class WikiTextGenerator2011 {
                 final List<String> historicalPopTemplateTitles = new ArrayList<String>();
                 historicalPopTemplateTitles.add("Format:Demografie/" + articleTitle);
                 if (uta.getType() == UTAType.MUNICIPIU) {
-                    historicalPopTemplateTitles.add("Format:Demografie/" + capitalizeName(uta.getName()));
+                    historicalPopTemplateTitles.add("Format:Demografie/" + Utilities.capitalizeName(uta.getName()));
                 }
                 String historicalPopTemplate = null;
                 final NumberFormat popNumberFormatter = NumberFormat.getNumberInstance(new Locale("ro"));
@@ -412,7 +414,7 @@ public class WikiTextGenerator2011 {
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Comune"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Județ"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{județ"));
-                        endIndices.add(StringUtils.indexOf(newPageText, "{{" + capitalizeName(uta.getName())));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{" + Utilities.capitalizeName(uta.getName())));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Comuna"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Casete de navigare"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orașe"));
@@ -484,7 +486,7 @@ public class WikiTextGenerator2011 {
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Comune"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Județ"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{județ"));
-                        endIndices.add(StringUtils.indexOf(newPageText, "{{" + capitalizeName(uta.getName())));
+                        endIndices.add(StringUtils.indexOf(newPageText, "{{" + Utilities.capitalizeName(uta.getName())));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Comuna"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Casete de navigare"));
                         endIndices.add(StringUtils.indexOf(newPageText, "{{Orașe"));
@@ -583,13 +585,13 @@ public class WikiTextGenerator2011 {
         final StringBuilder sb = new StringBuilder();
         if (uta.getType() == UTAType.COMUNA) {
             sb.append("Comuna ");
-            sb.append(capitalizeName(uta.getName()));
+            sb.append(Utilities.capitalizeName(uta.getName()));
             sb.append(", ");
-            sb.append(capitalizeName(judet));
+            sb.append(Utilities.capitalizeName(judet));
         } else {
-            sb.append(capitalizeName(uta.getName()));
+            sb.append(Utilities.capitalizeName(uta.getName()));
             sb.append(", ");
-            sb.append(capitalizeName(judet));
+            sb.append(Utilities.capitalizeName(judet));
         }
 
         final Map pageInfo = wiki.getPageInfo(sb.toString());
@@ -660,7 +662,7 @@ public class WikiTextGenerator2011 {
             pieChart.append(i);
             pieChart.append('=');
             final Color color = (Color) plot.getSectionPaint(k.toString());
-            pieChart.append(colorToHtml(color));
+            pieChart.append(Utilities.colorToHtml(color));
             i++;
         }
         pieChart.append("}}\n");
@@ -850,19 +852,11 @@ public class WikiTextGenerator2011 {
             pieChart.append(i);
             pieChart.append('=');
             final Color color = (Color) plot.getSectionPaint(k.toString());
-            pieChart.append(colorToHtml(color));
+            pieChart.append(Utilities.colorToHtml(color));
             i++;
         }
         pieChart.append("}}\n");
         return pieChart.toString();
-    }
-
-    private static String colorToHtml(final Color color) {
-        final StringBuilder sb = new StringBuilder("#");
-        sb.append(StringUtils.substring(StringUtils.leftPad(Integer.toHexString(color.getRed()), 2, '0'), 0, 2));
-        sb.append(StringUtils.substring(StringUtils.leftPad(Integer.toHexString(color.getGreen()), 2, '0'), 0, 2));
-        sb.append(StringUtils.substring(StringUtils.leftPad(Integer.toHexString(color.getBlue()), 2, '0'), 0, 2));
-        return sb.toString();
     }
 
     private static String generateCountyNationalText(final PopulationDb2002Entry uta) {
@@ -927,7 +921,7 @@ public class WikiTextGenerator2011 {
         textBuilder.append(" se ridic�? la {{formatnum:");
         textBuilder.append(uta.getPopulation());
         textBuilder.append("}} ");
-        textBuilder.append(de(uta.getPopulation(), "locuitor", "locuitori"));
+        textBuilder.append(Utilities.de(uta.getPopulation(), "locuitor", "locuitori"));
 
         final Connection c2011 = getConnection();
         PreparedStatement comp2011St, comp2002St;
@@ -972,14 +966,14 @@ public class WikiTextGenerator2011 {
                 .append(", în sc�?dere faț�? de [[Recens�?mântul populației din 2002 (România)|recens�?mântul anterior din 2002]], când se înregistraser�? {{formatnum:");
                 textBuilder.append(oldPopulationSum);
                 textBuilder.append("}}&nbsp;");
-                textBuilder.append(de(oldPopulationSum, "locuitor", "locuitori"));
+                textBuilder.append(Utilities.de(oldPopulationSum, "locuitor", "locuitori"));
                 textBuilder.append('.');
             } else {
                 textBuilder
                 .append(", în creștere faț�? de [[Recens�?mântul populației din 2002 (România)|recens�?mântul anterior din 2002]], când se înregistraser�? {{formatnum:");
                 textBuilder.append(oldPopulationSum);
                 textBuilder.append("}}&nbsp;");
-                textBuilder.append(de(oldPopulationSum, "locuitor", "locuitori"));
+                textBuilder.append(Utilities.de(oldPopulationSum, "locuitor", "locuitori"));
                 textBuilder.append('.');
             }
             textBuilder.append("<ref name=\"kia.hu\">");
@@ -1139,24 +1133,8 @@ public class WikiTextGenerator2011 {
             break;
         }
         sb.append("_");
-        sb.append(StringUtils.replace(capitalizeName(uta.getName()), " ", ""));
+        sb.append(StringUtils.replace(Utilities.capitalizeName(uta.getName()), " ", ""));
         return sb.toString();
-    }
-
-    private static String de(final int number, final String singular, final String plural) {
-        if (number == 1) {
-            return singular;
-        }
-        if (number == 0) {
-            return plural;
-        }
-
-        final int mod100 = number % 100;
-        if (mod100 == 0 || mod100 > 19) {
-            return "de&nbsp;" + plural;
-        } else {
-            return plural;
-        }
     }
 
     private static String getGenitiveFullName(final PopulationDb2002Entry uta) {
@@ -1175,20 +1153,7 @@ public class WikiTextGenerator2011 {
             break;
         }
         sb.append(" ");
-        sb.append(capitalizeName(uta.getName()));
+        sb.append(Utilities.capitalizeName(uta.getName()));
         return sb.toString();
-    }
-
-    private static String capitalizeName(final String name) {
-        final String onlyLower = StringUtils.lowerCase(name);
-        final String[] lowerItems = StringUtils.splitByCharacterType(onlyLower);
-        final StringBuilder sb = new StringBuilder();
-
-        final List<String> notCapitalized = Arrays.asList("de", "din", "pe", "sub", "peste", "la", "cel", "lui", "cu");
-
-        for (final String item : lowerItems) {
-            sb.append(notCapitalized.contains(item) ? item : StringUtils.capitalize(item));
-        }
-        return StringUtils.capitalize(sb.toString());
     }
 }
