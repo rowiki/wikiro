@@ -1,4 +1,4 @@
-package info.astroe.populationdb;
+package info.astroe.populationdb.ro.p2002;
 
 public enum UTAType {
     MUNICIPIU(1), ORAS(2), COMUNA(3);

@@ -1,4 +1,4 @@
-package info.astroe.populationdb;
+package info.astroe.populationdb.ro.p2002;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

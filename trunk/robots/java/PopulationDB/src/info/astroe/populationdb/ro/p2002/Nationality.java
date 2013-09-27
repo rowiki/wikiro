@@ -1,4 +1,4 @@
-package info.astroe.populationdb;
+package info.astroe.populationdb.ro.p2002;
 
 public enum Nationality {
     RO(1), HU(2), RR(3), UK(4), DE(5), TR(6), RU(7), TT(8), SR(9), SK(10), BG(11), HR(12), GR(13), IT(14), HE(15), CZ(16), PL(

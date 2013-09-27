@@ -1,4 +1,4 @@
-package info.astroe.populationdb;
+package info.astroe.populationdb.ro.p2002;
 
 public enum Religion {
     ORTHO(1), ROM_CATH(2), CALVINIST(3), PENTICOST(4), GR_CATH(5), BAPT(6), ADV7(7), MUSL(8), UNIT(9), JEHOVA(10), CR_EVANGH(
