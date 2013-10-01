@@ -2,6 +2,7 @@ package info.astroe.populationdb.bg;
 
 import static info.astroe.populationdb.util.Utilities.capitalizeName;
 import static info.astroe.populationdb.util.Utilities.transliterateBg;
+import static org.apache.commons.lang3.StringUtils.replaceChars;
 import static org.apache.commons.lang3.StringUtils.startsWith;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 import static org.apache.commons.lang3.StringUtils.trim;
@@ -15,6 +16,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 
@@ -285,7 +288,17 @@ public class BGPopulationParser {
     }
 
     private static SessionFactory initHibernate() {
-        return HibernateUtil.getSessionFactory(null);
+        final String packageName = BGPopulationParser.class.getPackage().getName();
+        final URL url = BGPopulationParser.class.getResource(replaceChars(packageName, '.', '/') + "/hibernate.cfg.xml");
+        File f;
+        try {
+            f = new File(url.toURI());
+            return HibernateUtil.getSessionFactory(f);
+        } catch (final URISyntaxException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static Nationality getNationalityByName(final String nationalityName) {
