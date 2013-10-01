@@ -5,6 +5,7 @@ import static info.astroe.populationdb.util.Utilities.transliterateBg;
 import static org.apache.commons.lang3.StringUtils.startsWith;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 import static org.apache.commons.lang3.StringUtils.trim;
+import info.astroe.populationdb.bg.model.Nationality;
 import info.astroe.populationdb.bg.model.Obshtina;
 import info.astroe.populationdb.bg.model.Region;
 import info.astroe.populationdb.bg.model.Settlement;
@@ -49,7 +50,7 @@ public class BGPopulationParser {
         }
 
         try {
-            // parseAgeFile(infileAge);
+            parseAgeFile(infileAge);
             parseEthnosFile(infileEthnos);
         } catch (final FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -125,9 +126,35 @@ public class BGPopulationParser {
                     obshtinaQuery.setParameter("region", currentRegion);
                     final List<Obshtina> obshtinas = obshtinaQuery.list();
                     if (0 == obshtinas.size()) {
-                        System.err.println("OBSHTINA OBJECT NOT FOUND FOR REGION " + capitalizeName(trim(name)));
+                        System.err.println("OBSHTINA OBJECT NOT FOUND FOR OBSHTINA " + capitalizeName(trim(name))
+                            + " region " + currentRegion.getNumeRo());
                     } else {
                         currentObshtina = obshtinas.get(0);
+                    }
+                    final Cell bulgariansCell = cellIterator.next();
+                    if (bulgariansCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                        final int bulgarians = (int) bulgariansCell.getNumericCellValue();
+                        currentObshtina.getEthnicStructure().put(getNationalityByName("Bulgari"), bulgarians);
+                    }
+                    final Cell turksCell = cellIterator.next();
+                    if (turksCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                        final int turks = (int) turksCell.getNumericCellValue();
+                        currentObshtina.getEthnicStructure().put(getNationalityByName("Turci"), turks);
+                    }
+                    final Cell romaCell = cellIterator.next();
+                    if (romaCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                        final int roma = (int) romaCell.getNumericCellValue();
+                        currentObshtina.getEthnicStructure().put(getNationalityByName("Romi"), roma);
+                    }
+                    final Cell othersCell = cellIterator.next();
+                    if (othersCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                        final int others = (int) othersCell.getNumericCellValue();
+                        currentObshtina.getEthnicStructure().put(getNationalityByName("Altele"), others);
+                    }
+                    final Cell notIdentifiedCell = cellIterator.next();
+                    if (notIdentifiedCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                        final int notIdentified = (int) notIdentifiedCell.getNumericCellValue();
+                        currentObshtina.getEthnicStructure().put(getNationalityByName("Nicio identificare"), notIdentified);
                     }
 
                 } else {
@@ -140,7 +167,8 @@ public class BGPopulationParser {
                     final List<Settlement> settlements = settlementQuery.list();
                     Settlement village = null;
                     if (0 == settlements.size()) {
-                        System.err.println("SETTLEMENT OBJECT NOT FOUND FOR REGION " + capitalizeName(trim(settlementName)));
+                        System.err.println("SETTLEMENT OBJECT NOT FOUND FOR " + capitalizeName(trim(settlementName))
+                            + " OBSHTINA " + currentObshtina.getNumeRo() + " in region " + currentRegion.getNumeRo());
                     } else {
                         village = settlements.get(0);
                     }
@@ -148,6 +176,31 @@ public class BGPopulationParser {
                         System.out.println("    Town " + capitalizeName(transliterateBg(settlementName)));
                     } else {
                         System.out.println("    Village " + capitalizeName(transliterateBg(settlementName)));
+                    }
+                    final Cell bulgariansCell = cellIterator.next();
+                    if (bulgariansCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                        final int bulgarians = (int) bulgariansCell.getNumericCellValue();
+                        village.getEthnicStructure().put(getNationalityByName("Bulgari"), bulgarians);
+                    }
+                    final Cell turksCell = cellIterator.next();
+                    if (turksCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                        final int turks = (int) turksCell.getNumericCellValue();
+                        village.getEthnicStructure().put(getNationalityByName("Turci"), turks);
+                    }
+                    final Cell romaCell = cellIterator.next();
+                    if (romaCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                        final int roma = (int) romaCell.getNumericCellValue();
+                        village.getEthnicStructure().put(getNationalityByName("Romi"), roma);
+                    }
+                    final Cell othersCell = cellIterator.next();
+                    if (othersCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                        final int others = (int) othersCell.getNumericCellValue();
+                        village.getEthnicStructure().put(getNationalityByName("Altele"), others);
+                    }
+                    final Cell notIdentifiedCell = cellIterator.next();
+                    if (notIdentifiedCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                        final int notIdentified = (int) notIdentifiedCell.getNumericCellValue();
+                        village.getEthnicStructure().put(getNationalityByName("Nicio identificare"), notIdentified);
                     }
                 }
                 ses.getTransaction().commit();
@@ -235,4 +288,19 @@ public class BGPopulationParser {
         return HibernateUtil.getSessionFactory(null);
     }
 
+    private static Nationality getNationalityByName(final String nationalityName) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query query = ses.createQuery("from Nationality nat where nat.nume=:natname");
+        query.setParameter("natname", nationalityName);
+        final List nats = query.list();
+        Nationality nat;
+        if (0 == nats.size()) {
+            nat = new Nationality();
+            nat.setNume(nationalityName);
+            ses.save(nat);
+        } else {
+            nat = (Nationality) nats.get(0);
+        }
+        return nat;
+    }
 }
