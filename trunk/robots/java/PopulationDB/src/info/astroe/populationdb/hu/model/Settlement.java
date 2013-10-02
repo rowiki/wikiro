@@ -25,7 +25,9 @@ public class Settlement {
     private int population;
     private int town;
     private District district;
+    private double area;
     private Map<Nationality, Integer> ethnicStructure = new HashMap<Nationality, Integer>();
+    private Map<Religion, Integer> religiousStructure = new HashMap<Religion, Integer>();
     private final Map<Integer, Integer> historicalPopulation = new HashMap<Integer, Integer>();
 
     @Id
@@ -87,13 +89,34 @@ public class Settlement {
     }
 
     @ManyToOne
-    @Column(name = "district")
+    @JoinColumn(name = "district")
     public District getDistrict() {
         return district;
     }
 
     public void setDistrict(final District district) {
         this.district = district;
+    }
+
+    public double getArea() {
+        return area;
+    }
+
+    @Column(name = "suprafata")
+    public void setArea(final double d) {
+        this.area = d;
+    }
+
+    @ElementCollection
+    @CollectionTable(name = "localitate_religie", joinColumns = @JoinColumn(name = "localitate"))
+    @MapKeyJoinColumn(name = "religie")
+    @Column(name = "populatie")
+    public Map<Religion, Integer> getReligiousStructure() {
+        return religiousStructure;
+    }
+
+    public void setReligiousStructure(final Map<Religion, Integer> religiousStructure) {
+        this.religiousStructure = religiousStructure;
     }
 
 }

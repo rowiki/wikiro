@@ -9,8 +9,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "nationalitate")
-public class Nationality {
+@Table(name = "religie")
+public class Religion {
     private int id;
     private String name;
 
