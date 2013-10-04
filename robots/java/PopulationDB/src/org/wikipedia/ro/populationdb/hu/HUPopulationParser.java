@@ -22,6 +22,8 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
 import org.wikipedia.ro.populationdb.hu.dao.Hibernator;
 import org.wikipedia.ro.populationdb.hu.model.County;
 import org.wikipedia.ro.populationdb.hu.model.District;
@@ -113,7 +115,7 @@ public class HUPopulationParser {
     private void parseAllCounties() {
         try {
             hib = new Hibernator();
-            for (int i = 0; i < countyHistPopFiles.size(); i++) {
+            for (int i = 2; i < countyHistPopFiles.size(); i++) {
                 this.parseCounty(i);
             }
         } finally {
@@ -338,7 +340,7 @@ public class HUPopulationParser {
             final Iterator<Row> rowIterator = sheet.iterator();
             boolean foundDistricts = false;
             boolean foundCities = false;
-            for (final Row crtRow = rowIterator.next(); rowIterator.hasNext();) {
+            for (Row crtRow = rowIterator.next(); rowIterator.hasNext(); crtRow = rowIterator.next()) {
                 final Iterator<Cell> cellIterator = crtRow.cellIterator();
                 final Cell firstCell = cellIterator.next();
                 if (firstCell.getCellType() != Cell.CELL_TYPE_STRING) {
@@ -354,8 +356,6 @@ public class HUPopulationParser {
 
                 if (startsWith(firstCellString, "Települések adatai")) {
                     foundCities = true;
-                    continue;
-                } else if (!foundCities) {
                     continue;
                 }
                 if (startsWith(firstCellString, "Megyeszékhely") && foundCities) {
@@ -380,6 +380,7 @@ public class HUPopulationParser {
                     final String districtCode = substringBefore(firstCellString, " ");
                     final District district = hib.getDistrictByName(districtName, counties.get(countyIndex));
                     districtCodes.put(districtCode, district);
+                    hib.storeDistrict(district, county);
                     continue;
                 }
                 if (foundDistricts && foundCities && startsWith(firstCellString, "J")
@@ -397,15 +398,21 @@ public class HUPopulationParser {
                     for (int i = 0; i < censi.size() && cellIterator.hasNext(); i++) {
                         popCell = cellIterator.next();
                         if (popCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                            final Session ses = hib.getSession();
+                            ses.beginTransaction();
+                            Hibernate.initialize(settlement.getHistoricalPopulation());
                             settlement.getHistoricalPopulation().put(censi.get(i), (int) popCell.getNumericCellValue());
+                            ses.getTransaction().commit();
                         }
                     }
                     if (cellIterator.hasNext()) {
                         popCell = cellIterator.next();
                         if (popCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+                            final Session ses = hib.getSession();
                             settlement.setPopulation((int) popCell.getNumericCellValue());
                         }
                     }
+                    settlement.setDistrict(district);
                     hib.saveSettlement(settlement);
 
                     continue;

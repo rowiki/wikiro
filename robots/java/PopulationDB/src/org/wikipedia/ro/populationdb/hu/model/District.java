@@ -1,5 +1,6 @@
 package org.wikipedia.ro.populationdb.hu.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -20,7 +21,7 @@ public class District {
     private long id;
     private String name;
     private County county;
-    private Set<Settlement> settlements;
+    private Set<Settlement> settlements = new HashSet<Settlement>();
 
     @Id
     @GeneratedValue(generator = "increment")
