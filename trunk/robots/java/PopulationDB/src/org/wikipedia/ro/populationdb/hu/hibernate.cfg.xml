@@ -26,11 +26,12 @@
 		<property name="show_sql">true</property>
 
 		<!-- Drop and re-create the database schema on startup -->
-		<property name="hbm2ddl.auto">update</property>
+		<property name="hbm2ddl.auto">drop-create</property>
 		
 		<mapping class="org.wikipedia.ro.populationdb.hu.model.Nationality"/>
 		<mapping class="org.wikipedia.ro.populationdb.hu.model.County"/>
 		<mapping class="org.wikipedia.ro.populationdb.hu.model.District"/>
+		<mapping class="org.wikipedia.ro.populationdb.hu.model.Religion"/>
 		<mapping class="org.wikipedia.ro.populationdb.hu.model.Settlement"/>
 	</session-factory>
 </hibernate-configuration>

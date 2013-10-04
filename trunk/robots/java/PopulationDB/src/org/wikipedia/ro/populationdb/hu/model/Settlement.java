@@ -11,7 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -28,7 +28,7 @@ public class Settlement {
     private double area;
     private Map<Nationality, Integer> ethnicStructure = new HashMap<Nationality, Integer>();
     private Map<Religion, Integer> religiousStructure = new HashMap<Religion, Integer>();
-    private final Map<Integer, Integer> historicalPopulation = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> historicalPopulation = new HashMap<Integer, Integer>();
 
     @Id
     @GeneratedValue(generator = "increment")
@@ -83,7 +83,7 @@ public class Settlement {
     @ElementCollection
     @CollectionTable(name = "localitate_istoric", joinColumns = @JoinColumn(name = "localitate"))
     @Column(name = "populatie")
-    @MapKey(name = "an")
+    @MapKeyColumn(name = "an")
     public Map<Integer, Integer> getHistoricalPopulation() {
         return historicalPopulation;
     }
@@ -117,6 +117,10 @@ public class Settlement {
 
     public void setReligiousStructure(final Map<Religion, Integer> religiousStructure) {
         this.religiousStructure = religiousStructure;
+    }
+
+    public void setHistoricalPopulation(final Map<Integer, Integer> historicalPopulation) {
+        this.historicalPopulation = historicalPopulation;
     }
 
 }
