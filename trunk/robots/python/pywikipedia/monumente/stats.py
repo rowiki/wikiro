@@ -23,6 +23,12 @@ def main():
 	pywikibot.output("...done")
 	f.close();
 	
+	f = open("commons_Category_pages.json", "r+")
+	pywikibot.output("Reading commons categories file...")
+	cat_commons = json.load(f)
+	pywikibot.output("...done")
+	f.close();
+	
 	f = open("commons_File_pages.json", "r+")
 	pywikibot.output("Reading commons images file...")
 	pages_commons = json.load(f)
@@ -32,6 +38,12 @@ def main():
 	f = open("ro_pages.json", "r+")
 	pywikibot.output("Reading articles file...")
 	pages_ro = json.load(f)
+	pywikibot.output("...done")
+	f.close();
+	
+	f = open("ro_Fișier_pages.json", "r+")
+	pywikibot.output("Reading ro images file...")
+	files_ro = json.load(f)
 	pywikibot.output("...done")
 	f.close();
 	
@@ -131,20 +143,23 @@ def main():
 	total_images = 0
 	for mon in pages_commons:
 		total_images += len(pages_commons[mon])
+	for mon in files_ro:
+		total_images += len(files_ro[mon])
 	
-	print "Total imagini: %d" % total_images
-	print "Imagini: %d/%d (%f%%)" % (images, total, images * 100.0 / total)
-	print "Coordonate: %d/%d (%f%%)" % (coords, total, coords * 100.0 / total)
-	print "Arhitect: %d/%d (%f%%)" % (authors, total, authors * 100.0 / total)
-	print "Articole: %d/%d (%f%%)" % (articles, total, articles * 100.0 / total)
-	print "Potențial articole: %d" % len(pages_ro)
+	print "* Total imagini: ''%d''" % total_images
+	print "* Monumente cu imagini: ''%d/%d (%f%%)''" % (images, total, images * 100.0 / total)
+	print "* Monumente cu coordonate: ''%d/%d (%f%%)''" % (coords, total, coords * 100.0 / total)
+	print "* Monumente cu arhitect: ''%d/%d (%f%%)''" % (authors, total, authors * 100.0 / total)
+	print "* Monumente cu articole: ''%d/%d (%f%%)''" % (articles, total, articles * 100.0 / total)
+	print "* Categorii la commons: ''%d''" % len(cat_commons)
+	print "* Articole distincte: ''%d''" % len(pages_ro)
 
 	for nature in image_nature.keys():
-		print "Imagini pentru monumente de %s: %f%%" % (nature, image_nature[nature] * 100.0 / total_nature[nature])
+		print "* Imagini pentru monumente de %s: ''%f%%''" % (nature, image_nature[nature] * 100.0 / total_nature[nature])
 	for type in image_type.keys():
-		print "Imagini pentru %s: %f%%" % (type, image_type[type] * 100.0 / total_type[type])
+		print "* Imagini pentru %s: ''%f%%''" % (type, image_type[type] * 100.0 / total_type[type])
 	for interest in image_interest.keys():
-		print "Imagini pentru monumente de interes %s: %f%%" % (interest, image_interest[interest] * 100.0 / total_interest[interest])
+		print "* Imagini pentru monumente de interes %s: ''%f%%''" % (interest, image_interest[interest] * 100.0 / total_interest[interest])
 	#image_keys = image_county.keys()
 	#image_keys.sort()
 	images_percent = {}
@@ -152,7 +167,7 @@ def main():
 		images_percent[county] = image_county[county] * 100.0 / total_county[county]
 	sorted_images = sorted(images_percent.iteritems(), key=operator.itemgetter(1), reverse=True)
 	for county,number in sorted_images:
-		print "Imagini pentru judetul %s: %f%% (%d/%d)" % (county, number , image_county[county], total_county[county])
+		print "* Imagini pentru judetul %s: ''%f%% (%d/%d)''" % (county, number , image_county[county], total_county[county])
 
 if __name__ == "__main__":
 	try:
