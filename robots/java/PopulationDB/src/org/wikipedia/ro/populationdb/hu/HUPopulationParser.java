@@ -22,7 +22,6 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.wikipedia.ro.populationdb.hu.dao.Hibernator;
 import org.wikipedia.ro.populationdb.hu.model.County;
@@ -33,9 +32,9 @@ import org.wikipedia.ro.populationdb.hu.model.Settlement;
 
 public class HUPopulationParser {
 
-    private final List<File> countyHistPopFiles = new ArrayList<File>();
-    private final List<File> countyNatPopFiles = new ArrayList<File>();
-    private final List<File> countyRelPopFiles = new ArrayList<File>();
+    private final Map<Integer, File> countyHistPopFiles = new HashMap<Integer, File>();
+    private final Map<Integer, File> countyNatPopFiles = new HashMap<Integer, File>();
+    private final Map<Integer, File> countyRelPopFiles = new HashMap<Integer, File>();
     private Hibernator hib;
 
     private final Map<Integer, String> counties = new HashMap<Integer, String>() {
@@ -102,9 +101,9 @@ public class HUPopulationParser {
                 }
             }
             if (!stop) {
-                parser.countyHistPopFiles.add(historicalPopFile);
-                parser.countyNatPopFiles.add(nationalityPopFile);
-                parser.countyRelPopFiles.add(religionPopFile);
+                parser.countyHistPopFiles.put(countyIndex, historicalPopFile);
+                parser.countyNatPopFiles.put(countyIndex, nationalityPopFile);
+                parser.countyRelPopFiles.put(countyIndex, religionPopFile);
             }
             countyIndex++;
         } while (!stop);
@@ -134,6 +133,8 @@ public class HUPopulationParser {
         FileInputStream xlsIS = null;
         int currentUnitType = 4;
         final Map<String, District> districtCodes = new HashMap<String, District>();
+        final Session ses = hib.getSession();
+        ses.beginTransaction();
         final County county = hib.getCountyByName(counties.get(countyIndex));
         try {
             final HSSFWorkbook wb = new HSSFWorkbook(xlsIS = new FileInputStream(xlsFile));
@@ -142,7 +143,7 @@ public class HUPopulationParser {
             final Iterator<Row> rowIterator = sheet.iterator();
             boolean foundDistricts = false;
             boolean foundCities = false;
-            for (final Row crtRow = rowIterator.next(); rowIterator.hasNext();) {
+            for (Row crtRow = rowIterator.next(); rowIterator.hasNext(); crtRow = rowIterator.next()) {
                 final Iterator<Cell> cellIterator = crtRow.cellIterator();
                 final Cell firstCell = cellIterator.next();
                 if (firstCell.getCellType() != Cell.CELL_TYPE_STRING) {
@@ -215,6 +216,7 @@ public class HUPopulationParser {
                 }
 
             }
+            ses.getTransaction().commit();
         } catch (final FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -229,6 +231,8 @@ public class HUPopulationParser {
         FileInputStream xlsIS = null;
         int currentUnitType = 4;
         final Map<String, District> districtCodes = new HashMap<String, District>();
+        final Session ses = hib.getSession();
+        ses.beginTransaction();
         final County county = hib.getCountyByName(counties.get(countyIndex));
         try {
             final HSSFWorkbook wb = new HSSFWorkbook(xlsIS = new FileInputStream(xlsFile));
@@ -237,7 +241,7 @@ public class HUPopulationParser {
             final Iterator<Row> rowIterator = sheet.iterator();
             boolean foundDistricts = false;
             boolean foundCities = false;
-            for (final Row crtRow = rowIterator.next(); rowIterator.hasNext();) {
+            for (Row crtRow = rowIterator.next(); rowIterator.hasNext(); crtRow = rowIterator.next()) {
                 final Iterator<Cell> cellIterator = crtRow.cellIterator();
                 final Cell firstCell = cellIterator.next();
                 if (firstCell.getCellType() != Cell.CELL_TYPE_STRING) {
@@ -317,6 +321,7 @@ public class HUPopulationParser {
                 }
 
             }
+            ses.getTransaction().commit();
         } catch (final FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -332,6 +337,8 @@ public class HUPopulationParser {
         FileInputStream xlsIS = null;
         int currentUnitType = 4;
         final Map<String, District> districtCodes = new HashMap<String, District>();
+        final Session ses = hib.getSession();
+        ses.beginTransaction();
         final County county = hib.getCountyByName(counties.get(countyIndex));
         try {
             final HSSFWorkbook wb = new HSSFWorkbook(xlsIS = new FileInputStream(xlsFile));
@@ -398,17 +405,12 @@ public class HUPopulationParser {
                     for (int i = 0; i < censi.size() && cellIterator.hasNext(); i++) {
                         popCell = cellIterator.next();
                         if (popCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                            final Session ses = hib.getSession();
-                            ses.beginTransaction();
-                            Hibernate.initialize(settlement.getHistoricalPopulation());
                             settlement.getHistoricalPopulation().put(censi.get(i), (int) popCell.getNumericCellValue());
-                            ses.getTransaction().commit();
                         }
                     }
                     if (cellIterator.hasNext()) {
                         popCell = cellIterator.next();
                         if (popCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                            final Session ses = hib.getSession();
                             settlement.setPopulation((int) popCell.getNumericCellValue());
                         }
                     }
@@ -419,6 +421,7 @@ public class HUPopulationParser {
                 }
 
             }
+            ses.getTransaction().commit();
         } catch (final FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
