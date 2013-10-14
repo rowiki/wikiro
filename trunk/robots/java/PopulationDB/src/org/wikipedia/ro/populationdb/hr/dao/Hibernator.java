@@ -1,4 +1,4 @@
-package org.wikipedia.ro.populationdb.hu.dao;
+package org.wikipedia.ro.populationdb.hr.dao;
 
 import java.io.Closeable;
 import java.io.File;
@@ -10,11 +10,10 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.wikipedia.ro.populationdb.hu.model.County;
-import org.wikipedia.ro.populationdb.hu.model.District;
-import org.wikipedia.ro.populationdb.hu.model.Nationality;
-import org.wikipedia.ro.populationdb.hu.model.Religion;
-import org.wikipedia.ro.populationdb.hu.model.Settlement;
+import org.wikipedia.ro.populationdb.hr.model.Commune;
+import org.wikipedia.ro.populationdb.hr.model.County;
+import org.wikipedia.ro.populationdb.hr.model.Nationality;
+import org.wikipedia.ro.populationdb.hr.model.Religion;
 import org.wikipedia.ro.populationdb.util.HibernateUtil;
 
 public class Hibernator implements Closeable {
@@ -42,26 +41,6 @@ public class Hibernator implements Closeable {
         if (0 == res.size()) {
             ret = new County();
             ret.setName(countyName);
-            ses.saveOrUpdate(ret);
-        } else {
-            ret = res.get(0);
-        }
-        return ret;
-    }
-
-    public District getDistrictByName(final String districtName, final String countyName) {
-        final County county = getCountyByName(countyName);
-        final Session ses = sessionFactory.getCurrentSession();
-        final Query findDistrict = ses
-            .createQuery("from District district where district.name=:districtName and district.county.name=:countyName");
-        findDistrict.setParameter("districtName", districtName);
-        findDistrict.setParameter("countyName", countyName);
-        final List<District> res = findDistrict.list();
-        District ret = null;
-        if (0 == res.size()) {
-            ret = new District();
-            ret.setName(districtName);
-            ret.setCounty(county);
             ses.saveOrUpdate(ret);
         } else {
             ret = res.get(0);
@@ -101,18 +80,18 @@ public class Hibernator implements Closeable {
         return ret;
     }
 
-    public Settlement getSettlementByName(final String settlementName, final District district, final int town) {
+    public Commune getCommuneByName(final String communeName, final County county, final int town) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query findSettlement = ses
-            .createQuery("from Commune s where s.name=:settlementName and s.district=:district");
-        findSettlement.setParameter("settlementName", settlementName);
-        findSettlement.setParameter("district", district);
-        final List<Settlement> res = findSettlement.list();
-        Settlement ret = null;
+            .createQuery("from Commune s where s.name=:communeName and s.county=:county");
+        findSettlement.setParameter("communeName", communeName);
+        findSettlement.setParameter("county", county);
+        final List<Commune> res = findSettlement.list();
+        Commune ret = null;
         if (0 == res.size()) {
-            ret = new Settlement();
-            ret.setName(settlementName);
-            ret.setDistrict(district);
+            ret = new Commune();
+            ret.setName(communeName);
+            ret.setCounty(county);
             ret.setTown(town);
             ses.saveOrUpdate(ret);
         } else {
@@ -127,15 +106,9 @@ public class Hibernator implements Closeable {
         }
     }
 
-    public void saveSettlement(final Settlement settlement) {
+    public void saveCommune(final Commune commune) {
         final Session ses = sessionFactory.getCurrentSession();
-        ses.saveOrUpdate(settlement);
-    }
-
-    public void storeDistrict(final District district, final County county) {
-        final Session ses = sessionFactory.getCurrentSession();
-        district.setCounty(county);
-        ses.saveOrUpdate(county);
+        ses.saveOrUpdate(commune);
     }
 
     public Session getSession() {

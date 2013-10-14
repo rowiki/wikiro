@@ -1,6 +1,5 @@
 package org.wikipedia.ro.populationdb.bg;
 
-import static org.apache.commons.lang3.StringUtils.replaceChars;
 import static org.apache.commons.lang3.StringUtils.startsWith;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 import static org.apache.commons.lang3.StringUtils.trim;
@@ -33,7 +32,7 @@ import org.wikipedia.ro.populationdb.bg.model.Settlement;
 import org.wikipedia.ro.populationdb.util.HibernateUtil;
 
 public class BGPopulationParser {
-    private static SessionFactory sessionFactory = initHibernate();
+    static SessionFactory sessionFactory = initHibernate();
 
     public static void main(final String[] args) {
         // TODO Auto-generated method stub
@@ -287,12 +286,11 @@ public class BGPopulationParser {
         }
     }
 
-    private static SessionFactory initHibernate() {
-        final String packageName = BGPopulationParser.class.getPackage().getName();
-        final URL url = BGPopulationParser.class.getResource(replaceChars(packageName, '.', '/') + "/hibernate.cfg.xml");
+    static SessionFactory initHibernate() {
+        final URL url = BGPopulationParser.class.getResource(".");
         File f;
         try {
-            f = new File(url.toURI());
+            f = new File(new File(url.toURI()), "hibernate.cfg.xml");
             return HibernateUtil.getSessionFactory(f);
         } catch (final URISyntaxException e) {
             // TODO Auto-generated catch block
