@@ -285,14 +285,14 @@ public class WikiTextGenerator2011 {
                     final StringBuilder poprefBuilder = new StringBuilder("<ref name=\"kia.hu\"");
                     if (!generateDemographySection && StringUtils.countMatches(pageText, "<ref name=\"kia.hu\">") < 2) {
                         poprefBuilder
-                            .append(">{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recens�?mântul Populației și al Locuințelor 2002 - populația unit�?ților administrative pe etnii|publisher=K");
+                        .append(">{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recens�?mântul Populației și al Locuințelor 2002 - populația unit�?ților administrative pe etnii|publisher=K");
                         poprefBuilder.append(StringUtils.lowerCase("ULTUR�?LIS "));
                         poprefBuilder.append('I');
                         poprefBuilder.append(StringUtils.lowerCase("NNOV�?CIÓS "));
                         poprefBuilder.append('A');
                         poprefBuilder.append(StringUtils.lowerCase("LAPÍTV�?NY"));
                         poprefBuilder
-                            .append(" (KIA.hu - Fundația Cultural�? pentru Inovație)|accessdate=2013-08-06}}</ref> ");
+                        .append(" (KIA.hu - Fundația Cultural�? pentru Inovație)|accessdate=2013-08-06}}</ref> ");
                     } else {
                         poprefBuilder.append("/>");
                     }
@@ -301,7 +301,7 @@ public class WikiTextGenerator2011 {
                         && StringUtils.countMatches(pageText, "<ref name=\"insse_2011_nat\">") < 2) {
 
                         poprefBuilder
-                            .append(">Rezultatele finale ale Recens�?mântului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabil�? dup�? etnie – județe, municipii, orașe, comune|publisher=[[Institutul Național de Statistic�?]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
+                        .append(">Rezultatele finale ale Recens�?mântului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabil�? dup�? etnie – județe, municipii, orașe, comune|publisher=[[Institutul Național de Statistic�?]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
                     } else {
                         poprefBuilder.append("/>");
                     }
@@ -718,7 +718,7 @@ public class WikiTextGenerator2011 {
             textBuilder.append("% din populație, nu este cunoscut�? apartenența confesional�?.");
         }
         textBuilder
-            .append("<ref name=\"insse_2011_rel\">Rezultatele finale ale Recens�?mântului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_TAB_13.xls|title=Tab13. Populaţia stabil�? dup�? religie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistic�?]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
+        .append("<ref name=\"insse_2011_rel\">Rezultatele finale ale Recens�?mântului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_TAB_13.xls|title=Tab13. Populaţia stabil�? dup�? religie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistic�?]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
 
         return textBuilder.toString();
     }
@@ -834,7 +834,7 @@ public class WikiTextGenerator2011 {
             + getShortedName(uta) + ".png");
         ImageIO.write(bufferedImage, "PNG", outFile);
 
-        final StringBuilder pieChart = new StringBuilder("{{Pie chart\n|thumb=left\n|caption=Componența etnic�? a ");
+        final StringBuilder pieChart = new StringBuilder("{{Pie chart\n|thumb=left\n|caption=Componența etnică a ");
         pieChart.append(getGenitiveFullName(uta));
         int i = 1;
         for (final Object k : dataset.getKeys()) {
@@ -909,13 +909,13 @@ public class WikiTextGenerator2011 {
             textBuilder.append("% din populație, apartenența etnic�? nu este cunoscut�?.");
         }
         textBuilder
-            .append("<ref name=\"insse_2011_nat\">Rezultatele finale ale Recens�?mântului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabil�? dup�? etnie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistic�?]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
+        .append("<ref name=\"insse_2011_nat\">Rezultatele finale ale Recens�?mântului din 2011: {{Citat web|url=http://www.recensamantromania.ro/wp-content/uploads/2013/07/sR_Tab_8.xls|title=Tab8. Populaţia stabil�? dup�? etnie – judeţe, municipii, oraşe, comune|publisher=[[Institutul Național de Statistic�?]] din România|accessdate=2013-08-05|date=iulie 2013}}</ref>");
         return textBuilder.toString();
     }
 
     private static void generateCountyIntroductionText(final PopulationDb2002Entry uta, final StringBuilder textBuilder) {
         textBuilder
-            .append("Conform [[Recens�?mântul populației din 2011 (România)|recens�?mântului efectuat în 2011]], populația ");
+        .append("Conform [[Recens�?mântul populației din 2011 (România)|recens�?mântului efectuat în 2011]], populația ");
         textBuilder.append(getGenitiveFullName(uta));
         textBuilder.append(" se ridic�? la {{formatnum:");
         textBuilder.append(uta.getPopulation());
@@ -959,17 +959,17 @@ public class WikiTextGenerator2011 {
 
             if (oldPopulationSum == uta.getPopulation()) {
                 textBuilder
-                    .append(", aceeași ca și la [[Recens�?mântul populației din 2002 (România)|recens�?mântul anterior din 2002]].");
+                .append(", aceeași ca și la [[Recens�?mântul populației din 2002 (România)|recens�?mântul anterior din 2002]].");
             } else if (oldPopulationSum > uta.getPopulation()) {
                 textBuilder
-                    .append(", în sc�?dere faț�? de [[Recens�?mântul populației din 2002 (România)|recens�?mântul anterior din 2002]], când se înregistraser�? {{formatnum:");
+                .append(", în sc�?dere faț�? de [[Recens�?mântul populației din 2002 (România)|recens�?mântul anterior din 2002]], când se înregistraser�? {{formatnum:");
                 textBuilder.append(oldPopulationSum);
                 textBuilder.append("}}&nbsp;");
                 textBuilder.append(Utilities.de(oldPopulationSum, "locuitor", "locuitori"));
                 textBuilder.append('.');
             } else {
                 textBuilder
-                    .append(", în creștere faț�? de [[Recens�?mântul populației din 2002 (România)|recens�?mântul anterior din 2002]], când se înregistraser�? {{formatnum:");
+                .append(", în creștere faț�? de [[Recens�?mântul populației din 2002 (România)|recens�?mântul anterior din 2002]], când se înregistraser�? {{formatnum:");
                 textBuilder.append(oldPopulationSum);
                 textBuilder.append("}}&nbsp;");
                 textBuilder.append(Utilities.de(oldPopulationSum, "locuitor", "locuitori"));
@@ -978,13 +978,13 @@ public class WikiTextGenerator2011 {
             textBuilder.append("<ref name=\"kia.hu\">");
             if (oldPopulationSelect < 0) {
                 textBuilder
-                    .append("Populația satelor componente la recens�?mântul din 2002. Pe atunci, comuna înc�? nu exista, ea fiind înființat�? la o dat�? ulterioar�?. ");
+                .append("Populația satelor componente la recens�?mântul din 2002. Pe atunci, comuna înc�? nu exista, ea fiind înființat�? la o dat�? ulterioar�?. ");
             } else if (currentComponentCount != oldComponentCount) {
                 textBuilder
-                    .append("Populația satelor aflate actualmente în componența comunei, ea având la acea vreme (2002) alt�? componenț�?.");
+                .append("Populația satelor aflate actualmente în componența comunei, ea având la acea vreme (2002) alt�? componenț�?.");
             }
             textBuilder
-                .append("{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recens�?mântul Populației și al Locuințelor 2002 - populația unit�?ților administrative pe etnii|publisher=K");
+            .append("{{cite web|url=http://www.kia.hu/konyvtar/erdely/erd2002/etnii2002.zip|title=Recens�?mântul Populației și al Locuințelor 2002 - populația unit�?ților administrative pe etnii|publisher=K");
             textBuilder.append(StringUtils.lowerCase("ULTUR�?LIS "));
             textBuilder.append('I');
             textBuilder.append(StringUtils.lowerCase("NNOV�?CIÓS "));
