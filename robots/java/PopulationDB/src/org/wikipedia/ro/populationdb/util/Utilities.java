@@ -26,7 +26,7 @@ public class Utilities {
             put('Л', "L");
             put('М', "M");
             put('Н', "N");
-            put('О', "О");
+            put('О', "O");
             put('П', "P");
             put('Р', "R");
             put('С', "S");
@@ -104,7 +104,7 @@ public class Utilities {
             case 'Й':
                 if (i + 1 >= in.length()) {
                     transformedChar = charmap.get(crt);
-                } else if (null != prev && prev.charValue() == 'И') {
+                } else if (null != prev && prev.charValue() == 'И' && i == in.length() - 1) {
                     transformedChar = "";
                 } else {
                     transformedChar = charmap.get(crt);
