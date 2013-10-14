@@ -1,0 +1,5 @@
+introTmpl(nume, populatie) ::= "La [[Recensământul din 2011 (Bulgaria)|recensământul din 2011]], populația obștinei <nume> era de <populatie> locuitori."
+ethnicMaj(maj_procent, etnie_maj) ::= "Din punct de vedere etnic, majoritatea locuitorilor (<maj_procent>) erau <etnie_maj>"
+someMinorities(minorities_enum) ::= ", existând și minorități de <minorities_enum>"
+noMaj(ethnicities_enum) ::= "Nu există o etnie majoritară, locuitorii fiind <ethnicities_enum>."
+piechart(nume, props) ::= "{{Pie chart\n|thumb=left\n|caption=Componența etnică a obștinei <nume><props>}}\n"
