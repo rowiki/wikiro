@@ -72,6 +72,9 @@ mistakes = {
 	u'(I|V|X)p\.(\s?)Chr\.': u'\g<1> p. Chr.',
 	u'p\.Chr\.': u'p. Chr.',
 	u'(\| (?!Imagine))(.*)sec\.(I|V|X)': u'\g<1>\g<2>sec. \g<3>',
+	u'(\| (?!Imagine|Commons))(.*):([0-9])': u'\g<1>\g<2>: \g<3>',
+}
+minormistakes = {
 	#specific to one or few file(s)
 	u'Cetate(a?)de([a-zăîâșțA-ZĂÂÎȘȚ])': u'Cetate\g<1> de \g<2>',
 	u'Moar([ăa])de([a-zăîâșțA-ZĂÂÎȘȚ])': u'Moar\g<1> de \g<2>',
@@ -90,10 +93,32 @@ mistakes = {
 	u'lemnabisericii([a-zăîâșț])': u'lemn a bisericii \g<1>',
 	u'afosteimănăstiri': u'a fostei mănăstiri',
 	u'([cC])astrulde': u'\g<1>astrul de',
+	u'([pP])rimajum': u'\g<1>rima jum',
+	u'înc .sec': u"înc. sec",
+	u'înfața': u'în fața',
+	u' azi([a-z]{2,})': u' azi \g<1>',
+	u'(\| (?!Imagine|Commons|NotăCod|Cod92))(.*)([a-z])([0-9])': u'\g<1>\g<2>\g<3> \g<4>',
+	u'(\| (?!Imagine|Commons|NotăCod|Cod92))(.*)([0-9])(ale|[dD]e|[Ii]anuarie|[Ff]ebruarie|[Mm]artie|[Aa]prilie|[Mm]ai|[iI]unie|[iI]ulie|[Aa]ugust|[Ss]eptembrie|[Oo]ctombrie|[Nn]oiembrie)': u'\g<1>\g<2>\g<3> \g<4>',
+	u'([Pp])eolungimede': u'\g<1>e o lungime de',
+	u'personalitățialeistorieiși': u'personalități ale istoriei și',
+	u'(\| (?!Imagine|Commons|NotăCod))(.*)([NSEV])(de|între|printre)': u'\g<1>\g<2>\g<3> \g<4>',
+	u'deunpâlcde': u'de un pâlc de',
+	u'deint': u'de int',
+	u'(\| (?!Imagine|Commons|NotăCod))(.*)(DJ|DC|DN)([a-zA-Z])': u'\g<1>\g<2>\g<3> \g<4>',
+	u'înfost(ul|a)([a-z])': u'în fost\g<1> \g<2>',
+	u'deculmeaparalelă': u'de culmea paralelă',
+	u'(de?)s a t': u'\g<1> sat',
+	u'([bcdfghjklmnpqsștțvwxzăî])și ': u'\g<1> și ',
+	u'([bcdfghjklmnpqrsștțvwxzăî])nr\.': u'\g<1> nr.',
+	u'și(turn|zid|poartă)': u'și \g<1>',
+	u'turn(de|al)\s?([a-z]?)': u'turn \g<1> \g<2>',
+	
 }
 
-coords = {
+deprecated = {
 	u'\|\s?Coordonate\s=.*(\r?)\n': u'',
+	u'\| Arhitect =\s{0,2}\n': u'',
+	u'\| Arhitect = (.*)\n': u'| Creatori = \g<1>\n',
 }
 
 improvements = OrderedDict([
@@ -105,28 +130,55 @@ improvements = OrderedDict([
 	(u' \s', u' '),#the replacement is U+00A0
 ])
 
+authors = {
+}
+
+def checkAndUpload(page, text, newtext, comment):
+	if text != newtext:
+                changed = True
+                #print mistake
+                pywikibot.showDiff(text, newtext)
+                resp = pywikibot.input("Do you agree with the change above? [y/n]")
+                if resp == "y" or resp == "Y":
+                         page.put(newtext, comment)
+                         return newtext
+	return text
+
 def processList(page):
 	pywikibot.output(u'Working on "%s"' % page.title(True))
-	global mistakes
+	#global mistakes
+	global minormistakes
+	#global authors
 	origtext = text = page.get()
 	changed = False
-	#for mistake in improvements.keys():
-		#newtext = re.sub(mistake, improvements[mistake], text)
-		#if text <> newtext:
-			#changed = True
-			#text = newtext
-	for mistake in mistakes.keys():
-		newtext = re.sub(mistake, mistakes[mistake], text)
-		if text <> newtext:
-			changed = True
-			print mistake
-			text = newtext
-	comment = u'Înlocuiesc spațiul cu non-breaking space (U+00A0) în unitățile de distranță din articolul [[%s]]' % page.title(True)
-	#comment = u'Scot câmpul de coordonate din articolul [[%s]]' % page.title(True)
+	#comment = u'Înlocuiesc spațiul cu non-breaking space (U+00A0) în unitățile de distranță din articolul [[%s]]' % page.title(True)
+	#comment = u'Scot câmpul învechite din {{ElementLMI}} în articolul [[%s]]' % page.title(True)
 	comment = u'Se corectează anumite erori frecvente din articolul [[%s]]' % page.title(True)
+	#for mistake in improvements.keys():
+	#	newtext = re.sub(mistake, improvements[mistake], text)
+	#	if text <> newtext:
+	#		changed = True
+	#		text = newtext
+	#for mistake in mistakes.keys():
+	#	newtext = re.sub(mistake, mistakes[mistake], text)
+	#	if newtext != text:
+	#		text = checkAndUpload(page, text, newtext, comment)
+	
+	for mistake in minormistakes.keys():
+		newtext = re.sub(mistake, minormistakes[mistake], text)
+		if newtext != text:
+			text = checkAndUpload(page, text, newtext, comment)
+	#for field in deprecated.keys():
+	#	newtext = re.sub(field, deprecated[field], text)
+	#	if text <> newtext:
+	#		changed = True
+	#		print author
+	#		text = newtext
+	return
 	if changed == True:
 		pywikibot.showDiff(origtext, text)
 		resp = pywikibot.input("Do you agree with ALL the changes above? [y/n]")
+		#resp = "y"
 		if resp == "y" or resp == "Y":
 			page.put(text, comment)
 
@@ -137,12 +189,12 @@ def main():
 	lang = u'ro'
 	textfile = u''
 
-	for arg in pywikibot.handleArgs():
-		if arg.startswith('-lang:'):
-			lang = arg [len('-lang:'):]
-			user.mylang = lang
-		if arg.startswith('-family'):
-			user.family = arg [len('-family:'):]
+	#for arg in pywikibot.handleArgs():
+	#	if arg.startswith('-lang:'):
+	#		lang = arg [len('-lang:'):]
+	#		user.mylang = lang
+	#	if arg.startswith('-family'):
+	#		user.family = arg [len('-family:'):]
 
 	site = pywikibot.getSite()
 	lang = site.language()
