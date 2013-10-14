@@ -23,98 +23,37 @@ from pywikibot import config as user
 
 countries = {
 	('ro', 'ro') : {
-	'project' : u'wikipedia',
-	'lang' : u'ro',
-	'headerTemplate' : u'ÎnceputTabelLMI',
-	'rowTemplate' : u'ElementLMI',
-	'footerTemplate' : u'SfârșitTabelLMI',
-	'commonsTemplate' : u'Monument istoric',
-	'commonsTrackerCategory' : u'Cultural heritage monuments in Romania with known IDs',
-	'commonsCategoryBase' : u'Historical monuments in Romania',
-	'unusedImagesPage' : u'User:Multichill/Unused Monument istoric',
-	'imagesWithoutIdPage' : u'User:Multichill/Monument istoric without ID',
-	'namespaces' : [0],
-	'table' : u'monuments_ro_(ro)',
-	'truncate' : False, 
-	'primkey' : u'Cod',
-	'fields' : 
-		[
-		    {
-		    'source' : u'Cod',
-		    'dest' : u'cod',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Denumire',
-		    'dest' : u'denumire',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Localitate',
-		    'dest' : u'localitate',
-		    'conv' : u'',
-		    },
-			    {
-		    'source' : u'Adresă',
-		    'dest' : u'adresa',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Datare',
-		    'dest' : u'datare',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Arhitect',
-		    'dest' : u'arhitect',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Lat',
-		    'dest' : u'lat',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Coordonate',
-		    'dest' : u'',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Lon',
-		    'dest' : u'lon',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Imagine',
-		    'dest' : u'imagine',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Commons',
-		    'dest' : u'commons',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'NotăCod',
-		    'dest' : u'notacod',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'FostCod',
-		    'dest' : u'fostcod',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'Cod92',
-		    'dest' : u'cod92',
-		    'conv' : u'',
-		    },
-		    {
-		    'source' : u'CodRan',
-		    'dest' : u'codran',
-		    'conv' : u'',
-		    },
-		],
+		'project' : u'wikipedia',
+		'lang' : u'ro',
+		'headerTemplate' : u'ÎnceputTabelLMI',
+		'rowTemplate' : u'ElementLMI',
+		'footerTemplate' : u'SfârșitTabelLMI',
+		'commonsTemplate' : u'Monument istoric',
+		'commonsTrackerCategory' : u'Cultural heritage monuments in Romania with known IDs',
+		'commonsCategoryBase' : u'Historical monuments in Romania',
+		'unusedImagesPage' : u'User:Multichill/Unused Monument istoric',
+		'imagesWithoutIdPage' : u'User:Multichill/Monument istoric without ID',
+		'namespaces' : [0],
+		'table' : u'monuments_ro_(ro)',
+		'truncate' : False, 
+		'primkey' : u'Cod',
+		'fields' : {
+                    u'Cod': u'Cod',
+                    u'Denumire': u'Denumire',
+                    u'Localitate': u'Localitate',
+                    u'Adresă': u'Adresă',
+                    u'Datare': u'Datare',
+                    u'Arhitect': u'Creatori',
+                    u'Lat': u'Lat',
+                    u'Coordonate': u'Coordonate',
+                    u'Lon': u'Lon',
+                    u'Imagine': u'Imagine',
+                    u'Commons': u'Commons',
+                    u'NotăCod': u'Notăcod',
+                    u'FostCod': u'FostCod',
+                    u'Cod92': u'Cod92',
+                    u'CodRan': u'CodRan',
+             },
 	},
 }
 
@@ -137,8 +76,7 @@ def rebuildTemplate(params):
 	my_template = u"{{" + countries.get(('ro', 'ro')).get('rowTemplate') + u"\n"
 	for name in [u"Cod", u"NotăCod", u"FostCod", u"CodRan", u"Cod92", u"Denumire", u"Localitate", u"Adresă", u"Datare", u"Arhitect", u"Lat", u"Lon", u"Imagine", u"Commons"]:
 		if name in params and params[name] <> u"":
-			my_template += u"| " + name + u" = " + params[name] + u"\n"
-			
+			my_template += u"| " + countries.get(('ro', 'ro')).get('fields')[name] + u" = " + params[name] + u"\n"
 	my_template += u"}}\n"
 	return my_template
 
@@ -234,6 +172,12 @@ def main():
 	f = open("ro_authors.json", "r+")
 	pywikibot.output("Reading ro.wp authors file...")
 	authors_ro = json.load(f)
+	pywikibot.output("...done")
+	f.close();
+
+	f = open("ro_Fișier_pages.json", "r+")
+	pywikibot.output("Reading ro.wp files file...")
+	files_ro = json.load(f)
 	pywikibot.output("...done")
 	f.close();
 
@@ -417,12 +361,24 @@ def main():
 					artimage = "File:" + artimage
 				#pywikibot.output("Upload?" + artimage)
 				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
-			#final option: choose a random image from commons
+			#next option: choose a random image from commons
 			elif (code in pages_commons) and len(pages_commons[code]) > 0:
-				artimage = random.sample(pages_commons[code],  1)[0]["name"]
+				tries = 0
+				while True:
+					artimage = random.sample(pages_commons[code],  1)[0]["name"]
+					tries += 1
+					#be picky and don't choose a detail picture; also stop on some arbitrary condition
+					if artimage.find("detali") == -1 or tries == len(pages_commons[code]):
+						break
 				if artimage.find(':') < 0:#no namespace
 					artimage = "File:" + artimage
 				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
+			#final option: perhaps we have a local image?
+			elif (code in files_ro) and len(files_ro[code]) > 0:
+				localimage = random.sample(files_ro[code],  1)[0]["name"]
+				if localimage.find(':') < 0:#nonamespace
+					localimage = "File:" + localimage
+				articleText = updateTableData(monument["source"], code, "Imagine", localimage, text=articleText)
 		
 		#Commons category
 		if code in categories_commons:
