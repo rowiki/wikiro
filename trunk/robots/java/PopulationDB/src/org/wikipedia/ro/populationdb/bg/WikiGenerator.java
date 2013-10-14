@@ -232,9 +232,9 @@ public class WikiGenerator {
             }
             demographics.append(".");
             demographics
-                .append("<ref>{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_ethnos.xls|title=Distribuția etnică a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref>");
+            .append("<ref>{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_ethnos.xls|title=Distribuția etnică a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref>");
             demographics
-                .append("<ref>{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_Age.xls|title=Distribuția pe vârste a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref> ");
+            .append("<ref>{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_Age.xls|title=Distribuția pe vârste a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref> ");
             final Nationality undeclared = findNationalityByName("Nicio identificare");
             if (null != undeclared) {
                 final double undeclaredPercent = 100.0 * obshtina.getEthnicStructure().get(undeclared)
@@ -261,7 +261,7 @@ public class WikiGenerator {
                 articleText.append(rowiki.getPageText(title));
                 final int startOfEnding = Math.max(articleText.indexOf("{{ciot-Bulgaria"),
                     articleText.indexOf("{{Ciot-Bulgaria"));
-                articleText.insert(startOfEnding, demographics);
+                articleText.insert(startOfEnding - 1, demographics);
                 final int generalCategoryStart = articleText.indexOf("[[Categorie:Comunele Bulgariei");
                 final int generalCategoryEnd = 2 + articleText.indexOf("]]", generalCategoryStart);
 
@@ -333,8 +333,9 @@ public class WikiGenerator {
         if (!StringUtils.isEmpty(latd)) {
             infoboxParams.put("latd", latd);
             infoboxParams.put("latNS", "N");
+            infoboxParams.put("pushpin_map", "Bulgaria");
         }
-        final String longd = bgparams.get("сев-ширина");
+        final String longd = bgparams.get("изт-дължина");
         if (!StringUtils.isEmpty(longd)) {
             infoboxParams.put("longd", longd);
             infoboxParams.put("longEV", "E");
@@ -344,14 +345,13 @@ public class WikiGenerator {
             infoboxParams.put("suprafață_totală_km2", "{{formatnum:" + aria + "}}");
         }
 
-
         for (final String ibParam : infoboxParams.keySet()) {
             sb.append("\n|");
             sb.append(ibParam);
             sb.append(" = ");
             sb.append(infoboxParams.get(ibParam));
         }
-        sb.append("}}\n");
+        sb.append("\n}}\n");
 
         final STGroup templateGroup = new STGroupFile("templates/bg/section_obshtina.stg");
         final ST intro = templateGroup.getInstanceOf("introObshtina");
