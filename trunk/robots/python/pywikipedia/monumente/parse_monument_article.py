@@ -26,7 +26,9 @@ import strainu_functions as strainu
 options = {
 	'ro':
 	{
-		'namespaces': [0],
+		'namespaces': [0, 6],
+		#'namespaces': [6],
+		'templateRegexp': re.compile("\{\{[a-z]*codLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 		'codeTemplate': "codLMI",
 		'codeTemplateParams': 
 		[
@@ -46,7 +48,7 @@ options = {
 			'ran': u'cod-ran',
 		},
 		{
-			'name': u'Cutie Edificiu Religios|Infocaseta Edificiu religios|Infocaseta Lăcaș de cult',
+			'name': u'Cutie Edificiu Religios|Infocaseta Edificiu religios|Infocaseta Teatru|Moschee',
 			'author': [u'arhitect'],
 			'image': u'imagine',
 			'ran': u'',#nada yet
@@ -81,19 +83,26 @@ options = {
 			'image': u'imagine',
 			'ran': u'codRAN'
 		},
+		{
+			'name': u'Infocaseta clădire|Infobox cladire|Infobox building',
+			'author': [u'arhitect'],
+			'image': u'image',
+			'ran': u''#nada yet
+		},
 		],
 		'qualityTemplates':
 		[
-		u'Articol bun',
-		u'Articol de calitate',
-		u'Listă de calitate',
+			u'Articol bun',
+			u'Articol de calitate',
+			u'Listă de calitate',
 		],
 	},
 	'commons':
 	{
 		'namespaces': [14, 6],
 		#'namespaces': [6],
-		'codeTemplate': "Monument_istoric",
+		'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
+		'codeTemplate': "Monument istoric",
 		'codeTemplateParams': 
 		[
 			u'lmi92',
@@ -116,12 +125,23 @@ options = {
 			u'Assessments',
 			u'Wiki Loves Monuments 2011 Europe nominee'
 		],
+		'validOccupations':
+		{
+			#we don't care about the creators of the 2D representation
+			u'architect': u'arhitect',
+			u'architectural painter': u'pictor arhitectural',
+			u'artist': u'artist',
+			u'artisan': u'artizan',
+			u'author': u'autor',
+			u'engineer': u'inginer',
+			u'entrepreneur': u'întreprinzător',
+			u'ornamental painter': u'pictor ornamental',
+		},
 	}
 }
 
 
 codeRegexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
-templateRegexp = re.compile("\{\{[a-z]*codLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
 errorRegexp = re.compile("eroare\s?=\s?([^0])", re.I)
 geohackRegexp = re.compile("geohack\.php\?pagename=(.*?)&(amp;)?params=(.*?)&(amp;)?language=")
 qualityRegexp = None
@@ -308,23 +328,57 @@ def commaRepl(matchobj):
 def formatAuthor(author):
 	ref = ""
 	if author.find("<ref") > -1:
-		ref = "".join(re.findall("<ref.*>", author))
+		ref = "".join(re.findall("<ref.*>", author))#TODO: this is oversimplified
 		author = author.split("<ref")[0]
 	author = strainu.stripNamespace(author.strip())
+	author = re.sub(u"((,|și)??)\s*<br\s*\/?\s*>\s*", commaRepl, author, flags=re.I)
 	#print author
-	author = re.sub(u"((,|și)??)\s*<br\s*\/?\s*>", commaRepl, author, flags=re.I)
+	author = author.replace(u" și", u",")
+	#print author
+	authors = author.split(u",")
+	author = u""
+	for i,a in enumerate(authors):
+		a = a.strip()
+		parsed = strainu.extractLinkAndSurroundingText(a)
+		if parsed != None:
+			author += parsed[0] + u"[[" + parsed[1] + u"]]" + parsed[2]
+		else:
+			author += u"[[" + a + u"]]"
+		if i != len(authors) - 1:
+			author += u", "
+		#print author
 	return author + ref
+
+#commons-specific
+def processCreatorTemplate(name, conf):
+	site = pywikibot.Site()
+	creator = pywikibot.Page(site, name)
+	if creator.exists() == False:
+		return u""
+	while creator.isRedirectPage():
+		creator = creator.getRedirectTarget()
+	tls = pywikibot.extract_templates_and_params(creator.get())
+	for (template,params) in tls:
+		if template != u"Creator":
+			continue
+		occupation = params[u"Occupation"]
+		for valid in conf['validOccupations']:
+			if occupation.find(valid) > -1:
+				#print occupation
+				return formatAuthor(name) + u" (" + conf['validOccupations'][valid] + u")"
+	return u""
+		
 
 def processArticle(text, page, conf):
 	title = page.title()
 	pywikibot.output(u'Working on "%s"' % title)
 	global codeRegexp
 	code = checkAllCodes(re.findall(codeRegexp, text), title)
-	if code is None: #no valid code
+	if code is None: #no valid code in page
 		pywikibot.output("No valid code in page " + title)
 		return
 	elif code == "": #more than one code, juse use the one that is marked as {{codLMI|code}}
-		code = checkAllCodes(re.findall(templateRegexp, text), title, False)
+		code = checkAllCodes(re.findall(conf['templateRegexp'], text), title, False)
 		if code is None or code == "": # either no code or more than one code is marked; just ignore
 			   pywikibot.output("Too many codes in page " + title)
 			   return
@@ -337,8 +391,22 @@ def processArticle(text, page, conf):
 		quality = True
 	else:
 		quality = False
-
-	lat, long = parseGeohackLinks(page)
+	
+	#lat, long = parseGeohackLinks(page)
+	
+	try:
+		coor = page.coordinates(True)
+		#print type(coor)
+		lat = coor['latitude']
+		long = coor['longitude']
+	except KeyError as e:
+		#print "KeyError " + repr(e)
+		lat, long = parseGeohackLinks(page)
+	except Exception as e:
+		#print "Exception " + repr(e)
+		lat = long = 0
+	
+	
 
 	author = None
 	image = None
@@ -360,13 +428,10 @@ def processArticle(text, page, conf):
 				author_type =  _dict[author_key_type].strip().lower()
 			else:
 				author_type = author_key.lower()
-			if author_type.find("arhitect") == -1 and \
-					author_type.find("artist") == -1 and \
-					author_type.find("_name") == -1 and \
-					author_type <> "":
-				author += formatAuthor(_dict[author_key]) + " (" + author_type + "), "
+			if author_type.find("_name") != -1:
+				author += processCreatorTemplate(_dict[author_key], conf) + u", "
 			else:
-				author = formatAuthor(_dict[author_key]) + ", " + author #architects always go first
+				author += formatAuthor(_dict[author_key]) + " (" + author_type + "), "
 		if author == "":
 			author = None
 		else:
@@ -473,7 +538,7 @@ def main():
 	for namespace in langOpt.get('namespaces'):
 		transGen = pagegenerators.ReferringPageGenerator(rowTemplate,
 									onlyTemplateInclusion=True, step=1000)
-		#transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, "Category:Schitul_Crivina"))
+		#transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, u"Categorie:1735_în_arhitectură"))
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen,
 									[namespace], site)
 		if preload:
@@ -481,7 +546,6 @@ def main():
 		else:
 			pregenerator = filteredGen
 
-		#page = pywikibot.Page(site, "File:Biserica_Sf._Maria,_sat_Drumul_Carului,_'La_Cetate'-Gradistea._Moeciu,_jud._BRASOV.jpg")
 		count = 0
 		if namespace == 0:
 			namespaceName = ""
@@ -502,6 +566,7 @@ def main():
 		del vallist
 		del jsonFile
 		for page in pregenerator:
+			#page = pywikibot.Page(site, u"File:Bucuresti punte 1837.jpg")
 			content = None
 			pageTitle = page.title()
 			if pageTitle in reworkedDict:
