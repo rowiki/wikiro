@@ -73,9 +73,9 @@ def processMonument(params, source, countryconfig, title):
 			if field in fields:
 				#Load it with Big fucking escape hack. Stupid mysql lib
 				if field == "Cod":
-					contents[field] = re.sub(r'\s', '', value.encode("utf8")) # Do this somewhere else.replace("'", "\\'")
+					contents[fields[field]] = re.sub(r'\s', '', value.encode("utf8")) # Do this somewhere else.replace("'", "\\'")
 				else:
-					contents[field] = value.encode("utf8") # Do this somewhere else.replace("'", "\\'")
+					contents[fields[field]] = value.encode("utf8") # Do this somewhere else.replace("'", "\\'")
 			else:
 				#FIXME: Include more information where it went wrong
 				pywikibot.output(u'Found unknown field: %s on page %s' % (field, title) )
