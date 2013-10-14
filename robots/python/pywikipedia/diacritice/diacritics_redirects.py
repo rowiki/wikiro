@@ -23,8 +23,9 @@ __version__ = '$Id: diacritics_redirects.py 7918 2010-02-08 11:24:22Z xqt $'
 
 import time, sys, re
 import string
-import wikipedia as pywikibot
-import pagegenerators
+import pywikibot
+from pywikibot import pagegenerators
+from pywikibot import config as user
 
 docuReplacements = {
     '&params;': pagegenerators.parameterHelp
@@ -70,16 +71,16 @@ class DiacriticsBot:
         
         #transrule = string.maketrans("şţŞŢ", "șțȘȚ")
         #page_cap = pywikibot.Page(self.site, page_t.translate(transrule))
-        new_page_t = string.replace(page_t, u'ş', u'ș')
-        new_page_t = string.replace(new_page_t, u'ţ', u'ț')
-        new_page_t = string.replace(new_page_t, u'Ş', u'Ș')
-        new_page_t = string.replace(new_page_t, u'Ţ', u'Ț')
+        new_page_t = string.replace(page_t, u'ș', u'ş')
+        new_page_t = string.replace(new_page_t, u'ț', u'ţ')
+        new_page_t = string.replace(new_page_t, u'Ș', u'Ş')
+        new_page_t = string.replace(new_page_t, u'Ț', u'Ţ')
         page_mod = pywikibot.Page(self.site, new_page_t)
         
         if new_page_t == page_t:
             pywikibot.output(u'%s does not contain diacritics, skipping...\n'
                              % page_mod.aslink())
-        elif page_mod.exists():
+        elif page_mod.exists() and page_mod.isRedirectPage() and page_mod.getRedirectTarget() == page:
             pywikibot.output(u'%s already exists, skipping...\n'
                              % page_mod.aslink())
         else:            
@@ -95,9 +96,10 @@ class DiacriticsBot:
             if self.acceptall or choice == 'y':
                 comment = pywikibot.translate(self.site, msg) % page_t
                 try:
-                    page_mod.put(u"#%s [[%s]]" % (self.site.redirect(True), page_t), comment)
-                except:
+                	page_mod.put(u"#%s [[%s]]" % (self.site.redirect(True), page_t.title()), comment)
+                except Exception as e:
                     pywikibot.output(u"An error occurred, skipping...")
+                    print type(e)
 
 def main():
     genFactory = pagegenerators.GeneratorFactory()
@@ -113,9 +115,11 @@ def main():
             pywikibot.showHelp(u'diacritics_redirects')
             return
 
-    gen = genFactory.getCombinedGenerator()
-    preloadingGen = pagegenerators.PreloadingGenerator(gen)
-    bot = DiacriticsBot(preloadingGen, acceptall, titlecase)
+    #gen = genFactory.getCombinedGenerator()
+    #preloadingGen = pagegenerators.PreloadingGenerator(gen)
+    transGen = pagegenerators.AllpagesPageGenerator('Ț', includeredirects=False)
+    pregenerator = pagegenerators.PreloadingGenerator(transGen, 120)
+    bot = DiacriticsBot(pregenerator, acceptall, titlecase)
     bot.run()
 
 if __name__ == "__main__":
