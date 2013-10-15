@@ -18,7 +18,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "localitate")
-public class Settlement {
+public class Settlement implements EthnicallyStructurable {
     private long id;
     private String numeBg;
     private String numeRo;

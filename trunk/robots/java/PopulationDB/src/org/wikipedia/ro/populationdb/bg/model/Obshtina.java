@@ -21,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "obstina")
-public class Obshtina {
+public class Obshtina implements EthnicallyStructurable {
     private int id;
     private String numeBg;
     private String numeRo;
