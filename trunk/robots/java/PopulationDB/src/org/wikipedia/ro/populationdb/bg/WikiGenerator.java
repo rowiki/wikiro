@@ -30,6 +30,7 @@ import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
 import org.apache.commons.collections.Transformer;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -356,7 +357,7 @@ public class WikiGenerator {
                 articleText.append("\n== Note ==\n{{reflist}}\n");
                 articleText.append("\n{{Comune în regiunea " + obshtina.getRegion().getNumeRo() + "}}");
                 articleText.append("\n[[Categorie:" + categoryName + "|" + obshtina.getNumeRo() + "]]");
-                if (!DEBUG) {
+                if (!DEBUG_OBSHTINA) {
                     articleTitle = getNotNecessarilyExistingRoTitleArticleWithSubject(obshtina);
                     final String bgCounterpart = findBgCounterpartForObshtina(obshtina);
                     rowiki.edit(articleTitle, articleText.toString(),
@@ -365,7 +366,8 @@ public class WikiGenerator {
                 }
             } else {
                 articleTitle = getNotNecessarilyExistingRoTitleArticleWithSubject(obshtina);
-                articleText.append(rowiki.getPageText(title));
+                final String initialText = rowiki.getPageText(title);
+                articleText.append(initialText);
 
                 int startOfEnding = Math.max(articleText.indexOf("{{ciot-Bulgaria"), articleText.indexOf("{{Ciot-Bulgaria"));
                 int generalCategoryStart = articleText.indexOf("[[Categorie:Comunele Bulgariei");
@@ -376,10 +378,15 @@ public class WikiGenerator {
                 }
                 final int generalCategoryEnd = 2 + articleText.indexOf("]]", generalCategoryStart);
 
-                articleText.replace(generalCategoryStart, generalCategoryEnd,
-                    "[[Categorie:" + categoryName + "|" + obshtina.getNumeRo() + "]]");
+                if (generalCategoryStart > 0) {
+                    articleText.replace(generalCategoryStart, generalCategoryEnd, "[[Categorie:" + categoryName + "|"
+                        + obshtina.getNumeRo() + "]]");
+                }
 
-                articleText.insert(startOfEnding - 1, demographics);
+                if (!StringUtils.contains(articleText, "== Demografie")
+                    && !StringUtils.contains(articleText, "==Demografie")) {
+                    articleText.insert(startOfEnding - 1, demographics);
+                }
 
                 if (!footnotesRegex.matcher(articleText).find()) {
                     startOfEnding = Math.max(articleText.indexOf("{{ciot-Bulgaria"), articleText.indexOf("{{Ciot-Bulgaria"));
@@ -392,11 +399,16 @@ public class WikiGenerator {
 
                     articleText.insert(startOfEnding, "\n<br clear=\"left\"/>\n== Note ==\n{{reflist}}\n");
                 }
+                articleTitle = getNotNecessarilyExistingRoTitleArticleWithSubject(obshtina);
                 if (!DEBUG_OBSHTINA) {
-                    rowiki.edit(title, articleText.toString(),
-                        "Robot: adăugare secțiune demografie pentru comună din Bulgaria");
-                    rowiki.move(title, articleTitle,
-                        "Robot: Redenumire articol despre comună din Bulgaria conform [[Wikipedia:Titluri]]");
+                    if (!StringUtils.equals(articleText, initialText)) {
+                        rowiki.edit(title, articleText.toString(),
+                            "Robot: adăugare secțiune demografie pentru comună din Bulgaria");
+                    }
+                    if (!StringUtils.equals(title, articleTitle)) {
+                        rowiki.move(title, articleTitle,
+                            "Robot: Redenumire articol despre comună din Bulgaria conform [[Wikipedia:Titluri]]");
+                    }
                 }
             }
             redirectAlternativeObshtinaNames(articleTitle, obshtina);
@@ -483,9 +495,9 @@ public class WikiGenerator {
         }
         demographics.append(".");
         demographics
-            .append("<ref name=\"etnic2011\">{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_ethnos.xls|title=Distribuția etnică a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref>");
+        .append("<ref name=\"etnic2011\">{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_ethnos.xls|title=Distribuția etnică a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref>");
         demographics
-            .append("<ref name=\"varste2011\">{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_Age.xls|title=Distribuția pe vârste a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref> ");
+        .append("<ref name=\"varste2011\">{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_Age.xls|title=Distribuția pe vârste a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref> ");
     }
 
     private void renderPiechart(final StringBuilder demographics, final ST piechart, final int population,
@@ -534,17 +546,19 @@ public class WikiGenerator {
                 totalKnownEthnicity += natpop;
             }
         }
-        smallGroups.put("Nicio identificare", population - totalKnownEthnicity);
+        dataset.setValue("Nicio identificare", population - totalKnownEthnicity);
         if (1 < smallGroups.size()) {
             smallGroups.put("Altele", ethnicStructure.get(otherNat));
             int smallSum = 0;
             for (final String smallGroup : smallGroups.keySet()) {
-                smallSum += smallGroups.get(smallGroup);
+                smallSum += ObjectUtils.defaultIfNull(smallGroups.get(smallGroup), 0);
             }
             dataset.setValue("Altele", smallSum);
         } else {
             for (final String natname : smallGroups.keySet()) {
-                dataset.setValue(natname, smallGroups.get(natname));
+                if (!startsWithAny(natname, "Nicio ")) {
+                    dataset.setValue(natname, smallGroups.get(natname));
+                }
             }
             dataset.setValue("Altele", ethnicStructure.get(otherNat));
         }
