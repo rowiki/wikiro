@@ -56,7 +56,7 @@ public class WikiGenerator {
 
     private static final String findNationalityByNameQueryString = "from Nationality nat where nat.nume=:name";
     private static final int MAX_ENUMED_VILLAGES = 12;
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final boolean DEBUG_OBSHTINA = false;
     private final Wiki rowiki = new Wiki("ro.wikipedia.org");
     private final Wiki bgwiki = new Wiki("bg.wikipedia.org");
@@ -87,9 +87,9 @@ public class WikiGenerator {
     private final Pattern footnotesRegex = Pattern
         .compile("\\{\\{(?:(?:L|l)istănote|(?:R|r)eflist)|(?:\\<\\s*references\\s*\\/\\>)");
     private final Pattern regexBgInfobox = Pattern
-        .compile("\\{\\{\uFEFF\u041E\u0431\u0449\u0438\u043D\u0430 \u0432 \u0411\u044A\u043B\u0433\u0430\u0440\u0438\u044F\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
+        .compile("\\{\\{\uFEFF\u041E\u0431\u0449\u0438\u043D\u0430 \u0432 \u0411\u044A\u043B\u0433\u0430\u0440\u0438\u044F\\s*(\\|\\s*(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
     private static Pattern regexBgSettlementInfobox = Pattern
-        .compile("\\{\\{\uFEFF\u0421\u0435\u043B\u0438\u0449\u0435 \u0432 \u0411\u044A\u043B\u0433\u0430\u0440\u0438\u044F\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
+        .compile("\\{\\{\uFEFF\u0421\u0435\u043B\u0438\u0449\u0435 \u0432 \u0411\u044A\u043B\u0433\u0430\u0440\u0438\u044F\\s*(\\|\\s*(?:\\{\\{[^{}]*+\\}\\}|(?:[^{}]))*+)?\\}\\}\\s*");
 
     public static void main(final String[] args) {
         final WikiGenerator generator = new WikiGenerator();
@@ -113,8 +113,14 @@ public class WikiGenerator {
     }
 
     private void generateVillages() throws IOException, LoginException {
-        final Criteria settlementCriteria = ses.createCriteria(Settlement.class).addOrder(Order.asc("numeRo"));
-        final List<Settlement> stlmnts = settlementCriteria.list();
+        /*
+         * final Criteria settlementCriteria = ses.createCriteria(Settlement.class).addOrder(Order.asc("numeRo")); final
+         * List<Settlement> stlmnts = settlementCriteria.list();
+         */
+        final Query partialQuery = ses.createQuery("from Settlement s where s.numeRo=:ablanita");
+        partialQuery.setParameter("ablanita", "Ablanița");
+        final List<Settlement> stlmnts = partialQuery.list();
+
         final STGroup templateGroup = new STGroupFile("templates/bg/section_settlement.stg");
 
         for (final Settlement stlmnt : stlmnts) {
@@ -136,6 +142,8 @@ public class WikiGenerator {
                 if (!DEBUG) {
                     rowiki.edit(desiredRoTitle, articleText.toString(), "Robot: creare articol despre "
                         + (stlmnt.isTown() ? "oraș" : "sat") + " din Bulgaria");
+                    final String bgArticleTitle = findBgCounterpartForSettlement(stlmnt);
+                    dwiki.linkPages("rowiki", desiredRoTitle, "bgwiki", bgArticleTitle);
                 }
             } else {
                 articleText.append(rowiki.getPageText(existingRoTitle));
@@ -149,19 +157,45 @@ public class WikiGenerator {
                     StringUtils.indexOf(articleText, "==Vezi"));
 
                 int insertLocation = StringUtils.length(articleText) - 1;
+
                 for (final int index : new int[] { startOfCategories, startOfNavTemplate, startOfNavTemplate1,
                     startOfNavTemplate2, startOfNote, startOfSeeAlso }) {
                     if (0 < index) {
                         insertLocation = Math.min(index, insertLocation);
                     }
                 }
-                articleText.insert(insertLocation, demogSection);
+                if (!footnotesRegex.matcher(articleText).find()) {
+                    articleText.insert(insertLocation, "== Note ==\n{{reflist}}\n");
+                }
+                if (!StringUtils.contains(articleText, "== Demografie")
+                    && !StringUtils.contains(articleText, "==Demografie")) {
+                    articleText.insert(insertLocation, demogSection);
+                }
 
                 if (!DEBUG) {
                     rowiki.edit(existingRoTitle, articleText.toString(),
                         "Robot: generare automată a secțiunii de demografie");
                 }
             }
+            createSettlementCategoryIfNotExist(stlmnt);
+            redirectAlternativeSettlementNames(defaultString(existingRoTitle, desiredRoTitle), stlmnt);
+        }
+    }
+
+    private void createSettlementCategoryIfNotExist(final Settlement stlmnt) throws LoginException, IOException {
+        final String categoryName = (stlmnt.isTown() ? "Oraș" : "Sat") + "e în regiunea "
+            + stlmnt.getObshtina().getRegion().getNumeRo();
+
+        final Map categoryInfo = rowiki.getPageInfo("Categorie:" + categoryName);
+        final boolean categoryExists = isTrue((Boolean) categoryInfo.get("exists"));
+
+        if (!categoryExists) {
+            final StringBuilder catSB = new StringBuilder("[[Categorie:Comunele Bulgariei|");
+            catSB.append(stlmnt.getObshtina().getRegion().getNumeRo());
+            catSB.append("]]");
+
+            rowiki.edit("Categorie:" + categoryName, catSB.toString(),
+                "Robot: creare categorie de localități din Bulgaria pe regiuni");
         }
     }
 
@@ -185,9 +219,15 @@ public class WikiGenerator {
 
         final String bgText = bgwiki.getPageText(findBgCounterpartForSettlement(stlmnt));
         final Matcher infoboxMatcher = regexBgSettlementInfobox.matcher(bgText);
-        if (infoboxMatcher.find()) {
-
-            final ParameterReader params = new ParameterReader(infoboxMatcher.group());
+        boolean foundRegex = false;
+        if ((foundRegex = infoboxMatcher.find()) || StringUtils.contains(bgText, "{{Селище в България")) {
+            ParameterReader params = null;
+            if (foundRegex) {
+                params = new ParameterReader(infoboxMatcher.group());
+            } else {
+                params = new ParameterReader(StringUtils.substring(bgText,
+                    StringUtils.indexOf(bgText, "{{Селище в България")));
+            }
             params.run();
             final Map<String, String> bgparams = params.getParams();
             final String img = bgparams.get("картинка");
@@ -226,17 +266,18 @@ public class WikiGenerator {
             if (!isEmpty(prefix)) {
                 infoboxParams.put("prefix_telefonic", prefix);
             }
-
-            for (final String ibParam : infoboxParams.keySet()) {
-                sb.append("\n|");
-                sb.append(ibParam);
-                sb.append(" = ");
-                sb.append(infoboxParams.get(ibParam));
-            }
-            sb.append("\n}}\n");
         }
 
+        for (final String ibParam : infoboxParams.keySet()) {
+            sb.append("\n|");
+            sb.append(ibParam);
+            sb.append(" = ");
+            sb.append(infoboxParams.get(ibParam));
+        }
+        sb.append("\n}}\n");
+
         final ST intro = group.getInstanceOf("introSettlement");
+        intro.add("tip", stlmnt.isTown() ? "oraș" : "sat");
         intro.add("numeRo", stlmnt.getNumeRo());
         intro.add("numeBg", stlmnt.getNumeBg());
         intro.add("obstina", stlmnt.getObshtina().getNumeRo());
@@ -248,8 +289,8 @@ public class WikiGenerator {
 
     private String findBgCounterpartForSettlement(final Settlement stlmnt) throws IOException {
         final List<String> possibleNames = Arrays.asList(stlmnt.getNumeBg() + " (община " + stlmnt.getObshtina().getNumeBg()
-            + ")", stlmnt.getNumeBg() + " (Област " + stlmnt.getObshtina().getRegion() + ")",
-            stlmnt.getNumeBg() + " (село)", stlmnt.getNumeBg());
+            + ")", stlmnt.getNumeBg() + " (Област " + stlmnt.getObshtina().getRegion().getNumeBg() + ")", stlmnt.getNumeBg()
+            + " (село)", stlmnt.getNumeBg());
 
         for (final String possibleName : possibleNames) {
             final HashMap pageInfo = bgwiki.getPageInfo(possibleName);
@@ -322,12 +363,16 @@ public class WikiGenerator {
             });
             communeLinks.addAll(communeNames);
             navTemplateBuilder.append(join(communeLinks, "{{~}}\n"));
+            navTemplateBuilder.append("\n</div>");
             navTemplateBuilder.append("\n}}<noinclude>");
             navTemplateBuilder.append("[[Categorie:Formate de navigare regiuni din Bulgaria]]</noinclude>");
 
-            if (!DEBUG) {
-                rowiki.edit("Format:Comune în regiunea " + region.getNumeRo(), navTemplateBuilder.toString(),
-                    "Robot: creare format navigare pentru regiunea bulgară " + region.getNumeRo());
+            if (!DEBUG_OBSHTINA) {
+                final Map templateInfo = rowiki.getPageInfo("Format:Comune în regiunea " + region.getNumeRo());
+                if (!isTrue((Boolean) templateInfo.get("exists"))) {
+                    rowiki.edit("Format:Comune în regiunea " + region.getNumeRo(), navTemplateBuilder.toString(),
+                        "Robot: creare format navigare pentru regiunea bulgară " + region.getNumeRo());
+                }
             }
         }
     }
@@ -355,7 +400,7 @@ public class WikiGenerator {
                 articleText.append(demographics);
                 articleText.append("\n<br clear=\"left\"/>");
                 articleText.append("\n== Note ==\n{{reflist}}\n");
-                articleText.append("\n{{Comune în regiunea " + obshtina.getRegion().getNumeRo() + "}}");
+                articleText.append("\n\n{{Comune în regiunea " + obshtina.getRegion().getNumeRo() + "}}");
                 articleText.append("\n[[Categorie:" + categoryName + "|" + obshtina.getNumeRo() + "]]");
                 if (!DEBUG_OBSHTINA) {
                     articleTitle = getNotNecessarilyExistingRoTitleArticleWithSubject(obshtina);
@@ -409,11 +454,30 @@ public class WikiGenerator {
                         rowiki.move(title, articleTitle,
                             "Robot: Redenumire articol despre comună din Bulgaria conform [[Wikipedia:Titluri]]");
                     }
+                    final String bgCounterpart = findBgCounterpartForObshtina(obshtina);
+                    dwiki.linkPages("rowiki", articleTitle, "bgwiki", bgCounterpart);
                 }
             }
             redirectAlternativeObshtinaNames(articleTitle, obshtina);
+            createObshtinaCategoryIfNotExist(obshtina);
             generateNavTemplateForObshtina(obshtina);
             System.out.println(articleText);
+        }
+    }
+
+    private void createObshtinaCategoryIfNotExist(final Obshtina obshtina) throws IOException, LoginException {
+        final String categoryName = "Comune în regiunea " + obshtina.getRegion().getNumeRo();
+
+        final Map categoryInfo = rowiki.getPageInfo("Categorie:" + categoryName);
+        final boolean categoryExists = isTrue((Boolean) categoryInfo.get("exists"));
+
+        if (!categoryExists) {
+            final StringBuilder catSB = new StringBuilder("[[Categorie:Comunele Bulgariei|");
+            catSB.append(obshtina.getRegion().getNumeRo());
+            catSB.append("]]");
+
+            rowiki.edit("Categorie:" + categoryName, catSB.toString(),
+                "Robot: creare categorie de comune din Bulgaria pe regiuni");
         }
     }
 
@@ -556,11 +620,13 @@ public class WikiGenerator {
             dataset.setValue("Altele", smallSum);
         } else {
             for (final String natname : smallGroups.keySet()) {
-                if (!startsWithAny(natname, "Nicio ")) {
+                if (!startsWithAny(natname, "Nicio ") && smallGroups.containsKey(natname)) {
                     dataset.setValue(natname, smallGroups.get(natname));
                 }
             }
-            dataset.setValue("Altele", ethnicStructure.get(otherNat));
+            if (ethnicStructure.containsKey(otherNat)) {
+                dataset.setValue("Altele", ethnicStructure.get(otherNat));
+            }
         }
         return totalKnownEthnicity;
     }
@@ -600,14 +666,18 @@ public class WikiGenerator {
         sb.append("]]</noinclude>");
 
         if (!DEBUG_OBSHTINA) {
-            rowiki.edit("Format:" + titlu, sb.toString(), "Robot: generare format navigare comuna " + obshtina.getNumeRo()
-                + ", regiunea " + obshtina.getRegion().getNumeRo());
-            final String categoryName = "Categorie:Formate de navigare regiunea " + obshtina.getRegion().getNumeRo();
-            final Map catInfo = rowiki.getPageInfo(categoryName);
-            if (!isTrue((Boolean) catInfo.get("exists"))) {
-                rowiki.edit(categoryName, "[[Categorie:Formate de navigare regiuni din Bulgaria|"
-                    + obshtina.getRegion().getNumeRo() + "]]",
-                    "Robot: creare categorie formate de navigare pentru regiune din Bulgaria");
+            final Map templateInfo = rowiki.getPageInfo("Format:" + titlu);
+            if (!isTrue((Boolean) templateInfo.get("exists"))) {
+                rowiki.edit("Format:" + titlu, sb.toString(),
+                    "Robot: generare format navigare comuna " + obshtina.getNumeRo() + ", regiunea "
+                        + obshtina.getRegion().getNumeRo());
+                final String categoryName = "Categorie:Formate de navigare regiunea " + obshtina.getRegion().getNumeRo();
+                final Map catInfo = rowiki.getPageInfo(categoryName);
+                if (!isTrue((Boolean) catInfo.get("exists"))) {
+                    rowiki.edit(categoryName, "[[Categorie:Formate de navigare regiuni din Bulgaria|"
+                        + obshtina.getRegion().getNumeRo() + "]]",
+                        "Robot: creare categorie formate de navigare pentru regiune din Bulgaria");
+                }
             }
         }
     }
@@ -640,13 +710,44 @@ public class WikiGenerator {
         final Query nationalLevelQuery = ses.createQuery("select count(ob) from Settlement ob where ob.numeRo=:numeRo");
         nationalLevelQuery.setParameter("numeRo", settlement.getNumeRo());
 
-        if ((Long) nationalLevelQuery.uniqueResult() <= 1) {
+        final Long omonymCount = (Long) nationalLevelQuery.uniqueResult();
+        if (omonymCount <= 1) {
             redirectNames.add(settlement.getNumeRo());
+        } else {
+            final Map disambigInfo = rowiki.getPageInfo(settlement.getNumeRo());
+            if (!isTrue((Boolean) disambigInfo.get("exists"))) {
+                final StringBuilder sb = new StringBuilder("Denumirea de '''");
+                sb.append(settlement.getNumeRo());
+                sb.append("''' se poate referi la una din următoarele localități din [[Bulgaria]]:\n");
+                final Query allOmonymsQuery = ses
+                    .createQuery("select s from Settlement s where s.numeRo=:numeRo order by s.town desc, s.obshtina.region.numeRo asc, s.obshtina.numeRo asc");
+                allOmonymsQuery.setParameter("numeRo", settlement.getNumeRo());
+                final List<Settlement> omonyms = allOmonymsQuery.list();
+                for (final Settlement omonym : omonyms) {
+                    sb.append("\n* [[");
+                    sb.append(getNonExistingRoTitleArticleWithSubject(omonym));
+                    sb.append("|");
+                    sb.append(omonym.getNumeRo());
+                    sb.append("]], un ");
+                    sb.append(omonym.isTown() ? "oraș" : "sat");
+                    sb.append(" în [[");
+                    sb.append(getNotNecessarilyExistingRoTitleArticleWithSubject(omonym.getObshtina()));
+                    sb.append("|comuna ");
+                    sb.append(omonym.getObshtina().getNumeRo());
+                    sb.append("]], ");
+                    sb.append("[[regiunea " + omonym.getObshtina().getRegion().getNumeRo() + "]];");
+                }
+                sb.delete(sb.length() - 1, sb.length());
+                sb.append(".\n\n{{dezambiguizare}}");
+                rowiki.edit(settlement.getNumeRo(), sb.toString(),
+                    "Robot: creare pagină de dezambiguizare pentru localitățile bulgare denumite „" + settlement.getNumeRo()
+                    + "”");
+            }
         }
 
         if (!StringUtils.contains(title, ")")) {
             redirectNames.add(settlement.getNumeRo() + " (" + settlement.getObshtina().getNumeRo() + "), "
-                + settlement.getObshtina().getRegion());
+                + settlement.getObshtina().getRegion().getNumeRo());
         }
 
         if (settlement.isTown()) {
