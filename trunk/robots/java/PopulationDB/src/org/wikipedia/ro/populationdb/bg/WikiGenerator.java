@@ -129,6 +129,9 @@ public class WikiGenerator {
             final String existingRoTitle = getExistingRoTitleOfArticleWithSubject(stlmnt);
             final StringBuilder articleText = new StringBuilder();
             final String desiredRoTitle = getNonExistingRoTitleArticleWithSubject(stlmnt, existingRoTitle);
+            if (null == existingRoTitle && null == desiredRoTitle) {
+                continue;
+            }
             if (null == existingRoTitle) {
                 articleText.append(generateIntroSectionForVillage(templateGroup, stlmnt));
                 articleText.append(demogSection);
@@ -183,14 +186,17 @@ public class WikiGenerator {
     }
 
     private void createSettlementCategoryIfNotExist(final Settlement stlmnt) throws LoginException, IOException {
-        final String categoryName = (stlmnt.isTown() ? "Oraș" : "Sat") + "e în regiunea "
+        final String stlmType = stlmnt.isTown() ? "Oraș" : "Sat";
+        final String categoryName = stlmType + "e în regiunea "
             + stlmnt.getObshtina().getRegion().getNumeRo();
 
         final Map categoryInfo = rowiki.getPageInfo("Categorie:" + categoryName);
         final boolean categoryExists = isTrue((Boolean) categoryInfo.get("exists"));
 
         if (!categoryExists) {
-            final StringBuilder catSB = new StringBuilder("[[Categorie:Comunele Bulgariei|");
+            final StringBuilder catSB = new StringBuilder("[[Categorie:");
+            catSB.append(stlmType);
+            catSB.append("e în Bulgaria|");
             catSB.append(stlmnt.getObshtina().getRegion().getNumeRo());
             catSB.append("]]");
 
@@ -559,9 +565,9 @@ public class WikiGenerator {
         }
         demographics.append(".");
         demographics
-        .append("<ref name=\"etnic2011\">{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_ethnos.xls|title=Distribuția etnică a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref>");
+            .append("<ref name=\"etnic2011\">{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_ethnos.xls|title=Distribuția etnică a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref>");
         demographics
-        .append("<ref name=\"varste2011\">{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_Age.xls|title=Distribuția pe vârste a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref> ");
+            .append("<ref name=\"varste2011\">{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_Age.xls|title=Distribuția pe vârste a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref> ");
     }
 
     private void renderPiechart(final StringBuilder demographics, final ST piechart, final int population,
@@ -741,7 +747,7 @@ public class WikiGenerator {
                 sb.append(".\n\n{{dezambiguizare}}");
                 rowiki.edit(settlement.getNumeRo(), sb.toString(),
                     "Robot: creare pagină de dezambiguizare pentru localitățile bulgare denumite „" + settlement.getNumeRo()
-                    + "”");
+                        + "”");
             }
         }
 
