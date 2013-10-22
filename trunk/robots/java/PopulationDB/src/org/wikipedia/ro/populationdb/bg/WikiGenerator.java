@@ -971,6 +971,8 @@ public class WikiGenerator {
         assignColorToNationality("Romi", new Color(85, 255, 255));
         assignColorToNationality("Altele", new Color(64, 64, 64));
         assignColorToNationality("Nicio identificare", new Color(192, 192, 192));
+
+        blandifyColors(nationColorMap);
     }
 
     private void assignColorToNationality(final String nationalityName, final Paint color) throws HibernateException {
@@ -1081,6 +1083,29 @@ public class WikiGenerator {
 
     private String translateNationalityToLink(final Nationality nat) {
         return defaultString(nationLinkMap.get(nat.getNume()), nat.getNume());
+    }
+
+    private static void blandifyColors(final Map<Nationality, Paint> map) {
+        for (final Nationality key : map.keySet()) {
+            final Color color = (Color) map.get(key);
+            final int[] colorcomps = new int[3];
+            colorcomps[0] = color.getRed();
+            colorcomps[1] = color.getGreen();
+            colorcomps[2] = color.getBlue();
+
+            for (int i = 0; i < colorcomps.length; i++) {
+                if (colorcomps[i] == 0) {
+                    colorcomps[i] = 0x3f;
+                } else if (colorcomps[i] == 85) {
+                    colorcomps[i] = 128;
+                } else if (colorcomps[i] == 64) {
+                    colorcomps[i] = 85;
+                } else if (colorcomps[i] == 128) {
+                    colorcomps[i] = 0x9f;
+                }
+            }
+            map.put(key, new Color(colorcomps[0], colorcomps[1], colorcomps[2]));
+        }
     }
 
 }

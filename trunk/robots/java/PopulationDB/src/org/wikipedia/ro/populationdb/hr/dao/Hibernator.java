@@ -7,9 +7,12 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.wikipedia.ro.populationdb.hr.model.Commune;
 import org.wikipedia.ro.populationdb.hr.model.County;
 import org.wikipedia.ro.populationdb.hr.model.Nationality;
@@ -100,6 +103,12 @@ public class Hibernator implements Closeable {
         return ret;
     }
 
+    public List<County> getAllCounties() {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Criteria countyCrit = ses.createCriteria(County.class).addOrder(Order.asc("name"));
+        return countyCrit.list();
+    }
+
     public void close() throws IOException {
         if (null != sessionFactory) {
             sessionFactory.close();
@@ -113,5 +122,12 @@ public class Hibernator implements Closeable {
 
     public Session getSession() {
         return sessionFactory.getCurrentSession();
+    }
+
+    public List<Commune> getCommunesByCounty(final County county) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Criteria comCrit = ses.createCriteria(Commune.class).add(Restrictions.eq("county", county))
+            .addOrder(Order.asc("name"));
+        return comCrit.list();
     }
 }

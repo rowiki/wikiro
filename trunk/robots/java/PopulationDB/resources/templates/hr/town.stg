@@ -1,0 +1,1 @@
+introTmpl(nume, canton, populatie) ::= "'''nume''' este un oraș în [[cantonul <canton>]], [[Croația]], având o populație de <populatie> locuitori."
