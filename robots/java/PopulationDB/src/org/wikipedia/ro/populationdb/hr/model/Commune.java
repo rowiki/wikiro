@@ -18,7 +18,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "localitate")
-public class Commune {
+public class Commune implements EthnicallyStructurable, ReligionStructurable {
     private long id;
     private String name;
     private int population;
