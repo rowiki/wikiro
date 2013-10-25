@@ -384,7 +384,8 @@ public class WikiGenerator {
     }
 
     private void generateObshtinas() throws IOException, LoginException {
-        final Criteria allObshtinasCriteria = ses.createCriteria(Obshtina.class);
+        final Criteria allObshtinasCriteria = ses.createCriteria(Obshtina.class).addOrder(Order.asc("numeRo"))
+            .setFirstResult(12);
         final List<Obshtina> obshtinas = allObshtinasCriteria.list();
         /*
          * final Query tempQ = ses.createQuery("from Obshtina ob where ob.numeRo=:nume1 or ob.numeRo=:nume2");
@@ -672,7 +673,7 @@ public class WikiGenerator {
             final Boolean exists = (Boolean) possiblePageInfo.get("exists");
             if (exists) {
                 final String[] categories = bgwiki.getCategories(possibleName);
-                if (ArrayUtils.contains(categories, "Общини в България")) {
+                if (ArrayUtils.contains(categories, "Категория:Общини в България")) {
                     return possibleName;
                 }
             }
