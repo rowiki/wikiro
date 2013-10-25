@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
 import org.apache.commons.collections.Transformer;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
@@ -113,13 +115,12 @@ public class WikiGenerator {
     }
 
     private void generateVillages() throws IOException, LoginException {
+        final Criteria settlementCriteria = ses.createCriteria(Settlement.class).addOrder(Order.asc("numeRo"));
+        final List<Settlement> stlmnts = settlementCriteria.list();
         /*
-         * final Criteria settlementCriteria = ses.createCriteria(Settlement.class).addOrder(Order.asc("numeRo")); final
-         * List<Settlement> stlmnts = settlementCriteria.list();
+         * final Query partialQuery = ses.createQuery("from Settlement s where s.numeRo=:ablanita");
+         * partialQuery.setParameter("ablanita", "Ablanița"); final List<Settlement> stlmnts = partialQuery.list();
          */
-        final Query partialQuery = ses.createQuery("from Settlement s where s.numeRo=:ablanita");
-        partialQuery.setParameter("ablanita", "Ablanița");
-        final List<Settlement> stlmnts = partialQuery.list();
 
         final STGroup templateGroup = new STGroupFile("templates/bg/section_settlement.stg");
 
@@ -187,8 +188,7 @@ public class WikiGenerator {
 
     private void createSettlementCategoryIfNotExist(final Settlement stlmnt) throws LoginException, IOException {
         final String stlmType = stlmnt.isTown() ? "Oraș" : "Sat";
-        final String categoryName = stlmType + "e în regiunea "
-            + stlmnt.getObshtina().getRegion().getNumeRo();
+        final String categoryName = stlmType + "e în regiunea " + stlmnt.getObshtina().getRegion().getNumeRo();
 
         final Map categoryInfo = rowiki.getPageInfo("Categorie:" + categoryName);
         final boolean categoryExists = isTrue((Boolean) categoryInfo.get("exists"));
@@ -384,14 +384,13 @@ public class WikiGenerator {
     }
 
     private void generateObshtinas() throws IOException, LoginException {
+        final Criteria allObshtinasCriteria = ses.createCriteria(Obshtina.class);
+        final List<Obshtina> obshtinas = allObshtinasCriteria.list();
         /*
-         * final Criteria allObshtinasCriteria = ses.createCriteria(Obshtina.class); final List<Obshtina> obshtinas =
-         * allObshtinasCriteria.list();
+         * final Query tempQ = ses.createQuery("from Obshtina ob where ob.numeRo=:nume1 or ob.numeRo=:nume2");
+         * tempQ.setParameter("nume1", "Bansko"); tempQ.setParameter("nume2", "Bratea Daskalovi"); final List<Obshtina>
+         * obshtinas = tempQ.list();
          */
-        final Query tempQ = ses.createQuery("from Obshtina ob where ob.numeRo=:nume1 or ob.numeRo=:nume2");
-        tempQ.setParameter("nume1", "Bansko");
-        tempQ.setParameter("nume2", "Bratea Daskalovi");
-        final List<Obshtina> obshtinas = tempQ.list();
 
         final STGroup templateGroup = new STGroupFile("templates/bg/section_obshtina.stg");
         for (final Obshtina obshtina : obshtinas) {
@@ -518,6 +517,21 @@ public class WikiGenerator {
     private void writeEthnodemographics(final STGroup templateGroup, final StringBuilder demographics, final int population,
                                         final Map<Nationality, Integer> ethnicStructure, final Nationality majNat,
                                         final List<Nationality> minorities) {
+        Collections.sort(minorities, new Comparator<Nationality>() {
+
+            public int compare(final Nationality o1, final Nationality o2) {
+                final Integer pop1 = ethnicStructure.get(o1);
+                final Integer pop2 = ethnicStructure.get(o2);
+                if (pop1 == null) {
+                    return -1;
+                }
+                if (pop2 == null) {
+                    return 1;
+                }
+
+                return pop1 - pop2;
+            }
+        });
         if (null != majNat) {
             final ST demogMajority = templateGroup.getInstanceOf("ethnicMaj");
             demogMajority.add("etnie_maj", nationLinkMap.get(majNat.getNume()));
@@ -562,6 +576,7 @@ public class WikiGenerator {
             }
             noMaj.add("ethnicities_enum", join(nationalitiesData.toArray(), ", ", 0, nationalitiesData.size() - 1) + " și "
                 + nationalitiesData.get(nationalitiesData.size() - 1));
+            demographics.append(noMaj.render());
         }
         demographics.append(".");
         demographics
@@ -637,7 +652,19 @@ public class WikiGenerator {
         return totalKnownEthnicity;
     }
 
-    private String findBgCounterpartForObshtina(final Obshtina obshtina) {
+    private String findBgCounterpartForObshtina(final Obshtina obshtina) throws IOException {
+        final List<String> possibleNames = Arrays.asList("Община " + obshtina.getNumeBg(), "Община " + obshtina.getNumeBg()
+            + " (Област " + obshtina.getRegion().getNumeBg() + ")");
+        for (final String possibleName:possibleNames) {
+            final Map possiblePageInfo = bgwiki.getPageInfo(possibleName);
+            final Boolean exists = (Boolean) possiblePageInfo.get("exists");
+            if (exists) {
+                final String[] categories = bgwiki.getCategories(possibleName);
+                if (ArrayUtils.contains(categories, "Общини в България")) {
+                    return possibleName;
+                }
+            }
+        }
         return "Община " + obshtina.getNumeBg();
     }
 
