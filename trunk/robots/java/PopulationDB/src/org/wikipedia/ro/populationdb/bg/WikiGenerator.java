@@ -433,6 +433,18 @@ public class WikiGenerator {
                         + obshtina.getNumeRo() + "]]");
                 }
 
+                final List<String> navTemplates = Arrays.asList("{{Comune", "{{" + obshtina.getRegion().getNumeRo(),
+                    "{{Regiunea", "{{Obștina");
+                final List<Integer> navTemplatesIndices = new ArrayList<Integer>();
+                for (final String navTemplate : navTemplates) {
+                    if (StringUtils.contains(articleText, navTemplate)) {
+                        navTemplatesIndices.add(StringUtils.indexOf(articleText, navTemplate));
+                    }
+                }
+                if (navTemplatesIndices.size() > 0) {
+                    startOfEnding = Math.min(Collections.min(navTemplatesIndices), startOfEnding);
+                }
+
                 if (!StringUtils.contains(articleText, "== Demografie")
                     && !StringUtils.contains(articleText, "==Demografie")) {
                     articleText.insert(startOfEnding - 1, demographics);
@@ -523,13 +535,13 @@ public class WikiGenerator {
                 final Integer pop1 = ethnicStructure.get(o1);
                 final Integer pop2 = ethnicStructure.get(o2);
                 if (pop1 == null) {
-                    return -1;
-                }
-                if (pop2 == null) {
                     return 1;
                 }
+                if (pop2 == null) {
+                    return -1;
+                }
 
-                return pop1 - pop2;
+                return pop2 - pop1;
             }
         });
         if (null != majNat) {
@@ -580,9 +592,9 @@ public class WikiGenerator {
         }
         demographics.append(".");
         demographics
-            .append("<ref name=\"etnic2011\">{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_ethnos.xls|title=Distribuția etnică a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref>");
+        .append("<ref name=\"etnic2011\">{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_ethnos.xls|title=Distribuția etnică a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref>");
         demographics
-            .append("<ref name=\"varste2011\">{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_Age.xls|title=Distribuția pe vârste a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref> ");
+        .append("<ref name=\"varste2011\">{{Citat web|url=http://www.nsi.bg/census2011/PDOCS2/Census2011_Age.xls|title=Distribuția pe vârste a populației localităților Bulgariei|publisher=Institutul Național de Statistică al Bulgariei|accessdate=2013-10-15}}</ref> ");
     }
 
     private void renderPiechart(final StringBuilder demographics, final ST piechart, final int population,
@@ -655,7 +667,7 @@ public class WikiGenerator {
     private String findBgCounterpartForObshtina(final Obshtina obshtina) throws IOException {
         final List<String> possibleNames = Arrays.asList("Община " + obshtina.getNumeBg(), "Община " + obshtina.getNumeBg()
             + " (Област " + obshtina.getRegion().getNumeBg() + ")");
-        for (final String possibleName:possibleNames) {
+        for (final String possibleName : possibleNames) {
             final Map possiblePageInfo = bgwiki.getPageInfo(possibleName);
             final Boolean exists = (Boolean) possiblePageInfo.get("exists");
             if (exists) {
@@ -774,7 +786,7 @@ public class WikiGenerator {
                 sb.append(".\n\n{{dezambiguizare}}");
                 rowiki.edit(settlement.getNumeRo(), sb.toString(),
                     "Robot: creare pagină de dezambiguizare pentru localitățile bulgare denumite „" + settlement.getNumeRo()
-                        + "”");
+                    + "”");
             }
         }
 
