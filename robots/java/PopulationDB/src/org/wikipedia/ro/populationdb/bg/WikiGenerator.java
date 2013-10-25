@@ -680,9 +680,9 @@ public class WikiGenerator {
         if (townsWikiLinkList.size() > 0) {
             villageGroupIndex = 2;
             sb.append("\n|grup1=Orașe");
-            sb.append("\n|listă1=<div>");
+            sb.append("\n|listă1=<div>\n");
             sb.append(join(townsWikiLinkList, "{{~}}\n"));
-            sb.append("</div>");
+            sb.append("\n</div>");
         }
         final List<String> villageWikiLinkList = getSettlementLinksForObshtina(obshtina, false);
         sb.append("\n|grup");
