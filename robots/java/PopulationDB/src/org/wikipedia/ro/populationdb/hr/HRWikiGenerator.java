@@ -310,7 +310,8 @@ public class HRWikiGenerator {
             if (!isTrue(exists)) {
                 continue;
             }
-            final String pageTitle = defaultString(rowiki.resolveRedirect(candidateTitle), candidateTitle);
+            final String pageTitle = defaultString(rowiki.resolveRedirect(new String[] { candidateTitle })[0],
+                candidateTitle);
             final String[] categs = rowiki.getCategories(pageTitle);
             for (final String categ : categs) {
                 if (StringUtils.startsWithAny(categ, "Orașe în Croația", "Orașe în cantonul ", "Comune în Croația",
