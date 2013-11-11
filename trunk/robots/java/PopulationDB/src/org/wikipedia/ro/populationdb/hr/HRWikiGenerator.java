@@ -363,22 +363,22 @@ public class HRWikiGenerator {
             }
         });
         if (null != majRel) {
-            final ST demogMajority = templateGroup.getInstanceOf("ethnicMaj");
-            demogMajority.add("etnie_maj", getReligionLink(majRel));
+            final ST demogMajority = templateGroup.getInstanceOf("religiousMaj");
+            demogMajority.add("rel_maj", getReligionLink(majRel));
             final double majProcent = 100.0 * religiousStructure.get(majRel) / population;
             demogMajority.add("maj_procent", "{{formatnum:" + ((long) (majProcent * 100) / 100.0) + "}}%");
             demographics.append(demogMajority.render());
 
             if (minorities.size() == 1) {
-                final ST oneMinority = templateGroup.getInstanceOf("oneMinority");
+                final ST oneMinority = templateGroup.getInstanceOf("oneReligiousMinority");
                 final Religion minority = minorities.get(0);
                 final double minProcent = 100.0 * religiousStructure.get(minority) / population;
 
-                oneMinority.add("minority", getReligionLink(minority) + " ({{formatnum:"
+                oneMinority.add("rel_minority", getReligionLink(minority) + " ({{formatnum:"
                     + ((long) (minProcent * 100) / 100.0) + "}}%)");
                 demographics.append(oneMinority.render());
             } else if (minorities.size() > 1) {
-                final ST someMinorities = templateGroup.getInstanceOf("someMinorities");
+                final ST someMinorities = templateGroup.getInstanceOf("someReligiousMinorities");
                 final List<String> nationalitiesData = new ArrayList<String>();
                 for (final Religion mino : minorities) {
                     final StringBuilder data = new StringBuilder();
@@ -388,13 +388,13 @@ public class HRWikiGenerator {
                     nationalitiesData.add(data.toString());
                 }
                 someMinorities.add(
-                    "minorities_enum",
+                    "rel_minorities_enum",
                     join(nationalitiesData.toArray(), ", ", 0, nationalitiesData.size() - 1) + " și "
                         + nationalitiesData.get(nationalitiesData.size() - 1));
                 demographics.append(someMinorities.render());
             }
         } else if (minorities.size() > 0) {
-            final ST noMaj = templateGroup.getInstanceOf("noMaj");
+            final ST noMaj = templateGroup.getInstanceOf("noReligiousMaj");
             final List<String> nationalitiesData = new ArrayList<String>();
 
             for (final Religion mino : minorities) {
@@ -404,7 +404,7 @@ public class HRWikiGenerator {
                 data.append(" ({{formatnum:" + ((long) (minProcent * 100) / 100.0) + "}}%)");
                 nationalitiesData.add(data.toString());
             }
-            noMaj.add("ethnicities_enum", join(nationalitiesData.toArray(), ", ", 0, nationalitiesData.size() - 1) + " și "
+            noMaj.add("rel_enum", join(nationalitiesData.toArray(), ", ", 0, nationalitiesData.size() - 1) + " și "
                 + nationalitiesData.get(nationalitiesData.size() - 1));
             demographics.append(noMaj.render());
         }
@@ -486,7 +486,7 @@ public class HRWikiGenerator {
             demographics.append(demogMajority.render());
 
             if (minorities.size() == 1) {
-                final ST oneMinority = templateGroup.getInstanceOf("oneMinority");
+                final ST oneMinority = templateGroup.getInstanceOf("oneEthnicMinority");
                 final Nationality minority = minorities.get(0);
                 final double minProcent = 100.0 * ethnicStructure.get(minority) / population;
 
@@ -494,7 +494,7 @@ public class HRWikiGenerator {
                     + "}}%)");
                 demographics.append(oneMinority.render());
             } else if (minorities.size() > 1) {
-                final ST someMinorities = templateGroup.getInstanceOf("someMinorities");
+                final ST someMinorities = templateGroup.getInstanceOf("someEthnicMinorities");
                 final List<String> nationalitiesData = new ArrayList<String>();
                 for (final Nationality mino : minorities) {
                     final StringBuilder data = new StringBuilder();
@@ -510,7 +510,7 @@ public class HRWikiGenerator {
                 demographics.append(someMinorities.render());
             }
         } else if (minorities.size() > 0) {
-            final ST noMaj = templateGroup.getInstanceOf("noMaj");
+            final ST noMaj = templateGroup.getInstanceOf("noEthnicMaj");
             final List<String> nationalitiesData = new ArrayList<String>();
 
             for (final Nationality mino : minorities) {
