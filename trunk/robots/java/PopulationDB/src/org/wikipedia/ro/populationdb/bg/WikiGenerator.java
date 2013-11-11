@@ -122,13 +122,12 @@ public class WikiGenerator {
 
     private void generateVillages() throws IOException, LoginException {
         final Criteria settlementCriteria = ses.createCriteria(Settlement.class).addOrder(Order.asc("numeRo"))
-            .setFirstResult(2114);
+            .setFirstResult(913);
         final List<Settlement> stlmnts = settlementCriteria.list();
         /*
          * final Query partialQuery = ses.createQuery("from Settlement s where s.numeRo=:ablanita");
          * partialQuery.setParameter("ablanita", "Ablanița"); final List<Settlement> stlmnts = partialQuery.list();
          */
-
         final STGroup templateGroup = new STGroupFile("templates/bg/section_settlement.stg");
 
         for (final Settlement stlmnt : stlmnts) {
@@ -228,6 +227,10 @@ public class WikiGenerator {
         infoboxParams.put("recensământ", "2011");
         infoboxParams.put("populație", String.valueOf(stlmnt.getPopulation()));
         infoboxParams.put("populație_note_subsol", "<ref name=\"varste2011\"/>");
+        infoboxParams.put("fus_orar", "[[Ora Europei de Est|EET]]");
+        infoboxParams.put("fus_orar_DST", "[[Ora de Vară a Europei de Est|EEST]]");
+        infoboxParams.put("utc_offset", "+2");
+        infoboxParams.put("utc_offset_DST", "+3");
 
         String bgCounterpartForSettlement = findBgCounterpartForSettlement(stlmnt);
         if (null != bgCounterpartForSettlement) {
