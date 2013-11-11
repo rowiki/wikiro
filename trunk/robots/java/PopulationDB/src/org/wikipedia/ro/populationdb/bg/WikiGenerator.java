@@ -122,7 +122,7 @@ public class WikiGenerator {
 
     private void generateVillages() throws IOException, LoginException {
         final Criteria settlementCriteria = ses.createCriteria(Settlement.class).addOrder(Order.asc("numeRo"))
-            .setFirstResult(913);
+            .setFirstResult(243).setFetchSize(2);
         final List<Settlement> stlmnts = settlementCriteria.list();
         /*
          * final Query partialQuery = ses.createQuery("from Settlement s where s.numeRo=:ablanita");

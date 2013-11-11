@@ -13,6 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 public class County {
     private long id;
     private String name;
+    private String nameHr;
 
     @Id
     @GeneratedValue(generator = "increment")
@@ -32,6 +33,15 @@ public class County {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    @Column(name = "nume_hr")
+    public String getNameHr() {
+        return nameHr;
+    }
+
+    public void setNameHr(String nameHr) {
+        this.nameHr = nameHr;
     }
 
 }
