@@ -3,6 +3,7 @@ package org.wikipedia.ro.populationdb.hr;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.lang3.StringUtils.startsWithAny;
 
 import java.awt.Color;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -56,11 +58,25 @@ public class HRWikiGenerator {
     private static Pattern regexInfocAsezare = Pattern
         .compile("\\{\\{(?:(?:C|c)asetă așezare|(?:I|i)nfocaseta Așezare|(?:C|c)utie așezare)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
 
-    private final STGroup communeTemplateGroup = new STGroupFile("templates/hr/commune.stg");
+    private final STGroup communeTemplateGroup = new STGroupFile("templates/hr/town.stg");
     private final STGroup townTemplateGroup = new STGroupFile("templates/hr/town.stg");
-    private Hashtable<Nationality, Color> nationColorMap;
-    private Hashtable<String, Nationality> nationNameMap;
+    private Map<Nationality, Color> nationColorMap;
+    private Map<String, Nationality> nationNameMap;
+    private Map<Religion, Color> religionColorMap;
+    private Map<String, Religion> religionNameMap;
     private Map<Commune, LazyInitializer<String>> hrWpNames = new HashMap<Commune, LazyInitializer<String>>();
+    private Map<String, String> relLinkMap = new HashMap<String, String>() {
+        {
+            put("Ortodocși", "[[Biserica Ortodoxă|ortodocși]]");
+            put("Catolici", "[[Biserica Romano-Catolică|catolici]]");
+            put("Protestanți", "[[Protestantism|protestanți]]");
+            put("Musulmani", "[[Islam|musulmani]]");
+            put("Iudaici", "[[Iudaism|iudaici]]");
+            put("Religii orientale", "de religii orientale");
+            put("Agnostici și sceptici", "[[Agnosticism|agnostici și sceptici]]");
+            put("Fără religie și atei", "[[Umanism secular|fără religie]] și [[Ateism|atei]]");
+        }
+    };
 
     public static void main(final String[] args) throws FailedLoginException, IOException, ConcurrentException {
         final HRWikiGenerator generator = new HRWikiGenerator();
@@ -297,6 +313,7 @@ public class HRWikiGenerator {
         final ST piechart = templateGroup.getInstanceOf("piechart");
         final int population = com.getPopulation();
         piechart.add("nume", com.getName());
+        piechart.add("tip_genitiv", com.getTown() > 0 ? "orașului" : "comunei");
 
         final Map<Nationality, Integer> ethnicStructure = com.getEthnicStructure();
         final Map<Religion, Integer> religiousStructure = com.getReligiousStructure();
@@ -305,24 +322,303 @@ public class HRWikiGenerator {
         final DefaultPieDataset datasetReligion = new DefaultPieDataset();
         final int totalKnownReligion = computeReligionDataset(population, religiousStructure, datasetReligion);
 
-        renderPiechart(demographics, piechart, population, datasetEthnos);
+        renderPiechart(demographics, piechart, population, datasetEthnos, datasetReligion);
 
-        final ST demogIntro = templateGroup.getInstanceOf("introTmpl");
+        final ST demogIntro = templateGroup.getInstanceOf("demogIntro" + (com.getTown() > 0 ? "Town" : "Comm"));
         demogIntro.add("nume", com.getName());
-        demogIntro.add("tip", com.getTown() > 1 ? "oraș" : "sat");
-        demogIntro.add("populatie", population);
+        demogIntro.add("populatie", Utilities.de(population, "locuitor", "locuitori"));
         demographics.append(demogIntro.render());
 
-        final Nationality majNat = getMajority(com);
-        final List<Nationality> minorities = getMinorities(com);
-        writeEthnodemographics(templateGroup, demographics, population, ethnicStructure, majNat, minorities);
-        writeUnknownEthnicity(templateGroup, demographics, population, totalKnownEthnicity);
+        final Nationality majNat = getMajorityEthnicity(com);
+        final List<Nationality> ethnicMinorities = getEthnicMinorities(com);
+        Religion majRel = getMajorityReligion(com);
+        List<Religion> religiousMinorities = getReligiousMinorities(com);
 
-        writeReligiousDemographics(templateGroup, demographics, population, ethnicStructure, majNat, minorities);
-        writeUnknownReligion(templateGroup, demographics, population, totalKnownEthnicity);
+        writeEthnodemographics(templateGroup, demographics, population, ethnicStructure, majNat, ethnicMinorities);
+        writeUnknownEthnicity(templateGroup, demographics, population, totalKnownEthnicity, com);
+
+        writeReligiousDemographics(templateGroup, demographics, population, religiousStructure, majRel, religiousMinorities);
+        writeUnknownReligion(templateGroup, demographics, population, totalKnownReligion, com);
 
         demographics.append("\n<!--Sfârșit secțiune generată de Andrebot -->");
         return demographics.toString();
+    }
+
+    private void writeReligiousDemographics(STGroup templateGroup, StringBuilder demographics, int population,
+                                            final Map<Religion, Integer> religiousStructure, Religion majRel,
+                                            List<Religion> minorities) {
+        Collections.sort(minorities, new Comparator<Religion>() {
+
+            public int compare(final Religion o1, final Religion o2) {
+                final Integer pop1 = religiousStructure.get(o1);
+                final Integer pop2 = religiousStructure.get(o2);
+                if (pop1 == null) {
+                    return 1;
+                }
+                if (pop2 == null) {
+                    return -1;
+                }
+
+                return pop2 - pop1;
+            }
+        });
+        if (null != majRel) {
+            final ST demogMajority = templateGroup.getInstanceOf("ethnicMaj");
+            demogMajority.add("etnie_maj", getReligionLink(majRel));
+            final double majProcent = 100.0 * religiousStructure.get(majRel) / population;
+            demogMajority.add("maj_procent", "{{formatnum:" + ((long) (majProcent * 100) / 100.0) + "}}%");
+            demographics.append(demogMajority.render());
+
+            if (minorities.size() == 1) {
+                final ST oneMinority = templateGroup.getInstanceOf("oneMinority");
+                final Religion minority = minorities.get(0);
+                final double minProcent = 100.0 * religiousStructure.get(minority) / population;
+
+                oneMinority.add("minority", getReligionLink(minority) + " ({{formatnum:"
+                    + ((long) (minProcent * 100) / 100.0) + "}}%)");
+                demographics.append(oneMinority.render());
+            } else if (minorities.size() > 1) {
+                final ST someMinorities = templateGroup.getInstanceOf("someMinorities");
+                final List<String> nationalitiesData = new ArrayList<String>();
+                for (final Religion mino : minorities) {
+                    final StringBuilder data = new StringBuilder();
+                    data.append(getReligionLink(mino));
+                    final double minProcent = 100.0 * religiousStructure.get(mino) / population;
+                    data.append(" ({{formatnum:" + ((long) (minProcent * 100) / 100.0) + "}}%)");
+                    nationalitiesData.add(data.toString());
+                }
+                someMinorities.add(
+                    "minorities_enum",
+                    join(nationalitiesData.toArray(), ", ", 0, nationalitiesData.size() - 1) + " și "
+                        + nationalitiesData.get(nationalitiesData.size() - 1));
+                demographics.append(someMinorities.render());
+            }
+        } else if (minorities.size() > 0) {
+            final ST noMaj = templateGroup.getInstanceOf("noMaj");
+            final List<String> nationalitiesData = new ArrayList<String>();
+
+            for (final Religion mino : minorities) {
+                final StringBuilder data = new StringBuilder();
+                data.append(getReligionLink(mino));
+                final double minProcent = 100.0 * religiousStructure.get(mino) / population;
+                data.append(" ({{formatnum:" + ((long) (minProcent * 100) / 100.0) + "}}%)");
+                nationalitiesData.add(data.toString());
+            }
+            noMaj.add("ethnicities_enum", join(nationalitiesData.toArray(), ", ", 0, nationalitiesData.size() - 1) + " și "
+                + nationalitiesData.get(nationalitiesData.size() - 1));
+            demographics.append(noMaj.render());
+        }
+        demographics.append(". ");
+    }
+
+    private Object getReligionLink(Religion rel) {
+        return relLinkMap.get(rel.getName());
+    }
+
+    private List<Religion> getReligiousMinorities(Commune com) {
+        final List<Religion> ret = new ArrayList<Religion>();
+        for (final Religion rel : com.getReligiousStructure().keySet()) {
+            final double weight = com.getReligiousStructure().get(rel) / (double) com.getPopulation();
+            if (weight <= 0.5 && weight > 0.01 && !startsWithAny(rel.getName(), "Alte", "Ne")) {
+                ret.add(rel);
+            }
+        }
+        return ret;
+    }
+
+    private Religion getMajorityReligion(Commune com) {
+        for (final Religion rel : com.getReligiousStructure().keySet()) {
+            if (com.getEthnicStructure().get(rel) / (double) com.getPopulation() > 0.5) {
+                return rel;
+            }
+        }
+        return null;
+    }
+
+    private void writeUnknownReligion(STGroup templateGroup, StringBuilder demographics, int population,
+                                      int totalKnownReligion, Commune com) {
+        final double undeclaredPercent = 100.0 * (population - totalKnownReligion) / population;
+        if (undeclaredPercent > 0) {
+            final ST undeclaredTempl = templateGroup.getInstanceOf("unknownRel");
+            undeclaredTempl.add("percent", "{{formatnum:" + ((long) (undeclaredPercent * 100) / 100.0) + "}}%");
+            demographics.append(undeclaredTempl.render());
+        }
+
+        demographics.append(getReligionRef(com));
+
+    }
+
+    private void writeUnknownEthnicity(STGroup templateGroup, StringBuilder demographics, int population,
+                                       int totalKnownEthnicity, Commune com) {
+        final double undeclaredPercent = 100.0 * (population - totalKnownEthnicity) / population;
+        if (undeclaredPercent > 0) {
+            final ST undeclaredTempl = templateGroup.getInstanceOf("unknownEthn");
+            undeclaredTempl.add("percent", "{{formatnum:" + ((long) (undeclaredPercent * 100) / 100.0) + "}}%");
+            demographics.append(undeclaredTempl.render());
+        }
+
+        demographics.append(getEthnicityRef(com));
+    }
+
+    private void writeEthnodemographics(STGroup templateGroup, StringBuilder demographics, int population,
+                                        final Map<Nationality, Integer> ethnicStructure, Nationality majNat,
+                                        List<Nationality> minorities) {
+        Collections.sort(minorities, new Comparator<Nationality>() {
+
+            public int compare(final Nationality o1, final Nationality o2) {
+                final Integer pop1 = ethnicStructure.get(o1);
+                final Integer pop2 = ethnicStructure.get(o2);
+                if (pop1 == null) {
+                    return 1;
+                }
+                if (pop2 == null) {
+                    return -1;
+                }
+
+                return pop2 - pop1;
+            }
+        });
+        if (null != majNat) {
+            final ST demogMajority = templateGroup.getInstanceOf("ethnicMaj");
+            demogMajority.add("etnie_maj", getNationLink(majNat));
+            final double majProcent = 100.0 * ethnicStructure.get(majNat) / population;
+            demogMajority.add("maj_procent", "{{formatnum:" + ((long) (majProcent * 100) / 100.0) + "}}%");
+            demographics.append(demogMajority.render());
+
+            if (minorities.size() == 1) {
+                final ST oneMinority = templateGroup.getInstanceOf("oneMinority");
+                final Nationality minority = minorities.get(0);
+                final double minProcent = 100.0 * ethnicStructure.get(minority) / population;
+
+                oneMinority.add("minority", getNationLink(minority) + " ({{formatnum:" + ((long) (minProcent * 100) / 100.0)
+                    + "}}%)");
+                demographics.append(oneMinority.render());
+            } else if (minorities.size() > 1) {
+                final ST someMinorities = templateGroup.getInstanceOf("someMinorities");
+                final List<String> nationalitiesData = new ArrayList<String>();
+                for (final Nationality mino : minorities) {
+                    final StringBuilder data = new StringBuilder();
+                    data.append(getNationLink(mino));
+                    final double minProcent = 100.0 * ethnicStructure.get(mino) / population;
+                    data.append(" ({{formatnum:" + ((long) (minProcent * 100) / 100.0) + "}}%)");
+                    nationalitiesData.add(data.toString());
+                }
+                someMinorities.add(
+                    "minorities_enum",
+                    join(nationalitiesData.toArray(), ", ", 0, nationalitiesData.size() - 1) + " și "
+                        + nationalitiesData.get(nationalitiesData.size() - 1));
+                demographics.append(someMinorities.render());
+            }
+        } else if (minorities.size() > 0) {
+            final ST noMaj = templateGroup.getInstanceOf("noMaj");
+            final List<String> nationalitiesData = new ArrayList<String>();
+
+            for (final Nationality mino : minorities) {
+                final StringBuilder data = new StringBuilder();
+                data.append(getNationLink(mino));
+                final double minProcent = 100.0 * ethnicStructure.get(mino) / population;
+                data.append(" ({{formatnum:" + ((long) (minProcent * 100) / 100.0) + "}}%)");
+                nationalitiesData.add(data.toString());
+            }
+            noMaj.add("ethnicities_enum", join(nationalitiesData.toArray(), ", ", 0, nationalitiesData.size() - 1) + " și "
+                + nationalitiesData.get(nationalitiesData.size() - 1));
+            demographics.append(noMaj.render());
+        }
+        demographics.append(". ");
+    }
+
+    private Object getNationLink(Nationality majNat) {
+        if (!StringUtils.startsWithAny(majNat.getName(), "Ne", "Afiliați")) {
+            return "[[" + majNat.getName() + "i din Croația|" + majNat.getName() + "]]";
+        } else {
+            return majNat.getName();
+        }
+    }
+
+    private int computeReligionDataset(int population, Map<Religion, Integer> religiousStructure, DefaultPieDataset dataset) {
+        final Map<String, Integer> smallGroups = new HashMap<String, Integer>();
+        final Religion undeclared = hib.getReligionByName("Nu au declarat religia");
+        int totalKnownEthnicity = 0;
+        Religion otherNat = null;
+        for (final Religion rel : religionColorMap.keySet()) {
+            final int natpop = defaultIfNull(religiousStructure.get(rel), 0);
+            if (natpop * 100.0 / population > 1.0 && !StringUtils.equals(rel.getName(), "Neclasificat")) {
+                dataset.setValue(rel.getName(), natpop);
+            } else if (natpop * 100.0 / population <= 1.0 && !StringUtils.equals(rel.getName(), "Neclasificat")) {
+                smallGroups.put(rel.getName(), natpop);
+            } else if (StringUtils.equals(rel.getName(), "Neclasificat")) {
+                otherNat = rel;
+            }
+            if (!StringUtils.equals(undeclared.getName(), rel.getName())) {
+                totalKnownEthnicity += natpop;
+            }
+        }
+        dataset.setValue("Nicio identificare", population - totalKnownEthnicity);
+        if (1 < smallGroups.size()) {
+            smallGroups.put("Neclasificat", religiousStructure.get(otherNat));
+            int smallSum = 0;
+            for (final String smallGroup : smallGroups.keySet()) {
+                smallSum += ObjectUtils.defaultIfNull(smallGroups.get(smallGroup), 0);
+            }
+            dataset.setValue("Neclasificat", smallSum);
+        } else {
+            for (final String natname : smallGroups.keySet()) {
+                if (!startsWithAny(natname, "Ne") && smallGroups.containsKey(natname)) {
+                    dataset.setValue(natname, smallGroups.get(natname));
+                }
+            }
+            if (religiousStructure.containsKey(otherNat)) {
+                dataset.setValue("Neclasificat", religiousStructure.get(otherNat));
+            }
+        }
+        return totalKnownEthnicity;
+    }
+
+    private void renderPiechart(StringBuilder demographics, ST piechart, int population, DefaultPieDataset datasetEthnos,
+                                DefaultPieDataset datasetReligion) {
+        final StringBuilder pieChartEthnosProps = new StringBuilder();
+        final StringBuilder pieChartReligProps = new StringBuilder();
+        int i = 1;
+        demographics.append("<div style=\"float:left\">");
+
+        for (final Object k : datasetEthnos.getKeys()) {
+            pieChartEthnosProps.append("\n|label");
+            pieChartEthnosProps.append(i);
+            pieChartEthnosProps.append('=');
+            pieChartEthnosProps.append(k.toString());
+            pieChartEthnosProps.append("|value");
+            pieChartEthnosProps.append(i);
+            pieChartEthnosProps.append('=');
+            pieChartEthnosProps
+                .append((int) (100 * (datasetEthnos.getValue(k.toString()).doubleValue() * 100.0 / population)) / 100.0);
+            pieChartEthnosProps.append("|color");
+            pieChartEthnosProps.append(i);
+            pieChartEthnosProps.append('=');
+            final Color color = (Color) nationColorMap.get(nationNameMap.get(k.toString()));
+            pieChartEthnosProps.append(Utilities.colorToHtml(color));
+            i++;
+        }
+        for (final Object k : datasetReligion.getKeys()) {
+            pieChartReligProps.append("\n|label");
+            pieChartReligProps.append(i);
+            pieChartReligProps.append('=');
+            pieChartReligProps.append(k.toString());
+            pieChartReligProps.append("|value");
+            pieChartReligProps.append(i);
+            pieChartReligProps.append('=');
+            pieChartReligProps
+                .append((int) (100 * (datasetReligion.getValue(k.toString()).doubleValue() * 100.0 / population)) / 100.0);
+            pieChartReligProps.append("|color");
+            pieChartReligProps.append(i);
+            pieChartReligProps.append('=');
+            final Color color = (Color) religionColorMap.get(religionNameMap.get(k.toString()));
+            pieChartEthnosProps.append(Utilities.colorToHtml(color));
+            i++;
+        }
+        piechart.add("propsEthnos", pieChartEthnosProps.toString());
+        piechart.add("propsRelig", pieChartReligProps.toString());
+        demographics.append(piechart.render());
+        demographics.append("</div>\n");
     }
 
     private int computeEthnicityDataset(final int population, final Map<Nationality, Integer> ethnicStructure,
@@ -430,13 +726,22 @@ public class HRWikiGenerator {
         assignColorToNationality("Sloveni", new Color(32, 32, 128));
         assignColorToNationality("Slovaci", new Color(48, 48, 160));
         assignColorToNationality("Neclasificat", new Color(192, 192, 192));
-
         blandifyColors(nationColorMap);
 
+        assignColorToReligion("Ortodocși", new Color(85, 85, 255));
+        assignColorToReligion("Musulmani", new Color(255, 85, 85));
+        assignColorToReligion("Catolici", new Color(255, 255, 85));
+        assignColorToReligion("Protestanți", new Color(0, 192, 0));
+        assignColorToReligion("Fără religie și atei", new Color(64, 64, 64));
+        assignColorToReligion("Agnostici și sceptici", new Color(192, 192, 192));
+        assignColorToReligion("Necunoscută", new Color(128, 128, 128));
+        assignColorToReligion("Nu au declarat religia", new Color(128, 128, 128));
+
+        blandifyColors(religionColorMap);
     }
 
-    private static void blandifyColors(final Hashtable<Nationality, Color> colorMap) {
-        for (final Nationality key : colorMap.keySet()) {
+    private static <T extends Object> void blandifyColors(final Map<T, Color> colorMap) {
+        for (final T key : colorMap.keySet()) {
             final Color color = colorMap.get(key);
             final int[] colorcomps = new int[3];
             colorcomps[0] = color.getRed();
@@ -463,6 +768,14 @@ public class HRWikiGenerator {
         if (null != nat) {
             nationColorMap.put(nat, color);
             nationNameMap.put(nat.getName(), nat);
+        }
+    }
+
+    private void assignColorToReligion(final String religionName, final Color color) throws HibernateException {
+        final Religion rel = hib.getReligionByName(religionName);
+        if (null != rel) {
+            religionColorMap.put(rel, color);
+            religionNameMap.put(rel.getName(), rel);
         }
     }
 
@@ -496,7 +809,7 @@ public class HRWikiGenerator {
         return null;
     }
 
-    private List<Nationality> getMinorities(final EthnicallyStructurable obshtina) {
+    private List<Nationality> getEthnicMinorities(final EthnicallyStructurable obshtina) {
         final List<Nationality> ret = new ArrayList<Nationality>();
         for (final Nationality nat : obshtina.getEthnicStructure().keySet()) {
             final double weight = obshtina.getEthnicStructure().get(nat) / (double) obshtina.getPopulation();
@@ -507,7 +820,7 @@ public class HRWikiGenerator {
         return ret;
     }
 
-    private Nationality getMajority(final EthnicallyStructurable obshtina) {
+    private Nationality getMajorityEthnicity(final EthnicallyStructurable obshtina) {
         for (final Nationality nat : obshtina.getEthnicStructure().keySet()) {
             if (obshtina.getEthnicStructure().get(nat) / (double) obshtina.getPopulation() > 0.5) {
                 return nat;
@@ -518,6 +831,15 @@ public class HRWikiGenerator {
 
     private String getEthnicityRef(Commune com) {
         return "<ref name=\"hr_census_2011_ethnicity\">{{Citat web|url=http://www.dzs.hr/Eng/censuses/census2011/results/htm/e01_01_04/E01_01_04_zup"
-            + StringUtils.leftPad(String.valueOf(com.getId()), 2, '0') + ".html";
+            + StringUtils.leftPad(String.valueOf(com.getId()), 2, '0')
+            + ".html|publisher=Biroul de Statistică al Croației|accessdate=2013-11-11|title=Componența etnică a cantonului "
+            + com.getCounty().getName() + " pe comune și orașe}}";
+    }
+
+    private String getReligionRef(Commune com) {
+        return "<ref name=\"hr_census_2011_religion\">{{Citat web|url=http://www.dzs.hr/Eng/censuses/census2011/results/htm/e01_01_10/E01_01_10_zup"
+            + StringUtils.leftPad(String.valueOf(com.getId()), 2, '0')
+            + ".html|publisher=Biroul de Statistică al Croației|accessdate=2013-11-11|title=Componența confesională a cantonului "
+            + com.getCounty().getName() + " pe comune și orașe}}";
     }
 }
