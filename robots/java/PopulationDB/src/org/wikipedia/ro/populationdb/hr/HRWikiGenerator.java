@@ -96,7 +96,13 @@ public class HRWikiGenerator {
             for (final Commune com : communes) {
                 generateCommune(com);
             }
+            generateCountyNavTemplate(county, communes);
         }
+    }
+
+    private void generateCountyNavTemplate(County county, List<Commune> communes) {
+        // TODO Auto-generated method stub
+        
     }
 
     private void generateCommune(final Commune com) throws IOException, ConcurrentException {
