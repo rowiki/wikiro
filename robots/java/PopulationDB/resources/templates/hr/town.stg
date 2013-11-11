@@ -1,1 +1,2 @@
-introTmpl(nume, canton, populatie) ::= "'''nume''' este un oraș în [[cantonul <canton>]], [[Croația]], având o populație de <populatie> locuitori."
+introTmplTown(nume, canton, populatie) ::= "'''<nume>''' este un oraș în [[cantonul <canton>]], [[Croația]], având o populație de <populatie> locuitori (2011)."
+introTmplComm(nume, canton, populatie) ::= "'''<nume>''' este o comună în [[cantonul <canton>]], [[Croația]], având o populație de <populatie> locuitori (2011)."
