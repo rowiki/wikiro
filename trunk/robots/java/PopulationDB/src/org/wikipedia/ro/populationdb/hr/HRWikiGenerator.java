@@ -526,7 +526,7 @@ public class HRWikiGenerator {
         final List<Religion> ret = new ArrayList<Religion>();
         for (final Religion rel : com.getReligiousStructure().keySet()) {
             final double weight = com.getReligiousStructure().get(rel) / (double) com.getPopulation();
-            if (weight <= 0.5 && weight > 0.01 && !startsWithAny(rel.getName(), "Alte", "Ne")) {
+            if (weight <= 0.5 && weight > 0.01 && !startsWithAny(rel.getName(), "Alte", "Ne", "Nu au declarat")) {
                 ret.add(rel);
             }
         }
