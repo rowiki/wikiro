@@ -118,8 +118,8 @@ public class HRWikiGenerator {
                                     rowiki.resolveRedirect(new String[] { candidateName })[0], candidateName);
                                 String[] categories = rowiki.getCategories(actualCandidateTitle);
                                 for (String categ : categories) {
-                                    if (StringUtils.startsWithAny(categ, "Orașe în Croația", "Orașe în cantonul ",
-                                        "Comune în Croația", "Comune în cantonul ")) {
+                                    if (StringUtils.startsWithAny(categ, "Categorie:Orașe în Croația", "Categorie:Orașe în cantonul ",
+                                        "Categorie:Comune în Croația", "Categorie:Comune în cantonul ")) {
                                         return candidateName;
                                     }
                                 }
