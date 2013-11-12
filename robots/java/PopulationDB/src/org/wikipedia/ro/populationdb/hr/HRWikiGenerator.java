@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
+import static org.apache.commons.lang3.StringUtils.startsWith;
 import static org.apache.commons.lang3.StringUtils.startsWithAny;
 
 import java.awt.Color;
@@ -170,8 +171,7 @@ public class HRWikiGenerator {
     private List<String> getRoWpCandidateNames(Commune com) {
         String communeName = retrieveName(com);
         if (com.getTown() > 0) {
-            return Arrays.asList(communeName, communeName + ", Croația", communeName + ", "
-                + com.getCounty().getName());
+            return Arrays.asList(communeName, communeName + ", Croația", communeName + ", " + com.getCounty().getName());
         } else {
             return Arrays.asList("Comuna " + communeName + ", " + com.getCounty().getName(), "Comuna " + communeName);
         }
@@ -360,7 +360,8 @@ public class HRWikiGenerator {
         ibParams.put("tip_subdiviziune", "[[Țările lumii|Țară]]");
         ibParams.put("tip_subdiviziune1", "[[Cantoanele Croației|Canton]]");
         ibParams.put("nume_subdiviziune", "{{CRO}}");
-        ibParams.put("nume_subdiviziune1", "[[Cantonul " + com.getCounty().getName() + "|" + com.getCounty().getName());
+        ibParams.put("nume_subdiviziune1", "[[Cantonul " + com.getCounty().getName() + "|" + com.getCounty().getName()
+            + "]]");
 
         ibParams.put("fus_orar", "[[Ora Europei Centrale|CET]]");
         ibParams.put("fus_orar_DST", "[[Ora de Vară a Europei Centrale|CEST]]");
@@ -634,8 +635,10 @@ public class HRWikiGenerator {
     }
 
     private Object getNationLink(Nationality majNat) {
-        if (!StringUtils.startsWithAny(majNat.getName(), "Necunoscut", "Nu au declarat")) {
+        if (!startsWithAny(majNat.getName(), "Necunoscut", "Nu au declarat", "Croați")) {
             return "[[" + majNat.getName() + "i din Croația|" + lowerCase(majNat.getName()) + "]]";
+        } else if (startsWith(majNat.getName(), "Croați")) {
+            return "[[croați]]";
         } else {
             return lowerCase(majNat.getName());
         }
@@ -952,7 +955,7 @@ public class HRWikiGenerator {
             + ".html|publisher=Biroul de Statistică al Croației|accessdate=2013-11-11|title=Componența confesională a cantonului "
             + com.getCounty().getName() + " pe comune și orașe}}</ref>";
     }
-    
+
     private String retrieveName(Commune com) {
         String[] names = StringUtils.splitByWholeSeparator(com.getName(), " - ");
         return names[0];
