@@ -16,4 +16,4 @@ someReligiousMinorities(rel_minorities_enum) ::= ", existând și minorități d
 oneReligiousMinority(rel_minority) ::= ", cu o minoritate de <rel_minority>"
 noReligiousMaj(rel_enum) ::= "Nu există o etnie majoritară, locuitorii fiind <rel_enum>"
 unknownRel(percent) ::= "Pentru <percent> din locuitori nu este cunoscută apartenența confesională."
-unknownEthn(percent) ::= "Apartenența confesională nu este cunoscută în cazul a <percent> din locuitori."
+unknownEthn(percent) ::= " Apartenența etnică nu este cunoscută în cazul a <percent> din locuitori."
