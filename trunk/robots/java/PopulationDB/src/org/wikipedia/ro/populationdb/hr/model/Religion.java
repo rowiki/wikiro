@@ -34,4 +34,8 @@ public class Religion {
     public void setName(final String nume) {
         this.name = nume;
     }
+
+    public String toString() {
+        return getName();
+    }
 }

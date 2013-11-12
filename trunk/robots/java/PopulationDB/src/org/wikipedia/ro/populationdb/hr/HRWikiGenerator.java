@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.join;
+import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.startsWithAny;
 
 import java.awt.Color;
@@ -13,7 +14,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -60,11 +60,12 @@ public class HRWikiGenerator {
 
     private final STGroup communeTemplateGroup = new STGroupFile("templates/hr/town.stg");
     private final STGroup townTemplateGroup = new STGroupFile("templates/hr/town.stg");
-    private Map<Nationality, Color> nationColorMap;
-    private Map<String, Nationality> nationNameMap;
-    private Map<Religion, Color> religionColorMap;
-    private Map<String, Religion> religionNameMap;
+    private Map<Nationality, Color> nationColorMap = new HashMap<Nationality, Color>();
+    private Map<String, Nationality> nationNameMap = new HashMap<String, Nationality>();
+    private Map<Religion, Color> religionColorMap = new HashMap<Religion, Color>();
+    private Map<String, Religion> religionNameMap = new HashMap<String, Religion>();
     private Map<Commune, LazyInitializer<String>> hrWpNames = new HashMap<Commune, LazyInitializer<String>>();
+    private Map<Commune, LazyInitializer<String>> roWpNames = new HashMap<Commune, LazyInitializer<String>>();
     private Map<String, String> relLinkMap = new HashMap<String, String>() {
         {
             put("Ortodocși", "[[Biserica Ortodoxă|ortodocși]]");
@@ -94,15 +95,131 @@ public class HRWikiGenerator {
         for (final County county : counties) {
             final List<Commune> communes = hib.getCommunesByCounty(county);
             for (final Commune com : communes) {
+                initCommune(com);
                 generateCommune(com);
             }
             generateCountyNavTemplate(county, communes);
         }
     }
 
-    private void generateCountyNavTemplate(County county, List<Commune> communes) {
-        // TODO Auto-generated method stub
-        
+    private void initCommune(final Commune com) {
+        if (null == roWpNames.get(com)) {
+            LazyInitializer<String> roWpNameIniter = new LazyInitializer<String>() {
+                @Override
+                protected String initialize() throws ConcurrentException {
+                    List<String> candidateNames = getRoWpCandidateNames(com);
+
+                    for (String candidateName : candidateNames) {
+                        try {
+                            HashMap candidatePageInfo = rowiki.getPageInfo(candidateName);
+                            if (BooleanUtils.isTrue((Boolean) candidatePageInfo.get("exists"))) {
+                                String actualCandidateTitle = StringUtils.defaultString(
+                                    rowiki.resolveRedirect(new String[] { candidateName })[0], candidateName);
+                                String[] categories = rowiki.getCategories(actualCandidateTitle);
+                                for (String categ : categories) {
+                                    if (StringUtils.startsWithAny(categ, "Orașe în Croația", "Orașe în cantonul ",
+                                        "Comune în Croația", "Comune în cantonul ")) {
+                                        return candidateName;
+                                    }
+                                }
+                            } else {
+                                return candidateName;
+                            }
+
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                    return candidateNames.get(candidateNames.size() - 1);
+                }
+
+            };
+            roWpNames.put(com, roWpNameIniter);
+        }
+        if (null == hrWpNames.get(com)) {
+            LazyInitializer<String> hrWpNameIniter;
+            if (null == (hrWpNameIniter = hrWpNames.get(com))) {
+                hrWpNameIniter = new LazyInitializer<String>() {
+
+                    @Override
+                    protected String initialize() throws ConcurrentException {
+                        String communeName = retrieveName(com);
+                        List<String> candidateNames = Arrays.asList(communeName + " (" + com.getCounty().getNameHr() + ")",
+                            communeName + " (općina)", communeName);
+                        try {
+                            for (String candidateName : candidateNames) {
+                                if (hrwiki.exists(new String[] { candidateName })[0]) {
+                                    String redirectedPage = hrwiki.resolveRedirect(new String[] { candidateName })[0];
+                                    redirectedPage = StringUtils.defaultString(redirectedPage, candidateName);
+                                    return redirectedPage;
+                                }
+                            }
+                        } catch (IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                };
+                hrWpNames.put(com, hrWpNameIniter);
+            }
+        }
+    }
+
+    private List<String> getRoWpCandidateNames(Commune com) {
+        String communeName = retrieveName(com);
+        if (com.getTown() > 0) {
+            return Arrays.asList(communeName, communeName + ", Croația", communeName + ", "
+                + com.getCounty().getName());
+        } else {
+            return Arrays.asList("Comuna " + communeName + ", " + com.getCounty().getName(), "Comuna " + communeName);
+        }
+    }
+
+    private void generateCountyNavTemplate(County county, List<Commune> communes) throws ConcurrentException {
+        Collections.sort(communes, new Comparator<Commune>() {
+
+            public int compare(Commune o1, Commune o2) {
+                if (o1.getTown() != o1.getTown()) {
+                    return o2.getTown() - o1.getTown();
+                }
+                if (!StringUtils.equals(o1.getName(), o2.getName())) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+                return o1.getCounty().getName().compareTo(o2.getCounty().getName());
+            }
+        });
+
+        List<String> townsLinks = new ArrayList<String>();
+        List<String> communeLinks = new ArrayList<String>();
+        for (Commune com : communes) {
+            String communeName = retrieveName(com);
+            if (com.getTown() > 0) {
+                townsLinks.add("[[" + roWpNames.get(com).get() + "|" + communeName + "]]");
+            } else {
+                communeLinks.add("[[" + roWpNames.get(com).get() + "|" + communeName + "]]");
+            }
+        }
+
+        String navTemplateName = "Cantonul " + county.getName();
+
+        StringBuilder navTemplateBuilder = new StringBuilder(
+            "{{Casetă de navigare simplă\n|titlu=Comune și orașe în [[cantonul");
+        navTemplateBuilder.append(county.getName());
+        navTemplateBuilder.append("]]\n|nume=");
+        navTemplateBuilder.append(navTemplateName);
+        navTemplateBuilder.append("\n|grup1=Orașe");
+        navTemplateBuilder.append("\n|listă1=<div>\n");
+        navTemplateBuilder.append(StringUtils.join(townsLinks.toArray(new String[townsLinks.size()]), "{{~}}\n"));
+        navTemplateBuilder.append("\n</div>");
+        navTemplateBuilder.append("\n|grup1=Comune");
+        navTemplateBuilder.append("\n|listă1=<div>\n");
+        navTemplateBuilder.append(StringUtils.join(communeLinks.toArray(new String[communeLinks.size()]), "{{~}}\n"));
+        navTemplateBuilder.append("\n</div>");
+        navTemplateBuilder.append("}}<noinclude>[[Categorie:Formate de navigare cantoane din Croația]]</noinclude>");
+
+        System.out.println(navTemplateBuilder.toString());
     }
 
     private void generateCommune(final Commune com) throws IOException, ConcurrentException {
@@ -111,7 +228,7 @@ public class HRWikiGenerator {
         String demographySection = generateDemographySection(com);
         String infobox = generateInfoboxForCommune(com);
         String articleIntro = generateIntroForCommune(com);
-        String refSection = "\n== Note ==\n{{reflist}}\n";
+        String refSection = NOTE_REFLIST;
         String closingStatements = generateClosingStatements(com);
 
         String newArticleContent = infobox + articleIntro + demographySection + refSection + closingStatements;
@@ -124,18 +241,21 @@ public class HRWikiGenerator {
         }
     }
 
-    private void generateNewCommuneArticle(Commune com, String string) {
-
+    private void generateNewCommuneArticle(Commune com, String string) throws ConcurrentException {
+        String communeName = retrieveName(com);
+        System.out.println("------------------ New commune article for " + communeName + " title="
+            + roWpNames.get(com).get() + " ----------------");
+        System.out.println(string);
     }
 
     private String generateClosingStatements(Commune com) {
         StringBuilder closingst = new StringBuilder();
 
         closingst.append("\n");
-        closingst.append("\n{{Cantonul " + com.getName() + "}}");
+        closingst.append("\n{{Cantonul " + com.getCounty().getName() + "}}");
         closingst.append("\n[[Categorie:");
         closingst.append(com.getTown() > 0 ? "Orașe" : "Comune");
-        closingst.append(" în cantonul " + com.getName());
+        closingst.append(" în cantonul " + com.getCounty().getName());
         closingst.append("]]");
 
         return closingst.toString();
@@ -144,16 +264,22 @@ public class HRWikiGenerator {
     private String generateIntroForCommune(Commune com) {
         STGroup stgroup = new STGroupFile("templates/hr/town.stg");
         ST introTmpl = stgroup.getInstanceOf("introTmpl" + (com.getTown() > 0 ? "Town" : "Comm"));
-        introTmpl.add("nume", com.getName());
+        String communeName = retrieveName(com);
+        introTmpl.add("nume", communeName);
         introTmpl.add("canton", com.getCounty().getName());
         introTmpl.add("populatie", "{{formatnum:" + com.getPopulation() + "}} " + Utilities.de(com.getPopulation(), "", ""));
         return introTmpl.render();
     }
 
     private String generateInfoboxForCommune(Commune com) throws ConcurrentException {
-        StringBuilder infoboxText = new StringBuilder("{{Infocaseta Așezare|");
+        StringBuilder infoboxText = new StringBuilder("{{Infocaseta Așezare");
+        String[] names = StringUtils.splitByWholeSeparator(com.getName(), " - ");
         infoboxText.append("\n|nume = ");
-        infoboxText.append(com.getName());
+        infoboxText.append(names[0]);
+        if (1 < names.length) {
+            infoboxText.append("\n|nume_nativ = ");
+            infoboxText.append(StringUtils.join(names, "<br />", 1, names.length));
+        }
         infoboxText.append("}}");
         ParameterReader ibReader = new ParameterReader(infoboxText.toString());
         ibReader.run();
@@ -176,31 +302,7 @@ public class HRWikiGenerator {
 
     private void extractDataFromExternalWikiToInfobox(final Commune com, Map<String, String> ibParams)
         throws ConcurrentException {
-        LazyInitializer<String> hrWpNameIniter;
-        if (null == (hrWpNameIniter = hrWpNames.get(com))) {
-            hrWpNameIniter = new LazyInitializer<String>() {
-
-                @Override
-                protected String initialize() throws ConcurrentException {
-                    List<String> candidateNames = Arrays.asList(com.getName() + " (" + com.getCounty().getNameHr() + ")",
-                        com.getName() + " (općina)", com.getName());
-                    try {
-                        for (String candidateName : candidateNames) {
-                            if (hrwiki.exists(new String[] { candidateName })[0]) {
-                                String redirectedPage = hrwiki.resolveRedirect(new String[] { candidateName })[0];
-                                redirectedPage = StringUtils.defaultString(redirectedPage, candidateName);
-                                return redirectedPage;
-                            }
-                        }
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-            };
-            hrWpNames.put(com, hrWpNameIniter);
-        }
+        LazyInitializer<String> hrWpNameIniter = hrWpNames.get(com);
         String hrWpName = hrWpNameIniter.get();
         try {
 
@@ -245,11 +347,6 @@ public class HRWikiGenerator {
         if (params.containsKey(fromString)) {
             ibParams.put(toString, params.get(fromString));
         }
-    }
-
-    private List<String> retrieveHrWpName(Commune com) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     private void putDemoDataIntoParams(Commune com, Map<String, String> ibParams) {
@@ -298,6 +395,7 @@ public class HRWikiGenerator {
         } else {
             sbuild.append(demographySection);
         }
+        System.out.println("Inserting demography section into article \"" + title + "\" at point " + insertLocation);
     }
 
     private List<Integer> createMarkerLocationList(final String pageText, final List<String> markers) {
@@ -318,7 +416,8 @@ public class HRWikiGenerator {
         final STGroup templateGroup = com.getTown() > 0 ? townTemplateGroup : communeTemplateGroup;
         final ST piechart = templateGroup.getInstanceOf("piechart");
         final int population = com.getPopulation();
-        piechart.add("nume", com.getName());
+        String communeName = retrieveName(com);
+        piechart.add("nume", communeName);
         piechart.add("tip_genitiv", com.getTown() > 0 ? "orașului" : "comunei");
 
         final Map<Nationality, Integer> ethnicStructure = com.getEthnicStructure();
@@ -331,8 +430,9 @@ public class HRWikiGenerator {
         renderPiechart(demographics, piechart, population, datasetEthnos, datasetReligion);
 
         final ST demogIntro = templateGroup.getInstanceOf("demogIntro" + (com.getTown() > 0 ? "Town" : "Comm"));
-        demogIntro.add("nume", com.getName());
-        demogIntro.add("populatie", Utilities.de(population, "locuitor", "locuitori"));
+        demogIntro.add("nume", communeName);
+        demogIntro.add("populatie",
+            "{{formatnum:" + com.getPopulation() + "}}&nbsp;" + Utilities.de(population, "locuitor", "locuitori"));
         demographics.append(demogIntro.render());
 
         final Nationality majNat = getMajorityEthnicity(com);
@@ -434,7 +534,7 @@ public class HRWikiGenerator {
 
     private Religion getMajorityReligion(Commune com) {
         for (final Religion rel : com.getReligiousStructure().keySet()) {
-            if (com.getEthnicStructure().get(rel) / (double) com.getPopulation() > 0.5) {
+            if (com.getReligiousStructure().get(rel) / (double) com.getPopulation() > 0.5) {
                 return rel;
             }
         }
@@ -534,10 +634,10 @@ public class HRWikiGenerator {
     }
 
     private Object getNationLink(Nationality majNat) {
-        if (!StringUtils.startsWithAny(majNat.getName(), "Ne", "Afiliați")) {
-            return "[[" + majNat.getName() + "i din Croația|" + majNat.getName() + "]]";
+        if (!StringUtils.startsWithAny(majNat.getName(), "Necunoscut", "Nu au declarat")) {
+            return "[[" + majNat.getName() + "i din Croația|" + lowerCase(majNat.getName()) + "]]";
         } else {
-            return majNat.getName();
+            return lowerCase(majNat.getName());
         }
     }
 
@@ -548,33 +648,33 @@ public class HRWikiGenerator {
         Religion otherNat = null;
         for (final Religion rel : religionColorMap.keySet()) {
             final int natpop = defaultIfNull(religiousStructure.get(rel), 0);
-            if (natpop * 100.0 / population > 1.0 && !StringUtils.equals(rel.getName(), "Neclasificat")) {
+            if (natpop * 100.0 / population > 1.0 && !startsWithAny(rel.getName(), "Necunoscut", "Nu au declarat")) {
                 dataset.setValue(rel.getName(), natpop);
-            } else if (natpop * 100.0 / population <= 1.0 && !StringUtils.equals(rel.getName(), "Neclasificat")) {
+            } else if (natpop * 100.0 / population <= 1.0 && !startsWithAny(rel.getName(), "Necunoscut", "Nu au declarat")) {
                 smallGroups.put(rel.getName(), natpop);
-            } else if (StringUtils.equals(rel.getName(), "Neclasificat")) {
+            } else if (StringUtils.equals(rel.getName(), undeclared.getName())) {
                 otherNat = rel;
             }
             if (!StringUtils.equals(undeclared.getName(), rel.getName())) {
                 totalKnownEthnicity += natpop;
             }
         }
-        dataset.setValue("Nicio identificare", population - totalKnownEthnicity);
+        dataset.setValue("Necunoscută", population - totalKnownEthnicity);
         if (1 < smallGroups.size()) {
-            smallGroups.put("Neclasificat", religiousStructure.get(otherNat));
+            smallGroups.put(undeclared.getName(), religiousStructure.get(otherNat));
             int smallSum = 0;
             for (final String smallGroup : smallGroups.keySet()) {
                 smallSum += ObjectUtils.defaultIfNull(smallGroups.get(smallGroup), 0);
             }
-            dataset.setValue("Neclasificat", smallSum);
+            dataset.setValue(undeclared.getName(), smallSum);
         } else {
-            for (final String natname : smallGroups.keySet()) {
-                if (!startsWithAny(natname, "Ne") && smallGroups.containsKey(natname)) {
-                    dataset.setValue(natname, smallGroups.get(natname));
+            for (final String relname : smallGroups.keySet()) {
+                if (!startsWithAny(relname, "Necunoscut", "Nu au declarat") && smallGroups.containsKey(relname)) {
+                    dataset.setValue(relname, smallGroups.get(relname));
                 }
             }
             if (religiousStructure.containsKey(otherNat)) {
-                dataset.setValue("Neclasificat", religiousStructure.get(otherNat));
+                dataset.setValue("Necunoscută", religiousStructure.get(otherNat));
             }
         }
         return totalKnownEthnicity;
@@ -601,6 +701,9 @@ public class HRWikiGenerator {
             pieChartEthnosProps.append(i);
             pieChartEthnosProps.append('=');
             final Color color = (Color) nationColorMap.get(nationNameMap.get(k.toString()));
+            if (null == color) {
+                throw new RuntimeException("Unknown color for nationality " + k);
+            }
             pieChartEthnosProps.append(Utilities.colorToHtml(color));
             i++;
         }
@@ -618,6 +721,9 @@ public class HRWikiGenerator {
             pieChartReligProps.append(i);
             pieChartReligProps.append('=');
             final Color color = (Color) religionColorMap.get(religionNameMap.get(k.toString()));
+            if (null == color) {
+                throw new RuntimeException("Unknown color for religion " + k);
+            }
             pieChartEthnosProps.append(Utilities.colorToHtml(color));
             i++;
         }
@@ -646,7 +752,7 @@ public class HRWikiGenerator {
                 totalKnownEthnicity += natpop;
             }
         }
-        dataset.setValue("Nicio identificare", population - totalKnownEthnicity);
+        dataset.setValue("Necunoscut", population - totalKnownEthnicity);
         if (1 < smallGroups.size()) {
             smallGroups.put("Neclasificat", ethnicStructure.get(otherNat));
             int smallSum = 0;
@@ -680,7 +786,12 @@ public class HRWikiGenerator {
     }
 
     private void close() {
-        ses.getTransaction().rollback();
+        if (null != ses) {
+            org.hibernate.Transaction tx = ses.getTransaction();
+            if (null != tx) {
+                tx.rollback();
+            }
+        }
         if (null != rowiki) {
             rowiki.logout();
         }
@@ -732,6 +843,7 @@ public class HRWikiGenerator {
         assignColorToNationality("Sloveni", new Color(32, 32, 128));
         assignColorToNationality("Slovaci", new Color(48, 48, 160));
         assignColorToNationality("Neclasificat", new Color(192, 192, 192));
+        assignColorToNationality("Necunoscut", new Color(64, 64, 64));
         blandifyColors(nationColorMap);
 
         assignColorToReligion("Ortodocși", new Color(85, 85, 255));
@@ -785,16 +897,8 @@ public class HRWikiGenerator {
         }
     }
 
-    private String getExistingRoTitleOfArticleWithSubject(final Commune obshtina) throws IOException {
-        final List<String> alternativeTitles = new ArrayList<String>();
-        if (obshtina.getTown() > 0) {
-            alternativeTitles.add(obshtina.getName());
-            alternativeTitles.add(obshtina.getName() + ", Croația");
-            alternativeTitles.add(obshtina.getName() + ", " + obshtina.getCounty().getName());
-        } else {
-            alternativeTitles.add("Comuna " + obshtina.getName() + ", " + obshtina.getCounty().getName());
-            alternativeTitles.add("Comuna " + obshtina.getName());
-        }
+    private String getExistingRoTitleOfArticleWithSubject(final Commune com) throws IOException {
+        final List<String> alternativeTitles = getRoWpCandidateNames(com);
 
         for (final String candidateTitle : alternativeTitles) {
             final HashMap pageInfo = rowiki.getPageInfo(candidateTitle);
@@ -839,13 +943,18 @@ public class HRWikiGenerator {
         return "<ref name=\"hr_census_2011_ethnicity\">{{Citat web|url=http://www.dzs.hr/Eng/censuses/census2011/results/htm/e01_01_04/E01_01_04_zup"
             + StringUtils.leftPad(String.valueOf(com.getId()), 2, '0')
             + ".html|publisher=Biroul de Statistică al Croației|accessdate=2013-11-11|title=Componența etnică a cantonului "
-            + com.getCounty().getName() + " pe comune și orașe}}";
+            + com.getCounty().getName() + " pe comune și orașe}}</ref>";
     }
 
     private String getReligionRef(Commune com) {
         return "<ref name=\"hr_census_2011_religion\">{{Citat web|url=http://www.dzs.hr/Eng/censuses/census2011/results/htm/e01_01_10/E01_01_10_zup"
             + StringUtils.leftPad(String.valueOf(com.getId()), 2, '0')
             + ".html|publisher=Biroul de Statistică al Croației|accessdate=2013-11-11|title=Componența confesională a cantonului "
-            + com.getCounty().getName() + " pe comune și orașe}}";
+            + com.getCounty().getName() + " pe comune și orașe}}</ref>";
+    }
+    
+    private String retrieveName(Commune com) {
+        String[] names = StringUtils.splitByWholeSeparator(com.getName(), " - ");
+        return names[0];
     }
 }

@@ -34,4 +34,9 @@ public class Nationality {
     public void setName(final String nume) {
         this.name = nume;
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }
