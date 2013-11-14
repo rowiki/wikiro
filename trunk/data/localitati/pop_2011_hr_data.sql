@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.2.4
 -- Dumped by pg_dump version 9.2.4
--- Started on 2013-10-10 17:43:09
+-- Started on 2013-11-14 19:18:47 EET
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -13,7 +13,7 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 
 --
--- TOC entry 174 (class 3079 OID 11727)
+-- TOC entry 174 (class 3079 OID 11734)
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
@@ -21,7 +21,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 1964 (class 0 OID 0)
+-- TOC entry 1970 (class 0 OID 0)
 -- Dependencies: 174
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -36,7 +36,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 168 (class 1259 OID 21392)
+-- TOC entry 168 (class 1259 OID 16970)
 -- Name: localitate; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -52,7 +52,7 @@ CREATE TABLE localitate (
 ALTER TABLE public.localitate OWNER TO postgres;
 
 --
--- TOC entry 169 (class 1259 OID 21397)
+-- TOC entry 169 (class 1259 OID 16973)
 -- Name: localitate_nationalitate; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -66,7 +66,7 @@ CREATE TABLE localitate_nationalitate (
 ALTER TABLE public.localitate_nationalitate OWNER TO postgres;
 
 --
--- TOC entry 170 (class 1259 OID 21402)
+-- TOC entry 170 (class 1259 OID 16976)
 -- Name: localitate_religie; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -80,7 +80,7 @@ CREATE TABLE localitate_religie (
 ALTER TABLE public.localitate_religie OWNER TO postgres;
 
 --
--- TOC entry 171 (class 1259 OID 21407)
+-- TOC entry 171 (class 1259 OID 16979)
 -- Name: nationalitate; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -93,7 +93,7 @@ CREATE TABLE nationalitate (
 ALTER TABLE public.nationalitate OWNER TO postgres;
 
 --
--- TOC entry 172 (class 1259 OID 21412)
+-- TOC entry 172 (class 1259 OID 16982)
 -- Name: religie; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -106,20 +106,21 @@ CREATE TABLE religie (
 ALTER TABLE public.religie OWNER TO postgres;
 
 --
--- TOC entry 173 (class 1259 OID 21417)
+-- TOC entry 173 (class 1259 OID 16985)
 -- Name: zupanja; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE zupanja (
     id bigint NOT NULL,
-    nume character varying(255)
+    nume character varying(255),
+    nume_hr text
 );
 
 
 ALTER TABLE public.zupanja OWNER TO postgres;
 
 --
--- TOC entry 1951 (class 0 OID 21392)
+-- TOC entry 1957 (class 0 OID 16970)
 -- Dependencies: 168
 -- Data for Name: localitate; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -190,7 +191,6 @@ INSERT INTO localitate (id, nume, populatie, town, county) VALUES (62, 'Sveti Kr
 INSERT INTO localitate (id, nume, populatie, town, county) VALUES (63, 'Tuhelj', 2104, 0, 2);
 INSERT INTO localitate (id, nume, populatie, town, county) VALUES (64, 'Veliko Trgovišće', 4945, 0, 2);
 INSERT INTO localitate (id, nume, populatie, town, county) VALUES (65, 'Zagorska Sela', 996, 0, 2);
-INSERT INTO localitate (id, nume, populatie, town, county) VALUES (66, 'Zlatar-Bistrica', 2600, 0, 2);
 INSERT INTO localitate (id, nume, populatie, town, county) VALUES (67, 'Glina', 9283, 1, 3);
 INSERT INTO localitate (id, nume, populatie, town, county) VALUES (68, 'Hrvatska Kostajnica', 2756, 1, 3);
 INSERT INTO localitate (id, nume, populatie, town, county) VALUES (69, 'Kutina', 22760, 1, 3);
@@ -679,10 +679,11 @@ INSERT INTO localitate (id, nume, populatie, town, county) VALUES (552, 'Sveti M
 INSERT INTO localitate (id, nume, populatie, town, county) VALUES (553, 'Šenkovec', 2879, 0, 20);
 INSERT INTO localitate (id, nume, populatie, town, county) VALUES (554, 'Štrigova', 2766, 0, 20);
 INSERT INTO localitate (id, nume, populatie, town, county) VALUES (555, 'Vratišinec', 1984, 0, 20);
+INSERT INTO localitate (id, nume, populatie, town, county) VALUES (66, 'Zlatar Bistrica', 2600, 0, 2);
 
 
 --
--- TOC entry 1952 (class 0 OID 21397)
+-- TOC entry 1958 (class 0 OID 16973)
 -- Dependencies: 169
 -- Data for Name: localitate_nationalitate; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -16230,7 +16231,7 @@ INSERT INTO localitate_nationalitate (localitate, populatie, nationalitate) VALU
 
 
 --
--- TOC entry 1953 (class 0 OID 21402)
+-- TOC entry 1959 (class 0 OID 16976)
 -- Dependencies: 170
 -- Data for Name: localitate_religie; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -22898,7 +22899,7 @@ INSERT INTO localitate_religie (localitate, populatie, religie) VALUES (555, 6, 
 
 
 --
--- TOC entry 1954 (class 0 OID 21407)
+-- TOC entry 1960 (class 0 OID 16979)
 -- Dependencies: 171
 -- Data for Name: nationalitate; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -22934,7 +22935,7 @@ INSERT INTO nationalitate (id, nume) VALUES (28, 'Necunoscut');
 
 
 --
--- TOC entry 1955 (class 0 OID 21412)
+-- TOC entry 1961 (class 0 OID 16982)
 -- Dependencies: 172
 -- Data for Name: religie; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -22954,35 +22955,35 @@ INSERT INTO religie (id, nume) VALUES (12, 'Necunoscută');
 
 
 --
--- TOC entry 1956 (class 0 OID 21417)
+-- TOC entry 1962 (class 0 OID 16985)
 -- Dependencies: 173
 -- Data for Name: zupanja; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO zupanja (id, nume) VALUES (1, 'Zagreb');
-INSERT INTO zupanja (id, nume) VALUES (2, 'Krapina-Zagorje');
-INSERT INTO zupanja (id, nume) VALUES (3, 'Sisak-Moslavina');
-INSERT INTO zupanja (id, nume) VALUES (4, 'Karlovac');
-INSERT INTO zupanja (id, nume) VALUES (5, 'Varaždin');
-INSERT INTO zupanja (id, nume) VALUES (6, 'Koprivnica-Križevci');
-INSERT INTO zupanja (id, nume) VALUES (7, 'Bjelovar-Bilogora');
-INSERT INTO zupanja (id, nume) VALUES (8, 'Primorje-Gorski kotar');
-INSERT INTO zupanja (id, nume) VALUES (9, 'Lika-Senj');
-INSERT INTO zupanja (id, nume) VALUES (10, 'Virovitica-Podravina');
-INSERT INTO zupanja (id, nume) VALUES (11, 'Požega-Slavonia');
-INSERT INTO zupanja (id, nume) VALUES (12, 'Slavonski Brod-Posavina');
-INSERT INTO zupanja (id, nume) VALUES (13, 'Zadar');
-INSERT INTO zupanja (id, nume) VALUES (14, 'Osijek-Baranja');
-INSERT INTO zupanja (id, nume) VALUES (15, 'Šibenik-Knin');
-INSERT INTO zupanja (id, nume) VALUES (16, 'Vukovar-Srijem');
-INSERT INTO zupanja (id, nume) VALUES (17, 'Split-Dalmația');
-INSERT INTO zupanja (id, nume) VALUES (18, 'Istria');
-INSERT INTO zupanja (id, nume) VALUES (19, 'Dubrovnik-Neretva');
-INSERT INTO zupanja (id, nume) VALUES (20, 'Međimurje');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (1, 'Zagreb', 'Zagrebačka županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (2, 'Krapina-Zagorje', 'Krapinsko-zagorska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (3, 'Sisak-Moslavina', 'Sisačko-moslavačka županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (4, 'Karlovac', 'Karlovačka županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (5, 'Varaždin', 'Varaždinska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (6, 'Koprivnica-Križevci', 'Koprivničko-križevačka županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (7, 'Bjelovar-Bilogora', 'Bjelovarsko-bilogorska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (8, 'Primorje-Gorski kotar', 'Primorsko-goranska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (9, 'Lika-Senj', 'Ličko-senjska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (10, 'Virovitica-Podravina', 'Virovitičko-podravska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (11, 'Požega-Slavonia', 'Požeško-slavonska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (12, 'Slavonski Brod-Posavina', 'Brodsko-posavska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (13, 'Zadar', 'Zadarska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (14, 'Osijek-Baranja', 'Osječko-baranjska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (15, 'Šibenik-Knin', 'Šibensko-kninska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (16, 'Vukovar-Srijem', 'Vukovarsko-srijemska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (17, 'Split-Dalmația', 'Splitsko-dalmatinska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (18, 'Istria', 'Istarska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (19, 'Dubrovnik-Neretva', 'Dubrovačko-neretvanska županija');
+INSERT INTO zupanja (id, nume, nume_hr) VALUES (20, 'Međimurje', 'Međimurska županija');
 
 
 --
--- TOC entry 1937 (class 2606 OID 21401)
+-- TOC entry 1943 (class 2606 OID 16992)
 -- Name: localitate_nationalitate_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -22991,7 +22992,7 @@ ALTER TABLE ONLY localitate_nationalitate
 
 
 --
--- TOC entry 1935 (class 2606 OID 21396)
+-- TOC entry 1941 (class 2606 OID 16994)
 -- Name: localitate_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -23000,7 +23001,7 @@ ALTER TABLE ONLY localitate
 
 
 --
--- TOC entry 1939 (class 2606 OID 21406)
+-- TOC entry 1945 (class 2606 OID 16996)
 -- Name: localitate_religie_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -23009,7 +23010,7 @@ ALTER TABLE ONLY localitate_religie
 
 
 --
--- TOC entry 1941 (class 2606 OID 21411)
+-- TOC entry 1947 (class 2606 OID 16998)
 -- Name: nationalitate_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -23018,7 +23019,7 @@ ALTER TABLE ONLY nationalitate
 
 
 --
--- TOC entry 1943 (class 2606 OID 21416)
+-- TOC entry 1949 (class 2606 OID 17000)
 -- Name: religie_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -23027,7 +23028,7 @@ ALTER TABLE ONLY religie
 
 
 --
--- TOC entry 1945 (class 2606 OID 21421)
+-- TOC entry 1951 (class 2606 OID 17002)
 -- Name: zupanja_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -23036,7 +23037,7 @@ ALTER TABLE ONLY zupanja
 
 
 --
--- TOC entry 1947 (class 2606 OID 21427)
+-- TOC entry 1953 (class 2606 OID 17003)
 -- Name: fk_ai1b59loicyophr4gsv26xixl; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -23045,7 +23046,7 @@ ALTER TABLE ONLY localitate_nationalitate
 
 
 --
--- TOC entry 1948 (class 2606 OID 21432)
+-- TOC entry 1954 (class 2606 OID 17008)
 -- Name: fk_iklhlpxapqsr6mgvrysli8ucv; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -23054,7 +23055,7 @@ ALTER TABLE ONLY localitate_nationalitate
 
 
 --
--- TOC entry 1949 (class 2606 OID 21437)
+-- TOC entry 1955 (class 2606 OID 17013)
 -- Name: fk_n0m53lvhq2je3grbv6hkwau0f; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -23063,7 +23064,7 @@ ALTER TABLE ONLY localitate_religie
 
 
 --
--- TOC entry 1946 (class 2606 OID 21422)
+-- TOC entry 1952 (class 2606 OID 17018)
 -- Name: fk_rrbabtk6dplytgn1bxxkefe1d; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -23072,7 +23073,7 @@ ALTER TABLE ONLY localitate
 
 
 --
--- TOC entry 1950 (class 2606 OID 21442)
+-- TOC entry 1956 (class 2606 OID 17023)
 -- Name: fk_t3lv3pi4bjt8f7jeak1xmayql; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -23081,8 +23082,8 @@ ALTER TABLE ONLY localitate_religie
 
 
 --
--- TOC entry 1963 (class 0 OID 0)
--- Dependencies: 5
+-- TOC entry 1969 (class 0 OID 0)
+-- Dependencies: 6
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
 
@@ -23092,7 +23093,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2013-10-10 17:43:10
+-- Completed on 2013-11-14 19:18:47 EET
 
 --
 -- PostgreSQL database dump complete
