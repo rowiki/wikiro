@@ -22,6 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.security.auth.login.FailedLoginException;
+import javax.security.auth.login.LoginException;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -58,6 +59,8 @@ public class HRWikiGenerator {
     Pattern hrWpTemplates1 = Pattern.compile("\\{\\{(?:(Općina|Grad))\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
     private static Pattern regexInfocAsezare = Pattern
         .compile("\\{\\{(?:(?:C|c)asetă așezare|(?:I|i)nfocaseta Așezare|(?:C|c)utie așezare)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
+    private static Pattern regexCutieOrase = Pattern
+        .compile("\\{\\{(?:(?:C|c)utieOrașe|(?:C|c)asetăOraşe|(?:C|c)asetăOrașe)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
 
     private final STGroup communeTemplateGroup = new STGroupFile("templates/hr/town.stg");
     private final STGroup townTemplateGroup = new STGroupFile("templates/hr/town.stg");
@@ -80,7 +83,7 @@ public class HRWikiGenerator {
         }
     };
 
-    public static void main(final String[] args) throws FailedLoginException, IOException, ConcurrentException {
+    public static void main(final String[] args) throws IOException, ConcurrentException, LoginException {
         final HRWikiGenerator generator = new HRWikiGenerator();
         try {
             generator.init();
@@ -90,16 +93,32 @@ public class HRWikiGenerator {
         }
     }
 
-    private void generateCounties() throws IOException, ConcurrentException {
+    private void generateCounties() throws IOException, ConcurrentException, LoginException {
         final List<County> counties = hib.getAllCounties();
 
         for (final County county : counties) {
             final List<Commune> communes = hib.getCommunesByCounty(county);
+            generateCountyCategory(county, false);
+            generateCountyCategory(county, true);
+            generateCountyNavTemplate(county, communes);
             for (final Commune com : communes) {
                 initCommune(com);
                 generateCommune(com);
             }
-            generateCountyNavTemplate(county, communes);
+        }
+    }
+
+    private void generateCountyCategory(County county, boolean town) throws IOException, LoginException {
+        String type = town ? "Oraș" : "Comun";
+        String categoryName = "Categorie:" + type + "e în cantonul " + county.getName();
+        HashMap pageInfo = rowiki.getPageInfo(categoryName);
+        if (!BooleanUtils.isTrue((Boolean) pageInfo.get("exists"))) {
+            StringBuilder catText = new StringBuilder("[[Categorie:");
+            catText.append(town ? "Oraș" : "Comun");
+            catText.append("e în Croația|");
+            catText.append(county.getName());
+            catText.append("]]");
+            rowiki.edit(categoryName, catText.toString(), "Robot: creare categorie pentru " + type + "e din Croația");
         }
     }
 
@@ -118,8 +137,9 @@ public class HRWikiGenerator {
                                     rowiki.resolveRedirect(new String[] { candidateName })[0], candidateName);
                                 String[] categories = rowiki.getCategories(actualCandidateTitle);
                                 for (String categ : categories) {
-                                    if (StringUtils.startsWithAny(categ, "Categorie:Orașe în Croația", "Categorie:Orașe în cantonul ",
-                                        "Categorie:Comune în Croația", "Categorie:Comune în cantonul ")) {
+                                    if (StringUtils.startsWithAny(categ, "Categorie:Orașe în Croația",
+                                        "Categorie:Orașe în cantonul ", "Categorie:Comune în Croația",
+                                        "Categorie:Comune în cantonul ")) {
                                         return candidateName;
                                     }
                                 }
@@ -147,7 +167,9 @@ public class HRWikiGenerator {
                     protected String initialize() throws ConcurrentException {
                         String communeName = retrieveName(com);
                         List<String> candidateNames = Arrays.asList(communeName + " (" + com.getCounty().getNameHr() + ")",
-                            communeName + " (općina)", communeName);
+                            communeName + " (općina)", communeName, StringUtils.replace(communeName, "-", " ") + " ("
+                                + com.getCounty().getNameHr() + ")", StringUtils.replace(communeName, "-", " ")
+                                + " (općina)", StringUtils.replace(communeName, "-", " "));
                         try {
                             for (String candidateName : candidateNames) {
                                 if (hrwiki.exists(new String[] { candidateName })[0]) {
@@ -177,7 +199,8 @@ public class HRWikiGenerator {
         }
     }
 
-    private void generateCountyNavTemplate(County county, List<Commune> communes) throws ConcurrentException {
+    private void generateCountyNavTemplate(County county, List<Commune> communes) throws ConcurrentException,
+        LoginException, IOException {
         Collections.sort(communes, new Comparator<Commune>() {
 
             public int compare(Commune o1, Commune o2) {
@@ -195,6 +218,7 @@ public class HRWikiGenerator {
         List<String> communeLinks = new ArrayList<String>();
         for (Commune com : communes) {
             String communeName = retrieveName(com);
+            initCommune(com);
             if (com.getTown() > 0) {
                 townsLinks.add("[[" + roWpNames.get(com).get() + "|" + communeName + "]]");
             } else {
@@ -219,10 +243,12 @@ public class HRWikiGenerator {
         navTemplateBuilder.append("\n</div>");
         navTemplateBuilder.append("}}<noinclude>[[Categorie:Formate de navigare cantoane din Croația]]</noinclude>");
 
-        System.out.println(navTemplateBuilder.toString());
+        rowiki.edit("Format:Cantonul " + county.getName(), navTemplateName.toString(),
+            "Robot: creare format navigare orașe și comune componente ale cantonului " + county.getName() + "din Croația");
+
     }
 
-    private void generateCommune(final Commune com) throws IOException, ConcurrentException {
+    private void generateCommune(final Commune com) throws IOException, ConcurrentException, LoginException {
         final String title = getExistingRoTitleOfArticleWithSubject(com);
 
         String demographySection = generateDemographySection(com);
@@ -237,15 +263,47 @@ public class HRWikiGenerator {
         if (newPage) {
             generateNewCommuneArticle(com, newArticleContent);
         } else {
-            addDemographySectionToExistingArticle(com, title);
+            addDemographySectionToExistingArticle(com, title, demographySection, infobox);
         }
     }
 
-    private void generateNewCommuneArticle(Commune com, String string) throws ConcurrentException {
+    private void generateNewCommuneArticle(Commune com, String text) throws ConcurrentException, LoginException, IOException {
         String communeName = retrieveName(com);
-        System.out.println("------------------ New commune article for " + communeName + " title="
-            + roWpNames.get(com).get() + " ----------------");
-        System.out.println(string);
+        String roWpArticleTitle = roWpNames.get(com).get();
+        System.out.println("------------------ New commune article for " + communeName + " title=" + roWpArticleTitle
+            + " ----------------");
+        System.out.println(text);
+
+        rowiki.edit(roWpArticleTitle, text, "Robot: (re-)creare articol despre " + communeName + ", Croația");
+        createRedirects(roWpArticleTitle, com);
+        dwiki.linkPages("rowiki", roWpArticleTitle, "hrwiki", hrWpNames.get(com).get());
+    }
+
+    private void createRedirects(String roWpArticleTitle, Commune com) throws IOException, LoginException {
+        List<String> redirects = new ArrayList<String>();
+        redirects.add(com.getName());
+        redirects.add(com.getName() + ", Croația");
+        redirects.add(com.getName() + ", " + com.getCounty().getName());
+        if (com.getTown() == 0) {
+            redirects.add("Comuna " + com.getName());
+            redirects.add("Comuna " + com.getName() + ", Croația");
+            redirects.add("Comuna " + com.getName() + ", " + com.getCounty().getName());
+        }
+
+        for (String redirect : redirects) {
+            if (StringUtils.equals(roWpArticleTitle, redirect)) {
+                continue;
+            }
+            if (rowiki.exists(new String[] { redirect })[0]) {
+                String logPage = "Utilizator:Andrebot/Comune Croația/Redirecționări necreate";
+                String logdata = rowiki.getPageText(logPage);
+                rowiki.edit(logPage, StringUtils.defaultString(logdata) + "\n* [[" + redirect + "]]",
+                    "Robot: logat redirect necreat");
+            } else {
+                rowiki.edit(redirect, "#redirect[[" + roWpArticleTitle + "]]", "Robot: creare redirect către [["
+                    + roWpArticleTitle + "]]");
+            }
+        }
     }
 
     private String generateClosingStatements(Commune com) {
@@ -254,8 +312,8 @@ public class HRWikiGenerator {
         closingst.append("\n");
         closingst.append("\n{{Cantonul " + com.getCounty().getName() + "}}");
         closingst.append("\n[[Categorie:");
-        closingst.append(com.getTown() > 0 ? "Orașe" : "Comune");
-        closingst.append(" în cantonul " + com.getCounty().getName());
+        closingst.append(com.getTown() > 0 ? "Oraș" : "Comun");
+        closingst.append("e în cantonul " + com.getCounty().getName());
         closingst.append("]]");
 
         return closingst.toString();
@@ -318,7 +376,7 @@ public class HRWikiGenerator {
                 translateInfoboxParam(ibParams, "lider_nume", params, "načelnik");
                 translateInfoboxParam(ibParams, "componenta", params, "naselja");
                 translateInfoboxParam(ibParams, "componenta", params, "gradska naselja");
-                translateInfoboxParam(ibParams, "codpostal", params, "poštanski broj");
+                translateInfoboxParam(ibParams, "codpoștal", params, "poštanski broj");
                 translateInfoboxParam(ibParams, "latd", params, "z. širina");
                 translateInfoboxParam(ibParams, "longd", params, "z. dužina");
                 if (params.containsKey("z. dužina")) {
@@ -369,8 +427,9 @@ public class HRWikiGenerator {
         ibParams.put("utc_offset_DST", "+2");
     }
 
-    private void addDemographySectionToExistingArticle(final Commune com, final String title) throws IOException {
-        final String demographySection = generateDemographySection(com);
+    private void addDemographySectionToExistingArticle(final Commune com, final String title,
+                                                       final String demographySection, final String infobox)
+        throws IOException, LoginException {
         final String pageText = rowiki.getPageText(title);
         final List<String> markers = Arrays.asList("==Note", "== Note", "== Vezi și", "==Vezi și", "[[Categorie:", "{{Ciot",
             "{{ciot", "{{Croatia");
@@ -396,7 +455,47 @@ public class HRWikiGenerator {
         } else {
             sbuild.append(demographySection);
         }
-        System.out.println("Inserting demography section into article \"" + title + "\" at point " + insertLocation);
+
+        String currentInfobox = null;
+        Matcher casetaOraseMatcher = regexCutieOrase.matcher(sbuild);
+        Matcher casetaAsezareMatcher = regexInfocAsezare.matcher(sbuild);
+        boolean isCasetaOrase = false;
+        if (casetaOraseMatcher.find()) {
+            isCasetaOrase = true;
+            currentInfobox = casetaOraseMatcher.group();
+        } else if (casetaAsezareMatcher.find()) {
+            currentInfobox = casetaAsezareMatcher.group();
+        }
+        if (null != currentInfobox && (currentInfobox.length() <= infobox.length() || isCasetaOrase)) {
+            sbuild
+                .replace(sbuild.indexOf(currentInfobox), sbuild.indexOf(currentInfobox) + currentInfobox.length(), infobox);
+        } else if (null != currentInfobox) {
+            ParameterReader crtIbReader = new ParameterReader(currentInfobox);
+            crtIbReader.run();
+            Map<String, String> crtIbParams = crtIbReader.getParams();
+            ParameterReader updatedIbReader = new ParameterReader(infobox);
+            updatedIbReader.run();
+            Map<String, String> updatedParams = updatedIbReader.getParams();
+            for (String updatedParam : updatedParams.keySet()) {
+                crtIbParams.put(updatedParam, updatedParams.get(updatedParam));
+            }
+            StringBuilder infoboxBuilder = new StringBuilder("{{Infocaseta Așezare");
+            for (String crtIbParam : crtIbParams.keySet()) {
+                infoboxBuilder.append("\n|");
+                infoboxBuilder.append(crtIbParam);
+                infoboxBuilder.append(" = ");
+                infoboxBuilder.append(crtIbParams.get(crtIbParam));
+            }
+            infoboxBuilder.append("\n}}");
+            sbuild.replace(sbuild.indexOf(currentInfobox), sbuild.indexOf(currentInfobox) + currentInfobox.length(),
+                infoboxBuilder.toString());
+        } else {
+            sbuild.insert(0, infobox);
+        }
+        System.out.println("Inserting demography section into article \"" + title + "\", article becomes: "
+            + sbuild.toString());
+        rowiki.edit(title, sbuild.toString(),
+            "Robot: adăugare date demografice conform recensământului din 2011 și date de la hr.wp în infocasetă");
     }
 
     private List<Integer> createMarkerLocationList(final String pageText, final List<String> markers) {
@@ -845,6 +944,7 @@ public class HRWikiGenerator {
         assignColorToNationality("Italieni", new Color(64, 192, 64));
         assignColorToNationality("Sloveni", new Color(32, 32, 128));
         assignColorToNationality("Slovaci", new Color(48, 48, 160));
+        assignColorToNationality("Cehi", new Color(64, 64, 128));
         assignColorToNationality("Neclasificat", new Color(192, 192, 192));
         assignColorToNationality("Necunoscut", new Color(64, 64, 64));
         blandifyColors(nationColorMap);
