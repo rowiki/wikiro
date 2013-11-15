@@ -43,7 +43,9 @@ import org.wikipedia.ro.populationdb.hr.model.County;
 import org.wikipedia.ro.populationdb.hr.model.EthnicallyStructurable;
 import org.wikipedia.ro.populationdb.hr.model.Nationality;
 import org.wikipedia.ro.populationdb.hr.model.Religion;
+import org.wikipedia.ro.populationdb.util.Executor;
 import org.wikipedia.ro.populationdb.util.ParameterReader;
+import org.wikipedia.ro.populationdb.util.SysoutExecutor;
 import org.wikipedia.ro.populationdb.util.Utilities;
 
 public class HRWikiGenerator {
@@ -52,6 +54,7 @@ public class HRWikiGenerator {
     private Wiki rowiki;
     private Wiki hrwiki;
     private Wikibase dwiki;
+    private Executor executor;
     private Hibernator hib;
     private Session ses;
     private final Pattern footnotesRegex = Pattern
@@ -83,7 +86,7 @@ public class HRWikiGenerator {
         }
     };
 
-    public static void main(final String[] args) throws IOException, ConcurrentException, LoginException {
+    public static void main(final String[] args) throws Exception {
         final HRWikiGenerator generator = new HRWikiGenerator();
         try {
             generator.init();
@@ -93,7 +96,7 @@ public class HRWikiGenerator {
         }
     }
 
-    private void generateCounties() throws IOException, ConcurrentException, LoginException {
+    private void generateCounties() throws Exception {
         final List<County> counties = hib.getAllCounties();
 
         for (final County county : counties) {
@@ -108,7 +111,7 @@ public class HRWikiGenerator {
         }
     }
 
-    private void generateCountyCategory(County county, boolean town) throws IOException, LoginException {
+    private void generateCountyCategory(County county, boolean town) throws Exception {
         String type = town ? "Oraș" : "Comun";
         String categoryName = "Categorie:" + type + "e în cantonul " + county.getName();
         HashMap pageInfo = rowiki.getPageInfo(categoryName);
@@ -118,7 +121,7 @@ public class HRWikiGenerator {
             catText.append("e în Croația|");
             catText.append(county.getName());
             catText.append("]]");
-            rowiki.edit(categoryName, catText.toString(), "Robot: creare categorie pentru " + type + "e din Croația");
+            executor.save(categoryName, catText.toString(), "Robot: creare categorie pentru " + type + "e din Croația");
         }
     }
 
@@ -199,8 +202,7 @@ public class HRWikiGenerator {
         }
     }
 
-    private void generateCountyNavTemplate(County county, List<Commune> communes) throws ConcurrentException,
-        LoginException, IOException {
+    private void generateCountyNavTemplate(County county, List<Commune> communes) throws Exception {
         Collections.sort(communes, new Comparator<Commune>() {
 
             public int compare(Commune o1, Commune o2) {
@@ -243,12 +245,12 @@ public class HRWikiGenerator {
         navTemplateBuilder.append("\n</div>");
         navTemplateBuilder.append("}}<noinclude>[[Categorie:Formate de navigare cantoane din Croația]]</noinclude>");
 
-        rowiki.edit("Format:Cantonul " + county.getName(), navTemplateName.toString(),
+        executor.save("Format:Cantonul " + county.getName(), navTemplateName.toString(),
             "Robot: creare format navigare orașe și comune componente ale cantonului " + county.getName() + "din Croația");
 
     }
 
-    private void generateCommune(final Commune com) throws IOException, ConcurrentException, LoginException {
+    private void generateCommune(final Commune com) throws Exception {
         final String title = getExistingRoTitleOfArticleWithSubject(com);
 
         String demographySection = generateDemographySection(com);
@@ -267,19 +269,19 @@ public class HRWikiGenerator {
         }
     }
 
-    private void generateNewCommuneArticle(Commune com, String text) throws ConcurrentException, LoginException, IOException {
+    private void generateNewCommuneArticle(Commune com, String text) throws Exception {
         String communeName = retrieveName(com);
         String roWpArticleTitle = roWpNames.get(com).get();
         System.out.println("------------------ New commune article for " + communeName + " title=" + roWpArticleTitle
             + " ----------------");
         System.out.println(text);
 
-        rowiki.edit(roWpArticleTitle, text, "Robot: (re-)creare articol despre " + communeName + ", Croația");
+        executor.save(roWpArticleTitle, text, "Robot: (re-)creare articol despre " + communeName + ", Croația");
         createRedirects(roWpArticleTitle, com);
-        dwiki.linkPages("rowiki", roWpArticleTitle, "hrwiki", hrWpNames.get(com).get());
+        executor.link("rowiki", roWpArticleTitle, "hrwiki", hrWpNames.get(com).get());
     }
 
-    private void createRedirects(String roWpArticleTitle, Commune com) throws IOException, LoginException {
+    private void createRedirects(String roWpArticleTitle, Commune com) throws Exception {
         List<String> redirects = new ArrayList<String>();
         redirects.add(com.getName());
         redirects.add(com.getName() + ", Croația");
@@ -297,10 +299,10 @@ public class HRWikiGenerator {
             if (rowiki.exists(new String[] { redirect })[0]) {
                 String logPage = "Utilizator:Andrebot/Comune Croația/Redirecționări necreate";
                 String logdata = rowiki.getPageText(logPage);
-                rowiki.edit(logPage, StringUtils.defaultString(logdata) + "\n* [[" + redirect + "]]",
+                executor.save(logPage, StringUtils.defaultString(logdata) + "\n* [[" + redirect + "]]",
                     "Robot: logat redirect necreat");
             } else {
-                rowiki.edit(redirect, "#redirect[[" + roWpArticleTitle + "]]", "Robot: creare redirect către [["
+                executor.save(redirect, "#redirect[[" + roWpArticleTitle + "]]", "Robot: creare redirect către [["
                     + roWpArticleTitle + "]]");
             }
         }
@@ -429,7 +431,7 @@ public class HRWikiGenerator {
 
     private void addDemographySectionToExistingArticle(final Commune com, final String title,
                                                        final String demographySection, final String infobox)
-        throws IOException, LoginException {
+        throws Exception {
         final String pageText = rowiki.getPageText(title);
         final List<String> markers = Arrays.asList("==Note", "== Note", "== Vezi și", "==Vezi și", "[[Categorie:", "{{Ciot",
             "{{ciot", "{{Croatia");
@@ -494,7 +496,7 @@ public class HRWikiGenerator {
         }
         System.out.println("Inserting demography section into article \"" + title + "\", article becomes: "
             + sbuild.toString());
-        rowiki.edit(title, sbuild.toString(),
+        executor.save(title, sbuild.toString(),
             "Robot: adăugare date demografice conform recensământului din 2011 și date de la hr.wp în infocasetă");
     }
 
@@ -910,6 +912,7 @@ public class HRWikiGenerator {
         rowiki = new Wiki("ro.wikipedia.org");
         hrwiki = new Wiki("hr.wikipedia.org");
         dwiki = new Wikibase();
+        executor = new SysoutExecutor();
 
         final Properties credentials = new Properties();
         credentials.load(HRWikiGenerator.class.getClassLoader().getResourceAsStream("credentials.properties"));
