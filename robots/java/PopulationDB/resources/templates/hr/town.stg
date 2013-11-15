@@ -1,9 +1,11 @@
-introTmplTown(nume, canton, populatie) ::= "'''<nume>''' este un oraș în [[cantonul <canton>]], [[Croația]], având o populație de <populatie> locuitori (2011)."
-introTmplComm(nume, canton, populatie) ::= "'''<nume>''' este o comună în [[cantonul <canton>]], [[Croația]], având o populație de <populatie> locuitori (2011)."
+introTmplTown(nume, canton, populatie) ::= "'''<nume>''' este un oraș în [[cantonul <canton>]], [[Croația]], având o populație de <populatie>locuitori (2011)."
+introTmplComm(nume, canton, populatie) ::= "'''<nume>''' este o comună în [[cantonul <canton>]], [[Croația]], având o populație de <populatie>locuitori (2011)."
 piechart(nume, propsRelig, propsEthnos, tip_genitiv) ::= "{{Pie chart
 |thumb=left
-|caption=Componența etnică a <tip_genitiv> <nume><propsEthnos>}}{{Pie chart
+|caption=Componența etnică a <tip_genitiv> <nume><propsEthnos>}}
+{{Pie chart
 |thumb=left
+|style=clear:none;
 |caption=Componența confesională a <tip_genitiv> <nume><propsRelig>}}"
 demogIntroTown(nume, populatie) ::= "Conform recensământului din 2011, orașul <nume> avea <populatie>. "
 demogIntroComm(nume, populatie) ::= "Conform recensământului din 2011, comuna <nume> avea <populatie>. "

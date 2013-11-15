@@ -85,8 +85,7 @@ public class Hibernator implements Closeable {
 
     public Commune getCommuneByName(final String communeName, final County county, final int town) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Query findSettlement = ses
-            .createQuery("from Commune s where s.name=:communeName and s.county=:county");
+        final Query findSettlement = ses.createQuery("from Commune s where s.name=:communeName and s.county=:county");
         findSettlement.setParameter("communeName", communeName);
         findSettlement.setParameter("county", county);
         final List<Commune> res = findSettlement.list();
@@ -128,6 +127,21 @@ public class Hibernator implements Closeable {
         final Session ses = sessionFactory.getCurrentSession();
         final Criteria comCrit = ses.createCriteria(Commune.class).add(Restrictions.eq("county", county))
             .addOrder(Order.asc("name"));
+        return comCrit.list();
+    }
+
+    public long countCommunesWithName(String name) {
+        final Session ses = sessionFactory.getCurrentSession();
+        Query comCrit = ses.createQuery("select count(com) from Commune com where com.name=:name");
+        comCrit.setParameter("name", name);
+        return (Long) comCrit.uniqueResult();
+    }
+
+    public List<Commune> getCommunesWithName(String name) {
+        final Session ses = sessionFactory.getCurrentSession();
+        Query comCrit = ses
+            .createQuery("from Commune com left join com.county as cty where com.name=:name order by com.town,cty.name");
+        comCrit.setParameter("name", name);
         return comCrit.list();
     }
 }
