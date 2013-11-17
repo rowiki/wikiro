@@ -64,7 +64,7 @@ public class HRWikiGenerator {
 	private final Pattern footnotesRegex = Pattern
 			.compile("\\{\\{(?:(?:L|l)istănote|(?:R|r)eflist)|(?:\\<\\s*references\\s*\\/\\>)");
 	Pattern hrWpTemplates1 = Pattern
-			.compile("\\{\\{(?:((Infookvir o|O|o)pćina|(G|g)rad))\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
+			.compile("\\{\\{(?:((Infookvir o|O|o)pćina|(Infookvir g|G|g)rad))\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
 	private static Pattern regexInfocAsezare = Pattern
 			.compile("\\{\\{(?:(?:C|c)asetă așezare|(?:I|i)nfocaseta Așezare|(?:C|c)utie așezare)\\s*(\\|(?:\\{\\{[^{}]*+\\}\\}|[^{}])*+)?\\}\\}\\s*");
 	private static Pattern regexCutieOrase = Pattern
@@ -286,7 +286,7 @@ public class HRWikiGenerator {
 		executor.save("Format:Cantonul " + county.getName(),
 				navTemplateBuilder.toString(),
 				"Robot: creare format navigare orașe și comune componente ale cantonului "
-						+ county.getName() + "din Croația");
+						+ county.getName() + " din Croația");
 
 	}
 
