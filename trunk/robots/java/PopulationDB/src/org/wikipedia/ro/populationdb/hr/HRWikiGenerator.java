@@ -265,7 +265,7 @@ public class HRWikiGenerator {
 		String navTemplateName = "Cantonul " + county.getName();
 
 		StringBuilder navTemplateBuilder = new StringBuilder(
-				"{{Casetă de navigare simplă\n|titlu=Comune și orașe în [[cantonul");
+				"{{Casetă de navigare simplă\n|titlu=Comune și orașe în [[cantonul ");
 		navTemplateBuilder.append(county.getName());
 		navTemplateBuilder.append("]]\n|nume=");
 		navTemplateBuilder.append(navTemplateName);
@@ -274,8 +274,8 @@ public class HRWikiGenerator {
 		navTemplateBuilder.append(StringUtils.join(
 				townsLinks.toArray(new String[townsLinks.size()]), "{{~}}\n"));
 		navTemplateBuilder.append("\n</div>");
-		navTemplateBuilder.append("\n|grup1=Comune");
-		navTemplateBuilder.append("\n|listă1=<div>\n");
+		navTemplateBuilder.append("\n|grup2=Comune");
+		navTemplateBuilder.append("\n|listă2=<div>\n");
 		navTemplateBuilder.append(StringUtils.join(
 				communeLinks.toArray(new String[communeLinks.size()]),
 				"{{~}}\n"));
