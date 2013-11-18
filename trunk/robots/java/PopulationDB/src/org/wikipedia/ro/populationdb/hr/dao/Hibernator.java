@@ -140,7 +140,7 @@ public class Hibernator implements Closeable {
     public List<Commune> getCommunesWithName(String name) {
         final Session ses = sessionFactory.getCurrentSession();
         Query comCrit = ses
-            .createQuery("from Commune com left join com.county as cty where com.name=:name order by com.town,cty.name");
+            .createQuery("select com from Commune com left join com.county as cty where com.name=:name order by com.town,cty.name");
         comCrit.setParameter("name", name);
         return comCrit.list();
     }
