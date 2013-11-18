@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -99,5 +100,18 @@ public class Commune implements EthnicallyStructurable, ReligionStructurable {
     public void setTown(final int town) {
         this.town = town;
     }
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Commune)) {
+			return false;
+		}
+		return ObjectUtils.equals(this.getId(), ((Commune) obj).getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return new Long(this.getId()).hashCode();
+	}
 
 }

@@ -348,9 +348,12 @@ public class HRWikiGenerator {
 			for (Commune eachCom : communesWithName) {
 				townsCount += eachCom.getTown();
 				disambig.append("\n* [[");
-				disambig.append(hrWpNames.get(eachCom).get());
+				if (null == roWpNames.get(eachCom)) {
+					initCommune(eachCom);
+				}
+				disambig.append(roWpNames.get(eachCom).get());
 				disambig.append("|");
-				disambig.append(eachCom.getName());
+				disambig.append(retrieveName(eachCom));
 				disambig.append("]], ");
 				disambig.append(eachCom.getTown() > 0 ? "oraș" : "comună");
 				disambig.append(" în [[cantonul ");
@@ -387,13 +390,13 @@ public class HRWikiGenerator {
 	private void createRedirects(String roWpArticleTitle, Commune com)
 			throws Exception {
 		List<String> redirects = new ArrayList<String>();
-		redirects.add(com.getName());
-		redirects.add(com.getName() + ", Croația");
-		redirects.add(com.getName() + ", " + com.getCounty().getName());
+		redirects.add(retrieveName(com));
+		redirects.add(retrieveName(com) + ", Croația");
+		redirects.add(retrieveName(com) + ", " + com.getCounty().getName());
 		if (com.getTown() == 0) {
-			redirects.add("Comuna " + com.getName());
-			redirects.add("Comuna " + com.getName() + ", Croația");
-			redirects.add("Comuna " + com.getName() + ", "
+			redirects.add("Comuna " + retrieveName(com));
+			redirects.add("Comuna " + retrieveName(com) + ", Croația");
+			redirects.add("Comuna " + retrieveName(com) + ", "
 					+ com.getCounty().getName());
 		}
 
@@ -402,14 +405,21 @@ public class HRWikiGenerator {
 				continue;
 			}
 			if (rowiki.exists(new String[] { redirect })[0]) {
-				String logPage = "Utilizator:Andrebot/Comune Croația/Redirecționări necreate";
-				String logdata = null;
-				if (rowiki.exists(new String[] { logPage })[0]) {
-					logdata = rowiki.getPageText(logPage);
+				String redirectsTo = rowiki
+						.resolveRedirect(new String[] { redirect })[0];
+				if (!StringUtils.equals(redirectsTo, roWpArticleTitle)) {
+					String logPage = "Utilizator:Andrebot/Comune Croația/Redirecționări necreate";
+					String logdata = null;
+					if (rowiki.exists(new String[] { logPage })[0]) {
+						logdata = rowiki.getPageText(logPage);
+					}
+					if (!StringUtils.contains(logdata, "[[" + redirect + "]]")) {
+						executor.save(logPage,
+								StringUtils.defaultString(logdata) + "\n* [["
+										+ redirect + "]]",
+								"Robot: logat redirect necreat");
+					}
 				}
-				executor.save(logPage, StringUtils.defaultString(logdata)
-						+ "\n* [[" + redirect + "]]",
-						"Robot: logat redirect necreat");
 			} else {
 				executor.save(redirect,
 						"#redirect[[" + roWpArticleTitle + "]]",
@@ -1211,7 +1221,7 @@ public class HRWikiGenerator {
 		assignColorToNationality("Croați", new Color(32, 32, 192));
 		assignColorToNationality("Sârbi", new Color(192, 32, 32));
 		assignColorToNationality("Bosniaci", new Color(64, 64, 128));
-		assignColorToNationality("Austrieci", new Color(255, 255, 255));
+		assignColorToNationality("Austrieci", new Color(192, 0, 0));
 		assignColorToNationality("Albanezi", new Color(192, 64, 192));
 		assignColorToNationality("Vlahi", new Color(128, 128, 255));
 		assignColorToNationality("Ucraineni", new Color(255, 255, 85));
@@ -1223,6 +1233,7 @@ public class HRWikiGenerator {
 		assignColorToNationality("Sloveni", new Color(32, 32, 128));
 		assignColorToNationality("Slovaci", new Color(48, 48, 160));
 		assignColorToNationality("Cehi", new Color(128, 128, 32));
+		assignColorToNationality("Afiliați religios", new Color(255, 255, 255));
 		assignColorToNationality("Neclasificat", new Color(192, 192, 192));
 		assignColorToNationality("Necunoscut", new Color(64, 64, 64));
 		assignColorToNationality("Nedeclarat", new Color(64, 64, 64));
