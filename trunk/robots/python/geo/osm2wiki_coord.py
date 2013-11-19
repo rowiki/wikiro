@@ -40,7 +40,7 @@ import math
 
 msg = {
     'ar': u'بوت: إضافة %s',
-    'cs': u'Robot přidal %s',
+    'cs': u'Robot přidal souřadnice %s',
     'de': u'Bot: "%s" hinzugefügt',
     'en': u'Bot: Adding coordinates: %s',
     'fr': u'Robot : Ajoute des coordonees: %s',
