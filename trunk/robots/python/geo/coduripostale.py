@@ -384,7 +384,7 @@ def processTags(node_type, node, tags, postal_data, other_data):
 		if len(postcode) < 6:
 			log.log(err_type="W4", osm_type=node_type, osm_item=node, osm_code=postcode, gov_code=None)
 			matching = False
-			postcode = "%06d" % num_postcode
+		postcode = "%06d" % num_postcode
 	except:
 		log.log(err_type="E4", osm_type=node_type, osm_item=node, osm_code=postcode, gov_code=None)
 		matching = False
@@ -426,6 +426,7 @@ def processTags(node_type, node, tags, postal_data, other_data):
 				gov_streets.append(address['type'] + u" " + address['street'])
 				continue
 		streets_match = True
+		#TODO match block number
 		if number and address['number']:
 			for nr in number:
 				if nr not in address['number']:
