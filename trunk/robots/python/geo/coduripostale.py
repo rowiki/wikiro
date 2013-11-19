@@ -325,7 +325,7 @@ def maketransU(s1, s2, todel=""):
 	return trans_tab
 	
 def removeDiacritics(name, lowerCase=True):
-	tran = maketransU(u"ȘșȚțŞşŢţÎîÂâĂăáöé", u"SsTtSsTtIiAaAaaoe")
+	tran = maketransU(u"ȘșȚțŞşŢţÎîÂâĂăáöőé", u"SsTtSsTtIiAaAaaooe")
 	if lowerCase:
 		name = name.lower()
 	return name.translate(tran)
