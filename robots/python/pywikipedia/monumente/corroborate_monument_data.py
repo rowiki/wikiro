@@ -44,6 +44,7 @@ countries = {
                     u'Adresă': u'Adresă',
                     u'Datare': u'Datare',
                     u'Arhitect': u'Creatori',
+                    u'Creatori': u'Creatori',
                     u'Lat': u'Lat',
                     u'Coordonate': u'Coordonate',
                     u'Lon': u'Lon',
@@ -74,7 +75,7 @@ def log(string):
 	
 def rebuildTemplate(params):
 	my_template = u"{{" + countries.get(('ro', 'ro')).get('rowTemplate') + u"\n"
-	for name in [u"Cod", u"NotăCod", u"FostCod", u"CodRan", u"Cod92", u"Denumire", u"Localitate", u"Adresă", u"Datare", u"Arhitect", u"Lat", u"Lon", u"Imagine", u"Commons"]:
+	for name in [u"Cod", u"NotăCod", u"FostCod", u"CodRan", u"Cod92", u"Denumire", u"Localitate", u"Adresă", u"Datare", u"Creatori", u"Lat", u"Lon", u"Imagine", u"Commons"]:
 		if name in params and params[name] <> u"":
 			my_template += u"| " + countries.get(('ro', 'ro')).get('fields')[name] + u" = " + params[name] + u"\n"
 	my_template += u"}}\n"
@@ -86,39 +87,43 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 	site = pywikibot.getSite()
 	title = urlparse.parse_qs(urlparse.urlparse(str(url)).query)['title'][0].decode('utf8')
 	page = pywikibot.Page(site, title)
+	
 	if text == None:
 		pywikibot.output("Getting page contents")
 		text = page.get()
+		
 	oldtext = text
-	#templates = page.templatesWithParams()
-	templates = pywikibot.extract_templates_and_params(text)
 	codeFound = False
 	last = None
 	rawCode = None
 	my_params = {}
-	#pywikibot.output("1")
+	rowTemplate = countries.get(('ro', 'ro')).get('rowTemplate')
+	
+	templates = pywikibot.extract_templates_and_params(text)
 	for (template, params) in templates:
-		if template==countries.get(('ro', 'ro')).get('rowTemplate'):
+		if template == rowTemplate:
 			for param in params:
 				val = params[param]
-				fld = param.strip()
 				val = val.split("<ref")[0].strip()
 				val2 = re.sub(r'\s', '', val)
+				
+				fld = param.strip()
+				
 				if fld == "Cod" and val2 == code:
 					codeFound = True
 					rawCode = val
 					my_params = params
 					break
+					
 			if codeFound:
 				break
-	#pywikibot.output("2")
-	if not codeFound:
+	else: #for .. else
 		log(u"*''E'': ''[%s]'' Codul nu este prezent în [[%s|listă]]" % (rawCode, title))
 		pywikibot.output(u"Code not found: %s" % code)
 		return None
-	else:
-		pywikibot.output(u"\n" + str(params) + u"\n")
-	#pywikibot.output("3")
+		
+	pywikibot.output(u"\n" + str(params) + u"\n")
+	pywikibot.output(my_params)
 	orig = rebuildTemplate(my_params)
 	my_params[field] = newvalue
 	new = rebuildTemplate(my_params)
@@ -127,6 +132,8 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 		pywikibot.output("No change, nothing to upload!")
 		return text
 	#pywikibot.output("5")
+	pywikibot.output(orig)
+	pywikibot.output(new)
 	pywikibot.showDiff(orig, new)
 	answer = pywikibot.input(u"Upload change? ([y]es/[n]o/[l]og)")
 	if answer == 'y':
@@ -190,6 +197,12 @@ def main():
 	f = open("commons_File_pages.json", "r+")
 	pywikibot.output("Reading commons images file...")
 	pages_commons = json.load(f)
+	pywikibot.output("...done")
+	f.close();
+
+	f = open("other_monument_data.json", "r+")
+	pywikibot.output("Reading other data file...")
+	other_data = json.load(f)
 	pywikibot.output("...done")
 	f.close();
 
@@ -399,6 +412,8 @@ def main():
 			long = float(monument["Lon"])
 		artLat = 0
 		artLong = 0
+		otherLat = 0
+		otherLong = 0
 		artCoord = None
 		updateCoord = True
 		for page in allPages:
@@ -411,14 +426,29 @@ def main():
 					artLat = page["lat"]
 					artLong = page["long"]
 					artCoord = page["name"]
+					
+		if code in other_data:
+			otherLat = float(other_data[code]["lat"])
+			otherLong = float(other_data[code]["long"])
 				
-		if lat == 0 and artLat <> 0 and updateCoord:
-			pywikibot.output(str(artLat) + " " + str(artLong))
-			articleText = updateTableData(monument["source"], code, "Lat", str(artLat), upload = False, text=articleText)
-			articleText = updateTableData(monument["source"], code, "Lon", str(artLong), upload = True, text = articleText)
+		if lat == 0 and (artLat <> 0 or otherLat <> 0) and updateCoord:
+			if artLat <> 0:
+				aLat = artLat
+				aLong = artLong
+			else:
+				aLat = otherLat
+				aLong = otherLong
+			pywikibot.output(str(aLat) + " " + str(aLong))
+			articleText = updateTableData(monument["source"], code, "Lat", str(aLat), upload = False, text = articleText)
+			articleText = updateTableData(monument["source"], code, "Lon", str(aLong), upload = True, text = articleText)
 	
-		if lat <> 0 and artLat <> 0 and (math.fabs(artLat - lat) > 0.01 or math.fabs(artLong - long) > 0.01):
-			log(u"*''E'': ''[%s]'' Coordonate diferite între [[:%s]] (%f,%f) și listă (%f,%f)" % (code, artCoord, artLat, artLong, lat, long))
+		if lat <> 0:
+			if artLat <> 0 and (math.fabs(artLat - lat) > 0.01 or math.fabs(artLong - long) > 0.01):
+				log(u"*''E'': ''[%s]'' Coordonate diferite între [[:%s]] (%f,%f) și listă (%f,%f)" % \
+					(code, artCoord, artLat, artLong, lat, long))
+			if otherLat <> 0 and (math.fabs(otherLat - lat) > 0.01 or math.fabs(otherLong - long) > 0.01):
+				log(u"*''E'': ''[%s]'' Coordonate diferite între sursele externe (%f,%f) și listă (%f,%f)" % \
+					(code, otherLat, otherLong, lat, long))
 			
 		if lmi92 <> None:
 			articleText = updateTableData(monument["source"], code, "Cod92", lmi92, upload = True, text = articleText)
