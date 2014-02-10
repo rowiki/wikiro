@@ -51,54 +51,80 @@
       "quality": false
     }
   ], 
+  "BH-III-m-B-01237": [
+    {
+      "code": "BH-III-m-B-01237", 
+      "lastedit": "20131204210334", 
+      "name": "Fi\u0219ier:Mihai Eminescu statue - Oradea.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-III-m-B-01237", 
+      "lastedit": "20131204210330", 
+      "name": "Fi\u0219ier:Mihai Eminescu statue (1) - Oradea.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "AB-II-a-B-00182": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "AB-II-a-B-00182", 
       "lastedit": "20131110114227", 
       "name": "Fi\u0219ier:BalcaciuAB (2).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "AB-II-a-B-00182", 
       "lastedit": "20131110114309", 
       "name": "Fi\u0219ier:BalcaciuAB (3).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "AB-II-a-B-00182", 
       "lastedit": "20131110114426", 
       "name": "Fi\u0219ier:BalcaciuAB (6).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "AB-II-a-B-00182", 
       "lastedit": "20131110114026", 
       "name": "Fi\u0219ier:BalcaciuAB (10).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-II-m-B-17947": [
@@ -313,11 +339,79 @@
       "quality": false
     }
   ], 
+  "BH-III-m-B-01236": [
+    {
+      "code": "BH-III-m-B-01236", 
+      "lastedit": "20131204212239", 
+      "name": "Fi\u0219ier:Szigligeti Ede statue - Oradea.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-II-m-A-19843": [
     {
       "code": "B-II-m-A-19843", 
       "lastedit": "20131014102645", 
       "name": "Fi\u0219ier:PalatulPosteiGIMP.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-III-m-B-01234": [
+    {
+      "code": "BH-III-m-B-01234", 
+      "lastedit": "20131204205931", 
+      "name": "Fi\u0219ier:Emanuil Gojdu statue - Oradea.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-III-m-B-01235": [
+    {
+      "code": "BH-III-m-B-01235", 
+      "lastedit": "20131204211242", 
+      "name": "Fi\u0219ier:Romanian soldier monument - Oradea 01.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-III-m-B-01235", 
+      "lastedit": "20131204211239", 
+      "name": "Fi\u0219ier:Romanian soldier monument (1) - Oradea.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-III-m-B-01233": [
+    {
+      "code": "BH-III-m-B-01233", 
+      "lastedit": "20131204203823", 
+      "name": "Fi\u0219ier:Bust of Iosif Vulcan - Oradea.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -379,246 +473,308 @@
       "quality": false
     }
   ], 
+  "B-II-m-B-19004": [
+    {
+      "code": "B-II-m-B-19004", 
+      "lastedit": "20131204210935", 
+      "name": "Fi\u0219ier:OperaBucuresti.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-II-m-B-19004", 
+      "lastedit": "20131204210851", 
+      "name": "Fi\u0219ier:Opera romana.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-II-m-B-19004", 
+      "lastedit": "20131204210837", 
+      "name": "Fi\u0219ier:Opera romana si statuia lui George Enescu.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-II-m-B-19004", 
+      "lastedit": "20131204210820", 
+      "name": "Fi\u0219ier:Opera Rom\u00e2n\u0103 - Vedere Interior.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-II-m-B-19004", 
+      "lastedit": "20131204210806", 
+      "name": "Fi\u0219ier:Opera Romana -0790 (3).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "CJ-II-m-B-07519": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195330", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu A17.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195333", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A2.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195335", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A3.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195338", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A4.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195339", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A5.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195354", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A6.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195350", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A7.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195348", 
       "name": "Fi\u0219ier:Biserica de lemn din Achileu A8.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195346", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A9.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195345", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A10.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195341", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A11.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195356", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A12.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195401", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare DSCF7836.JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195404", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare DSCF7821.JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195406", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A14.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195410", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A15.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195412", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A16.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195417", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A18.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195416", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A19.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195414", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare DSCF7842.JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-III-m-B-19993": [
@@ -640,6 +796,82 @@
       "code": "BN-II-m-A-01450", 
       "lastedit": "20130605220725", 
       "name": "Fi\u0219ier:Biserica Evanghelic\u0103 Bistri\u0163a2.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-III-m-B-19998": [
+    {
+      "code": "B-III-m-B-19998", 
+      "lastedit": "20131204211452", 
+      "name": "Fi\u0219ier:Statuia lui George Enescu.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-III-m-B-19998", 
+      "lastedit": "20131204211447", 
+      "name": "Fi\u0219ier:Statuia lui George Enescu si Opera Romana.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-III-m-B-19998", 
+      "lastedit": "20131204211233", 
+      "name": "Fi\u0219ier:Romanian Opera A.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": "Fi\u0219ier:Romanian Opera.JPG", 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-III-m-B-19998", 
+      "lastedit": "20131204210226", 
+      "name": "Fi\u0219ier:George Enescu - sculptura de Ion Jalea.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-III-m-B-01240": [
+    {
+      "code": "BH-III-m-B-01240", 
+      "lastedit": "20131202163710", 
+      "name": "Fi\u0219ier:Baile Felix - George Enescu.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-III-m-B-01240", 
+      "lastedit": "20131204203634", 
+      "name": "Fi\u0219ier:Bust of George Enescu - Baile Felix BH.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -703,6 +935,32 @@
       "quality": false
     }
   ], 
+  "BH-II-m-B-01104": [
+    {
+      "code": "BH-II-m-B-01104", 
+      "lastedit": "20131201001229", 
+      "name": "Fi\u0219ier:Biserica de lemn din Brusturi-scaune.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-II-m-B-01104", 
+      "lastedit": "20131201001239", 
+      "name": "Fi\u0219ier:Biserica de lemn din Brusturi-pictura.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "SJ-II-m-B-05125": [
     {
       "code": "SJ-II-m-B-05125", 
@@ -733,52 +991,52 @@
   ], 
   "AB-II-m-B-00182.02": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "AB-II-m-B-00182.02", 
       "lastedit": "20131110114327", 
       "name": "Fi\u0219ier:BalcaciuAB (4).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "AB-II-m-B-00182.02", 
       "lastedit": "20131110114402", 
       "name": "Fi\u0219ier:BalcaciuAB (5).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "AB-II-m-B-00182.02", 
       "lastedit": "20131110114126", 
       "name": "Fi\u0219ier:BalcaciuAB (16).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "AB-II-m-B-00182.02", 
       "lastedit": "20131110114144", 
       "name": "Fi\u0219ier:BalcaciuAB (17).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "VL-II-m-B-09913": [
@@ -849,6 +1107,20 @@
       "quality": false
     }
   ], 
+  "B-III-m-B-19984": [
+    {
+      "code": "B-III-m-B-19984", 
+      "lastedit": "20131203135211", 
+      "name": "Fi\u0219ier:Lupta lui Hercule cu Centaurul-Ion Jalea 1925 - Herastrau.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BV-II-m-A-11589.02": [
     {
       "code": "BV-II-m-A-11589.02", 
@@ -863,11 +1135,11 @@
       "quality": false
     }
   ], 
-  "B-III-m-B-19983": [
+  "VL-II-m-B-09790": [
     {
-      "code": "B-III-m-B-19983", 
-      "lastedit": "20131009075959", 
-      "name": "Fi\u0219ier:Mihai Eminescu, bronz, 1963, sculptor Gheorghe D. Anghel, Atheneul Rom\u00e2n.jpg", 
+      "code": "VL-II-m-B-09790", 
+      "lastedit": "20131206104348", 
+      "name": "Fi\u0219ier:Biserica de lemn din Ionesti01.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -877,11 +1149,217 @@
       "quality": false
     }
   ], 
-  "SB-III-m-B-12599": [
+  "CJ-II-m-B-07567": [
     {
-      "code": "SB-III-m-B-12599", 
-      "lastedit": "20131009094416", 
-      "name": "Fi\u0219ier:Monument - Gheorghe Lazar - Avrig.png", 
+      "code": "CJ-II-m-B-07567", 
+      "lastedit": "20131202102746", 
+      "name": "Fi\u0219ier:Biserica de lemn din Ciubancuta1.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CJ-II-m-B-07564": [
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101422", 
+      "name": "Fi\u0219ier:Biserica de lemn din Chidea.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101428", 
+      "name": "Fi\u0219ier:Biserica de lemn din Chidea C2.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101903", 
+      "name": "Fi\u0219ier:ChideaCJ (2).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101855", 
+      "name": "Fi\u0219ier:ChideaCJ (3).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101857", 
+      "name": "Fi\u0219ier:ChideaCJ (4).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101859", 
+      "name": "Fi\u0219ier:ChideaCJ (5).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101901", 
+      "name": "Fi\u0219ier:ChideaCJ (6).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101853", 
+      "name": "Fi\u0219ier:ChideaCJ (7).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101851", 
+      "name": "Fi\u0219ier:ChideaCJ (8).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101848", 
+      "name": "Fi\u0219ier:ChideaCJ (9).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101846", 
+      "name": "Fi\u0219ier:ChideaCJ (10).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101912", 
+      "name": "Fi\u0219ier:ChideaCJ (25).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101841", 
+      "name": "Fi\u0219ier:ChideaCJ (29).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101839", 
+      "name": "Fi\u0219ier:ChideaCJ (36).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101834", 
+      "name": "Fi\u0219ier:ChideaCJ (40).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101837", 
+      "name": "Fi\u0219ier:ChideaCJ (41).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07564", 
+      "lastedit": "20131202101919", 
+      "name": "Fi\u0219ier:ChideaCJ (64).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -896,6 +1374,44 @@
       "code": "GR-II-a-A-14967", 
       "lastedit": "20131009074408", 
       "name": "Fi\u0219ier:Manastirea Comana.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CJ-II-m-B-07277": [
+    {
+      "code": "CJ-II-m-B-07277", 
+      "lastedit": "20131129142013", 
+      "name": "Fi\u0219ier:Biserica Bob din Cluj - turnul baroc.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07277", 
+      "lastedit": "20131129142002", 
+      "name": "Fi\u0219ier:Biserica Bob din Cluj.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07277", 
+      "lastedit": "20131129141850", 
+      "name": "Fi\u0219ier:Biserica Bob din Cluj - detaliu.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -992,6 +1508,20 @@
       "code": "IF-II-m-B-15274.01", 
       "lastedit": "20131009074955", 
       "name": "Fi\u0219ier:Manastirea Samurcasesti - Altarul.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-III-m-B-19983": [
+    {
+      "code": "B-III-m-B-19983", 
+      "lastedit": "20131009075959", 
+      "name": "Fi\u0219ier:Mihai Eminescu, bronz, 1963, sculptor Gheorghe D. Anghel, Atheneul Rom\u00e2n.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -1159,30 +1689,56 @@
       "quality": false
     }
   ], 
+  "SV-IV-m-B-05695": [
+    {
+      "code": "SV-IV-m-B-05695", 
+      "lastedit": "20131204211506", 
+      "name": "Fi\u0219ier:Suceava-center.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SV-IV-m-B-05695", 
+      "lastedit": "20131204211458", 
+      "name": "Fi\u0219ier:Statuia lui Petru I Mu\u015fat din Suceava.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "AB-II-m-B-00182.01": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "AB-II-m-B-00182.01", 
       "lastedit": "20131110114200", 
       "name": "Fi\u0219ier:BalcaciuAB (18).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "AB-II-m-B-00182.01", 
       "lastedit": "20131110114215", 
       "name": "Fi\u0219ier:BalcaciuAB (19).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "AB-II-m-A-00372": [
@@ -1267,6 +1823,20 @@
       "quality": false
     }
   ], 
+  "SB-III-m-B-12599": [
+    {
+      "code": "SB-III-m-B-12599", 
+      "lastedit": "20131009094416", 
+      "name": "Fi\u0219ier:Monument - Gheorghe Lazar - Avrig.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "CJ-II-m-B-07243.04": [
     {
       "code": "CJ-II-m-B-07243.04", 
@@ -1281,11 +1851,221 @@
       "quality": false
     }
   ], 
+  "B-III-m-A-20060": [
+    {
+      "code": "B-III-m-A-20060", 
+      "lastedit": "20131204211315", 
+      "name": "Fi\u0219ier:SpiruHaretB.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-III-m-B-01231": [
+    {
+      "code": "BH-III-m-B-01231", 
+      "lastedit": "20131204210520", 
+      "name": "Fi\u0219ier:Nicolae Balcescu statue - Oradea.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "AG-IV-m-A-14017": [
+    {
+      "code": "AG-IV-m-A-14017", 
+      "lastedit": "20131122122013", 
+      "name": "Fi\u0219ier:Basorelieful Monumentului de la Mateias-2012 stitch6.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-II-m-A-01031.07": [
+    {
+      "code": "BH-II-m-A-01031.07", 
+      "lastedit": "20131204212602", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul I.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-II-m-A-01031.06": [
+    {
+      "code": "BH-II-m-A-01031.06", 
+      "lastedit": "20131204212608", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul M.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-II-m-A-01031.05": [
+    {
+      "code": "BH-II-m-A-01031.05", 
+      "lastedit": "20131204212556", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul C.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-II-m-A-01031.05", 
+      "lastedit": "20131204212553", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul C (1).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "IS-II-m-B-04205": [
     {
       "code": "IS-II-m-B-04205", 
       "lastedit": "20131009080957", 
       "name": "Fi\u0219ier:Miroslovesti.S.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-II-m-A-01031.03": [
+    {
+      "code": "BH-II-m-A-01031.03", 
+      "lastedit": "20131204212601", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul H.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-II-m-A-01031.02": [
+    {
+      "code": "BH-II-m-A-01031.02", 
+      "lastedit": "20131204212559", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul G.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-II-m-A-01031.02", 
+      "lastedit": "20131204212558", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul G (1).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-II-m-A-01031.01": [
+    {
+      "code": "BH-II-m-A-01031.01", 
+      "lastedit": "20131204212532", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul A.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-II-m-A-01031.01", 
+      "lastedit": "20131204212529", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul A (fatada din spate).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-II-m-A-01031.01", 
+      "lastedit": "20131204212526", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul A (fatada din spate 2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-II-m-A-01031.01", 
+      "lastedit": "20131204212457", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul A (detaliu 2).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-II-m-A-01031.01", 
+      "lastedit": "20131204212453", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul A (detaliu 1).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-II-m-A-01031.01", 
+      "lastedit": "20131204212447", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul A (1).jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -1312,6 +2092,48 @@
       "code": "TM-II-m-A-06256", 
       "lastedit": "20131015111739", 
       "name": "Fi\u0219ier:Sculptura fatada, Turnul Sf. Nicolae, Lugoj.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-II-m-A-01031.08": [
+    {
+      "code": "BH-II-m-A-01031.08", 
+      "lastedit": "20131204212606", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul J.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-III-m-B-01244": [
+    {
+      "code": "BH-III-m-B-01244", 
+      "lastedit": "20131204211132", 
+      "name": "Fi\u0219ier:RO BH Oradea Ady Endre statue.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-III-m-B-01243": [
+    {
+      "code": "BH-III-m-B-01243", 
+      "lastedit": "20131208165134", 
+      "name": "Fi\u0219ier:\"Dansul Felegii\" statue - Oradea.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -1589,16 +2411,30 @@
   ], 
   "B-II-m-A-19500": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "B-II-m-A-19500", 
       "lastedit": "20131110182324", 
       "name": "Fi\u0219ier:Biserica Bucur 1900-1.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-III-m-B-01251": [
+    {
+      "code": "BH-III-m-B-01251", 
+      "lastedit": "20131204205924", 
+      "name": "Fi\u0219ier:Dimitrie Cantemir Statue - Oradea.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "AB-II-a-B-00250": [
@@ -1676,6 +2512,32 @@
       "code": "VN-II-m-B-20832.01", 
       "lastedit": "20131009075136", 
       "name": "Fi\u0219ier:ManastireaDalhautiVN (16).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-A-19675": [
+    {
+      "code": "B-II-m-A-19675", 
+      "lastedit": "20131204135502", 
+      "name": "Fi\u0219ier:Biserica Sf. Elefterie vechi din fata-stitch3.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-II-m-A-19675", 
+      "lastedit": "20131204135444", 
+      "name": "Fi\u0219ier:Biserica Sf. Elefterie vechi din lateral-stitch4.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -1971,6 +2833,56 @@
       "quality": false
     }
   ], 
+  "BH-II-m-A-01031.04": [
+    {
+      "code": "BH-II-m-A-01031.04", 
+      "lastedit": "20131204212551", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul B.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-II-m-A-01031.04", 
+      "lastedit": "20131204212549", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul B (detaliu usa spate).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-II-m-A-01031.04", 
+      "lastedit": "20131204212542", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul B (2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-II-m-A-01031.04", 
+      "lastedit": "20131204212536", 
+      "name": "Fi\u0219ier:Univ Oradea - Corpul B (1).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "VL-II-m-B-09810": [
     {
       "code": "VL-II-m-B-09810", 
@@ -2025,20 +2937,6 @@
       "quality": false
     }
   ], 
-  "SJ-II-m-B-05016": [
-    {
-      "project": "ro", 
-      "ran": null, 
-      "code": "SJ-II-m-B-05016", 
-      "lastedit": "20131109142040", 
-      "name": "Fi\u0219ier:Balan Josani.SE.02.jpg", 
-      "author": null, 
-      "lat": 0, 
-      "image": null, 
-      "quality": false, 
-      "long": 0
-    }
-  ], 
   "CV-II-m-A-13327": [
     {
       "code": "CV-II-m-A-13327", 
@@ -2055,880 +2953,880 @@
   ], 
   "SB-II-m-B-12311": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132114", 
       "name": "Fi\u0219ier:ApolduDeJosSB.JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131249", 
       "name": "Fi\u0219ier:ApolduDeJosSB (2).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131327", 
       "name": "Fi\u0219ier:ApolduDeJosSB (4).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132108", 
       "name": "Fi\u0219ier:ApolduDeJosSB (9).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109130835", 
       "name": "Fi\u0219ier:ApolduDeJosSB (11).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109130845", 
       "name": "Fi\u0219ier:ApolduDeJosSB (13).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109130843", 
       "name": "Fi\u0219ier:ApolduDeJosSB (14).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109130841", 
       "name": "Fi\u0219ier:ApolduDeJosSB (15).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131243", 
       "name": "Fi\u0219ier:ApolduDeJosSB (16).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131244", 
       "name": "Fi\u0219ier:ApolduDeJosSB (17).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131246", 
       "name": "Fi\u0219ier:ApolduDeJosSB (18).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131248", 
       "name": "Fi\u0219ier:ApolduDeJosSB (19).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131251", 
       "name": "Fi\u0219ier:ApolduDeJosSB (22).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131253", 
       "name": "Fi\u0219ier:ApolduDeJosSB (23).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131254", 
       "name": "Fi\u0219ier:ApolduDeJosSB (24).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131257", 
       "name": "Fi\u0219ier:ApolduDeJosSB (26).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131259", 
       "name": "Fi\u0219ier:ApolduDeJosSB (28).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131301", 
       "name": "Fi\u0219ier:ApolduDeJosSB (29).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131303", 
       "name": "Fi\u0219ier:ApolduDeJosSB (30).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131306", 
       "name": "Fi\u0219ier:ApolduDeJosSB (31).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131313", 
       "name": "Fi\u0219ier:ApolduDeJosSB (32).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131315", 
       "name": "Fi\u0219ier:ApolduDeJosSB (33).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131317", 
       "name": "Fi\u0219ier:ApolduDeJosSB (34).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131319", 
       "name": "Fi\u0219ier:ApolduDeJosSB (35).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131321", 
       "name": "Fi\u0219ier:ApolduDeJosSB (36).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131323", 
       "name": "Fi\u0219ier:ApolduDeJosSB (37).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131325", 
       "name": "Fi\u0219ier:ApolduDeJosSB (38).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131329", 
       "name": "Fi\u0219ier:ApolduDeJosSB (40).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131331", 
       "name": "Fi\u0219ier:ApolduDeJosSB (45).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131332", 
       "name": "Fi\u0219ier:ApolduDeJosSB (46).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131334", 
       "name": "Fi\u0219ier:ApolduDeJosSB (49).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131337", 
       "name": "Fi\u0219ier:ApolduDeJosSB (50).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131338", 
       "name": "Fi\u0219ier:ApolduDeJosSB (51).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131348", 
       "name": "Fi\u0219ier:ApolduDeJosSB (52).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131347", 
       "name": "Fi\u0219ier:ApolduDeJosSB (53).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131345", 
       "name": "Fi\u0219ier:ApolduDeJosSB (55).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131341", 
       "name": "Fi\u0219ier:ApolduDeJosSB (60).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131340", 
       "name": "Fi\u0219ier:ApolduDeJosSB (61).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132010", 
       "name": "Fi\u0219ier:ApolduDeJosSB (63).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132012", 
       "name": "Fi\u0219ier:ApolduDeJosSB (64).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132015", 
       "name": "Fi\u0219ier:ApolduDeJosSB (65).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132020", 
       "name": "Fi\u0219ier:ApolduDeJosSB (66).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132021", 
       "name": "Fi\u0219ier:ApolduDeJosSB (68).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132023", 
       "name": "Fi\u0219ier:ApolduDeJosSB (69).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109131343", 
       "name": "Fi\u0219ier:ApolduDeJosSB (58).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132047", 
       "name": "Fi\u0219ier:ApolduDeJosSB (71).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132045", 
       "name": "Fi\u0219ier:ApolduDeJosSB (72).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132043", 
       "name": "Fi\u0219ier:ApolduDeJosSB (73).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132042", 
       "name": "Fi\u0219ier:ApolduDeJosSB (74).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132030", 
       "name": "Fi\u0219ier:ApolduDeJosSB (75).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132028", 
       "name": "Fi\u0219ier:ApolduDeJosSB (76).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132049", 
       "name": "Fi\u0219ier:ApolduDeJosSB (77).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132050", 
       "name": "Fi\u0219ier:ApolduDeJosSB (78).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132052", 
       "name": "Fi\u0219ier:ApolduDeJosSB (79).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132054", 
       "name": "Fi\u0219ier:ApolduDeJosSB (80).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132056", 
       "name": "Fi\u0219ier:ApolduDeJosSB (81).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132057", 
       "name": "Fi\u0219ier:ApolduDeJosSB (82).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132107", 
       "name": "Fi\u0219ier:ApolduDeJosSB (83).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132105", 
       "name": "Fi\u0219ier:ApolduDeJosSB (84).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132103", 
       "name": "Fi\u0219ier:ApolduDeJosSB (85).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132102", 
       "name": "Fi\u0219ier:ApolduDeJosSB (86).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132100", 
       "name": "Fi\u0219ier:ApolduDeJosSB (88).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132059", 
       "name": "Fi\u0219ier:ApolduDeJosSB (89).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132110", 
       "name": "Fi\u0219ier:ApolduDeJosSB (95).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132112", 
       "name": "Fi\u0219ier:ApolduDeJosSB (96).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109130831", 
       "name": "Fi\u0219ier:ApolduDeJosSB (102).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109130825", 
       "name": "Fi\u0219ier:ApolduDeJosSB (105).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109130833", 
       "name": "Fi\u0219ier:ApolduDeJosSB (106).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109130836", 
       "name": "Fi\u0219ier:ApolduDeJosSB (111).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109130839", 
       "name": "Fi\u0219ier:ApolduDeJosSB (113).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109130850", 
       "name": "Fi\u0219ier:ApolduDeJosSB (115).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109130848", 
       "name": "Fi\u0219ier:ApolduDeJosSB (116).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109130846", 
       "name": "Fi\u0219ier:ApolduDeJosSB (117).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "MS-II-m-A-15761.01": [
@@ -3063,6 +3961,116 @@
       "quality": false
     }
   ], 
+  "CJ-II-m-B-07551": [
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092522", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina D2.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092524", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina D3.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092527", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina D4.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092529", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina DSCF8010.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092537", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina DSCF8025.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092518", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina 2 DSCF8025.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092532", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina DSCF8019.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092540", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina 2 DSCF8021.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092534", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina DSCF8022.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "SV-II-m-A-05673.03": [
     {
       "code": "SV-II-m-A-05673.03", 
@@ -3157,11 +4165,39 @@
       "quality": false
     }
   ], 
+  "BV-II-m-A-11706": [
+    {
+      "code": "BV-II-m-A-11706", 
+      "lastedit": "20131204103257", 
+      "name": "Fi\u0219ier:Biserica de lemn din Granari01.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "IF-II-m-B-15300.01": [
     {
       "code": "IF-II-m-B-15300.01", 
       "lastedit": "20131009074231", 
       "name": "Fi\u0219ier:Manastirea Cernica.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-IV-m-B-01254": [
+    {
+      "code": "BH-IV-m-B-01254", 
+      "lastedit": "20131204210941", 
+      "name": "Fi\u0219ier:Oradea Holocaust Memorial.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -3307,6 +4343,20 @@
       "quality": false
     }
   ], 
+  "SV-II-m-B-05450": [
+    {
+      "code": "SV-II-m-B-05450", 
+      "lastedit": "20131204205751", 
+      "name": "Fi\u0219ier:Bustul lui Stefan cel Mare Colegiul National Stefan cel Mare Suceava.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-II-m-A-18941": [
     {
       "code": "B-II-m-A-18941", 
@@ -3383,52 +4433,52 @@
   ], 
   "CJ-II-m-B-07523": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07523", 
       "lastedit": "20131109132528", 
       "name": "Fi\u0219ier:BadestiCJ.JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07523", 
       "lastedit": "20131109132530", 
       "name": "Fi\u0219ier:BadestiCJ (11).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07523", 
       "lastedit": "20131109132522", 
       "name": "Fi\u0219ier:BadestiCJ (15).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07523", 
       "lastedit": "20131109132525", 
       "name": "Fi\u0219ier:BadestiCJ (16).JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "IS-II-m-B-03783": [
@@ -3445,18 +4495,312 @@
       "quality": false
     }
   ], 
+  "CJ-II-m-B-07520": [
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142856", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic B2.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142858", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic B3.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142901", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic B5.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142908", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7882.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142904", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic B6.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142906", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic B7.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142911", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7886.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142853", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic 2 DSCF7927.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142929", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7921.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142927", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7918.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142921", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7917.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142919", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7909.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142916", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7908.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07520", 
+      "lastedit": "20131129142913", 
+      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7888.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CJ-II-m-B-07527": [
+    {
+      "code": "CJ-II-m-B-07527", 
+      "lastedit": "20131201000337", 
+      "name": "Fi\u0219ier:Biserica de lemn din Balcesti2.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07527", 
+      "lastedit": "20131201000346", 
+      "name": "Fi\u0219ier:Biserica de lemn din Balcesti4.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "CJ-II-m-B-07524": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07524", 
       "lastedit": "20131110193539", 
       "name": "Fi\u0219ier:Biserica de lemn Bagaciu2.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "SV-II-m-B-05494": [
+    {
+      "code": "SV-II-m-B-05494", 
+      "lastedit": "20131201001649", 
+      "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u015fti5.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SV-II-m-B-05494", 
+      "lastedit": "20131201001654", 
+      "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u015fti6.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SV-II-m-B-05494", 
+      "lastedit": "20131201001658", 
+      "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u015fti8.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SV-II-m-B-05494", 
+      "lastedit": "20131201001701", 
+      "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u015fti9.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SV-II-m-B-05494", 
+      "lastedit": "20131201001634", 
+      "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u015fti11.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SV-II-m-B-05494", 
+      "lastedit": "20131201001638", 
+      "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u015fti12.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SV-II-m-B-05494", 
+      "lastedit": "20131201001641", 
+      "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u015fti13.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SV-II-m-B-05494", 
+      "lastedit": "20131201001645", 
+      "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u015fti14.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-III-m-A-21039": [
@@ -3763,6 +5107,20 @@
       "quality": false
     }
   ], 
+  "GJ-II-m-B-09268.02": [
+    {
+      "code": "GJ-II-m-B-09268.02", 
+      "lastedit": "20131030223308", 
+      "name": "Fi\u0219ier:CarpinisGJ (37).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "NT-II-m-A-10590": [
     {
       "code": "NT-II-m-A-10590", 
@@ -3993,11 +5351,23 @@
       "quality": false
     }
   ], 
-  "B-II-m-B-19049": [
+  "AR-II-m-A-00592": [
     {
-      "code": "B-II-m-B-19049", 
-      "lastedit": "20131015132706", 
-      "name": "Fi\u0219ier:Vila Bucuresti Str. dr. Lister 6 sector 5 cod LMI B-II-m-B-19049.jpg", 
+      "code": "AR-II-m-A-00592", 
+      "lastedit": "20131201001403", 
+      "name": "Fi\u0219ier:Biserica de lemn din Budesti2.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "AR-II-m-A-00592", 
+      "lastedit": "20131201001437", 
+      "name": "Fi\u0219ier:Biserica de lemn din Budesti3.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -4012,6 +5382,68 @@
       "code": "VL-II-m-B-09891", 
       "lastedit": "20131101164502", 
       "name": "Fi\u0219ier:Raureni.bis lemn.N.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CJ-II-m-B-07531": [
+    {
+      "code": "CJ-II-m-B-07531", 
+      "lastedit": "20131201000627", 
+      "name": "Fi\u0219ier:Biserica de lemn din Bica7.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07531", 
+      "lastedit": "20131201000620", 
+      "name": "Fi\u0219ier:Biserica de lemn din Bica2.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07531", 
+      "lastedit": "20131201000623", 
+      "name": "Fi\u0219ier:Biserica de lemn din Bica3.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07531", 
+      "lastedit": "20131201000625", 
+      "name": "Fi\u0219ier:Biserica de lemn din Bica4.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07531", 
+      "lastedit": "20131201000630", 
+      "name": "Fi\u0219ier:Biserica de lemn din Bica8.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -4047,11 +5479,37 @@
       "quality": false
     }
   ], 
+  "B-II-m-B-18680": [
+    {
+      "code": "B-II-m-B-18680", 
+      "lastedit": "20131018111430", 
+      "name": "Fi\u0219ier:Cinema Bucuresti - Monument istoric LMI B-II-m-B-18680.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-III-m-B-20007": [
     {
       "code": "B-III-m-B-20007", 
-      "lastedit": "20131031204128", 
+      "lastedit": "20140103201453", 
       "name": "Fi\u0219ier:Constantin I. Istrati - Parcul Carol.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-III-m-B-20007", 
+      "lastedit": "20140103201430", 
+      "name": "Fi\u0219ier:Constantin I. Istrati - Parcul Carol \u2013 detaliu basorelief - cod LMI B-III-m-B-20007.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -4066,6 +5524,34 @@
       "code": "B-III-m-B-20000", 
       "lastedit": "20131015114032", 
       "name": "Fi\u0219ier:Statuia lui Alexandru Lahovari din Bucuresti.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-III-m-B-20010": [
+    {
+      "code": "B-III-m-B-20010", 
+      "lastedit": "20131204110031", 
+      "name": "Fi\u0219ier:Leul - Monumentul Eroilor din Arma Geniulu 2.jpeg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CJ-II-a-A-07534": [
+    {
+      "code": "CJ-II-a-A-07534", 
+      "lastedit": "20131128205416", 
+      "name": "Fi\u0219ier:Castelul Banffy Bontida (3).jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -4103,11 +5589,11 @@
       "quality": false
     }
   ], 
-  "B-II-m-B-18680": [
+  "B-II-m-B-19049": [
     {
-      "code": "B-II-m-B-18680", 
-      "lastedit": "20131018111430", 
-      "name": "Fi\u0219ier:Cinema Bucuresti - Monument istoric LMI B-II-m-B-18680.jpg", 
+      "code": "B-II-m-B-19049", 
+      "lastedit": "20131015132706", 
+      "name": "Fi\u0219ier:Vila Bucuresti Str. dr. Lister 6 sector 5 cod LMI B-II-m-B-19049.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -4134,6 +5620,20 @@
       "code": "AR-I-s-A-00450", 
       "lastedit": "20131008143334", 
       "name": "Fi\u0219ier:Cetatuie Savarsin 08-02.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-IV-m-B-01249": [
+    {
+      "code": "BH-IV-m-B-01249", 
+      "lastedit": "20131204210340", 
+      "name": "Fi\u0219ier:Monument Romanian soldiers WWI Oradea.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -4200,6 +5700,106 @@
       "code": "HD-II-m-A-03454", 
       "lastedit": "20131015115152", 
       "name": "Fi\u0219ier:Streisangeorgiu biszid imag arhiva.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "SV-IV-m-B-05689": [
+    {
+      "code": "SV-IV-m-B-05689", 
+      "lastedit": "20131204211436", 
+      "name": "Fi\u0219ier:Statuia ecvestr\u0103 a lui \u015etefan cel Mare din Suceava.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "AB-II-m-A-00221": [
+    {
+      "code": "AB-II-m-A-00221", 
+      "lastedit": "20131204102219", 
+      "name": "Fi\u0219ier:Biserica de lemn din Gabud01.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "AB-II-m-A-00221", 
+      "lastedit": "20131204102243", 
+      "name": "Fi\u0219ier:Biserica de lemn din Gabud03.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "AB-II-m-A-00221", 
+      "lastedit": "20131204102251", 
+      "name": "Fi\u0219ier:Biserica de lemn din Gabud04.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "AB-II-m-A-00221", 
+      "lastedit": "20131204102259", 
+      "name": "Fi\u0219ier:Biserica de lemn din Gabud05.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "AB-II-m-A-00221", 
+      "lastedit": "20131204102209", 
+      "name": "Fi\u0219ier:Biserica de lemn din Gabud.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "AB-II-m-A-00221", 
+      "lastedit": "20131204102306", 
+      "name": "Fi\u0219ier:Biserica de lemn din Gabud06.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "AB-II-m-A-00221", 
+      "lastedit": "20131204102321", 
+      "name": "Fi\u0219ier:Biserica de lemn din Gabud07.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -4533,11 +6133,35 @@
       "quality": false
     }
   ], 
-  "GJ-II-m-B-09268.02": [
+  "CJ-II-m-B-07508": [
     {
-      "code": "GJ-II-m-B-09268.02", 
-      "lastedit": "20131030223308", 
-      "name": "Fi\u0219ier:CarpinisGJ (37).JPG", 
+      "code": "CJ-II-m-B-07508", 
+      "lastedit": "20131129142459", 
+      "name": "Fi\u0219ier:Biserica de lemn din Agarbiciu1.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07508", 
+      "lastedit": "20131129142505", 
+      "name": "Fi\u0219ier:Biserica de lemn din Agarbiciu2.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07508", 
+      "lastedit": "20131129142510", 
+      "name": "Fi\u0219ier:Biserica de lemn din Agarbiciu4.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -4590,6 +6214,154 @@
       "code": "IS-III-m-B-04277", 
       "lastedit": "20131014140458", 
       "name": "Fi\u0219ier:Monumentul Eroilor din Bucium3.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "MS-III-m-A-16078": [
+    {
+      "code": "MS-III-m-A-16078", 
+      "lastedit": "20140117190725", 
+      "name": "Fi\u0219ier:Statuia lui Avram Iancu, drapelul Rom\u00e2niei, Catedrala.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "MS-III-m-A-16078", 
+      "lastedit": "20140117190824", 
+      "name": "Fi\u0219ier:Statuia lui Avram Iancu, Tg. Mure\u015f.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "SB-II-m-B-12407": [
+    {
+      "code": "SB-II-m-B-12407", 
+      "lastedit": "20131206104257", 
+      "name": "Fi\u0219ier:Biserica de lemn din Ilimbav02.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SB-II-m-B-12407", 
+      "lastedit": "20131206104259", 
+      "name": "Fi\u0219ier:Biserica de lemn din Ilimbav03.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SB-II-m-B-12407", 
+      "lastedit": "20131206104302", 
+      "name": "Fi\u0219ier:Biserica de lemn din Ilimbav04.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SB-II-m-B-12407", 
+      "lastedit": "20131206104305", 
+      "name": "Fi\u0219ier:Biserica de lemn din Ilimbav05.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SB-II-m-B-12407", 
+      "lastedit": "20131206104307", 
+      "name": "Fi\u0219ier:Biserica de lemn din Ilimbav06.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SB-II-m-B-12407", 
+      "lastedit": "20131206104313", 
+      "name": "Fi\u0219ier:Biserica de lemn din Ilimbav07.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SB-II-m-B-12407", 
+      "lastedit": "20131206104316", 
+      "name": "Fi\u0219ier:Biserica de lemn din Ilimbav08.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SB-II-m-B-12407", 
+      "lastedit": "20131129142559", 
+      "name": "Fi\u0219ier:Biserica de lemn di Ilimbav09.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SB-II-m-B-12407", 
+      "lastedit": "20131206104322", 
+      "name": "Fi\u0219ier:Biserica de lemn din Ilimbav10.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SB-II-m-B-12407", 
+      "lastedit": "20131206104325", 
+      "name": "Fi\u0219ier:Biserica de lemn din Ilimbav11.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
