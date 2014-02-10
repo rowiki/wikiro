@@ -9,7 +9,7 @@ identify different improvements and further errors in the monument pages and dat
 * să raporteze la [[Proiect:Monumente istorice/Erori/Automate]] următoarele situații:
 ** în listă nu există codul respectiv, dar codul are formatul corect în articol/imagine
 ** în listă nu există imagine și există mai multe imagini disponibile la commons - i
-** în listă și articol coordonatele sunt diferite (diferențe mai mari de 0,001 grade sau ~3,6 de secunde de grad) - i
+** în listă și articol coordonatele sunt diferite (diferențe mai mari de 0,001 grade sau ~3,6 de secunde de grad)
 '''
 
 import sys, time, warnings, json, string, random, re
@@ -22,7 +22,7 @@ from pywikibot import pagegenerators
 from pywikibot import config as user
 
 countries = {
-	('ro', 'ro') : {
+	('ro', 'lmi') : {
 		'project' : u'wikipedia',
 		'lang' : u'ro',
 		'headerTemplate' : u'ÎnceputTabelLMI',
@@ -61,6 +61,8 @@ countries = {
 _log = "link.err.log"
 _flog = None
 
+_coordVariance = 0.001 #decimal degrees
+
 def initLog():
 	global _flog, _log;
 	_flog = open(_log, 'w+')
@@ -74,14 +76,13 @@ def log(string):
 	_flog.write(string.encode("utf8") + "\n")
 	
 def rebuildTemplate(params):
-	my_template = u"{{" + countries.get(('ro', 'ro')).get('rowTemplate') + u"\n"
+	my_template = u"{{" + countries.get(('ro', 'lmi')).get('rowTemplate') + u"\n"
 	for name in [u"Cod", u"NotăCod", u"FostCod", u"CodRan", u"Cod92", u"Denumire", u"Localitate", u"Adresă", u"Datare", u"Creatori", u"Lat", u"Lon", u"Imagine", u"Commons"]:
 		if name in params and params[name] <> u"":
-			my_template += u"| " + countries.get(('ro', 'ro')).get('fields')[name] + u" = " + params[name] + u"\n"
+			my_template += u"| " + countries.get(('ro', 'lmi')).get('fields')[name] + u" = " + params[name] + u"\n"
 	my_template += u"}}\n"
 	return my_template
 
-#TODO: Hardcoded order of parameters
 def updateTableData(url, code, field, newvalue, upload = True, text = None):
 	pywikibot.output("Uploading %s for %s; value \"%s\"" % (field, code, newvalue))
 	site = pywikibot.getSite()
@@ -97,7 +98,7 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 	last = None
 	rawCode = None
 	my_params = {}
-	rowTemplate = countries.get(('ro', 'ro')).get('rowTemplate')
+	rowTemplate = countries.get(('ro', 'lmi')).get('rowTemplate')
 	
 	templates = pywikibot.extract_templates_and_params(text)
 	for (template, params) in templates:
@@ -121,35 +122,43 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 		log(u"*''E'': ''[%s]'' Codul nu este prezent în [[%s|listă]]" % (rawCode, title))
 		pywikibot.output(u"Code not found: %s" % code)
 		return None
-		
-	pywikibot.output(u"\n" + str(params) + u"\n")
+
 	pywikibot.output(my_params)
+	
 	orig = rebuildTemplate(my_params)
 	my_params[field] = newvalue
 	new = rebuildTemplate(my_params)
-	#pywikibot.output("4")
+	
 	if orig.strip() == new.strip():
 		pywikibot.output("No change, nothing to upload!")
 		return text
-	#pywikibot.output("5")
+	
 	pywikibot.output(orig)
 	pywikibot.output(new)
 	pywikibot.showDiff(orig, new)
+	
 	answer = pywikibot.input(u"Upload change? ([y]es/[n]o/[l]og)")
 	if answer == 'y':
 		(before, code, after) = text.partition(rawCode)
-		#we need to clean the whole template from both before and after
-		clivb = before.rfind(u"{{" + countries.get(('ro', 'ro')).get('rowTemplate'))
-		cliva = after.find(u"{{" + countries.get(('ro', 'ro')).get('rowTemplate'))
+		
+		# we need to clean the whole template from both before and after
+		clivb = before.rfind(u"{{" + rowTemplate)
+		cliva = after.find(u"{{" + rowTemplate)
+		# if we cannot find another template after the current, we
+		# are most likely the last template on the page
+		if cliva < 0:
+			cliva = after.find(u"{{" + countries.get(('ro', 'lmi')).get('footerTemplate'))
 		if cliva >= 0 and clivb >= 0:
 			after = after[cliva:]
 			before = before[:clivb]
 		else:
 			pywikibot.output("Could not find the current template, aborting!")
 			return text
+		
+		# rebuild the page with the new text
 		after = new + after
 		text = "".join((before, after))
-		#pywikibot.output(text)
+		
 		if upload == True:
 			comment = u"Actualizez câmpul %s în lista de monumente" % field
 			try:
@@ -157,63 +166,111 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 			except pywikibot.exceptions.Error:
 				pywikibot.output("Some error occured, let's move on and hope for the best!")
 			return None
+			
 	elif answer == 'l' or answer == '':
 		new = new.replace("\n", "<br/>")
 		log(u"*''W'': ''[%s]'' De verificat dacă înlocuirea câmpului ''%s'' cu ''%s'' este corectă (inclusiv legăturile adăugate)" % (code, orig, new))
-	#pywikibot.output("6")
+	
 	return text
-
-def main():
-	f = open("lmi_db.json", "r+")
-	pywikibot.output("Reading database file...")
+	
+def readJson(filename, what):
+	f = open(filename, "r+")
+	pywikibot.output("Reading " + what + " file...")
 	db = json.load(f)
 	pywikibot.output("...done")
 	f.close();
-
-	f = open("ro_pages.json", "r+")
-	pywikibot.output("Reading ro.wp pages file...")
-	pages_ro = json.load(f)
+	return db
+	
+def readRan(filename):
+	f = open(filename, "r+")
+	pywikibot.output("Reading archeological monuments file...")
+	ran = json.load(f)
 	pywikibot.output("...done")
 	f.close();
+	
+	db = {}
+	for site in ran:
+		if u"CodLMI" in site and site[u"CodLMI"] != u"":
+			lmi = site[u"CodLMI"]
+			if lmi not in db:
+				db[lmi] = []
+			db[lmi].append(site)
+	return db
+	
+def parseArticleCoords(code, allPages):
+	artLat = 0
+	artLon = 0
+	artSrc = None
+	updateCoord = False
+	for page in allPages:
+		if page["lat"] <> 0 and page["long"] <> 0:
+			if artLat <> 0: #this also means artLong <> 0
+				if math.fabs(artLat - page["lat"]) > _coordVariance or \
+					math.fabs(artLon - page["long"]) > _coordVariance:
+					log(u"*''E'': ''[%s]'' Coordonate diferite între "
+						u"[[:%s]] (%f,%f) și [[:%s]] (%f,%f)" % \
+						(code, page["name"], page["lat"], page["long"], artSrc, artLat, artLon)
+						)
+					updateCoord = False
+			else:
+				artLat = page["lat"]
+				artLon = page["long"]
+				artSrc = page["name"]
+				updateCoord = True
+	return (artLat, artLon, artSrc, updateCoord)
+	
+def parseRanCoords(code, ran_data):
+	#search in RAN database
+	ranLat = 0
+	ranLon = 0
+	ranCod = u""
+	updateCoord = False
+	for site in ran_data:
+		if site[u"Lat"] == u"" or site[u"Lon"] == u"":
+			continue
+		if ranLat == 0:
+			ranLat = float(site[u"Lat"])
+			ranLon = float(site[u"Lon"])
+			ranCod = site[u"Cod"]
+			updateCoord = True
+		elif math.fabs(ranLat - float(site["Lat"])) > _coordVariance or \
+			 math.fabs(ranLon - float(site["Lon"])) > _coordVariance:
+				log(u"*''E'': ''[%s]'' Coordonate diferite între RAN:%s (%f,%f) și RAN:%s (%f,%f)" % \
+					(code, site["Cod"], float(site["Lat"]), float(site["Lon"]), ranCod, ranLat, ranLon))
+				updateCoord = False
+	return (ranLat, ranLon, u"RAN: " + ranCod, updateCoord)
+	
+def parseOtherCoords(code, other_data):
+	#search in external data
+	updateCoord = False
+	try:
+		otherLat = float(other_data["lat"])
+		otherLong = float(other_data["long"])
+		updateCoord = True
+	except ValueError:
+		pass
+	return (otherLat, otherLong, u"External data", updateCoord)
 
-	f = open("ro_authors.json", "r+")
-	pywikibot.output("Reading ro.wp authors file...")
-	authors_ro = json.load(f)
-	pywikibot.output("...done")
-	f.close();
-
-	f = open("ro_Fișier_pages.json", "r+")
-	pywikibot.output("Reading ro.wp files file...")
-	files_ro = json.load(f)
-	pywikibot.output("...done")
-	f.close();
-
-	f = open("commons_Category_pages.json", "r+")
-	pywikibot.output("Reading commons categories file...")
-	categories_commons = json.load(f)
-	pywikibot.output("...done")
-	f.close();
-
-	f = open("commons_File_pages.json", "r+")
-	pywikibot.output("Reading commons images file...")
-	pages_commons = json.load(f)
-	pywikibot.output("...done")
-	f.close();
-
-	f = open("other_monument_data.json", "r+")
-	pywikibot.output("Reading other data file...")
-	other_data = json.load(f)
-	pywikibot.output("...done")
-	f.close();
+def main():
+	db =				readJson("lmi_db.json", "database")
+	pages_ro =			readJson("ro_pages.json", "ro.wp pages")
+	authors_ro =		readJson("ro_authors.json", "ro.wp authors")
+	files_ro =			readJson("ro_Fișier_pages.json", "ro.wp files")
+	categories_commons =readJson("commons_Category_pages.json", "commons categories")
+	pages_commons =		readJson("commons_File_pages.json", "commons images")
+	other_data =		readJson("other_monument_data.json", "other data")
+	
+	ran_data = readRan("ran_db.json")
 
 	initLog()
 	lastSource = None
 
-	#this is the big loop that should only happen once
+	#this is the big loop that must only happen once
 	for monument in db:
 		if monument["source"] <> lastSource:
 			articleText = None
 			lastSource = monument["source"]
+
 		rawCode = monument["Cod"]
 		regexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
 		result = re.findall(regexp, rawCode)
@@ -222,15 +279,15 @@ def main():
 		else:
 			code = rawCode
 		pywikibot.output(code)
+		
 		allPages = list()
 		article = None
 		picture = None
 		pic_author = None
 		lmi92 = None
 		ran = None
-		#pywikibot.output(str(page))
+		
 		try:
-			#pywikibot.output("OK: " + str(page[code]))
 			if code in pages_ro:
 				allPages.extend(pages_ro[code])
 				if len(allPages) > 1:
@@ -252,10 +309,10 @@ def main():
 						monument["Arhitect"].strip() == "" or \
 						monument["Cod92"].strip() == "": 
 					#multiple images available, we need to parse them
+					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
 					for pic in pages_commons[code]:
 						if "lmi92" in pic:
 							lmi92 = pic["lmi92"]
-						msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
 						author_list = ""
 						if pic_author == None and author_list == "" and pic["author"] <> None:
 							pic_author = pic["author"]
@@ -348,32 +405,26 @@ def main():
 			if picture.find(':') < 0:#no namespace
 				picture = "File:" + picture
 			articleText = updateTableData(monument["source"], code, "Imagine", picture, text=articleText)
-	
-			#use image from article only if none is available (or was selected) 
-			#from commons and we don't have a picture in the list
-			if picture == None and article <> None and article["image"] <> None and \
-			article["image"] <> "" and monument["Imagine"].strip() == "":
-				pywikibot.output(monument["Imagine"])
-				artimage = strainu.extractImageLink(article["image"]).strip()
-				if artimage == None or artimage == "":
-					pywikibot.output("Wrong image link: \"%s\"@%s" % (article["image"], article["name"]))
-				if artimage.find(':') < 0:#no namespace
-					artimage = "File:" + artimage
-				#pywikibot.output("Upload?" + artimage)
-				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
 
-		if picture == None and monument["Imagine"].strip() == "":
+		elif monument["Imagine"].strip() == "":
 			#use image from article only if none is available (or was selected) 
 			#from commons and we don't have a picture in the list
 			if article <> None and article["image"] <> None and article["image"] <> "":
-				pywikibot.output(monument["Imagine"])
+				pywikibot.output(article["Imagine"])
 				artimage = strainu.extractImageLink(article["image"]).strip()
 				if artimage == None or artimage == "":
 					pywikibot.output("Wrong article image link: \"%s\"@%s" % (article["image"], article["name"]))
 				if artimage.find(':') < 0:#no namespace
 					artimage = "File:" + artimage
-				#pywikibot.output("Upload?" + artimage)
 				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
+			#next option: an image from the RAN database
+			elif code in ran_data:
+				for site in ran_data[code]:
+					if site[u"Imagine"] != u"":
+						ranimage = site[u"Imagine"] # it MUST have the namespace prefix
+						articleText = updateTableData(monument["source"], code, 
+											"Imagine", ranimage, text=articleText)
+						break
 			#next option: choose a random image from commons
 			elif (code in pages_commons) and len(pages_commons[code]) > 0:
 				tries = 0
@@ -397,59 +448,59 @@ def main():
 		if code in categories_commons:
 			cat = categories_commons[code][0]
 			if monument["Commons"] == "":
-				articleText = updateTableData(monument["source"], code, "Commons", "commons:" + cat["name"], text=articleText)
+				articleText = updateTableData(monument["source"], code,
+										"Commons", "commons:" + cat["name"], text=articleText)
 			elif monument["Commons"].strip() <> ("commons:" + cat["name"].strip()):
 				log(u"*''E'': ''[%s]'' Există mai multe categorii pentru acest cod: <span lang=\"x-sic\">[[:%s]] și [[:%s]]</span>" % (code, "commons:" + cat["name"], monument["Commons"]))
-	
+		#next option: a category from the RAN database
+		elif code in ran_data:
+			for site in ran_data[code]:
+				if site[u"Commons"] != u"":
+					rancat = site[u"Commons"] #it MUST have the namespace prefix
+					articleText = updateTableData(monument["source"], code, 
+										"Commons", rancat, text=articleText)
+					break
+
 		#latitude and longitude
-		if monument["Lat"] == "":
-			lat = 0
-		else:
+		try:
 			lat = float(monument["Lat"])
-		if monument["Lon"] == "":
-			long = 0
-		else:
+		except ValueError:
+			lat = 0
+		try:
 			long = float(monument["Lon"])
-		artLat = 0
-		artLong = 0
-		otherLat = 0
-		otherLong = 0
-		artCoord = None
-		updateCoord = True
-		for page in allPages:
-			if page["lat"] <> 0 and page["long"] <> 0:
-				if artLat <> 0: #this also means artLong <> 0
-					if math.fabs(artLat - page["lat"]) > 0.001 or math.fabs(artLong - page["long"]) > 0.001:
-						log(u"*''E'': ''[%s]'' Coordonate diferite între [[:%s]] (%f,%f) și [[:%s]] (%f,%f)" % (code, page["name"], page["lat"], page["long"], artCoord, artLat, artLong))
-						updateCoord = False
-				else:
-					artLat = page["lat"]
-					artLong = page["long"]
-					artCoord = page["name"]
-					
-		if code in other_data:
-			otherLat = float(other_data[code]["lat"])
-			otherLong = float(other_data[code]["long"])
-				
-		if lat == 0 and (artLat <> 0 or otherLat <> 0) and updateCoord:
-			if artLat <> 0:
-				aLat = artLat
-				aLong = artLong
-			else:
-				aLat = otherLat
-				aLong = otherLong
-			pywikibot.output(str(aLat) + " " + str(aLong))
-			articleText = updateTableData(monument["source"], code, "Lat", str(aLat), upload = False, text = articleText)
-			articleText = updateTableData(monument["source"], code, "Lon", str(aLong), upload = True, text = articleText)
-	
-		if lat <> 0:
-			if artLat <> 0 and (math.fabs(artLat - lat) > 0.01 or math.fabs(artLong - long) > 0.01):
-				log(u"*''E'': ''[%s]'' Coordonate diferite între [[:%s]] (%f,%f) și listă (%f,%f)" % \
-					(code, artCoord, artLat, artLong, lat, long))
-			if otherLat <> 0 and (math.fabs(otherLat - lat) > 0.01 or math.fabs(otherLong - long) > 0.01):
-				log(u"*''E'': ''[%s]'' Coordonate diferite între sursele externe (%f,%f) și listă (%f,%f)" % \
-					(code, otherLat, otherLong, lat, long))
+		except ValueError:
+			long = 0
 			
+		otherCoords = []
+		otherCoords.append(parseArticleCoords(code, allPages))
+		if code in ran_data:
+			otherCoords.append(parseRanCoords(code, ran_data[code]))
+		if code in other_data:
+			otherCoords.append(parseOtherCoords(code, other_data[code]))
+
+		for (otherLat, otherLong, otherSrc, otherValid) in otherCoords:
+			if lat <> 0 and \
+				otherValid and \
+				otherLat <> 0 and \
+				( \
+				 math.fabs(otherLat - lat) > _coordVariance or \
+				 math.fabs(otherLong - long) > _coordVariance \
+				):
+					log(u"*''E'': ''[%s]'' Coordonate diferite între %s (%f,%f) și listă (%f,%f)" % \
+						(code, otherSrc, otherLat, otherLong, lat, long))
+
+			elif lat == 0 and otherValid:
+				print otherCoords
+				pywikibot.output(u"Valid coord found:\n"
+								u"\tSource: " + otherSrc + "\n" 
+								u"\tLatitude: " + str(otherLat) + "\n" 
+								u"\tLongitude: " + str(otherLong))
+				articleText = updateTableData(monument["source"], code, "Lat", str(otherLat), 
+								upload = False, text = articleText)
+				articleText = updateTableData(monument["source"], code, "Lon", str(otherLong), 
+								upload = True, text = articleText)
+			
+		#Codes from 1992
 		if lmi92 <> None:
 			articleText = updateTableData(monument["source"], code, "Cod92", lmi92, upload = True, text = articleText)
 	
