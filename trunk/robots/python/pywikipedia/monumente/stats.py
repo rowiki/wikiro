@@ -51,6 +51,7 @@ def main():
 	coords = 0
 	authors = 0
 	articles = 0
+	potential_articles = 0
 	total = len(db)
 
 	total_county = {}
@@ -75,6 +76,8 @@ def main():
 		
 		if monument["Denumire"].find("[[") >= 0:
 			articles += 1
+		elif interest == "A":
+			potential_articles += 1
 
 		if nature == "I":
 			nature = "arheologie"
@@ -153,6 +156,7 @@ def main():
 	print "* Monumente cu articole: ''%d/%d (%f%%)''" % (articles, total, articles * 100.0 / total)
 	print "* Categorii la commons: ''%d''" % len(cat_commons)
 	print "* Articole distincte: ''%d''" % len(pages_ro)
+	print "* Articole lipsă (cat A): ''%d''" % potential_articles
 
 	for nature in image_nature.keys():
 		print "* Imagini pentru monumente de %s: ''%f%%''" % (nature, image_nature[nature] * 100.0 / total_nature[nature])
