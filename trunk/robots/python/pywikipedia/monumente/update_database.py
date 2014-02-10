@@ -11,39 +11,64 @@ from pywikibot import pagegenerators
 from pywikibot import config
 
 countries = {
-	('ro', 'ro') : {
+	('ro', 'lmi') : {
 		'project' : u'wikipedia',
-	    'lang' : u'ro',
-	    'headerTemplate' : u'ÎnceputTabelLMI',
-	    'rowTemplate' : u'ElementLMI',
+		'lang' : u'ro',
+		'headerTemplate' : u'ÎnceputTabelLMI',
+		'rowTemplate' : u'ElementLMI',
 		'footerTemplate' : u'SfârșitTabelLMI',
-		'commonsTemplate' : u'Monument istoric',
-		'commonsTrackerCategory' : u'Cultural heritage monuments in Romania with known IDs',
-		'commonsCategoryBase' : u'Historical monuments in Romania',
-		'unusedImagesPage' : u'User:Multichill/Unused Monument istoric',
-		'imagesWithoutIdPage' : u'User:Multichill/Monument istoric without ID',
-	    'namespaces' : [0],
-	    'table' : u'monuments_ro_(ro)',
-	    'truncate' : False, 
-	    'primkey' : u'Cod',
-	    'fields' : {
-		    u'Cod': u'Cod',
-		    u'Denumire': u'Denumire',
-		    u'Localitate': u'Localitate',
-		    u'Adresă': u'Adresă',
-		    u'Datare': u'Datare',
-		    u'Arhitect': u'Arhitect',
-		    u'Creatori': u'Arhitect',
-		    u'Lat': u'Lat',
-		    u'Coordonate': u'Coordonate',
-		    u'Lon': u'Lon',
-		    u'Imagine': u'Imagine',
-		    u'Commons': u'Commons',
-		    u'NotăCod': u'Notăcod',
-		    u'FostCod': u'FostCod',
-		    u'Cod92': u'Cod92',
-		    u'CodRan': u'CodRan',
-		    },
+		'namespaces' : [0],
+		'fields' : {
+			u'Cod': u'Cod',
+			u'Denumire': u'Denumire',
+			u'Localitate': u'Localitate',
+			u'Adresă': u'Adresă',
+			u'Datare': u'Datare',
+			u'Arhitect': u'Arhitect',
+			u'Creatori': u'Arhitect',
+			u'Lat': u'Lat',
+			u'Coordonate': u'Coordonate',
+			u'Lon': u'Lon',
+			u'Imagine': u'Imagine',
+			u'Commons': u'Commons',
+			u'NotăCod': u'Notăcod',
+			u'FostCod': u'FostCod',
+			u'Cod92': u'Cod92',
+			u'CodRan': u'CodRan',
+			},
+	},
+	('ro', 'ran') : {
+		'project' : u'wikipedia',
+		'lang' : u'ro',
+		'headerTemplate' : u'ÎnceputTabelRAN',
+		'rowTemplate' : u'ElementRAN',
+		'footerTemplate' : u'SfârșitTabelRAN',
+		'namespaces' : [0],
+		'fields' : {
+			u'Cod': u'Cod',
+			u'NotăCod': u'Notăcod',
+			u'CodLMI': u'CodLMI',
+			u'Nume': u'Nume',
+			u'NumeAlternative': u'NumeAlternative',
+			u'Categorie': u'Categorie',
+			u'TipMonument': u'TipMonument',
+			u'Localitate': u'Localitate',
+			u'Adresă': u'Adresă',
+			u'Cultura': u'Cultura',
+			u'Faza': u'Faza',
+			u'Datare': u'Datare',
+			u'Lat': u'Lat',
+			u'Lon': u'Lon',
+			u'Descoperit': u'Descoperit',
+			u'Descoperitor': u'Descoperitor',
+			u'Datare': u'Datare',
+			u'Imagine': u'Imagine',
+			u'Commons': u'Commons',
+			u'Index': u'Index',
+			u'CodSIRUTA': u'CodSIRUTA',
+			u'Stare': u'Stare',
+			u'TipCod': u'TipCod',
+			},
 	},
 }
 
@@ -98,9 +123,9 @@ def processText(source, countryconfig, page=None):
 			#time.sleep(5)
  
 
-def processCountry(countryconfig):
+def processDatabase(countryconfig, dbname="lmi"):
 	'''
-	Process all the monuments of one country
+	Process all the monuments of one database
 	'''
 
 	site = pywikibot.getSite(countryconfig.get('lang'), countryconfig.get('project'))
@@ -114,7 +139,7 @@ def processCountry(countryconfig):
 			# Do some checking
 			processText(page.permalink(), countryconfig, page=page)
 			
-	f = open("lmi_db.json", "w+")
+	f = open(dbname + "_db.json", "w+")
 	json.dump(monuments_db, f, indent=2)
 	f.close();
 
@@ -133,30 +158,24 @@ def main():
 	'''
 	# First find out what to work on
 
-	countrycode = u'ro'
+	database = u'lmi'
 	textfile = u''
 
 	for arg in pywikibot.handleArgs():
-		if arg.startswith('-countrycode:'):
-			countrycode = arg [len('-countrycode:'):]
-		elif arg.startswith('-textfile:'):
-			textfile = arg [len('-textfile:'):]
+		if arg.startswith('-db:'):
+			database = arg [len('-db:'):]
 
-	if countrycode:
+	if database:
 		lang = pywikibot.getSite().language()
-		if not countries.get((countrycode, lang)):
-			pywikibot.output(u'I have no config for countrycode "%s" in language "%s"' % (countrycode, lang))
+		if not countries.get((lang, database)):
+			pywikibot.output(u'I have no config for database "%s" in language "%s"' % (database, lang))
 			return False
-		pywikibot.output(u'Working on countrycode "%s" in language "%s"' % (countrycode, lang))
-		if textfile:
-			pywikibot.output(u'Going to work on textfile.')
-			processTextfile(textfile, countries.get((countrycode, lang)))
-		else:
-			processCountry(countries.get((countrycode, lang)))
+		pywikibot.output(u'Working on database "%s" in language "%s"' % (database, lang))
+		processDatabase(countries.get((lang, database)), database)
 	else:
-		for (countrycode, lang), countryconfig in countries.iteritems():
-			pywikibot.output(u'Working on countrycode "%s" in language "%s"' % (countrycode, lang))
-			processCountry(countryconfig,)
+		for (lang, database), countryconfig in countries.iteritems():
+			pywikibot.output(u'Working on database "%s" in language "%s"' % (database, lang))
+			processDatabase(countryconfig, database)
 	'''
 
 
