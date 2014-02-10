@@ -29,7 +29,7 @@ options = {
 		'namespaces': [0, 6],
 		#'namespaces': [6],
 		'templateRegexp': re.compile("\{\{[a-z]*codLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
-		'codeTemplate': "codLMI",
+		'codeTemplate': ["codLMI"],
 		'codeTemplateParams': 
 		[
 		],
@@ -102,7 +102,7 @@ options = {
 		'namespaces': [14, 6],
 		#'namespaces': [6],
 		'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
-		'codeTemplate': "Monument istoric",
+		'codeTemplate': ["Monument istoric", "codLMI"],
 		'codeTemplateParams': 
 		[
 			u'lmi92',
@@ -432,7 +432,7 @@ def processArticle(text, page, conf):
 				author += processCreatorTemplate(_dict[author_key], conf) + u", "
 			else:
 				author += formatAuthor(_dict[author_key]) + " (" + author_type + "), "
-		if author == "":
+		if author == u"":
 			author = None
 		else:
 			author = author[:-2] #remove the final comma
@@ -468,7 +468,13 @@ def processArticle(text, page, conf):
 			   }
 
 	if len(conf['codeTemplateParams']):
-		tl = strainu.extractTemplate(text, conf['codeTemplate'])
+		i = 0
+		while tl == None and i < len(conf['codeTemplate']):
+			tl = strainu.extractTemplate(text, conf['codeTemplate'][i])
+			i += 1
+		if tl == None:
+			print "Cannot find any valid templates!"
+			return
 		(tlcont, tlparam) = strainu.tl2Dict(tl)
 							
 		for param in conf['codeTemplateParams']:
@@ -520,7 +526,7 @@ def main():
 	langOpt = options.get(lang)
 
 	rowTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), \
-								langOpt.get('codeTemplate')))
+								langOpt.get('codeTemplate')[0]))
 	global _log
 	global fullDict
 	global qualityRegexp
