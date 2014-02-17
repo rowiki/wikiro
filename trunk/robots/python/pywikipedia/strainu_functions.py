@@ -8,12 +8,14 @@
 #
 #
 
-import re, pagegenerators, urllib2, urllib
-import wikipedia as pywikibot
-import pywikibot.textlib as textlib
+import re, urllib2, urllib
+import pywikibot
+from pywikibot import textlib
+from pywikibot import pagegenerators
 import math
 import time
 import string
+import csv
 
 
 #extract the first instance of a template from the page text
@@ -26,7 +28,7 @@ def extractTemplate(text, template):
     template = template.replace(" ", "[ _]")
     match = re.search("\{\{\s*" + template, text, re.I)
     if match == None:
-		return None
+        return None
     tl = text[match.start():]
     text = text[match.start() + 2:]
     open = 0
@@ -108,7 +110,7 @@ def tl2Dict(template):
                 _keyList.append(key)
         elif line[0].startswith(u'{{') and not u"_name" in _dict: #name of the template
             #pywikibot.output("Name: " + line[0][2:])
-            _dict[u"_name"] = line[0][2:]
+            _dict[u"_name"] = line[0][2:].strip()
             if not key in _keyList:
                 _keyList.append(u"_name")
         elif line[0] != u"" and key != u"":#the first line might not begin with {{
@@ -157,6 +159,22 @@ def extractLink(text):
         return text[start+2:end]
     else:
         return text[start+2:sep]
+
+#from "pre [[a|b]] post" get [pre, a, post]
+def extractLinkAndSurroundingText(text):
+    start = text.find("[[")
+    end = text.find("]]")
+    sep = text.find("|")
+    
+    if start < 0 or end < 0:
+        return None
+    if start > end or (start > sep and sep > -1) or sep > end:
+        return None
+        
+    if sep < 0:
+        return [text[:start], text[start+2:end], text[end+2:]]
+    else:
+        return [text[:start], text[start+2:sep], text[end+2:]]
         
 def extractImageLink(text):
     start = text.find("[[")
@@ -196,18 +214,18 @@ def stripNamespace(link):
     return link[link.find(':')+1:]
     
 def capitalizeWithSigns(text, keep=[]):
-    text = text.replace(u"-", u"* ")
-    i = 0
+    text = text.replace(u"-", u"@@0@@ ")
+    text = text.replace(u".", u"@@1@@ ")
+    i = 2
     for term in keep:
         text = text.replace(term, u"@@%d@@ " % i)
         i += 1
-    text = text
-    text = string.capwords(text,)
-    i = 0
-    for term in keep:
+    text = string.capwords(text,' ')
+    for term in reversed(keep):
+        i -= 1
         text = text.replace(u"@@%d@@ " % i, term)
-        i += 1
-    text = text.replace(u"* ", u"-")
+    text = text.replace(u"@@1@@ ", u".")
+    text = text.replace(u"@@0@@ ", u"-")
     return text
         
     # def getDeg(self, decimal):
@@ -232,6 +250,71 @@ def capitalizeWithSigns(text, keep=[]):
             # return -1
         # else:
             # return 0 #this should really never happen
+            
+def linkedImages(page):
+    """Return a list of Pages that this Page links to.
+
+    Only returns pages from "normal" internal links. Category links are
+    omitted unless prefixed with ":". Image links are omitted when parameter
+    withImageLinks is False. Embedded templates are omitted (but links
+    within them are returned). All interwiki and external links are omitted.
+
+    @param thistxt: the wikitext of the page
+    @return: a list of Page objects.
+    """
+    
+    Rlink = re.compile(r'\[\[(?P<title>[^\]\|\[]*)(\|[^\]]*)?\]\]')
+    result = []
+    try:
+        thistxt = textlib.removeLanguageLinks(page.get(get_redirect=True),
+                                      page.site)
+    except pywikibot.NoPage:
+        raise
+    except pywikibot.IsRedirectPage:
+        raise
+    except pywikibot.SectionError:
+        return []
+    thistxt = textlib.removeCategoryLinks(thistxt, page.site)
+
+    # remove HTML comments, pre, nowiki, and includeonly sections
+    # from text before processing
+    thistxt = textlib.removeDisabledParts(thistxt)
+
+    # resolve {{ns:-1}} or {{ns:Help}}
+    #thistxt = page.site.resolvemagicwords(thistxt)
+
+    for match in Rlink.finditer(thistxt):
+        title = match.group('title')
+        title = title.replace("_", " ").strip(" ")
+        if page.namespace() in page.site.family.namespacesWithSubpage:
+            # convert relative link to absolute link
+            if title.startswith(".."):
+                parts = self.title().split('/')
+                parts.pop()
+                title = u'/'.join(parts) + title[2:]
+            elif title.startswith("/"):
+                title = u'%s/%s' % (page.title(), title[1:])
+        if title.startswith("#"):
+            # this is an internal section link
+            continue
+        if not page.site.isInterwikiLink(title):
+            page2 = pywikibot.Page(page.site, title)
+            try:
+                hash(str(page2))
+            except Exception:
+                pywikibot.output(u"Page %s contains invalid link to [[%s]]."
+                        % (page.title(), title))
+                continue
+            if not page2.isImage():
+                continue
+            if page2.title(withSection=False) and page2 not in result:
+                result.append(page2)
+    return result
+    
+def unicode_csv_reader(utf8_data, dialect=csv.excel, **kwargs):
+    csv_reader = csv.reader(utf8_data, dialect=dialect, **kwargs)
+    for row in csv_reader:
+        yield [unicode(cell, 'utf-8') for cell in row]
             
 if __name__ == "__main__":
     print extractTemplate("{{Sema_2|a=b<ref>{{citat|}}</ref>|e=f}}", "Sema 2")
