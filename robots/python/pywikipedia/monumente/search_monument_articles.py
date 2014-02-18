@@ -13,11 +13,14 @@ import strainu_functions as strainu
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot import config as user
+from pywikibot import textlib
 
-codeRegexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
+#codeRegexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
+codeRegexp = re.compile("([1-9]{1,2})([A-D])([0-9]{4})( |\)|\. |\, )", re.I)
 templateRegexp = re.compile("\{\{([aA]utorCodLMI|[cC]odLMI)")
 errorRegexp = re.compile("eroare\s?=\s?([^0])", re.I)
-_log = "search.err.log"
+#_log = "search.err.log"
+_log = "search_92.err.log"
 _flog = None
 
 def initLog():
@@ -33,6 +36,7 @@ def log(string):
 
 def processArticle(page):
 	text = page.get()
+	text = textlib.removeDisabledParts(text)
 	# pywikibot.output(u'Working on "%s"' % title)
 	global codeRegexp
 	global templateRegexp
@@ -41,7 +45,7 @@ def processArticle(page):
 	if len(result) > 0 and len(template) == 0:
 		msg = u"* [[%s]]: " % page.title()
 		for res in result:
-			msg += res[0] + ", "
+			msg += str(res)
 		log(msg)
 		pywikibot.output(msg)
 		
