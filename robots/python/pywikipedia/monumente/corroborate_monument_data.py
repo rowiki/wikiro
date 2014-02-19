@@ -83,7 +83,7 @@ def rebuildTemplate(params):
 	my_template += u"}}\n"
 	return my_template
 
-def updateTableData(url, code, field, newvalue, upload = True, text = None):
+def updateTableData(url, code, field, newvalue, upload = True, text = None, ask = True):
 	pywikibot.output("Uploading %s for %s; value \"%s\"" % (field, code, newvalue))
 	site = pywikibot.getSite()
 	title = urlparse.parse_qs(urlparse.urlparse(str(url)).query)['title'][0].decode('utf8')
@@ -137,7 +137,10 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None):
 	pywikibot.output(new)
 	pywikibot.showDiff(orig, new)
 	
-	answer = pywikibot.input(u"Upload change? ([y]es/[n]o/[l]og)")
+	if ask:
+		answer = pywikibot.input(u"Upload change? ([y]es/[n]o/[l]og)")
+	else:
+		answer = 'y'
 	if answer == 'y':
 		(before, code, after) = text.partition(rawCode)
 		
@@ -410,7 +413,7 @@ def main():
 			#use image from article only if none is available (or was selected) 
 			#from commons and we don't have a picture in the list
 			if article <> None and article["image"] <> None and article["image"] <> "":
-				pywikibot.output(article["Imagine"])
+				pywikibot.output(article["image"])
 				artimage = strainu.extractImageLink(article["image"]).strip()
 				if artimage == None or artimage == "":
 					pywikibot.output("Wrong article image link: \"%s\"@%s" % (article["image"], article["name"]))
@@ -495,10 +498,13 @@ def main():
 								u"\tSource: " + otherSrc + "\n" 
 								u"\tLatitude: " + str(otherLat) + "\n" 
 								u"\tLongitude: " + str(otherLong))
+				ask = True
+				if otherSrc[5:] == monument["CodRan"]:
+					ask = False
 				articleText = updateTableData(monument["source"], code, "Lat", str(otherLat), 
-								upload = False, text = articleText)
+								upload = False, text = articleText, ask = ask)
 				articleText = updateTableData(monument["source"], code, "Lon", str(otherLong), 
-								upload = True, text = articleText)
+								upload = True, text = articleText, ask = ask)
 			
 		#Codes from 1992
 		if lmi92 <> None:
