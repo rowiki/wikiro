@@ -171,7 +171,8 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 				pywikibot.output("Some error occured, let's move on and hope for the best!")
 			return None
 			
-	elif answer == 'l' or answer == '':
+	elif answer == 'l':
+		orig = orig.replace("\n", "<br/>")
 		new = new.replace("\n", "<br/>")
 		log(u"*''W'': ''[%s]'' De verificat dacă înlocuirea câmpului ''%s'' cu ''%s'' este corectă (inclusiv legăturile adăugate)" % (code, orig, new))
 	
@@ -426,14 +427,15 @@ def main():
 				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
 		#try to find the author in external data
 		elif code in other_data and "Creatori" in other_data[code]:
-			authors = monument["Arhitect"]
+			authors = monument["Arhitect"].strip()
 			author = other_data[code]["Creatori"]
-			pywikibot.output(authors)
-			pywikibot.output(author)
-			if authors <> "" and authors.find(author) == -1: #we don't already know the author
+			if authors <> u"" and authors.find(author) == -1: #we don't already know the author
 				authors = author + ", " + authors
-			else:
+			elif authors == u"":
 				authors = author
+			else:
+				log("* [Listă] ''W'': ''[%s]'' Lista are creatorii %s, iar în fișierul importat apare %s" % \
+						code, authors, author)
 			if authors <> monument["Arhitect"]: # if something changed, update the text
 				pywikibot.output(authors)
 				articleText = updateTableData(monument["source"], code, "Creatori", authors, text=articleText)
