@@ -13,9 +13,10 @@ identify different improvements and further errors in the monument pages and dat
 '''
 
 import sys, time, warnings, json, string, random, re
-import math, urlparse
+import math, urlparse, os
 sys.path.append("..")
 import strainu_functions as strainu
+import csv2json
 
 import pywikibot
 from pywikibot import pagegenerators
@@ -72,7 +73,7 @@ def closeLog():
 	_flog.close()
 
 def log(string):
-	#pywikibot.output(string.encode("utf8") + "\n")
+	pywikibot.output(string.encode("utf8"))
 	_flog.write(string.encode("utf8") + "\n")
 	
 def rebuildTemplate(params):
@@ -119,7 +120,7 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 			if codeFound:
 				break
 	else: #for .. else
-		log(u"*''E'': ''[%s]'' Codul nu este prezent în [[%s|listă]]" % (rawCode, title))
+		log(u"* [Listă] ''E'': ''[%s]'' Codul nu este prezent în [[%s|listă]]" % (rawCode, title))
 		pywikibot.output(u"Code not found: %s" % code)
 		return None
 
@@ -184,6 +185,23 @@ def readJson(filename, what):
 	f.close();
 	return db
 	
+def readOtherData(filename):
+	if not os.path.exists(filename):
+		pywikibot.output("Could not find file " + filename)
+		return {}
+	pywikibot.output("Reading other data file...")
+	if filename.endswith(".json"):
+		f = open(filename, "r+")
+		db = json.load(f)
+		f.close()
+	elif filename.endswith(".csv"):
+		db = csv2json.csvToJson(filename)
+	else:
+		pywikibot.output("Could not recognise file type")
+		return {}
+	pywikibot.output("...done")
+	return db
+	
 def readRan(filename):
 	f = open(filename, "r+")
 	pywikibot.output("Reading archeological monuments file...")
@@ -210,15 +228,15 @@ def parseArticleCoords(code, allPages):
 			if artLat <> 0: #this also means artLong <> 0
 				if math.fabs(artLat - page["lat"]) > _coordVariance or \
 					math.fabs(artLon - page["long"]) > _coordVariance:
-					log(u"*''E'': ''[%s]'' Coordonate diferite între "
+					log(u"* [WPCOM] ''E'': ''[%s]'' Coordonate diferite între "
 						u"[[:%s]] (%f,%f) și [[:%s]] (%f,%f)" % \
-						(code, page["name"], page["lat"], page["long"], artSrc, artLat, artLon)
+						(code, page["name"], page["lat"], page["long"], artSrc[5:], artLat, artLon)
 						)
 					updateCoord = False
 			else:
 				artLat = page["lat"]
 				artLon = page["long"]
-				artSrc = page["name"]
+				artSrc = u"WP : " + page["name"]
 				updateCoord = True
 	return (artLat, artLon, artSrc, updateCoord)
 	
@@ -238,7 +256,7 @@ def parseRanCoords(code, ran_data):
 			updateCoord = True
 		elif math.fabs(ranLat - float(site["Lat"])) > _coordVariance or \
 			 math.fabs(ranLon - float(site["Lon"])) > _coordVariance:
-				log(u"*''E'': ''[%s]'' Coordonate diferite între RAN:%s (%f,%f) și RAN:%s (%f,%f)" % \
+				log(u"* [RAN] ''E'': ''[%s]'' Coordonate diferite între RAN:%s (%f,%f) și RAN:%s (%f,%f)" % \
 					(code, site["Cod"], float(site["Lat"]), float(site["Lon"]), ranCod, ranLat, ranLon))
 				updateCoord = False
 	return (ranLat, ranLon, u"RAN: " + ranCod, updateCoord)
@@ -246,22 +264,31 @@ def parseRanCoords(code, ran_data):
 def parseOtherCoords(code, other_data):
 	#search in external data
 	updateCoord = False
-	try:
-		otherLat = float(other_data["lat"])
-		otherLong = float(other_data["long"])
-		updateCoord = True
-	except ValueError:
-		pass
-	return (otherLat, otherLong, u"External data", updateCoord)
+	otherLat = 0
+	otherLong = 0
+	if "Lat" in other_data and "Lon" in other_data:
+		try:
+			otherLat = float(other_data["Lat"])
+			otherLong = float(other_data["Lon"])
+			updateCoord = True
+		except ValueError:
+			pass
+	return (otherLat, otherLong, u"ALT: External data", updateCoord)
 
 def main():
+	otherFile = "other_monument_data.csv"
+	
+	for arg in pywikibot.handleArgs():
+		if arg.startswith('-import:'):
+			otherFile = arg [len('-import:'):]
 	db =				readJson("lmi_db.json", "database")
 	pages_ro =			readJson("ro_pages.json", "ro.wp pages")
 	authors_ro =		readJson("ro_authors.json", "ro.wp authors")
 	files_ro =			readJson("ro_Fișier_pages.json", "ro.wp files")
 	categories_commons =readJson("commons_Category_pages.json", "commons categories")
 	pages_commons =		readJson("commons_File_pages.json", "commons images")
-	other_data =		readJson("other_monument_data.json", "other data")
+	
+	other_data = readOtherData(otherFile)
 	
 	ran_data = readRan("ran_db.json")
 
@@ -294,7 +321,7 @@ def main():
 			if code in pages_ro:
 				allPages.extend(pages_ro[code])
 				if len(allPages) > 1:
-					msg = u"*''E'': ''[%s]'' Codul este prezent în mai multe articole pe Wikipedia: " % code
+					msg = u"* [WP] ''E'': ''[%s]'' Codul este prezent în mai multe articole pe Wikipedia: " % code
 					for page in allPages:
 						msg += (u"[[:%s]], " % page["name"])
 					log(msg)
@@ -334,12 +361,12 @@ def main():
 						pass
 						#log(msg)
 					if pic_author == None and author_list <> "":
-						log(u"*'''E''': ''[%s]'' În lista de imagini sunt trecuți mai multi autori: %s" % (code, author_list))
+						log(u"* [COM] '''E''': ''[%s]'' În lista de imagini sunt trecuți mai multi autori: %s" % (code, author_list))
 				allPages.extend(pages_commons[code])
 			if code in categories_commons:
 				allPages.extend(categories_commons[code])
 				if len(categories_commons[code]) > 1:
-					msg = u"*''E'': ''[%s]'' Codului îi corespund mai multe categorii la Commons: <span lang=\"x-sic\">" % code
+					msg = u"* [COM] ''E'': ''[%s]'' Codului îi corespund mai multe categorii la Commons: <span lang=\"x-sic\">" % code
 					for page in categories_commons[code]:
 						msg += (u"[[:commons:%s]], " % page["name"])
 					msg += "</span>"
@@ -358,14 +385,14 @@ def main():
 			else: # check if the 2 links are the same
 				link = strainu.extractLink(monument["Denumire"])
 				if link == None:
-					log(u"*''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire" % code)
+					log(u"* [Listă] ''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire" % code)
 				else:
 					page1 = pywikibot.Page(pywikibot.getSite(), link)
 					page2 = pywikibot.Page(pywikibot.getSite(), article["name"])
 					if page1 <> page2 and \
 					(not page1.isRedirectPage() or page1.getRedirectTarget() <> page2) and \
 					(not page2.isRedirectPage() or page2.getRedirectTarget() <> page1):
-						log(u"*''W'': ''[%s]'' Câmpul Denumire are o legătură internă către [[%s]], dar articolul despre monument este [[%s]]" % (code, page1, page2))
+						log(u"* [WPListă]''W'': ''[%s]'' Câmpul Denumire are o legătură internă către [[%s]], dar articolul despre monument este [[%s]]" % (code, page1, page2))
 				
 		#author from article
 		if article <> None and article["author"] <> None and article["author"].strip() <> "":
@@ -394,17 +421,32 @@ def main():
 						authors = author
 			if authors <> monument["Arhitect"]: # if something changed, update the text
 				pywikibot.output(authors)
-				articleText = updateTableData(monument["source"], code, "Arhitect", authors, text=articleText)
+				articleText = updateTableData(monument["source"], code, "Creatori", authors, text=articleText)
+			else:
+				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
+		#try to find the author in external data
+		elif code in other_data and "Creatori" in other_data[code]:
+			authors = monument["Arhitect"]
+			author = other_data[code]["Creatori"]
+			pywikibot.output(authors)
+			pywikibot.output(author)
+			if authors <> "" and authors.find(author) == -1: #we don't already know the author
+				authors = author + ", " + authors
+			else:
+				authors = author
+			if authors <> monument["Arhitect"]: # if something changed, update the text
+				pywikibot.output(authors)
+				articleText = updateTableData(monument["source"], code, "Creatori", authors, text=articleText)
 			else:
 				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
 
 		elif pic_author <> None:
 			if pic_author <> strainu.stripLink(monument["Arhitect"]).strip():
-				articleText = updateTableData(monument["source"], code, "Arhitect", pic_author, text=articleText)
+				articleText = updateTableData(monument["source"], code, "Creatori", pic_author, text=articleText)
 	
 		#image from Commons, none in the list
 		if picture <> None and monument["Imagine"].strip() == "":
-			pywikibot.output("Upload?" + picture)
+			#pywikibot.output("Upload?" + picture)
 			if picture.find(':') < 0:#no namespace
 				picture = "File:" + picture
 			articleText = updateTableData(monument["source"], code, "Imagine", picture, text=articleText)
@@ -454,7 +496,7 @@ def main():
 				articleText = updateTableData(monument["source"], code,
 										"Commons", "commons:" + cat["name"], text=articleText)
 			elif monument["Commons"].strip() <> ("commons:" + cat["name"].strip()):
-				log(u"*''E'': ''[%s]'' Există mai multe categorii pentru acest cod: <span lang=\"x-sic\">[[:%s]] și [[:%s]]</span>" % (code, "commons:" + cat["name"], monument["Commons"]))
+				log(u"* [COM] ''E'': ''[%s]'' Există mai multe categorii pentru acest cod: <span lang=\"x-sic\">[[:%s]] și [[:%s]]</span>" % (code, "commons:" + cat["name"], monument["Commons"]))
 		#next option: a category from the RAN database
 		elif code in ran_data:
 			for site in ran_data[code]:
@@ -482,6 +524,12 @@ def main():
 			otherCoords.append(parseOtherCoords(code, other_data[code]))
 
 		for (otherLat, otherLong, otherSrc, otherValid) in otherCoords:
+			if (otherLat > 0 and strainu.getSec(otherLat) == 0) and \
+				(otherLong > 0 and strainu.getSec(otherLong) == 0):
+				log(u"* [%s] ''W'': ''[%s]'' Coordonatele (%f,%f) au nevoie de o verificare - secundele sunt 0" \
+				 %	(otherSrc[:3], code, otherLat, otherLong))
+				otherValid = False
+				continue
 			if lat <> 0 and \
 				otherValid and \
 				otherLat <> 0 and \
@@ -489,7 +537,7 @@ def main():
 				 math.fabs(otherLat - lat) > _coordVariance or \
 				 math.fabs(otherLong - long) > _coordVariance \
 				):
-					log(u"*''E'': ''[%s]'' Coordonate diferite între %s (%f,%f) și listă (%f,%f)" % \
+					log(u"* [Listă] ''E'': ''[%s]'' Coordonate diferite între %s (%f,%f) și listă (%f,%f)" % \
 						(code, otherSrc, otherLat, otherLong, lat, long))
 
 			elif lat == 0 and otherValid:
@@ -501,10 +549,10 @@ def main():
 				ask = True
 				if otherSrc[5:] == monument["CodRan"]:
 					ask = False
-				articleText = updateTableData(monument["source"], code, "Lat", str(otherLat), 
-								upload = False, text = articleText, ask = ask)
-				articleText = updateTableData(monument["source"], code, "Lon", str(otherLong), 
-								upload = True, text = articleText, ask = ask)
+				#articleText = updateTableData(monument["source"], code, "Lat", str(otherLat), 
+				#				upload = False, text = articleText, ask = ask)
+				#articleText = updateTableData(monument["source"], code, "Lon", str(otherLong), 
+				#				upload = True, text = articleText, ask = ask)
 			
 		#Codes from 1992
 		if lmi92 <> None:
