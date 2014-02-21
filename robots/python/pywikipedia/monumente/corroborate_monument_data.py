@@ -397,6 +397,7 @@ def main():
 				
 		#author from article
 		if article <> None and article["author"] <> None and article["author"].strip() <> "":
+			print "autor1"
 			#author = strainu.stripLink(article["author"]).strip()
 			author = article["author"].strip()
 			if author == None or author == "":
@@ -413,6 +414,7 @@ def main():
 
 		#add the author(s) extracted from author pages
 		elif code in authors_ro:
+			print "autor2"
 			authors = monument["Arhitect"]
 			for author in authors_ro[code]:
 				if authors.find(author) == -1: #we don't already know the author
@@ -425,8 +427,15 @@ def main():
 				articleText = updateTableData(monument["source"], code, "Creatori", authors, text=articleText)
 			else:
 				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
+
+		elif pic_author <> None and pic_author.strip() <> "":
+			print "autor3"
+			if pic_author <> strainu.stripLink(monument["Arhitect"]).strip():
+				articleText = updateTableData(monument["source"], code, "Creatori", pic_author, text=articleText)
+
 		#try to find the author in external data
 		elif code in other_data and "Creatori" in other_data[code]:
+			print "autor4"
 			authors = monument["Arhitect"].strip()
 			author = other_data[code]["Creatori"]
 			if authors <> u"" and authors.find(author) == -1: #we don't already know the author
@@ -441,10 +450,6 @@ def main():
 				articleText = updateTableData(monument["source"], code, "Creatori", authors, text=articleText)
 			else:
 				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
-
-		elif pic_author <> None:
-			if pic_author <> strainu.stripLink(monument["Arhitect"]).strip():
-				articleText = updateTableData(monument["source"], code, "Creatori", pic_author, text=articleText)
 	
 		#image from Commons, none in the list
 		if picture <> None and monument["Imagine"].strip() == "":
@@ -551,10 +556,10 @@ def main():
 				ask = True
 				if otherSrc[5:] == monument["CodRan"]:
 					ask = False
-				#articleText = updateTableData(monument["source"], code, "Lat", str(otherLat), 
-				#				upload = False, text = articleText, ask = ask)
-				#articleText = updateTableData(monument["source"], code, "Lon", str(otherLong), 
-				#				upload = True, text = articleText, ask = ask)
+				articleText = updateTableData(monument["source"], code, "Lat", str(otherLat), 
+								upload = False, text = articleText, ask = ask)
+				articleText = updateTableData(monument["source"], code, "Lon", str(otherLong), 
+								upload = True, text = articleText, ask = ask)
 			
 		#Codes from 1992
 		if lmi92 <> None:
