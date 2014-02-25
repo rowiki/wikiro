@@ -441,9 +441,9 @@
       "author": null, 
       "ran": null, 
       "image": null, 
-      "long": 23.059444444444, 
+      "long": 0, 
       "project": "commons", 
-      "lat": 47.175827777778, 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -550,20 +550,6 @@
       "code": "BV-II-a-A-11294", 
       "lastedit": "20120909102248", 
       "name": "Category:Fortifications in Bra\u015fov", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "commons", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
-  "AG-II-a-A-13805": [
-    {
-      "code": "AG-II-a-A-13805", 
-      "lastedit": "20120827073753", 
-      "name": "Category:Ansamblul conacului Br\u0103tianu - \"Florica\"", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -721,9 +707,9 @@
       "author": null, 
       "ran": null, 
       "image": null, 
-      "long": 26.083667, 
+      "long": 0, 
       "project": "commons", 
-      "lat": 44.454368888889, 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -842,7 +828,7 @@
   "MS-II-m-A-15575": [
     {
       "code": "MS-II-m-A-15575", 
-      "lastedit": "20130529115853", 
+      "lastedit": "20140214182830", 
       "name": "Category:Mure\u0219 County Prefecture", 
       "author": null, 
       "ran": null, 
@@ -1103,6 +1089,20 @@
       "project": "commons", 
       "lat": 0, 
       "quality": false
+    }
+  ], 
+  "BC-II-m-B-00903": [
+    {
+      "project": "commons", 
+      "ran": null, 
+      "code": "BC-II-m-B-00903", 
+      "lastedit": "20140225170217", 
+      "name": "Category:Wooden church in \u0218esuri, Bac\u0103u", 
+      "author": null, 
+      "lat": 0, 
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "B-II-m-B-19728": [
@@ -1528,7 +1528,7 @@
   "AB-II-m-A-00177.01": [
     {
       "code": "AB-II-m-A-00177.01", 
-      "lastedit": "20131113215408", 
+      "lastedit": "20140207164125", 
       "name": "Category:Wooden church in Arie\u0219eni, Alba", 
       "author": null, 
       "ran": null, 
@@ -1651,11 +1651,11 @@
       "quality": false
     }
   ], 
-  "TM-II-s-A-06095": [
+  "BH-II-m-B-01156": [
     {
-      "code": "TM-II-s-A-06095", 
-      "lastedit": "20120907162049", 
-      "name": "Category:Serbian Community House, Timi\u015foara", 
+      "code": "BH-II-m-B-01156", 
+      "lastedit": "20120806113511", 
+      "name": "Category:Wooden church in Gurbe\u0219ti, Bihor", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -1948,7 +1948,7 @@
   "AB-II-m-B-00255": [
     {
       "code": "AB-II-m-B-00255", 
-      "lastedit": "20120802203958", 
+      "lastedit": "20140207172035", 
       "name": "Category:Wooden church in No\u0219lac, Alba", 
       "author": null, 
       "ran": null, 
@@ -2009,9 +2009,9 @@
       "author": null, 
       "ran": null, 
       "image": null, 
-      "long": 26.085277, 
+      "long": 0, 
       "project": "commons", 
-      "lat": 44.454843888889, 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -2479,16 +2479,16 @@
   ], 
   "IS-II-m-A-04069": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "IS-II-m-A-04069", 
       "lastedit": "20140203184459", 
       "name": "Category:The Metropolitan Cathedral in Ia\u015fi", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "IS-III-m-B-04319": [
@@ -2538,6 +2538,20 @@
       "code": "SB-II-m-A-12400.01", 
       "lastedit": "20120907152534", 
       "name": "Category:Biserica fortificat\u0103 din Hosman", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "AB-II-m-A-00231": [
+    {
+      "code": "AB-II-m-A-00231", 
+      "lastedit": "20140207163352", 
+      "name": "Category:Wooden church in Ghirbom, Alba", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -3558,7 +3572,7 @@
   "BH-II-m-A-01086": [
     {
       "code": "BH-II-m-A-01086", 
-      "lastedit": "20131119142742", 
+      "lastedit": "20140214182658", 
       "name": "Category:Black Eagle Palace", 
       "author": null, 
       "ran": null, 
@@ -4538,7 +4552,7 @@
   "AB-II-m-B-00394": [
     {
       "code": "AB-II-m-B-00394", 
-      "lastedit": "20120907122143", 
+      "lastedit": "20140216202133", 
       "name": "Category:Martinuzzi Castle", 
       "author": null, 
       "ran": null, 
@@ -4692,7 +4706,7 @@
   "B-II-m-A-19875": [
     {
       "code": "B-II-m-A-19875", 
-      "lastedit": "20121119142009", 
+      "lastedit": "20140218190632", 
       "name": "Category:Dissescu House, Bucharest", 
       "author": null, 
       "ran": null, 
@@ -4804,7 +4818,7 @@
   "AB-II-m-A-00262": [
     {
       "code": "AB-II-m-A-00262", 
-      "lastedit": "20120802202107", 
+      "lastedit": "20140207172256", 
       "name": "Category:Wooden church in Pianu de Sus, Alba", 
       "author": null, 
       "ran": null, 
@@ -6223,9 +6237,9 @@
       "author": null, 
       "ran": null, 
       "image": null, 
-      "long": 26.820555555556, 
+      "long": 0, 
       "project": "commons", 
-      "lat": 45.153611111111, 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -6677,11 +6691,11 @@
       "quality": false
     }
   ], 
-  "TM-II-a-A-06097": [
+  "AG-II-a-A-13805": [
     {
-      "code": "TM-II-a-A-06097", 
-      "lastedit": "20120912111651", 
-      "name": "Category:Neptun Public Bath, Timi\u015foara", 
+      "code": "AG-II-a-A-13805", 
+      "lastedit": "20120827073753", 
+      "name": "Category:Ansamblul conacului Br\u0103tianu - \"Florica\"", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -7337,16 +7351,16 @@
   ], 
   "CT-II-m-A-02856": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "CT-II-m-A-02856", 
       "lastedit": "20140204154904", 
       "name": "Category:Military House of Constan\u021ba", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "VL-II-m-B-09790": [
@@ -7587,6 +7601,20 @@
       "quality": false
     }
   ], 
+  "B-II-a-B-18183": [
+    {
+      "code": "B-II-a-B-18183", 
+      "lastedit": "20140218145320", 
+      "name": "Category:Strada Hristo Botev", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-II-m-B-18722": [
     {
       "code": "B-II-m-B-18722", 
@@ -7772,7 +7800,7 @@
   "B-II-m-B-18118": [
     {
       "code": "B-II-m-B-18118", 
-      "lastedit": "20131008201832", 
+      "lastedit": "20140208110842", 
       "name": "Category:B\u0103r\u0103\u0163ia din Bucure\u015fti", 
       "author": null, 
       "ran": null, 
@@ -8071,9 +8099,9 @@
       "author": null, 
       "ran": null, 
       "image": null, 
-      "long": 23.58983, 
+      "long": 0, 
       "project": "commons", 
-      "lat": 46.76954, 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -8166,6 +8194,20 @@
       "code": "IS-II-m-A-03852.02", 
       "lastedit": "20120907142530", 
       "name": "Category:Golia Monastery Priory", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-18198": [
+    {
+      "code": "B-II-m-B-18198", 
+      "lastedit": "20140218145706", 
+      "name": "Category:Cretzulescu Commercial School", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -8304,7 +8346,7 @@
   "AB-II-m-A-00312": [
     {
       "code": "AB-II-m-A-00312", 
-      "lastedit": "20120802201537", 
+      "lastedit": "20140207172457", 
       "name": "Category:Wooden church in Runc (Ocoli\u0219), Alba", 
       "author": null, 
       "ran": null, 
@@ -8318,7 +8360,7 @@
   "AB-II-m-A-00314": [
     {
       "code": "AB-II-m-A-00314", 
-      "lastedit": "20120802201606", 
+      "lastedit": "20140207172741", 
       "name": "Category:Wooden church in S\u0103li\u0219tea, Alba", 
       "author": null, 
       "ran": null, 
@@ -8371,20 +8413,6 @@
       "quality": false
     }
   ], 
-  "BH-II-m-B-01156": [
-    {
-      "code": "BH-II-m-B-01156", 
-      "lastedit": "20120806113511", 
-      "name": "Category:Wooden church in Gurbe\u0219ti, Bihor", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "commons", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
   "B-IV-m-A-20105": [
     {
       "code": "B-IV-m-A-20105", 
@@ -8393,9 +8421,9 @@
       "author": null, 
       "ran": null, 
       "image": null, 
-      "long": 26.096666666667, 
+      "long": 0, 
       "project": "commons", 
-      "lat": 44.411388888889, 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -11028,7 +11056,7 @@
   "MS-II-m-A-15503": [
     {
       "code": "MS-II-m-A-15503", 
-      "lastedit": "20130430202933", 
+      "lastedit": "20140214182703", 
       "name": "Category:Culture Palace, T\u00e2rgu Mure\u015f", 
       "author": null, 
       "ran": null, 
@@ -11361,6 +11389,20 @@
       "quality": false
     }
   ], 
+  "B-II-m-B-18440": [
+    {
+      "code": "B-II-m-B-18440", 
+      "lastedit": "20140218191336", 
+      "name": "Category:Macca House, Bucharest", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BN-II-m-A-01661": [
     {
       "code": "BN-II-m-A-01661", 
@@ -11672,8 +11714,8 @@
   "TM-II-a-B-06114": [
     {
       "code": "TM-II-a-B-06114", 
-      "lastedit": "20120907162036", 
-      "name": "Category:National Bank of Romania, Timi\u015foara", 
+      "lastedit": "20140219120054", 
+      "name": "Category:Ansamblul urban IX, Timi\u0219oara", 
       "author": null, 
       "ran": null, 
       "image": null, 
