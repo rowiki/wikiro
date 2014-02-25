@@ -10,14 +10,24 @@ class OverpassRequest:
 		self.base = os.path.join("/", base, "interpreter")
 		self._api = api
 		self._poly = poly
+		print api
+		print base
+		print poly
+		print filters
+		print output
 		self._filters = filters
 		self._output = output
+		
 	def buildRequest(self, req_type, poly, filters, output):
-		req = unicode("[out:json];", "utf8")
+		req = unicode("[out:" + output + "];", "utf8")
+		if type(poly) == str or type(poly) == unicode:
+			p = poly
+		else:
+			raise NotImplementedError 
 		vars = u"("
 		for filts in filters:
 			vars += u"." + filts + u";"
-			req += u"\narea[name=\"România\"]; " + req_type + u"(area)"
+			req += u"\narea[name=\"" + p + "\"]; " + req_type + u"(area)"
 			for filt in filters[filts]:
 				req += u"[\"" + filt + u"\""
 				f = filters[filts][filt]
@@ -29,7 +39,7 @@ class OverpassRequest:
 			req += u"->." + filts + u";"
 		req += u"\n" + vars + u");"
 		req += u"\nout body;"
-		#print req
+		print req
 		return req.encode("utf8")
 
 	def makeRequest(self, req=None):

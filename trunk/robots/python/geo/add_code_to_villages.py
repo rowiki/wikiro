@@ -33,7 +33,7 @@ filters = {
 	}
 
 api = OsmApi.OsmApi(api="api.openstreetmap.org", passwordfile = "../osmpasswd", debug = True)
-bot = overpass.OverpassRequest(poly=None, filters=filters, output="json")
+bot = overpass.OverpassRequest(poly=u"România", filters=filters, output="json")
 
 def upload(node_id, code):
 	if not node_id:
