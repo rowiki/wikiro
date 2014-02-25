@@ -50,12 +50,14 @@ filters = {
 	u"a": {
 	u"addr:postcode": None,
 	u"siruta:code": (u".", False),
+	u"amenity": (u"post_office", False),
 	},
 	u"b": {
 	u"postal_code": None,
 	u"siruta:code": (u".", False),
+	u"amenity": (u"post_office", False),
 	},
-	}
+}
 
 log = None
 
@@ -144,7 +146,8 @@ class PostcodeErrLog:
 			"E7": u"Strada nu corespunde între OSM și poștă",
 			"E8": u"Numărul nu corespunde între OSM și poștă",
 		}
-		self._log = u"""
+		self._log = u"""Această pagină conține diverse informații despre codurile poștale din România. O parte din informații provin de pe site-ul [http://date.gov.ro/dataset/coduri-postale-romania date.gov.ro] și sunt licențiate sub licența [http://data.gov.ro/base/images/logoinst/OGL-ROU-1.0.pdf OGL-ROU-1.0].
+		
 == Erori în codurile poștale de pe OSM ==
 {|class="wikitable sortable"
 ! Tip
