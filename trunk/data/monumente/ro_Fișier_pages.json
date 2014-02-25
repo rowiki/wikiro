@@ -77,6 +77,56 @@
       "quality": false
     }
   ], 
+  "CJ-II-m-B-07687": [
+    {
+      "code": "CJ-II-m-B-07687", 
+      "lastedit": "20140216184951", 
+      "name": "Fi\u0219ier:Biserica de lemn din Lacu DSCF7587.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07687", 
+      "lastedit": "20140216184956", 
+      "name": "Fi\u0219ier:Biserica de lemn din Lacu DSCF7588.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07687", 
+      "lastedit": "20140216185000", 
+      "name": "Fi\u0219ier:Biserica de lemn din Lacu DSCF7589.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07687", 
+      "lastedit": "20140216185003", 
+      "name": "Fi\u0219ier:Biserica de lemn din Lacu DSCF7590.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "AB-II-a-B-00182": [
     {
       "code": "AB-II-a-B-00182", 
@@ -127,11 +177,25 @@
       "quality": false
     }
   ], 
-  "B-II-m-B-17947": [
+  "CJ-II-m-B-07689": [
     {
-      "code": "B-II-m-B-17947", 
-      "lastedit": "20131009111552", 
-      "name": "Fi\u0219ier:Muzeul Storck - cladirea 2012.01.14.jpg", 
+      "code": "CJ-II-m-B-07689", 
+      "lastedit": "20140216185207", 
+      "name": "Fi\u0219ier:Biserica de lemn din Livada.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "VL-II-m-B-09729": [
+    {
+      "code": "VL-II-m-B-09729", 
+      "lastedit": "20140216165753", 
+      "name": "Fi\u0219ier:Biserica de lemn din Cop\u0103ceni-Racovi\u0163a02.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -791,11 +855,23 @@
       "quality": false
     }
   ], 
-  "BN-II-m-A-01450": [
+  "CJ-II-m-B-07592": [
     {
-      "code": "BN-II-m-A-01450", 
-      "lastedit": "20130605220725", 
-      "name": "Fi\u0219ier:Biserica Evanghelic\u0103 Bistri\u0163a2.jpg", 
+      "code": "CJ-II-m-B-07592", 
+      "lastedit": "20140216172249", 
+      "name": "Fi\u0219ier:Biserica de lemn din Dangau mic3.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07592", 
+      "lastedit": "20140216172246", 
+      "name": "Fi\u0219ier:Biserica de lemn din Dangau Mic100.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -846,6 +922,56 @@
       "code": "B-III-m-B-19998", 
       "lastedit": "20131204210226", 
       "name": "Fi\u0219ier:George Enescu - sculptura de Ion Jalea.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CJ-II-m-B-07595": [
+    {
+      "code": "CJ-II-m-B-07595", 
+      "lastedit": "20140216175551", 
+      "name": "Fi\u0219ier:Biserica de lemn din Dealu negru1.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07595", 
+      "lastedit": "20140216175553", 
+      "name": "Fi\u0219ier:Biserica de lemn din Dealu negru2.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07595", 
+      "lastedit": "20140216175556", 
+      "name": "Fi\u0219ier:Biserica de lemn din Dealu negru3.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07595", 
+      "lastedit": "20140216175558", 
+      "name": "Fi\u0219ier:Biserica de lemn din Dealu Negru5.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -952,6 +1078,34 @@
       "code": "BH-II-m-B-01104", 
       "lastedit": "20131201001239", 
       "name": "Fi\u0219ier:Biserica de lemn din Brusturi-pictura.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-A-18221": [
+    {
+      "code": "B-II-m-A-18221", 
+      "lastedit": "20140218151737", 
+      "name": "Fi\u0219ier:Palatul Sutu.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "TM-II-m-A-06103.03": [
+    {
+      "code": "TM-II-m-A-06103.03", 
+      "lastedit": "20140216160546", 
+      "name": "Fi\u0219ier:Bastion Timisoara.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -1098,6 +1252,20 @@
       "code": "SB-II-m-A-12010.05", 
       "lastedit": "20131015113319", 
       "name": "Fi\u0219ier:Santul de apa.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-17947": [
+    {
+      "code": "B-II-m-B-17947", 
+      "lastedit": "20131009111552", 
+      "name": "Fi\u0219ier:Muzeul Storck - cladirea 2012.01.14.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -1517,6 +1685,68 @@
       "quality": false
     }
   ], 
+  "SJ-II-m-B-05086": [
+    {
+      "code": "SJ-II-m-B-05086", 
+      "lastedit": "20140217221535", 
+      "name": "Fi\u0219ier:Biserica de lemn din Negreni120.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SJ-II-m-B-05086", 
+      "lastedit": "20140217221537", 
+      "name": "Fi\u0219ier:Biserica de lemn din Negreni121.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SJ-II-m-B-05086", 
+      "lastedit": "20140217221539", 
+      "name": "Fi\u0219ier:Biserica de lemn din Negreni122.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SJ-II-m-B-05086", 
+      "lastedit": "20140217221541", 
+      "name": "Fi\u0219ier:Biserica de lemn din Negreni123.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SJ-II-m-B-05086", 
+      "lastedit": "20140217221543", 
+      "name": "Fi\u0219ier:Biserica de lemn din Negreni124.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-III-m-B-19983": [
     {
       "code": "B-III-m-B-19983", 
@@ -1689,6 +1919,68 @@
       "quality": false
     }
   ], 
+  "VL-II-m-B-09908": [
+    {
+      "code": "VL-II-m-B-09908", 
+      "lastedit": "20140216162137", 
+      "name": "Fi\u0219ier:Biserica Cuvioasa Paraschiva din Sinesti in feb. 2002.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09908", 
+      "lastedit": "20140218110052", 
+      "name": "Fi\u0219ier:Biserica Cuvioasa Paraschiva din Sinesti in feb. 2002 (1).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09908", 
+      "lastedit": "20140218110153", 
+      "name": "Fi\u0219ier:Biserica de lemn Cuvioasa Paraschiva Sinesti in feb 2002.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09908", 
+      "lastedit": "20140216162228", 
+      "name": "Fi\u0219ier:Sinesti VL.bis lemn.pisania.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09908", 
+      "lastedit": "20140218110241", 
+      "name": "Fi\u0219ier:Sinesti VL.bislemn.intrarea.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "SV-IV-m-B-05695": [
     {
       "code": "SV-IV-m-B-05695", 
@@ -1772,6 +2064,32 @@
       "code": "BV-II-a-B-11697", 
       "lastedit": "20131008150701", 
       "name": "Fi\u0219ier:Felmer - Biserica si fosta scoala.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "VL-II-m-B-09789": [
+    {
+      "code": "VL-II-m-B-09789", 
+      "lastedit": "20140216183814", 
+      "name": "Fi\u0219ier:Biserica de lemn din Igoiu01.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09789", 
+      "lastedit": "20140216184345", 
+      "name": "Fi\u0219ier:Biserica de lemn din Igoiu02.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -2479,6 +2797,20 @@
       "quality": false
     }
   ], 
+  "GJ-II-m-B-09367": [
+    {
+      "code": "GJ-II-m-B-09367", 
+      "lastedit": "20131030223520", 
+      "name": "Fi\u0219ier:SaceluGJ (5).JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BN-II-a-A-01459": [
     {
       "code": "BN-II-a-A-01459", 
@@ -2493,11 +2825,59 @@
       "quality": false
     }
   ], 
-  "IF-II-a-B-15274": [
+  "CJ-II-m-B-07543": [
     {
-      "code": "IF-II-a-B-15274", 
-      "lastedit": "20131009075033", 
-      "name": "Fi\u0219ier:Manastirea Samurcasesti - intrarea.jpg", 
+      "code": "CJ-II-m-B-07543", 
+      "lastedit": "20140216164208", 
+      "name": "Fi\u0219ier:Biserica de lemn din Caianu.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07543", 
+      "lastedit": "20140216164154", 
+      "name": "Fi\u0219ier:Biserica de lemn din Caianu1.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07543", 
+      "lastedit": "20140216164158", 
+      "name": "Fi\u0219ier:Biserica de lemn din Caianu2.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07543", 
+      "lastedit": "20140216164201", 
+      "name": "Fi\u0219ier:Biserica de lemn din Caianu3.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07543", 
+      "lastedit": "20140216164205", 
+      "name": "Fi\u0219ier:Biserica de lemn din Caianu4.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -2819,6 +3199,32 @@
       "quality": false
     }
   ], 
+  "VL-II-m-B-09838": [
+    {
+      "code": "VL-II-m-B-09838", 
+      "lastedit": "20140217222859", 
+      "name": "Fi\u0219ier:Biserica de lemn din Obislavu01.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09838", 
+      "lastedit": "20140217222902", 
+      "name": "Fi\u0219ier:Biserica de lemn din Obislavu02.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BV-II-m-B-11775": [
     {
       "code": "BV-II-m-B-11775", 
@@ -2942,6 +3348,116 @@
       "code": "CV-II-m-A-13327", 
       "lastedit": "20131019185852", 
       "name": "Fi\u0219ier:Biserica de lemn din Zabala01.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CJ-II-m-B-07551": [
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092522", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina D2.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092524", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina D3.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092527", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina D4.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092529", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina DSCF8010.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092537", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina DSCF8025.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092518", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina 2 DSCF8025.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092532", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina DSCF8019.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092540", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina 2 DSCF8021.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07551", 
+      "lastedit": "20131202092534", 
+      "name": "Fi\u0219ier:Biserica de lemn din Catalina DSCF8022.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -3961,11 +4477,11 @@
       "quality": false
     }
   ], 
-  "CJ-II-m-B-07551": [
+  "AB-II-m-B-00255": [
     {
-      "code": "CJ-II-m-B-07551", 
-      "lastedit": "20131202092522", 
-      "name": "Fi\u0219ier:Biserica de lemn din Catalina D2.jpg", 
+      "code": "AB-II-m-B-00255", 
+      "lastedit": "20140217222533", 
+      "name": "Fi\u0219ier:Biserica de lemn din Noslac2.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -3975,9 +4491,9 @@
       "quality": false
     }, 
     {
-      "code": "CJ-II-m-B-07551", 
-      "lastedit": "20131202092524", 
-      "name": "Fi\u0219ier:Biserica de lemn din Catalina D3.jpg", 
+      "code": "AB-II-m-B-00255", 
+      "lastedit": "20140217222518", 
+      "name": "Fi\u0219ier:Biserica de lemn din Noslac3.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -3987,81 +4503,9 @@
       "quality": false
     }, 
     {
-      "code": "CJ-II-m-B-07551", 
-      "lastedit": "20131202092527", 
-      "name": "Fi\u0219ier:Biserica de lemn din Catalina D4.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07551", 
-      "lastedit": "20131202092529", 
-      "name": "Fi\u0219ier:Biserica de lemn din Catalina DSCF8010.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07551", 
-      "lastedit": "20131202092537", 
-      "name": "Fi\u0219ier:Biserica de lemn din Catalina DSCF8025.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07551", 
-      "lastedit": "20131202092518", 
-      "name": "Fi\u0219ier:Biserica de lemn din Catalina 2 DSCF8025.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07551", 
-      "lastedit": "20131202092532", 
-      "name": "Fi\u0219ier:Biserica de lemn din Catalina DSCF8019.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07551", 
-      "lastedit": "20131202092540", 
-      "name": "Fi\u0219ier:Biserica de lemn din Catalina 2 DSCF8021.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07551", 
-      "lastedit": "20131202092534", 
-      "name": "Fi\u0219ier:Biserica de lemn din Catalina DSCF8022.JPG", 
+      "code": "AB-II-m-B-00255", 
+      "lastedit": "20140217222512", 
+      "name": "Fi\u0219ier:Biserica de lemn din Noslac6.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -4422,6 +4866,32 @@
       "code": "B-II-m-A-18941", 
       "lastedit": "20131015114932", 
       "name": "Fi\u0219ier:Statuie alegorica 6 - Palatul de Justitie din Bucuresti, sculptor Carol Storck.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CJ-II-m-B-07529": [
+    {
+      "code": "CJ-II-m-B-07529", 
+      "lastedit": "20140216161747", 
+      "name": "Fi\u0219ier:Berchies,Cluj-529.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07529", 
+      "lastedit": "20140216161739", 
+      "name": "Fi\u0219ier:Berchies,Cluj-526.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -5309,11 +5779,23 @@
       "quality": false
     }
   ], 
-  "GJ-II-m-B-09367": [
+  "VL-II-m-B-09890": [
     {
-      "code": "GJ-II-m-B-09367", 
-      "lastedit": "20131030223520", 
-      "name": "Fi\u0219ier:SaceluGJ (5).JPG", 
+      "code": "VL-II-m-B-09890", 
+      "lastedit": "20140218172329", 
+      "name": "Fi\u0219ier:Biserica de lemn din Racu01.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09890", 
+      "lastedit": "20140218172332", 
+      "name": "Fi\u0219ier:Biserica de lemn din Racu02.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -5323,11 +5805,83 @@
       "quality": false
     }
   ], 
-  "VL-II-m-B-09693.03": [
+  "VL-II-m-B-09891": [
     {
-      "code": "VL-II-m-B-09693.03", 
-      "lastedit": "20131018123611", 
-      "name": "Fi\u0219ier:Biserica de lemn din Mrene\u015fti01.jpg", 
+      "code": "VL-II-m-B-09891", 
+      "lastedit": "20140218172535", 
+      "name": "Fi\u0219ier:Biserica de lemn din Raureni01.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09891", 
+      "lastedit": "20140218172528", 
+      "name": "Fi\u0219ier:Biserica de lemn din Raureni02.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09891", 
+      "lastedit": "20131101164502", 
+      "name": "Fi\u0219ier:Raureni.bis lemn.N.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09891", 
+      "lastedit": "20140218172521", 
+      "name": "Fi\u0219ier:Raureni.bis lemn.SE.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09891", 
+      "lastedit": "20140218172523", 
+      "name": "Fi\u0219ier:Raureni.bis lemn.portal.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09891", 
+      "lastedit": "20140218172531", 
+      "name": "Fi\u0219ier:Raureni.bis lemn.pisania.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VL-II-m-B-09891", 
+      "lastedit": "20140218172526", 
+      "name": "Fi\u0219ier:Raureni.bis lemn.baza stalp.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -5368,20 +5922,6 @@
       "code": "AR-II-m-A-00592", 
       "lastedit": "20131201001437", 
       "name": "Fi\u0219ier:Biserica de lemn din Budesti3.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
-  "VL-II-m-B-09891": [
-    {
-      "code": "VL-II-m-B-09891", 
-      "lastedit": "20131101164502", 
-      "name": "Fi\u0219ier:Raureni.bis lemn.N.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -5484,6 +6024,72 @@
       "code": "B-II-m-B-18680", 
       "lastedit": "20131018111430", 
       "name": "Fi\u0219ier:Cinema Bucuresti - Monument istoric LMI B-II-m-B-18680.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CJ-II-m-B-07732": [
+    {
+      "code": "CJ-II-m-B-07732", 
+      "lastedit": "20140218171920", 
+      "name": "Fi\u0219ier:Biserica de lemn din P\u0103dureni.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07732", 
+      "lastedit": "20140218171923", 
+      "name": "Fi\u0219ier:Biserica de lemn din Padureni2.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07732", 
+      "lastedit": "20140217223349", 
+      "name": "Fi\u0219ier:Biserica de lemn din Padureni1.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "IF-II-a-B-15274": [
+    {
+      "code": "IF-II-a-B-15274", 
+      "lastedit": "20131009075033", 
+      "name": "Fi\u0219ier:Manastirea Samurcasesti - intrarea.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CJ-II-m-B-07730": [
+    {
+      "code": "CJ-II-m-B-07730", 
+      "lastedit": "20140217223136", 
+      "name": "Fi\u0219ier:Biserica de lemn din Osoi1.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -5603,32 +6209,6 @@
       "quality": false
     }
   ], 
-  "AR-I-s-A-00450": [
-    {
-      "code": "AR-I-s-A-00450", 
-      "lastedit": "20131008143330", 
-      "name": "Fi\u0219ier:Cetatuie Savarsin 08-01.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "AR-I-s-A-00450", 
-      "lastedit": "20131008143334", 
-      "name": "Fi\u0219ier:Cetatuie Savarsin 08-02.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
   "BH-IV-m-B-01249": [
     {
       "code": "BH-IV-m-B-01249", 
@@ -5686,6 +6266,20 @@
       "code": "VL-II-m-B-09976", 
       "lastedit": "20131019190224", 
       "name": "Fi\u0219ier:Biserica de lemn din Zatreni02.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CJ-II-m-B-07695": [
+    {
+      "code": "CJ-II-m-B-07695", 
+      "lastedit": "20140217071750", 
+      "name": "Fi\u0219ier:Biserica de lemn din Luncani.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -5975,6 +6569,20 @@
       "quality": false
     }
   ], 
+  "BV-II-m-A-11692": [
+    {
+      "code": "BV-II-m-A-11692", 
+      "lastedit": "20140216162651", 
+      "name": "Fi\u0219ier:Biserica Brancoveanu din Fagaras.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "HR-II-m-B-12998": [
     {
       "code": "HR-II-m-B-12998", 
@@ -6238,7 +6846,7 @@
     }, 
     {
       "code": "MS-III-m-A-16078", 
-      "lastedit": "20140117190824", 
+      "lastedit": "20140207131542", 
       "name": "Fi\u0219ier:Statuia lui Avram Iancu, Tg. Mure\u015f.JPG", 
       "author": null, 
       "ran": null, 
@@ -6362,6 +6970,20 @@
       "code": "SB-II-m-B-12407", 
       "lastedit": "20131206104325", 
       "name": "Fi\u0219ier:Biserica de lemn din Ilimbav11.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-II-m-B-01175": [
+    {
+      "code": "BH-II-m-B-01175", 
+      "lastedit": "20140217213657", 
+      "name": "Fi\u0219ier:Biserica de lemn din Mierag100.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
