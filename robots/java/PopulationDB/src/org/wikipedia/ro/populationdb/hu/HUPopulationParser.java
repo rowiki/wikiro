@@ -298,8 +298,8 @@ public class HUPopulationParser {
                     final String settlementName = substringAfter(substringAfter(firstCellString, " "), " ");
                     final Settlement settlement = hib.getSettlementByName(settlementName, district, currentUnitType);
 
-                    final List<String> columnHeader1 = Arrays.asList("Maghiari", "Bulgari", "Romi", "Croați", "Germani",
-                        "Armeni", "Români", "Ruteni", "Sârbi", "Slovaci", "Sloveni", "Ucraineni");
+                    final List<String> columnHeader1 = Arrays.asList("Maghiari", "Bulgari", "Romi", "Greci", "Croați",
+                        "Polonezi", "Germani", "Armeni", "Români", "Ruteni", "Sârbi", "Slovaci", "Sloveni", "Ucraineni");
                     final List<String> columnHeader2 = Arrays.asList("Arabi", "Chinezi", "Ruși", "Vietnamezi", "Alții");
 
                     Cell popCell = null;
@@ -317,8 +317,7 @@ public class HUPopulationParser {
                     for (int i = 0; i < columnHeader2.size() && cellIterator.hasNext(); i++) {
                         popCell = cellIterator.next();
                         if (popCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                            final Nationality nat = hib.getNationalityByName(columnHeader2.get(i));
-                            settlement.getEthnicStructure().put(nat, (int) popCell.getNumericCellValue());
+                            hib.getNationalityByName(columnHeader2.get(i));
                         }
                     }
                     hib.saveSettlement(settlement);
