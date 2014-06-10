@@ -49,6 +49,7 @@ import org.wikipedia.ro.populationdb.util.Executor;
 import org.wikipedia.ro.populationdb.util.ParameterReader;
 import org.wikipedia.ro.populationdb.util.SysoutExecutor;
 import org.wikipedia.ro.populationdb.util.Utilities;
+import org.wikipedia.ro.populationdb.util.WikiEditExecutor;
 
 public class HUWikiGenerator {
     private static final String NOTE_REFLIST = "\n== Note ==\n{{Reflist}}\n";
@@ -121,11 +122,11 @@ public class HUWikiGenerator {
         final HashMap pageInfo = rowiki.getPageInfo(categoryName);
         if (!BooleanUtils.isTrue((Boolean) pageInfo.get("exists"))) {
             final StringBuilder catText = new StringBuilder("[[Categorie:");
-            catText.append(town ? "Oraș" : "Comun");
+            catText.append(town ? "Oraș" : "Sat");
             catText.append("e în Ungaria|");
             catText.append(county.getName());
             catText.append("]]");
-            executor.save(categoryName, catText.toString(), "Robot: creare categorie pentru " + type + "e din Ungaria");
+            executor.save(categoryName, catText.toString(), "Robot: creare categorie pentru " + StringUtils.lowerCase(type) + "e din Ungaria");
         }
     }
 
@@ -491,10 +492,15 @@ public class HUWikiGenerator {
                 final Map<String, String> params = ibparamreader.getParams();
                 translateInfoboxParam(ibParams, "stemă", params, "címer");
                 translateInfoboxParam(ibParams, "lider_nume", params, "polgármester");
+                ibParams.put("lider_titlu", "Primar");
                 translateInfoboxParam(ibParams, "codpoștal", params, "irányítószám");
                 translateInfoboxParam(ibParams, "prefix_telefonic", params, "körzethívószám");
                 translateInfoboxParam(ibParams, "latd", params, "szélességi fok");
                 translateInfoboxParam(ibParams, "longd", params, "hosszúsági fok");
+                translateInfoboxParam(ibParams, "latm", params, "szélességi ívperc");
+                translateInfoboxParam(ibParams, "lats", params, "szélességi ívmásodperc");
+                translateInfoboxParam(ibParams, "longm", params, "hosszúsági ívperc");
+                translateInfoboxParam(ibParams, "longs", params, "hosszúsági ívmásodperc");
                 if (params.containsKey("szélességi fok")) {
                     ibParams.put("pushpin_map", "Ungaria");
                     ibParams.put("latNS", "N");
@@ -1097,7 +1103,7 @@ public class HUWikiGenerator {
         rowiki = new Wiki("ro.wikipedia.org");
         huwiki = new Wiki("hu.wikipedia.org");
         dwiki = new Wikibase();
-        executor = new SysoutExecutor();
+        executor = new WikiEditExecutor(rowiki, dwiki);
 
         final Properties credentials = new Properties();
         credentials.load(HUWikiGenerator.class.getClassLoader().getResourceAsStream("credentials.properties"));
