@@ -1022,9 +1022,9 @@ public class HUWikiGenerator {
         int otherEthn = 0;
         for (final Nationality nat : ethnicitiesList) {
             final int natpop = defaultIfNull(ethnicStructure.get(nat), 0);
-            if (natpop * 100.0 / population > 1.0 && !startsWithAny(nat.getName(), "Ne", "Afiliați") && 0 < natpop) {
+            if (natpop * 100.0 / population > 1.0 && !startsWithAny(nat.getName(), "Ne", "Alți") && 0 < natpop) {
                 dataset.setValue(nat.getName(), natpop);
-            } else if (natpop * 100.0 / population <= 1.0 && !startsWithAny(nat.getName(), "Ne", "Afiliați") && 0 < natpop) {
+            } else if (natpop * 100.0 / population <= 1.0 && !startsWithAny(nat.getName(), "Ne", "Alți") && 0 < natpop) {
                 smallGroups.put(nat.getName(), natpop);
             } else if (startsWithAny(nat.getName(), "Alți", "Neclasificat")) {
                 otherEthn += natpop;
@@ -1042,7 +1042,9 @@ public class HUWikiGenerator {
             for (final String smallGroup : smallGroups.keySet()) {
                 smallSum += ObjectUtils.defaultIfNull(smallGroups.get(smallGroup), 0);
             }
-            dataset.setValue("Neclasificat", smallSum);
+            if (0 < smallSum) {
+                dataset.setValue("Neclasificat", smallSum);
+            }
         } else {
             for (final String natname : smallGroups.keySet()) {
                 if (!startsWithAny(natname, "Ne") && !startsWithAny(natname, "Alți") && smallGroups.containsKey(natname)) {
@@ -1210,7 +1212,7 @@ public class HUWikiGenerator {
         final List<Nationality> ret = new ArrayList<Nationality>();
         for (final Nationality nat : settl.getEthnicStructure().keySet()) {
             final double weight = settl.getEthnicStructure().get(nat) / (double) settl.getPopulation();
-            if (weight <= 0.5 && weight > 0.01 && !startsWithAny(nat.getName(), "Altele", "Ne")) {
+            if (weight <= 0.5 && weight > 0.01 && !startsWithAny(nat.getName(), "Alți", "Ne")) {
                 ret.add(nat);
             }
         }
