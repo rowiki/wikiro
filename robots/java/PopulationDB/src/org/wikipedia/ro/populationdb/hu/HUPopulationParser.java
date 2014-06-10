@@ -317,7 +317,8 @@ public class HUPopulationParser {
                     for (int i = 0; i < columnHeader2.size() && cellIterator.hasNext(); i++) {
                         popCell = cellIterator.next();
                         if (popCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                            hib.getNationalityByName(columnHeader2.get(i));
+                            final Nationality nat = hib.getNationalityByName(columnHeader2.get(i));
+                            settlement.getEthnicStructure().put(nat, (int) popCell.getNumericCellValue());
                         }
                     }
                     hib.saveSettlement(settlement);
@@ -410,6 +411,11 @@ public class HUPopulationParser {
                         popCell = cellIterator.next();
                         if (popCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
                             settlement.getHistoricalPopulation().put(censi.get(i), (int) popCell.getNumericCellValue());
+                        }
+                    }
+                    for (int i = 0; i < 6; i++) {
+                        if (cellIterator.hasNext()) {
+                            popCell = cellIterator.next();
                         }
                     }
                     if (cellIterator.hasNext()) {
