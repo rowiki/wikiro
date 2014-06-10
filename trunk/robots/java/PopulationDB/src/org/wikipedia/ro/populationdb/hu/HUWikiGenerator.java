@@ -10,6 +10,7 @@ import static org.apache.commons.lang3.StringUtils.startsWithAny;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.text.RuleBasedCollator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -144,7 +145,8 @@ public class HUWikiGenerator {
                                 for (final String categ : categories) {
                                     if (StringUtils.startsWithAny(categ, "Categorie:Orașe în Ungaria",
                                         "Categorie:Orașe în județul ", "Categorie:Sate în Ungaria",
-                                        "Categorie:Sate în județul ")) {
+                                        "Categorie:Sate în județul ", "Categorie:Orașe în comitatul",
+                                        "Categorie:Sate în comitatul")) {
                                         return candidateName;
                                     }
                                 }
@@ -222,16 +224,42 @@ public class HUWikiGenerator {
         });
 
         final List<String> townsLinks = new ArrayList<String>();
+        final List<String> capitalTownLink = new ArrayList<String>();
+        final List<String> majorTownsLinks = new ArrayList<String>();
         final List<String> communeLinks = new ArrayList<String>();
         for (final Settlement com : communes) {
             final String communeName = retrieveName(com);
             initCommune(com);
-            if (com.getTown() > 1) {
-                townsLinks.add("[[" + roWpNames.get(com).get() + "|" + communeName + "]]");
-            } else {
+            switch (com.getTown()) {
+            case 1:
                 communeLinks.add("[[" + roWpNames.get(com).get() + "|" + communeName + "]]");
+                break;
+            case 2:
+                townsLinks.add("[[" + roWpNames.get(com).get() + "|" + communeName + "]]");
+                break;
+            case 3:
+                majorTownsLinks.add("[[" + roWpNames.get(com).get() + "|" + communeName + "]]");
+                break;
+            case 4:
+                capitalTownLink.add("[[" + roWpNames.get(com).get() + "|" + communeName + "]]");
+                break;
+            default:
+                break;
             }
         }
+        final RuleBasedCollator huCollator = new RuleBasedCollator("< a,A < á,Á < b,B < c,C < cs,Cs < d,D < dz,Dz < dzs,Dzs"
+            + " < e,E < é,É < f,F < g,G < gy,Gy < h,H < i,I < í,Í < j,J"
+            + "< k,K < l,L < ly,Ly < m,M < n,N < ny,Ny < o,O < ó,Ó" + "< ö,Ö < ő,Ő < p,P < q,Q < r,R < s,S < sz,Sz < t,T"
+            + "< ty,Ty < u,U < ú,Ú < ü,Ü < ű,Ű < v,V < w,W < x,X < y,Y < z,Z < zs,Zs");
+        final Comparator<String> stringComparator = new Comparator<String>() {
+
+            public int compare(final String o1, final String o2) {
+                return huCollator.compare(o1, o2);
+            }
+        };
+        Collections.sort(townsLinks, stringComparator);
+        Collections.sort(communeLinks, stringComparator);
+        Collections.sort(majorTownsLinks, stringComparator);
 
         final String navTemplateName = "Județul " + county.getName();
 
@@ -240,14 +268,33 @@ public class HUWikiGenerator {
         navTemplateBuilder.append(county.getName());
         navTemplateBuilder.append("]]\n|nume=");
         navTemplateBuilder.append(navTemplateName);
-        navTemplateBuilder.append("\n|grup1=Orașe");
-        navTemplateBuilder.append("\n|listă1=<div>\n");
-        navTemplateBuilder.append(StringUtils.join(townsLinks.toArray(new String[townsLinks.size()]), "{{~}}\n"));
+        int nextGroup = 1;
+        navTemplateBuilder.append("\n|grup" + nextGroup + "=Reședința");
+        navTemplateBuilder.append("\n|listă" + nextGroup + "=<div>\n");
+        navTemplateBuilder.append(StringUtils.join(capitalTownLink.toArray(new String[capitalTownLink.size()]), "{{~}}\n"));
         navTemplateBuilder.append("\n</div>");
-        navTemplateBuilder.append("\n|grup2=Sate");
-        navTemplateBuilder.append("\n|listă2=<div>\n");
-        navTemplateBuilder.append(StringUtils.join(communeLinks.toArray(new String[communeLinks.size()]), "{{~}}\n"));
-        navTemplateBuilder.append("\n</div>");
+        if (0 < majorTownsLinks.size()) {
+            nextGroup++;
+            navTemplateBuilder.append("\n|grup" + nextGroup + "=Orașe de importanță națională");
+            navTemplateBuilder.append("\n|listă" + nextGroup + "=<div>\n");
+            navTemplateBuilder.append(StringUtils.join(majorTownsLinks.toArray(new String[majorTownsLinks.size()]),
+                "{{~}}\n"));
+            navTemplateBuilder.append("\n</div>");
+        }
+        if (0 < townsLinks.size()) {
+            nextGroup++;
+            navTemplateBuilder.append("\n|grup" + nextGroup + "=Orașe");
+            navTemplateBuilder.append("\n|listă" + nextGroup + "=<div>\n");
+            navTemplateBuilder.append(StringUtils.join(townsLinks.toArray(new String[townsLinks.size()]), "{{~}}\n"));
+            navTemplateBuilder.append("\n</div>");
+        }
+        if (0 < communeLinks.size()) {
+            nextGroup++;
+            navTemplateBuilder.append("\n|grup" + nextGroup + "=Sate");
+            navTemplateBuilder.append("\n|listă" + nextGroup + "=<div>\n");
+            navTemplateBuilder.append(StringUtils.join(communeLinks.toArray(new String[communeLinks.size()]), "{{~}}\n"));
+            navTemplateBuilder.append("\n</div>");
+        }
         navTemplateBuilder.append("}}<noinclude>[[Categorie:Formate de navigare județe din Ungaria]]</noinclude>");
 
         executor.save("Format:Județul " + county.getName(), navTemplateBuilder.toString(),
@@ -458,7 +505,7 @@ public class HUWikiGenerator {
 
     private void translateInfoboxParam(final Map<String, String> ibParams, final String toString,
                                        final Map<String, String> params, final String fromString) {
-        if (params.containsKey(fromString)) {
+        if (params.containsKey(fromString) && !StringUtils.isEmpty(params.get(fromString))) {
             ibParams.put(toString, params.get(fromString));
         }
     }
@@ -487,7 +534,7 @@ public class HUWikiGenerator {
         ibParams.put("nume_subdiviziune", "{{HUN}}");
         ibParams.put("nume_subdiviziune1", "[[Județul " + com.getDistrict().getCounty().getName() + "|"
             + com.getDistrict().getCounty().getName() + "]]");
-        ibParams.put("nume_subdiviziune1", "[[Districtul " + com.getDistrict().getName() + ", "
+        ibParams.put("nume_subdiviziune2", "[[Districtul " + com.getDistrict().getName() + ", "
             + com.getDistrict().getCounty().getName() + "|" + com.getDistrict().getName() + "]]");
 
         ibParams.put("fus_orar", "[[Ora Europei Centrale|CET]]");
@@ -1041,17 +1088,17 @@ public class HUWikiGenerator {
         assignColorToNationality("Turci", new Color(255, 85, 85));
         assignColorToNationality("Romi", new Color(85, 255, 255));
         assignColorToNationality("Maghiari", new Color(85, 255, 85));
+        assignColorToNationality("Bulgari", new Color(0, 192, 0));
         assignColorToNationality("Evrei", new Color(192, 192, 192));
         assignColorToNationality("Croați", new Color(32, 32, 192));
         assignColorToNationality("Sârbi", new Color(192, 32, 32));
         assignColorToNationality("Bosniaci", new Color(64, 64, 128));
-        assignColorToNationality("Austrieci", new Color(192, 0, 0));
-        assignColorToNationality("Albanezi", new Color(192, 64, 192));
+        assignColorToNationality("Germani", new Color(192, 0, 192));
         assignColorToNationality("Vlahi", new Color(128, 128, 255));
         assignColorToNationality("Ucraineni", new Color(255, 255, 85));
         assignColorToNationality("Ruteni", new Color(255, 255, 128));
+        assignColorToNationality("Ruși", new Color(192, 85, 85));
         assignColorToNationality("Germani", new Color(192, 192, 64));
-        assignColorToNationality("Albanezi", new Color(192, 64, 64));
         assignColorToNationality("Muntenegreni", new Color(255, 85, 255));
         assignColorToNationality("Italieni", new Color(64, 192, 64));
         assignColorToNationality("Sloveni", new Color(32, 32, 128));
@@ -1074,6 +1121,7 @@ public class HUWikiGenerator {
         assignColorToReligion("Atei", new Color(192, 192, 192));
         assignColorToReligion("Nu au răspuns", new Color(64, 64, 64));
         assignColorToReligion("Alte religii", new Color(32, 32, 32));
+        assignColorToReligion("Necunoscută", new Color(64, 64, 64));
 
         blandifyColors(religionColorMap);
     }
