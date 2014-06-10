@@ -345,7 +345,7 @@ public class HUWikiGenerator {
             disambig.append("''' se poate referi la următoarele locuri din [[Ungaria]]:");
             int townsCount = 0;
             for (final Settlement eachCom : communesWithName) {
-                townsCount += eachCom.getTown();
+                townsCount += (eachCom.getTown() > 1) ? 1 : 0;
                 disambig.append("\n* [[");
                 if (null == roWpNames.get(eachCom)) {
                     initCommune(eachCom);
@@ -354,7 +354,7 @@ public class HUWikiGenerator {
                 disambig.append("|");
                 disambig.append(retrieveName(eachCom));
                 disambig.append("]], ");
-                disambig.append(eachCom.getTown() > 0 ? "oraș" : "sat");
+                disambig.append(eachCom.getTown() > 1 ? "oraș" : "sat");
                 disambig.append(" în [[județul ");
                 disambig.append(eachCom.getDistrict().getCounty().getName());
                 disambig.append("]];");
@@ -422,7 +422,7 @@ public class HUWikiGenerator {
         closingst.append("\n");
         closingst.append("\n{{Județul " + com.getDistrict().getCounty().getName() + "}}");
         closingst.append("\n[[Categorie:");
-        closingst.append(com.getTown() > 0 ? "Oraș" : "Comun");
+        closingst.append(com.getTown() > 1 ? "Oraș" : "Sat");
         closingst.append("e în cantonul " + com.getDistrict().getCounty().getName());
         closingst.append("]]");
 
@@ -431,7 +431,7 @@ public class HUWikiGenerator {
 
     private String generateIntroForCommune(final Settlement com) {
         final STGroup stgroup = new STGroupFile("templates/hu/town.stg");
-        final ST introTmpl = stgroup.getInstanceOf("introTmpl" + (com.getTown() > 0 ? "Town" : "Comm"));
+        final ST introTmpl = stgroup.getInstanceOf("introTmpl" + (com.getTown() > 1 ? "Town" : "Comm"));
         final String communeName = retrieveName(com);
         introTmpl.add("nume", communeName);
         introTmpl.add("district", com.getDistrict().getName());
@@ -527,7 +527,7 @@ public class HUWikiGenerator {
     }
 
     private void putBasicDataIntoParams(final Settlement com, final Map<String, String> ibParams) {
-        ibParams.put("tip_asezare", 0 < com.getTown() ? "Oraș" : "Comună");
+        ibParams.put("tip_asezare", 1 < com.getTown() ? "Oraș" : "Sat");
         ibParams.put("tip_subdiviziune", "[[Țările lumii|Țară]]");
         ibParams.put("tip_subdiviziune1", "[[Județele Ungariei|Județ]]");
         ibParams.put("tip_subdiviziune2", "[[Districtele Ungariei|District]]");
@@ -629,7 +629,7 @@ public class HUWikiGenerator {
     private String generateDemographySection(final Settlement com) {
         final StringBuilder demographics = new StringBuilder(
             "\n== Demografie ==\n<!-- Start secțiune generată de Andrebot -->");
-        final STGroup templateGroup = com.getTown() > 0 ? townTemplateGroup : communeTemplateGroup;
+        final STGroup templateGroup = com.getTown() > 1 ? townTemplateGroup : communeTemplateGroup;
         final ST piechart = templateGroup.getInstanceOf("piechart");
         final int population = com.getPopulation();
         final String communeName = retrieveName(com);
@@ -645,7 +645,7 @@ public class HUWikiGenerator {
 
         renderPiechart(demographics, piechart, population, datasetEthnos, datasetReligion);
 
-        final ST demogIntro = templateGroup.getInstanceOf("demogIntro" + (com.getTown() > 0 ? "Town" : "Comm"));
+        final ST demogIntro = templateGroup.getInstanceOf("demogIntro" + (com.getTown() > 1 ? "Town" : "Comm"));
         demogIntro.add("nume", communeName);
         demogIntro.add("populatie",
             "{{formatnum:" + com.getPopulation() + "}}&nbsp;" + Utilities.de(population, "locuitor", "locuitori"));
