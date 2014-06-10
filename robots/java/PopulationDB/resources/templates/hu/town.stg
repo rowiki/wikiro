@@ -1,5 +1,5 @@
-introTmplTown(nume, district, judet, populatie) ::= "'''<nume>''' este un oraș în [[districtul <district>, <judet>|districtul <district>]], [[județul <judet>]], [[Ungaria]], având o populație de <populatie>locuitori (2011)."
-introTmplComm(nume, district, judet, populatie) ::= "'''<nume>''' este un sat în [[districtul <district>, <judet>|districtul <district>]], [[județul <judet>]], [[Ungaria]], având o populație de <populatie>locuitori (2011)."
+introTmplTown(nume, district, judet, populatie) ::= "'''<nume>''' este un oraș în [[districtul <district>, <judet>|districtul <district>]], [[județul <judet>]], [[Ungaria]], având o populație de <populatie>locuitori (2011). "
+introTmplComm(nume, district, judet, populatie) ::= "'''<nume>''' este un sat în [[districtul <district>, <judet>|districtul <district>]], [[județul <judet>]], [[Ungaria]], având o populație de <populatie>locuitori (2011). "
 piechart(nume, propsRelig, propsEthnos, tip_genitiv) ::= "{{Pie chart
 |thumb=left
 |caption=Componența etnică a <tip_genitiv> <nume><propsEthnos>}}

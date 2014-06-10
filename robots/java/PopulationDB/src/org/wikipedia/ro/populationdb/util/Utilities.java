@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Utilities {
     private static final char SEMN_MOALE_BG = 'Ь';
-    private static final Map<Character, String> charmap = new HashMap<Character, String>() {
+    private static final Map<Character, String> bgCharmap = new HashMap<Character, String>() {
         {
             put('А', "A");
             put('Б', "B");
@@ -92,42 +92,42 @@ public class Utilities {
             switch (crt.charValue()) {
             case 'Г':
                 if (i + 1 >= in.length()) {
-                    transformedChar = charmap.get(crt);
+                    transformedChar = bgCharmap.get(crt);
                 } else if (Arrays.asList('Е', 'И', 'Ю', 'Я').contains(in.charAt(i + 1))) {
                     transformedChar = "GH";
                 } else if (in.charAt(i + 1) == 'ь') {
                     transformedChar = "GHI";
                 } else {
-                    transformedChar = charmap.get(crt);
+                    transformedChar = bgCharmap.get(crt);
                 }
                 break;
             case 'Й':
                 if (i + 1 >= in.length()) {
-                    transformedChar = charmap.get(crt);
+                    transformedChar = bgCharmap.get(crt);
                 } else if (null != prev && prev.charValue() == 'И' && i == in.length() - 1) {
                     transformedChar = "";
                 } else {
-                    transformedChar = charmap.get(crt);
+                    transformedChar = bgCharmap.get(crt);
                 }
                 break;
             case 'Ч':
                 if (i + 1 >= in.length()) {
-                    transformedChar = charmap.get(crt);
+                    transformedChar = bgCharmap.get(crt);
                 } else if (Arrays.asList('Е', 'И', 'Ю', 'Я').contains(in.charAt(i + 1))) {
                     transformedChar = "C";
                 } else if (in.charAt(i + 1) == 'А') {
                     transformedChar = "CE";
                 } else {
-                    transformedChar = charmap.get(crt);
+                    transformedChar = bgCharmap.get(crt);
                 }
                 break;
             case 'К':
                 if (i + 1 >= in.length()) {
-                    transformedChar = charmap.get(crt);
+                    transformedChar = bgCharmap.get(crt);
                 } else if (in.charAt(i + 1) == 'ь') {
                     transformedChar = "CHI";
                 } else {
-                    transformedChar = charmap.get(crt);
+                    transformedChar = bgCharmap.get(crt);
                 }
                 break;
             case SEMN_MOALE_BG:
@@ -145,7 +145,7 @@ public class Utilities {
                 } else if (Arrays.asList('И', 'Й').contains(prev)) {
                     transformedChar = "A";
                 } else {
-                    transformedChar = charmap.get(crt);
+                    transformedChar = bgCharmap.get(crt);
                 }
                 break;
             case ' ':
@@ -153,7 +153,7 @@ public class Utilities {
                 transformedChar = " ";
                 break;
             default:
-                transformedChar = StringUtils.defaultString(charmap.get(crt), String.valueOf(crt));
+                transformedChar = StringUtils.defaultString(bgCharmap.get(crt), String.valueOf(crt));
             }
             transformedString.append(transformedChar);
             prev = crt;
