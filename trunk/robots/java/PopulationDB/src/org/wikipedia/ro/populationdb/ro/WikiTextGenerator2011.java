@@ -777,7 +777,7 @@ public class WikiTextGenerator2011 {
 		ImageIO.write(bufferedImage, "PNG", outFile);
 
 		final StringBuilder pieChart = new StringBuilder(
-				"{{Pie chart\n|thumb=left\n|style=clear:none;\n|caption=Componența confesional�? a ");
+				"{{Pie chart\n|thumb=left\n|style=clear:none;\n|caption=Componența confesională a ");
 		pieChart.append(getGenitiveFullName(uta));
 
 		int i = 1;
