@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -106,6 +107,10 @@ public class HUPopulationParser {
                 parser.countyRelPopFiles.put(countyIndex, religionPopFile);
             }
             countyIndex++;
+            if (countyIndex == 18) {
+                stop = false;
+                countyIndex++;
+            }
         } while (!stop);
 
         parser.parseAllCounties();
@@ -114,8 +119,12 @@ public class HUPopulationParser {
     private void parseAllCounties() {
         try {
             hib = new Hibernator();
-            for (int i = 2; i < countyHistPopFiles.size(); i++) {
-                this.parseCounty(i);
+
+            final List<Integer> countyIds = new ArrayList<Integer>();
+            countyIds.addAll(countyHistPopFiles.keySet());
+            Collections.sort(countyIds);
+            for (final Integer eachId : countyIds) {
+                this.parseCounty(eachId);
             }
         } finally {
             IOUtils.closeQuietly(hib);
@@ -123,21 +132,23 @@ public class HUPopulationParser {
     }
 
     private void parseCounty(final int countyIndex) {
+        System.out.println("Generating historical data for county " + countyIndex);
         this.parseHistoricalData(countyIndex);
+        System.out.println("Generating nationality data for county " + countyIndex);
         this.parseNationalityData(countyIndex);
+        System.out.println("Generating religion data for county " + countyIndex);
         this.parseReligionData(countyIndex);
     }
 
     private void parseReligionData(final int countyIndex) {
-        final File xlsFile = countyHistPopFiles.get(countyIndex);
-        FileInputStream xlsIS = null;
+        final File xlsFile = countyRelPopFiles.get(countyIndex);
         int currentUnitType = 4;
         final Map<String, District> districtCodes = new HashMap<String, District>();
         final Session ses = hib.getSession();
         ses.beginTransaction();
-        final County county = hib.getCountyByName(counties.get(countyIndex));
+        hib.getCountyByName(counties.get(countyIndex));
         try {
-            final HSSFWorkbook wb = new HSSFWorkbook(xlsIS = new FileInputStream(xlsFile));
+            final HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(xlsFile));
             final HSSFSheet sheet = wb.getSheetAt(0);
 
             final Iterator<Row> rowIterator = sheet.iterator();
@@ -159,8 +170,6 @@ public class HUPopulationParser {
 
                 if (startsWith(firstCellString, "Települések adatai")) {
                     foundCities = true;
-                    continue;
-                } else if (!foundCities) {
                     continue;
                 }
                 if (startsWith(firstCellString, "Megyeszékhely") && foundCities) {
@@ -227,15 +236,14 @@ public class HUPopulationParser {
     }
 
     private void parseNationalityData(final int countyIndex) {
-        final File xlsFile = countyHistPopFiles.get(countyIndex);
-        FileInputStream xlsIS = null;
+        final File xlsFile = countyNatPopFiles.get(countyIndex);
         int currentUnitType = 4;
         final Map<String, District> districtCodes = new HashMap<String, District>();
         final Session ses = hib.getSession();
         ses.beginTransaction();
-        final County county = hib.getCountyByName(counties.get(countyIndex));
+        hib.getCountyByName(counties.get(countyIndex));
         try {
-            final HSSFWorkbook wb = new HSSFWorkbook(xlsIS = new FileInputStream(xlsFile));
+            final HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(xlsFile));
             final HSSFSheet sheet = wb.getSheetAt(0);
 
             final Iterator<Row> rowIterator = sheet.iterator();
@@ -257,8 +265,6 @@ public class HUPopulationParser {
 
                 if (startsWith(firstCellString, "Települések adatai")) {
                     foundCities = true;
-                    continue;
-                } else if (!foundCities) {
                     continue;
                 }
                 if (startsWith(firstCellString, "Megyeszékhely") && foundCities) {
@@ -334,14 +340,13 @@ public class HUPopulationParser {
 
     private void parseHistoricalData(final int countyIndex) {
         final File xlsFile = countyHistPopFiles.get(countyIndex);
-        FileInputStream xlsIS = null;
         int currentUnitType = 4;
         final Map<String, District> districtCodes = new HashMap<String, District>();
         final Session ses = hib.getSession();
         ses.beginTransaction();
         final County county = hib.getCountyByName(counties.get(countyIndex));
         try {
-            final HSSFWorkbook wb = new HSSFWorkbook(xlsIS = new FileInputStream(xlsFile));
+            final HSSFWorkbook wb = new HSSFWorkbook(new FileInputStream(xlsFile));
             final HSSFSheet sheet = wb.getSheetAt(0);
 
             final Iterator<Row> rowIterator = sheet.iterator();

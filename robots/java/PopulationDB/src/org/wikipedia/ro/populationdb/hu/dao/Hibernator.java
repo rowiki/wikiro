@@ -7,9 +7,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.wikipedia.ro.populationdb.hu.model.County;
 import org.wikipedia.ro.populationdb.hu.model.District;
 import org.wikipedia.ro.populationdb.hu.model.Nationality;
@@ -104,7 +106,7 @@ public class Hibernator implements Closeable {
     public Settlement getSettlementByName(final String settlementName, final District district, final int town) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query findSettlement = ses
-            .createQuery("from Commune s where s.name=:settlementName and s.district=:district");
+            .createQuery("from Settlement s where s.name=:settlementName and s.district=:district");
         findSettlement.setParameter("settlementName", settlementName);
         findSettlement.setParameter("district", district);
         final List<Settlement> res = findSettlement.list();
@@ -140,5 +142,50 @@ public class Hibernator implements Closeable {
 
     public Session getSession() {
         return sessionFactory.getCurrentSession();
+    }
+
+    public List<County> getAllCounties() {
+        final Session session = sessionFactory.getCurrentSession();
+        final Criteria countyCriteria = session.createCriteria(County.class);
+        countyCriteria.addOrder(Order.asc("id"));
+
+        return countyCriteria.list();
+    }
+
+    public List<Settlement> getCommunesByCounty(final County county) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query settlementQuery = ses.createQuery("select s from Settlement s where s.district.county=:county");
+        settlementQuery.setParameter("county", county);
+        return settlementQuery.list();
+    }
+
+    public long countCommunesWithName(final String name) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query comCrit = ses.createQuery("select count(com) from Settlement com where com.name=:name");
+        comCrit.setParameter("name", name);
+        return (Long) comCrit.uniqueResult();
+    }
+
+    public Settlement getCommuneByName(final String communeName, final County county, final int town) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query findSettlement = ses
+            .createQuery("from Settlement s where s.name=:communeName and s.district.county=:county");
+        findSettlement.setParameter("communeName", communeName);
+        findSettlement.setParameter("county", county);
+        final List<Settlement> res = findSettlement.list();
+        Settlement ret = null;
+        if (0 == res.size()) {
+        } else {
+            ret = res.get(0);
+        }
+        return ret;
+    }
+
+    public List<Settlement> getCommunesWithName(final String name) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query comCrit = ses
+            .createQuery("select com from Settlement com left join com.district as d left join d.county as cty where com.name=:name order by com.town,cty.name,d.name");
+        comCrit.setParameter("name", name);
+        return comCrit.list();
     }
 }
