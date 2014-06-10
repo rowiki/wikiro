@@ -136,10 +136,13 @@ public class HUWikiGenerator {
                 protected String initialize() throws ConcurrentException {
                     final List<String> candidateNames = getRoWpCandidateNames(com);
 
+                    final boolean[] existenceArray = new boolean[candidateNames.size()];
+                    int i = 0;
                     for (final String candidateName : candidateNames) {
                         try {
                             final HashMap candidatePageInfo = rowiki.getPageInfo(candidateName);
-                            if (BooleanUtils.isTrue((Boolean) candidatePageInfo.get("exists"))) {
+                            existenceArray[i] = BooleanUtils.isTrue((Boolean) candidatePageInfo.get("exists"));
+                            if (existenceArray[i]) {
                                 final String actualCandidateTitle = StringUtils.defaultString(
                                     rowiki.resolveRedirect(new String[] { candidateName })[0], candidateName);
                                 final String[] categories = rowiki.getCategories(actualCandidateTitle);
@@ -147,20 +150,22 @@ public class HUWikiGenerator {
                                     if (StringUtils.startsWithAny(categ, "Categorie:Orașe în Ungaria",
                                         "Categorie:Orașe în județul ", "Categorie:Sate în Ungaria",
                                         "Categorie:Sate în județul ", "Categorie:Orașe în comitatul",
-                                        "Categorie:Sate în comitatul")) {
+                                        "Categorie:Sate în comitatul", "Categorie:Comune în județul",
+                                        "Categorie:Comune în comitatul")) {
                                         return candidateName;
                                     }
                                 }
-                            } else {
-                                return candidateName;
                             }
-
+                            i++;
                         } catch (final IOException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
                         }
                     }
-                    return candidateNames.get(candidateNames.size() - 1);
+                    for (i = 0; i < candidateNames.size() && existenceArray[i]; i++) {
+                        ;
+                    }
+                    return candidateNames.get(i);
                 }
 
             };
@@ -424,7 +429,7 @@ public class HUWikiGenerator {
         closingst.append("\n{{Județul " + com.getDistrict().getCounty().getName() + "}}");
         closingst.append("\n[[Categorie:");
         closingst.append(com.getTown() > 1 ? "Oraș" : "Sat");
-        closingst.append("e în cantonul " + com.getDistrict().getCounty().getName());
+        closingst.append("e în județul " + com.getDistrict().getCounty().getName());
         closingst.append("]]");
 
         return closingst.toString();
@@ -522,7 +527,7 @@ public class HUWikiGenerator {
             + countyCode
             + "_4_1_1_1.xls"
             + "|publisher=Biroul Central de Statistică al Ungariei|accessdate=2014-06-11|title=Populația istorică a județului "
-            + com.getDistrict().getCounty().getName() + " pe sate și orașe}}</ref>";
+            + com.getDistrict().getCounty().getName() + " pe sate și orașe}}</ref> ";
 
         ibParams.put("populatie_note_subsol", ref);
         final NumberFormat areaNumberFormat = NumberFormat.getNumberInstance();
@@ -893,7 +898,7 @@ public class HUWikiGenerator {
                                        final DefaultPieDataset dataset) {
         final Map<String, Integer> smallGroups = new HashMap<String, Integer>();
         hib.getReligionByName("Necunoscută");
-        int totalKnownEthnicity = 0;
+        int totalKnownReligion = 0;
         final Set<Religion> religionsSet = religionColorMap.keySet();
         final List<Religion> religionsList = new ArrayList<Religion>(religionsSet);
         Collections.sort(religionsList, new Comparator<Religion>() {
@@ -919,10 +924,10 @@ public class HUWikiGenerator {
                 otherRel += natpop;
             }
             if (!startsWithAny(rel.getName(), "Necunoscut", "Nu au răspuns", "Alte")) {
-                totalKnownEthnicity += natpop;
+                totalKnownReligion += natpop;
             }
         }
-        dataset.setValue("Necunoscută", population - totalKnownEthnicity);
+        dataset.setValue("Necunoscută", population - totalKnownReligion);
         if (1 < smallGroups.size()) {
             smallGroups.put("Alte religii", otherRel);
             int smallSum = 0;
@@ -940,7 +945,7 @@ public class HUWikiGenerator {
                 dataset.setValue("Alte religii", otherRel);
             }
         }
-        return totalKnownEthnicity;
+        return totalKnownReligion;
     }
 
     private void renderPiechart(final StringBuilder demographics, final ST piechart, final int population,
@@ -1038,14 +1043,13 @@ public class HUWikiGenerator {
         dataset.setValue("Necunoscut", population - totalKnownEthnicity);
 
         // add all small groups to other; if only one, just show that one
-        smallGroups.put("Neclasificat", otherEthn);
         if (1 < smallGroups.size()) {
             int smallSum = 0;
             for (final String smallGroup : smallGroups.keySet()) {
                 smallSum += ObjectUtils.defaultIfNull(smallGroups.get(smallGroup), 0);
             }
             if (0 < smallSum) {
-                dataset.setValue("Neclasificat", smallSum);
+                dataset.setValue("Alții", smallSum);
             }
         } else {
             for (final String natname : smallGroups.keySet()) {
@@ -1053,7 +1057,7 @@ public class HUWikiGenerator {
                     dataset.setValue(natname, smallGroups.get(natname));
                 }
             }
-            dataset.setValue("Neclasificat", otherEthn);
+            dataset.setValue("Alții", otherEthn);
         }
         return totalKnownEthnicity;
     }
@@ -1123,7 +1127,6 @@ public class HUWikiGenerator {
         assignColorToNationality("Ucraineni", new Color(255, 255, 85));
         assignColorToNationality("Ruteni", new Color(255, 255, 128));
         assignColorToNationality("Ruși", new Color(192, 85, 85));
-        assignColorToNationality("Germani", new Color(192, 192, 64));
         assignColorToNationality("Italieni", new Color(64, 192, 64));
         assignColorToNationality("Sloveni", new Color(32, 32, 128));
         assignColorToNationality("Slovaci", new Color(48, 48, 160));
@@ -1132,7 +1135,7 @@ public class HUWikiGenerator {
         assignColorToNationality("Neclasificat", new Color(192, 192, 192));
         assignColorToNationality("Armeni", new Color(0x62, 0x46, 0x46));
         assignColorToNationality("Necunoscut", new Color(192, 192, 192));
-        assignColorToNationality("Nedeclarat", new Color(192, 192, 192));
+        assignColorToNationality("Alții", new Color(192, 192, 192));
         blandifyColors(nationColorMap);
 
         assignColorToReligion("Ortodocși", new Color(85, 85, 255));
@@ -1201,8 +1204,9 @@ public class HUWikiGenerator {
                 candidateTitle);
             final String[] categs = rowiki.getCategories(pageTitle);
             for (final String categ : categs) {
-                if (StringUtils.startsWithAny(categ, "Orașe în Croația", "Orașe în cantonul ", "Comune în Croația",
-                    "Comune în cantonul ")) {
+                if (StringUtils.startsWithAny(StringUtils.removeStart(categ, "Categorie:"), "Orașe în Ungaria",
+                    "Orașe în județul ", "Comune în Ungaria", "Sate în Ungaria", "Sate în comitatul ",
+                    "Orașe în comitatul ", "Comune în județul " + com.getDistrict().getCounty().getName())) {
                     return pageTitle;
                 }
             }
@@ -1239,7 +1243,7 @@ public class HUWikiGenerator {
             + countyCode
             + "_4_1_6_1.xls"
             + "|publisher=Biroul Central de Statistică al Ungariei|accessdate=2014-06-11|title=Componența etnică a județului "
-            + com.getDistrict().getCounty().getName() + " pe sate și orașe}}</ref>";
+            + com.getDistrict().getCounty().getName() + " pe sate și orașe}}</ref> ";
     }
 
     private String getReligionRef(final Settlement com) {
@@ -1251,7 +1255,7 @@ public class HUWikiGenerator {
             + countyCode
             + "_4_1_7_1.xls"
             + "|publisher=Biroul Central de Statistică al Ungariei|accessdate=2014-06-11|title=Componența confesională a județului "
-            + com.getDistrict().getCounty().getName() + " pe sate și orașe}}</ref>";
+            + com.getDistrict().getCounty().getName() + " pe sate și orașe}}</ref> ";
     }
 
     private String retrieveName(final Settlement com) {

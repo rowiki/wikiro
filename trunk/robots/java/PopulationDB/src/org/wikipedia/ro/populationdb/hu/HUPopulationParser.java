@@ -413,11 +413,6 @@ public class HUPopulationParser {
                             settlement.getHistoricalPopulation().put(censi.get(i), (int) popCell.getNumericCellValue());
                         }
                     }
-                    for (int i = 0; i < 6; i++) {
-                        if (cellIterator.hasNext()) {
-                            popCell = cellIterator.next();
-                        }
-                    }
                     if (cellIterator.hasNext()) {
                         popCell = cellIterator.next();
                         if (popCell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
