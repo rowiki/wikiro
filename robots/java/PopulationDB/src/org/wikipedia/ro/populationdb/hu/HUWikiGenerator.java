@@ -10,6 +10,7 @@ import static org.apache.commons.lang3.StringUtils.startsWithAny;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.text.RuleBasedCollator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -524,6 +525,9 @@ public class HUWikiGenerator {
             + com.getDistrict().getCounty().getName() + " pe sate și orașe}}</ref>";
 
         ibParams.put("populatie_note_subsol", ref);
+        final NumberFormat areaNumberFormat = NumberFormat.getNumberInstance();
+        areaNumberFormat.setMaximumFractionDigits(2);
+        ibParams.put("suprafață_totală_km2", "{{formatnum:" + areaNumberFormat.format(com.getArea() / 100.0) + "}}");
     }
 
     private void putBasicDataIntoParams(final Settlement com, final Map<String, String> ibParams) {
