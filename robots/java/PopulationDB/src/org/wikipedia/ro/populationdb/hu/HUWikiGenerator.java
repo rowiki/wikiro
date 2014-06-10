@@ -435,7 +435,7 @@ public class HUWikiGenerator {
         final ST introTmpl = stgroup.getInstanceOf("introTmpl" + (com.getTown() > 1 ? "Town" : "Comm"));
         final String communeName = retrieveName(com);
         introTmpl.add("nume", communeName);
-        introTmpl.add("district", com.getDistrict().getName());
+        introTmpl.add("district", StringUtils.removeEnd(com.getDistrict().getName(), "i"));
         introTmpl.add("judet", com.getDistrict().getCounty().getName());
         introTmpl.add("populatie",
             "{{formatnum:" + com.getPopulation() + "}}&nbsp;" + Utilities.de(com.getPopulation(), "", ""));
@@ -548,8 +548,10 @@ public class HUWikiGenerator {
         ibParams.put("nume_subdiviziune", "{{HUN}}");
         ibParams.put("nume_subdiviziune1", "[[Județul " + com.getDistrict().getCounty().getName() + "|"
             + com.getDistrict().getCounty().getName() + "]]");
-        ibParams.put("nume_subdiviziune2", "[[Districtul " + com.getDistrict().getName() + ", "
-            + com.getDistrict().getCounty().getName() + "|" + com.getDistrict().getName() + "]]");
+        ibParams
+            .put("nume_subdiviziune2", "[[Districtul " + StringUtils.removeEnd(com.getDistrict().getName(), "i") + ", "
+                + com.getDistrict().getCounty().getName() + "|" + StringUtils.removeEnd(com.getDistrict().getName(), "i")
+                + "]]");
 
         ibParams.put("fus_orar", "[[Ora Europei Centrale|CET]]");
         ibParams.put("fus_orar_DST", "[[Ora de Vară a Europei Centrale|CEST]]");
