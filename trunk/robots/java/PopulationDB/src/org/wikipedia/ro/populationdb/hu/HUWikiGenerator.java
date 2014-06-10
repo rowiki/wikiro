@@ -527,7 +527,17 @@ public class HUWikiGenerator {
     }
 
     private void putBasicDataIntoParams(final Settlement com, final Map<String, String> ibParams) {
-        ibParams.put("tip_asezare", 1 < com.getTown() ? "Oraș" : "Sat");
+        switch (com.getTown()) {
+        case 4:
+        case 3:
+            ibParams.put("tip_asezare", "Municipiu");
+            break;
+        case 2:
+            ibParams.put("tip_asezare", "Oraș");
+            break;
+        default:
+            ibParams.put("tip_asezare", "Sat");
+        }
         ibParams.put("tip_subdiviziune", "[[Țările lumii|Țară]]");
         ibParams.put("tip_subdiviziune1", "[[Județele Ungariei|Județ]]");
         ibParams.put("tip_subdiviziune2", "[[Districtele Ungariei|District]]");
@@ -877,7 +887,6 @@ public class HUWikiGenerator {
             }
 
         });
-        int unknownRel = 0;
         int otherRel = 0;
         for (final Religion rel : religionsList) {
             final int natpop = defaultIfNull(religiousStructure.get(rel), 0);
@@ -888,7 +897,6 @@ public class HUWikiGenerator {
                 && !startsWithAny(rel.getName(), "Necunoscut", "Nu au declarat", "Alte") && natpop > 0) {
                 smallGroups.put(rel.getName(), natpop);
             } else if (startsWithAny(rel.getName(), "Necunoscut", "Nu au declarat")) {
-                unknownRel += natpop;
             } else if (startsWith(rel.getName(), "Alte")) {
                 otherRel += natpop;
             }
@@ -896,7 +904,7 @@ public class HUWikiGenerator {
                 totalKnownEthnicity += natpop;
             }
         }
-        dataset.setValue("Necunoscută", unknownRel);
+        dataset.setValue("Necunoscută", population - totalKnownEthnicity);
         if (1 < smallGroups.size()) {
             smallGroups.put("Alte religii", otherRel);
             int smallSum = 0;
@@ -995,7 +1003,6 @@ public class HUWikiGenerator {
             }
 
         });
-        int unknownEthn = 0;
         int otherEthn = 0;
         for (final Nationality nat : ethnicitiesList) {
             final int natpop = defaultIfNull(ethnicStructure.get(nat), 0);
@@ -1003,8 +1010,6 @@ public class HUWikiGenerator {
                 dataset.setValue(nat.getName(), natpop);
             } else if (natpop * 100.0 / population <= 1.0 && !startsWithAny(nat.getName(), "Ne", "Afiliați") && 0 < natpop) {
                 smallGroups.put(nat.getName(), natpop);
-            } else if (startsWithAny(nat.getName(), "Nedeclarat", "Necunoscut")) {
-                unknownEthn += natpop;
             } else if (startsWithAny(nat.getName(), "Afiliați", "Neclasificat")) {
                 otherEthn += natpop;
             }
@@ -1012,7 +1017,7 @@ public class HUWikiGenerator {
                 totalKnownEthnicity += natpop;
             }
         }
-        dataset.setValue("Necunoscut", unknownEthn);
+        dataset.setValue("Necunoscut", population - totalKnownEthnicity);
 
         // add all small groups to other; if only one, just show that one
         smallGroups.put("Neclasificat", otherEthn);
@@ -1093,7 +1098,7 @@ public class HUWikiGenerator {
         assignColorToNationality("Croați", new Color(32, 32, 192));
         assignColorToNationality("Sârbi", new Color(192, 32, 32));
         assignColorToNationality("Bosniaci", new Color(64, 64, 128));
-        assignColorToNationality("Germani", new Color(192, 0, 192));
+        assignColorToNationality("Germani", new Color(255, 85, 255));
         assignColorToNationality("Vlahi", new Color(128, 128, 255));
         assignColorToNationality("Ucraineni", new Color(255, 255, 85));
         assignColorToNationality("Ruteni", new Color(255, 255, 128));
