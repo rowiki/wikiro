@@ -47,7 +47,6 @@ import org.wikipedia.ro.populationdb.hu.model.Religion;
 import org.wikipedia.ro.populationdb.hu.model.Settlement;
 import org.wikipedia.ro.populationdb.util.Executor;
 import org.wikipedia.ro.populationdb.util.ParameterReader;
-import org.wikipedia.ro.populationdb.util.SysoutExecutor;
 import org.wikipedia.ro.populationdb.util.Utilities;
 import org.wikipedia.ro.populationdb.util.WikiEditExecutor;
 
@@ -80,7 +79,7 @@ public class HUWikiGenerator {
     private final Map<String, String> relLinkMap = new LinkedHashMap<String, String>() {
         {
             put("Romano-catolici", "[[Biserica Romano-Catolică|romano-catolici]]");
-            put("Greco-catolici", "[[Biserica Ortodoxă|ortodocși]]");
+            put("Greco-catolici", "[[Biserica Greco-Catolică|greco-catolici]]");
             put("Ortodocși", "[[Biserica Ortodoxă|ortodocși]]");
             put("Reformați", "[[Calvinism|reformați]]");
             put("Luterani", "[[Luteranism|luterani]]");
@@ -126,7 +125,8 @@ public class HUWikiGenerator {
             catText.append("e în Ungaria|");
             catText.append(county.getName());
             catText.append("]]");
-            executor.save(categoryName, catText.toString(), "Robot: creare categorie pentru " + StringUtils.lowerCase(type) + "e din Ungaria");
+            executor.save(categoryName, catText.toString(), "Robot: creare categorie pentru " + StringUtils.lowerCase(type)
+                + "e din Ungaria");
         }
     }
 
@@ -673,7 +673,6 @@ public class HUWikiGenerator {
             piechart.add("tip_genitiv", "satului");
             break;
         }
-        piechart.add("tip_genitiv", com.getTown() > 0 ? "orașului" : "comunei");
 
         final Map<Nationality, Integer> ethnicStructure = com.getEthnicStructure();
         final Map<Religion, Integer> religiousStructure = com.getReligiousStructure();
