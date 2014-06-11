@@ -79,7 +79,7 @@ public class HUWikiGenerator {
     private final Map<String, String> relLinkMap = new LinkedHashMap<String, String>() {
         {
             put("Romano-catolici", "[[Biserica Romano-Catolică|romano-catolici]]");
-            put("Greco-catolici", "[[Biserica Greco-Catolică|greco-catolici]]");
+            put("Greco-catolici", "[[Biserico greco-catolice|greco-catolici]]");
             put("Ortodocși", "[[Biserica Ortodoxă|ortodocși]]");
             put("Reformați", "[[Calvinism|reformați]]");
             put("Luterani", "[[Luteranism|luterani]]");
@@ -149,8 +149,8 @@ public class HUWikiGenerator {
                                 final String[] categories = rowiki.getCategories(actualCandidateTitle);
                                 for (final String categ : categories) {
                                     if (StringUtils.startsWithAny(categ, "Categorie:Orașe în Ungaria",
-                                        "Categorie:Orașe în județul ", "Categorie:Sate în Ungaria",
-                                        "Categorie:Sate în județul ", "Categorie:Orașe în comitatul",
+                                        "Categorie:Orașe în județul", "Categorie:Sate în Ungaria",
+                                        "Categorie:Sate în județul", "Categorie:Orașe în comitatul",
                                         "Categorie:Sate în comitatul", "Categorie:Comune în județul",
                                         "Categorie:Comune în comitatul")) {
                                         return candidateName;
