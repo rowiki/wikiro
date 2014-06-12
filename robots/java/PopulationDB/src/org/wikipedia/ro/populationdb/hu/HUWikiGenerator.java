@@ -588,9 +588,11 @@ public class HUWikiGenerator {
             }
             for (final Integer demographySectionIndex : demographySectionIndices) {
                 String demogSection = rowiki.getSectionText(title, demographySectionIndex);
-                demogSection = StringUtils.substring(demogSection, 0,
-                    StringUtils.indexOf(demogSection, "<!--Sfârșit secțiune generată de Andrebot -->== Note ==")
-                        + StringUtils.length("<!--Sfârșit secțiune generată de Andrebot -->"));
+                if (StringUtils.contains(demogSection, "<!--Sfârșit secțiune generată de Andrebot -->== Note ==")) {
+                    demogSection = StringUtils.substring(demogSection, 0,
+                        StringUtils.indexOf(demogSection, "<!--Sfârșit secțiune generată de Andrebot -->== Note ==")
+                            + StringUtils.length("<!--Sfârșit secțiune generată de Andrebot -->"));
+                }
                 final int indexOfDemogSection = StringUtils.indexOf(sbuild, demogSection);
                 if (0 < indexOfDemogSection) {
                     sbuild.delete(indexOfDemogSection - 1, indexOfDemogSection + StringUtils.length(demogSection));
