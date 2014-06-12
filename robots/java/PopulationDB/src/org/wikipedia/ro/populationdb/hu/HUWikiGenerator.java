@@ -47,8 +47,8 @@ import org.wikipedia.ro.populationdb.hu.model.Religion;
 import org.wikipedia.ro.populationdb.hu.model.Settlement;
 import org.wikipedia.ro.populationdb.util.Executor;
 import org.wikipedia.ro.populationdb.util.ParameterReader;
-import org.wikipedia.ro.populationdb.util.SysoutExecutor;
 import org.wikipedia.ro.populationdb.util.Utilities;
+import org.wikipedia.ro.populationdb.util.WikiEditExecutor;
 
 public class HUWikiGenerator {
     private static final String NOTE_REFLIST = "\n== Note ==\n{{Reflist}}\n";
@@ -107,7 +107,7 @@ public class HUWikiGenerator {
             final List<Settlement> communes = hib.getCommunesByCounty(county);
             generateCountyCategory(county, false);
             generateCountyCategory(county, true);
-            // generateCountyNavTemplate(county, communes);
+            generateCountyNavTemplate(county, communes);
             for (final Settlement com : communes) {
                 initCommune(com);
                 generateCommune(com);
@@ -727,7 +727,7 @@ public class HUWikiGenerator {
         writeReligiousDemographics(templateGroup, demographics, population, religiousStructure, majRel, religiousMinorities);
         writeUnknownReligion(templateGroup, demographics, population, datasetReligion, com);
 
-        demographics.append("\n<!--Sfârșit secțiune generată de Andrebot -->");
+        demographics.append("\n<!--Sfârșit secțiune generată de Andrebot -->\n");
         return demographics.toString();
     }
 
@@ -1136,8 +1136,8 @@ public class HUWikiGenerator {
         rowiki = new Wiki("ro.wikipedia.org");
         huwiki = new Wiki("hu.wikipedia.org");
         dwiki = new Wikibase();
-        // executor = new WikiEditExecutor(rowiki, dwiki);
-        executor = new SysoutExecutor();
+        executor = new WikiEditExecutor(rowiki, dwiki);
+        // executor = new SysoutExecutor();
 
         final Properties credentials = new Properties();
         credentials.load(HUWikiGenerator.class.getClassLoader().getResourceAsStream("credentials.properties"));
