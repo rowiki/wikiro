@@ -705,10 +705,17 @@ public class HUWikiGenerator {
         final Map<Religion, Integer> religiousStructure = com.getReligiousStructure();
         final DefaultPieDataset datasetEthnos = new DefaultPieDataset();
         computeEthnicityDataset(population, ethnicStructure, datasetEthnos);
+	int totalEthn = 0;
+        for (final Nationality nat : nationColorMap.keySet()) {
+            if (null != ethnicStructure.get(nat)) {
+                totalEthn += ethnicStructure.get(nat);
+            }
+        }
+        totalEthn = 0 == totalEthn ? population : totalEthn;
         final DefaultPieDataset datasetReligion = new DefaultPieDataset();
         computeReligionDataset(population, religiousStructure, datasetReligion);
 
-        renderPiechart(demographics, piechart, population, datasetEthnos, datasetReligion);
+        renderPiechart(demographics, piechart, population, totalEthn, datasetEthnos, datasetReligion);
 
         final ST demogIntro = templateGroup.getInstanceOf("demogIntro" + (com.getTown() > 1 ? "Town" : "Comm"));
         demogIntro.add("nume", communeName);
@@ -980,7 +987,7 @@ public class HUWikiGenerator {
         return totalKnownReligion;
     }
 
-    private void renderPiechart(final StringBuilder demographics, final ST piechart, final int population,
+    private void renderPiechart(final StringBuilder demographics, final ST piechart, final int population, int totalEthn,
                                 final DefaultPieDataset datasetEthnos, final DefaultPieDataset datasetReligion) {
         final StringBuilder pieChartEthnosProps = new StringBuilder();
         final StringBuilder pieChartReligProps = new StringBuilder();
@@ -996,7 +1003,7 @@ public class HUWikiGenerator {
             pieChartEthnosProps.append(i);
             pieChartEthnosProps.append('=');
             pieChartEthnosProps
-                .append(Math.round(100 * ((datasetEthnos.getValue(k.toString()).doubleValue() * 100) / population)) / 100.0d);
+                .append(Math.round(100 * ((datasetEthnos.getValue(k.toString()).doubleValue() * 100) / totalEthn)) / 100.0d);
             pieChartEthnosProps.append("|color");
             pieChartEthnosProps.append(i);
             pieChartEthnosProps.append('=');
