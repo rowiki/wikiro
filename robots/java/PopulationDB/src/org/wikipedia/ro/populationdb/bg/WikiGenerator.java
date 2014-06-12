@@ -232,7 +232,7 @@ public class WikiGenerator {
         infoboxParams.put("utc_offset", "+2");
         infoboxParams.put("utc_offset_DST", "+3");
 
-        String bgCounterpartForSettlement = findBgCounterpartForSettlement(stlmnt);
+        final String bgCounterpartForSettlement = findBgCounterpartForSettlement(stlmnt);
         if (null != bgCounterpartForSettlement) {
             final String bgText = bgwiki.getPageText(bgCounterpartForSettlement);
             final Matcher infoboxMatcher = regexBgSettlementInfobox.matcher(bgText);
@@ -317,7 +317,7 @@ public class WikiGenerator {
             final HashMap pageInfo = bgwiki.getPageInfo(possibleName);
             final Boolean exists = (Boolean) pageInfo.get("exists");
             if (isTrue(exists)) {
-                return defaultString(bgwiki.resolveRedirect(new String[] { possibleName })[0], possibleName);
+                return defaultString(bgwiki.resolveRedirects(new String[] { possibleName })[0], possibleName);
             }
         }
         return null;
@@ -1075,7 +1075,7 @@ public class WikiGenerator {
             if (!isTrue(exists)) {
                 continue;
             }
-            final String pageTitle = defaultString(rowiki.resolveRedirect(new String[] { candidateTitle })[0],
+            final String pageTitle = defaultString(rowiki.resolveRedirects(new String[] { candidateTitle })[0],
                 candidateTitle);
             return pageTitle;
         }
@@ -1097,7 +1097,7 @@ public class WikiGenerator {
             if (!isTrue(exists)) {
                 continue;
             }
-            final String pageTitle = defaultString(rowiki.resolveRedirect(new String[] { candidateTitle })[0],
+            final String pageTitle = defaultString(rowiki.resolveRedirects(new String[] { candidateTitle })[0],
                 candidateTitle);
             final String[] categories = rowiki.getCategories(candidateTitle);
             if ((settlement.isTown() && contains(categories, "Categorie:Orașe în Bulgaria"))
