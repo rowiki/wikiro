@@ -1243,6 +1243,10 @@ public class HUWikiGenerator {
 			}
 
 		});
+		int total = 0;
+		for (final Nationality nat : ethnicitiesList) {
+			
+		}
 		int otherEthn = 0;
 		for (final Nationality nat : ethnicitiesList) {
 			final int natpop = defaultIfNull(ethnicStructure.get(nat), 0);
