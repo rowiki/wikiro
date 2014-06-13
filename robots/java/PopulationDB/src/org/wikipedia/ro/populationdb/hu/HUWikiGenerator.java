@@ -34,6 +34,7 @@ import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.apache.commons.lang3.concurrent.LazyInitializer;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.jfree.data.UnknownKeyException;
 import org.jfree.data.general.DefaultPieDataset;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
@@ -845,8 +846,13 @@ public class HUWikiGenerator {
 
     private void writeUnknownEthnicity(final STGroup templateGroup, final StringBuilder demographics, final int population,
                                        final DefaultPieDataset datasetEthnos, final Settlement com) {
-        final double undeclaredPercent = 100.0d
-            * (defaultIfNull(datasetEthnos.getValue("Necunoscut"), new Integer(0)).doubleValue()) / population;
+        double undeclaredPercent = 0.0;
+	try {
+	    undeclaredPercent = 100.0d
+		* (defaultIfNull(datasetEthnos.getValue("Necunoscut"), new Integer(0)).doubleValue()) / population;
+	} catch (UnknownKeyException e) {
+	    undeclaredPercent = 0.0;
+	}
         if (undeclaredPercent > 0) {
             final ST undeclaredTempl = templateGroup.getInstanceOf("unknownEthn");
             undeclaredTempl.add("percent", "{{formatnum:" + (Math.round(undeclaredPercent * 100.0d) / 100.0d) + "}}%");
