@@ -728,8 +728,8 @@ public class HUWikiGenerator {
         final Religion majRel = getMajorityReligion(com);
         final List<Religion> religiousMinorities = getReligiousMinorities(com);
 
-        writeEthnodemographics(templateGroup, demographics, population, ethnicStructure, majNat, ethnicMinorities);
-        writeUnknownEthnicity(templateGroup, demographics, population, datasetEthnos, com);
+        writeEthnodemographics(templateGroup, demographics, totalEthn, ethnicStructure, majNat, ethnicMinorities);
+        writeUnknownEthnicity(templateGroup, demographics, totalEthn, datasetEthnos, com);
 
         writeReligiousDemographics(templateGroup, demographics, population, religiousStructure, majRel, religiousMinorities);
         writeUnknownReligion(templateGroup, demographics, population, datasetReligion, com);
