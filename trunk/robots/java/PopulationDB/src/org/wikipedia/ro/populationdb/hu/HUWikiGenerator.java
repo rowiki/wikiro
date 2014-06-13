@@ -665,7 +665,7 @@ public class HUWikiGenerator {
         System.out.println("Inserting demography section into article \"" + title + "\", article becomes: "
             + sbuild.toString());
         executor.save(title, sbuild.toString(),
-            "Robot: adăugare date demografice conform recensământului din 2011 și date de la hr.wp în infocasetă");
+            "Robot: adăugare date demografice conform recensământului din 2011 și date de la hu.wp în infocasetă");
     }
 
     private List<Integer> createMarkerLocationList(final CharSequence pageText, final List<String> markers) {
@@ -705,7 +705,7 @@ public class HUWikiGenerator {
         final Map<Religion, Integer> religiousStructure = com.getReligiousStructure();
         final DefaultPieDataset datasetEthnos = new DefaultPieDataset();
         computeEthnicityDataset(population, ethnicStructure, datasetEthnos);
-	int totalEthn = 0;
+        int totalEthn = 0;
         for (final Nationality nat : nationColorMap.keySet()) {
             if (null != ethnicStructure.get(nat)) {
                 totalEthn += ethnicStructure.get(nat);
@@ -987,8 +987,9 @@ public class HUWikiGenerator {
         return totalKnownReligion;
     }
 
-    private void renderPiechart(final StringBuilder demographics, final ST piechart, final int population, int totalEthn,
-                                final DefaultPieDataset datasetEthnos, final DefaultPieDataset datasetReligion) {
+    private void renderPiechart(final StringBuilder demographics, final ST piechart, final int population,
+                                final int totalEthn, final DefaultPieDataset datasetEthnos,
+                                final DefaultPieDataset datasetReligion) {
         final StringBuilder pieChartEthnosProps = new StringBuilder();
         final StringBuilder pieChartReligProps = new StringBuilder();
         int i = 1;
@@ -1086,7 +1087,9 @@ public class HUWikiGenerator {
                 totalKnownEthnicity += natpop;
             }
         }
-        dataset.setValue("Necunoscut", total - totalKnownEthnicity);
+        if (total != totalKnownEthnicity) {
+            dataset.setValue("Necunoscut", total - totalKnownEthnicity);
+        }
 
         // add all small groups to other; if only one, just show that one
         if (1 < smallGroups.size()) {
@@ -1103,7 +1106,9 @@ public class HUWikiGenerator {
                     dataset.setValue(natname, smallGroups.get(natname));
                 }
             }
-            dataset.setValue("Alții", otherEthn);
+            if (0 < otherEthn) {
+                dataset.setValue("Alții", otherEthn);
+            }
         }
         return totalKnownEthnicity;
     }
