@@ -26,6 +26,7 @@ public class WikiEditExecutor implements Executor {
 				wiki.edit(title, text, comment);
 				success = true;
 			} catch (Throwable t) {
+				System.out.println("" + t.getClass() + ": " + t.getMessage());
 				success = false;
 			}
 		} while (!success);
@@ -39,6 +40,7 @@ public class WikiEditExecutor implements Executor {
 				dwiki.linkPages(fromwiki, fromtitle, towiki, totitle);
 				success = true;
 			} catch (Throwable t) {
+				System.out.println("" + t.getClass() + ": " + t.getMessage());
 				success = false;
 			}
 		} while (!success);
