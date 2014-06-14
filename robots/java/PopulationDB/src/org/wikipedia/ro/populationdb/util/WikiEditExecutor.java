@@ -24,6 +24,7 @@ public class WikiEditExecutor implements Executor {
 		do {
 			try {
 				wiki.edit(title, text, comment);
+				success = true;
 			} catch (Throwable t) {
 				success = false;
 			}
@@ -36,6 +37,7 @@ public class WikiEditExecutor implements Executor {
 		do {
 			try {
 				dwiki.linkPages(fromwiki, fromtitle, towiki, totitle);
+				success = true;
 			} catch (Throwable t) {
 				success = false;
 			}
