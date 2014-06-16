@@ -445,6 +445,7 @@ public class HUWikiGenerator {
         final ST introTmpl = stgroup.getInstanceOf("introTmpl" + (com.getTown() > 1 ? "Town" : "Comm"));
         final String communeName = retrieveNameFromExistingArticle(com);
         introTmpl.add("nume", communeName);
+        introTmpl.add("nume_nativ", StringUtils.equals(com.getName(), communeName) ? "" : ("în {{hu|" + com.getName() + "}}"));
         introTmpl.add("district", StringUtils.removeEnd(com.getDistrict().getName(), "i"));
         introTmpl.add("judet", com.getDistrict().getCounty().getName());
         introTmpl.add("populatie",
