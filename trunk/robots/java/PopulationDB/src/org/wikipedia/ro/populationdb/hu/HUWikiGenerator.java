@@ -454,12 +454,12 @@ public class HUWikiGenerator {
 
     private String generateInfoboxForCommune(final Settlement com) throws ConcurrentException {
         StringBuilder infoboxText = new StringBuilder("{{Infocaseta Așezare");
-        final String[] names = StringUtils.splitByWholeSeparator(com.getName(), " - ");
+        final String name = retrieveNameFromExistingArticle(com);
         infoboxText.append("\n|nume = ");
-        infoboxText.append(names[0]);
-        if (1 < names.length) {
+        infoboxText.append(name);
+        if (!StringUtils.equals(com.getName(), name)) {
             infoboxText.append("\n|nume_nativ = ");
-            infoboxText.append(StringUtils.join(names, "<br />", 1, names.length));
+            infoboxText.append(com.getName());
         }
         infoboxText.append("}}");
         final ParameterReader ibReader = new ParameterReader(infoboxText.toString());
