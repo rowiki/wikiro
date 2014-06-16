@@ -147,6 +147,7 @@ public class Hibernator implements Closeable {
     public List<County> getAllCounties() {
         final Session session = sessionFactory.getCurrentSession();
         final Criteria countyCriteria = session.createCriteria(County.class);
+        countyCriteria.setFirstResult(3);
         countyCriteria.addOrder(Order.asc("id"));
 
         return countyCriteria.list();

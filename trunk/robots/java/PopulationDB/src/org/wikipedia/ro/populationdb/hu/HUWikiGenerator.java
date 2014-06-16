@@ -106,11 +106,13 @@ public class HUWikiGenerator {
 
         for (final County county : counties) {
             final List<Settlement> communes = hib.getCommunesByCounty(county);
+            for (final Settlement eachCommune : communes) {
+                initCommune(eachCommune);
+            }
             generateCountyCategory(county, false);
             generateCountyCategory(county, true);
             generateCountyNavTemplate(county, communes);
             for (final Settlement com : communes) {
-                initCommune(com);
                 generateCommune(com);
             }
         }
@@ -237,7 +239,7 @@ public class HUWikiGenerator {
         final List<String> majorTownsLinks = new ArrayList<String>();
         final List<String> communeLinks = new ArrayList<String>();
         for (final Settlement com : communes) {
-            final String communeName = retrieveName(com);
+            final String communeName = retrieveNameFromExistingArticle(com);
             initCommune(com);
             switch (com.getTown()) {
             case 1:
@@ -334,8 +336,8 @@ public class HUWikiGenerator {
     }
 
     private void generateNewCommuneArticle(final Settlement com, final String text) throws Exception {
-        final String communeName = retrieveName(com);
         final String roWpArticleTitle = roWpNames.get(com).get();
+        final String communeName = retrieveNameFromExistingArticle(com);
         System.out.println("------------------ New settlement article for " + communeName + " title=" + roWpArticleTitle
             + " ----------------");
         System.out.println(text);
@@ -441,7 +443,7 @@ public class HUWikiGenerator {
     private String generateIntroForCommune(final Settlement com) {
         final STGroup stgroup = new STGroupFile("templates/hu/town.stg");
         final ST introTmpl = stgroup.getInstanceOf("introTmpl" + (com.getTown() > 1 ? "Town" : "Comm"));
-        final String communeName = retrieveName(com);
+        final String communeName = retrieveNameFromExistingArticle(com);
         introTmpl.add("nume", communeName);
         introTmpl.add("district", StringUtils.removeEnd(com.getDistrict().getName(), "i"));
         introTmpl.add("judet", com.getDistrict().getCounty().getName());
@@ -602,7 +604,7 @@ public class HUWikiGenerator {
         }
 
         final List<String> markers = Arrays.asList("==Note", "== Note", "== Vezi și", "==Vezi și", "[[Categorie:", "{{Ciot",
-            "{{ciot", "{{Ungaria");
+            "{{ciot", "{{Ungaria", "==Referințe", "== Referințe");
         final List<Integer> markerLocations = createMarkerLocationList(sbuild, markers);
 
         int insertLocation;
@@ -687,7 +689,7 @@ public class HUWikiGenerator {
         final STGroup templateGroup = com.getTown() > 1 ? townTemplateGroup : communeTemplateGroup;
         final ST piechart = templateGroup.getInstanceOf("piechart");
         final int population = com.getPopulation();
-        final String communeName = retrieveName(com);
+        final String communeName = retrieveNameFromExistingArticle(com);
         piechart.add("nume", communeName);
         switch (com.getTown()) {
         case 4:
@@ -724,8 +726,8 @@ public class HUWikiGenerator {
             "{{formatnum:" + com.getPopulation() + "}}&nbsp;" + Utilities.de(population, "locuitor", "locuitori"));
         demographics.append(demogIntro.render());
 
-        final Nationality majNat = getMajorityEthnicity(com);
-        final List<Nationality> ethnicMinorities = getEthnicMinorities(com);
+        final Nationality majNat = getMajorityEthnicity(com, totalEthn);
+        final List<Nationality> ethnicMinorities = getEthnicMinorities(com, totalEthn);
         final Religion majRel = getMajorityReligion(com);
         final List<Religion> religiousMinorities = getReligiousMinorities(com);
 
@@ -847,12 +849,12 @@ public class HUWikiGenerator {
     private void writeUnknownEthnicity(final STGroup templateGroup, final StringBuilder demographics, final int population,
                                        final DefaultPieDataset datasetEthnos, final Settlement com) {
         double undeclaredPercent = 0.0;
-	try {
-	    undeclaredPercent = 100.0d
-		* (defaultIfNull(datasetEthnos.getValue("Necunoscut"), new Integer(0)).doubleValue()) / population;
-	} catch (UnknownKeyException e) {
-	    undeclaredPercent = 0.0;
-	}
+        try {
+            undeclaredPercent = 100.0d * (defaultIfNull(datasetEthnos.getValue("Necunoscut"), new Integer(0)).doubleValue())
+                / population;
+        } catch (final UnknownKeyException e) {
+            undeclaredPercent = 0.0;
+        }
         if (undeclaredPercent > 0) {
             final ST undeclaredTempl = templateGroup.getInstanceOf("unknownEthn");
             undeclaredTempl.add("percent", "{{formatnum:" + (Math.round(undeclaredPercent * 100.0d) / 100.0d) + "}}%");
@@ -1271,10 +1273,10 @@ public class HUWikiGenerator {
         return null;
     }
 
-    private List<Nationality> getEthnicMinorities(final Settlement settl) {
+    private List<Nationality> getEthnicMinorities(final Settlement settl, final int population) {
         final List<Nationality> ret = new ArrayList<Nationality>();
         for (final Nationality nat : settl.getEthnicStructure().keySet()) {
-            final double weight = settl.getEthnicStructure().get(nat) / (double) settl.getPopulation();
+            final double weight = settl.getEthnicStructure().get(nat) / (double) population;
             if (weight <= 0.5 && weight > 0.01 && !startsWithAny(nat.getName(), "Alți", "Ne")) {
                 ret.add(nat);
             }
@@ -1282,9 +1284,9 @@ public class HUWikiGenerator {
         return ret;
     }
 
-    private Nationality getMajorityEthnicity(final Settlement settl) {
+    private Nationality getMajorityEthnicity(final Settlement settl, final int population) {
         for (final Nationality nat : settl.getEthnicStructure().keySet()) {
-            if (settl.getEthnicStructure().get(nat) / (double) settl.getPopulation() > 0.5) {
+            if (settl.getEthnicStructure().get(nat) / (double) population > 0.5) {
                 return nat;
             }
         }
@@ -1318,5 +1320,19 @@ public class HUWikiGenerator {
     private String retrieveName(final Settlement com) {
         final String[] names = StringUtils.splitByWholeSeparator(com.getName(), " - ");
         return names[0];
+    }
+
+    private String retrieveNameFromExistingArticle(final Settlement com) {
+        String name;
+        try {
+            name = StringUtils.trim(StringUtils.substringBefore(StringUtils.substringBefore(roWpNames.get(com).get(), ","),
+                "("));
+            if (!StringUtils.isEmpty(name)) {
+                return name;
+            }
+        } catch (final ConcurrentException e) {
+            System.out.println("!!! " + e.getMessage());
+        }
+        return retrieveName(com);
     }
 }
