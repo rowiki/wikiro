@@ -505,6 +505,10 @@ public class HUWikiGenerator {
                 translateInfoboxParam(ibParams, "lats", params, "szélességi ívmásodperc");
                 translateInfoboxParam(ibParams, "longm", params, "hosszúsági ívperc");
                 translateInfoboxParam(ibParams, "longs", params, "hosszúsági ívmásodperc");
+                if (Arrays.asList("Szabolcs-Szatmár-Bereg", "Csongrád", "Hajdú-Bihar", "Békés").contains(
+                    com.getDistrict().getCounty().getName())) {
+                    ibParams.put("pushpin_label_position", "left");
+                }
                 if (params.containsKey("szélességi fok")) {
                     ibParams.put("pushpin_map", "Ungaria");
                     ibParams.put("latNS", "N");
