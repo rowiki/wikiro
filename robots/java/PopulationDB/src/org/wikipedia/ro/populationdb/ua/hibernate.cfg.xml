@@ -6,7 +6,7 @@
 	<session-factory>
 		<!-- Database connection settings -->
 		<property name="connection.driver_class">org.postgresql.Driver</property>
-		<property name="connection.url">jdbc:postgresql://localhost/populatie_ungaria_2011</property>
+		<property name="connection.url">jdbc:postgresql://localhost/populatie_ucraina_2001</property>
 		<property name="connection.username">postgres</property>
 		<property name="connection.password">postgres</property>
 
@@ -28,10 +28,10 @@
 		<!-- Drop and re-create the database schema on startup -->
 		<property name="hbm2ddl.auto">update</property>
 		
-		<mapping class="org.wikipedia.ro.populationdb.hu.model.Nationality"/>
-		<mapping class="org.wikipedia.ro.populationdb.hu.model.County"/>
-		<mapping class="org.wikipedia.ro.populationdb.hu.model.District"/>
-		<mapping class="org.wikipedia.ro.populationdb.hu.model.Religion"/>
-		<mapping class="org.wikipedia.ro.populationdb.hu.model.Settlement"/>
+		<mapping class="org.wikipedia.ro.populationdb.ua.model.Commune"/>
+		<mapping class="org.wikipedia.ro.populationdb.ua.model.Language"/>
+		<mapping class="org.wikipedia.ro.populationdb.ua.model.Raion"/>
+		<mapping class="org.wikipedia.ro.populationdb.ua.model.Region"/>
+		<mapping class="org.wikipedia.ro.populationdb.ua.model.Settlement"/>
 	</session-factory>
 </hibernate-configuration>

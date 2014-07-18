@@ -107,10 +107,6 @@ public class HUPopulationParser {
                 parser.countyRelPopFiles.put(countyIndex, religionPopFile);
             }
             countyIndex++;
-            if (countyIndex == 18) {
-                stop = false;
-                countyIndex++;
-            }
         } while (!stop);
 
         parser.parseAllCounties();

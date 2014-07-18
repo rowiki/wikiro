@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -22,13 +21,12 @@ import org.hibernate.annotations.GenericGenerator;
 public class Settlement {
     private long id;
     private String name;
+    private String transliteratedName;
+    private String romanianName;
     private int population;
-    private int town;
-    private Raion district;
+    private Commune commune;
     private double area;
-    private Map<Nationality, Integer> ethnicStructure = new HashMap<Nationality, Integer>();
-    private Map<Religion, Integer> religiousStructure = new HashMap<Religion, Integer>();
-    private Map<Integer, Integer> historicalPopulation = new HashMap<Integer, Integer>();
+    private Map<Language, Double> languageStructure = new HashMap<Language, Double>();
 
     @Id
     @GeneratedValue(generator = "increment")
@@ -53,13 +51,13 @@ public class Settlement {
     @ElementCollection
     @CollectionTable(name = "localitate_nationalitate", joinColumns = @JoinColumn(name = "localitate"))
     @MapKeyJoinColumn(name = "nationalitate")
-    @Column(name = "populatie")
-    public Map<Nationality, Integer> getEthnicStructure() {
-        return ethnicStructure;
+    @Column(name = "procent")
+    public Map<Language, Double> getLanguageStructure() {
+        return languageStructure;
     }
 
-    public void setEthnicStructure(final Map<Nationality, Integer> ethnicStructure) {
-        this.ethnicStructure = ethnicStructure;
+    public void setLanguageStructure(final Map<Language, Double> languageStructure) {
+        this.languageStructure = languageStructure;
     }
 
     @Column(name = "nume")
@@ -71,31 +69,14 @@ public class Settlement {
         this.name = name;
     }
 
-    @Column(name = "nivel_oras")
-    public int getTown() {
-        return town;
-    }
-
-    public void setTown(final int town) {
-        this.town = town;
-    }
-
-    @ElementCollection
-    @CollectionTable(name = "localitate_istoric", joinColumns = @JoinColumn(name = "localitate"))
-    @Column(name = "populatie")
-    @MapKeyColumn(name = "an")
-    public Map<Integer, Integer> getHistoricalPopulation() {
-        return historicalPopulation;
-    }
-
     @ManyToOne
-    @JoinColumn(name = "district")
-    public Raion getDistrict() {
-        return district;
+    @JoinColumn(name = "commune")
+    public Commune getCommune() {
+        return commune;
     }
 
-    public void setDistrict(final Raion district) {
-        this.district = district;
+    public void setCommune(final Commune commune) {
+        this.commune = commune;
     }
 
     public double getArea() {
@@ -107,20 +88,21 @@ public class Settlement {
         this.area = d;
     }
 
-    @ElementCollection
-    @CollectionTable(name = "localitate_religie", joinColumns = @JoinColumn(name = "localitate"))
-    @MapKeyJoinColumn(name = "religie")
-    @Column(name = "populatie")
-    public Map<Religion, Integer> getReligiousStructure() {
-        return religiousStructure;
+    @Column(name = "transliterare")
+    public String getTransliteratedName() {
+        return transliteratedName;
     }
 
-    public void setReligiousStructure(final Map<Religion, Integer> religiousStructure) {
-        this.religiousStructure = religiousStructure;
+    public void setTransliteratedName(final String transliteratedName) {
+        this.transliteratedName = transliteratedName;
     }
 
-    public void setHistoricalPopulation(final Map<Integer, Integer> historicalPopulation) {
-        this.historicalPopulation = historicalPopulation;
+    public String getRomanianName() {
+        return romanianName;
+    }
+
+    public void setRomanianName(final String romanianName) {
+        this.romanianName = romanianName;
     }
 
 }
