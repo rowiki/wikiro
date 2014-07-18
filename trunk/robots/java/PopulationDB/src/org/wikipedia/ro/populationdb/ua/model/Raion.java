@@ -20,8 +20,37 @@ public class Raion {
 
     private long id;
     private String name;
+    private String transliteratedName;
+    private String romanianName;
+
+    @Column(name = "transliterare")
+    public String getTransliteratedName() {
+        return transliteratedName;
+    }
+
+    public void setTransliteratedName(final String transliteratedName) {
+        this.transliteratedName = transliteratedName;
+    }
+
+    public String getRomanianName() {
+        return romanianName;
+    }
+
+    public void setRomanianName(final String romanianName) {
+        this.romanianName = romanianName;
+    }
+
+    @OneToMany(mappedBy = "raion")
+    public Set<Commune> getCommunes() {
+        return communes;
+    }
+
+    public void setCommunes(final Set<Commune> communes) {
+        this.communes = communes;
+    }
+
     private Region county;
-    private Set<Settlement> settlements = new HashSet<Settlement>();
+    private Set<Commune> communes = new HashSet<Commune>();
 
     @Id
     @GeneratedValue(generator = "increment")
@@ -44,21 +73,12 @@ public class Raion {
     }
 
     @ManyToOne
-    @JoinColumn(name = "county")
+    @JoinColumn(name = "region")
     public Region getCounty() {
         return county;
     }
 
     public void setCounty(final Region county) {
         this.county = county;
-    }
-
-    @OneToMany(mappedBy = "district")
-    public Set<Settlement> getSettlements() {
-        return settlements;
-    }
-
-    public void setSettlements(final Set<Settlement> settlements) {
-        this.settlements = settlements;
     }
 }
