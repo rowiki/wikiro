@@ -114,7 +114,7 @@ public class UkrainianTransliterator extends Transliterator {
                 transformedChar = "";
                 break;
             case 'Я':
-                if (null == prev || Arrays.asList('А', 'Е', 'О', 'У', 'Ъ', 'Ю', 'Я', 'Э').contains(prev)) {
+                if (null == prev || Arrays.asList('А', 'Е', 'О', 'У', 'Ъ', 'Ю', 'Я', 'Э', 'И').contains(prev)) {
                     transformedChar = "IA";
                 } else if (Arrays.asList('І', 'Й', 'Ї').contains(prev)) {
                     transformedChar = "A";
@@ -123,7 +123,7 @@ public class UkrainianTransliterator extends Transliterator {
                 }
                 break;
             case 'Є':
-                if (null == prev || Arrays.asList('А', 'Е', 'О', 'У', 'Ъ', 'Ю', 'Я', 'Э').contains(prev)) {
+                if (null == prev || Arrays.asList('А', 'Е', 'О', 'У', 'Ъ', 'Ю', 'Я', 'Э', 'И').contains(prev)) {
                     transformedChar = "IE";
                 } else if (Arrays.asList('І', 'Й', 'Ї').contains(prev)) {
                     transformedChar = "E";
@@ -132,7 +132,7 @@ public class UkrainianTransliterator extends Transliterator {
                 }
                 break;
             case 'Ї':
-                if (null == prev || Arrays.asList('А', 'Е', 'О', 'У', 'Ъ', 'Ю', 'Я', 'Э').contains(prev)) {
+                if (null == prev || Arrays.asList('А', 'Е', 'О', 'У', 'Ъ', 'Ю', 'Я', 'Э', 'И').contains(prev)) {
                     transformedChar = "II";
                 } else if (Arrays.asList('І', 'Й', 'Ї').contains(prev)) {
                     transformedChar = "I";
