@@ -1,5 +1,11 @@
 package org.wikipedia.ro.populationdb.ua;
 
+import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.isAlpha;
+import static org.apache.commons.lang3.StringUtils.join;
+import static org.apache.commons.lang3.StringUtils.lowerCase;
+import static org.apache.commons.lang3.StringUtils.split;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.wikipedia.ro.populationdb.ua.model.Commune;
 import org.wikipedia.ro.populationdb.util.Transliterator;
 import org.wikipedia.ro.populationdb.util.UkrainianTransliterator;
 
@@ -45,11 +54,62 @@ public class UAPercentagesParser {
                 for (int i = 0; i < 5; i++) {
                     line = reader.readNext();
                 }
+
+                // comuna, oras, asezare urbana
                 while (null != (line = reader.readNext())) {
                     final String nume = line[0];
                     final Transliterator t = new UkrainianTransliterator(nume);
                     final String numeTransliterat = t.transliterate();
-                    System.out.println(nume + " - " + numeTransliterat);
+
+                    final String[] splitName = split(numeTransliterat);
+                    final String[] splitNameUa = split(nume);
+
+                    if (splitName.length < 2) {
+                        continue;
+                    }
+
+                    if (ArrayUtils.contains(splitName, "silrada") || StringUtils.equals(splitName[0], "smt")
+                        || StringUtils.equals(splitName[0], "m.")) {
+                        final Commune com = new Commune();
+                        if (ArrayUtils.contains(splitName, "silrada")) {
+                            final int indexOfSilrada = ArrayUtils.indexOf(splitName, "silrada");
+                            final String[] nameParts = ArrayUtils.subarray(splitName, 0, indexOfSilrada);
+                            final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 0, indexOfSilrada);
+
+                            for (int i = 0; i < nameParts.length; i++) {
+                                nameParts[i] = capitalize(lowerCase(nameParts[i]));
+                                namePartsUa[i] = capitalize(lowerCase(namePartsUa[i]));
+                            }
+
+                            com.setTransliteratedName(join(nameParts, " "));
+                            com.setName(join(namePartsUa, " "));
+                            com.setTown(0);
+                        }
+                        if (StringUtils.equals(splitName[0], "smt")) {
+                            int i = splitName.length;
+                            for (i = 1; i < splitName.length && isAlpha(splitName[i]); i++) {
+                            }
+                            final String[] nameParts = ArrayUtils.subarray(splitName, 1, i);
+                            final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 1, i);
+                            com.setTown(1);
+                            com.setTransliteratedName(capitalize(lowerCase(join(nameParts, " "))));
+                            com.setName(capitalize(lowerCase(join(namePartsUa, " "))));
+                        }
+                        if (StringUtils.equals(splitName[0], "m.")) {
+                            int i = splitName.length;
+                            for (i = 1; i < splitName.length && isAlpha(splitName[i]); i++) {
+                            }
+                            final String[] nameParts = ArrayUtils.subarray(splitName, 1, i);
+                            final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 1, i);
+                            com.setTown(2);
+                            com.setTransliteratedName(capitalize(lowerCase(join(nameParts, " "))));
+                            com.setName(capitalize(lowerCase(join(namePartsUa, " "))));
+                        }
+                        final Transliterator t1 = new UkrainianTransliterator(com.getName());
+                        final String numeTransliterat1 = t1.transliterate();
+
+                        System.out.println(com.getTown() + " - " + com.getName() + " - " + numeTransliterat1);
+                    }
                 }
             } catch (final UnsupportedEncodingException e) {
                 // TODO Auto-generated catch block
@@ -73,5 +133,4 @@ public class UAPercentagesParser {
         }
 
     }
-
 }
