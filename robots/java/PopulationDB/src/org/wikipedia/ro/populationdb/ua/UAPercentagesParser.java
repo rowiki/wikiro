@@ -157,12 +157,21 @@ public class UAPercentagesParser {
                             final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 0, indexOfSilrada);
 
                             for (int i = 0; i < nameParts.length; i++) {
-                                nameParts[i] = capitalize(lowerCase(nameParts[i]));
-                                namePartsUa[i] = capitalize(lowerCase(namePartsUa[i]));
+                                final String[] lineSeparatedParts = split(splitName[i], '-');
+                                for (int j = 0; j < lineSeparatedParts.length; j++) {
+                                    lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
+                                }
+                                splitName[i] = join(lineSeparatedParts, '-');
+
+                                final String[] lineSeparatedPartsUa = split(splitNameUa[i], '-');
+                                for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
+                                    lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
+                                }
+                                splitNameUa[i] = join(lineSeparatedPartsUa, '-');
                             }
 
                             currentCommune.setTransliteratedName(join(nameParts, " "));
-                            currentCommune.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
+                            // currentCommune.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
                             currentCommune.setName(join(namePartsUa, " "));
                             currentCommune.setTown(0);
                             currentCommune.setRaion(currentRaion);
@@ -170,9 +179,18 @@ public class UAPercentagesParser {
                         }
                         if (StringUtils.equals(splitName[0], "smt")) {
                             int i = splitName.length;
-                            for (i = 1; i < splitName.length && isAlpha(splitName[i]); i++) {
-                                splitName[i] = capitalize(lowerCase(splitName[i]));
-                                splitNameUa[i] = capitalize(lowerCase(splitNameUa[i]));
+                            for (i = 1; i < splitName.length && isAlpha(StringUtils.replace(splitName[i], "-", "")); i++) {
+                                final String[] lineSeparatedParts = split(splitName[i], '-');
+                                for (int j = 0; j < lineSeparatedParts.length; j++) {
+                                    lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
+                                }
+                                splitName[i] = join(lineSeparatedParts, '-');
+
+                                final String[] lineSeparatedPartsUa = split(splitNameUa[i], '-');
+                                for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
+                                    lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
+                                }
+                                splitNameUa[i] = join(lineSeparatedPartsUa, '-');
                             }
                             final String[] nameParts = ArrayUtils.subarray(splitName, 1, i);
                             final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 1, i);
@@ -192,9 +210,18 @@ public class UAPercentagesParser {
                         }
                         if (StringUtils.equals(splitName[0], "m.")) {
                             int i = splitName.length;
-                            for (i = 1; i < splitName.length && isAlpha(splitName[i]); i++) {
-                                splitName[i] = capitalize(lowerCase(splitName[i]));
-                                splitNameUa[i] = capitalize(lowerCase(splitNameUa[i]));
+                            for (i = 1; i < splitName.length && isAlpha(StringUtils.replace(splitName[i], "-", "")); i++) {
+                                final String[] lineSeparatedParts = split(splitName[i], '-');
+                                for (int j = 0; j < lineSeparatedParts.length; j++) {
+                                    lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
+                                }
+                                splitName[i] = join(lineSeparatedParts, '-');
+
+                                final String[] lineSeparatedPartsUa = split(splitNameUa[i], '-');
+                                for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
+                                    lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
+                                }
+                                splitNameUa[i] = join(lineSeparatedPartsUa, '-');
                             }
                             final String[] nameParts = ArrayUtils.subarray(splitName, 1, i);
                             final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 1, i);
