@@ -74,11 +74,16 @@ public class Raion {
 
     @ManyToOne
     @JoinColumn(name = "region")
-    public Region getCounty() {
+    public Region getRegion() {
         return county;
     }
 
-    public void setCounty(final Region county) {
+    public void setRegion(final Region county) {
         this.county = county;
+    }
+
+    @Override
+    public String toString() {
+        return "Raion [name=" + name + ", transliteratedName=" + transliteratedName + ", romanianName=" + romanianName + "]";
     }
 }
