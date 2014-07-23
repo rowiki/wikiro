@@ -22,6 +22,15 @@ public class Language {
         return id;
     }
 
+    public Language(final String name) {
+        super();
+        this.name = name;
+    }
+
+    public Language() {
+        super();
+    }
+
     public void setId(final int id) {
         this.id = id;
     }

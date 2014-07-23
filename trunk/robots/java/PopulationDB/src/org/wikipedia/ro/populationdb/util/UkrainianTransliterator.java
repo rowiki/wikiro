@@ -1,10 +1,12 @@
 package org.wikipedia.ro.populationdb.util;
 
+import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.lowerCase;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
 
 public class UkrainianTransliterator extends Transliterator {
     private static final char SEMN_MOALE = 'Ь';
@@ -69,9 +71,9 @@ public class UkrainianTransliterator extends Transliterator {
             case 'Ч':
                 if (i + 1 >= text.length()) {
                     transformedChar = charmap.get(crt);
-                } else if (Arrays.asList('Е', 'І', 'Ю', 'Я', 'Ї', 'Є').contains(text.charAt(i + 1))) {
+                } else if (Arrays.asList('Е', 'І', 'Ю', 'Я', 'Ї', 'Є').contains(Character.toUpperCase(text.charAt(i + 1)))) {
                     transformedChar = "C";
-                } else if (Arrays.asList('И', 'О', 'У').contains(text.charAt(i + 1))) {
+                } else if (Arrays.asList('И', 'О', 'У').contains(Character.toUpperCase(text.charAt(i + 1)))) {
                     transformedChar = "CI";
                 } else if (text.charAt(i + 1) == 'А') {
                     transformedChar = "CE";
@@ -82,9 +84,9 @@ public class UkrainianTransliterator extends Transliterator {
             case 'Щ':
                 if (i + 1 >= text.length()) {
                     transformedChar = charmap.get(crt);
-                } else if (Arrays.asList('Е', 'І', 'Ю', 'Я', 'Ї', 'Є').contains(text.charAt(i + 1))) {
+                } else if (Arrays.asList('Е', 'І', 'Ю', 'Я', 'Ї', 'Є').contains(Character.toUpperCase(text.charAt(i + 1)))) {
                     transformedChar = "ȘC";
-                } else if (Arrays.asList('И', 'О', 'У').contains(text.charAt(i + 1))) {
+                } else if (Arrays.asList('И', 'О', 'У').contains(Character.toUpperCase(text.charAt(i + 1)))) {
                     transformedChar = "ȘCI";
                 } else if (text.charAt(i + 1) == 'А') {
                     transformedChar = "ȘCE";
@@ -104,7 +106,7 @@ public class UkrainianTransliterator extends Transliterator {
             case SEMN_MOALE:
                 if (i + 1 >= text.length()) {
                     transformedChar = "";
-                } else if (prev == 'С' && text.charAt(i + 1) == 'О') {
+                } else if (prev == 'С' && Character.toUpperCase(text.charAt(i + 1)) == 'О') {
                     transformedChar = "I";
                 } else {
                     transformedChar = "";
@@ -145,11 +147,11 @@ public class UkrainianTransliterator extends Transliterator {
                 transformedChar = " ";
                 break;
             default:
-                transformedChar = StringUtils.defaultString(charmap.get(crt), String.valueOf(crt));
+                transformedChar = defaultString(charmap.get(crt), String.valueOf(crt));
             }
 
-            transformedString.append(Character.isLowerCase(originalCrt) ? StringUtils.lowerCase(transformedChar)
-                : StringUtils.capitalize(transformedChar));
+            transformedString.append(Character.isLowerCase(originalCrt) ? lowerCase(transformedChar)
+                : capitalize(lowerCase(transformedChar)));
             prev = crt;
         }
         return transformedString.toString();

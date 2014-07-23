@@ -105,4 +105,10 @@ public class Settlement {
         this.romanianName = romanianName;
     }
 
+    @Override
+    public String toString() {
+        return "Settlement [name=" + name + ", transliteratedName=" + transliteratedName + ", romanianName=" + romanianName
+            + "]";
+    }
+
 }

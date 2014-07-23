@@ -1,21 +1,26 @@
 package org.wikipedia.ro.populationdb.ua.model;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+@Entity
+@Table(name = "comuna")
 public class Commune {
     private long id;
 
@@ -90,8 +95,24 @@ public class Commune {
     }
 
     private Raion raion;
-    private Set<Settlement> settlements;
-    private final Map<Language, Double> languageStructure = new HashMap<Language, Double>();
+    private Region region;
+
+    @ManyToOne
+    @JoinColumn(name = "region")
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(final Region region) {
+        this.region = region;
+    }
+
+    private Set<Settlement> settlements = new HashSet<Settlement>();
+    private Map<Language, Double> languageStructure = new HashMap<Language, Double>();
+
+    public void setLanguageStructure(final Map<Language, Double> languageStructure) {
+        this.languageStructure = languageStructure;
+    }
 
     @Column(name = "nivel_oras")
     public int getTown() {
@@ -109,6 +130,12 @@ public class Commune {
 
     public void setSettlements(final Set<Settlement> settlements) {
         this.settlements = settlements;
+    }
+
+    @Override
+    public String toString() {
+        return "Commune [name=" + name + ", transliteratedName=" + transliteratedName + ", romanianName=" + romanianName
+            + "]";
     }
 
 }

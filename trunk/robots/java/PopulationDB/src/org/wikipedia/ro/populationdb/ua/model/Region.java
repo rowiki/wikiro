@@ -1,5 +1,6 @@
 package org.wikipedia.ro.populationdb.ua.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -45,7 +46,17 @@ public class Region {
         this.raioane = raioane;
     }
 
-    private Set<Raion> raioane;
+    private Set<Raion> raioane = new HashSet<Raion>();
+    private Set<Commune> cities = new HashSet<Commune>();
+
+    @OneToMany(mappedBy = "region")
+    public Set<Commune> getCities() {
+        return cities;
+    }
+
+    public void setCities(final Set<Commune> cities) {
+        this.cities = cities;
+    }
 
     @Id
     @GeneratedValue(generator = "increment")
@@ -67,12 +78,9 @@ public class Region {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "region")
-    public Set<Raion> getDistricts() {
-        return raioane;
-    }
-
-    public void setDistricts(final Set<Raion> districts) {
-        this.raioane = districts;
+    @Override
+    public String toString() {
+        return "Region [name=" + name + ", transliteratedName=" + transliteratedName + ", romanianName=" + romanianName
+            + "]";
     }
 }
