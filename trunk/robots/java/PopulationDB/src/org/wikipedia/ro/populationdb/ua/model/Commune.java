@@ -23,6 +23,27 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "comuna")
 public class Commune {
     private long id;
+    private Settlement capital;
+    private boolean miskrada;
+
+    @Column(name = "miskrada")
+    public boolean isMiskrada() {
+        return miskrada;
+    }
+
+    public void setMiskrada(final boolean miskrada) {
+        this.miskrada = miskrada;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "capitala")
+    public Settlement getCapital() {
+        return capital;
+    }
+
+    public void setCapital(final Settlement capital) {
+        this.capital = capital;
+    }
 
     @Id
     @GeneratedValue(generator = "increment")

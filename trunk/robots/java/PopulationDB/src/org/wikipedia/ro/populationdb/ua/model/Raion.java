@@ -22,6 +22,17 @@ public class Raion {
     private String name;
     private String transliteratedName;
     private String romanianName;
+    private Commune capital;
+
+    @ManyToOne
+    @JoinColumn(name = "capital")
+    public Commune getCapital() {
+        return capital;
+    }
+
+    public void setCapital(final Commune capital) {
+        this.capital = capital;
+    }
 
     @Column(name = "transliterare")
     public String getTransliteratedName() {
@@ -49,7 +60,7 @@ public class Raion {
         this.communes = communes;
     }
 
-    private Region county;
+    private Region region;
     private Set<Commune> communes = new HashSet<Commune>();
 
     @Id
@@ -75,11 +86,11 @@ public class Raion {
     @ManyToOne
     @JoinColumn(name = "region")
     public Region getRegion() {
-        return county;
+        return region;
     }
 
     public void setRegion(final Region county) {
-        this.county = county;
+        this.region = county;
     }
 
     @Override
