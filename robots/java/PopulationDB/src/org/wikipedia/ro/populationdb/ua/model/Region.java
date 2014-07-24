@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -19,6 +21,17 @@ public class Region {
     private String name;
     private String transliteratedName;
     private String romanianName;
+    private Commune capital;
+
+    @ManyToOne
+    @JoinColumn(name = "capital")
+    public Commune getCapital() {
+        return capital;
+    }
+
+    public void setCapital(final Commune capital) {
+        this.capital = capital;
+    }
 
     @Column(name = "transliterare")
     public String getTransliteratedName() {

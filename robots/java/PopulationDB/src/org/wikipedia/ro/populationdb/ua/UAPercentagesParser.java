@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
@@ -38,7 +41,15 @@ public class UAPercentagesParser {
     private static File[] files;
 
     public UAPercentagesParser(final File[] files2) {
-        this.files = files2;
+        final List<File> fileList = new ArrayList<File>();
+        fileList.addAll(Arrays.asList(files2));
+        Collections.sort(fileList, new Comparator<File>() {
+
+            public int compare(final File arg0, final File arg1) {
+                return arg0.getName().compareTo(arg1.getName());
+            }
+        });
+        this.files = fileList.toArray(new File[fileList.size()]);
     }
 
     private static Wiki rowiki = null;
@@ -63,6 +74,7 @@ public class UAPercentagesParser {
             final File[] files = inDir.listFiles();
             final UAPercentagesParser parser = new UAPercentagesParser(files);
             parser.parse();
+            parser.performCorrection();
         } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -72,6 +84,14 @@ public class UAPercentagesParser {
         } finally {
             rowiki.logout();
         }
+    }
+
+    public void performCorrection() {
+        final Hibernator hib = new Hibernator();
+        final Session ses = hib.getSession();
+
+        ses.beginTransaction();
+        ses.getTransaction().commit();
     }
 
     public void parse() {
@@ -147,6 +167,32 @@ public class UAPercentagesParser {
                         continue;
                     }
                     // comuna, oras, asezare urbana
+                    if (ArrayUtils.contains(splitName, "(miskrada)")) {
+                        currentCommune = new Commune();
+                        final int indexOfMiskrada = ArrayUtils.indexOf(splitName, "(miskrada)");
+                        final String[] nameParts = ArrayUtils.subarray(splitName, 0, indexOfMiskrada);
+                        final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 0, indexOfMiskrada);
+
+                        for (int i = 0; i < nameParts.length; i++) {
+                            final String[] lineSeparatedParts = split(nameParts[i], '-');
+                            for (int j = 0; j < lineSeparatedParts.length; j++) {
+                                lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
+                            }
+                            nameParts[i] = join(lineSeparatedParts, '-');
+
+                            final String[] lineSeparatedPartsUa = split(namePartsUa[i], '-');
+                            for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
+                                lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
+                            }
+                            namePartsUa[i] = join(lineSeparatedPartsUa, '-');
+                        }
+                        currentCommune.setTransliteratedName(join(nameParts, " "));
+                        currentCommune.setName(join(namePartsUa, " "));
+                        currentCommune.setTown(3);
+                        currentCommune.setRegion(currentRegion);
+                        currentCommune.setMiskrada(true);
+                        session.save(currentCommune);
+                    }
                     if (ArrayUtils.contains(splitName, "silrada") || StringUtils.equals(splitName[0], "smt")
                         || StringUtils.equals(splitName[0], "m.")) {
 
@@ -157,17 +203,17 @@ public class UAPercentagesParser {
                             final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 0, indexOfSilrada);
 
                             for (int i = 0; i < nameParts.length; i++) {
-                                final String[] lineSeparatedParts = split(splitName[i], '-');
+                                final String[] lineSeparatedParts = split(nameParts[i], '-');
                                 for (int j = 0; j < lineSeparatedParts.length; j++) {
                                     lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
                                 }
-                                splitName[i] = join(lineSeparatedParts, '-');
+                                nameParts[i] = join(lineSeparatedParts, '-');
 
-                                final String[] lineSeparatedPartsUa = split(splitNameUa[i], '-');
+                                final String[] lineSeparatedPartsUa = split(namePartsUa[i], '-');
                                 for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
                                     lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
                                 }
-                                splitNameUa[i] = join(lineSeparatedPartsUa, '-');
+                                namePartsUa[i] = join(lineSeparatedPartsUa, '-');
                             }
 
                             currentCommune.setTransliteratedName(join(nameParts, " "));
@@ -248,6 +294,7 @@ public class UAPercentagesParser {
                                     currentRegion.setName(currentCommune.getName());
                                     currentRegion.setTransliteratedName(currentCommune.getTransliteratedName());
                                     currentRegion.setRomanianName(getRomanianName(getPossibleNames(currentRegion)));
+                                    currentRegion.setCapital(currentCommune);
                                     System.out.println("REGION - " + currentRegion.getName() + " - "
                                         + currentRegion.getTransliteratedName());
                                 }
@@ -264,6 +311,7 @@ public class UAPercentagesParser {
                                 currentRaion.setName(currentCommune.getName());
                                 currentRaion.setTransliteratedName(numeTransliterat1);
                                 currentRaion.setRomanianName(getRomanianName(getPossibleNames(currentRaion)));
+                                currentRaion.setCapital(currentCommune);
                                 currentCommune.setRaion(currentRaion);
                                 System.out.println("Raion " + currentRaion.getName() + " - "
                                     + currentRaion.getTransliteratedName());
@@ -329,6 +377,7 @@ public class UAPercentagesParser {
                             currentCommune.setName(sat.getName());
                             currentCommune.setTransliteratedName(sat.getTransliteratedName());
                             currentCommune.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
+                            currentCommune.setCapital(sat);
                             System.out.println(currentCommune.getTown() + " - " + currentCommune.getName() + " - "
                                 + currentCommune.getTransliteratedName());
                         }
