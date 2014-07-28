@@ -35,18 +35,18 @@ def main():
 	
 	site = pywikibot.getSite()
 	
-	#for code in pages_ro:
-	#	page = pywikibot.Page(site, u"Cod:LMI:" + code + "/articol")
-	#	pywikibot.output(page.title())
-	#	#if page.exists() and not page.isRedirect():
-	#	#		pywikibot.output(u"Page %s is not a redirect" % page.title())
-	#	#else:
-	#	if not page.exists():
-	#		page.put(u"#redirecteaza[[%s]]" % pages_ro[code][0]["name"], "Redirecting code to the Wikipedia article")
+	for code in pages_ro:
+		page = pywikibot.Page(site, u"Cod:LMI:" + code + "/articol")
+		#pywikibot.output(page.title())
+		if page.exists() and not page.isRedirectPage():
+				pywikibot.output(u"Page %s is not a redirect" % page.title())
+		else:
+		#if not page.exists():
+			page.put(u"#redirecteaza[[%s]]" % pages_ro[code][0]["name"], "Redirecting code to the Wikipedia article")
 			
 	for monument in db:
-		if not monument["Cod"] in pages_ro:
-			continue
+		#if not monument["Cod"] in pages_ro:
+		#	continue
 		page = pywikibot.Page(site, u"Cod:LMI:" + monument["Cod"])
 		pywikibot.output(page.title())
 
