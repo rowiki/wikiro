@@ -58,11 +58,13 @@ def main():
 	total_nature = {}
 	total_type = {}
 	total_interest = {}
+	total_apmnir = 0
 
 	image_county = {}
 	image_nature = {}
 	image_type = {}
 	image_interest = {}
+	image_apmnir = 0
 	
 	for monument in db:
 		(county, nature, type, interest) = split_code(monument["Cod"])
@@ -159,11 +161,17 @@ def main():
 	print "* Articole lipsă (cat A): ''%d''" % potential_articles
 
 	for nature in image_nature.keys():
+		if nature != "arheologie":
+			total_apmnir += total_nature[nature]
+			image_apmnir += image_nature[nature]
 		print "* Imagini pentru monumente de %s: ''%f%%''" % (nature, image_nature[nature] * 100.0 / total_nature[nature])
 	for type in image_type.keys():
 		print "* Imagini pentru %s: ''%f%%''" % (type, image_type[type] * 100.0 / total_type[type])
 	for interest in image_interest.keys():
 		print "* Imagini pentru monumente de interes %s: ''%f%%''" % (interest, image_interest[interest] * 100.0 / total_interest[interest])
+	
+	print "* Comparație cu monumenteuitate.ro: ''%f%% (%d/%d)''" % (image_apmnir * 100.0 / total_apmnir, image_apmnir, total_apmnir)
+
 	#image_keys = image_county.keys()
 	#image_keys.sort()
 	images_percent = {}
