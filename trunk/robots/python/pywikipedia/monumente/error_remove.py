@@ -73,8 +73,6 @@ mistakes = {
 	u'p\.Chr\.': u'p. Chr.',
 	u'(\| (?!Imagine))(.*)sec\.(I|V|X)': u'\g<1>\g<2>sec. \g<3>',
 	u'(\| (?!Imagine|Commons))(.*):([0-9])': u'\g<1>\g<2>: \g<3>',
-}
-minormistakes = {
 	#specific to one or few file(s)
 	u'Cetate(a?)de([a-zăîâșțA-ZĂÂÎȘȚ])': u'Cetate\g<1> de \g<2>',
 	u'Moar([ăa])de([a-zăîâșțA-ZĂÂÎȘȚ])': u'Moar\g<1> de \g<2>',
@@ -97,21 +95,60 @@ minormistakes = {
 	u'înc .sec': u"înc. sec",
 	u'înfața': u'în fața',
 	u' azi([a-z]{2,})': u' azi \g<1>',
-	u'(\| (?!Imagine|Commons|NotăCod|Cod92))(.*)([a-z])([0-9])': u'\g<1>\g<2>\g<3> \g<4>',
+	#u'(\| (?!Imagine|Commons|NotăCod|Cod92))(.*)([a-z])([0-9])': u'\g<1>\g<2>\g<3> \g<4>',
+	u'(\| Adresă)(.*)Str(.*[a-z])([0-9])': u'\g<1>\g<2>Str\g<3> \g<4>',
 	u'(\| (?!Imagine|Commons|NotăCod|Cod92))(.*)([0-9])(ale|[dD]e|[Ii]anuarie|[Ff]ebruarie|[Mm]artie|[Aa]prilie|[Mm]ai|[iI]unie|[iI]ulie|[Aa]ugust|[Ss]eptembrie|[Oo]ctombrie|[Nn]oiembrie)': u'\g<1>\g<2>\g<3> \g<4>',
 	u'([Pp])eolungimede': u'\g<1>e o lungime de',
 	u'personalitățialeistorieiși': u'personalități ale istoriei și',
 	u'(\| (?!Imagine|Commons|NotăCod))(.*)([NSEV])(de|între|printre)': u'\g<1>\g<2>\g<3> \g<4>',
 	u'deunpâlcde': u'de un pâlc de',
 	u'deint': u'de int',
-	u'(\| (?!Imagine|Commons|NotăCod))(.*)(DJ|DC|DN)([a-zA-Z])': u'\g<1>\g<2>\g<3> \g<4>',
+	#u'(\| (?!Imagine|Commons|NotăCod))(.*)(DJ|DC|DN)([a-zA-Z])': u'\g<1>\g<2>\g<3> \g<4>',
 	u'înfost(ul|a)([a-z])': u'în fost\g<1> \g<2>',
 	u'deculmeaparalelă': u'de culmea paralelă',
 	u'(de?)s a t': u'\g<1> sat',
 	u'([bcdfghjklmnpqsștțvwxzăî])și ': u'\g<1> și ',
 	u'([bcdfghjklmnpqrsștțvwxzăî])nr\.': u'\g<1> nr.',
-	u'și(turn|zid|poartă)': u'și \g<1>',
+	u'și(turn|zid|poartă|râul)': u'și \g<1>',
 	u'turn(de|al)\s?([a-z]?)': u'turn \g<1> \g<2>',
+	u'confluențapârâului': u'confluența pârâului',
+	u' platoul , Dogaru\"': u' platoul \"Dogaru\"',
+	u'(a|e|o|u|i)nr\.': u'\g<1> nr.',
+	u'(d|t)de': u'\g<1> de',
+	u'(\| (?!Imagine|Commons|NotăCod))(.*)([0-9])([a-zA-Z]{4,})': u'\g<1>\g<2>\g<3> \g<4>',
+	u'afost': u'a fost',
+	u'([0-9]-) ([0-9])': u'\g<1>\g<2>',
+	u'([0-9]) (-[0-9])': u'\g<1>\g<2>',
+	u'([a-z]{4,})a a ': u'\g<1>a',
+	u'([a-z]{4,})a a ([^I])': u'\g<1>ă a \g<2>',
+	u' ([înqwtyuipdfghjlzxcvbn]) ': u'\g<1> ', 
+}
+minormistakes = {
+	u'([Zz])iddeapărare': u'\g<1>id de apărare',
+	u'peun([a-zA-Z])': u'pe un \g<1>',
+	u'peo([a-zA-Z])': u'pe o \g<1>',
+	u'(\| (?!Imagine|Commons|NotăCod))(.*) ,(,?)(\s?)': u'\g<1>\g<2>, ',
+	u'(\| (?!Imagine|Commons|NotăCod))(.*) ;(\s?)': u'\g<1>\g<2>; ',
+	u';;': u'; ',
+	u'(\| (?!Imagine|Commons|NotăCod))(.*) \.(\.?)(\s?)': u'\g<1>\g<2>. ',
+	u'([^a-z])(\s?)l a ': u'\g<1> la ',
+	u'(N|S) (E|V)(\s?)d(\s?)e(\s?)': u'\g<1>\g<2> de ',
+	u'troițadinfața': u'troița din fața',
+	u'\"(și|dar|sau) ': u'\" \g<1> ',
+	u' catre ': u' către ',
+	u'Casă(ș|ț|ă|â|a)': u'Casă \g<1>',
+	u'căzuțiînrăzboi': u'căzuți în război',
+	u'(G|g)arade': u'\g<1>ara de',
+	u'([;,:/?!])([;,.:?!])': u'\g<1>',
+	u'cadastrala': u'cadastrală',
+	u' =(\s*)" ': u' = "',
+	u'(\| (?!Imagine|Commons|NotăCod))(.*)(\s+)" ([A-ZȘȚÂĂÎ])': u'\g<1>\g<2>\g<3>"\g<4>',
+	u'dealtaa(\s*)': u'de alta a ',
+	u'deoparte(\s*)': u'de o parte ',
+	u' și(de|a|pe)': u' și \g<1>',
+	u' k ': u' km ',
+	u'([^aeiourpăc\(" ])și': u'\g<1> și',
+	u' de([bg])': u' de \g<1>',
 	
 }
 
@@ -133,10 +170,12 @@ improvements = OrderedDict([
 authors = {
 }
 
+def specialProcessingWhitespace():
+	pass#u'((?P<letter>[a-zîâășț])( +)){3,}': u'\g<letter>',
+
 def checkAndUpload(page, text, newtext, comment):
 	if text != newtext:
                 changed = True
-                #print mistake
                 pywikibot.showDiff(text, newtext)
                 resp = pywikibot.input("Do you agree with the change above? [y/n]")
                 if resp == "y" or resp == "Y":
@@ -167,6 +206,7 @@ def processList(page):
 	for mistake in minormistakes.keys():
 		newtext = re.sub(mistake, minormistakes[mistake], text)
 		if newtext != text:
+			print mistake
 			text = checkAndUpload(page, text, newtext, comment)
 	#for field in deprecated.keys():
 	#	newtext = re.sub(field, deprecated[field], text)
