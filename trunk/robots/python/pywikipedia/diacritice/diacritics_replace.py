@@ -14,7 +14,7 @@ Example: "python diacritics_replace.py -start:B -always"
 '''
 #
 # (C) Strainu 2010
-# (C) Pywikipedia bot team, 2007-2010
+# (C) Pywikibot bot team, 2007-2010
 #
 # Distributed under the terms of the GPLv2 license.
 #
@@ -23,8 +23,8 @@ __version__ = '$Id: diacritics_redirects.py 7918 2010-02-08 11:24:22Z xqt $'
 
 import time, sys, re
 import string
-import wikipedia as pywikibot
-import pagegenerators
+import pywikibot
+from pywikibot import pagegenerators
 
 docuReplacements = {
     '&params;': pagegenerators.parameterHelp
@@ -32,7 +32,7 @@ docuReplacements = {
 
 msg = {	
 	 'en': u'Robot: Replacing diacritics for [[:ro:Wikipedia:corectarea diacriticelor|Romanian diacritics correction]]',
-     'ro': u'Robot: Înlocuite diacritice pentru [[Wikipedia:corectarea diacriticelor|corectarea diacriticelor]]',
+     'ro': u'Robot: Înlocuiesc diacritice pentru [[Wikipedia:corectarea diacriticelor|corectarea diacriticelor]]',
      }
 
 class DiacriticsReplaceBot:
@@ -56,23 +56,25 @@ class DiacriticsReplaceBot:
         # Show the title of the page we're working on.
         # Highlight the title in purple.
         pywikibot.output(u"\n>>> \03{lightpurple}%s\03{default} <<<"
-                         % page_t)
+		 % page_t)
         if page_t.find(".js") > -1:
             # JS file, ignore
             pywikibot.output(u"Javascript file, skipping")
             return
-                         
+		 
         try:
             text = page.get()
+            #print text
         except:
             pywikibot.output(u"An error occurred while getting the page, skipping...")
             return
             
-        turkish_regexp  = re.compile("(<(span) lang=[^<>]*>((.|\r|\n)*?)<\/\1>)", re.I);
+        #turkish_regexp  = re.compile(u"(<(span) lang=[^<>]*>((.|\r|\n)*?)<\/\1>)", re.I);
+        turkish_regexp = re.compile(u"((<(span) lang=[^<>]*>(.|\r|\n)*?<\/span>)|(<(ref)(.*?)>(.|\r|\n)*?<\/ref>)|(<ref(.*?)\/(\s?)>)|(<(gallery)(.*?)>(.|\r|\n)*?<\/gallery>)|(\| (?=Commons).*\n)|(\|\s*(?=[Ii]magine).*\n)|(\|\s*(?=[hH]art[ăa]).*\n))", re.I);
         turkish_phrases = turkish_regexp.findall(text)
-        interwiki_regexp  = re.compile("((:?)\[\[([a-z]{2,3}|simple|roa-(rup|tara)|be-x-old|zh-(yue|classical|min-nan)|bat-smg|fiu-vro|nds-nl|map-bms|cbk-zam|fi(ș|ş)ier|imagine|media):(.*?)\]\])", re.I);
+        interwiki_regexp  = re.compile(u"(\[\[:?([a-z]{2,3}|fișier|imagine|media|simple|roa-rup|be-x-old|zh-(yue|classical|min-nan)|bat-smg|cbk-zam|nds-nl|map-bms|cbk-zam|fişier|file|image):(.*?)\]\])", re.I);
         interwiki_phrases = interwiki_regexp.findall(text)
-        template_regexp  = re.compile("(\{\{(sisterlinks|commons|commonscat|incubator|interwiki|species|wikicitat|wikimanuale|wikisursă|wikitravel|wikiştiri|wikţionar)\|(.*?)\}\})", re.I);
+        template_regexp  = re.compile(u"(\{\{(proiecte surori|sisterlinks|commons|commonscat|wikicitat|wikimanuale|wikisursă|wikitravel|wikiştiri|wikţionar|WikimediaPentruPortale)\|((.|\n|\r)*?)\}\})", re.I);
         template_phrases = template_regexp.findall(text)
         
         new_text = string.replace(text, u'ş', u'ș')
@@ -80,31 +82,36 @@ class DiacriticsReplaceBot:
         new_text = string.replace(new_text, u'Ş', u'Ș')
         new_text = string.replace(new_text, u'Ţ', u'Ț')
         
-        mixed_phrases = turkish_regexp.findall(new_text)
         print "turkish"
+        mixed_phrases = turkish_regexp.findall(new_text)
         print mixed_phrases
         print turkish_phrases
         if len(mixed_phrases) > 0 and len(turkish_phrases) > 0:
             for i in range(len(mixed_phrases)):
-                new_text = string.replace(new_text, mixed_phrases[i][0], turkish_phrases[i][0])
+                new_text = string.replace(new_text, mixed_phrases[i][0], turkish_phrases[i][0], 1)
         
         print "interwiki" 
-        print mixed_phrases        
-        print interwiki_phrases
         mixed_phrases = interwiki_regexp.findall(new_text)
+        print mixed_phrases
+	#print "-----------------------------------------------------------------------"
+        print interwiki_phrases
         if len(mixed_phrases) > 0 and len(interwiki_phrases) > 0:
             for i in range(len(mixed_phrases)):
-                new_text = string.replace(new_text, mixed_phrases[i][0], interwiki_phrases[i][0])
+                new_text = string.replace(new_text, mixed_phrases[i][0], interwiki_phrases[i][0], 1)
         
-        print mixed_phrases
+	print "template"
         mixed_phrases = template_regexp.findall(new_text)
+        print mixed_phrases
+	print template_phrases
         if len(mixed_phrases) > 0 and len(template_phrases) > 0:
             for i in range(len(mixed_phrases)):
-                new_text = string.replace(new_text, mixed_phrases[i][0], template_phrases[i][0])
+                new_text = string.replace(new_text, mixed_phrases[i][0], template_phrases[i][0], 1)
                 
         if new_text == text:
             pywikibot.output(u"Weird, no diacritics in the page, skipping...")
             return
+
+	pywikibot.showDiff(text, new_text)
             
         if not self.acceptall:
             choice = pywikibot.inputChoice(
@@ -118,10 +125,10 @@ class DiacriticsReplaceBot:
             comment = pywikibot.translate(self.site, msg)
             try:
                 page.put(new_text, comment)
-                page.close()
                 pywikibot.output(u"Replaced diacritics...")
-            except:
-                pywikibot.output(u"An error occurred, skipping...")
+            except Exception as e:
+                pywikibot.output(u"An error occurred, skipping...%s")
+		print e
 
 def main():
     genFactory = pagegenerators.GeneratorFactory()

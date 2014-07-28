@@ -14,7 +14,7 @@ Example: "python diacritics_redirects.py -start:B -always"
 '''
 #
 # (C) Strainu 2010
-# (C) Pywikipedia bot team, 2007-2010
+# (C) Pywikibot bot team, 2007-2010
 #
 # Distributed under the terms of the GPLv2 license.
 #
@@ -23,8 +23,8 @@ __version__ = '$Id: diacritics_redirects.py 7918 2010-02-08 11:24:22Z xqt $'
 
 import time, sys, re
 import string
-import wikipedia as pywikibot
-import pagegenerators
+import pywikibot as pywikibot
+from pywikibot import pagegenerators
 
 docuReplacements = {
     '&params;': pagegenerators.parameterHelp
@@ -41,7 +41,7 @@ msg = {
      'ksh': u'Bot: oemleidung aanjelaat op [[%s]]',
      'nl': u'Bot: doorverwijzing gemaakt naar [[%s]]',
      'pt': u'Bot: Criando redirecionamento para [[%s]]',
-     'ro': u'Robot: Mută [[%s]] pentru [[Wikipedia:corectarea diacriticelor|]]',
+     'ro': u'Robot: Mută [[%s]] pentru [[pywikibot:corectarea diacriticelor|]]',
      'sv': u'Bot: Omdirigerar till [[%s]]',
      'zh': u'機器人: 建立重定向至[[%s]]',
     }
@@ -104,9 +104,9 @@ class DiacriticsBot:
             if self.acceptall or choice == 'y':
                 comment = pywikibot.translate(self.site, msg) % page_t
                 try:
-                    page.move(new_page_t, comment, throttle=True, leaveRedirect=True)
-                except:
-                    pywikibot.output(u"An error occurred, skipping...")
+                    page.move(new_page_t, comment)
+                except Exception as e:
+                    pywikibot.output(u"An error occurred, skipping... %s" % e)
 
 def main():
     genFactory = pagegenerators.GeneratorFactory()
