@@ -90,8 +90,71 @@ public class UAPercentagesParser {
         final Hibernator hib = new Hibernator();
         final Session ses = hib.getSession();
 
+        final Region kievReg = hib.getRegionByTransliteratedName("Bila Țerkva");
+        if (null != kievReg) {
+            kievReg.setName(capitalize(lowerCase("КИЇВ")));
+            kievReg.setTransliteratedName("Kîiiv");
+            kievReg.setRomanianName("Kiev");
+
+            final Commune kievCommune = hib.getCommuneByRomanianName("Kiev");
+            kievReg.setCapital(kievCommune);
+            ses.save(kievReg);
+        }
+        final Region transcarpatiaRegion = hib.getRegionByTransliteratedName("Ujhorod");
+        if (null != transcarpatiaRegion) {
+            transcarpatiaRegion.setName(capitalize(lowerCase("ЗАКАРПАТСЬКА")));
+            transcarpatiaRegion.setRomanianName("Transcarpatia");
+            transcarpatiaRegion.setTransliteratedName("Zakarpatska");
+            ses.save(transcarpatiaRegion);
+        }
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "BRATSKA", "Krasnoperekopsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "BEREZNEaNSKA", "Hmilnîk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "BOHDANIVSKA", "Pavlohrad");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "OLEKSANDRO-KALÎNOVSKA", "Kosteantînivka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "VELÎKOȘÎȘIVSKA", "Șahtarsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Jîtomîr", "BILKIVSKA", "Korosten");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Zaporijjea", "VELÎKOBILOZERSKA", "Velîka Bilozerka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, kievReg.getTransliteratedName(), "VELÎKOOLEKSANDRIVSKA", "Borîspil");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, kievReg.getTransliteratedName(), "VELÎKOKARATULSKA",
+            "Pereiaslav-Hmelnîțkîi");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "BOHDANIVSKA", "Znameanka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "ADJAMSKA", "Kirovohrad");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "VELÎKOANDRUSIVSKA", "Svitlovodsk");
+
+        if (null != kievReg) {
+            final Raion raion = hib.getRaionByTransliteratedNameAndRegion("VOLODARSKA", kievReg);
+            if (null != raion) {
+                final Commune com = hib.getCommuneByTransliteratedNameAndRaion("Kraseatîci", raion);
+                if (null != com) {
+                    raion.setTransliteratedName("Poliske");
+                    raion.setName(capitalize(lowerCase("Поліський")));
+                    raion.setRomanianName("");
+                    raion.setCapital(com);
+                    ses.save(raion);
+                }
+            }
+        }
         ses.beginTransaction();
         ses.getTransaction().commit();
+    }
+
+    private void fixRaionNameAndCapitalByTransliteratedNames(final Hibernator hib, final String regionName,
+                                                             final String raionWrongName, final String correctCapitalName) {
+        final Region reg = hib.getRegionByTransliteratedName(regionName);
+        if (null != reg) {
+            final Raion raion = hib.getRaionByTransliteratedNameAndRegion(raionWrongName, reg);
+            if (null != raion) {
+                final Commune com = hib.getCommuneByTransliteratedNameAndRaion(correctCapitalName, reg);
+                if (null != com) {
+                    raion.setTransliteratedName(com.getTransliteratedName());
+                    raion.setName(com.getName());
+                    raion.setRomanianName(com.getName());
+                    raion.setCapital(com);
+                    final Session ses = hib.getSession();
+                    ses.save(raion);
+                }
+            }
+        }
     }
 
     public void parse() {
@@ -130,9 +193,9 @@ public class UAPercentagesParser {
                     line = reader.readNext();
                 }
                 Commune currentCommune = null;
+                int currentCommuneLevel = 2;
                 Raion currentRaion = null;
                 Region currentRegion = null;
-
                 while (null != (line = reader.readNext())) {
                     final String nume = line[0];
                     final Transliterator t = new UkrainianTransliterator(nume);
@@ -146,7 +209,9 @@ public class UAPercentagesParser {
                     }
 
                     // regiune
-                    if (ArrayUtils.contains(splitName, "OBLAST") || ArrayUtils.contains(splitName, "KRÎM")) {
+                    if (ArrayUtils.contains(splitName, "OBLAST")
+                        || (ArrayUtils.contains(splitName, "KRÎM") && ArrayUtils.contains(splitName, "AVTONOMNA") && ArrayUtils
+                            .contains(splitName, "RESPUBLIKA"))) {
                         currentRegion = new Region();
                         currentRaion = null;
                         if (ArrayUtils.contains(splitName, "KRÎM")) {
@@ -155,6 +220,7 @@ public class UAPercentagesParser {
                             currentRegion.setName(capitalize(lowerCase("КРИМ")));
                             session.save(currentRegion);
                         }
+                        currentCommuneLevel = 2;
                         continue;
                     }
                     // raion
@@ -164,11 +230,31 @@ public class UAPercentagesParser {
                         currentRaion = new Raion();
                         currentRegion.getRaioane().add(currentRaion);
                         currentRaion.setRegion(currentRegion);
+                        if (ArrayUtils.contains(splitName, "RAION")) {
+                            final int indexOfRaion = ArrayUtils.indexOf(splitName, "RAION");
+                            final String[] nameParts = ArrayUtils.subarray(splitName, 0, indexOfRaion);
+                            final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 0, indexOfRaion);
+                            for (int i = 0; i < nameParts.length; i++) {
+                                final String[] lineSeparatedParts = split(nameParts[i], '-');
+                                for (int j = 0; j < lineSeparatedParts.length; j++) {
+                                    lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
+                                }
+                                nameParts[i] = join(lineSeparatedParts, '-');
+
+                                final String[] lineSeparatedPartsUa = split(namePartsUa[i], '-');
+                                for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
+                                    lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
+                                }
+                                namePartsUa[i] = join(lineSeparatedPartsUa, '-');
+                            }
+                            currentRaion.setTransliteratedName(join(nameParts, " "));
+                            currentRaion.setName(join(namePartsUa, " "));
+                        }
+                        currentCommuneLevel = 2;
                         continue;
                     }
-                    // comuna, oras, asezare urbana
                     if (ArrayUtils.contains(splitName, "(miskrada)")) {
-                        currentCommune = new Commune();
+                        currentRaion = new Raion();
                         final int indexOfMiskrada = ArrayUtils.indexOf(splitName, "(miskrada)");
                         final String[] nameParts = ArrayUtils.subarray(splitName, 0, indexOfMiskrada);
                         final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 0, indexOfMiskrada);
@@ -186,13 +272,16 @@ public class UAPercentagesParser {
                             }
                             namePartsUa[i] = join(lineSeparatedPartsUa, '-');
                         }
-                        currentCommune.setTransliteratedName(join(nameParts, " "));
-                        currentCommune.setName(join(namePartsUa, " "));
-                        currentCommune.setTown(3);
-                        currentCommune.setRegion(currentRegion);
-                        currentCommune.setMiskrada(true);
+                        currentRaion.setTransliteratedName(join(nameParts, " "));
+                        currentRaion.setName(join(namePartsUa, " "));
+                        currentRaion.setMiskrada(true);
+                        currentRaion.setRegion(currentRegion);
+                        currentCommuneLevel = 2;
+                        System.out.println(" -- MISKRADA " + currentRaion.getName() + " - "
+                            + currentRaion.getTransliteratedName());
                         session.save(currentCommune);
                     }
+                    // comuna, oras, asezare urbana
                     if (ArrayUtils.contains(splitName, "silrada") || StringUtils.equals(splitName[0], "smt")
                         || StringUtils.equals(splitName[0], "m.")) {
 
@@ -244,6 +333,7 @@ public class UAPercentagesParser {
                             currentCommune.setTransliteratedName(join(nameParts, " "));
                             currentCommune.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
                             currentCommune.setName(join(namePartsUa, " "));
+
                             if (null == currentRaion) {
                                 currentCommune.setRegion(currentRegion);
                                 currentRegion.getCities().add(currentCommune);
@@ -275,6 +365,10 @@ public class UAPercentagesParser {
                             currentCommune.setTransliteratedName(join(nameParts, " "));
                             currentCommune.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
                             currentCommune.setName(join(namePartsUa, " "));
+
+                            if (currentCommuneLevel < 2) {
+                                currentRaion = null;
+                            }
                             if (null == currentRaion) {
                                 if (null == currentRegion) {
                                     if (StringUtils.equals(currentCommune.getName(), capitalize(lowerCase("КИЇВ")))) {
@@ -304,13 +398,12 @@ public class UAPercentagesParser {
                             }
                         }
                         final Transliterator t1 = new UkrainianTransliterator(currentCommune.getName());
-                        final String numeTransliterat1 = t1.transliterate();
+                        t1.transliterate();
 
                         if (null != currentRaion) {
                             if (currentRaion.getCommunes().size() == 0) {
-                                currentRaion.setName(currentCommune.getName());
-                                currentRaion.setTransliteratedName(numeTransliterat1);
-                                currentRaion.setRomanianName(getRomanianName(getPossibleNames(currentRaion)));
+                                currentRaion.setRomanianName(getRomanianName(getPossibleNames(currentRaion,
+                                    currentCommune.getName())));
                                 currentRaion.setCapital(currentCommune);
                                 currentCommune.setRaion(currentRaion);
                                 System.out.println("Raion " + currentRaion.getName() + " - "
@@ -350,6 +443,7 @@ public class UAPercentagesParser {
                             }
                         }
                         session.save(currentCommune);
+                        currentCommuneLevel = currentCommune.getTown();
                     }
                     // sat
                     if (StringUtils.equals(splitName[0], "s.") || StringUtils.equals(splitName[0], "s-șce.")) {
@@ -490,15 +584,15 @@ public class UAPercentagesParser {
         return possibleNames;
     }
 
-    private List<String> getPossibleNames(final Raion raion) {
+    private List<String> getPossibleNames(final Raion raion, final String roName) {
         final List<String> possibleNames = new ArrayList<String>();
-        possibleNames.add("Raionul " + raion.getTransliteratedName() + ", Ucraina");
-        possibleNames.add("Raionul " + raion.getTransliteratedName() + " (Ucraina)");
+        possibleNames.add("Raionul " + roName + ", Ucraina");
+        possibleNames.add("Raionul " + roName + " (Ucraina)");
         if (null != raion.getRegion()) {
-            possibleNames.add("Raionul " + raion.getTransliteratedName() + ", " + raion.getRegion().getTransliteratedName());
-            possibleNames.add("Raionul " + raion.getTransliteratedName() + ", " + raion.getRegion().getRomanianName());
+            possibleNames.add("Raionul " + roName + ", " + raion.getRegion().getTransliteratedName());
+            possibleNames.add("Raionul " + roName + ", " + raion.getRegion().getRomanianName());
         }
-        possibleNames.add("Raionul " + raion.getTransliteratedName());
+        possibleNames.add("Raionul " + roName);
         return possibleNames;
     }
 

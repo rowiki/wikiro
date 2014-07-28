@@ -23,6 +23,7 @@ public class Raion {
     private String transliteratedName;
     private String romanianName;
     private Commune capital;
+    private boolean miskrada;
 
     @ManyToOne
     @JoinColumn(name = "capital")
@@ -96,5 +97,14 @@ public class Raion {
     @Override
     public String toString() {
         return "Raion [name=" + name + ", transliteratedName=" + transliteratedName + ", romanianName=" + romanianName + "]";
+    }
+
+    @Column(name = "miskrada")
+    public boolean isMiskrada() {
+        return miskrada;
+    }
+
+    public void setMiskrada(final boolean miskrada) {
+        this.miskrada = miskrada;
     }
 }
