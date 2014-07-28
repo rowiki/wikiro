@@ -16,7 +16,7 @@ import sys, time, warnings, json, string, random, re
 import math, urlparse, os
 sys.path.append("..")
 import strainu_functions as strainu
-import csv2json
+import csvUtils
 
 import pywikibot
 from pywikibot import pagegenerators
@@ -196,7 +196,7 @@ def readOtherData(filename):
 		db = json.load(f)
 		f.close()
 	elif filename.endswith(".csv"):
-		db = csv2json.csvToJson(filename)
+		db = csvUtils.csvToJson(filename)
 	else:
 		pywikibot.output("Could not recognise file type")
 		return {}
@@ -240,7 +240,7 @@ def parseArticleCoords(code, allPages):
 				artSrc = u"WP : " + page["name"]
 				updateCoord = True
 	return (artLat, artLon, artSrc, updateCoord)
-	
+
 def parseRanCoords(code, ran_data):
 	#search in RAN database
 	ranLat = 0
@@ -267,7 +267,7 @@ def parseOtherCoords(code, other_data):
 	updateCoord = False
 	otherLat = 0
 	otherLong = 0
-	if "Lat" in other_data and "Lon" in other_data:
+	if u"Lat" in other_data and u"Lon" in other_data:
 		try:
 			otherLat = float(other_data["Lat"])
 			otherLong = float(other_data["Lon"])
@@ -275,13 +275,45 @@ def parseOtherCoords(code, other_data):
 		except ValueError:
 			pass
 	return (otherLat, otherLong, u"ALT: External data", updateCoord)
+	
+def addRan(code, monument, ran_data, articleText):
+	if code in ran_data:
+		sites = []
+		for site in ran_data[code]:
+			sites.append(site[u"Cod"])
+		sites = list(set(sites))
+		sites.sort()
+		#print sites
+		sites = ", ".join(sites)
+		articleText = updateTableData(monument["source"], code, "CodRan", sites, \
+								 text=articleText, ask=False)
+	return articleText
+	
+def chooseImagePicky(files):
+	blacklist = [#all lowercase
+				u'detali',#detaliu, detalii
+				u'pisani',#pisanie, pisanii
+				]
+	tries = 0
+	while tries < len(files):
+		artimage = random.sample(files,  1)[0]["name"]
+		tries += 1
+		#be picky and don't choose a detail picture; also stop on some arbitrary condition
+		for cond in blacklist:
+			if (artimage.lower().find(cond) == -1):
+				return artimage
+	return artimage
 
 def main():
 	otherFile = "other_monument_data.csv"
+	addRan = False
 	
 	for arg in pywikibot.handleArgs():
 		if arg.startswith('-import:'):
 			otherFile = arg [len('-import:'):]
+		if arg.startswith('-addRan'):
+			addRan = True
+			
 	db =				readJson("lmi_db.json", "database")
 	pages_ro =			readJson("ro_pages.json", "ro.wp pages")
 	authors_ro =		readJson("ro_authors.json", "ro.wp authors")
@@ -364,6 +396,8 @@ def main():
 					if pic_author == None and author_list <> "":
 						log(u"* [COM] '''E''': ''[%s]'' În lista de imagini sunt trecuți mai multi autori: %s" % (code, author_list))
 				allPages.extend(pages_commons[code])
+			if code in files_ro:
+				allPages.extend(files_ro[code])
 			if code in categories_commons:
 				allPages.extend(categories_commons[code])
 				if len(categories_commons[code]) > 1:
@@ -376,6 +410,10 @@ def main():
 		except Exception as e:
 			pywikibot.output("Error: " + str(e))
 			pass #ignore errors
+
+		#RAN
+		if addRan:
+			articleText = addRanData(code, monument, ran_data, articleText)
 	
 		#monument name and link
 		if article <> None and article["name"] <> None and article["name"] <> "":
@@ -394,7 +432,7 @@ def main():
 					(not page1.isRedirectPage() or page1.getRedirectTarget() <> page2) and \
 					(not page2.isRedirectPage() or page2.getRedirectTarget() <> page1):
 						log(u"* [WPListă]''W'': ''[%s]'' Câmpul Denumire are o legătură internă către [[%s]], dar articolul despre monument este [[%s]]" % (code, page1, page2))
-				
+
 		#author from article
 		if article <> None and article["author"] <> None and article["author"].strip() <> "":
 			print "autor1"
@@ -402,14 +440,14 @@ def main():
 			author = article["author"].strip()
 			if author == None or author == "":
 				pywikibot.output("Wrong author link: \"%s\"@%s" % (article["author"], article["name"]))
-			elif monument["Arhitect"] == "":
+			elif monument["Arhitect"].strip() == "":
 				pywikibot.output(author)
-				articleText = updateTableData(monument["source"], code, "Arhitect", author, text=articleText)
+				articleText = updateTableData(monument["source"], code, "Creatori", author, text=articleText)
 			else:
 				a1 = author.strip()
 				a2 = monument["Arhitect"].strip()
 				if a1 <> a2:
-					articleText = updateTableData(monument["source"], code, "Arhitect", a1, text=articleText)
+					articleText = updateTableData(monument["source"], code, "Creatori", a1, text=articleText)
 				#	log(u"*''W'': ''[%s]'' Câmpul Arhitect este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
 
 		#add the author(s) extracted from author pages
@@ -479,23 +517,17 @@ def main():
 						break
 			#next option: choose a random image from commons
 			elif (code in pages_commons) and len(pages_commons[code]) > 0:
-				tries = 0
-				while True:
-					artimage = random.sample(pages_commons[code],  1)[0]["name"]
-					tries += 1
-					#be picky and don't choose a detail picture; also stop on some arbitrary condition
-					if artimage.find("detali") == -1 or tries == len(pages_commons[code]):
-						break
+				artimage = chooseImagePicky(pages_commons[code])
 				if artimage.find(':') < 0:#no namespace
 					artimage = "File:" + artimage
 				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
 			#final option: perhaps we have a local image?
 			elif (code in files_ro) and len(files_ro[code]) > 0:
-				localimage = random.sample(files_ro[code],  1)[0]["name"]
+				localimage = chooseImagePicky(files_ro[code])
 				if localimage.find(':') < 0:#nonamespace
 					localimage = "File:" + localimage
 				articleText = updateTableData(monument["source"], code, "Imagine", localimage, text=articleText)
-		
+
 		#Commons category
 		if code in categories_commons:
 			cat = categories_commons[code][0]
@@ -528,6 +560,7 @@ def main():
 		if code in ran_data:
 			otherCoords.append(parseRanCoords(code, ran_data[code]))
 		if code in other_data:
+			print code
 			otherCoords.append(parseOtherCoords(code, other_data[code]))
 
 		for (otherLat, otherLong, otherSrc, otherValid) in otherCoords:
@@ -535,6 +568,13 @@ def main():
 				(otherLong > 0 and strainu.getSec(otherLong) == 0):
 				log(u"* [%s] ''W'': ''[%s]'' Coordonatele (%f,%f) au nevoie de o verificare - secundele sunt 0" \
 				 %	(otherSrc[:3], code, otherLat, otherLong))
+				otherValid = False
+				continue
+			elif (otherLat > 0 or otherLong > 0) and \
+				(otherLat > 48.3 or otherLat < 43.6 or \
+				otherLong > 29.7 or otherLong < 20.27) :
+				log(u"* [%s] ''W'': ''[%s]'' Coordonatele (%f,%f) au nevoie de o verificare - nu par " \
+						"a fi din Romania" %	(otherSrc[:3], code, otherLat, otherLong))
 				otherValid = False
 				continue
 			if lat <> 0 and \

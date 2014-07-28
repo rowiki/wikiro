@@ -176,9 +176,8 @@ def main():
 		for (lang, database), countryconfig in countries.iteritems():
 			pywikibot.output(u'Working on database "%s" in language "%s"' % (database, lang))
 			processDatabase(countryconfig, database)
+	
 	'''
-
-
 	generator = genFactory.getCombinedGenerator()
 	if not generator:
 		pywikibot.output(u'You have to specify what to work on. This can either be -textfile:<filename> to work on a local file or you can use one of the standard pagegenerators (in pagegenerators.py)')
