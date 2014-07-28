@@ -26,8 +26,8 @@ import strainu_functions as strainu
 options = {
 	'ro':
 	{
-		'namespaces': [0, 6],
-		#'namespaces': [6],
+		#'namespaces': [0, 6],
+		'namespaces': [6],
 		'templateRegexp': re.compile("\{\{[a-z]*codLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 		'codeTemplate': ["codLMI"],
 		'codeTemplateParams': 
@@ -79,7 +79,7 @@ options = {
 		},
 		{
 			'name': u'Infocaseta Lăcaș de cult',
-			'author': [u'arhitect'],
+			'author': [u'arhitect', u'constructor', u'pictor'],
 			'image': u'imagine',
 			'ran': u'codRAN'
 		},
@@ -100,7 +100,7 @@ options = {
 	'commons':
 	{
 		'namespaces': [14, 6],
-		#'namespaces': [6],
+		#'namespaces': [14],
 		'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 		'codeTemplate': ["Monument istoric", "codLMI"],
 		'codeTemplateParams': 
@@ -136,6 +136,7 @@ options = {
 			u'engineer': u'inginer',
 			u'entrepreneur': u'întreprinzător',
 			u'ornamental painter': u'pictor ornamental',
+			u'sculptor': u'sculptor',
 		},
 	}
 }
@@ -163,14 +164,12 @@ def log(string):
 
 def dms2dec(deg, min, sec, sign):
 	return sign * (deg + (min / 60.0) + (sec / 3600.0))
-
-def geosign(check, plus, minus):
-	if check == plus:
-		return 1
-	elif check == minus:
-		return -1
-	else:
-		return 0 #this should really never happen
+		
+def isCoor( ns, ew ):
+	ns = ns.upper()
+	ew = ew.upper()
+	return ((ns == "N" or ns == "S") and
+			(ew == "E" or ew == "W"))
 
 def parseGeohackLinks(page):
 	#title = page.title()
@@ -209,7 +208,7 @@ def parseGeohackLinks(page):
 			tokens.remove(token)
 	numElem = len(tokens)
 	if tokens[0] == link: #no _
-		tokens = tokens[0].split(';')
+		tokens = link.split(';')
 		if float(tokens[0]) and float(tokens[1]): # D;D
 			lat = tokens[0]
 			long = tokens[1]
@@ -217,68 +216,54 @@ def parseGeohackLinks(page):
 			log(u"*''E'': [[:%s]] Problemă (1) cu legătura Geohack: nu pot \
 				identifica coordonatele în grade zecimale: %s" % (title, link))
 			return 0,0
-	elif numElem == 9: # D_N_D_E_to_D_N_D_E or D_M_S_N_D_M_S_E_something
-		if tokens[4] <> "to":
+	elif numElem >= 8 and isCoor(tokens[3], tokens[7]): #D_M_S_N_D_M_S_E_something
+		if numElem == 9:
 			pywikibot.output(u"*[[%s]] We should ignore parameter 9: %s (%s)" %
-							(title, tokens[8], link))
-			deg1 = float(tokens[0])
-			min1 = float(tokens[1])
-			sec1 = float(tokens[2])
-			sign1 = geosign(tokens[3],'N','S')
-			deg2 = float(tokens[4])
-			min2 = float(tokens[5])
-			sec2 = float(tokens[6])
-			sign2 = geosign(tokens[7],'E','V')
-			lat = dms2dec(deg1, min1, sec1, sign1)
-			long = dms2dec(deg2, min2, sec2, sign2)
-			if sec1 == 0 and sec2 == 0:
-				log(u"*''W'': [[:%s]] ar putea avea nevoie de actualizarea \
-					coordonatelor - valoarea secundelor este 0" % title)
-		else:
-			lat1 = float(tokens[0]) * geosign(tokens[1], 'N', 'S')
-			long1 = float(tokens[2]) * geosign(tokens[3], 'E', 'V')
-			lat2 = float(tokens[5]) * geosign(tokens[6], 'N', 'S')
-			long2 = float(tokens[7]) * geosign(tokens[8], 'E', 'V')
-			if lat1 == 0 or long1 == 0 or lat2 == 0 or long2 == 0:
-				#TODO: one of them is 0; this is also true for equator and GMT
-				log(u"*''E'': [[:%s]] Problemă (2) cu legătura Geohack: - \
-					una dintre coordonatele de bounding box e 0: %s" %
-					(title, link))
-				return 0,0
-			lat = (lat1 + lat2) / 2
-			long = (long1 + long2) / 2
-	elif numElem == 8: # D_M_S_N_D_M_S_E
+						(title, tokens[8], link))
 		deg1 = float(tokens[0])
 		min1 = float(tokens[1])
 		sec1 = float(tokens[2])
-		sign1 = geosign(tokens[3],'N','S')
+		sign1 = strainu.geosign(tokens[3],'N','S')
 		deg2 = float(tokens[4])
 		min2 = float(tokens[5])
 		sec2 = float(tokens[6])
-		sign2 = geosign(tokens[7],'E','V')
+		sign2 = strainu.geosign(tokens[7],'E','V')
 		lat = dms2dec(deg1, min1, sec1, sign1)
 		long = dms2dec(deg2, min2, sec2, sign2)
 		if sec1 == 0 and sec2 == 0:
-			log(u"*''W'': [[:%s]] ar putea avea nevoie de actualizarea" \
-				u" coordonatelor - valoarea secundelor este 0" % title)
-	elif numElem == 6: # D_M_N_D_M_E
+			log(u"*''W'': [[:%s]] ar putea avea nevoie de actualizarea \
+				coordonatelor - valoarea secundelor este 0" % title)
+	elif numElem >= 9 and isCoor(tokens[1], tokens[3]) and isCoor(tokens[6], tokens[8]): # D_N_D_E_to_D_N_D_E
+		lat1 = float(tokens[0]) * strainu.geosign(tokens[1], 'N', 'S')
+		long1 = float(tokens[2]) * strainu.geosign(tokens[3], 'E', 'V')
+		lat2 = float(tokens[5]) * strainu.geosign(tokens[6], 'N', 'S')
+		long2 = float(tokens[7]) * strainu.geosign(tokens[8], 'E', 'V')
+		if lat1 == 0 or long1 == 0 or lat2 == 0 or long2 == 0:
+			#TODO: one of them is 0; this is also true for equator and GMT
+			log(u"*''E'': [[:%s]] Problemă (2) cu legătura Geohack: - \
+				una dintre coordonatele de bounding box e 0: %s" %
+				(title, link))
+			return 0,0
+		lat = (lat1 + lat2) / 2
+		long = (long1 + long2) / 2
+	elif numElem >= 6 and isCoor(tokens[2], tokens[5]): # D_M_N_D_M_E
 		deg1 = float(tokens[0])
 		min1 = float(tokens[1])
 		sec1 = 0.0
-		sign1 = geosign(tokens[2],'N','S')
+		sign1 = strainu.geosign(tokens[2],'N','S')
 		deg2 = float(tokens[3])
 		min2 = float(tokens[4])
 		sec2 = 0.0
-		sign2 = geosign(tokens[5],'E','V')
+		sign2 = strainu.geosign(tokens[5],'E','V')
 		lat = dms2dec(deg1, min1, sec1, sign1)
 		long = dms2dec(deg2, min2, sec2, sign2)
 		log(u"*''E'': [[:%s]] are nevoie de actualizarea coordonatelor" \
 			u" nu sunt disponibile secundele" % title)
-	elif numElem == 4: # D_N_D_E
+	elif numElem >= 4 and isCoor(tokens[1], tokens[3]): # D_N_D_E
 		deg1 = float(tokens[0])
-		sign1 = geosign(tokens[1],'N','S')
+		sign1 = strainu.geosign(tokens[1],'N','S')
 		deg2 = float(tokens[2])
-		sign2 = geosign(tokens[3],'E','V')
+		sign2 = strainu.geosign(tokens[3],'E','V')
 		lat = sign1 * deg1
 		long = sign2 * deg2
 	else:
@@ -287,7 +272,7 @@ def parseGeohackLinks(page):
 		return 0,0
 	if lat < 43 or lat > 48.25 or long < 20 or long > 29.67:
 		log(u"*''E'': [[:%s]] Coordonate invalide pentru România: %f,%f" \
-			u" (extrase din %s)" % (title, lat, long, link))
+			u" (extra	se din %s)" % (title, lat, long, link))
 		return 0,0
 	return lat,long
 
@@ -359,6 +344,7 @@ def processCreatorTemplate(name, conf):
 		creator = creator.getRedirectTarget()
 	tls = pywikibot.extract_templates_and_params(creator.get())
 	for (template,params) in tls:
+		print params
 		if template != u"Creator":
 			continue
 		occupation = params[u"Occupation"]
@@ -372,6 +358,13 @@ def processCreatorTemplate(name, conf):
 def processArticle(text, page, conf):
 	title = page.title()
 	pywikibot.output(u'Working on "%s"' % title)
+	
+	#skip pictures under copyright
+	tl = strainu.extractTemplate(text, "Material sub drepturi de autor")
+	if tl != None:
+		pywikibot.output("Skipping page containing copyrighted material")
+		return
+		
 	global codeRegexp
 	code = checkAllCodes(re.findall(codeRegexp, text), title)
 	if code is None: #no valid code in page
@@ -392,21 +385,20 @@ def processArticle(text, page, conf):
 	else:
 		quality = False
 	
-	#lat, long = parseGeohackLinks(page)
-	
 	try:
 		coor = page.coordinates(True)
-		#print type(coor)
-		lat = coor['latitude']
-		long = coor['longitude']
+		if coor:
+			#print coor
+			lat = coor.lat
+			long = coor.lon
+		else:
+			lat, long = parseGeohackLinks(page)
 	except KeyError as e:
-		#print "KeyError " + repr(e)
+		print "KeyError " + repr(e)
 		lat, long = parseGeohackLinks(page)
 	except Exception as e:
-		#print "Exception " + repr(e)
+		print "Exception " + repr(e)
 		lat = long = 0
-	
-	
 
 	author = None
 	image = None
@@ -418,7 +410,7 @@ def processArticle(text, page, conf):
 			continue
 		(_dict, _keys) = strainu.tl2Dict(tl)
 		#print _dict
-		author = ""
+		author = u""
 		for author_key in box['author']:
 			if (not author_key in _dict) or _dict[author_key].strip() == "":
 				#empty author, ignore
@@ -427,7 +419,7 @@ def processArticle(text, page, conf):
 			if author_key_type in _dict:
 				author_type =  _dict[author_key_type].strip().lower()
 			else:
-				author_type = author_key.lower()
+				author_type = author_key
 			if author_type.find("_name") != -1:
 				author += processCreatorTemplate(_dict[author_key], conf) + u", "
 			else:
@@ -548,7 +540,7 @@ def main():
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen,
 									[namespace], site)
 		if preload:
-			pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 125)
+			pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 50)
 		else:
 			pregenerator = filteredGen
 
@@ -557,20 +549,23 @@ def main():
 			namespaceName = ""
 		else:
 			namespaceName = "_" + site.namespace(namespace)
-		filename = lang + namespaceName + "_pages.json"
-		f = open(filename, "r+")
-		jsonFile = json.load(f)
-		f.close();
-		#pre-calculate as much as possible of the information we'll need
-		vallist = jsonFile.values() # extract list of values
-		valCount = len(vallist)
-		#print vallist
+		#no need to parse everything if we're gonna go through all the pages
 		reworkedDict = {}
-		for i in xrange(valCount):
-			for j in xrange(len(vallist[i])):
-				reworkedDict[vallist[i][j]["name"]] = vallist[i][j]
-		del vallist
-		del jsonFile
+		filename = lang + namespaceName + "_pages.json"
+		if parse_type != PARSE_FULL:
+			f = open(filename, "r+")
+			jsonFile = json.load(f)
+			f.close();
+			#pre-calculate as much as possible of the information we'll need
+			vallist = jsonFile.values() # extract list of values
+			valCount = len(vallist)
+			#print vallist
+			for i in xrange(valCount):
+				for j in xrange(len(vallist[i])):
+					reworkedDict[vallist[i][j]["name"]] = vallist[i][j]
+			del vallist
+			del jsonFile
+
 		for page in pregenerator:
 			#page = pywikibot.Page(site, u"File:Bucuresti punte 1837.jpg")
 			content = None
@@ -578,7 +573,7 @@ def main():
 			if pageTitle in reworkedDict:
 				content = reworkedDict[pageTitle]
 			useCache = False
-			if content:
+			if content and parse_type != PARSE_FULL:
 				if 'lastedit' in content:
 					lastedit = content['lastedit']
 				else:
@@ -597,8 +592,6 @@ def main():
 					pageEdit = page.editTime().totimestampformat()
 					if int(pageEdit) <= int(lastedit):
 						useCache = True
-				else:
-					useCache = False
 			if useCache:
 				if code in fullDict:
 					fullDict[code].append(content)
@@ -619,7 +612,7 @@ def main():
 
 if __name__ == "__main__":
 	try:
-		#cProfile.run('main()', './parseprofile.txt')
+		#cProfile.run('main()', 'profiling/parseprofile.txt')
 		main()
 	finally:
 		pywikibot.stopme()
