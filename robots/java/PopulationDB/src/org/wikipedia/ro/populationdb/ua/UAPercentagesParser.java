@@ -279,7 +279,15 @@ public class UAPercentagesParser {
                         currentCommuneLevel = 2;
                         System.out.println(" -- MISKRADA " + currentRaion.getName() + " - "
                             + currentRaion.getTransliteratedName());
-                        session.save(currentCommune);
+                        session.save(currentRaion);
+
+                        if (StringUtils.equals(currentCommune.getName(), capitalize(lowerCase("СЕВАСТОПОЛЬ")))) {
+                            currentRegion = new Region();
+                            currentRegion.setName(capitalize(lowerCase("СЕВАСТОПОЛЬ")));
+                            currentRegion.setTransliteratedName("Sevastopol-oraș");
+                            currentRegion.setRomanianName("orașul Sevastopol");
+                            session.save(currentRegion);
+                        }
                     }
                     // comuna, oras, asezare urbana
                     if (ArrayUtils.contains(splitName, "silrada") || StringUtils.equals(splitName[0], "smt")
@@ -376,12 +384,6 @@ public class UAPercentagesParser {
                                         currentRegion.setName(capitalize(lowerCase("КИЇВ")));
                                         currentRegion.setTransliteratedName("Kîiiv-oraș");
                                         currentRegion.setRomanianName("orașul Kiev");
-                                    }
-                                    if (StringUtils.equals(currentCommune.getName(), capitalize(lowerCase("СЕВАСТОПОЛЬ")))) {
-                                        currentRegion = new Region();
-                                        currentRegion.setName(capitalize(lowerCase("СЕВАСТОПОЛЬ")));
-                                        currentRegion.setTransliteratedName("Sevastopol-oraș");
-                                        currentRegion.setRomanianName("orașul Sevastopol");
                                     }
                                 }
                                 if (currentRegion.getCities().size() == 0 && StringUtils.isEmpty(currentRegion.getName())) {
