@@ -226,9 +226,7 @@ public class UAPercentagesParser {
                         continue;
                     }
                     // raion
-                    if (ArrayUtils.contains(splitName, "RAION")
-                        || (ArrayUtils.contains(splitName, "raion,") && StringUtils.equals("orașul Sevastopol",
-                            currentRegion.getRomanianName()))) {
+                    if (ArrayUtils.contains(splitName, "RAION")) {
                         currentRaion = new Raion();
                         currentRegion.getRaioane().add(currentRaion);
                         currentRaion.setRegion(currentRegion);
