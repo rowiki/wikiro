@@ -21,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "comuna")
-public class Commune {
+public class Commune implements LanguageStructurable {
     private long id;
     private Settlement capital;
 
