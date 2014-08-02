@@ -28,6 +28,7 @@ import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.ua.dao.Hibernator;
 import org.wikipedia.ro.populationdb.ua.model.Commune;
 import org.wikipedia.ro.populationdb.ua.model.Language;
+import org.wikipedia.ro.populationdb.ua.model.LanguageStructurable;
 import org.wikipedia.ro.populationdb.ua.model.Raion;
 import org.wikipedia.ro.populationdb.ua.model.Region;
 import org.wikipedia.ro.populationdb.ua.model.Settlement;
@@ -96,7 +97,7 @@ public class UAPercentagesParser {
             kievReg.setTransliteratedName("Kîiiv");
             kievReg.setRomanianName("Kiev");
 
-            final Commune kievCommune = hib.getCommuneByRomanianName("Kiev");
+            final LanguageStructurable kievCommune = hib.getCommuneByRomanianName("Kiev");
             kievReg.setCapital(kievCommune);
             ses.save(kievReg);
         }
@@ -124,7 +125,7 @@ public class UAPercentagesParser {
         if (null != kievReg) {
             final Raion raion = hib.getRaionByTransliteratedNameAndRegion("VOLODARSKA", kievReg);
             if (null != raion) {
-                final Commune com = hib.getCommuneByTransliteratedNameAndRaion("Kraseatîci", raion);
+                final LanguageStructurable com = hib.getCommuneByTransliteratedNameAndRaion("Kraseatîci", raion);
                 if (null != com) {
                     raion.setTransliteratedName("Poliske");
                     raion.setName(capitalize(lowerCase("Поліський")));
@@ -220,6 +221,7 @@ public class UAPercentagesParser {
                             currentRegion.setName(capitalize(lowerCase("КРИМ")));
                             session.save(currentRegion);
                         }
+                        extractLanguageData(limbi, line, currentRegion);
                         currentCommuneLevel = 2;
                         continue;
                     }
@@ -249,6 +251,7 @@ public class UAPercentagesParser {
                             }
                             currentRaion.setTransliteratedName(join(nameParts, " "));
                             currentRaion.setName(join(namePartsUa, " "));
+                            extractLanguageData(limbi, line, currentRaion);
                         }
                         currentCommuneLevel = 2;
                         continue;
@@ -279,6 +282,7 @@ public class UAPercentagesParser {
                         currentCommuneLevel = 2;
                         System.out.println(" -- MISKRADA " + currentRaion.getName() + " - "
                             + currentRaion.getTransliteratedName());
+                        extractLanguageData(limbi, line, currentRaion);
                         session.save(currentRaion);
 
                         if (StringUtils.equals(currentCommune.getName(), capitalize(lowerCase("СЕВАСТОПОЛЬ")))) {
@@ -419,31 +423,7 @@ public class UAPercentagesParser {
                                 + currentCommune.getTransliteratedName());
                         }
 
-                        for (int langIndex = 0; langIndex < line.length - 1; langIndex++) {
-                            final String langData = line[1 + langIndex];
-                            int langListIndex = langIndex;
-                            if (langIndex == 11) {
-                                langListIndex = 7;
-                            }
-                            if (langIndex > 11) {
-                                langListIndex = langIndex - 1;
-                            }
-                            Double langNumber = -1.0;
-                            try {
-                                langNumber = Double.parseDouble(langData);
-                            } catch (final NumberFormatException nfe) {
-                                continue;
-                            }
-                            if (langIndex == 11) {
-                                final Double moldValue = currentCommune.getLanguageStructure().get(limbi.get(7));
-                                if (null != moldValue && 0 < moldValue.doubleValue()) {
-                                    langNumber += moldValue;
-                                }
-                            }
-                            if (0 < langNumber) {
-                                currentCommune.getLanguageStructure().put(limbi.get(langListIndex), langNumber);
-                            }
-                        }
+                        extractLanguageData(limbi, line, currentCommune);
                         session.save(currentCommune);
                         currentCommuneLevel = currentCommune.getTown();
                     }
@@ -481,31 +461,7 @@ public class UAPercentagesParser {
                         sat.setRomanianName(getRomanianName(getPossibleNames(sat)));
                         currentCommune.getSettlements().add(sat);
 
-                        for (int langIndex = 0; langIndex < line.length - 1; langIndex++) {
-                            final String langData = line[1 + langIndex];
-                            int langListIndex = langIndex;
-                            if (langIndex == 11) {
-                                langListIndex = 7;
-                            }
-                            if (langIndex > 11) {
-                                langListIndex = langIndex - 1;
-                            }
-                            Double langNumber = -1.0;
-                            try {
-                                langNumber = Double.parseDouble(langData);
-                            } catch (final NumberFormatException nfe) {
-                                continue;
-                            }
-                            if (langIndex == 11) {
-                                final Double moldValue = sat.getLanguageStructure().get(limbi.get(7));
-                                if (null != moldValue && 0 < moldValue.doubleValue()) {
-                                    langNumber += moldValue;
-                                }
-                            }
-                            if (0 < langNumber) {
-                                sat.getLanguageStructure().put(limbi.get(langListIndex), langNumber);
-                            }
-                        }
+                        extractLanguageData(limbi, line, sat);
 
                         session.save(sat);
                         session.save(currentCommune);
@@ -534,6 +490,35 @@ public class UAPercentagesParser {
         }
         session.getTransaction().commit();
         session.close();
+    }
+
+    private void extractLanguageData(final List<Language> limbi, final String[] line,
+                                     final LanguageStructurable currentCommune) {
+        for (int langIndex = 0; langIndex < line.length - 1; langIndex++) {
+            final String langData = line[1 + langIndex];
+            int langListIndex = langIndex;
+            if (langIndex == 11) {
+                langListIndex = 7;
+            }
+            if (langIndex > 11) {
+                langListIndex = langIndex - 1;
+            }
+            Double langNumber = -1.0;
+            try {
+                langNumber = Double.parseDouble(langData);
+            } catch (final NumberFormatException nfe) {
+                continue;
+            }
+            if (langIndex == 11) {
+                final Double moldValue = currentCommune.getLanguageStructure().get(limbi.get(7));
+                if (null != moldValue && 0 < moldValue.doubleValue()) {
+                    langNumber += moldValue;
+                }
+            }
+            if (0 < langNumber) {
+                currentCommune.getLanguageStructure().put(limbi.get(langListIndex), langNumber);
+            }
+        }
     }
 
     private String getRomanianName(final List<String> possibleNames) {

@@ -1,14 +1,17 @@
 package org.wikipedia.ro.populationdb.ua.model;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -16,20 +19,20 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "oblast")
-public class Region {
+public class Region implements LanguageStructurable {
     private long id;
     private String name;
     private String transliteratedName;
     private String romanianName;
-    private Commune capital;
+    private LanguageStructurable capital;
 
     @ManyToOne
     @JoinColumn(name = "capital")
-    public Commune getCapital() {
+    public LanguageStructurable getCapital() {
         return capital;
     }
 
-    public void setCapital(final Commune capital) {
+    public void setCapital(final LanguageStructurable capital) {
         this.capital = capital;
     }
 
@@ -61,6 +64,7 @@ public class Region {
 
     private Set<Raion> raioane = new HashSet<Raion>();
     private Set<Commune> cities = new HashSet<Commune>();
+    private Map<Language, Double> languageStructure;
 
     @OneToMany(mappedBy = "region")
     public Set<Commune> getCities() {
@@ -89,6 +93,17 @@ public class Region {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    @CollectionTable(name = "oblast_nationalitate", joinColumns = @JoinColumn(name = "oblast"))
+    @MapKeyJoinColumn(name = "nationalitate")
+    @Column(name = "procent")
+    public Map<Language, Double> getLanguageStructure() {
+        return languageStructure;
+    }
+
+    public void setLanguageStructure(final Map<Language, Double> languageStructure) {
+        this.languageStructure = languageStructure;
     }
 
     @Override

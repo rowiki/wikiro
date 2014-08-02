@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.wikipedia.ro.populationdb.ua.model.Commune;
+import org.wikipedia.ro.populationdb.ua.model.LanguageStructurable;
 import org.wikipedia.ro.populationdb.ua.model.Raion;
 import org.wikipedia.ro.populationdb.ua.model.Region;
 import org.wikipedia.ro.populationdb.util.HibernateUtil;
@@ -50,33 +51,33 @@ public class Hibernator {
         return null;
     }
 
-    public Commune getCommuneByRomanianName(final String needle) {
+    public LanguageStructurable getCommuneByRomanianName(final String needle) {
         final Session ses = sessionFactory.getCurrentSession();
         final Criteria crit = ses.createCriteria(Commune.class).add(Restrictions.eq("romanianName", needle));
         final List rez = crit.list();
         if (0 < rez.size()) {
-            return (Commune) rez.get(0);
+            return (LanguageStructurable) rez.get(0);
         }
         return null;
     }
 
-    public Commune getCommuneByTransliteratedName(final String needle) {
+    public LanguageStructurable getCommuneByTransliteratedName(final String needle) {
         final Session ses = sessionFactory.getCurrentSession();
         final Criteria crit = ses.createCriteria(Commune.class).add(Restrictions.eq("transliteratedName", needle));
         final List rez = crit.list();
         if (0 < rez.size()) {
-            return (Commune) rez.get(0);
+            return (LanguageStructurable) rez.get(0);
         }
         return null;
     }
 
-    public Commune getCommuneByTransliteratedNameAndRaion(final String needle, final Raion raion) {
+    public LanguageStructurable getCommuneByTransliteratedNameAndRaion(final String needle, final Raion raion) {
         final Session ses = sessionFactory.getCurrentSession();
         final Criteria crit = ses.createCriteria(Commune.class).add(Restrictions.eq("transliteratedName", needle))
             .add(Restrictions.eq("raion", raion));
         final List rez = crit.list();
         if (0 < rez.size()) {
-            return (Commune) rez.get(0);
+            return (LanguageStructurable) rez.get(0);
         }
         return null;
     }
