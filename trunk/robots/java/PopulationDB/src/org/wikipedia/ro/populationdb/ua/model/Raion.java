@@ -26,17 +26,17 @@ public class Raion implements LanguageStructurable {
     private String name;
     private String transliteratedName;
     private String romanianName;
-    private LanguageStructurable capital;
+    private Commune capital;
     private boolean miskrada;
     private Map<Language, Double> languageStructure = new HashMap<Language, Double>();
 
     @ManyToOne
     @JoinColumn(name = "capital")
-    public LanguageStructurable getCapital() {
+    public Commune getCapital() {
         return capital;
     }
 
-    public void setCapital(final LanguageStructurable capital) {
+    public void setCapital(final Commune capital) {
         this.capital = capital;
     }
 

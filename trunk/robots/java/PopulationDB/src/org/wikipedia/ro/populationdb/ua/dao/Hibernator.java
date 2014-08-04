@@ -51,33 +51,33 @@ public class Hibernator {
         return null;
     }
 
-    public LanguageStructurable getCommuneByRomanianName(final String needle) {
+    public Commune getCommuneByRomanianName(final String needle) {
         final Session ses = sessionFactory.getCurrentSession();
         final Criteria crit = ses.createCriteria(Commune.class).add(Restrictions.eq("romanianName", needle));
         final List rez = crit.list();
         if (0 < rez.size()) {
-            return (LanguageStructurable) rez.get(0);
+            return (Commune) rez.get(0);
         }
         return null;
     }
 
-    public LanguageStructurable getCommuneByTransliteratedName(final String needle) {
+    public Commune getCommuneByTransliteratedName(final String needle) {
         final Session ses = sessionFactory.getCurrentSession();
         final Criteria crit = ses.createCriteria(Commune.class).add(Restrictions.eq("transliteratedName", needle));
         final List rez = crit.list();
         if (0 < rez.size()) {
-            return (LanguageStructurable) rez.get(0);
+            return (Commune) rez.get(0);
         }
         return null;
     }
 
-    public LanguageStructurable getCommuneByTransliteratedNameAndRaion(final String needle, final Raion raion) {
+    public Commune getCommuneByTransliteratedNameAndRaion(final String needle, final Raion raion) {
         final Session ses = sessionFactory.getCurrentSession();
         final Criteria crit = ses.createCriteria(Commune.class).add(Restrictions.eq("transliteratedName", needle))
             .add(Restrictions.eq("raion", raion));
         final List rez = crit.list();
         if (0 < rez.size()) {
-            return (LanguageStructurable) rez.get(0);
+            return (Commune) rez.get(0);
         }
         return null;
     }
