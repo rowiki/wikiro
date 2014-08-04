@@ -97,7 +97,7 @@ public class UAPercentagesParser {
             kievReg.setTransliteratedName("Kîiiv");
             kievReg.setRomanianName("Kiev");
 
-            final LanguageStructurable kievCommune = hib.getCommuneByRomanianName("Kiev");
+            final Commune kievCommune = hib.getCommuneByRomanianName("Kiev");
             kievReg.setCapital(kievCommune);
             ses.save(kievReg);
         }
