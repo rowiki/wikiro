@@ -283,7 +283,7 @@ public class UAPercentagesParser {
                         extractLanguageData(limbi, line, currentRaion);
                         session.save(currentRaion);
 
-                        if (StringUtils.equals(currentCommune.getName(), capitalize(lowerCase("СЕВАСТОПОЛЬ")))) {
+                        if (null != currentCommune && StringUtils.equals(currentCommune.getName(), capitalize(lowerCase("СЕВАСТОПОЛЬ")))) {
                             currentRegion = new Region();
                             currentRegion.setName(capitalize(lowerCase("СЕВАСТОПОЛЬ")));
                             currentRegion.setTransliteratedName("Sevastopol-oraș");
