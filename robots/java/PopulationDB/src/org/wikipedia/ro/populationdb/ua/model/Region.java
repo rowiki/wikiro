@@ -24,15 +24,15 @@ public class Region implements LanguageStructurable {
     private String name;
     private String transliteratedName;
     private String romanianName;
-    private LanguageStructurable capital;
+    private Commune capital;
 
     @ManyToOne
     @JoinColumn(name = "capital")
-    public LanguageStructurable getCapital() {
+    public Commune getCapital() {
         return capital;
     }
 
-    public void setCapital(final LanguageStructurable capital) {
+    public void setCapital(final Commune capital) {
         this.capital = capital;
     }
 
