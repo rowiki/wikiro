@@ -125,7 +125,7 @@ public class UAPercentagesParser {
         if (null != kievReg) {
             final Raion raion = hib.getRaionByTransliteratedNameAndRegion("VOLODARSKA", kievReg);
             if (null != raion) {
-                final LanguageStructurable com = hib.getCommuneByTransliteratedNameAndRaion("Kraseatîci", raion);
+                final Commune com = hib.getCommuneByTransliteratedNameAndRaion("Kraseatîci", raion);
                 if (null != com) {
                     raion.setTransliteratedName("Poliske");
                     raion.setName(capitalize(lowerCase("Поліський")));
