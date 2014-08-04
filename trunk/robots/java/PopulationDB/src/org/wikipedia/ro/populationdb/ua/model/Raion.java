@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -116,6 +117,7 @@ public class Raion implements LanguageStructurable {
     @CollectionTable(name = "raion_nationalitate", joinColumns = @JoinColumn(name = "raion"))
     @MapKeyJoinColumn(name = "nationalitate")
     @Column(name = "procent")
+    @ElementCollection
     public Map<Language, Double> getLanguageStructure() {
         return languageStructure;
     }
