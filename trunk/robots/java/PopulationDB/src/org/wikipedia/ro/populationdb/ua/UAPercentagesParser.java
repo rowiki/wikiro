@@ -251,6 +251,7 @@ public class UAPercentagesParser {
                             currentRaion.setName(join(namePartsUa, " "));
                             extractLanguageData(limbi, line, currentRaion);
                         }
+                        session.save(currentRaion);
                         currentCommuneLevel = 2;
                         continue;
                     }
@@ -399,6 +400,7 @@ public class UAPercentagesParser {
                                 currentRegion.getCities().add(currentCommune);
                                 currentCommune.setRegion(currentRegion);
                                 session.save(currentRegion);
+                                session.save(currentCommune);
                             }
                         }
                         final Transliterator t1 = new UkrainianTransliterator(currentCommune.getName());
@@ -407,7 +409,7 @@ public class UAPercentagesParser {
                         if (null != currentRaion) {
                             if (currentRaion.getCommunes().size() == 0) {
                                 currentRaion.setRomanianName(getRomanianName(getPossibleNames(currentRaion,
-                                    currentCommune.getName())));
+                                    StringUtils.defaultString(currentCommune.getRomanianName(), currentCommune.getTransliteratedName()))));
                                 currentRaion.setCapital(currentCommune);
                                 currentCommune.setRaion(currentRaion);
                                 System.out.println("Raion " + currentRaion.getName() + " - "
