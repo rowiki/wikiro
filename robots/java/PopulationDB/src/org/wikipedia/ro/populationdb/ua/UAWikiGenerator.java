@@ -58,33 +58,23 @@ public class UAWikiGenerator {
         ses = hib.getSession();
         ses.beginTransaction();
 
-        assignColorToNationality("Români", new Color(85, 85, 255));
-        assignColorToNationality("Turci", new Color(255, 85, 85));
-        assignColorToNationality("Romi", new Color(85, 255, 255));
-        assignColorToNationality("Maghiari", new Color(85, 255, 85));
-        assignColorToNationality("Bulgari", new Color(0, 192, 0));
-        assignColorToNationality("Evrei", new Color(192, 192, 192));
-        assignColorToNationality("Croați", new Color(32, 32, 192));
-        assignColorToNationality("Sârbi", new Color(192, 32, 32));
-        assignColorToNationality("Bosniaci", new Color(64, 64, 128));
-        assignColorToNationality("Germani", new Color(255, 85, 255));
-        assignColorToNationality("Vlahi", new Color(128, 128, 255));
-        assignColorToNationality("Ucraineni", new Color(255, 255, 85));
-        assignColorToNationality("Ruteni", new Color(255, 255, 128));
-        assignColorToNationality("Ruși", new Color(192, 85, 85));
-        assignColorToNationality("Italieni", new Color(64, 192, 64));
-        assignColorToNationality("Sloveni", new Color(32, 32, 128));
-        assignColorToNationality("Slovaci", new Color(48, 48, 160));
-        assignColorToNationality("Cehi", new Color(128, 128, 32));
-        assignColorToNationality("Afiliați religios", new Color(255, 255, 255));
-        assignColorToNationality("Neclasificat", new Color(192, 192, 192));
-        assignColorToNationality("Armeni", new Color(0x62, 0x46, 0x46));
-        assignColorToNationality("Necunoscut", new Color(192, 192, 192));
-        assignColorToNationality("Alții", new Color(192, 192, 192));
+        assignColorToLanguage("Română", new Color(85, 85, 255));
+        assignColorToLanguage("Romani", new Color(85, 255, 255));
+        assignColorToLanguage("Greacă", new Color(0, 0, 192));
+        assignColorToLanguage("Maghiară", new Color(85, 255, 85));
+        assignColorToLanguage("Belarusă", new Color(32, 192, 32));
+        assignColorToLanguage("Bulgară", new Color(0, 192, 0));
+        assignColorToLanguage("Tătară crimeeană", new Color(192, 192, 255));
+        assignColorToLanguage("Ebraică", new Color(192, 192, 192));
+        assignColorToLanguage("Karaim", new Color(32, 32, 192));
+        assignColorToLanguage("Germană", new Color(255, 85, 255));
+        assignColorToLanguage("Ucraineană", new Color(255, 255, 85));
+        assignColorToLanguage("Rusă", new Color(192, 85, 85));
+        assignColorToLanguage("Slovacă", new Color(48, 48, 160));
         blandifyColors(nationColorMap);
     }
 
-    private void assignColorToNationality(final String languageName, final Color color) throws HibernateException {
+    private void assignColorToLanguage(final String languageName, final Color color) throws HibernateException {
         final Language nat = hib.getLanguageByName(languageName);
         if (null != nat) {
             nationColorMap.put(nat, color);
