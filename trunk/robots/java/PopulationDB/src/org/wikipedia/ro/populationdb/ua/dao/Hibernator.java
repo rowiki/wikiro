@@ -7,11 +7,12 @@ import java.net.URL;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.wikipedia.ro.populationdb.ua.model.Commune;
-import org.wikipedia.ro.populationdb.ua.model.LanguageStructurable;
+import org.wikipedia.ro.populationdb.ua.model.Language;
 import org.wikipedia.ro.populationdb.ua.model.Raion;
 import org.wikipedia.ro.populationdb.ua.model.Region;
 import org.wikipedia.ro.populationdb.util.HibernateUtil;
@@ -102,6 +103,22 @@ public class Hibernator {
             return (Raion) rez.get(0);
         }
         return null;
+    }
+
+    public Language getLanguageByName(final String languageName) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query findNat = ses.createQuery("from Language nat where nat.name=:natName");
+        findNat.setParameter("natName", languageName);
+        final List<Language> res = findNat.list();
+        Language ret = null;
+        if (0 == res.size()) {
+            ret = new Language();
+            ret.setName(languageName);
+            ses.saveOrUpdate(ret);
+        } else {
+            ret = res.get(0);
+        }
+        return ret;
     }
 
 }
