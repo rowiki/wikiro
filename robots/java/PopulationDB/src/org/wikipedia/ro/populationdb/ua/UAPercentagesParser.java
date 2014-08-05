@@ -410,6 +410,8 @@ public class UAPercentagesParser {
                             if (currentRaion.getCommunes().size() == 0) {
                                 currentRaion.setRomanianName(getRomanianName(getPossibleNames(currentRaion,
                                     StringUtils.defaultString(currentCommune.getRomanianName(), currentCommune.getTransliteratedName()))));
+                                currentRaion.setName(currentCommune.getName());
+                                currentRaion.setTransliteratedName(new UkrainianTransliterator(currentCommune.getName()).transliterate());
                                 currentRaion.setCapital(currentCommune);
                                 currentCommune.setRaion(currentRaion);
                                 System.out.println("Raion " + currentRaion.getName() + " - "
