@@ -219,9 +219,9 @@ public class UAPercentagesParser {
                             currentRegion.setRomanianName("Crimeea");
                             currentRegion.setTransliteratedName("Krîm");
                             currentRegion.setName(capitalize(lowerCase("КРИМ")));
-                            session.save(currentRegion);
                         }
                         extractLanguageData(limbi, line, currentRegion);
+                        session.save(currentRegion);
                         currentCommuneLevel = 2;
                         continue;
                     }
