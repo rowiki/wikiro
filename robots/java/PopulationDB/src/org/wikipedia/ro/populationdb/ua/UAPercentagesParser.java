@@ -108,19 +108,21 @@ public class UAPercentagesParser {
             transcarpatiaRegion.setTransliteratedName("Zakarpatska");
             ses.save(transcarpatiaRegion);
         }
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "BRATSKA", "Krasnoperekopsk");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "BEREZNEaNSKA", "Hmilnîk");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "BOHDANIVSKA", "Pavlohrad");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "OLEKSANDRO-KALÎNOVSKA", "Kosteantînivka");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "VELÎKOȘÎȘIVSKA", "Șahtarsk");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Jîtomîr", "BILKIVSKA", "Korosten");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Zaporijjea", "VELÎKOBILOZERSKA", "Velîka Bilozerka");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, kievReg.getTransliteratedName(), "VELÎKOOLEKSANDRIVSKA", "Borîspil");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, kievReg.getTransliteratedName(), "VELÎKOKARATULSKA",
-            "Pereiaslav-Hmelnîțkîi");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "BOHDANIVSKA", "Znameanka");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "ADJAMSKA", "Kirovohrad");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "VELÎKOANDRUSIVSKA", "Svitlovodsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Bratska", "Krasnoperekopsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Berezneanska", "Hmilnîk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Bohdanivska", "Pavlohrad");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Oleksandro-Kalînovska", "Kosteantînivka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "V" + lowerCase("ELÎKOȘÎȘIVSKA"), "Șahtarsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Jîtomîr", "B" + lowerCase("ILKIVSKA"), "Korosten");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Zaporijjea", "V" + lowerCase("ELÎKOBILOZERSKA"),
+            "Velîka Bilozerka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, kievReg.getTransliteratedName(), "V"
+            + lowerCase("ELÎKOOLEKSANDRIVSKA"), "Borîspil");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, kievReg.getTransliteratedName(),
+            "V" + lowerCase("ELÎKOKARATULSKA"), "Pereiaslav-Hmelnîțkîi");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "B" + lowerCase("OHDANIVSKA"), "Znameanka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "A" + lowerCase("DJAMSKA"), "Kirovohrad");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "V" + lowerCase("ELÎKOANDRUSIVSKA"), "Svitlovodsk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Mîkolaiiv", "Dmîtrivska", "Oceakiv");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Odesa", "Adamivska", "Bilhorod-Dnistrovskîi");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Odesa", "Oleksiivka", "Kotovsk");
@@ -130,7 +132,15 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Rivne", "Bilașivska", "Ostroh");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Sumî", "Bîșkinska", "Lebedîn");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Sumî", "Anastasivska", "Romnî");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Oleksandrivska", "Romnî");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Oleksandrivska", "Izium");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Vîșnivska", "Kupeansk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Oleksiivka", "Pervomaiskîi");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Herson", "Vasîlivka", "Kahovka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Hmelnîțkîi", "Hannopilska", "Slavuta");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Hmelnîțkîi", "Bahlaiivska", "Starokosteantîniv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Antîpivska", "Zolotonoșa");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Berzokivska", "Kaniv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Balakliivska", "Smila");
 
         if (null != kievReg) {
             final Raion raion = hib.getRaionByTransliteratedNameAndRegion("VOLODARSKA", kievReg);
