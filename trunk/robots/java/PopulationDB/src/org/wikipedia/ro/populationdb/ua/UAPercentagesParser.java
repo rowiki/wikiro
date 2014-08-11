@@ -121,6 +121,16 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "BOHDANIVSKA", "Znameanka");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "ADJAMSKA", "Kirovohrad");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "VELÎKOANDRUSIVSKA", "Svitlovodsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Mîkolaiiv", "Dmîtrivska", "Oceakiv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Odesa", "Adamivska", "Bilhorod-Dnistrovskîi");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Odesa", "Oleksiivka", "Kotovsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Poltava", "Bilețkivska", "Kremenciuk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Poltava", "Berezivska", "Lubnî");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Poltava", "Abazivska", "Poltava");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Rivne", "Bilașivska", "Ostroh");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Sumî", "Bîșkinska", "Lebedîn");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Sumî", "Anastasivska", "Romnî");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Oleksandrivska", "Romnî");
 
         if (null != kievReg) {
             final Raion raion = hib.getRaionByTransliteratedNameAndRegion("VOLODARSKA", kievReg);
@@ -284,7 +294,8 @@ public class UAPercentagesParser {
                         extractLanguageData(limbi, line, currentRaion);
                         session.save(currentRaion);
 
-                        if (null != currentCommune && StringUtils.equals(currentCommune.getName(), capitalize(lowerCase("СЕВАСТОПОЛЬ")))) {
+                        if (null != currentCommune
+                            && StringUtils.equals(currentCommune.getName(), capitalize(lowerCase("СЕВАСТОПОЛЬ")))) {
                             currentRegion = new Region();
                             currentRegion.setName(capitalize(lowerCase("СЕВАСТОПОЛЬ")));
                             currentRegion.setTransliteratedName("Sevastopol-oraș");
@@ -380,16 +391,17 @@ public class UAPercentagesParser {
                             if (currentCommuneLevel < 2) {
                                 currentRaion = null;
                             }
-                            if (null == currentRaion) {
-                                if (null == currentRegion) {
-                                    if (StringUtils.equals(currentCommune.getName(), capitalize(lowerCase("КИЇВ")))) {
-                                        currentRegion = new Region();
-                                        currentRegion.setName(capitalize(lowerCase("КИЇВ")));
-                                        currentRegion.setTransliteratedName("Kîiiv-oraș");
-                                        currentRegion.setRomanianName("orașul Kiev");
-                                    }
+                            if (null == currentRaion && null == currentRegion) {
+                                if (StringUtils.equals(currentCommune.getName(), capitalize(lowerCase("КИЇВ")))) {
+                                    currentRegion = new Region();
+                                    currentRegion.setName(capitalize(lowerCase("КИЇВ")));
+                                    currentRegion.setTransliteratedName("Kîiiv-oraș");
+                                    currentRegion.setRomanianName("orașul Kiev");
+                                    session.save(currentRegion);
                                 }
-                                if (currentRegion.getCities().size() == 0 && StringUtils.isEmpty(currentRegion.getName())) {
+                            }
+                            if (null == currentRaion || currentRaion.isMiskrada()) {
+                                if (StringUtils.isEmpty(currentRegion.getName())) {
                                     currentRegion.setName(currentCommune.getName());
                                     currentRegion.setTransliteratedName(currentCommune.getTransliteratedName());
                                     currentRegion.setRomanianName(getRomanianName(getPossibleNames(currentRegion)));
@@ -397,8 +409,10 @@ public class UAPercentagesParser {
                                     System.out.println("REGION - " + currentRegion.getName() + " - "
                                         + currentRegion.getTransliteratedName());
                                 }
-                                currentRegion.getCities().add(currentCommune);
-                                currentCommune.setRegion(currentRegion);
+                                if (null == currentRaion) {
+                                    currentRegion.getCities().add(currentCommune);
+                                    currentCommune.setRegion(currentRegion);
+                                }
                                 session.save(currentRegion);
                                 session.save(currentCommune);
                             }
@@ -408,10 +422,13 @@ public class UAPercentagesParser {
 
                         if (null != currentRaion) {
                             if (currentRaion.getCommunes().size() == 0) {
-                                currentRaion.setRomanianName(getRomanianName(getPossibleNames(currentRaion,
-                                    StringUtils.defaultString(currentCommune.getRomanianName(), currentCommune.getTransliteratedName()))));
+                                currentRaion.setRomanianName(getRomanianName(getPossibleNames(
+                                    currentRaion,
+                                    StringUtils.defaultString(currentCommune.getRomanianName(),
+                                        currentCommune.getTransliteratedName()))));
                                 currentRaion.setName(currentCommune.getName());
-                                currentRaion.setTransliteratedName(new UkrainianTransliterator(currentCommune.getName()).transliterate());
+                                currentRaion.setTransliteratedName(new UkrainianTransliterator(currentCommune.getName())
+                                    .transliterate());
                                 currentRaion.setCapital(currentCommune);
                                 currentCommune.setRaion(currentRaion);
                                 System.out.println("Raion " + currentRaion.getName() + " - "
