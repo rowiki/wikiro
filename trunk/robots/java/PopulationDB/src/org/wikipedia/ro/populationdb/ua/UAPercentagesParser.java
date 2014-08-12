@@ -410,7 +410,7 @@ public class UAPercentagesParser {
                                     session.save(currentRegion);
                                 }
                             }
-                            if (null == currentRaion || currentRaion.isMiskrada()) {
+                            if ((null == currentRaion || currentRaion.isMiskrada()) && null != currentRegion) {
                                 if (StringUtils.isEmpty(currentRegion.getName())) {
                                     currentRegion.setName(currentCommune.getName());
                                     currentRegion.setTransliteratedName(currentCommune.getTransliteratedName());
@@ -424,8 +424,8 @@ public class UAPercentagesParser {
                                     currentCommune.setRegion(currentRegion);
                                 }
                                 session.save(currentRegion);
-                                session.save(currentCommune);
                             }
+                            session.save(currentCommune);
                         }
                         final Transliterator t1 = new UkrainianTransliterator(currentCommune.getName());
                         t1.transliterate();
