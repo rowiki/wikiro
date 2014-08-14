@@ -99,14 +99,21 @@ public class UAPercentagesParser {
 
             final Commune kievCommune = hib.getCommuneByRomanianName("Kiev");
             kievReg.setCapital(kievCommune);
-            ses.save(kievReg);
+            ses.saveOrUpdate(kievReg);
         }
         final Region transcarpatiaRegion = hib.getRegionByTransliteratedName("Ujhorod");
         if (null != transcarpatiaRegion) {
             transcarpatiaRegion.setName(capitalize(lowerCase("ЗАКАРПАТСЬКА")));
             transcarpatiaRegion.setRomanianName("Transcarpatia");
             transcarpatiaRegion.setTransliteratedName("Zakarpatska");
-            ses.save(transcarpatiaRegion);
+            ses.saveOrUpdate(transcarpatiaRegion);
+        }
+        final Region volynRegion = hib.getRegionByTransliteratedName("Luțk");
+        if (null != volynRegion) {
+            volynRegion.setName(capitalize(lowerCase("Волин")));
+            volynRegion.setRomanianName("Volînia");
+            volynRegion.setTransliteratedName("Volîn");
+            ses.saveOrUpdate(volynRegion);
         }
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Bratska", "Krasnoperekopsk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Berezneanska", "Hmilnîk");
@@ -151,7 +158,7 @@ public class UAPercentagesParser {
                     raion.setName(capitalize(lowerCase("Поліський")));
                     raion.setRomanianName("");
                     raion.setCapital(com);
-                    ses.save(raion);
+                    ses.saveOrUpdate(raion);
                 }
             }
         }
@@ -172,7 +179,7 @@ public class UAPercentagesParser {
                     raion.setRomanianName(com.getName());
                     raion.setCapital(com);
                     final Session ses = hib.getSession();
-                    ses.save(raion);
+                    ses.saveOrUpdate(raion);
                 }
             }
         }
