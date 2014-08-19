@@ -90,7 +90,7 @@ public class UAPercentagesParser {
     public void performCorrection() {
         final Hibernator hib = new Hibernator();
         final Session ses = hib.getSession();
-
+        ses.beginTransaction();
         final Region kievReg = hib.getRegionByTransliteratedName("Bila Țerkva");
         if (null != kievReg) {
             kievReg.setName(capitalize(lowerCase("КИЇВ")));
@@ -162,7 +162,6 @@ public class UAPercentagesParser {
                 }
             }
         }
-        ses.beginTransaction();
         ses.getTransaction().commit();
     }
 
@@ -176,7 +175,7 @@ public class UAPercentagesParser {
                 if (null != com) {
                     raion.setTransliteratedName(com.getTransliteratedName());
                     raion.setName(com.getName());
-                    raion.setRomanianName(com.getName());
+                    raion.setRomanianName(com.getRomanianName());
                     raion.setCapital(com);
                     final Session ses = hib.getSession();
                     ses.saveOrUpdate(raion);
