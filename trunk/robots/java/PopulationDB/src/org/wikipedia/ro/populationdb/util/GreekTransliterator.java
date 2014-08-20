@@ -46,6 +46,17 @@ public class GreekTransliterator extends Transliterator {
             put('χ', "ch");
             put('ψ', "ps");
             put('ω', "o");
+            put('ή', "i");
+            put('έ', "e");
+            put('ί', "i");
+            put('ό', "o");
+            put('ώ', "o");
+            put('ύ', "y");
+            put('ά', "a");
+            put('ΐ', "i");
+            put('ΰ', "y");
+            put('ϊ', "i");
+            put('ϋ', "y");
         }
     };
 
@@ -61,6 +72,7 @@ public class GreekTransliterator extends Transliterator {
                 crt = Character.toLowerCase(crt);
             }
             switch (crt.charValue()) {
+            case 'ύ':
             case 'υ':
                 if (0 == i) {
                     transformedChar = unElotMap.get(crt);
@@ -74,7 +86,7 @@ public class GreekTransliterator extends Transliterator {
                         .contains(Character.toLowerCase(text.charAt(i + 1)))) {
                         transformedChar = "v";
                     }
-                } else if (Arrays.asList('ό', 'ο').contains(Character.toLowerCase(text.charAt(i + 1)))) {
+                } else if (Arrays.asList('ό', 'ο').contains(Character.toLowerCase(text.charAt(i - 1)))) {
                     transformedChar = "u";
                 }
                 if (null == transformedChar) {
@@ -105,12 +117,16 @@ public class GreekTransliterator extends Transliterator {
             transformedString.append(capitalize(lowerCase(transformedChar)));
         }
 
-        final String[] transformedStringParts = split(lowerCase(transformedString.toString()), "- ");
+        final String[] transformedStringParts = split(lowerCase(transformedString.toString()), "-");
         for (int i = 0; i < transformedStringParts.length; i++) {
-            transformedStringParts[i] = capitalize(lowerCase(transformedStringParts[i]));
+            final String[] transformedSpaceSeparatedParts = split(lowerCase(transformedStringParts[i]), " ");
+            for (int j = 0; j < transformedSpaceSeparatedParts.length; j++) {
+                transformedSpaceSeparatedParts[j] = capitalize(lowerCase(transformedSpaceSeparatedParts[j]));
+            }
+            transformedStringParts[i] = StringUtils.join(transformedSpaceSeparatedParts, " ");
         }
 
-        return StringUtils.join(transformedStringParts, " ");
+        return StringUtils.join(transformedStringParts, "-");
     }
 
     public GreekTransliterator(final String txt) {
