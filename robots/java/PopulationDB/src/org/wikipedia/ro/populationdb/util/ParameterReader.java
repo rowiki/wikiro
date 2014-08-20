@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * A self-made push-down automaton that receives the text of a template declaration and identifies its arguments
+ * 
  * @author andrei.stroe@gmail.com
  */
 public class ParameterReader {
@@ -15,6 +16,7 @@ public class ParameterReader {
     private final String analyzedText;
     private final Map<String, String> params = new LinkedHashMap<String, String>();
     private final Stack<String> automatonStack = new Stack<String>();
+    private int templateLength = 0;
 
     public ParameterReader(final String text) {
         analyzedText = text;
@@ -53,10 +55,12 @@ public class ParameterReader {
                         automatonStack.pop();
                         index += 2;
                     } else {
-                        params.put(StringUtils.defaultString(StringUtils.trim(crtParamName), String.valueOf(crtParamIndex++)),
+                        params.put(
+                            StringUtils.defaultString(StringUtils.trim(crtParamName), String.valueOf(crtParamIndex++)),
                             StringUtils.trim(crtBuilder.toString()));
                         crtBuilder.delete(0, crtBuilder.length());
                         crtParamName = null;
+                        templateLength = index;
                         break loop;
                     }
                     break;
@@ -99,6 +103,10 @@ public class ParameterReader {
 
     public Map<String, String> getParams() {
         return params;
+    }
+
+    public int getTemplateLength() {
+        return templateLength;
     }
 
 }

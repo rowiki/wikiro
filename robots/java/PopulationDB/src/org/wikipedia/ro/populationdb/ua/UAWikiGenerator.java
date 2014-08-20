@@ -2,18 +2,27 @@ package org.wikipedia.ro.populationdb.ua;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import javax.security.auth.login.FailedLoginException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupFile;
 import org.wikibase.Wikibase;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.ua.dao.Hibernator;
 import org.wikipedia.ro.populationdb.ua.model.Language;
+import org.wikipedia.ro.populationdb.ua.model.Region;
+import org.wikipedia.ro.populationdb.util.ParameterReader;
+import org.wikipedia.ro.populationdb.util.UkrainianTransliterator;
 import org.wikipedia.ro.populationdb.util.WikiEditExecutor;
 
 public class UAWikiGenerator {
@@ -22,7 +31,7 @@ public class UAWikiGenerator {
         final UAWikiGenerator generator = new UAWikiGenerator();
         try {
             generator.init();
-            // generator.generateRegions();
+            generator.generateRegions();
         } finally {
             generator.close();
         }
@@ -34,12 +43,103 @@ public class UAWikiGenerator {
     private Hibernator hib;
     private Session ses;
     private final Map<Language, Color> nationColorMap = new HashMap<Language, Color>();
-    private Map<Object, Object> nationNameMap;
+    private final Map<String, Language> nationNameMap = new HashMap<String, Language>();
     private Wiki ukwiki;
+
+    private void generateRegions() throws IOException {
+        ses.beginTransaction();
+        final List<Region> regions = hib.getAllRegions();
+        for (final Region eachReg : regions) {
+            generateRegionText(eachReg);
+        }
+    }
+
+    private void generateRegionText(final Region region) throws IOException {
+        if (StringUtils.equalsIgnoreCase("Kiev-oraș", region.getRomanianName())) {
+            return;
+        }
+
+        final List<String> candidateRegionArticleNames = new ArrayList<String>();
+        if (StringUtils.isNotBlank(region.getRomanianName())) {
+            candidateRegionArticleNames.add("Regiunea " + region.getRomanianName());
+            candidateRegionArticleNames.add("Regiunea " + region.getRomanianName() + ", Ucraina");
+        }
+        candidateRegionArticleNames.add("Regiunea " + region.getTransliteratedName());
+        candidateRegionArticleNames.add("Regiunea " + region.getTransliteratedName() + ", Ucraina");
+
+        if (StringUtils.equalsIgnoreCase(region.getRomanianName(), "Crimeea")) {
+            for (int i = 0; i < candidateRegionArticleNames.size(); i++) {
+                candidateRegionArticleNames.set(i,
+                    StringUtils.replace(candidateRegionArticleNames.get(i), "Regiunea", "Republica autonomă"));
+            }
+        }
+
+        String actualTitle = null;
+        final StringBuilder currentText = new StringBuilder();
+        final boolean[] titleExistance = rowiki.exists(candidateRegionArticleNames
+            .toArray(new String[candidateRegionArticleNames.size()]));
+        for (int i = 0; i < titleExistance.length; i++) {
+            if (!titleExistance[i]) {
+                continue;
+            }
+            final String eachCandidateTitle = candidateRegionArticleNames.get(i);
+            actualTitle = StringUtils.defaultString(rowiki.resolveRedirect(eachCandidateTitle), eachCandidateTitle);
+        }
+        if (null == actualTitle) {
+            actualTitle = candidateRegionArticleNames.get(0);
+        } else {
+            currentText.append(rowiki.getPageText(actualTitle));
+        }
+        final ParameterReader ibParaReader = new ParameterReader(currentText.toString());
+        if (!StringUtils.equalsIgnoreCase(region.getRomanianName(), "Crimeea")) {
+            final String regionInfobox = generateRegionInfobox(region, ibParaReader);
+            String regionIntro = generateRegionIntro(region, actualTitle);
+
+            final String currentRegionIntro = StringUtils.substringBefore(
+                StringUtils.substring(currentText.toString(), ibParaReader.getTemplateLength()), "==");
+            if (currentRegionIntro.length() < regionIntro.length()) {
+                regionIntro = currentRegionIntro;
+            }
+
+            currentText.replace(0, ibParaReader.getTemplateLength(), regionInfobox);
+            int indexOfFirstSection = currentText.indexOf("==", ibParaReader.getTemplateLength());
+            if (0 > indexOfFirstSection) {
+                indexOfFirstSection = currentText.length();
+            }
+            currentText.replace(ibParaReader.getTemplateLength(), indexOfFirstSection, regionIntro);
+        }
+    }
+
+    private String generateRegionIntro(final Region region, final String articleName) throws IOException {
+        final STGroup stgroup = new STGroupFile("templates/ua/ucraina.stg");
+        final ST introTmpl = stgroup.getInstanceOf("introReg");
+        introTmpl.add("nume_reg_ro", StringUtils.defaultIfBlank(region.getRomanianName(), region.getTransliteratedName()));
+        final String ukArticleName = getUkrainianRegionName(articleName);
+        final String transliteratedUkArticleName = StringUtils.replace(
+            new UkrainianTransliterator(ukArticleName).transliterate(), "Oblast", "oblast");
+
+        introTmpl.add("nume_reg_uk", ukArticleName + "|" + transliteratedUkArticleName);
+
+        introTmpl.add(
+            "nume_capitala",
+            null == region.getCapital() ? "" : StringUtils.defaultIfBlank(region.getCapital().getRomanianName(), region
+                .getCapital().getTransliteratedName()));
+        return introTmpl.render();
+    }
+
+    private String getUkrainianRegionName(final String articleName) throws IOException {
+        final String ukTitle = dwiki.getTitleInLanguage("rowiki", articleName, "uk");
+        return ukTitle;
+    }
+
+    private String generateRegionInfobox(final Region region, final ParameterReader ibParaReader) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     private void init() throws FailedLoginException, IOException {
         rowiki = new Wiki("ro.wikipedia.org");
-        ukwiki = new Wiki("hu.wikipedia.org");
+        ukwiki = new Wiki("uk.wikipedia.org");
         dwiki = new Wikibase();
         executor = new WikiEditExecutor(rowiki, dwiki);
         // executor = new SysoutExecutor();
@@ -71,6 +171,7 @@ public class UAWikiGenerator {
         assignColorToLanguage("Ucraineană", new Color(255, 255, 85));
         assignColorToLanguage("Rusă", new Color(192, 85, 85));
         assignColorToLanguage("Slovacă", new Color(48, 48, 160));
+        ses.getTransaction().rollback();
         blandifyColors(nationColorMap);
     }
 

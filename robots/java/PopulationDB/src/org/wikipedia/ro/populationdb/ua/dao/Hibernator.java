@@ -121,4 +121,11 @@ public class Hibernator {
         return ret;
     }
 
+    public List<Region> getAllRegions() {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Criteria crit = ses.createCriteria(Region.class);
+        final List list = crit.list();
+        return list;
+    }
+
 }
