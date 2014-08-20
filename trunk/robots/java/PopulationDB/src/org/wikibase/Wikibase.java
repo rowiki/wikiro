@@ -23,6 +23,26 @@ public class Wikibase extends Wiki {
         return text;
     }
 
+    public String getTitleInLanguage(final String site, final String pageName, final String language) throws IOException {
+        final StringBuilder url = new StringBuilder(query);
+        url.append("action=wbgetentities");
+        url.append("&sites=" + site);
+        url.append("&titles=" + URLEncoder.encode(pageName, "UTF-8"));
+        url.append("&format=xml");
+
+        final String text = fetch(url.toString(), "getWikibaseItem");
+
+        final String sitelinkText = "<sitelink site=\"" + language + "wiki\" title=";
+        final int sitelinkStart = text.indexOf(sitelinkText);
+        if (0 > sitelinkStart) {
+            return null;
+        }
+        final int pageNameStart = text.indexOf("\"", sitelinkStart + sitelinkText.length());
+        final int pageNameEnd = text.indexOf("\"", pageNameStart + 1);
+
+        return text.substring(pageNameStart + 1, pageNameEnd);
+    }
+
     public void linkPages(final String fromsite, final String fromtitle, final String tosite, final String totitle)
         throws IOException {
         final StringBuilder url1 = new StringBuilder(query);

@@ -1,0 +1,3 @@
+introReg(nume_reg_ro, nume_reg_uk, nume_capitala) ::= '''<nume_reg_ro>''' (în {{uk|<nume_reg_uk>}}) este o [[Regiunile Ucrainei|regiune]] din [[Ucraina]]. Capitala sa este orașul [[<nume_capitala>]].
+demographyMaj(nume_unitate_genitiv, nume_limba_majoritara, procent_limba_majoritara, enum_alte_limbi) ::= Conform recensământului din 2001, majoritatea populației <nume_unitate_genitiv> era vorbitoare de <nume_limba_majoritara> (<procent_limba_majoritara>%), existând și minorități vorbitoare de <enum_alte_limbi>.
+demographyNoMaj(nume_unitate_genitiv, enum_alte_limbi) ::= Conform recensământului din 2001, nu exista o limbă vorbită de majoritatea populației, aceasta fiind compusă din vorbitori de <enum_alte_limbi>.

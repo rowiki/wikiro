@@ -115,6 +115,13 @@ public class UAPercentagesParser {
             volynRegion.setTransliteratedName("Volîn");
             ses.saveOrUpdate(volynRegion);
         }
+
+        final Region crimeaRegion = hib.getRegionByTransliteratedName("Krîm");
+        final Commune simferopol = hib.getCommuneByTransliteratedName("Simferopol");
+        if (null != crimeaRegion && null != simferopol) {
+            crimeaRegion.setCapital(simferopol);
+            ses.saveOrUpdate(crimeaRegion);
+        }
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Bratska", "Krasnoperekopsk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Berezneanska", "Hmilnîk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Bohdanivska", "Pavlohrad");
