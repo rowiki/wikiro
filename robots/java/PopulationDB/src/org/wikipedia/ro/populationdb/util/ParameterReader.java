@@ -23,6 +23,9 @@ public class ParameterReader {
     }
 
     public void run() {
+        if (null == analyzedText || 0 == analyzedText.length()) {
+            return;
+        }
         final char[] chars = analyzedText.toCharArray();
         int index = 0;
         while (chars[index] != '|') { // skip initial template name
@@ -60,7 +63,7 @@ public class ParameterReader {
                             StringUtils.trim(crtBuilder.toString()));
                         crtBuilder.delete(0, crtBuilder.length());
                         crtParamName = null;
-                        templateLength = index;
+                        templateLength = 2 + index;
                         break loop;
                     }
                     break;

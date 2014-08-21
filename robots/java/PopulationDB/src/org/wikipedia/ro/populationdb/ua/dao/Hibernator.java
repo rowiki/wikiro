@@ -33,7 +33,8 @@ public class Hibernator {
     }
 
     public Session getSession() {
-        return sessionFactory.getCurrentSession();
+        final Session ses = sessionFactory.getCurrentSession();
+        return ses;
     }
 
     public void close() throws IOException {
