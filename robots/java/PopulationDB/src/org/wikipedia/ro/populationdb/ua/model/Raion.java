@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -124,5 +125,10 @@ public class Raion implements LanguageStructurable {
 
     public void setLanguageStructure(final Map<Language, Double> languageStructure) {
         this.languageStructure = languageStructure;
+    }
+
+    @Transient
+    public String getGenitive() {
+        return miskrada ? "orașului regional" : "raionului";
     }
 }

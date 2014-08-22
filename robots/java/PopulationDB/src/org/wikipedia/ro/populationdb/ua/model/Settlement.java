@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -109,6 +110,11 @@ public class Settlement implements LanguageStructurable {
     public String toString() {
         return "Settlement [name=" + name + ", transliteratedName=" + transliteratedName + ", romanianName=" + romanianName
             + "]";
+    }
+
+    @Transient
+    public String getGenitive() {
+        return "localității";
     }
 
 }

@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -147,6 +148,19 @@ public class Commune implements LanguageStructurable {
     public String toString() {
         return "Commune [name=" + name + ", transliteratedName=" + transliteratedName + ", romanianName=" + romanianName
             + "]";
+    }
+
+    @Transient
+    public String getGenitive() {
+        switch (town) {
+        case 0:
+            return "satului";
+        case 1:
+            return "așezării de tip urban";
+        case 2:
+            return "orașului";
+        }
+        return null;
     }
 
 }
