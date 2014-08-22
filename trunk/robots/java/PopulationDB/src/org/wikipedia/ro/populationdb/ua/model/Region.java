@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -113,5 +114,10 @@ public class Region implements LanguageStructurable {
     public String toString() {
         return "Region [name=" + name + ", transliteratedName=" + transliteratedName + ", romanianName=" + romanianName
             + "]";
+    }
+
+    @Transient
+    public String getGenitive() {
+        return "regiunii";
     }
 }

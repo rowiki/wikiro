@@ -1,9 +1,13 @@
 package org.wikipedia.ro.populationdb.ua;
 
+import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.indexOf;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.join;
+import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.replace;
 import static org.apache.commons.lang3.StringUtils.substring;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
@@ -11,16 +15,25 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.security.auth.login.FailedLoginException;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.jfree.data.general.DefaultPieDataset;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
@@ -29,9 +42,11 @@ import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.ua.dao.Hibernator;
 import org.wikipedia.ro.populationdb.ua.model.Commune;
 import org.wikipedia.ro.populationdb.ua.model.Language;
+import org.wikipedia.ro.populationdb.ua.model.LanguageStructurable;
 import org.wikipedia.ro.populationdb.ua.model.Region;
 import org.wikipedia.ro.populationdb.util.ParameterReader;
 import org.wikipedia.ro.populationdb.util.UkrainianTransliterator;
+import org.wikipedia.ro.populationdb.util.Utilities;
 import org.wikipedia.ro.populationdb.util.WikiEditExecutor;
 
 public class UAWikiGenerator {
@@ -121,8 +136,192 @@ public class UAWikiGenerator {
                 indexOfFirstSection = currentText.indexOf("{{Ucraina}}");
             }
             currentText.replace(templateLength, indexOfFirstSection, SEP + regionIntro + SEP);
+
+            final String demografie = generateDemographySection(region);
+
+            final int indexOfCurrentDemography = locateFirstOf(currentText, "==Populați", "== Populați", "== Demografie",
+                "==Demografie");
+            if (0 <= indexOfCurrentDemography) {
+                currentText.replace(indexOfCurrentDemography, currentText.indexOf("==", indexOfCurrentDemography + 2) + 2,
+                    demografie);
+            } else {
+                final int indexOfFutureDemographySection = locateFirstOf(currentText, "== Economie", "==Economie",
+                    "{{Ucraina", "==Legături externe", "== Legături externe", "== Vezi și", "==Vezi și");
+                if (0 <= indexOfFutureDemographySection) {
+                    currentText.insert(indexOfFutureDemographySection, demografie);
+                } else {
+                    currentText.append(demografie);
+                }
+            }
             System.out.println(currentText);
         }
+    }
+
+    private int locateFirstOf(final CharSequence haystack, final CharSequence... needles) {
+        final List<Integer> locations = new ArrayList<Integer>();
+        for (final CharSequence eachNeedle : needles) {
+            final int locationOfNeedleInHaystack = indexOf(haystack, eachNeedle);
+            if (0 <= locationOfNeedleInHaystack) {
+                locations.add(locationOfNeedleInHaystack);
+            }
+        }
+        if (0 == locations.size()) {
+            return -1;
+        }
+        Collections.sort(locations);
+        return locations.get(0);
+    }
+
+    private String generateDemographySection(final LanguageStructurable place) {
+        final StringBuilder sb = new StringBuilder("== Demografie ==");
+        sb.append(SEP);
+        sb.append("<!-- Start secțiune generată de Andrebot -->");
+        final STGroup templateGroup = new STGroupFile("templates/ua/ucraina.stg");
+        final ST piechart = templateGroup.getInstanceOf("piechart");
+        piechart.add("nume", defaultIfBlank(place.getRomanianName(), place.getTransliteratedName()));
+        piechart.add("tip_genitiv", place.getGenitive());
+
+        final DefaultPieDataset datasetLang = new DefaultPieDataset();
+        computeEthnicityDataset(place.getLanguageStructure(), datasetLang);
+        renderPiechart(sb, piechart, datasetLang);
+
+        String templateName = "NoMaj";
+        Language majLanguage = null;
+        for (final Entry<Language, Double> eachEntry : place.getLanguageStructure().entrySet()) {
+            final Double val = eachEntry.getValue();
+            if (null == val) {
+                continue;
+            }
+            if (val.doubleValue() >= 100.0) {
+                templateName = "Total";
+                majLanguage = eachEntry.getKey();
+                break;
+            }
+            if (val.doubleValue() >= 50.0) {
+                majLanguage = eachEntry.getKey();
+                templateName = "Maj";
+                break;
+            }
+        }
+        final ST demoText = templateGroup.getInstanceOf("demography" + templateName);
+        final NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
+        nf.setMaximumFractionDigits(2);
+        demoText.add("nume_unitate_genitiv", place.getGenitive() + " " + obtainActualRomanianName(place));
+        if (null != majLanguage) {
+            demoText.add("nume_limba_majoritara", linkifyLanguage(majLanguage));
+        }
+        if (StringUtils.equals("Maj", templateName)) {
+            demoText.add("procent_limba_majoritara",
+                "{{formatnum:" + nf.format(place.getLanguageStructure().get(majLanguage)) + "}}");
+        }
+        if (!StringUtils.equals("Total", templateName)) {
+            final List<Language> otherLanguages = new ArrayList<Language>();
+            for (final Language eachLang : place.getLanguageStructure().keySet()) {
+                if (!eachLang.equals(majLanguage) && place.getLanguageStructure().get(eachLang) > 1.0) {
+                    otherLanguages.add(eachLang);
+                }
+            }
+            Collections.sort(otherLanguages, new Comparator<Language>() {
+
+                public int compare(final Language arg0, final Language arg1) {
+                    final double pop0 = defaultIfNull(place.getLanguageStructure().get(arg0), 0.0);
+                    final double pop1 = defaultIfNull(place.getLanguageStructure().get(arg1), 0.0);
+                    return (int) Math.signum(pop1 - pop0);
+                }
+            });
+            final List<String> languageEnumerationList = new ArrayList<String>();
+            for (final Language eachOtherLang : otherLanguages) {
+                Double speakers;
+                if (null != (speakers = place.getLanguageStructure().get(eachOtherLang))) {
+                    final StringBuilder langBuilder = new StringBuilder(linkifyLanguage(eachOtherLang));
+                    langBuilder.append(" (");
+                    langBuilder.append("{{formatnum:");
+                    langBuilder.append(nf.format(speakers.doubleValue()));
+                    langBuilder.append("}}%)");
+                    languageEnumerationList.add(langBuilder.toString());
+                }
+            }
+            if (1 == languageEnumerationList.size()) {
+                demoText.add("enum_alte_limbi", languageEnumerationList.get(0));
+            } else {
+                final String[] languageEnumerationArray = languageEnumerationList.toArray(new String[languageEnumerationList
+                    .size()]);
+                demoText.add("enum_alte_limbi",
+                    join(ArrayUtils.subarray(languageEnumerationArray, 0, languageEnumerationArray.length - 1), ", ")
+                        + " și " + languageEnumerationArray[languageEnumerationArray.length - 1]);
+            }
+        }
+        sb.append(demoText.render());
+        sb.append(SEP);
+
+        return sb.toString();
+    }
+
+    private String obtainActualRomanianName(final LanguageStructurable place) {
+        return defaultIfBlank(place.getRomanianName(), place.getTransliteratedName());
+    }
+
+    private String linkifyLanguage(final Language lang) {
+        final StringBuilder linkBuilder = new StringBuilder("[[Limba ");
+        final String langName = lowerCase(lang.getName());
+        linkBuilder.append(langName);
+        linkBuilder.append('|');
+        linkBuilder.append(langName).append("]]");
+
+        return linkBuilder.toString();
+    }
+
+    private void computeEthnicityDataset(final Map<Language, Double> languageStructure, final DefaultPieDataset dataset) {
+        final Set<Language> ethnicitiesSet = nationColorMap.keySet();
+        final List<Language> ethnicitiesList = new ArrayList<Language>(ethnicitiesSet);
+        Collections.sort(ethnicitiesList, new Comparator<Language>() {
+
+            public int compare(final Language arg0, final Language arg1) {
+                final double natpop0 = defaultIfNull(languageStructure.get(arg0), 0.0);
+                final double natpop1 = defaultIfNull(languageStructure.get(arg1), 0.0);
+                return (int) Math.signum(natpop1 - natpop0);
+            }
+
+        });
+        for (final Language nat : ethnicitiesList) {
+            final Double natpop = languageStructure.get(nat);
+            if (null != natpop && 0.0 < natpop.doubleValue()) {
+                dataset.setValue(nat.getName(), natpop.doubleValue());
+            }
+        }
+    }
+
+    private void renderPiechart(final StringBuilder demographics, final ST piechart, final DefaultPieDataset datasetEthnos) {
+        final StringBuilder pieChartLangProps = new StringBuilder();
+        int i = 1;
+        demographics.append("<div style=\"float:left\">");
+
+        final NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
+        nf.setMaximumFractionDigits(2);
+
+        for (final Object k : datasetEthnos.getKeys()) {
+            pieChartLangProps.append("\n|label");
+            pieChartLangProps.append(i);
+            pieChartLangProps.append('=');
+            pieChartLangProps.append(k.toString());
+            pieChartLangProps.append("|value");
+            pieChartLangProps.append(i);
+            pieChartLangProps.append('=');
+            pieChartLangProps.append(nf.format(datasetEthnos.getValue(k.toString()).doubleValue()));
+            pieChartLangProps.append("|color");
+            pieChartLangProps.append(i);
+            pieChartLangProps.append('=');
+            final Color color = nationColorMap.get(nationNameMap.get(k.toString()));
+            if (null == color) {
+                throw new RuntimeException("Unknown color for nationality " + k);
+            }
+            pieChartLangProps.append(Utilities.colorToHtml(color));
+            i++;
+        }
+        piechart.add("props", pieChartLangProps.toString());
+        demographics.append(piechart.render());
+        demographics.append("</div>");
+        demographics.append(SEP);
     }
 
     private String generateRegionIntro(final Region region, final String articleName) throws IOException {
