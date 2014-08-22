@@ -334,10 +334,7 @@ public class UAWikiGenerator {
 
         introTmpl.add("nume_reg_uk", ukArticleName + "|" + transliteratedUkArticleName);
 
-        introTmpl.add(
-            "nume_capitala",
-            null == region.getCapital() ? "" : defaultIfBlank(region.getCapital().getRomanianName(), region.getCapital()
-                .getTransliteratedName()));
+        introTmpl.add("nume_capitala", null == region.getCapital() ? "" : obtainActualRomanianName(region.getCapital()));
         return introTmpl.render();
     }
 
