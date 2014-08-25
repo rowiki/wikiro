@@ -24,7 +24,7 @@ public class RegionNameInitializer extends LazyInitializer<String> {
     @Override
     protected String initialize() throws ConcurrentException {
         final String roName = StringUtils.defaultIfBlank(region.getRomanianName(), region.getTransliteratedName());
-        final List<String> candidateNames = Arrays.asList("Regiunea " + roName, "Regiunea " + roName + ", Ucraina");
+        final List<String> candidateNames = Arrays.asList("Regiunea " + roName + ", Ucraina", "Regiunea " + roName);
 
         boolean[] existanceArray = null;
         try {
@@ -34,8 +34,11 @@ public class RegionNameInitializer extends LazyInitializer<String> {
         }
         for (int i = 0; i < candidateNames.size(); i++) {
             try {
-                if (!existanceArray[i] || UAUtils.isInCategoryTree(candidateNames.get(i), wiki, 3, "Regiuni ale Ucrainei")) {
-                    return candidateNames.get(i);
+                if (existanceArray[i]) {
+                    final String actualArticleName = candidateNames.get(i);
+                    if (UAUtils.isInCategoryTree(actualArticleName, wiki, 3, "Regiuni ale Ucrainei")) {
+                        return actualArticleName;
+                    }
                 }
             } catch (final IOException e) {
                 throw new ConcurrentException(e);
