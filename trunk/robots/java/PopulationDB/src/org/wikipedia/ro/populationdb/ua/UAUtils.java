@@ -132,4 +132,11 @@ public class UAUtils {
         return false;
 
     }
+
+    public static String resolveRedirect(final Wiki wiki, final String title) throws IOException {
+        if (!wiki.exists(new String[] { title })[0]) {
+            return null;
+        }
+        return StringUtils.defaultIfBlank(wiki.resolveRedirect(title), title);
+    }
 }
