@@ -120,4 +120,9 @@ public class Region implements LanguageStructurable {
     public String getGenitive() {
         return "regiunii";
     }
+
+    @Transient
+    public LanguageStructurable computeRegion() {
+        return this;
+    }
 }

@@ -129,4 +129,33 @@ public class Hibernator {
         return list;
     }
 
+    public List<Commune> getRegionalCitiesForRegion(final Region eachReg) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query q = ses.createQuery("from Commune com where com.raion is null and com.region=:region");
+        q.setParameter("region", eachReg);
+        return q.list();
+    }
+
+    public List<Raion> getRaionsForRegion(final Region eachReg) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query q = ses.createQuery("from Raion r where not r.miskrada and r.region=:region");
+        q.setParameter("region", eachReg);
+        return q.list();
+    }
+
+    public List<Raion> getRaionsByRomanianOrTransliteratedName(final String roName) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query q = ses.createQuery("from Raion r where r.transliteratedName=:translName or r.romanianName=:translName");
+        q.setParameter("translName", roName);
+        return q.list();
+    }
+
+    public int countRaionsByRomanianOrTransliteratedName(final String transliteratedName) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query q = ses
+            .createQuery("count(r) from Raion r where r.transliteratedName=:translName or r.romanianName=:translName");
+        q.setParameter("translName", transliteratedName);
+        final Long uniqueResult = (Long) q.uniqueResult();
+        return uniqueResult.intValue();
+    }
 }

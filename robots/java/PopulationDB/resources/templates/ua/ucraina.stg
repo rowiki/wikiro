@@ -1,7 +1,7 @@
 introReg(nume_reg_ro, nume_reg_uk, nume_capitala) ::= "'''<nume_reg_ro>''' (în {{uk|<nume_reg_uk>}}) este o [[Regiunile Ucrainei|regiune]] din [[Ucraina]]. Capitala sa este orașul [[<nume_capitala>]]."
-demographyTotal(nume_unitate_genitiv, nume_limba_majoritara) ::= "Conform recensământului din 2001, toată populația <nume_unitate_genitiv> era vorbitoare de <nume_limba_majoritara> (100%)."
-demographyMaj(nume_unitate_genitiv, nume_limba_majoritara, procent_limba_majoritara, enum_alte_limbi) ::= "Conform recensământului din 2001, majoritatea populației <nume_unitate_genitiv> era vorbitoare de <nume_limba_majoritara> (<procent_limba_majoritara>%), existând în minoritate și vorbitori de <enum_alte_limbi>."
-demographyNoMaj(nume_unitate_genitiv, enum_alte_limbi) ::= "Conform recensământului din 2001, nu exista o limbă vorbită de majoritatea populației, aceasta fiind compusă din vorbitori de <enum_alte_limbi>."
+demographyTotal(nume_unitate_genitiv, nume_limba_majoritara, ref) ::= "Conform recensământului din 2001, toată populația <nume_unitate_genitiv> era vorbitoare de <nume_limba_majoritara> (100%).<ref>"
+demographyMaj(nume_unitate_genitiv, nume_limba_majoritara, procent_limba_majoritara, enum_alte_limbi, ref) ::= "Conform recensământului din 2001, majoritatea populației <nume_unitate_genitiv> era vorbitoare de <nume_limba_majoritara> (<procent_limba_majoritara>%), existând în minoritate și vorbitori de <enum_alte_limbi>.<ref>"
+demographyNoMaj(nume_unitate_genitiv, enum_alte_limbi, ref) ::= "Conform recensământului din 2001, nu exista o limbă vorbită de majoritatea populației, aceasta fiind compusă din vorbitori de <enum_alte_limbi>.<ref>"
 piechart(nume, props, tip_genitiv) ::= "{{Pie chart
 |thumb=left
 |caption=Componența etnică a <tip_genitiv> <nume><props>}}"

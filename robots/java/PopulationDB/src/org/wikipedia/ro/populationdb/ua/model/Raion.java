@@ -131,4 +131,9 @@ public class Raion implements LanguageStructurable {
     public String getGenitive() {
         return miskrada ? "orașului regional" : "raionului";
     }
+
+    @Transient
+    public LanguageStructurable computeRegion() {
+        return getRegion();
+    }
 }

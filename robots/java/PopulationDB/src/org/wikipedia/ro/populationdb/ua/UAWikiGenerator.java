@@ -31,6 +31,7 @@ import javax.security.auth.login.FailedLoginException;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.concurrent.LazyInitializer;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.jfree.data.general.DefaultPieDataset;
@@ -43,6 +44,7 @@ import org.wikipedia.ro.populationdb.ua.dao.Hibernator;
 import org.wikipedia.ro.populationdb.ua.model.Commune;
 import org.wikipedia.ro.populationdb.ua.model.Language;
 import org.wikipedia.ro.populationdb.ua.model.LanguageStructurable;
+import org.wikipedia.ro.populationdb.ua.model.Raion;
 import org.wikipedia.ro.populationdb.ua.model.Region;
 import org.wikipedia.ro.populationdb.util.ParameterReader;
 import org.wikipedia.ro.populationdb.util.UkrainianTransliterator;
@@ -67,8 +69,65 @@ public class UAWikiGenerator {
     private Wikibase dwiki;
     private WikiEditExecutor executor;
     private Hibernator hib;
+    private final Map<LanguageStructurable, LazyInitializer<String>> roArticleNames = new HashMap<LanguageStructurable, LazyInitializer<String>>();
     private final Map<Language, Color> nationColorMap = new HashMap<Language, Color>();
     private final Map<String, Language> nationNameMap = new HashMap<String, Language>();
+    private final Map<String, String> urls = new HashMap<String, String>() {
+        {
+            put("Crimeea",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_001&ti=19A050501_02_001.%20Distribution%20of%20the%20population%20by%20native%20language,%20Avtonomna%20Respublika%20Krym%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Vinița",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_005&ti=19A050501_02_005.%20Distribution%20of%20the%20population%20by%20native%20language,%20Vinnytska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Volînia",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_007&ti=19A050501_02_007.%20Distribution%20of%20the%20population%20by%20native%20language,%20Volynska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Dnipropetrovsk",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_012&ti=19A050501_02_012.%20Distribution%20of%20the%20population%20by%20native%20language,%20Dnipropetrovska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Donețk",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_014&ti=19A050501_02_014.%20Distribution%20of%20the%20population%20by%20native%20language,%20Donetska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Jîtomîr",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_018&ti=19A050501_02_018.%20Distribution%20of%20the%20population%20by%20native%20language,%20Zhytomyrska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Zaporijjea",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_023&ti=19A050501_02_023.%20Distribution%20of%20the%20population%20by%20native%20language,%20Zaporizka%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Ivano-Frankivsk",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_026&ti=19A050501_02_026.%20Distribution%20of%20the%20population%20by%20native%20language,%20Ivano-Frankivska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Kiev",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_032&ti=19A050501_02_032.%20Distribution%20of%20the%20population%20by%20native%20language,%20Kyivska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Kirovohrad",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_035&ti=19A050501_02_035.%20Distribution%20of%20the%20population%20by%20native%20language,%20Kirovohradska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Luhansk",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_044&ti=19A050501_02_044.%20Distribution%20of%20the%20population%20by%20native%20language,%20Luhanska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Mîkolaiiv",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_048&ti=19A050501_02_048.%20Distribution%20of%20the%20population%20by%20native%20language,%20Mykolaivska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Odesa",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_051&ti=19A050501_02_051.%20Distribution%20of%20the%20population%20by%20native%20language,%20Odeska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Poltava",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_053&ti=19A050501_02_053.%20Distribution%20of%20the%20population%20by%20native%20language,%20Poltavska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Rivne",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_056&ti=19A050501_02_056.%20Distribution%20of%20the%20population%20by%20native%20language,%20Rivnenska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Sumî",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_059&ti=19A050501_02_059.%20Distribution%20of%20the%20population%20by%20native%20language,%20Sumska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Ternopil",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_061&ti=19A050501_02_061.%20Distribution%20of%20the%20population%20by%20native%20language,%20Ternopilska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Harkiv",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_063&ti=19A050501_02_063.%20Distribution%20of%20the%20population%20by%20native%20language,%20Kharkivska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Herson",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_065&ti=19A050501_02_065.%20Distribution%20of%20the%20population%20by%20native%20language,%20Khersonska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Hmelnîțkîi",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_068&ti=19A050501_02_068.%20Distribution%20of%20the%20population%20by%20native%20language,%20Khmelnytska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Cerkasî",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_071&ti=19A050501_02_071.%20Distribution%20of%20the%20population%20by%20native%20language,%20Cherkaska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Cernăuți",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_073&ti=19A050501_02_073.%20Distribution%20of%20the%20population%20by%20native%20language,%20Chernivetska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Cernigău",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_074&ti=19A050501_02_074.%20Distribution%20of%20the%20population%20by%20native%20language,%20Chernihivska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Sevastopol",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_085&ti=19A050501_02_085.%20Distribution%20of%20the%20population%20by%20native%20language,%20Sevastopol%20(miskrada)%20(1,2,3,4)&path=../Database/Census/05/01/&lang=2&multilang=en");
+            put("Transcarpatia",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_021&ti=19A050501_02_021.%20Distribution%20of%20the%20population%20by%20native%20language,%20Zakarpatska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/01/&lang=2&multilang=en");
+            put("Liov",
+                "http://database.ukrcensus.gov.ua/MULT/Dialog/varval.asp?ma=19A050501_02_046&ti=19A050501_02_046.%20Distribution%20of%20the%20population%20by%20native%20language,%20Lvivska%20oblast%20(1,2,3,4)&path=../Database/Census/05/01/02/&lang=2&multilang=en");
+        }
+    };
     private Wiki ukwiki;
 
     private void generateRegions() throws IOException {
@@ -76,7 +135,40 @@ public class UAWikiGenerator {
         final List<Region> regions = hib.getAllRegions();
         for (final Region eachReg : regions) {
             generateRegionText(eachReg);
+            generateRegionNavBox(eachReg);
         }
+    }
+
+    private void generateRegionNavBox(final Region region) {
+        final List<Commune> regionalCities = hib.getRegionalCitiesForRegion(region);
+        final List<Raion> raions = hib.getRaionsForRegion(region);
+        int section = 0;
+
+        final StringBuilder navBox = new StringBuilder(
+            "{{Casetă de navigare simplă\n|stare = {{{stare|autopliabilă}}}\n|titlu=Diviziuni administrative ale [[Regiunea");
+        final String regionRomanianName = obtainActualRomanianName(region);
+        navBox.append(regionRomanianName);
+        navBox.append('|');
+        navBox.append(regionRomanianName);
+        navBox.append("]]\n|nume=Regiunea " + regionRomanianName);
+
+        if (null != regionalCities && 0 < regionalCities.size()) {
+            section++;
+            navBox.append("\n|grup").append(section).append("=Orașe regionale");
+            navBox.append("\n|listă").append(section).append("=<div>");
+            navBox.append("</div>");
+        }
+        if (null != raions && 0 < raions.size()) {
+            section++;
+            navBox.append("\n|grup").append(section).append("=[[Raioanele Ucrainei|Raioane]]");
+            navBox.append("\n|listă").append(section).append("=<div>");
+            navBox.append("</div>");
+        }
+        navBox.append("}}<noinclude>");
+        navBox.append("[[Categorie:Formate de navigare regiuni din Ucraina|");
+        navBox.append(regionRomanianName);
+        navBox.append("]]");
+        navBox.append("</noinclude>");
     }
 
     private void generateRegionText(final Region region) throws IOException {
@@ -251,6 +343,16 @@ public class UAWikiGenerator {
                         + " și " + languageEnumerationArray[languageEnumerationArray.length - 1]);
             }
         }
+        final StringBuilder refBuilder = new StringBuilder("<ref name=\"populatie_ucraina_2001\">{{Citat web|url=");
+        final String regionName = obtainActualRomanianName(place.computeRegion());
+        refBuilder.append(urls.get(regionName));
+        refBuilder.append("|publisher=Institutul Național de Statistică al Ucrainei");
+        refBuilder.append("|title=Rezultatele recensământului din 2001 cu structura lingvistică a regiunii");
+        refBuilder.append(regionName);
+        refBuilder.append(" pe localități");
+        refBuilder.append("|accessdate=2014-08-25}}");
+        refBuilder.append("</ref>");
+        demoText.add("ref", refBuilder.toString());
         sb.append(demoText.render());
         sb.append(SEP);
 
@@ -283,15 +385,21 @@ public class UAWikiGenerator {
             }
 
         });
+        double others = 0.0;
         for (final Language nat : ethnicitiesList) {
             final Double natpop = languageStructure.get(nat);
-            if (null != natpop && 0.0 < natpop.doubleValue()) {
+            if (null != natpop && 1.0 < natpop.doubleValue()) {
                 dataset.setValue(nat.getName(), natpop.doubleValue());
+            } else if (null != natpop) {
+                others += natpop;
             }
+        }
+        if (0.0 < others) {
+            dataset.setValue("Alte limbi", others);
         }
     }
 
-    private void renderPiechart(final StringBuilder demographics, final ST piechart, final DefaultPieDataset datasetEthnos) {
+    private void renderPiechart(final StringBuilder demographics, final ST piechart, final DefaultPieDataset dataset) {
         final StringBuilder pieChartLangProps = new StringBuilder();
         int i = 1;
         demographics.append("<div style=\"float:left\">");
@@ -299,7 +407,7 @@ public class UAWikiGenerator {
         final NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
         nf.setMaximumFractionDigits(2);
 
-        for (final Object k : datasetEthnos.getKeys()) {
+        for (final Object k : dataset.getKeys()) {
             pieChartLangProps.append("\n|label");
             pieChartLangProps.append(i);
             pieChartLangProps.append('=');
@@ -307,7 +415,7 @@ public class UAWikiGenerator {
             pieChartLangProps.append("|value");
             pieChartLangProps.append(i);
             pieChartLangProps.append('=');
-            pieChartLangProps.append(nf.format(datasetEthnos.getValue(k.toString()).doubleValue()));
+            pieChartLangProps.append(nf.format(dataset.getValue(k.toString()).doubleValue()));
             pieChartLangProps.append("|color");
             pieChartLangProps.append(i);
             pieChartLangProps.append('=');
@@ -385,12 +493,13 @@ public class UAWikiGenerator {
         assignColorToLanguage("Belarusă", new Color(32, 192, 32));
         assignColorToLanguage("Bulgară", new Color(0, 192, 0));
         assignColorToLanguage("Tătară crimeeană", new Color(192, 192, 255));
-        assignColorToLanguage("Ebraică", new Color(192, 192, 192));
-        assignColorToLanguage("Karaim", new Color(32, 32, 192));
+        assignColorToLanguage("Ebraică", new Color(192, 255, 255));
+        assignColorToLanguage("Karaim", new Color(32, 192, 192));
         assignColorToLanguage("Germană", new Color(255, 85, 255));
         assignColorToLanguage("Ucraineană", new Color(255, 255, 85));
         assignColorToLanguage("Rusă", new Color(192, 85, 85));
         assignColorToLanguage("Slovacă", new Color(48, 48, 160));
+        assignColorToLanguage("Alte limbi", new Color(85, 85, 85));
         ses.getTransaction().rollback();
         blandifyColors(nationColorMap);
     }
