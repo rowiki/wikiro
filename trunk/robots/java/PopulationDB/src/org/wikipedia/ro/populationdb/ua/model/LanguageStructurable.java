@@ -14,4 +14,6 @@ public interface LanguageStructurable {
 
     public abstract String getTransliteratedName();
 
+    public abstract LanguageStructurable computeRegion();
+
 }
