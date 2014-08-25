@@ -123,9 +123,9 @@ public class UAUtils {
     }
 
     public static boolean isInAnyCategoryTree(final String pageTitle, final Wiki wiki, final int depth,
-                                              final String... categories) {
+                                              final String... categories) throws IOException {
         for (final String eachCat : categories) {
-            if (isInAnyCategoryTree(pageTitle, wiki, depth, eachCat)) {
+            if (isInCategoryTree(pageTitle, wiki, depth, eachCat)) {
                 return true;
             }
         }
