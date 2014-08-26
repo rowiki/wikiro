@@ -138,7 +138,7 @@ public class Hibernator {
 
     public List<Raion> getRaionsForRegion(final Region eachReg) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Query q = ses.createQuery("from Raion r where not r.miskrada and r.region=:region");
+        final Query q = ses.createQuery("from Raion r where r.miskrada is not true and r.region=:region");
         q.setParameter("region", eachReg);
         return q.list();
     }
