@@ -383,6 +383,8 @@ public class UAPercentagesParser {
                                 currentCommune.setRegion(currentRegion);
                                 currentRegion.getCities().add(currentCommune);
                                 session.save(currentRegion);
+                            } else {
+                                currentCommune.setRaion(currentRaion);
                             }
                             session.save(currentCommune);
 
