@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.ua.model.Commune;
 import org.wikipedia.ro.populationdb.ua.model.Raion;
+import org.wikipedia.ro.populationdb.ua.model.Settlement;
 
 public class UAUtils {
     public static List<String> getPossibleRaionNames(final Raion raion, final Wiki wiki, final boolean singleInWiki) {
@@ -59,9 +60,8 @@ public class UAUtils {
         }
         if (null != commune.getRaion()) {
             final Raion raion = commune.getRaion();
-            final String roRaionName = StringUtils.defaultIfBlank(raion.getRegion().getRomanianName(), raion.getRegion()
-                .getTransliteratedName());
-            final String translRaionName = commune.getRaion().getTransliteratedName();
+            final String roRaionName = StringUtils.defaultIfBlank(raion.getRomanianName(), raion.getTransliteratedName());
+            final String translRaionName = raion.getTransliteratedName();
 
             if (0 == commune.getTown()) {
                 ret.add("Comuna " + translCommuneName + ", raionul " + translRaionName + ", regiunea " + translRegionName);
@@ -101,6 +101,93 @@ public class UAUtils {
         if (singleInWiki && (0 < commune.getTown() || commune.getSettlements().size() < 2)) {
             ret.add(translCommuneName);
             ret.add(roName);
+        }
+
+        return new ArrayList<String>(ret);
+    }
+
+    public static List<String> getPossibleSettlementNames(final Settlement settlement, final Wiki wiki,
+                                                          final boolean singleInWiki, final boolean singleInRegion,
+                                                          final boolean singleInRaion) {
+        final Commune com = settlement.getCommune();
+        final Raion rai = com.getRaion();
+        settlement.computeRegion();
+        final String roSettlementName = StringUtils.defaultIfBlank(settlement.getRomanianName(),
+            settlement.getTransliteratedName());
+        final String translSettlementName = settlement.getTransliteratedName();
+        final String roRegionName = StringUtils.defaultIfBlank(settlement.computeRegion().getRomanianName(), settlement
+            .computeRegion().getTransliteratedName());
+        final String translRegionName = settlement.computeRegion().getTransliteratedName();
+        final String roCommuneName = StringUtils.defaultIfBlank(com.getRomanianName(), com.getTransliteratedName());
+        final String translCommuneName = com.getTransliteratedName();
+
+        final Set<String> ret = new LinkedHashSet<String>();
+
+        if (singleInRegion) {
+            ret.add(roSettlementName + ", " + roRegionName);
+            ret.add(roSettlementName + ", " + translRegionName);
+            ret.add(translSettlementName + ", " + roRegionName);
+            ret.add(translSettlementName + ", " + translRegionName);
+        }
+        if (null != rai) {
+            final String roRaionName = StringUtils.defaultIfBlank(rai.getRomanianName(), rai.getTransliteratedName());
+            final String translRaionName = rai.getTransliteratedName();
+
+            ret.add(roSettlementName + " (" + translCommuneName + "), raionul " + roRaionName + ", regiunea " + roRegionName);
+            ret.add(roSettlementName + " (" + roCommuneName + "), raionul " + roRaionName + ", regiunea " + roRegionName);
+            ret.add(roSettlementName + " (" + translCommuneName + "), raionul " + translRaionName + ", regiunea "
+                + roRegionName);
+            ret.add(roSettlementName + " (" + roCommuneName + "), raionul " + translRaionName + ", regiunea " + roRegionName);
+            ret.add(roSettlementName + " (" + translCommuneName + "), raionul " + roRaionName + ", regiunea "
+                + translRegionName);
+            ret.add(roSettlementName + " (" + roCommuneName + "), raionul " + roRaionName + ", regiunea " + translRegionName);
+            ret.add(roSettlementName + " (" + translCommuneName + "), raionul " + translRaionName + ", regiunea "
+                + translRegionName);
+            ret.add(roSettlementName + " (" + roCommuneName + "), raionul " + translRaionName + ", regiunea "
+                + translRegionName);
+            ret.add(translSettlementName + " (" + translCommuneName + "), raionul " + roRaionName + ", regiunea "
+                + roRegionName);
+            ret.add(translSettlementName + " (" + roCommuneName + "), raionul " + roRaionName + ", regiunea " + roRegionName);
+            ret.add(translSettlementName + " (" + translCommuneName + "), raionul " + translRaionName + ", regiunea "
+                + roRegionName);
+            ret.add(translSettlementName + " (" + roCommuneName + "), raionul " + translRaionName + ", regiunea "
+                + roRegionName);
+            ret.add(translSettlementName + " (" + translCommuneName + "), raionul " + roRaionName + ", regiunea "
+                + translRegionName);
+            ret.add(translSettlementName + " (" + roCommuneName + "), raionul " + roRaionName + ", regiunea "
+                + translRegionName);
+            ret.add(translSettlementName + " (" + translCommuneName + "), raionul " + translRaionName + ", regiunea "
+                + translRegionName);
+            ret.add(translSettlementName + " (" + roCommuneName + "), raionul " + translRaionName + ", regiunea "
+                + translRegionName);
+            if (singleInRaion) {
+                ret.add(roSettlementName + ", raionul " + roRaionName + ", regiunea " + roRegionName);
+                ret.add(roSettlementName + ", raionul " + translRaionName + ", regiunea " + roRegionName);
+                ret.add(roSettlementName + ", raionul " + roRaionName + ", regiunea " + translRegionName);
+                ret.add(roSettlementName + ", raionul " + translRaionName + ", regiunea " + translRegionName);
+                ret.add(translSettlementName + ", raionul " + roRaionName + ", regiunea " + roRegionName);
+                ret.add(translSettlementName + ", raionul " + translRaionName + ", regiunea " + roRegionName);
+                ret.add(translSettlementName + ", raionul " + roRaionName + ", regiunea " + translRegionName);
+                ret.add(translSettlementName + ", raionul " + translRaionName + ", regiunea " + translRegionName);
+            }
+            if (singleInWiki) {
+                ret.add(translSettlementName);
+                ret.add(roSettlementName);
+            }
+            ret.add(translSettlementName + " (" + translCommuneName + "), " + translRaionName);
+            ret.add(translSettlementName + " (" + roCommuneName + "), " + translRaionName);
+            ret.add(translSettlementName + " (" + translCommuneName + "), " + roRaionName);
+            ret.add(translSettlementName + " (" + roCommuneName + "), " + roRaionName);
+            ret.add(roSettlementName + " (" + translCommuneName + "), " + translRaionName);
+            ret.add(roSettlementName + " (" + roCommuneName + "), " + translRaionName);
+            ret.add(roSettlementName + " (" + translCommuneName + "), " + roRaionName);
+            ret.add(roSettlementName + " (" + roCommuneName + "), " + roRaionName);
+            if (singleInRaion) {
+                ret.add(translSettlementName + ", " + translRaionName);
+                ret.add(translSettlementName + ", " + roRaionName);
+                ret.add(roSettlementName + ", " + translRaionName);
+                ret.add(roSettlementName + ", " + roRaionName);
+            }
         }
 
         return new ArrayList<String>(ret);

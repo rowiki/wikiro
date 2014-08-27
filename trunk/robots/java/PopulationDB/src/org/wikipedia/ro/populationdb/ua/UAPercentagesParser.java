@@ -282,6 +282,7 @@ public class UAPercentagesParser {
                             }
                             currentRaion.setTransliteratedName(join(nameParts, " "));
                             currentRaion.setName(join(namePartsUa, " "));
+                            currentRaion.setOriginalName(join(namePartsUa, " "));
                             extractLanguageData(limbi, line, currentRaion);
                         }
                         session.save(currentRaion);
@@ -309,6 +310,7 @@ public class UAPercentagesParser {
                         }
                         currentRaion.setTransliteratedName(join(nameParts, " "));
                         currentRaion.setName(join(namePartsUa, " "));
+                        currentRaion.setOriginalName(join(namePartsUa, " "));
                         currentRaion.setMiskrada(true);
                         currentRaion.setRegion(currentRegion);
                         currentCommuneLevel = 2;
@@ -533,7 +535,6 @@ public class UAPercentagesParser {
             }
         }
         session.getTransaction().commit();
-        session.close();
     }
 
     private void extractLanguageData(final List<Language> limbi, final String[] line,

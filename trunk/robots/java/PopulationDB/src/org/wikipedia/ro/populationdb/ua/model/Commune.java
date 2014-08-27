@@ -164,7 +164,7 @@ public class Commune implements LanguageStructurable {
     }
 
     @Transient
-    public LanguageStructurable computeRegion() {
+    public Region computeRegion() {
         return null == getRegion() ? getRaion().getRegion() : getRegion();
     }
 
