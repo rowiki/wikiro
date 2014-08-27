@@ -28,6 +28,7 @@ public class Raion implements LanguageStructurable {
     private String name;
     private String transliteratedName;
     private String romanianName;
+    private String originalName;
     private Commune capital;
     private boolean miskrada;
     private Map<Language, Double> languageStructure = new HashMap<Language, Double>();
@@ -51,6 +52,7 @@ public class Raion implements LanguageStructurable {
         this.transliteratedName = transliteratedName;
     }
 
+    @Column(name = "romanian_name")
     public String getRomanianName() {
         return romanianName;
     }
@@ -133,7 +135,16 @@ public class Raion implements LanguageStructurable {
     }
 
     @Transient
-    public LanguageStructurable computeRegion() {
+    public Region computeRegion() {
         return getRegion();
+    }
+
+    @Column(name = "original")
+    public String getOriginalName() {
+        return originalName;
+    }
+
+    public void setOriginalName(final String originalName) {
+        this.originalName = originalName;
     }
 }

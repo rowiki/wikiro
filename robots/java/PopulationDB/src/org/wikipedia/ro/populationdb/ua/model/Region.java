@@ -122,7 +122,7 @@ public class Region implements LanguageStructurable {
     }
 
     @Transient
-    public LanguageStructurable computeRegion() {
+    public Region computeRegion() {
         return this;
     }
 }
