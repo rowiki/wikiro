@@ -17,6 +17,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -31,6 +32,7 @@ import javax.security.auth.login.FailedLoginException;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.apache.commons.lang3.concurrent.LazyInitializer;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -46,6 +48,7 @@ import org.wikipedia.ro.populationdb.ua.model.Language;
 import org.wikipedia.ro.populationdb.ua.model.LanguageStructurable;
 import org.wikipedia.ro.populationdb.ua.model.Raion;
 import org.wikipedia.ro.populationdb.ua.model.Region;
+import org.wikipedia.ro.populationdb.ua.model.Settlement;
 import org.wikipedia.ro.populationdb.util.ParameterReader;
 import org.wikipedia.ro.populationdb.util.UkrainianTransliterator;
 import org.wikipedia.ro.populationdb.util.Utilities;
@@ -130,12 +133,213 @@ public class UAWikiGenerator {
     };
     private Wiki ukwiki;
 
+    private void init() throws FailedLoginException, IOException {
+        rowiki = new Wiki("ro.wikipedia.org");
+        ukwiki = new Wiki("uk.wikipedia.org");
+        dwiki = new Wikibase();
+        executor = new WikiEditExecutor(rowiki, dwiki);
+        // executor = new SysoutExecutor();
+
+        final Properties credentials = new Properties();
+        credentials.load(UAWikiGenerator.class.getClassLoader().getResourceAsStream("credentials.properties"));
+        final String datauser = credentials.getProperty("UsernameData");
+        final String datapass = credentials.getProperty("PasswordData");
+        final String user = credentials.getProperty("Username");
+        final String pass = credentials.getProperty("Password");
+        rowiki.login(user, pass.toCharArray());
+        rowiki.setMarkBot(true);
+        dwiki.login(datauser, datapass.toCharArray());
+
+        hib = new Hibernator();
+        final Session ses = hib.getSession();
+        ses.beginTransaction();
+
+        assignColorToLanguage("Română", new Color(85, 85, 255));
+        assignColorToLanguage("Romani", new Color(85, 255, 255));
+        assignColorToLanguage("Greacă", new Color(0, 0, 192));
+        assignColorToLanguage("Maghiară", new Color(85, 255, 85));
+        assignColorToLanguage("Belarusă", new Color(32, 192, 32));
+        assignColorToLanguage("Bulgară", new Color(0, 192, 0));
+        assignColorToLanguage("Tătară crimeeană", new Color(192, 192, 255));
+        assignColorToLanguage("Ebraică", new Color(192, 255, 255));
+        assignColorToLanguage("Karaim", new Color(32, 192, 192));
+        assignColorToLanguage("Germană", new Color(255, 85, 255));
+        assignColorToLanguage("Ucraineană", new Color(255, 255, 85));
+        assignColorToLanguage("Rusă", new Color(192, 85, 85));
+        assignColorToLanguage("Slovacă", new Color(48, 48, 160));
+        assignColorToLanguage("Alte limbi", new Color(85, 85, 85));
+        ses.getTransaction().rollback();
+        blandifyColors(nationColorMap);
+    }
+
     private void generateRegions() throws IOException {
         hib.getSession().beginTransaction();
         final List<Region> regions = hib.getAllRegions();
         for (final Region eachReg : regions) {
+            for (final Raion raion : eachReg.getRaioane()) {
+                for (final Commune com : raion.getCommunes()) {
+                    if (1 < com.getSettlements().size()) {
+                        for (final Settlement s : com.getSettlements()) {
+                            generateVillageText(s);
+                        }
+                        generateCommuneText(com);
+                        generateCommuneNavBox(com);
+                    }
+                }
+                generateRaionText(raion);
+                generateRaionNavBox(raion);
+            }
+            for (final Commune com : eachReg.getCities()) {
+                generateCommuneText(com);
+                generateCommuneNavBox(com);
+            }
             generateRegionText(eachReg);
             generateRegionNavBox(eachReg);
+        }
+    }
+
+    private void generateRaionNavBox(final Raion raion) {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void generateRaionText(final Raion raion) {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void generateCommuneText(final Commune com) {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void generateCommuneNavBox(final Commune com) {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void generateVillageText(final Settlement s) throws IOException {
+        final String villageRoName = defaultIfBlank(s.getRomanianName(), s.getTransliteratedName());
+        final int countVillagesWithThisName = hib.countSettlementsByRomanianOrTransliteratedName(villageRoName);
+        final int countVillagesWithThisNameInRaion = 1;
+        if (null != s.getCommune().getRaion()) {
+            hib.countSettlementsInRaionByRomanianOrTransliteratedName(villageRoName, s.getCommune().getRaion());
+        }
+        final int countVillagesWithThisNameInRegion = hib.countSettlementsInRegionByRomanianOrTransliteratedName(
+            villageRoName, s.computeRegion());
+        final List<String> possibleSettlementNames = UAUtils.getPossibleSettlementNames(s, rowiki,
+            1 == countVillagesWithThisName, 1 == countVillagesWithThisNameInRegion, 1 == countVillagesWithThisNameInRaion);
+
+        String actualTitle = null;
+        final StringBuilder currentText = new StringBuilder();
+        final boolean[] titleExistance = rowiki.exists(possibleSettlementNames.toArray(new String[possibleSettlementNames
+            .size()]));
+        for (int i = 0; i < titleExistance.length; i++) {
+            if (!titleExistance[i]) {
+                continue;
+            }
+            final String eachCandidateTitle = possibleSettlementNames.get(i);
+            actualTitle = defaultString(rowiki.resolveRedirect(eachCandidateTitle), eachCandidateTitle);
+        }
+        if (null == actualTitle) {
+            actualTitle = possibleSettlementNames.get(possibleSettlementNames.size() - 1);
+        } else {
+            currentText.append(rowiki.getPageText(actualTitle));
+        }
+        final ParameterReader ibParaReader = new ParameterReader(currentText.toString());
+        ibParaReader.run();
+        final String villageIBText = generateVillageInfobox(s, ibParaReader);
+        currentText.replace(0, ibParaReader.getTemplateLength(), villageIBText);
+    }
+
+    private String generateVillageInfobox(final Settlement s, final ParameterReader ibParaReader) {
+        final String villageRoName = defaultIfBlank(s.getRomanianName(), s.getTransliteratedName());
+        final StringBuilder sb = new StringBuilder("{{Infocaseta Așezare");
+        sb.append("\n|tip_asezare = Sat");
+        sb.append("\n|nume=").append(villageRoName);
+        sb.append("\n|nume_nativ").append(s.getName());
+        final Commune commune = s.getCommune();
+        final String communeRoName = obtainActualRomanianName(commune);
+        if (null != commune.getRaion()) {
+            obtainActualRomanianName(commune.getRaion());
+        }
+        final Region region = s.computeRegion();
+        final String regionRoName = obtainActualRomanianName(region);
+
+        sb.append("\n|tip_subdiviziune1=[[Regiunile Ucrainei|Regiune]]");
+        sb.append("\n|nume_subdiviziune1=[[");
+        sb.append(getArticleName(region));
+        sb.append("|").append(regionRoName).append("]]");
+        if (null != commune.getRaion()) {
+            if (commune.getRaion().isMiskrada()) {
+                sb.append("\n|tip_subdiviziune2=Oraș regional");
+                sb.append("\n|nume_subdiviziune2=[[");
+                sb.append(getArticleName(commune.getRaion().getCapital()));
+                sb.append('|');
+                sb.append(obtainActualRomanianName(commune.getRaion().getCapital()));
+            } else {
+                sb.append("\n|tip_subdiviziune2=[[Raioanele Ucrainei|Raion]]");
+                sb.append("\n|nume_subdiviziune2=[[");
+                sb.append(getArticleName(commune.getRaion()));
+                sb.append('|');
+                sb.append(obtainActualRomanianName(commune.getRaion()));
+            }
+            sb.append("]]");
+        }
+
+        sb.append("\n|tip_subdiviziune3=[[Comunele Ucrainei|Comună]]");
+        sb.append("\n|nume_subdiviziune3=[[");
+        sb.append(getArticleName(commune));
+        sb.append("|").append(communeRoName).append("]]");
+
+        final String coordonate = ibParaReader.getParams().get("coordonate");
+        if (StringUtils.isNotBlank(coordonate)) {
+            final ParameterReader coordParaReader = new ParameterReader(coordonate);
+            coordParaReader.run();
+            final Map<String, String> coordParams = coordParaReader.getParams();
+            final List<String> coordArgNames = Arrays.asList("latd", "latm", "lats", "latNS", "longd", "longm", "longs",
+                "longEV");
+            sb.append('\n');
+            for (int i = 0; i < coordArgNames.size(); i++) {
+                final String argValue = defaultString(coordParams.get(String.valueOf(1 + i)));
+                sb.append(coordArgNames.get(i)).append("=").append(argValue);
+            }
+        }
+        sb.append("\n|pushpin_map=Ucraina Regiunea ").append(regionRoName);
+        UAUtils.copyParameterFromTemplate(ibParaReader, sb, "populație");
+        UAUtils.copyParameterFromTemplate(ibParaReader, sb, "recensământ");
+        UAUtils.copyParameterFromTemplate(ibParaReader, sb, "altitudine");
+        UAUtils.copyParameterFromTemplate(ibParaReader, sb, "prefix telefonic");
+        UAUtils.copyParameterFromTemplate(ibParaReader, sb, "cod poștal");
+        UAUtils.copyParameterFromTemplate(ibParaReader, sb, "densitate");
+        UAUtils.copyParameterFromTemplate(ibParaReader, sb, "atestare");
+        UAUtils.copyParameterFromTemplate(ibParaReader, sb, "suprafață");
+        sb.append("\n}}\n");
+        return sb.toString();
+    }
+
+    private String getArticleName(final LanguageStructurable ls) {
+        LazyInitializer<String> lazyInitializer = roArticleNames.get(ls);
+        if (null == lazyInitializer) {
+            if (ls instanceof Region) {
+                lazyInitializer = new RegionNameInitializer((Region) ls, rowiki);
+            } else if (ls instanceof Raion) {
+                lazyInitializer = new RaionNameInitializer((Raion) ls, rowiki, hib);
+            } else if (ls instanceof Commune) {
+                lazyInitializer = new CommuneNameInitializer((Commune) ls, rowiki, hib);
+            } else if (ls instanceof Settlement) {
+                lazyInitializer = new SettlementNameInitializer((Settlement) ls, rowiki, hib);
+            }
+            roArticleNames.put(ls, lazyInitializer);
+        }
+        if (null == lazyInitializer) {
+            return null;
+        }
+        try {
+            return lazyInitializer.get();
+        } catch (final ConcurrentException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -247,6 +451,45 @@ public class UAWikiGenerator {
             }
             System.out.println(currentText);
         }
+    }
+
+    private String generateRegionIntro(final Region region, final String articleName) throws IOException {
+        final STGroup stgroup = new STGroupFile("templates/ua/ucraina.stg");
+        final ST introTmpl = stgroup.getInstanceOf("introReg");
+        introTmpl.add("nume_reg_ro", defaultIfBlank(region.getRomanianName(), region.getTransliteratedName()));
+        final String ukArticleName = getUkrainianRegionName(articleName);
+        final String transliteratedUkArticleName = replace(new UkrainianTransliterator(ukArticleName).transliterate(),
+            "Oblast", "oblast");
+
+        introTmpl.add("nume_reg_uk", ukArticleName + "|" + transliteratedUkArticleName);
+
+        introTmpl.add("nume_capitala", null == region.getCapital() ? "" : obtainActualRomanianName(region.getCapital()));
+        return introTmpl.render();
+    }
+
+    private String generateRegionInfobox(final Region region, final ParameterReader ibParaReader) {
+        final StringBuilder sb = new StringBuilder("{{Infocaseta Regiune");
+        sb.append("\n|nume = ");
+        final String roRegName = defaultIfBlank(region.getRomanianName(), region.getTransliteratedName());
+        sb.append(roRegName);
+        if (null != region.getCapital()) {
+            final Commune capital = region.getCapital();
+            sb.append("\n|capitala = [[");
+            sb.append(defaultIfBlank(capital.getRomanianName(), capital.getTransliteratedName()));
+            sb.append("]]");
+            sb.append("\n|nume=").append(roRegName);
+            sb.append("\n|numegen=").append(region.getGenitive()).append(' ').append(roRegName);
+            sb.append("\n|tara={{UKR}}");
+            sb.append("\n|stemă={{#property:P94}}");
+            sb.append("\n|steag_imagine={{#property:P41}}");
+            for (final String paramName : ibParaReader.getParams().keySet()) {
+                if (!Arrays.asList("capitala", "tara", "nume", "numegen", "steag_imagine", "stemă").contains(paramName)) {
+                    UAUtils.copyParameterFromTemplate(ibParaReader, sb, paramName);
+                }
+            }
+        }
+        sb.append("\n}}\n");
+        return sb.toString();
     }
 
     private int locateFirstOf(final CharSequence haystack, final CharSequence... needles) {
@@ -432,76 +675,9 @@ public class UAWikiGenerator {
         demographics.append(SEP);
     }
 
-    private String generateRegionIntro(final Region region, final String articleName) throws IOException {
-        final STGroup stgroup = new STGroupFile("templates/ua/ucraina.stg");
-        final ST introTmpl = stgroup.getInstanceOf("introReg");
-        introTmpl.add("nume_reg_ro", defaultIfBlank(region.getRomanianName(), region.getTransliteratedName()));
-        final String ukArticleName = getUkrainianRegionName(articleName);
-        final String transliteratedUkArticleName = replace(new UkrainianTransliterator(ukArticleName).transliterate(),
-            "Oblast", "oblast");
-
-        introTmpl.add("nume_reg_uk", ukArticleName + "|" + transliteratedUkArticleName);
-
-        introTmpl.add("nume_capitala", null == region.getCapital() ? "" : obtainActualRomanianName(region.getCapital()));
-        return introTmpl.render();
-    }
-
     private String getUkrainianRegionName(final String articleName) throws IOException {
         final String ukTitle = dwiki.getTitleInLanguage("rowiki", articleName, "uk");
         return ukTitle;
-    }
-
-    private String generateRegionInfobox(final Region region, final ParameterReader ibParaReader) {
-        final StringBuilder sb = new StringBuilder("{{Infocaseta Regiune");
-        sb.append("\n|nume = ");
-        sb.append(defaultIfBlank(region.getRomanianName(), region.getTransliteratedName()));
-        if (null != region.getCapital()) {
-            final Commune capital = region.getCapital();
-            sb.append("\n|capitala = [[");
-            sb.append(defaultIfBlank(capital.getRomanianName(), capital.getTransliteratedName()));
-            sb.append("]]");
-        }
-        sb.append("}}");
-        return sb.toString();
-    }
-
-    private void init() throws FailedLoginException, IOException {
-        rowiki = new Wiki("ro.wikipedia.org");
-        ukwiki = new Wiki("uk.wikipedia.org");
-        dwiki = new Wikibase();
-        executor = new WikiEditExecutor(rowiki, dwiki);
-        // executor = new SysoutExecutor();
-
-        final Properties credentials = new Properties();
-        credentials.load(UAWikiGenerator.class.getClassLoader().getResourceAsStream("credentials.properties"));
-        final String datauser = credentials.getProperty("UsernameData");
-        final String datapass = credentials.getProperty("PasswordData");
-        final String user = credentials.getProperty("Username");
-        final String pass = credentials.getProperty("Password");
-        rowiki.login(user, pass.toCharArray());
-        rowiki.setMarkBot(true);
-        dwiki.login(datauser, datapass.toCharArray());
-
-        hib = new Hibernator();
-        final Session ses = hib.getSession();
-        ses.beginTransaction();
-
-        assignColorToLanguage("Română", new Color(85, 85, 255));
-        assignColorToLanguage("Romani", new Color(85, 255, 255));
-        assignColorToLanguage("Greacă", new Color(0, 0, 192));
-        assignColorToLanguage("Maghiară", new Color(85, 255, 85));
-        assignColorToLanguage("Belarusă", new Color(32, 192, 32));
-        assignColorToLanguage("Bulgară", new Color(0, 192, 0));
-        assignColorToLanguage("Tătară crimeeană", new Color(192, 192, 255));
-        assignColorToLanguage("Ebraică", new Color(192, 255, 255));
-        assignColorToLanguage("Karaim", new Color(32, 192, 192));
-        assignColorToLanguage("Germană", new Color(255, 85, 255));
-        assignColorToLanguage("Ucraineană", new Color(255, 255, 85));
-        assignColorToLanguage("Rusă", new Color(192, 85, 85));
-        assignColorToLanguage("Slovacă", new Color(48, 48, 160));
-        assignColorToLanguage("Alte limbi", new Color(85, 85, 85));
-        ses.getTransaction().rollback();
-        blandifyColors(nationColorMap);
     }
 
     private void assignColorToLanguage(final String languageName, final Color color) throws HibernateException {

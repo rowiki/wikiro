@@ -131,8 +131,10 @@ public class Hibernator {
 
     public List<Commune> getRegionalCitiesForRegion(final Region eachReg) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Query q = ses.createQuery("from Commune com where com.raion is null and com.region=:region");
+        final Query q = ses
+            .createQuery("from Commune com where (com.raion is null and com.region=:region) or (com.raion is not null and com.raion.miskrada=:true and com.raion.region=:region)");
         q.setParameter("region", eachReg);
+        q.setParameter("true", Boolean.TRUE);
         return q.list();
     }
 
