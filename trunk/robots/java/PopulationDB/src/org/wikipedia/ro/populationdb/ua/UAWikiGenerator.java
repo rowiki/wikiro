@@ -49,10 +49,11 @@ import org.wikipedia.ro.populationdb.ua.model.LanguageStructurable;
 import org.wikipedia.ro.populationdb.ua.model.Raion;
 import org.wikipedia.ro.populationdb.ua.model.Region;
 import org.wikipedia.ro.populationdb.ua.model.Settlement;
+import org.wikipedia.ro.populationdb.util.Executor;
 import org.wikipedia.ro.populationdb.util.ParameterReader;
+import org.wikipedia.ro.populationdb.util.SysoutExecutor;
 import org.wikipedia.ro.populationdb.util.UkrainianTransliterator;
 import org.wikipedia.ro.populationdb.util.Utilities;
-import org.wikipedia.ro.populationdb.util.WikiEditExecutor;
 
 public class UAWikiGenerator {
 
@@ -70,7 +71,7 @@ public class UAWikiGenerator {
 
     private Wiki rowiki;
     private Wikibase dwiki;
-    private WikiEditExecutor executor;
+    private Executor executor;
     private Hibernator hib;
     private final Map<LanguageStructurable, LazyInitializer<String>> roArticleNames = new HashMap<LanguageStructurable, LazyInitializer<String>>();
     private final Map<Language, Color> nationColorMap = new HashMap<Language, Color>();
@@ -137,8 +138,8 @@ public class UAWikiGenerator {
         rowiki = new Wiki("ro.wikipedia.org");
         ukwiki = new Wiki("uk.wikipedia.org");
         dwiki = new Wikibase();
-        executor = new WikiEditExecutor(rowiki, dwiki);
-        // executor = new SysoutExecutor();
+        // executor = new WikiEditExecutor(rowiki, dwiki);
+        executor = new SysoutExecutor();
 
         final Properties credentials = new Properties();
         credentials.load(UAWikiGenerator.class.getClassLoader().getResourceAsStream("credentials.properties"));
@@ -172,7 +173,7 @@ public class UAWikiGenerator {
         blandifyColors(nationColorMap);
     }
 
-    private void generateRegions() throws IOException {
+    private void generateRegions() throws Exception {
         hib.getSession().beginTransaction();
         final List<Region> regions = hib.getAllRegions();
         for (final Region eachReg : regions) {
@@ -218,7 +219,7 @@ public class UAWikiGenerator {
 
     }
 
-    private void generateVillageText(final Settlement s) throws IOException {
+    private void generateVillageText(final Settlement s) throws Exception {
         final String villageRoName = defaultIfBlank(s.getRomanianName(), s.getTransliteratedName());
         final int countVillagesWithThisName = hib.countSettlementsByRomanianOrTransliteratedName(villageRoName);
         final int countVillagesWithThisNameInRaion = 1;
@@ -249,7 +250,112 @@ public class UAWikiGenerator {
         final ParameterReader ibParaReader = new ParameterReader(currentText.toString());
         ibParaReader.run();
         final String villageIBText = generateVillageInfobox(s, ibParaReader);
+
+        String villageIntro = generateVillageIntro(s, actualTitle);
+
+        String currentVillageIntro = substringBefore(substring(currentText.toString(), ibParaReader.getTemplateLength()),
+            "==");
+        currentVillageIntro = substringBefore(currentVillageIntro, "{{Localități în ");
+        currentVillageIntro = substringBefore(currentVillageIntro, "{{Comune în ");
+        currentVillageIntro = trim(currentVillageIntro);
+        if (currentVillageIntro.length() < villageIntro.length()) {
+            villageIntro = currentVillageIntro;
+        }
         currentText.replace(0, ibParaReader.getTemplateLength(), villageIBText);
+
+        final String demografie = generateDemographySection(s);
+
+        final int indexOfCurrentDemography = locateFirstOf(currentText, "==Populați", "== Populați", "== Demografie",
+            "==Demografie");
+        if (0 <= indexOfCurrentDemography) {
+            currentText.replace(indexOfCurrentDemography, currentText.indexOf("==", indexOfCurrentDemography + 2) + 2,
+                demografie);
+        } else {
+            final int indexOfFutureDemographySection = locateFirstOf(currentText, "== Economie", "==Economie", "{{Ucraina",
+                "==Legături externe", "== Legături externe", "== Vezi și", "==Vezi și");
+            if (0 <= indexOfFutureDemographySection) {
+                currentText.insert(indexOfFutureDemographySection, demografie);
+            } else {
+                currentText.append(demografie);
+            }
+        }
+
+        executor.save(actualTitle, currentText.toString(), "Robot - creare/completare articol despre satul ucrainean "
+            + obtainActualRomanianName(s));
+    }
+
+    private String generateVillageIntro(final Settlement s, final String actualTitle) {
+        final STGroup stgroup = new STGroupFile("templates/ua/ucraina.stg");
+        final ST introTmpl = stgroup.getInstanceOf("introVillage");
+        final String roVillageName = obtainActualRomanianName(s);
+        introTmpl.add("nume", roVillageName);
+
+        String ukName = s.getName();
+        if (!StringUtils.equals(roVillageName, s.getTransliteratedName())) {
+            ukName = ukName + '|' + s.getTransliteratedName();
+        }
+        introTmpl.add("nume_uk", ukName);
+
+        final Settlement communeCapital = s.getCommune().getCapital();
+        boolean isCommuneCapital = false;
+        if (null != communeCapital && communeCapital.getId() == s.getId()) {
+            introTmpl.add("statut", "localitatea de reședință a");
+            isCommuneCapital = true;
+        } else {
+            introTmpl.add("statut", "un sat în");
+        }
+
+        final Commune com = s.getCommune();
+        final String comArticleName = getArticleName(com);
+        final StringBuilder communePart = new StringBuilder();
+        if (com.getTown() == 0) {
+            communePart.append("[[");
+            communePart.append(comArticleName);
+            communePart.append("|");
+            communePart.append(isCommuneCapital ? "comunei " : "comuna ");
+            communePart.append(obtainActualRomanianName(com));
+            communePart.append("]]");
+        } else {
+            if (com.getTown() == 1) {
+                communePart.append("așezarea urbană ");
+            } else {
+                communePart.append("orașul ");
+                if (null == com.getRaion() || com.getRaion().isMiskrada()) {
+                    communePart.append("regional ");
+                }
+            }
+            communePart.append("[[");
+            communePart.append(getArticleName(com));
+            communePart.append('|');
+            communePart.append(obtainActualRomanianName(com));
+            communePart.append("]]");
+        }
+        introTmpl.add("comuna", communePart.toString());
+
+        final StringBuilder raionPart = new StringBuilder();
+        final Raion raion = com.getRaion();
+        if (null != raion && !raion.isMiskrada()) {
+            raionPart.append("[[");
+            raionPart.append(getArticleName(raion));
+            raionPart.append("|raionul ");
+            raionPart.append(obtainActualRomanianName(raion));
+            raionPart.append("]], ");
+        }
+        introTmpl.add("raion", raionPart.toString());
+
+        final StringBuilder regionPart = new StringBuilder("[[");
+        final Region reg = s.computeRegion();
+        regionPart.append(getArticleName(reg));
+        regionPart.append(StringUtils.equals(reg.getRomanianName(), "Crimeea") ? "Republica Autonomă " : "regiunea ");
+        regionPart.append(obtainActualRomanianName(reg));
+        regionPart.append("]]");
+        introTmpl.add("regiune", regionPart.toString());
+        return introTmpl.render();
+    }
+
+    private String getUkrainianVillageArticleName(final Settlement s) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     private String generateVillageInfobox(final Settlement s, final ParameterReader ibParaReader) {
@@ -318,32 +424,7 @@ public class UAWikiGenerator {
         return sb.toString();
     }
 
-    private String getArticleName(final LanguageStructurable ls) {
-        LazyInitializer<String> lazyInitializer = roArticleNames.get(ls);
-        if (null == lazyInitializer) {
-            if (ls instanceof Region) {
-                lazyInitializer = new RegionNameInitializer((Region) ls, rowiki);
-            } else if (ls instanceof Raion) {
-                lazyInitializer = new RaionNameInitializer((Raion) ls, rowiki, hib);
-            } else if (ls instanceof Commune) {
-                lazyInitializer = new CommuneNameInitializer((Commune) ls, rowiki, hib);
-            } else if (ls instanceof Settlement) {
-                lazyInitializer = new SettlementNameInitializer((Settlement) ls, rowiki, hib);
-            }
-            roArticleNames.put(ls, lazyInitializer);
-        }
-        if (null == lazyInitializer) {
-            return null;
-        }
-        try {
-            return lazyInitializer.get();
-        } catch (final ConcurrentException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private void generateRegionNavBox(final Region region) {
+    private void generateRegionNavBox(final Region region) throws Exception {
         final List<Commune> regionalCities = hib.getRegionalCitiesForRegion(region);
         final List<Raion> raions = hib.getRaionsForRegion(region);
         int section = 0;
@@ -373,9 +454,12 @@ public class UAWikiGenerator {
         navBox.append(regionRomanianName);
         navBox.append("]]");
         navBox.append("</noinclude>");
+
+        executor.save("Format:Regiunea " + regionRomanianName, navBox.toString(),
+            "Robot: creare/regenerare casetă de navigare pentru regiunea ucraineană " + regionRomanianName);
     }
 
-    private void generateRegionText(final Region region) throws IOException {
+    private void generateRegionText(final Region region) throws Exception {
         if (equalsIgnoreCase("orașul Kiev", region.getRomanianName())) {
             return;
         }
@@ -449,6 +533,8 @@ public class UAWikiGenerator {
                     currentText.append(demografie);
                 }
             }
+            executor.save(actualTitle, currentText.toString(),
+                "Robot - creare / editare articol despre regiunea ucraineană " + obtainActualRomanianName(region));
             System.out.println(currentText);
         }
     }
@@ -490,6 +576,31 @@ public class UAWikiGenerator {
         }
         sb.append("\n}}\n");
         return sb.toString();
+    }
+
+    private String getArticleName(final LanguageStructurable ls) {
+        LazyInitializer<String> lazyInitializer = roArticleNames.get(ls);
+        if (null == lazyInitializer) {
+            if (ls instanceof Region) {
+                lazyInitializer = new RegionNameInitializer((Region) ls, rowiki);
+            } else if (ls instanceof Raion) {
+                lazyInitializer = new RaionNameInitializer((Raion) ls, rowiki, hib);
+            } else if (ls instanceof Commune) {
+                lazyInitializer = new CommuneNameInitializer((Commune) ls, rowiki, hib);
+            } else if (ls instanceof Settlement) {
+                lazyInitializer = new SettlementNameInitializer((Settlement) ls, rowiki, hib);
+            }
+            roArticleNames.put(ls, lazyInitializer);
+        }
+        if (null == lazyInitializer) {
+            return null;
+        }
+        try {
+            return lazyInitializer.get();
+        } catch (final ConcurrentException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private int locateFirstOf(final CharSequence haystack, final CharSequence... needles) {
