@@ -58,9 +58,10 @@ public class ParameterReader {
                         automatonStack.pop();
                         index += 2;
                     } else {
-                        params.put(
-                            StringUtils.defaultString(StringUtils.trim(crtParamName), String.valueOf(crtParamIndex++)),
-                            StringUtils.trim(crtBuilder.toString()));
+                        if (null == crtParamName) {
+                            crtParamName = String.valueOf(crtParamIndex++);
+                        }
+                        params.put(crtParamName, StringUtils.trim(crtBuilder.toString()));
                         crtBuilder.delete(0, crtBuilder.length());
                         crtParamName = null;
                         templateLength = 2 + index;
@@ -75,8 +76,10 @@ public class ParameterReader {
                 break;
             case '|':
                 if (automatonStack.isEmpty()) {
-                    params.put(StringUtils.defaultString(StringUtils.trim(crtParamName), String.valueOf(crtParamIndex++)),
-                        StringUtils.trim(crtBuilder.toString()));
+                    if (null == crtParamName) {
+                        crtParamName = String.valueOf(crtParamIndex++);
+                    }
+                    params.put(crtParamName, StringUtils.trim(crtBuilder.toString()));
                     crtParamName = null;
                     crtBuilder.delete(0, crtBuilder.length());
                 } else {

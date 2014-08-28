@@ -11,6 +11,7 @@ import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.ua.model.Commune;
 import org.wikipedia.ro.populationdb.ua.model.Raion;
 import org.wikipedia.ro.populationdb.ua.model.Settlement;
+import org.wikipedia.ro.populationdb.util.ParameterReader;
 
 public class UAUtils {
     public static List<String> getPossibleRaionNames(final Raion raion, final Wiki wiki, final boolean singleInWiki) {
@@ -225,5 +226,16 @@ public class UAUtils {
             return null;
         }
         return StringUtils.defaultIfBlank(wiki.resolveRedirect(title), title);
+    }
+
+    public static void copyParameterFromTemplate(final ParameterReader ibParaReader, final StringBuilder sb,
+                                                 final String paramName) {
+        if (!ibParaReader.getParams().containsKey(paramName)) {
+            return;
+        }
+        sb.append("\n|");
+        sb.append(paramName);
+        sb.append('=');
+        sb.append(ibParaReader.getParams().get(paramName));
     }
 }
