@@ -199,7 +199,7 @@ public class UAUtils {
         String[] cats = null;
         cats = wiki.getCategories(pageTitle);
         for (final String eachCat : cats) {
-            if (StringUtils.equals("Categorie:" + category, eachCat)) {
+            if (StringUtils.equals(StringUtils.substringAfter(category, ":"), eachCat)) {
                 return true;
             }
             if (0 < depth) {
@@ -238,4 +238,5 @@ public class UAUtils {
         sb.append('=');
         sb.append(ibParaReader.getParams().get(paramName));
     }
+
 }
