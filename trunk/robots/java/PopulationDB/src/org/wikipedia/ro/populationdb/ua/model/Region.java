@@ -27,6 +27,7 @@ public class Region implements LanguageStructurable {
     private String name;
     private String transliteratedName;
     private String romanianName;
+    private String originalName;
     private Commune capital;
 
     @ManyToOne
@@ -124,5 +125,14 @@ public class Region implements LanguageStructurable {
     @Transient
     public Region computeRegion() {
         return this;
+    }
+
+    @Column(name = "originalname")
+    public String getOriginalName() {
+        return originalName;
+    }
+
+    public void setOriginalName(final String originalName) {
+        this.originalName = originalName;
     }
 }

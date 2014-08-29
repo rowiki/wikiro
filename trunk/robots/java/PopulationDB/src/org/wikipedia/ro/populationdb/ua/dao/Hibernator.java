@@ -208,4 +208,10 @@ public class Hibernator {
         final Long uniqueResult = (Long) q.uniqueResult();
         return uniqueResult.intValue();
     }
+
+    public void saveRegion(final Region region) {
+        final Session ses = sessionFactory.getCurrentSession();
+        ses.saveOrUpdate(region);
+        ses.getTransaction().commit();
+    }
 }

@@ -353,9 +353,19 @@ public class UAWikiGenerator {
         return introTmpl.render();
     }
 
-    private String getUkrainianVillageArticleName(final Settlement s) {
-        // TODO Auto-generated method stub
-        return null;
+    private String getUkrainianVillageArticleName(final Settlement s) throws IOException {
+        final List<String> possibleUkrainianArticleNames = getPossibleUkrainianArticleNames(s);
+        final boolean[] existance = ukwiki.exists(possibleUkrainianArticleNames
+            .toArray(new String[possibleUkrainianArticleNames.size()]));
+        for (int i = 0; i < possibleUkrainianArticleNames.size(); i++) {
+            if (existance[i]) {
+                final String articleCandidateTitle = UAUtils.resolveRedirect(ukwiki, possibleUkrainianArticleNames.get(i));
+                if (UAUtils.isInCategoryTree(articleCandidateTitle, ukwiki, 6, "Села України")) {
+                    return articleCandidateTitle;
+                }
+            }
+        }
+        return possibleUkrainianArticleNames.get(0);
     }
 
     private String generateVillageInfobox(final Settlement s, final ParameterReader ibParaReader) {
@@ -535,7 +545,6 @@ public class UAWikiGenerator {
             }
             executor.save(actualTitle, currentText.toString(),
                 "Robot - creare / editare articol despre regiunea ucraineană " + obtainActualRomanianName(region));
-            System.out.println(currentText);
         }
     }
 
@@ -786,11 +795,6 @@ public class UAWikiGenerator {
         demographics.append(SEP);
     }
 
-    private String getUkrainianRegionName(final String articleName) throws IOException {
-        final String ukTitle = dwiki.getTitleInLanguage("rowiki", articleName, "uk");
-        return ukTitle;
-    }
-
     private void assignColorToLanguage(final String languageName, final Color color) throws HibernateException {
         final Language nat = hib.getLanguageByName(languageName);
         if (null != nat) {
@@ -840,5 +844,38 @@ public class UAWikiGenerator {
             }
             colorMap.put(key, new Color(colorcomps[0], colorcomps[1], colorcomps[2]));
         }
+    }
+
+    public List<String> getPossibleUkrainianArticleNames(final Settlement s) throws IOException {
+        final List<String> ret = new ArrayList<String>();
+        final Raion r = s.getCommune().getRaion();
+        final Region reg = s.computeRegion();
+        final String regName = getUkrainianRegionName(reg);
+        if (null != r && !r.isMiskrada()) {
+            ret.add(s.getName() + " (" + r.getOriginalName() + ", " + regName + ")");
+        }
+        if (null != r && !r.isMiskrada()) {
+            ret.add(s.getName() + " (" + r.getOriginalName() + ")");
+        }
+        ret.add(s.getName() + " (село)");
+        ret.add(s.getName());
+        return ret;
+    }
+
+    public String getUkrainianRegionName(final Region region) throws IOException {
+
+        final String articleName = getArticleName(region);
+
+        final String ukTitle = dwiki.getTitleInLanguage("rowiki", articleName, "uk");
+        region.setOriginalName(ukTitle);
+        hib.saveRegion(region);
+
+        return ukTitle;
+    }
+
+    public String getUkrainianRegionName(final String articleName) throws IOException {
+        final String ukTitle = dwiki.getTitleInLanguage("rowiki", articleName, "uk");
+
+        return ukTitle;
     }
 }
