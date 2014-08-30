@@ -183,7 +183,7 @@ public class Hibernator {
     public int countSettlementsInRaionByRomanianOrTransliteratedName(final String transliteratedName, final Raion raion) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-            .createQuery("count(r) from Settlement s where (s.transliteratedName=:translName or s.romanianName=:translName) and (s.raion is not null and s.raion=:raion)");
+            .createQuery("select count(s) from Settlement s keft join s.commune as c where (s.transliteratedName=:translName or s.romanianName=:translName) and (c.raion is not null and c.raion=:raion)");
         q.setParameter("translName", transliteratedName);
         q.setParameter("raion", raion);
         final Long uniqueResult = (Long) q.uniqueResult();
@@ -193,7 +193,7 @@ public class Hibernator {
     public int countSettlementsByRomanianOrTransliteratedName(final String transliteratedName) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-            .createQuery("count(r) from Settlement s where (s.transliteratedName=:translName or s.romanianName=:translName)");
+            .createQuery("select count(s) from Settlement s where (s.transliteratedName=:translName or s.romanianName=:translName)");
         q.setParameter("translName", transliteratedName);
         final Long uniqueResult = (Long) q.uniqueResult();
         return uniqueResult.intValue();
@@ -202,7 +202,7 @@ public class Hibernator {
     public int countSettlementsInRegionByRomanianOrTransliteratedName(final String transliteratedName, final Region region) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-            .createQuery("count(r) from Settlement s left join s.commune as c where (s.transliteratedName=:translName or s.romanianName=:translName) and ((c.raion is not null and c.raion.region=:region) or c.region=:region)");
+            .createQuery("select count(s) from Settlement s left join s.commune as c where (s.transliteratedName=:translName or s.romanianName=:translName) and ((c.raion is not null and c.raion.region=:region) or c.region=:region)");
         q.setParameter("translName", transliteratedName);
         q.setParameter("region", region);
         final Long uniqueResult = (Long) q.uniqueResult();
