@@ -23,6 +23,7 @@ import javax.security.auth.login.FailedLoginException;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.Session;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.ua.dao.Hibernator;
@@ -157,7 +158,7 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Balakliivska", "Smila");
 
         if (null != kievReg) {
-            final Raion raion = hib.getRaionByTransliteratedNameAndRegion("VOLODARSKA", kievReg);
+            final Raion raion = hib.getRaionByTransliteratedNameAndRegion("Volodarska", kievReg);
             if (null != raion) {
                 final Commune com = hib.getCommuneByTransliteratedNameAndRaion("Kraseatîci", raion);
                 if (null != com) {
@@ -357,6 +358,7 @@ public class UAPercentagesParser {
                             currentCommune.setName(join(namePartsUa, " "));
                             currentCommune.setTown(0);
                             currentCommune.setRaion(currentRaion);
+                            currentCommune.setOriginalName(currentCommune.getName());
                             session.save(currentCommune);
                         }
                         if (StringUtils.equals(splitName[0], "smt")) {
@@ -380,6 +382,7 @@ public class UAPercentagesParser {
                             currentCommune.setTransliteratedName(join(nameParts, " "));
                             currentCommune.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
                             currentCommune.setName(join(namePartsUa, " "));
+                            currentCommune.setOriginalName(currentCommune.getName());
 
                             if (null == currentRaion) {
                                 currentCommune.setRegion(currentRegion);
@@ -414,6 +417,7 @@ public class UAPercentagesParser {
                             currentCommune.setTransliteratedName(join(nameParts, " "));
                             currentCommune.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
                             currentCommune.setName(join(namePartsUa, " "));
+                            currentCommune.setOriginalName(currentCommune.getName());
 
                             if (currentCommuneLevel < 2) {
                                 currentRaion = null;

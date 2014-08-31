@@ -25,8 +25,18 @@ import org.hibernate.annotations.GenericGenerator;
 public class Commune implements LanguageStructurable {
     private long id;
     private Settlement capital;
+    private String originalName;
+    
+    @Column(name = "original_name")
+    public String getOriginalName() {
+		return originalName;
+	}
 
-    @ManyToOne
+	public void setOriginalName(String originalName) {
+		this.originalName = originalName;
+	}
+
+	@ManyToOne
     @JoinColumn(name = "capitala")
     public Settlement getCapital() {
         return capital;
