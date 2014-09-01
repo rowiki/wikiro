@@ -35,16 +35,11 @@ public class RaionNameInitializer extends LazyInitializer<String> {
             throw new ConcurrentException(e);
         }
         for (int i = 0; i < candidateNames.size(); i++) {
-            try {
-                if (existanceArray[i]) {
-                    final String actualCandidateTitle = UAUtils.resolveRedirect(wiki, candidateNames.get(i));
-                    if (UAUtils.isInAnyCategoryTree(actualCandidateTitle, wiki, 3, "Regiuni ale Ucrainei",
-                        "Raioanele Ucrainei")) {
-                        return actualCandidateTitle;
-                    }
+            if (existanceArray[i]) {
+                final String actualCandidateTitle = UAUtils.resolveRedirect(wiki, candidateNames.get(i));
+                if (UAUtils.isInAnyCategoryTree(actualCandidateTitle, wiki, 3, "Regiuni ale Ucrainei", "Raioanele Ucrainei")) {
+                    return actualCandidateTitle;
                 }
-            } catch (final IOException e) {
-                throw new ConcurrentException(e);
             }
         }
         return candidateNames.get(candidateNames.size() - 1);
