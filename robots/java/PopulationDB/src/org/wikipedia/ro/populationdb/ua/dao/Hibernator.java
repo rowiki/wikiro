@@ -155,7 +155,7 @@ public class Hibernator {
     public int countRaionsByRomanianOrTransliteratedName(final String transliteratedName) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-            .createQuery("count(r) from Raion r where r.transliteratedName=:translName or r.romanianName=:translName");
+            .createQuery("select count(r) from Raion r where r.transliteratedName=:translName or r.romanianName=:translName");
         q.setParameter("translName", transliteratedName);
         final Long uniqueResult = (Long) q.uniqueResult();
         return uniqueResult.intValue();
@@ -164,7 +164,7 @@ public class Hibernator {
     public int countCommunesByRomanianOrTransliteratedName(final String transliteratedName) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-            .createQuery("count(r) from Commune c where c.transliteratedName=:translName or c.romanianName=:translName");
+            .createQuery("select count(c) from Commune c where c.transliteratedName=:translName or c.romanianName=:translName");
         q.setParameter("translName", transliteratedName);
         final Long uniqueResult = (Long) q.uniqueResult();
         return uniqueResult.intValue();
@@ -173,7 +173,7 @@ public class Hibernator {
     public int countCommunesInRegionByRomanianOrTransliteratedName(final String transliteratedName, final Region region) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-            .createQuery("count(r) from Commune c where (c.transliteratedName=:translName or c.romanianName=:translName) and ((c.raion is not null and c.raion.region=:region) or c.region=:region)");
+            .createQuery("select count(c) from Commune c where (c.transliteratedName=:translName or c.romanianName=:translName) and ((c.raion is not null and c.raion.region=:region) or c.region=:region)");
         q.setParameter("translName", transliteratedName);
         q.setParameter("region", region);
         final Long uniqueResult = (Long) q.uniqueResult();
@@ -183,7 +183,7 @@ public class Hibernator {
     public int countSettlementsInRaionByRomanianOrTransliteratedName(final String transliteratedName, final Raion raion) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-            .createQuery("select count(s) from Settlement s keft join s.commune as c where (s.transliteratedName=:translName or s.romanianName=:translName) and (c.raion is not null and c.raion=:raion)");
+            .createQuery("select count(s) from Settlement s left join s.commune as c where (s.transliteratedName=:translName or s.romanianName=:translName) and (c.raion is not null and c.raion=:raion)");
         q.setParameter("translName", transliteratedName);
         q.setParameter("raion", raion);
         final Long uniqueResult = (Long) q.uniqueResult();

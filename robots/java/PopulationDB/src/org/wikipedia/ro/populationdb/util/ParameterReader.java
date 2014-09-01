@@ -61,7 +61,7 @@ public class ParameterReader {
                         if (null == crtParamName) {
                             crtParamName = String.valueOf(crtParamIndex++);
                         }
-                        params.put(crtParamName, StringUtils.trim(crtBuilder.toString()));
+                        params.put(StringUtils.trim(crtParamName), StringUtils.trim(crtBuilder.toString()));
                         crtBuilder.delete(0, crtBuilder.length());
                         crtParamName = null;
                         templateLength = 2 + index;

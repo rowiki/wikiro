@@ -33,15 +33,11 @@ public class RegionNameInitializer extends LazyInitializer<String> {
             throw new ConcurrentException(e);
         }
         for (int i = 0; i < candidateNames.size(); i++) {
-            try {
-                if (existanceArray[i]) {
-                    final String actualArticleName = candidateNames.get(i);
-                    if (UAUtils.isInCategoryTree(actualArticleName, wiki, 3, "Regiuni ale Ucrainei")) {
-                        return actualArticleName;
-                    }
+            if (existanceArray[i]) {
+                final String actualArticleName = candidateNames.get(i);
+                if (UAUtils.isInCategoryTree(actualArticleName, wiki, 3, "Regiuni ale Ucrainei")) {
+                    return actualArticleName;
                 }
-            } catch (final IOException e) {
-                throw new ConcurrentException(e);
             }
 
         }

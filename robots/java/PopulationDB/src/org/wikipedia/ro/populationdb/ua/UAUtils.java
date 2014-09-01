@@ -194,10 +194,21 @@ public class UAUtils {
         return new ArrayList<String>(ret);
     }
 
-    public static boolean isInCategoryTree(final String pageTitle, final Wiki wiki, final int depth, final String category)
-        throws IOException {
+    public static boolean isInCategoryTree(final String pageTitle, final Wiki wiki, final int depth, final String category) {
         String[] cats = null;
-        cats = wiki.getCategories(pageTitle);
+        boolean categoriesRead = false;
+
+        do {
+            try {
+                cats = wiki.getCategories(pageTitle);
+                categoriesRead = true;
+            } catch (final IOException e) {
+                e.printStackTrace();
+                System.err.println("Retrying");
+                categoriesRead = false;
+            }
+        } while (!categoriesRead);
+
         for (final String eachCat : cats) {
             if (StringUtils.equals(StringUtils.substringAfter(category, ":"), eachCat)) {
                 return true;
@@ -211,7 +222,7 @@ public class UAUtils {
     }
 
     public static boolean isInAnyCategoryTree(final String pageTitle, final Wiki wiki, final int depth,
-                                              final String... categories) throws IOException {
+                                              final String... categories) {
         for (final String eachCat : categories) {
             if (isInCategoryTree(pageTitle, wiki, depth, eachCat)) {
                 return true;
@@ -221,11 +232,35 @@ public class UAUtils {
 
     }
 
-    public static String resolveRedirect(final Wiki wiki, final String title) throws IOException {
-        if (!wiki.exists(new String[] { title })[0]) {
-            return null;
-        }
-        return StringUtils.defaultIfBlank(wiki.resolveRedirect(title), title);
+    public static String resolveRedirect(final Wiki wiki, final String title) {
+        boolean existenceChecked = false;
+
+        do {
+            try {
+                if (!wiki.exists(new String[] { title })[0]) {
+                    existenceChecked = true;
+                    return null;
+                }
+                existenceChecked = true;
+            } catch (final IOException e) {
+                e.printStackTrace();
+                System.err.println("Retrying...");
+                existenceChecked = false;
+            }
+        } while (!existenceChecked);
+
+        String retVal = null;
+        boolean redirectResolved = false;
+        do {
+            try {
+                retVal = StringUtils.defaultIfBlank(wiki.resolveRedirect(title), title);
+                redirectResolved = true;
+            } catch (final IOException e) {
+                e.printStackTrace();
+                redirectResolved = false;
+            }
+        } while (!redirectResolved);
+        return retVal;
     }
 
     public static void copyParameterFromTemplate(final ParameterReader ibParaReader, final StringBuilder sb,
