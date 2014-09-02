@@ -187,7 +187,7 @@ public class UAWikiGenerator {
                 for (final Commune com : raion.getCommunes()) {
                     if (1 < com.getSettlements().size()) {
                         for (final Settlement s : com.getSettlements()) {
-                            generateVillageText(s);
+                            // generateVillageText(s);
                         }
                         generateCommuneText(com);
                         generateCommuneNavBox(com);
@@ -226,9 +226,86 @@ public class UAWikiGenerator {
 
     }
 
-    private void generateCommuneNavBox(final Commune com) {
-        // TODO Auto-generated method stub
+    private void generateCommuneNavBox(final Commune com) throws Exception {
+        if (com.getSettlements().size() < 2 && com.getTown() == 0) {
+            return;
+        }
+        if (com.getSettlements().size() < 1 && com.getTown() > 0) {
+            return;
+        }
+        final String communeName = obtainActualRomanianName(com);
+        final String articleName = getArticleName(com);
+        int section = 0;
 
+        final StringBuilder navBox = new StringBuilder(
+            "{{Casetă de navigare simplă\n|stare = {{{stare|autopliabilă}}}\n|titlu=Localități componente ale ");
+        switch (com.getTown()) {
+        case 0:
+            navBox.append("[[").append(articleName).append("|comunei ").append(communeName).append("]]");
+            break;
+        case 1:
+            navBox.append("așezării de tip urban ").append("[[").append(articleName);
+            if (!StringUtils.equals(articleName, communeName)) {
+                navBox.append("|").append(communeName);
+            }
+            navBox.append("]]");
+            break;
+        case 2:
+            navBox.append("orașului ").append("[[").append(articleName);
+            if (!StringUtils.equals(articleName, communeName)) {
+                navBox.append("|").append(communeName);
+            }
+            navBox.append("]]");
+            break;
+        }
+        navBox.append("\n|nume=" + articleName);
+
+        if (com.getTown() == 0) {
+            section++;
+            navBox.append("\n|grup").append(section).append("=Reședință");
+            navBox.append("\n|listă").append(section).append("=[[");
+            final String capitalVillageName = obtainActualRomanianName(com.getCapital());
+            final String capitalVillageArticle = getArticleName(com.getCapital());
+            navBox.append(capitalVillageArticle);
+            if (!StringUtils.equals(capitalVillageName, capitalVillageArticle)) {
+                navBox.append('|').append(capitalVillageName);
+            }
+            navBox.append("]]");
+        }
+        {
+            section++;
+            navBox.append("\n|grup").append(section).append("=Sate componente");
+            navBox.append("\n|listă").append(section).append("=<div>");
+            final List<Settlement> villages = new ArrayList<Settlement>(com.getSettlements());
+            Collections.sort(villages, new Comparator<Settlement>() {
+
+                public int compare(final Settlement o1, final Settlement o2) {
+                    return obtainActualRomanianName(o1).compareTo(obtainActualRomanianName(o2));
+                }
+            });
+            for (final Settlement eachVillage : villages) {
+                if (0 == com.getTown() && eachVillage.getId() == com.getCapital().getId()) {
+                    continue;
+                }
+                final String villageArticleName = getArticleName(eachVillage);
+                final String villageName = obtainActualRomanianName(eachVillage);
+                navBox.append("\n[[").append(villageArticleName);
+                if (!StringUtils.equals(villageArticleName, villageName)) {
+                    navBox.append('|').append(villageName);
+                }
+                navBox.append("]]{{~}}");
+            }
+            navBox.delete(navBox.length() - "{{~}}".length(), navBox.length());
+            navBox.append("\n</div>");
+        }
+        navBox.append("}}<noinclude>");
+        navBox.append("[[Categorie:Formate de navigare comune din Ucraina|");
+        navBox.append(communeName);
+        navBox.append("]]");
+        navBox.append("</noinclude>");
+
+        executor.save("Format: " + articleName, navBox.toString(),
+            "Robot: creare/regenerare casetă de navigare pentru comuna ucraineană " + articleName);
     }
 
     private void generateVillageText(final Settlement s) throws Exception {
@@ -567,6 +644,7 @@ public class UAWikiGenerator {
         if (null != regionalCities && 0 < regionalCities.size()) {
             section++;
             navBox.append("\n|grup").append(section).append("=Orașe regionale");
+
             navBox.append("\n|listă").append(section).append("=<div>");
             navBox.append("</div>");
         }
