@@ -629,8 +629,21 @@ public class UAWikiGenerator {
         if (equalsIgnoreCase("orașul Kiev", region.getRomanianName())) {
             return;
         }
-        final List<Commune> regionalCities = hib.getRegionalCitiesForRegion(region);
-        final List<Raion> raions = hib.getRaionsForRegion(region);
+        final List<Commune> regionalCities = new ArrayList<Commune>(hib.getRegionalCitiesForRegion(region));
+        regionalCities.remove(region.getCapital());
+        Collections.sort(regionalCities, new Comparator<Commune>() {
+
+            public int compare(final Commune o1, final Commune o2) {
+                return obtainActualRomanianName(o1).compareTo(obtainActualRomanianName(o2));
+            }
+        });
+        final List<Raion> raions = new ArrayList<Raion>(hib.getRaionsForRegion(region));
+        Collections.sort(raions, new Comparator<Raion>() {
+
+            public int compare(final Raion o1, final Raion o2) {
+                return obtainActualRomanianName(o1).compareTo(obtainActualRomanianName(o2));
+            }
+        });
         int section = 0;
 
         final StringBuilder navBox = new StringBuilder(
@@ -641,18 +654,45 @@ public class UAWikiGenerator {
         navBox.append(regionRomanianName);
         navBox.append("]]\n|nume=Regiunea " + regionRomanianName);
 
+        {
+            section++;
+            navBox.append("\n|grup").append(section).append("=Reședință");
+            navBox.append("\n|listă").append(section).append("=<div>");
+            final String capitalArticleName = getArticleName(region.getCapital());
+            final String capitalName = obtainActualRomanianName(region.getCapital());
+            navBox.append("[[").append(capitalArticleName);
+            if (!StringUtils.equals(capitalArticleName, capitalName)) {
+                navBox.append('|').append(capitalName);
+            }
+            navBox.append("]]");
+            navBox.append("\n</div>");
+        }
         if (null != regionalCities && 0 < regionalCities.size()) {
             section++;
             navBox.append("\n|grup").append(section).append("=Orașe regionale");
-
             navBox.append("\n|listă").append(section).append("=<div>");
+            for (final Commune regCity : regionalCities) {
+                final String regCityArticleName = getArticleName(regCity);
+                final String regCityName = obtainActualRomanianName(regCity);
+                navBox.append("[[").append(regCityArticleName);
+                if (!StringUtils.equals(regCityArticleName, regCityName)) {
+                    navBox.append('|').append(regCityName);
+                }
+                navBox.append("]]{{~}}");
+            }
+            navBox.delete(navBox.length() - "{{~}}".length(), navBox.length());
             navBox.append("</div>");
         }
         if (null != raions && 0 < raions.size()) {
             section++;
             navBox.append("\n|grup").append(section).append("=[[Raioanele Ucrainei|Raioane]]");
             navBox.append("\n|listă").append(section).append("=<div>");
-            navBox.append("</div>");
+            for (final Raion raion : raions) {
+                final String raionArticleName = getArticleName(raion);
+                final String raionName = obtainActualRomanianName(raion);
+                navBox.append("[[").append(raionArticleName).append('|').append(raionName).append("]]{{~}}");
+            }
+            navBox.append("\n</div>");
         }
         navBox.append("}}<noinclude>");
         navBox.append("[[Categorie:Formate de navigare regiuni din Ucraina|");
