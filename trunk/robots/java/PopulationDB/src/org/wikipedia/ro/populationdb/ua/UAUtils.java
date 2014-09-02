@@ -210,11 +210,13 @@ public class UAUtils {
         } while (!categoriesRead);
 
         for (final String eachCat : cats) {
-            if (StringUtils.equals(StringUtils.substringAfter(category, ":"), eachCat)) {
+            if (StringUtils.equals(category, StringUtils.substringAfter(eachCat, ":"))) {
                 return true;
             }
             if (0 < depth) {
-                return isInCategoryTree(eachCat, wiki, depth - 1, category);
+                if (isInCategoryTree(eachCat, wiki, depth - 1, category)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -265,11 +267,16 @@ public class UAUtils {
 
     public static void copyParameterFromTemplate(final ParameterReader ibParaReader, final StringBuilder sb,
                                                  final String paramName) {
+        copyParameterFromTemplate(ibParaReader, sb, paramName, paramName);
+    }
+
+    public static void copyParameterFromTemplate(final ParameterReader ibParaReader, final StringBuilder sb,
+                                                 final String paramName, final String targetParamName) {
         if (!ibParaReader.getParams().containsKey(paramName)) {
             return;
         }
         sb.append("\n|");
-        sb.append(paramName);
+        sb.append(targetParamName);
         sb.append('=');
         sb.append(ibParaReader.getParams().get(paramName));
     }

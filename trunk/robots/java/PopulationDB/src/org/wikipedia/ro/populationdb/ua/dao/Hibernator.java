@@ -214,4 +214,8 @@ public class Hibernator {
         ses.saveOrUpdate(region);
         ses.getTransaction().commit();
     }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
 }

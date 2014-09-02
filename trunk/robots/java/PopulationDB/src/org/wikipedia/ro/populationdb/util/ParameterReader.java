@@ -79,7 +79,7 @@ public class ParameterReader {
                     if (null == crtParamName) {
                         crtParamName = String.valueOf(crtParamIndex++);
                     }
-                    params.put(crtParamName, StringUtils.trim(crtBuilder.toString()));
+                    params.put(StringUtils.trim(crtParamName), StringUtils.trim(crtBuilder.toString()));
                     crtParamName = null;
                     crtBuilder.delete(0, crtBuilder.length());
                 } else {
