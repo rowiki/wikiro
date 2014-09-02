@@ -23,7 +23,6 @@ import javax.security.auth.login.FailedLoginException;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
 import org.hibernate.Session;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.ua.dao.Hibernator;
@@ -150,7 +149,7 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Oleksandrivska", "Izium");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Vîșnivska", "Kupeansk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Oleksiivka", "Pervomaiskîi");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Herson", "Vasîlivka", "Kahovka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Herson", "Vasîlivska", "Kahovka");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Hmelnîțkîi", "Hannopilska", "Slavuta");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Hmelnîțkîi", "Bahlaiivska", "Starokosteantîniv");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Antîpivska", "Zolotonoșa");
