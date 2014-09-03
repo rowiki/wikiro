@@ -4,8 +4,9 @@ demographyMaj(nume_unitate_genitiv, nume_limba_majoritara, procent_limba_majorit
 demographyNoMaj(nume_unitate_genitiv, enum_alte_limbi, ref) ::= "Conform recensământului din 2001, nu exista o limbă vorbită de majoritatea populației, aceasta fiind compusă din vorbitori de <enum_alte_limbi>.<ref>"
 piechart(nume, props, tip_genitiv) ::= "{{Pie chart
 |thumb=left
-|caption=Componența etnică a <tip_genitiv> <nume><props>}}"
+|caption=Componența lingvistică a <tip_genitiv> <nume><props>}}"
 introVillage(nume, nume_uk, statut, comuna, raion, regiune) ::= "'''<nume>''' (în {{uk|<nume_uk>}}) este <statut> <comuna> din <raion><regiune>, [[Ucraina]]."
 introCommune(nume, nume_uk, raion, regiune, sate) ::= "'''<nume>''' (în {{uk|<nume_uk>}}) este o comună în <raion><regiune>, [[Ucraina]], formată <sate>."
 introTown(nume, nume_uk, statut, raion, regiune, sate) ::= "'''<nume>''' (în {{uk|<nume_uk>}}) este <statut> în <raion><regiune>, [[Ucraina]]. În afara localității principale, mai cuprinde și satele <sate>."
 introCity(nume, nume_uk, statut, regiune, sate, are_raion, are_sate) ::= "'''<nume>''' (în {{uk|<nume_uk>}}) este <statut> în <regiune>, [[Ucraina]].<are_raion><are_sate>"
+introRaion(nume, nume_uk, regiune) ::= "'''<nume>''' (în {{uk|<nume_uk>}}) este un [[Raioanele Ucrainei|raion]] în <regiune>, [[Ucraina]]. Reședința sa este <statut_resedinta> <resedinta>."
