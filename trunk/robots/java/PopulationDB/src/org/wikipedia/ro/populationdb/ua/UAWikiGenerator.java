@@ -221,9 +221,325 @@ public class UAWikiGenerator {
 
     }
 
-    private void generateCommuneText(final Commune com) {
-        // TODO Auto-generated method stub
+    private void generateCommuneText(final Commune com) throws Exception {
+        final String communeRoName = defaultIfBlank(com.getRomanianName(), com.getTransliteratedName());
+        final int countCommunesWithThisName = hib.countCommunesByRomanianOrTransliteratedName(communeRoName);
+        final int countCommunesWithThisNameInRegion = hib.countCommunesInRegionByRomanianOrTransliteratedName(communeRoName,
+            com.computeRegion());
+        final List<String> possibleCommuneNames = UAUtils.getPossibleCommuneNames(com, rowiki,
+            1 == countCommunesWithThisName, 1 == countCommunesWithThisNameInRegion);
 
+        String actualTitle = null;
+        final StringBuilder currentText = new StringBuilder();
+        final boolean[] titleExistance = rowiki
+            .exists(possibleCommuneNames.toArray(new String[possibleCommuneNames.size()]));
+        for (int i = 0; i < titleExistance.length; i++) {
+            if (!titleExistance[i]) {
+                continue;
+            }
+            final String eachCandidateTitle = possibleCommuneNames.get(i);
+            actualTitle = defaultString(rowiki.resolveRedirect(eachCandidateTitle), eachCandidateTitle);
+        }
+        if (null == actualTitle) {
+            actualTitle = possibleCommuneNames.get(possibleCommuneNames.size() - 1);
+        } else {
+            currentText.append(rowiki.getPageText(actualTitle));
+        }
+        final ParameterReader ibParaReader = new ParameterReader(currentText.toString());
+        ibParaReader.run();
+        final String villageIBText = generateCommuneInfobox(com, ibParaReader);
+
+        String communeIntro = generateCommuneIntro(com, actualTitle);
+
+        String currentCommuneIntro = substringBefore(substring(currentText.toString(), ibParaReader.getTemplateLength()),
+            "==");
+        currentCommuneIntro = substringBefore(currentCommuneIntro, "{{Localități în ");
+        currentCommuneIntro = substringBefore(currentCommuneIntro, "{{Comune în ");
+        currentCommuneIntro = trim(currentCommuneIntro);
+        if (currentCommuneIntro.length() > communeIntro.length()) {
+            communeIntro = currentCommuneIntro;
+        }
+        currentText.replace(0, ibParaReader.getTemplateLength(), villageIBText);
+
+        int indexOfFirstSection = currentText.indexOf("==", ibParaReader.getTemplateLength());
+        if (0 > indexOfFirstSection) {
+            indexOfFirstSection = currentText.indexOf("{{Ucraina}}");
+        }
+        if (0 <= indexOfFirstSection) {
+            currentText.replace(villageIBText.length(), indexOfFirstSection, SEP + communeIntro + SEP);
+        } else {
+            currentText.append(SEP + communeIntro + SEP);
+        }
+
+        final String demografie = generateDemographySection(com);
+
+        final int indexOfCurrentDemography = locateFirstOf(currentText, "==Populați", "== Populați", "== Demografie",
+            "==Demografie");
+        if (0 <= indexOfCurrentDemography) {
+            currentText.replace(indexOfCurrentDemography, currentText.indexOf("==", indexOfCurrentDemography + 2) + 2,
+                demografie);
+        } else {
+            final int indexOfFutureDemographySection = locateFirstOf(currentText, "== Economie", "==Economie", "{{Ucraina",
+                "==Legături externe", "== Legături externe", "== Vezi și", "==Vezi și", "{{Localități în ", "{{Comune în ");
+            if (0 <= indexOfFutureDemographySection) {
+                currentText.insert(indexOfFutureDemographySection, demografie);
+            } else {
+                currentText.append(demografie);
+            }
+        }
+
+        generateReferencesSection(currentText);
+
+        if (0 > currentText.indexOf("{{Raionul ") && 0 > currentText.indexOf("{{Orașul regional")) {
+            currentText.append("\n{{");
+            currentText.append(roArticleNames.get(com.getRaion()).get());
+            currentText.append("}}\n");
+        }
+        if (0 > currentText.indexOf("{{Comuna ")) {
+            currentText.append("\n{{");
+            currentText.append(roArticleNames.get(com).get());
+            currentText.append("}}\n");
+        }
+        if (0 > currentText.indexOf("[[Categorie:")) {
+            currentText.append("[[Categorie:Comune în ")
+                .append(com.getRaion().isMiskrada() ? "orașul regional " : "raionul ")
+                .append(obtainActualRomanianName(com.getRaion())).append("]]\n");
+        }
+
+        executor.save(actualTitle, currentText.toString(), "Robot - creare/completare articol despre comuna ucraineană "
+            + obtainActualRomanianName(com));
+    }
+
+    private String generateCommuneIntro(final Commune com, final String actualTitle) {
+        final STGroup stgroup = new STGroupFile("templates/ua/ucraina.stg");
+        stgroup.getInstanceOf("introVillage");
+        if (com.getTown() == 0) {
+            return generateRuralCommuneIntro(com, actualTitle);
+        } else if (com.getTown() == 2 && com.getRaion() == null) {
+            return generateCityIntro(com, actualTitle);
+        } else {
+            return generateTownIntro(com, actualTitle);
+        }
+    }
+
+    private String generateTownIntro(final Commune com, final String actualTitle) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private String generateCityIntro(final Commune com, final String actualTitle) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private String generateRuralCommuneIntro(final Commune com, final String actualTitle) {
+        final STGroup stgroup = new STGroupFile("templates/ua/ucraina.stg");
+        final ST introTmpl = stgroup.getInstanceOf("introCommune");
+        final String roCommuneName = obtainActualRomanianName(com);
+        introTmpl.add("nume", roCommuneName);
+
+        String ukName = com.getName();
+        if (!StringUtils.equals(roCommuneName, com.getTransliteratedName())) {
+            ukName = ukName + '|' + com.getTransliteratedName();
+        }
+        introTmpl.add("nume_uk", ukName);
+
+        com.getCapital();
+
+        final StringBuilder raionPart = new StringBuilder();
+        final Raion raion = com.getRaion();
+        if (null != raion && !raion.isMiskrada()) {
+            raionPart.append("[[");
+            raionPart.append(getArticleName(raion));
+            raionPart.append("|raionul ");
+            raionPart.append(obtainActualRomanianName(raion));
+            raionPart.append("]], ");
+        }
+        introTmpl.add("raion", raionPart.toString());
+
+        final StringBuilder regionPart = new StringBuilder("[[");
+        final Region reg = com.computeRegion();
+        regionPart.append(getArticleName(reg));
+        regionPart.append('|');
+        regionPart.append(StringUtils.equals(reg.getRomanianName(), "Crimeea") ? "Republica Autonomă " : "regiunea ");
+        regionPart.append(obtainActualRomanianName(reg));
+        regionPart.append("]]");
+        introTmpl.add("regiune", regionPart.toString());
+
+        if (com.getSettlements().size() > 1) {
+            final List<String> villageNames = new ArrayList<String>();
+            for (final Settlement eachVillage : com.getSettlements()) {
+                final String villageRoName = obtainActualRomanianName(eachVillage);
+                final String villageArticleName = getArticleName(eachVillage);
+                final StringBuilder villageLinkBuilder = new StringBuilder("[[");
+                villageLinkBuilder.append(villageArticleName);
+                if (!StringUtils.equals(villageArticleName, villageRoName)) {
+                    villageLinkBuilder.append('|').append(villageRoName);
+                }
+                villageLinkBuilder.append("]]");
+                if (eachVillage.equals(com.getCapital())) {
+                    villageLinkBuilder.append(" (reședința)");
+                }
+                villageNames.add(villageLinkBuilder.toString());
+            }
+            final StringBuilder villageEnumeration = new StringBuilder("din satele ");
+            for (int i = 0; i < villageNames.size() - 1; i++) {
+                villageEnumeration.append(villageNames.get(i)).append(", ");
+            }
+            villageEnumeration.setLength(villageEnumeration.length() - 2);
+            villageEnumeration.append(" și ").append(villageNames.get(villageNames.size() - 1));
+            introTmpl.add("sate", villageEnumeration.toString());
+        } else {
+            introTmpl.add("sate", "numai din satul de reședință");
+        }
+        return introTmpl.render();
+    }
+
+    private String generateCommuneInfobox(final Commune com, final ParameterReader ibParaReader) throws ConcurrentException {
+        final String villageRoName = defaultIfBlank(com.getRomanianName(), com.getTransliteratedName());
+        final StringBuilder sb = new StringBuilder("{{Infocaseta Așezare");
+        sb.append("\n|tip_asezare = Comună");
+        sb.append("\n|nume=").append(villageRoName);
+        sb.append("\n|nume_nativ=").append(com.getName());
+        if (null != com.getRaion()) {
+            obtainActualRomanianName(com.getRaion());
+        }
+        final Region region = com.computeRegion();
+        final String regionRoName = obtainActualRomanianName(region);
+
+        sb.append("\n|tip_subdiviziune=[[Țările lumii|Țară]]");
+        sb.append("\n|nume_subdiviziune={{UKR}}");
+        sb.append("\n|tip_subdiviziune1=[[Regiunile Ucrainei|Regiune]]");
+        sb.append("\n|nume_subdiviziune1=[[");
+        sb.append(getArticleName(region));
+        sb.append("|").append(regionRoName).append("]]");
+        if (null != com.getRaion()) {
+            if (com.getRaion().isMiskrada()) {
+                sb.append("\n|tip_subdiviziune2=Oraș regional");
+                sb.append("\n|nume_subdiviziune2=[[");
+                sb.append(getArticleName(com.getRaion().getCapital()));
+                sb.append('|');
+                sb.append(obtainActualRomanianName(com.getRaion().getCapital()));
+            } else {
+                sb.append("\n|tip_subdiviziune2=[[Raioanele Ucrainei|Raion]]");
+                sb.append("\n|nume_subdiviziune2=[[");
+                sb.append(getArticleName(com.getRaion()));
+                sb.append('|');
+                sb.append(obtainActualRomanianName(com.getRaion()));
+            }
+            sb.append("]]");
+        }
+
+        String coordonate = ibParaReader.getParams().get("coordonate");
+        if (StringUtils.isBlank(coordonate)) {
+            final String ukrainianCommuneArticleName = getUkrainianCommuneArticleName(com);
+
+            boolean uaTextRead = false;
+            String uaText = null;
+            do {
+                try {
+                    uaText = ukwiki.getPageText(ukrainianCommuneArticleName);
+                    uaTextRead = true;
+                } catch (final FileNotFoundException fnfe) {
+                    fnfe.printStackTrace();
+                    uaTextRead = true;
+                } catch (final IOException e) {
+                    e.printStackTrace();
+                }
+            } while (!uaTextRead);
+
+            if (!StringUtils.isEmpty(uaText) && StringUtils.contains(uaText, "{{Село")) {
+                final int indexOfIB = uaText.indexOf("{{Село");
+                final String textFromInfobox = uaText.substring(indexOfIB);
+                final ParameterReader ukIBPR = new ParameterReader(textFromInfobox);
+                ukIBPR.run();
+                final Map<String, String> ukIBParams = ukIBPR.getParams();
+                coordonate = ukIBParams.get("координати");
+                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "щільність", "densitate");
+                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "висота", "altitudine");
+                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "телефонний код", "prefix_telefonic");
+                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "поштовий індекс", "cod_poștal");
+                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "площа", "suprafață_totală_km2");
+                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "населення", "populație");
+                if (ukIBParams.containsKey("код КОАТУУ")) {
+                    sb.append("|tip_cod_clasificare=").append(
+                        "{{Ill|uk|KOATUU|Класифікатор об'єктів адміністративно-територіального устрою України|Cod KOATUU}}");
+                    UAUtils.copyParameterFromTemplate(ukIBPR, sb, "код КОАТУУ", "cod_clasificare");
+                }
+            }
+        }
+
+        if (StringUtils.isNotBlank(coordonate)) {
+            final ParameterReader coordParaReader = new ParameterReader(coordonate);
+            coordParaReader.run();
+            final Map<String, String> coordParams = coordParaReader.getParams();
+            final List<String> coordArgNames = Arrays.asList("latd", "latm", "lats", "latNS", "longd", "longm", "longs",
+                "longEV");
+            sb.append('\n');
+            for (int i = 0; i < coordArgNames.size(); i++) {
+                final String argValue = defaultString(coordParams.get(String.valueOf(1 + i)));
+                sb.append('|').append(coordArgNames.get(i)).append("=").append(argValue);
+            }
+            sb.append("\n|pushpin_map=Ucraina Regiunea ").append(regionRoName);
+            sb.append("\n|pushpin_map1=Ucraina");
+        }
+        if (0 > sb.indexOf("populație")) {
+            UAUtils.copyParameterFromTemplate(ibParaReader, sb, "populație");
+        }
+        UAUtils.copyParameterFromTemplate(ibParaReader, sb, "recensământ");
+        if (0 > sb.indexOf("altitudine")) {
+            UAUtils.copyParameterFromTemplate(ibParaReader, sb, "altitudine");
+        }
+        if (0 > sb.indexOf("prefix_telefonic")) {
+            UAUtils.copyParameterFromTemplate(ibParaReader, sb, "prefix telefonic");
+        }
+        if (0 > sb.indexOf("cod_poștal")) {
+            UAUtils.copyParameterFromTemplate(ibParaReader, sb, "cod poștal");
+        }
+        if (0 > sb.indexOf("densitate")) {
+            UAUtils.copyParameterFromTemplate(ibParaReader, sb, "densitate");
+        }
+        UAUtils.copyParameterFromTemplate(ibParaReader, sb, "atestare");
+        if (0 > sb.indexOf("suprafață_totală_km2")) {
+            UAUtils.copyParameterFromTemplate(ibParaReader, sb, "suprafață", "suprafață_totală_km2");
+        }
+        sb.append("\n}}\n");
+        return sb.toString();
+    }
+
+    private String getUkrainianCommuneArticleName(final Commune com) throws ConcurrentException {
+        LazyInitializer<String> communeInitializer = uaArticleNames.get(com);
+        if (null == communeInitializer) {
+            communeInitializer = new LazyInitializer<String>() {
+
+                @Override
+                protected String initialize() throws ConcurrentException {
+                    final List<String> possibleUkrainianArticleNames = getPossibleUkrainianArticleNames(com);
+                    boolean[] existance = null;
+                    do {
+                        try {
+                            existance = ukwiki.exists(possibleUkrainianArticleNames
+                                .toArray(new String[possibleUkrainianArticleNames.size()]));
+                        } catch (final IOException e) {
+                            e.printStackTrace();
+                        }
+                    } while (null == existance);
+                    for (int i = 0; i < possibleUkrainianArticleNames.size(); i++) {
+                        if (existance[i]) {
+                            final String articleCandidateTitle = UAUtils.resolveRedirect(ukwiki,
+                                possibleUkrainianArticleNames.get(i));
+                            if (UAUtils.isInCategoryTree(articleCandidateTitle, ukwiki, 2, "Сільські ради України")
+                                || UAUtils.isInAnyCategoryTree(articleCandidateTitle, ukwiki, 2, "Міста України")) {
+                                return articleCandidateTitle;
+                            }
+                        }
+                    }
+                    return possibleUkrainianArticleNames.get(0);
+                }
+            };
+            uaArticleNames.put(com, communeInitializer);
+        }
+        return communeInitializer.get();
     }
 
     private void generateCommuneNavBox(final Commune com) throws Exception {
@@ -1117,6 +1433,27 @@ public class UAWikiGenerator {
         }
         ret.add(s.getName() + " (село)");
         ret.add(s.getName());
+        return ret;
+    }
+
+    public List<String> getPossibleUkrainianArticleNames(final Commune c) {
+        final List<String> ret = new ArrayList<String>();
+        final Raion r = c.getRaion();
+        final Region reg = c.computeRegion();
+        final String regName = getUkrainianRegionName(reg);
+        c.getOriginalName().replace("сілрада", "сільська рада");
+        if (null != r && !r.isMiskrada()) {
+            ret.add(c.getName() + " (" + r.getOriginalName() + " район, " + regName + ")");
+            ret.add(c.getOriginalName().replace("сілрада", "сільська рада") + " (" + r.getOriginalName() + " район, "
+                + regName + ")");
+        }
+        if (null != r && !r.isMiskrada()) {
+            ret.add(c.getName() + " (" + r.getOriginalName() + " район)");
+            ret.add(c.getOriginalName().replace("сілрада", "сільська рада") + " (" + r.getOriginalName() + " район, "
+                + regName + ")");
+        }
+        ret.add(c.getOriginalName().replace("сілрада", "сільська рада"));
+        ret.add(c.getName());
         return ret;
     }
 
