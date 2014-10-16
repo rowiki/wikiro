@@ -7,10 +7,10 @@ $ua = $_SERVER['HTTP_USER_AGENT'];
 $date= date("Y/m/d:h:i:sa");
 
  switch ($lmi) {
-	 case "SV-II-a-A-05595": $redirect="https://ro.wikipedia.org/wiki/M%C4%83n%C4%83stirea_Sucevi%C8%9Ba";break;
-	 case "SV-II-a-A-05595-1": $redirect="https://ro.wikipedia.org/wiki/M%C4%83n%C4%83stirea_Sucevi%C8%9Ba";break;  
-   case "VN-IV-m-A-06632":   $redirect="https://ro.wikipedia.org/wiki/Mausoleul_de_la_M%C4%83r%C4%83%C8%99e%C8%99ti";break;
-   case "SV-II-m-B-05545":   $redirect="https://commons.wikimedia.org/wiki/File:Galeria_Oamenilor_de_Seama_Falticeni.JPG";break;
+	 case "SV-II-a-A-05595": $redirect="https://ro.wikipedia.org/wiki/M%C4%83n%C4%83stirea_Putna";break;
+	 case "SV-II-a-A-05651": $redirect="https://ro.wikipedia.org/wiki/M%C4%83n%C4%83stirea_Sucevi%C8%9Ba";break;  
+   case "VN-IV-m-A-06631":   $redirect="https://ro.wikipedia.org/wiki/Mausoleul_de_la_M%C4%83r%C4%83%C8%99e%C8%99ti";break;
+   case "SV-II-m-B-05545":   $redirect="https://ro.wikipedia.org/wiki/Galeria_Oamenilor_de_Seam%C4%83_din_F%C4%83lticeni";break;
    case "VN-II-m-A-06417":   $redirect="https://commons.wikimedia.org/wiki/File:Tribunalul_Judetean_Vrancea,_Focsani.JPG";break;
    case "TM-II-m-A-06176":   $redirect="https://ro.wikipedia.org/wiki/Pia%C8%9Ba_Unirii_din_Timi%C8%99oara";break;
    case "SB-II-m-A-12093":   $redirect="https://commons.wikimedia.org/wiki/File:Interior_al_Bisericii_parohiale_romano-catolice_%22Sf._Treime%22.jpg";break;
