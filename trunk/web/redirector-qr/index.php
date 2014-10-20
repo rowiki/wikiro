@@ -22,7 +22,6 @@ $date= date("Y/m/d:h:i:sa");
    case "BV-II-a-A-11769":   $redirect="https://ro.wikipedia.org/wiki/Cetatea_Rupea";break;
    case "HD-II-m-A-03344":   $redirect="https://ro.wikipedia.org/wiki/Castelul_Hunedoarei";break;
    case "AB-II-m-A-00129":   $redirect="https://ro.wikipedia.org/wiki/Catedrala_Sf%C3%A2ntul_Mihail_din_Alba_Iulia";break;
-
    case "CT-I-m-A-02567.05": $redirect="https://ro.wikipedia.org/wiki/Tropaeum_Traiani";break;
    case "BV-I-m-A-11284.01": $redirect="https://ro.wikipedia.org/wiki/Cetatea_R%C3%A2%C8%99nov";break;
    case "BV-II-a-A-11768": $redirect="https://ro.wikipedia.org/wiki/Rotbav,_Bra%C8%99ov";break;
@@ -33,7 +32,7 @@ $date= date("Y/m/d:h:i:sa");
    case "AB-II-a-A-00196": $redirect="https://ro.wikipedia.org/wiki/Cetatea_din_C%C3%A2lnic";break;
    case "SB-II-a-A-12471": $redirect="https://ro.wikipedia.org/wiki/Mo%C8%99na,_Sibiu";break;
    case "HD-II-m-A-03452": $redirect="https://ro.wikipedia.org/wiki/Biserica_Adormirea_Maicii_Domnului_din_Strei";break;
-
+   case "expozitie": $redirect="http://wikilovesmonuments.ro/2014/10/invitatie-la-expozitia-wiki-loves-monuments/";break;
          default: $redirect="https://commons.wikimedia.org/wiki/Category:Images_from_Wiki_Loves_Monuments_2014_in_Romania";
    }
 
