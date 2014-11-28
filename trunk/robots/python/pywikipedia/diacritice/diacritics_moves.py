@@ -23,8 +23,9 @@ __version__ = '$Id: diacritics_redirects.py 7918 2010-02-08 11:24:22Z xqt $'
 
 import time, sys, re
 import string
-import pywikibot as pywikibot
+import pywikibot
 from pywikibot import pagegenerators
+from pywikibot import config as user
 
 docuReplacements = {
     '&params;': pagegenerators.parameterHelp
@@ -123,7 +124,7 @@ def main():
             return
 
     gen = genFactory.getCombinedGenerator()
-    preloadingGen = pagegenerators.PreloadingGenerator(gen)
+    preloadingGen = pagegenerators.PreloadingGenerator(gen, 100)
     bot = DiacriticsBot(preloadingGen, acceptall, titlecase)
     bot.run()
 

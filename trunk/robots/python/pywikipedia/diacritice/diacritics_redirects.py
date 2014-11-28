@@ -79,7 +79,7 @@ class DiacriticsBot:
         
         if new_page_t == page_t:
             pywikibot.output(u'%s does not contain diacritics, skipping...\n'
-                             % page_mod.aslink())
+                             % page_mod.title(asLink=True))
         elif page_mod.exists() and page_mod.isRedirectPage() and page_mod.getRedirectTarget() == page:
             pywikibot.output(u'%s already exists, skipping...\n'
                              % page_mod.aslink())
@@ -87,7 +87,7 @@ class DiacriticsBot:
             pywikibot.output(u'[[%s]] doesn\'t exist' % page_mod.title())
             if not self.acceptall:
                 choice = pywikibot.inputChoice(
-                        u'Do you want to create a redirect?',
+                        u'Do you want to create a redirect to %s?' % page_t,
                         ['Yes', 'No', 'All', 'Quit'], ['y', 'N', 'a', 'q'], 'N')
                 if choice == 'a':
                     self.acceptall = True
@@ -96,7 +96,7 @@ class DiacriticsBot:
             if self.acceptall or choice == 'y':
                 comment = pywikibot.translate(self.site, msg) % page_t
                 try:
-                	page_mod.put(u"#%s [[%s]]" % (self.site.redirect(True), page_t.title()), comment)
+                	page_mod.put(u"#%s [[%s]]" % (self.site.redirect(True), page_t), comment)
                 except Exception as e:
                     pywikibot.output(u"An error occurred, skipping...")
                     print type(e)
@@ -115,10 +115,10 @@ def main():
             pywikibot.showHelp(u'diacritics_redirects')
             return
 
-    #gen = genFactory.getCombinedGenerator()
-    #preloadingGen = pagegenerators.PreloadingGenerator(gen)
-    transGen = pagegenerators.AllpagesPageGenerator('Ț', includeredirects=False)
-    pregenerator = pagegenerators.PreloadingGenerator(transGen, 120)
+    gen = genFactory.getCombinedGenerator()
+    pregenerator = pagegenerators.PreloadingGenerator(gen, 120)
+    #transGen = pagegenerators.AllpagesPageGenerator(u'Ț', includeredirects=False)
+    #pregenerator = pagegenerators.PreloadingGenerator(transGen, 120)
     bot = DiacriticsBot(pregenerator, acceptall, titlecase)
     bot.run()
 
