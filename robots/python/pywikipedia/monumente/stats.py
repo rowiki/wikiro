@@ -160,17 +160,20 @@ def main():
 	print "* Articole distincte: ''%d''" % len(pages_ro)
 	print "* Articole lipsă (cat A): ''%d''" % potential_articles
 
+	print "----"
 	for nature in image_nature.keys():
 		if nature != "arheologie":
 			total_apmnir += total_nature[nature]
 			image_apmnir += image_nature[nature]
 		print "* Imagini pentru monumente de %s: ''%f%%''" % (nature, image_nature[nature] * 100.0 / total_nature[nature])
+	print "----"
 	for type in image_type.keys():
 		print "* Imagini pentru %s: ''%f%%''" % (type, image_type[type] * 100.0 / total_type[type])
+	print "* Comparație cu monumenteromania.ro: ''%f%% (%d/%d)''" % (image_apmnir * 100.0 / total_apmnir, image_apmnir, total_apmnir)
+	print "----"
 	for interest in image_interest.keys():
 		print "* Imagini pentru monumente de interes %s: ''%f%%''" % (interest, image_interest[interest] * 100.0 / total_interest[interest])
-	
-	print "* Comparație cu monumenteuitate.ro: ''%f%% (%d/%d)''" % (image_apmnir * 100.0 / total_apmnir, image_apmnir, total_apmnir)
+	print "----"
 
 	#image_keys = image_county.keys()
 	#image_keys.sort()
@@ -183,6 +186,8 @@ def main():
 
 if __name__ == "__main__":
 	try:
+		import update_database
+		update_database.main()
 		main()
 	finally:
 		pywikibot.stopme()
