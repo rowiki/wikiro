@@ -26,10 +26,10 @@ import strainu_functions as strainu
 options = {
 	'ro':
 	{
-		#'namespaces': [0, 6],
-		'namespaces': [6],
+		'namespaces': [0, 6],
+		#'namespaces': [0],
 		'templateRegexp': re.compile("\{\{[a-z]*codLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
-		'codeTemplate': ["codLMI"],
+		'codeTemplate': ["codLMI", "Monument istoric"],
 		'codeTemplateParams': 
 		[
 		],
@@ -100,7 +100,7 @@ options = {
 	'commons':
 	{
 		'namespaces': [14, 6],
-		#'namespaces': [14],
+		#'namespaces': [6],
 		'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 		'codeTemplate': ["Monument istoric", "codLMI"],
 		'codeTemplateParams': 
@@ -123,7 +123,9 @@ options = {
 			u'Valued image',
 			u'QualityImage',
 			u'Assessments',
-			u'Wiki Loves Monuments 2011 Europe nominee'
+			u'Wiki Loves Monuments 2011 Europe nominee',
+			u'WLM finalist or winner image 2012',
+			u'WLM finalist or winner image',
 		],
 		'validOccupations':
 		{
@@ -296,9 +298,8 @@ def checkAllCodes(result, title, logMsg = True):
 					c2 = res[0][-5:]
 				if c1 != c2: #they're NOT sub-monuments
 					if logMsg:
-						log(u"*''W'': [[:%s]] conține mai multe coduri LMI" \
-						u" distincte: %s, %s. În mod normal, acest lucru" \
-						u" este o greșeală" % (title, code, res[0]))
+						log(u"*''I'': [[:%s]] conține mai multe coduri LMI" \
+						u" distincte: %s, %s." % (title, code, res[0]))
 					return ""
 		return code
 	else:
@@ -358,7 +359,7 @@ def processCreatorTemplate(name, conf):
 def processArticle(text, page, conf):
 	title = page.title()
 	pywikibot.output(u'Working on "%s"' % title)
-	
+
 	#skip pictures under copyright
 	tl = strainu.extractTemplate(text, "Material sub drepturi de autor")
 	if tl != None:
@@ -448,7 +449,6 @@ def processArticle(text, page, conf):
 			#print img
 			image = img.title()
 			break
-				
 	dictElem = {'name': title,
 				'project': user.mylang,
 				'lat': lat, 'long': long,
@@ -509,7 +509,7 @@ def main():
 				parse_type = PARSE_QUICK
 				preload = False
 
-	site = pywikibot.getSite()
+	site = pywikibot.Site()
 	lang = user.mylang
 	if not options.get(lang):
 		pywikibot.output(u'I have no options for language "%s"' % lang)

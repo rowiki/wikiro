@@ -35,6 +35,7 @@ countries = {
 			u'FostCod': u'FostCod',
 			u'Cod92': u'Cod92',
 			u'CodRan': u'CodRan',
+			u'Copyright': u'Copyright',
 			},
 	},
 	('ro', 'ran') : {
@@ -114,7 +115,7 @@ def processText(source, countryconfig, page=None):
 	'''
 	Process a text containing one or multiple instances of the monument row template
 	'''
-	templates = pywikibot.extract_templates_and_params(page.get())
+	templates = pywikibot.textlib.extract_templates_and_params(page.get())
 	title = page.title(True)
 	pywikibot.output(u'Working on page "%s"' % title)
 	for (template, params) in templates:
@@ -128,7 +129,7 @@ def processDatabase(countryconfig, dbname="lmi"):
 	Process all the monuments of one database
 	'''
 
-	site = pywikibot.getSite(countryconfig.get('lang'), countryconfig.get('project'))
+	site = pywikibot.Site(countryconfig.get('lang'), countryconfig.get('project'))
 	rowTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), countryconfig.get('rowTemplate')))
 
 	transGen = pagegenerators.ReferringPageGenerator(rowTemplate, onlyTemplateInclusion=True)
@@ -166,7 +167,7 @@ def main():
 			database = arg [len('-db:'):]
 
 	if database:
-		lang = pywikibot.getSite().language()
+		lang = pywikibot.Site().language()
 		if not countries.get((lang, database)):
 			pywikibot.output(u'I have no config for database "%s" in language "%s"' % (database, lang))
 			return False

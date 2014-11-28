@@ -14,6 +14,7 @@ identify different improvements and further errors in the monument pages and dat
 
 import sys, time, warnings, json, string, random, re
 import math, urlparse, os
+import codecs
 sys.path.append("..")
 import strainu_functions as strainu
 import csvUtils
@@ -39,23 +40,23 @@ countries = {
 		'truncate' : False, 
 		'primkey' : u'Cod',
 		'fields' : {
-                    u'Cod': u'Cod',
-                    u'Denumire': u'Denumire',
-                    u'Localitate': u'Localitate',
-                    u'Adresă': u'Adresă',
-                    u'Datare': u'Datare',
-                    u'Arhitect': u'Creatori',
-                    u'Creatori': u'Creatori',
-                    u'Lat': u'Lat',
-                    u'Coordonate': u'Coordonate',
-                    u'Lon': u'Lon',
-                    u'Imagine': u'Imagine',
-                    u'Commons': u'Commons',
-                    u'NotăCod': u'Notăcod',
-                    u'FostCod': u'FostCod',
-                    u'Cod92': u'Cod92',
-                    u'CodRan': u'CodRan',
-             },
+					u'Cod': u'Cod',
+					u'Denumire': u'Denumire',
+					u'Localitate': u'Localitate',
+					u'Adresă': u'Adresă',
+					u'Datare': u'Datare',
+					u'Arhitect': u'Creatori',
+					u'Creatori': u'Creatori',
+					u'Lat': u'Lat',
+					u'Lon': u'Lon',
+					u'Imagine': u'Imagine',
+					u'Commons': u'Commons',
+					u'NotăCod': u'NotăCod',
+					u'FostCod': u'FostCod',
+					u'Cod92': u'Cod92',
+					u'CodRan': u'CodRan',
+					u'Copyright': u'Copyright',
+			 },
 	},
 }
 
@@ -78,15 +79,36 @@ def log(string):
 	
 def rebuildTemplate(params):
 	my_template = u"{{" + countries.get(('ro', 'lmi')).get('rowTemplate') + u"\n"
-	for name in [u"Cod", u"NotăCod", u"FostCod", u"CodRan", u"Cod92", u"Denumire", u"Localitate", u"Adresă", u"Datare", u"Creatori", u"Lat", u"Lon", u"Imagine", u"Commons"]:
+	for name in [u"Cod", u"NotăCod", u"FostCod", u"CodRan", u"Cod92", u"Denumire", u"Localitate", u"Adresă", u"Datare", u"Creatori", u"Lat", u"Lon", u"Imagine", u"Commons", u"Copyright"]:
 		if name in params and params[name] <> u"":
 			my_template += u"| " + countries.get(('ro', 'lmi')).get('fields')[name] + u" = " + params[name] + u"\n"
 	my_template += u"}}\n"
 	return my_template
 
 def updateTableData(url, code, field, newvalue, upload = True, text = None, ask = True):
+	"""
+	:param url: The wiki page that will be updated
+	:type url: string
+	:param code: The LMI code that will be updated
+	:type code: string
+	:param field: The field that will be updated
+	:type field: string
+	:param newvalue: The new value that will be used for the field
+	:type newvalue: string
+	:param upload: How to handle the upload of the modified page. False means do not upload; 
+		True means upload if we have a change; 
+		None means upload even if the text has not changed;
+		This option is for empty or previous changes; it will probalby be used with ask=False
+	:type upload: Three-state boolean (True, False, None)
+	:param text: The text that will be updated (None means get the page from the server)
+	:type text: string
+	:param ask: Whether to ask the user before uploading
+	:type ask: boolean
+	:return: The modified text of the page
+	:rtype: string
+	"""
 	pywikibot.output("Uploading %s for %s; value \"%s\"" % (field, code, newvalue))
-	site = pywikibot.getSite()
+	site = pywikibot.Site()
 	title = urlparse.parse_qs(urlparse.urlparse(str(url)).query)['title'][0].decode('utf8')
 	page = pywikibot.Page(site, title)
 	
@@ -123,14 +145,12 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 		log(u"* [Listă] ''E'': ''[%s]'' Codul nu este prezent în [[%s|listă]]" % (rawCode, title))
 		pywikibot.output(u"Code not found: %s" % code)
 		return None
-
-	pywikibot.output(my_params)
 	
 	orig = rebuildTemplate(my_params)
 	my_params[field] = newvalue
 	new = rebuildTemplate(my_params)
 	
-	if orig.strip() == new.strip():
+	if orig.strip() == new.strip() and upload != None:
 		pywikibot.output("No change, nothing to upload!")
 		return text
 	
@@ -163,7 +183,7 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 		after = new + after
 		text = "".join((before, after))
 		
-		if upload == True:
+		if upload == True or upload == None:
 			comment = u"Actualizez câmpul %s în lista de monumente" % field
 			try:
 				page.put(text, comment)
@@ -293,6 +313,8 @@ def chooseImagePicky(files):
 	blacklist = [#all lowercase
 				u'detali',#detaliu, detalii
 				u'pisani',#pisanie, pisanii
+				u'interio',#interior, interioare
+				u'plac',#placa, placă
 				]
 	tries = 0
 	while tries < len(files):
@@ -300,9 +322,20 @@ def chooseImagePicky(files):
 		tries += 1
 		#be picky and don't choose a detail picture; also stop on some arbitrary condition
 		for cond in blacklist:
-			if (artimage.lower().find(cond) == -1):
-				return artimage
+			if (artimage.lower().find(cond) != -1):
+				break
+		else:
+			return artimage
 	return artimage
+	
+def checkNewMonuments(other_data, db):
+	f = codecs.open("lmi_monumente_noi.wiki", "w", "utf8")
+	for monument in other_data:
+		if monument in db:
+			continue
+		outText = rebuildTemplate(other_data[monument])
+		f.write(outText)
+	f.close()
 
 def main():
 	otherFile = "other_monument_data.csv"
@@ -322,6 +355,8 @@ def main():
 	pages_commons =		readJson("commons_File_pages.json", "commons images")
 	
 	other_data = readOtherData(otherFile)
+	
+	checkNewMonuments(other_data, db)
 	
 	ran_data = readRan("ran_db.json")
 
@@ -426,8 +461,8 @@ def main():
 				if link == None:
 					log(u"* [Listă] ''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire" % code)
 				else:
-					page1 = pywikibot.Page(pywikibot.getSite(), link)
-					page2 = pywikibot.Page(pywikibot.getSite(), article["name"])
+					page1 = pywikibot.Page(pywikibot.Site(), link)
+					page2 = pywikibot.Page(pywikibot.Site(), article["name"])
 					if page1 <> page2 and \
 					(not page1.isRedirectPage() or page1.getRedirectTarget() <> page2) and \
 					(not page2.isRedirectPage() or page2.getRedirectTarget() <> page1):
@@ -446,7 +481,7 @@ def main():
 			else:
 				a1 = author.strip()
 				a2 = monument["Arhitect"].strip()
-				if a1 <> a2:
+				if a1 <> a2 and strainu.extractLink(a1) <> strainu.extractLink(a2):
 					articleText = updateTableData(monument["source"], code, "Creatori", a1, text=articleText)
 				#	log(u"*''W'': ''[%s]'' Câmpul Arhitect este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
 
@@ -460,7 +495,8 @@ def main():
 						authors = author + ", " + authors
 					else:
 						authors = author
-			if authors <> monument["Arhitect"]: # if something changed, update the text
+			a2 = monument["Arhitect"].strip()
+			if authors <> a2  and strainu.extractLink(authors) <> strainu.extractLink(a2): # if something changed, update the text
 				pywikibot.output(authors)
 				articleText = updateTableData(monument["source"], code, "Creatori", authors, text=articleText)
 			else:
@@ -468,7 +504,7 @@ def main():
 
 		elif pic_author <> None and pic_author.strip() <> "":
 			print "autor3"
-			if pic_author <> strainu.stripLink(monument["Arhitect"]).strip():
+			if strainu.stripLink(pic_author) <> strainu.stripLink(monument["Arhitect"]).strip():
 				articleText = updateTableData(monument["source"], code, "Creatori", pic_author, text=articleText)
 
 		#try to find the author in external data
@@ -594,10 +630,13 @@ def main():
 								u"\tLatitude: " + str(otherLat) + "\n" 
 								u"\tLongitude: " + str(otherLong))
 				ask = True
-				if otherSrc[5:] == monument["CodRan"]:
-					ask = False
+				#if otherSrc[5:] == monument["CodRan"]:
+				#	ask = False
+				uploadlat = False
+				if "Lon" in monument and monument["Lon"] != "":
+					uploadlat = True
 				articleText = updateTableData(monument["source"], code, "Lat", str(otherLat), 
-								upload = False, text = articleText, ask = ask)
+								upload = uploadlat, text = articleText, ask = ask)
 				articleText = updateTableData(monument["source"], code, "Lon", str(otherLong), 
 								upload = True, text = articleText, ask = ask)
 			
