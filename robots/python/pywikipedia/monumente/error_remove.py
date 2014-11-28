@@ -122,6 +122,11 @@ mistakes = {
 	u'([a-z]{4,})a a ': u'\g<1>a',
 	u'([a-z]{4,})a a ([^I])': u'\g<1>ă a \g<2>',
 	u' ([înqwtyuipdfghjlzxcvbn]) ': u'\g<1> ', 
+	u'(\| (?!Imagine|Commons|NotăCod|Creatori))(.*?)?"(.*?)"': u'\g<1>\g<2>„\g<3>”',
+	u'([^\s])„\s': u'\g<1> „',
+	u'([a-zA-ZăîâșțĂÂÎȘȚ])„([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1> „\g<2>',
+	u'([a-zA-ZăîâșțĂÂÎȘȚ])”([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1>” \g<2>',
+	u'\s”([^\s])': u'” \g<1>',
 }
 minormistakes = {
 	u'([Zz])iddeapărare': u'\g<1>id de apărare',
@@ -147,9 +152,24 @@ minormistakes = {
 	u'deoparte(\s*)': u'de o parte ',
 	u' și(de|a|pe)': u' și \g<1>',
 	u' k ': u' km ',
-	u'([^aeiourpăc\(" ])și': u'\g<1> și',
+	u'([^aeiourpăâc\(" ])și': u'\g<1> și',
 	u' de([bg])': u' de \g<1>',
-	
+	u' de(pe|la|sub|peste|o|lemn|locul) ': u' de \g<1> ',
+	u' la(vecini|extremitatea) ': u' de \g<1> ',
+	u' pe(malul) ': u' pe \g<1> ',
+	u'([Pp])iațade': u'\g<1>iața de',
+	u'și(fa|vă|sp|gr)': u'și \g<1>',
+	u'([Mm])ăgurade': u'\g<1>ăgura de',
+	u'([Mm])irceacel': u'\g<1>ircea cel',
+	u'([Mm])ovilacu': u'\g<1>ovila cu',
+	u'amănăstir': u'a mănăstir',
+	u'dinmina': u'din mina',
+	u'\*80': u'\'80',
+	u'SEa': u'SE a',
+	u'([Cc])urteade': u'\g<1>urtea de',
+	u'satpedrum': u'sat pe drum',
+	u'([Aa])ripade(.*)': u'\g<1>ripa de \g<2>',
+	u'([VE])a ': u'\g<1> a ',
 }
 
 deprecated = {
