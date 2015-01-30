@@ -293,12 +293,12 @@ public class UAWikiGenerator {
 
         if (0 > currentText.indexOf("{{Raionul ") && 0 > currentText.indexOf("{{Orașul regional")) {
             currentText.append("\n{{");
-            currentText.append(roArticleNames.get(com.getRaion()).get());
+            currentText.append(getArticleName(com.getRaion()));
             currentText.append("}}\n");
         }
         if (0 > currentText.indexOf("{{Comuna ")) {
             currentText.append("\n{{");
-            currentText.append(roArticleNames.get(com).get());
+            currentText.append(getArticleName(com));
             currentText.append("}}\n");
         }
         if (0 > currentText.indexOf("[[Categorie:")) {
