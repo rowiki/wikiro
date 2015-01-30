@@ -222,6 +222,7 @@ public class UAWikiGenerator {
     }
 
     private void generateCommuneText(final Commune com) throws Exception {
+        System.out.println("------ generating text for commune " + com.getName());
         final String communeRoName = defaultIfBlank(com.getRomanianName(), com.getTransliteratedName());
         final int countCommunesWithThisName = hib.countCommunesByRomanianOrTransliteratedName(communeRoName);
         final int countCommunesWithThisNameInRegion = hib.countCommunesInRegionByRomanianOrTransliteratedName(communeRoName,
@@ -323,13 +324,128 @@ public class UAWikiGenerator {
     }
 
     private String generateTownIntro(final Commune com, final String actualTitle) {
-        // TODO Auto-generated method stub
-        return null;
+        final STGroup stgroup = new STGroupFile("templates/ua/ucraina.stg");
+        final ST introTmpl = stgroup.getInstanceOf("introTown");
+        final String roCommuneName = obtainActualRomanianName(com);
+        introTmpl.add("nume", roCommuneName);
+
+        String ukName = com.getName();
+        if (!StringUtils.equals(roCommuneName, com.getTransliteratedName())) {
+            ukName = ukName + '|' + com.getTransliteratedName();
+        }
+        introTmpl.add("nume_uk", ukName);
+
+        com.getCapital();
+
+        introTmpl.add("statut", 1 == com.getTown() ? "o așezare de tip urban" : "un oraș");
+
+        final StringBuilder raionPart = new StringBuilder();
+        final Raion raion = com.getRaion();
+        if (null != raion && !raion.isMiskrada()) {
+            raionPart.append("[[");
+            raionPart.append(getArticleName(raion));
+            raionPart.append("|raionul ");
+            raionPart.append(obtainActualRomanianName(raion));
+            raionPart.append("]], ");
+        }
+        introTmpl.add("raion", raionPart.toString());
+
+        final StringBuilder regionPart = new StringBuilder("[[");
+        final Region reg = com.computeRegion();
+        regionPart.append(getArticleName(reg));
+        regionPart.append('|');
+        regionPart.append(StringUtils.equals(reg.getRomanianName(), "Crimeea") ? "Republica Autonomă " : "regiunea ");
+        regionPart.append(obtainActualRomanianName(reg));
+        regionPart.append("]]");
+        introTmpl.add("regiune", regionPart.toString());
+
+        if (com.getSettlements().size() > 1) {
+            final List<String> villageNames = new ArrayList<String>();
+            for (final Settlement eachVillage : com.getSettlements()) {
+                final String villageRoName = obtainActualRomanianName(eachVillage);
+                final String villageArticleName = getArticleName(eachVillage);
+                final StringBuilder villageLinkBuilder = new StringBuilder("[[");
+                villageLinkBuilder.append(villageArticleName);
+                if (!StringUtils.equals(villageArticleName, villageRoName)) {
+                    villageLinkBuilder.append('|').append(villageRoName);
+                }
+                villageLinkBuilder.append("]]");
+                if (eachVillage.equals(com.getCapital())) {
+                    continue;
+                }
+                villageNames.add(villageLinkBuilder.toString());
+            }
+            final StringBuilder villageEnumeration = new StringBuilder("mai cuprinde și satele ");
+            for (int i = 0; i < villageNames.size() - 1; i++) {
+                villageEnumeration.append(villageNames.get(i)).append(", ");
+            }
+            villageEnumeration.setLength(villageEnumeration.length() - 2);
+            villageEnumeration.append(" și ").append(villageNames.get(villageNames.size() - 1));
+            introTmpl.add("sate", villageEnumeration.toString());
+        } else {
+            introTmpl.add("sate", "nu cuprinde și alte sate");
+        }
+        List<Raion> outerRaions = hib.findOuterRaionsForCity(com);
+        if (0 == outerRaions.size()) {
+            introTmpl.add("are_raion", "");
+        } else {
+            introTmpl.add("are_raion", "Deși nu este inclus în raion, este reședința raionului " + "[["
+                + getArticleName(outerRaions.get(0)) + "|raionului " + obtainActualRomanianName(outerRaions.get(0)) + "]]");
+        }
+        return introTmpl.render();
     }
 
     private String generateCityIntro(final Commune com, final String actualTitle) {
-        // TODO Auto-generated method stub
-        return null;
+        final STGroup stgroup = new STGroupFile("templates/ua/ucraina.stg");
+        final ST introTmpl = stgroup.getInstanceOf("introCity");
+        final String roCommuneName = obtainActualRomanianName(com);
+        introTmpl.add("nume", roCommuneName);
+
+        String ukName = com.getName();
+        if (!StringUtils.equals(roCommuneName, com.getTransliteratedName())) {
+            ukName = ukName + '|' + com.getTransliteratedName();
+        }
+        introTmpl.add("nume_uk", ukName);
+
+        com.getCapital();
+
+        final StringBuilder regionPart = new StringBuilder("[[");
+        final Region reg = com.computeRegion();
+        regionPart.append(getArticleName(reg));
+        regionPart.append('|');
+        regionPart.append(StringUtils.equals(reg.getRomanianName(), "Crimeea") ? "Republica Autonomă " : "regiunea ");
+        regionPart.append(obtainActualRomanianName(reg));
+        regionPart.append("]]");
+        introTmpl.add("regiune", regionPart.toString());
+
+        if (com.getSettlements().size() > 1) {
+            final List<String> villageNames = new ArrayList<String>();
+            for (final Settlement eachVillage : com.getSettlements()) {
+                final String villageRoName = obtainActualRomanianName(eachVillage);
+                final String villageArticleName = getArticleName(eachVillage);
+                final StringBuilder villageLinkBuilder = new StringBuilder("[[");
+                villageLinkBuilder.append(villageArticleName);
+                if (!StringUtils.equals(villageArticleName, villageRoName)) {
+                    villageLinkBuilder.append('|').append(villageRoName);
+                }
+                villageLinkBuilder.append("]]");
+                if (eachVillage.equals(com.getCapital())) {
+                    villageLinkBuilder.append(" (reședința)");
+                }
+                villageNames.add(villageLinkBuilder.toString());
+            }
+            final StringBuilder villageEnumeration = new StringBuilder(
+                "În afara localității principale, mai cuprinde și satele ");
+            for (int i = 0; i < villageNames.size() - 1; i++) {
+                villageEnumeration.append(villageNames.get(i)).append(", ");
+            }
+            villageEnumeration.setLength(villageEnumeration.length() - 2);
+            villageEnumeration.append(" și ").append(villageNames.get(villageNames.size() - 1));
+            introTmpl.add("are_sate", villageEnumeration.toString());
+        } else {
+            introTmpl.add("are_sate", "");
+        }
+        return introTmpl.render();
     }
 
     private String generateRuralCommuneIntro(final Commune com, final String actualTitle) {

@@ -209,6 +209,14 @@ public class Hibernator {
         return uniqueResult.intValue();
     }
 
+    public List<Raion> findOuterRaionsForCity(Commune city) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query q = ses
+            .createQuery("select raion from Raion raion left join raion.capital as c where c=:city");
+        q.setParameter("city", city);
+        return q.list();
+    }
+    
     public void saveRegion(final Region region) {
         final Session ses = sessionFactory.getCurrentSession();
         ses.saveOrUpdate(region);
