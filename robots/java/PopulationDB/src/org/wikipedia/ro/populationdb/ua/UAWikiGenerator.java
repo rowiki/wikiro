@@ -386,12 +386,6 @@ public class UAWikiGenerator {
             introTmpl.add("sate", "nu cuprinde și alte sate");
         }
         List<Raion> outerRaions = hib.findOuterRaionsForCity(com);
-        if (0 == outerRaions.size()) {
-            introTmpl.add("are_raion", "");
-        } else {
-            introTmpl.add("are_raion", "Deși nu este inclus în raion, este reședința raionului " + "[["
-                + getArticleName(outerRaions.get(0)) + "|raionului " + obtainActualRomanianName(outerRaions.get(0)) + "]]");
-        }
         return introTmpl.render();
     }
 
@@ -514,7 +508,18 @@ public class UAWikiGenerator {
     private String generateCommuneInfobox(final Commune com, final ParameterReader ibParaReader) throws ConcurrentException {
         final String villageRoName = defaultIfBlank(com.getRomanianName(), com.getTransliteratedName());
         final StringBuilder sb = new StringBuilder("{{Infocaseta Așezare");
-        sb.append("\n|tip_asezare = Comună");
+        sb.append("\n|tip_asezare = ");
+        switch (com.getTown()) {
+        case 0:
+            sb.append("Comună");
+            break;
+        case 1:
+            sb.append("Așezare de tip urban");
+            break;
+        case 2:
+            sb.append(null != com.getRaion() ? "Oraș" : "Oraș regional");
+            break;
+        }
         sb.append("\n|nume=").append(villageRoName);
         sb.append("\n|nume_nativ=").append(com.getName());
         if (null != com.getRaion()) {
