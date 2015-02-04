@@ -9,4 +9,4 @@ introVillage(nume, nume_uk, statut, comuna, raion, regiune) ::= "'''<nume>''' (�
 introCommune(nume, nume_uk, raion, regiune, sate) ::= "'''<nume>''' (în {{uk|<nume_uk>}}) este o comună în <raion><regiune>, [[Ucraina]], formată <sate>."
 introTown(nume, nume_uk, statut, raion, regiune, sate) ::= "'''<nume>''' (în {{uk|<nume_uk>}}) este <statut> în <raion><regiune>, [[Ucraina]]. În afara localității principale, <sate>."
 introCity(nume, nume_uk, statut, regiune, sate, are_raion, are_sate) ::= "'''<nume>''' (în {{uk|<nume_uk>}}) este <statut> în <regiune>, [[Ucraina]].<are_raion><are_sate>"
-introRaion(nume, nume_uk, regiune) ::= "'''<nume>''' (în {{uk|<nume_uk>}}) este un [[Raioanele Ucrainei|raion]] în <regiune>, [[Ucraina]]. Reședința sa este <statut_resedinta> <resedinta>."
+introRaion(nume, nume_uk, regiune, statut_resedinta, resedinta, apartine_raionului) ::= "'''<nume>''' (în {{uk|<nume_uk>}}) este un [[Raioanele Ucrainei|raion]] în <regiune>, [[Ucraina]]. Reședința sa este <statut_resedinta> <resedinta><apartine_raionului>."
