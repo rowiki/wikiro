@@ -27,7 +27,7 @@ options = {
 	'ro':
 	{
 		'namespaces': [0, 6],
-		#'namespaces': [0],
+		#'namespaces': [6],
 		'templateRegexp': re.compile("\{\{[a-z]*codLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 		'codeTemplate': ["codLMI", "Monument istoric"],
 		'codeTemplateParams': 
@@ -99,8 +99,8 @@ options = {
 	},
 	'commons':
 	{
-		'namespaces': [14, 6],
-		#'namespaces': [6],
+		#'namespaces': [14, 6],
+		'namespaces': [6],
 		'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 		'codeTemplate': ["Monument istoric", "codLMI"],
 		'codeTemplateParams': 
@@ -151,6 +151,17 @@ qualityRegexp = None
 fullDict = {}
 _log = "pages.err.log"
 _flog = None
+_trace = False
+
+class Trace:
+	def __init__(self, name):
+		if (_trace):
+			pywikibot.output("=> " + name)
+		self.name = name
+
+	def __del__(self):
+		if(_trace):
+			pywikibot.output("<= " + str(self.name))
 
 def initLog():
 	global _flog, _log;
@@ -161,7 +172,7 @@ def closeLog():
 	_flog.close()
 
 def log(string):
-	#pywikibot.output(string.encode("utf8") + "\n")
+	pywikibot.output(string.encode("utf8") + "\n")
 	_flog.write(string.encode("utf8") + "\n")
 
 def dms2dec(deg, min, sec, sign):
@@ -174,23 +185,29 @@ def isCoor( ns, ew ):
 			(ew == "E" or ew == "W"))
 
 def parseGeohackLinks(page):
-	#title = page.title()
-	#html = page.site().getUrl( "/wiki/" + page.urlname(), True)
+	trace = Trace(sys._getframe().f_code.co_name)
+	#pywikibot.output("=> Trying to retrieve: " + page.site.base_url("/w/api.php?action=parse&format=json&page=" +
+        #                page.title(asUrl=True) + "&prop=externallinks&uselang=ro"))
 	output = pywikibot.comms.http.request(page.site, "/w/api.php?action=parse&format=json&page=" +
 			page.title(asUrl=True) + "&prop=externallinks&uselang=ro")
+	#pywikibot.output("<= Retrieved external links")
 	linksdb = json.loads(output)
-	title = linksdb["parse"]["title"]
-	links = linksdb["parse"]["externallinks"]
+	#print linksdb
+	try:
+		title = linksdb["parse"]["title"]
+		links = linksdb["parse"]["externallinks"]
+	except: return 0,0
 	global geohackRegexp
 	geohack_match = None
 	for item in links:
+		#print "External link " + item
 		geohack_match = geohackRegexp.search(item)
 		if geohack_match <> None:
 			link = geohack_match.group(3)
 			#print geohack_match.group(3)
 			break
 	if geohack_match == None or link == None or link == "":
-		#pywikibot.output("No geohack link found in article")
+		pywikibot.output("No geohack link found in article")
 		return 0,0
 	#valid formats:
 	# D_M_S_N_D_M_S_E
@@ -201,7 +218,7 @@ def parseGeohackLinks(page):
 	# (see https://wiki.toolserver.org/view/GeoHack#params for details)
 	link = link.replace(",", ".") #make sure we're dealing with US-style numbers
 	tokens = link.split('_')
-	#print tokens
+	#print u"Tokens are " + str(tokens)
 	#sanitize non-standard strings
 	l = tokens[:]
 	for token in l:
@@ -279,6 +296,7 @@ def parseGeohackLinks(page):
 	return lat,long
 
 def checkAllCodes(result, title, logMsg = True):
+	trace = Trace(sys._getframe().f_code.co_name)
 	if len(result) == 0:
 		if logMsg:
 			log(u"*''E'': [[:%s]] nu conține niciun cod LMI valid" % title)
@@ -306,12 +324,14 @@ def checkAllCodes(result, title, logMsg = True):
 		return result[0][0]#first regular expression
 
 def commaRepl(matchobj):
+	trace = Trace(sys._getframe().f_code.co_name)
 	if matchobj.group(1) == u"și":
 		return u"și "
 	else:
 		return u", "
 
 def formatAuthor(author):
+	trace = Trace(sys._getframe().f_code.co_name)
 	ref = ""
 	if author.find("<ref") > -1:
 		ref = "".join(re.findall("<ref.*>", author))#TODO: this is oversimplified
@@ -337,6 +357,7 @@ def formatAuthor(author):
 
 #commons-specific
 def processCreatorTemplate(name, conf):
+	trace = Trace(sys._getframe().f_code.co_name)
 	site = pywikibot.Site()
 	creator = pywikibot.Page(site, name)
 	if creator.exists() == False:
@@ -357,6 +378,7 @@ def processCreatorTemplate(name, conf):
 		
 
 def processArticle(text, page, conf):
+	trace = Trace(sys._getframe().f_code.co_name)
 	title = page.title()
 	pywikibot.output(u'Working on "%s"' % title)
 
@@ -387,6 +409,7 @@ def processArticle(text, page, conf):
 		quality = False
 	
 	try:
+		
 		coor = page.coordinates(True)
 		if coor:
 			#print coor
@@ -401,6 +424,7 @@ def processArticle(text, page, conf):
 		print "Exception " + repr(e)
 		lat = long = 0
 
+	#lat = long = 0
 	author = None
 	image = None
 	ran = None
@@ -483,9 +507,11 @@ def processArticle(text, page, conf):
 		fullDict[code] = [dictElem]
 
 def processImagePage(text, page, conf):
+	trace = Trace(sys._getframe().f_code.co_name)
 	pass
 
 def main():
+	trace = Trace(sys._getframe().f_code.co_name)
 	PARSE_QUICK = 0
 	PARSE_NORMAL = 1
 	PARSE_FULL = 2
@@ -493,6 +519,7 @@ def main():
 	textfile = u''
 	parse_type = PARSE_NORMAL
 	preload = True
+	incremental = False
 
 	for arg in pywikibot.handleArgs():
 		if arg.startswith('-lang:'):
@@ -502,6 +529,8 @@ def main():
 			user.family = arg [len('-family:'):]
 		if arg.startswith('-nopreload'):
 			preload = False
+		if arg.startswith('-incremental'):
+			incremental = True
 		if arg.startswith('-parse'):
 			if  arg [len('-parse:'):] == "full":
 				parse_type = PARSE_FULL
@@ -554,6 +583,7 @@ def main():
 		filename = lang + namespaceName + "_pages.json"
 		if parse_type != PARSE_FULL:
 			f = open(filename, "r+")
+			print f
 			jsonFile = json.load(f)
 			f.close();
 			#pre-calculate as much as possible of the information we'll need
@@ -598,10 +628,15 @@ def main():
 				else:
 					fullDict[code] = [content]
 				pywikibot.output(u'Skipping "%s"' % page.title())
-				continue
+				#continue
 			elif page.exists() and not page.isRedirectPage():
+				print page.title()
 				processArticle(page.get(), page, langOpt)
 				count += 1
+				if incremental:
+					f = open(filename, "w+")
+					json.dump(fullDict, f, indent = 2)
+					f.close();
 		print count
 		#print fullDict
 		f = open(filename, "w+")
@@ -613,6 +648,8 @@ def main():
 if __name__ == "__main__":
 	try:
 		#cProfile.run('main()', 'profiling/parseprofile.txt')
+		#import pdb
+		#pdb.set_trace()
 		main()
 	finally:
 		pywikibot.stopme()
