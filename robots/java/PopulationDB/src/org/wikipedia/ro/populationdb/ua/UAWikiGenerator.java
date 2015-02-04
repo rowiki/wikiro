@@ -293,10 +293,13 @@ public class UAWikiGenerator {
 
         generateReferencesSection(currentText);
 
-        if (0 > currentText.indexOf("{{Raionul ") && 0 > currentText.indexOf("{{Orașul regional")) {
-            currentText.append("\n{{");
-            currentText.append(getArticleName(com.getRaion()));
-            currentText.append("}}\n");
+        if (null != com.getRaion()) {
+            if (0 > currentText.indexOf("{{Raionul ") && 0 > currentText.indexOf("{{Orașul regional")) {
+
+                currentText.append("\n{{");
+                currentText.append(getArticleName(com.getRaion()));
+                currentText.append("}}\n");
+            }
         }
         if (0 > currentText.indexOf("{{Comuna ")) {
             currentText.append("\n{{");
@@ -654,8 +657,8 @@ public class UAWikiGenerator {
                         if (existance[i]) {
                             final String articleCandidateTitle = UAUtils.resolveRedirect(ukwiki,
                                 possibleUkrainianArticleNames.get(i));
-                            if (UAUtils.isInAnyCategoryTree(articleCandidateTitle, ukwiki, 2, "Сільські ради України", "Міста України",
-                                    "Селища міського типу України")) {
+                            if (UAUtils.isInAnyCategoryTree(articleCandidateTitle, ukwiki, 2, "Сільські ради України",
+                                "Міста України", "Селища міського типу України")) {
                                 return articleCandidateTitle;
                             }
                         }
