@@ -37,6 +37,10 @@ countries = {
 			u'CodRan': u'CodRan',
 			u'Copyright': u'Copyright',
 			},
+		'pagePrefix': {
+			u'Lista monumentelor istorice din județul',
+			u'Lista monumentelor istorice din București',
+		}
 	},
 	('ro', 'ran') : {
 		'project' : u'wikipedia',
@@ -70,6 +74,10 @@ countries = {
 			u'Stare': u'Stare',
 			u'TipCod': u'TipCod',
 			},
+		'pagePrefix': {
+			u'Lista siturilor arheologice din județul',
+			u'Lista siturilor arheologice din București',
+		}
 	},
 }
 
@@ -136,6 +144,13 @@ def processDatabase(countryconfig, dbname="lmi"):
 	filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen, countryconfig.get('namespaces'))
 	pregenerator = pagegenerators.PreloadingGenerator(filteredGen)
 	for page in pregenerator:
+		prefixes = countryconfig.get('pagePrefix')
+		for prefix in prefixes:
+			if page.title().find(prefix) > -1:
+				break
+		else:
+			pywikibot.output(u"Page " + page.title() + u" is unknown.")
+			continue
 		if page.exists() and not page.isRedirectPage():
 			# Do some checking
 			processText(page.permalink(), countryconfig, page=page)
