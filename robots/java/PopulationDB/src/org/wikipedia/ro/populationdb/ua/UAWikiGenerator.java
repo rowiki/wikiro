@@ -189,8 +189,10 @@ public class UAWikiGenerator {
                         for (final Settlement s : com.getSettlements()) {
                             // generateVillageText(s);
                         }
-                        generateCommuneText(com);
-                        generateCommuneNavBox(com);
+                        if (1 == com.getTown()) {
+                            generateCommuneText(com);
+                            generateCommuneNavBox(com);
+                        }
                     }
                 }
                 generateRaionText(raion);
@@ -569,8 +571,10 @@ public class UAWikiGenerator {
                 }
             } while (!uaTextRead);
 
-            if (!StringUtils.isEmpty(uaText) && StringUtils.contains(uaText, "{{Село")) {
-                final int indexOfIB = uaText.indexOf("{{Село");
+            if (!StringUtils.isEmpty(uaText)
+                && (StringUtils.contains(uaText, "{{Сільська рада") || StringUtils.contains(uaText, "{{Смт") || StringUtils
+                    .contains(uaText, "{{Місто"))) {
+                final int indexOfIB = StringUtils.indexOfAny(uaText, "{{Село", "{{Смт", "{{Місто");
                 final String textFromInfobox = uaText.substring(indexOfIB);
                 final ParameterReader ukIBPR = new ParameterReader(textFromInfobox);
                 ukIBPR.run();
@@ -582,6 +586,7 @@ public class UAWikiGenerator {
                 UAUtils.copyParameterFromTemplate(ukIBPR, sb, "поштовий індекс", "cod_poștal");
                 UAUtils.copyParameterFromTemplate(ukIBPR, sb, "площа", "suprafață_totală_km2");
                 UAUtils.copyParameterFromTemplate(ukIBPR, sb, "населення", "populație");
+                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "зображення", "imagine");
                 if (ukIBParams.containsKey("код КОАТУУ")) {
                     sb.append("|tip_cod_clasificare=").append(
                         "{{Ill|uk|KOATUU|Класифікатор об'єктів адміністративно-територіального устрою України|Cod KOATUU}}");
@@ -649,8 +654,8 @@ public class UAWikiGenerator {
                         if (existance[i]) {
                             final String articleCandidateTitle = UAUtils.resolveRedirect(ukwiki,
                                 possibleUkrainianArticleNames.get(i));
-                            if (UAUtils.isInCategoryTree(articleCandidateTitle, ukwiki, 2, "Сільські ради України")
-                                || UAUtils.isInAnyCategoryTree(articleCandidateTitle, ukwiki, 2, "Міста України")) {
+                            if (UAUtils.isInAnyCategoryTree(articleCandidateTitle, ukwiki, 2, "Сільські ради України", "Міста України",
+                                    "Селища міського типу України")) {
                                 return articleCandidateTitle;
                             }
                         }
@@ -741,7 +746,7 @@ public class UAWikiGenerator {
         navBox.append("]]");
         navBox.append("</noinclude>");
 
-        executor.save("Format: " + articleName, navBox.toString(),
+        executor.save("Format:" + articleName, navBox.toString(),
             "Robot: creare/regenerare casetă de navigare pentru comuna ucraineană " + articleName);
     }
 
@@ -1003,7 +1008,7 @@ public class UAWikiGenerator {
                 }
             } while (!uaTextRead);
 
-            if (!StringUtils.isEmpty(uaText) && StringUtils.contains(uaText, "{{Село")) {
+            if (!StringUtils.isEmpty(uaText) && (StringUtils.contains(uaText, "{{Село"))) {
                 final int indexOfIB = uaText.indexOf("{{Село");
                 final String textFromInfobox = uaText.substring(indexOfIB);
                 final ParameterReader ukIBPR = new ParameterReader(textFromInfobox);
@@ -1016,6 +1021,7 @@ public class UAWikiGenerator {
                 UAUtils.copyParameterFromTemplate(ukIBPR, sb, "поштовий індекс", "cod_poștal");
                 UAUtils.copyParameterFromTemplate(ukIBPR, sb, "площа", "suprafață_totală_km2");
                 UAUtils.copyParameterFromTemplate(ukIBPR, sb, "населення", "populație");
+                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "розташування", "imagine");
                 if (ukIBParams.containsKey("код КОАТУУ")) {
                     sb.append("|tip_cod_clasificare=").append(
                         "{{Ill|uk|KOATUU|Класифікатор об'єктів адміністративно-територіального устрою України|Cod KOATUU}}");
@@ -1572,6 +1578,11 @@ public class UAWikiGenerator {
             ret.add(c.getName() + " (" + r.getOriginalName() + " район)");
             ret.add(c.getOriginalName().replace("сілрада", "сільська рада") + " (" + r.getOriginalName() + " район, "
                 + regName + ")");
+        }
+        if (1 == c.getTown()) {
+            ret.add(c.getName() + " (смт)");
+        } else if (2 == c.getTown()) {
+            ret.add(c.getName() + " (місто)");
         }
         ret.add(c.getOriginalName().replace("сілрада", "сільська рада"));
         ret.add(c.getName());
