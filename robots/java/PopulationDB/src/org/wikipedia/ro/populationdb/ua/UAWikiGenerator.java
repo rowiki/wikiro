@@ -264,7 +264,7 @@ public class UAWikiGenerator {
         }
         currentText.replace(0, ibParaReader.getTemplateLength(), villageIBText);
 
-        int indexOfFirstSection = currentText.indexOf("==", ibParaReader.getTemplateLength());
+        int indexOfFirstSection = currentText.indexOf("==", villageIBText.length());
         if (0 > indexOfFirstSection) {
             indexOfFirstSection = currentText.indexOf("{{Ucraina}}");
         }
