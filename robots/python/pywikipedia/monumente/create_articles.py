@@ -202,7 +202,7 @@ def buildArticle(monument):
                                     .replace(u"Fișier:", u"") \
                                     .replace(u"Image:", u"") \
                                     .replace(u"Imagine:", u""),
-        Localitate2 = articulate(monument[u'Localitate']),
+        Localitate2 = articulate(monument[u'Localitate']).replace(u";", u","),
         Artist = formatCreator(monument),
         Artist2 = artist2,
         Ran = formatRan(monument),
@@ -230,18 +230,18 @@ def addVillageToTitle(title, village):
     if title.find(u" din ") == -1 and (not village or title.find(village) == -1):
 	title = title.strip()
         title = re.sub(ur'Ansamblul (.*)', ur'Ansamblul \1 din %s' % village, title)
-        title = re.sub(ur'Biserica (.*)', ur'Biserica \1 din %s' % village, title)
+        title = re.sub(ur'Biseric(ă|a) (.*)', ur'Biserica \2 din %s' % village, title)
         title = re.sub(ur'Capela (.*)', ur'Capela \1 din %s' % village, title)
         title = re.sub(ur'Basilica (.*)', ur'Basilica \1 din %s' % village, title)
         title = re.sub(ur'Statuia (.*)', ur'Statuia \1 din %s' % village, title)
         title = re.sub(ur'Centrul (.*)', ur'Centrul \1 din %s' % village, title)
         title = re.sub(ur'Bustul (.*)', ur'Bustul \1 din %s' % village, title)
         title = re.sub(ur'Monumentul (.*)', ur'Monumentul \1 din %s' % village, title)
-        title = re.sub(ur'Biserică (.*)', ur'Biserica \1 din %s' % village, title)
         title = re.sub(ur'Palatul (.*)', ur'Palatul \1 din %s' % village, title)
         title = re.sub(ur'Conacul (.*)', ur'Conacul \1 din %s' % village, title)
         title = re.sub(ur'Podul (.*)', ur'Podul \1 din %s' % village, title)
         title = re.sub(ur'Cazinou(.*)', ur'Cazinoul\1 din %s' % village, title)
+        title = re.sub(ur'Hotel(.*)', ur'Hotelul\1 din %s' % village, title)
     return title
 
 def generateList(seq):
@@ -266,7 +266,7 @@ def cleanupTitle(monument):
     if title.find(u"„") > -1:
         ret.add(title[title.find(u"„")+1:title.find(u"”")])
 
-    title2 = title.replace(u'Ansamblul ', u'')
+    title2 = title.replace(u'Ansamblul bisericii', u'Biserica').replace(u'Ansamblul conacului', u'Conacul').replace(u'Ansamblul castelului', u'Castelul').replace(u'Ansamblul cetății', u'Ctatea')
     if title2 != title:
         ret.add(title2)
         ret.add(title2.strip(u"„”"))
