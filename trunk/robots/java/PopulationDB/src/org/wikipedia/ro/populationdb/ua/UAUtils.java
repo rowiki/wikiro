@@ -83,7 +83,7 @@ public class UAUtils {
                 ret.add("Comuna " + roName + ", " + roRaionName);
 
             }
-            if (0 < commune.getTown() || commune.getSettlements().size() < 2) {
+            if (0 < commune.getTown() && !commune.equals(commune.getRaion().getCapital()) || commune.getSettlements().size() < 2) {
                 ret.add(roName + ", raionul " + roRaionName + ", regiunea " + roRegionName);
                 ret.add(roName + ", raionul " + translRaionName + ", regiunea " + roRegionName);
                 ret.add(roName + ", raionul " + roRaionName + ", regiunea " + translRegionName);
