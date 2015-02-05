@@ -15,6 +15,7 @@ identify different improvements and further errors in the monument pages and dat
 import sys, time, warnings, json, string, random, re
 import math, urlparse, os
 import codecs
+import collections
 sys.path.append("..")
 import strainu_functions as strainu
 import csvUtils
@@ -22,6 +23,16 @@ import csvUtils
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot import config as user
+
+class Changes:
+	none	= 0x000
+	article = 0x010
+	coord   = 0x020
+	image   = 0x040
+        creator = 0x080
+	commons = 0x100
+	other	= 0x200
+	all	= 0xFFF
 
 countries = {
 	('ro', 'lmi') : {
@@ -39,31 +50,32 @@ countries = {
 		'table' : u'monuments_ro_(ro)',
 		'truncate' : False, 
 		'primkey' : u'Cod',
-		'fields' : {
-					u'Cod': u'Cod',
-					u'Denumire': u'Denumire',
-					u'Localitate': u'Localitate',
-					u'Adresă': u'Adresă',
-					u'Datare': u'Datare',
-					u'Arhitect': u'Creatori',
-					u'Creatori': u'Creatori',
-					u'Lat': u'Lat',
-					u'Lon': u'Lon',
-					u'Imagine': u'Imagine',
-					u'Commons': u'Commons',
-					u'NotăCod': u'NotăCod',
-					u'FostCod': u'FostCod',
-					u'Cod92': u'Cod92',
-					u'CodRan': u'CodRan',
-					u'Copyright': u'Copyright',
-			 },
+		'fields' : collections.OrderedDict({
+					u'Cod': {'code': Changes.all, }, 
+					u'NotăCod': {'code': Changes.all, },
+					u'FostCod': {'code': Changes.other, },
+					u'CodRan': {'code': Changes.other, },
+					u'Cod92': {'code': Changes.other, },
+					u'Denumire': {'code': Changes.article, },
+					u'Localitate': {'code': Changes.all, },
+					u'Adresă': {'code': Changes.all, },
+					u'Datare': {'code': Changes.all, },
+					u'Creatori': {'code': Changes.creator, },
+					u'Lat': {'code': Changes.coord, },
+					u'Lon': {'code': Changes.coord, },
+					u'Imagine': {'code': Changes.image, },
+					u'Commons': {'code': Changes.commons, },
+					u'Copyright': {'code': Changes.all, },
+			 }),
 	},
 }
 
+        
 _log = "link.err.log"
 _flog = None
-
 _coordVariance = 0.001 #decimal degrees
+_changes = Changes.none
+
 
 def initLog():
 	global _flog, _log;
@@ -79,9 +91,9 @@ def log(string):
 	
 def rebuildTemplate(params):
 	my_template = u"{{" + countries.get(('ro', 'lmi')).get('rowTemplate') + u"\n"
-	for name in [u"Cod", u"NotăCod", u"FostCod", u"CodRan", u"Cod92", u"Denumire", u"Localitate", u"Adresă", u"Datare", u"Creatori", u"Lat", u"Lon", u"Imagine", u"Commons", u"Copyright"]:
+	for name in countries.get(('ro', 'lmi')).get('fields'):
 		if name in params and params[name] <> u"":
-			my_template += u"| " + countries.get(('ro', 'lmi')).get('fields')[name] + u" = " + params[name] + u"\n"
+			my_template += u"| " + name + u" = " + params[name] + u"\n"
 	my_template += u"}}\n"
 	return my_template
 
@@ -107,6 +119,9 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 	:return: The modified text of the page
 	:rtype: string
 	"""
+	if (countries.get(('ro', 'lmi')).get('fields')[field]['code'] & _changes) == Changes.none:
+		pywikibot.output("Skipping %s for %s" % (field, code))
+		return
 	pywikibot.output("Uploading %s for %s; value \"%s\"" % (field, code, newvalue))
 	site = pywikibot.Site()
 	title = urlparse.parse_qs(urlparse.urlparse(str(url)).query)['title'][0].decode('utf8')
@@ -340,12 +355,26 @@ def checkNewMonuments(other_data, db):
 def main():
 	otherFile = "other_monument_data.csv"
 	addRan = False
+	global _changes
 	
 	for arg in pywikibot.handleArgs():
 		if arg.startswith('-import:'):
 			otherFile = arg [len('-import:'):]
 		if arg.startswith('-addRan'):
 			addRan = True
+		if arg.startswith('-updateArticle'):
+			_changes = _changes | Changes.article
+		if arg.startswith('-updateImage'):
+			_changes = _changes | Changes.image
+		if arg.startswith('-updateCoord'):
+			_changes = _changes | Changes.coord
+		if arg.startswith('-updateCreator'):
+			_changes = _changes | Changes.creator
+		if arg.startswith('-updateCommons'):
+			_changes = _changes | Changes.commons
+
+	if _changes == Changes.none:
+		_changes = Changes.all
 			
 	db =				readJson("lmi_db.json", "database")
 	pages_ro =			readJson("ro_pages.json", "ro.wp pages")
@@ -404,7 +433,7 @@ def main():
 					if "lmi92" in pages_commons[code]:
 						lmi92 = pages_commons[code]["lmi92"]
 				elif monument["Imagine"].strip() == "" or \
-						monument["Arhitect"].strip() == "" or \
+						monument["Creatori"].strip() == "" or \
 						monument["Cod92"].strip() == "": 
 					#multiple images available, we need to parse them
 					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
@@ -475,27 +504,27 @@ def main():
 			author = article["author"].strip()
 			if author == None or author == "":
 				pywikibot.output("Wrong author link: \"%s\"@%s" % (article["author"], article["name"]))
-			elif monument["Arhitect"].strip() == "":
+			elif monument["Creatori"].strip() == "":
 				pywikibot.output(author)
 				articleText = updateTableData(monument["source"], code, "Creatori", author, text=articleText)
 			else:
 				a1 = author.strip()
-				a2 = monument["Arhitect"].strip()
+				a2 = monument["Creatori"].strip()
 				if a1 <> a2 and strainu.extractLink(a1) <> strainu.extractLink(a2):
 					articleText = updateTableData(monument["source"], code, "Creatori", a1, text=articleText)
-				#	log(u"*''W'': ''[%s]'' Câmpul Arhitect este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
+				#	log(u"*''W'': ''[%s]'' Câmpul Creatori este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
 
 		#add the author(s) extracted from author pages
 		elif code in authors_ro:
 			print "autor2"
-			authors = monument["Arhitect"]
+			authors = monument["Creatori"]
 			for author in authors_ro[code]:
 				if authors.find(author) == -1: #we don't already know the author
 					if authors <> "":
 						authors = author + ", " + authors
 					else:
 						authors = author
-			a2 = monument["Arhitect"].strip()
+			a2 = monument["Creatori"].strip()
 			if authors <> a2  and strainu.extractLink(authors) <> strainu.extractLink(a2): # if something changed, update the text
 				pywikibot.output(authors)
 				articleText = updateTableData(monument["source"], code, "Creatori", authors, text=articleText)
@@ -504,13 +533,13 @@ def main():
 
 		elif pic_author <> None and pic_author.strip() <> "":
 			print "autor3"
-			if strainu.stripLink(pic_author) <> strainu.stripLink(monument["Arhitect"]).strip():
+			if strainu.stripLink(pic_author) <> strainu.stripLink(monument["Creatori"]).strip():
 				articleText = updateTableData(monument["source"], code, "Creatori", pic_author, text=articleText)
 
 		#try to find the author in external data
 		elif code in other_data and "Creatori" in other_data[code]:
 			print "autor4"
-			authors = monument["Arhitect"].strip()
+			authors = monument["Creatori"].strip()
 			author = other_data[code]["Creatori"]
 			if authors <> u"" and authors.find(author) == -1: #we don't already know the author
 				authors = author + ", " + authors
@@ -519,7 +548,7 @@ def main():
 			else:
 				log("* [Listă] ''W'': ''[%s]'' Lista are creatorii %s, iar în fișierul importat apare %s" % \
 						code, authors, author)
-			if authors <> monument["Arhitect"]: # if something changed, update the text
+			if authors <> monument["Creatori"]: # if something changed, update the text
 				pywikibot.output(authors)
 				articleText = updateTableData(monument["source"], code, "Creatori", authors, text=articleText)
 			else:
