@@ -72,7 +72,7 @@ def articulate(text):
                 .replace(u"Arhitect", u"arhitectului")
 
 def extractCreator(monument):
-    text = monument[u"Arhitect"]
+    text = monument[u"Creatori"]
     if text == u"":
         return u""
     creators = text.split(u',')
