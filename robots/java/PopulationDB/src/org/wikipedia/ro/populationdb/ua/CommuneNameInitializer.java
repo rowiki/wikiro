@@ -29,8 +29,8 @@ public class CommuneNameInitializer extends LazyInitializer<String> {
         final int nameOccurencesInRegion = hib.countCommunesInRegionByRomanianOrTransliteratedName(
             StringUtils.defaultIfBlank(commune.getTransliteratedName(), commune.getRomanianName()), commune.computeRegion());
 
-        final List<String> candidateNames = UAUtils.getPossibleCommuneNames(commune, wiki, 1 == nameOccurences,
-            1 == nameOccurencesInRegion);
+        final List<String> candidateNames = UAUtils.getPossibleCommuneNames(commune, wiki, 1 >= nameOccurences,
+            1 >= nameOccurencesInRegion);
         boolean[] existanceArray = null;
         try {
             existanceArray = wiki.exists(candidateNames.toArray(new String[candidateNames.size()]));
@@ -40,7 +40,7 @@ public class CommuneNameInitializer extends LazyInitializer<String> {
         for (int i = 0; i < candidateNames.size(); i++) {
             if (existanceArray[i]) {
                 final String actualCandidateTitle = UAUtils.resolveRedirect(wiki, candidateNames.get(i));
-                if (UAUtils.isInAnyCategoryTree(actualCandidateTitle, wiki, 3, "Regiuni ale Ucrainei", "Raioanele Ucrainei")) {
+                if (UAUtils.isInAnyCategoryTree(actualCandidateTitle, wiki, 3, "Regiuni ale Ucrainei", "Raioanele Ucrainei", "Orașe în Ucraina", "Localități în Ucraina")) {
                     return actualCandidateTitle;
                 }
             }
