@@ -199,14 +199,14 @@ public class UAWikiGenerator {
                     }
                 }
                 if (!raion.isMiskrada()) {
-                    // generateRaionText(raion);
+                    generateRaionText(raion);
                 }
                 // generateRaionNavBox(raion);
                 // generateRaionCategories(raion);
             }
 
             for (final Commune com : eachReg.getCities()) {
-                generateCommuneText(com);
+                // generateCommuneText(com);
                 // generateCommuneNavBox(com);
                 // generateCityCategories(com);
             }
@@ -608,11 +608,6 @@ public class UAWikiGenerator {
             currentText.append(getArticleName(raion.getRegion()));
             currentText.append("}}\n");
         }
-        if (0 > currentText.indexOf("[[Categorie:")) {
-            currentText.append("[[Categorie:Raioane în ").append("regiunea ")
-                .append(obtainActualRomanianName(raion.getRegion())).append('|').append(obtainActualRomanianName(raion))
-                .append("]]\n");
-        }
 
         String raionKey = generateCategoryKey(raionRoName);
         String regionRoName = obtainActualRomanianName(raion.computeRegion());
@@ -621,7 +616,7 @@ public class UAWikiGenerator {
         categories.append(regionRoName);
         categories.append('|').append(raionKey);
         categories.append("]]\n");
-        categories.append("[[Categorie:Comunele Ucrainei");
+        categories.append("[[Categorie:Raioanele Ucrainei");
         categories.append('|').append(raionKey).append(", ").append(generateCategoryKey(regionRoName));
         categories.append("]]\n");
 
