@@ -192,12 +192,10 @@ public class UAWikiGenerator {
                 for (final Commune com : raion.getCommunes()) {
                     if (1 < com.getSettlements().size()) {
                         for (final Settlement s : com.getSettlements()) {
-                            //generateVillageText(s);
+                            // generateVillageText(s);
                         }
-                        if (1 == com.getTown()) {
-                        generateCommuneText(com);
-                        generateCommuneNavBox(com);
-                        }
+                        // generateCommuneText(com);
+                        // generateCommuneNavBox(com);
                     }
                 }
                 if (!raion.isMiskrada()) {
@@ -208,7 +206,7 @@ public class UAWikiGenerator {
             }
 
             for (final Commune com : eachReg.getCities()) {
-                // generateCommuneText(com);
+                generateCommuneText(com);
                 // generateCommuneNavBox(com);
                 // generateCityCategories(com);
             }
@@ -291,11 +289,11 @@ public class UAWikiGenerator {
     }
 
     private String generateCategoryKey(String bruteKey) {
-        String regiuneCategoryKey = replaceEach(bruteKey, new String[] {"â"}, new String[] {"ăâ"});
-        regiuneCategoryKey = replaceEach(regiuneCategoryKey, new String[] {"ă"}, new String[] {"aă"});
-        regiuneCategoryKey = replaceEach(regiuneCategoryKey, new String[] {"î"}, new String[] {"iî"});
-        regiuneCategoryKey = replaceEach(regiuneCategoryKey, new String[] {"ș"}, new String[] {"sș"});
-        regiuneCategoryKey = replaceEach(regiuneCategoryKey, new String[] {"ț"}, new String[] {"tț"});
+        String regiuneCategoryKey = replaceEach(bruteKey, new String[] { "â" }, new String[] { "ăâ" });
+        regiuneCategoryKey = replaceEach(regiuneCategoryKey, new String[] { "ă" }, new String[] { "aă" });
+        regiuneCategoryKey = replaceEach(regiuneCategoryKey, new String[] { "î" }, new String[] { "iî" });
+        regiuneCategoryKey = replaceEach(regiuneCategoryKey, new String[] { "ș" }, new String[] { "sș" });
+        regiuneCategoryKey = replaceEach(regiuneCategoryKey, new String[] { "ț" }, new String[] { "tț" });
         return regiuneCategoryKey;
     }
 
@@ -880,7 +878,8 @@ public class UAWikiGenerator {
         }
 
         String communeKey = generateCategoryKey(communeRoName);
-        String communeRaionKey = communeKey + ", " + generateCategoryKey(obtainActualRomanianName(com.getRaion()));
+        String communeRaionKey = communeKey
+            + (null != com.getRaion() ? (", " + generateCategoryKey(obtainActualRomanianName(com.getRaion()))) : "");
         String regionRoName = obtainActualRomanianName(com.computeRegion());
 
         StringBuilder categories = new StringBuilder();
