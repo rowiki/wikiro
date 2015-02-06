@@ -194,7 +194,7 @@ public class UAWikiGenerator {
                         for (final Settlement s : com.getSettlements()) {
                             //generateVillageText(s);
                         }
-                        if (2 == com.getTown() && null != com.getRaion()) {
+                        if (1 == com.getTown()) {
                         generateCommuneText(com);
                         generateCommuneNavBox(com);
                         }
