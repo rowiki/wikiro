@@ -194,7 +194,7 @@ public class UAWikiGenerator {
                         for (final Settlement s : com.getSettlements()) {
                             //generateVillageText(s);
                         }
-                        if (1 == com.getTown()) {
+                        if (2 == com.getTown() && null != com.getRaion()) {
                         generateCommuneText(com);
                         generateCommuneNavBox(com);
                         }
@@ -872,11 +872,11 @@ public class UAWikiGenerator {
             nationalCategoryName = "Așezări de tip urban în Ucraina";
             unarticulatedTypeName = "Așezări de tip urban";
         } else if (com.getRaion() == null) {
-            nationalCategoryName = "Orașe raionale în Ucraina";
-            unarticulatedTypeName = "Orașe raionale";
-        } else {
             nationalCategoryName = "Orașe regionale în Ucraina";
             unarticulatedTypeName = "Orașe regionale";
+        } else {
+            nationalCategoryName = "Orașe raionale în Ucraina";
+            unarticulatedTypeName = "Orașe raionale";
         }
 
         String communeKey = generateCategoryKey(communeRoName);
