@@ -6,7 +6,7 @@ import static org.apache.commons.lang3.StringUtils.contains;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.indexOf;
+import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -192,26 +192,29 @@ public class UAWikiGenerator {
                 for (final Commune com : raion.getCommunes()) {
                     if (1 < com.getSettlements().size()) {
                         for (final Settlement s : com.getSettlements()) {
-                            generateVillageText(s);
+                            //generateVillageText(s);
                         }
+                        if (1 == com.getTown()) {
                         generateCommuneText(com);
                         generateCommuneNavBox(com);
+                        }
                     }
                 }
                 if (!raion.isMiskrada()) {
-                    generateRaionText(raion);
+                    // generateRaionText(raion);
                 }
-                generateRaionNavBox(raion);
-                generateRaionCategories(raion);
+                // generateRaionNavBox(raion);
+                // generateRaionCategories(raion);
             }
 
             for (final Commune com : eachReg.getCities()) {
-                generateCommuneText(com);
-                generateCommuneNavBox(com);
+                // generateCommuneText(com);
+                // generateCommuneNavBox(com);
+                // generateCityCategories(com);
             }
-            generateRegionText(eachReg);
-            generateRegionNavBox(eachReg);
-            generateRegionCategories(eachReg);
+            // generateRegionText(eachReg);
+            // generateRegionNavBox(eachReg);
+            // generateRegionCategories(eachReg);
 
         }
     }
@@ -233,7 +236,7 @@ public class UAWikiGenerator {
         categories.put("Comune în regiunea " + regiuneRoName, mainCommunesRegionCategory.toString());
 
         StringBuilder byRaionCommunesRegionCategory = new StringBuilder();
-        byRaionCommunesRegionCategory.append("[[Comune în regiunea " + regiuneRoName);
+        byRaionCommunesRegionCategory.append("[[Categorie:Comune în regiunea " + regiuneRoName);
         byRaionCommunesRegionCategory.append("| ]]");
         categories.put("Comune în regiunea " + regiuneRoName + " după raion", byRaionCommunesRegionCategory.toString());
 
@@ -243,17 +246,16 @@ public class UAWikiGenerator {
         smtsRegionCategory.append("\n[[Categorie:Așezări de tip urban în Ucraina după regiune");
         smtsRegionCategory.append('|').append(regiuneCategoryKey);
         smtsRegionCategory.append("]]");
-        
+
         smtsRegionCategory.append("\n[[Categorie:Regiunea " + regiuneRoName);
         smtsRegionCategory.append("]]");
-        categories
-            .put("Așezări de tip urban în regiunea " + regiuneRoName, smtsRegionCategory.toString());
-        
+        categories.put("Așezări de tip urban în regiunea " + regiuneRoName, smtsRegionCategory.toString());
+
         StringBuilder byRaionSmtsRegionCategory = new StringBuilder();
-        byRaionSmtsRegionCategory.append("[[Așezări de tip urban în regiunea " + regiuneRoName);
+        byRaionSmtsRegionCategory.append("[[Categorie:Așezări de tip urban în regiunea " + regiuneRoName);
         byRaionSmtsRegionCategory.append("| ]]");
-        categories.put("Așezări de tip urban în regiunea " + regiuneRoName + " după raion", byRaionSmtsRegionCategory.toString());
-        
+        categories.put("Așezări de tip urban în regiunea " + regiuneRoName + " după raion",
+            byRaionSmtsRegionCategory.toString());
 
         StringBuilder mainRaionCityRegionCategory = new StringBuilder();
         mainRaionCityRegionCategory.append("[[Categorie:Orașe raionale în Ucraina după regiune");
@@ -263,15 +265,24 @@ public class UAWikiGenerator {
         mainRaionCityRegionCategory.append("]]");
         categories.put("Orașe raionale în regiunea " + regiuneRoName, mainRaionCityRegionCategory.toString());
 
+        StringBuilder byRaionCityRegionCategory = new StringBuilder();
+        byRaionCityRegionCategory.append("[[Categorie:Orașe raionale în regiunea " + regiuneRoName);
+        byRaionCityRegionCategory.append("| ]]");
+        categories.put("Orașe raionale în regiunea " + regiuneRoName + " după raion", byRaionCityRegionCategory.toString());
+
         StringBuilder villageRegionCategory = new StringBuilder();
         villageRegionCategory.append("[[Categorie:Sate în Ucraina după regiune");
         villageRegionCategory.append('|').append(regiuneCategoryKey);
         villageRegionCategory.append("]]");
         villageRegionCategory.append(regiuneRoName).append(" după raion").append("]]");
-        villageRegionCategory.append("\n[[Categorie:Sate în Ucraina după raion]]");
         villageRegionCategory.append("\n[[Categorie:Regiunea " + regiuneRoName);
         villageRegionCategory.append("]]");
         categories.put("Sate în regiunea " + regiuneRoName, villageRegionCategory.toString());
+
+        StringBuilder byRaionVillageRegionCategory = new StringBuilder();
+        byRaionVillageRegionCategory.append("[[Categorie:Sate în regiunea " + regiuneRoName);
+        byRaionVillageRegionCategory.append("| ]]");
+        categories.put("Sate în regiunea " + regiuneRoName + " după raion", byRaionVillageRegionCategory.toString());
 
         for (Entry<String, String> eachCatToCreate : categories.entrySet()) {
             executor.save("Categorie:" + eachCatToCreate.getKey(), eachCatToCreate.getValue(),
@@ -279,23 +290,27 @@ public class UAWikiGenerator {
         }
     }
 
-    private String generateCategoryKey(String regiuneRoName) {
-        String regiuneCategoryKey = replace(regiuneRoName, "â", "ăâ");
-        regiuneCategoryKey = replace(regiuneRoName, "ă", "aă");
-        regiuneCategoryKey = replace(regiuneRoName, "î", "iî");
-        regiuneCategoryKey = replace(regiuneRoName, "ș", "sș");
-        regiuneCategoryKey = replace(regiuneRoName, "ț", "tț");
+    private String generateCategoryKey(String bruteKey) {
+        String regiuneCategoryKey = replaceEach(bruteKey, new String[] {"â"}, new String[] {"ăâ"});
+        regiuneCategoryKey = replaceEach(regiuneCategoryKey, new String[] {"ă"}, new String[] {"aă"});
+        regiuneCategoryKey = replaceEach(regiuneCategoryKey, new String[] {"î"}, new String[] {"iî"});
+        regiuneCategoryKey = replaceEach(regiuneCategoryKey, new String[] {"ș"}, new String[] {"sș"});
+        regiuneCategoryKey = replaceEach(regiuneCategoryKey, new String[] {"ț"}, new String[] {"tț"});
         return regiuneCategoryKey;
     }
 
     private void generateRaionCategories(final Raion raion) throws Exception {
+        if (raion.isMiskrada()) {
+            return;
+        }
         String raionRoName = obtainActualRomanianName(raion);
         String regiuneRoName = obtainActualRomanianName(raion.computeRegion());
         String raionCategoryKey = generateCategoryKey(raionRoName);
         String regiuneCategoryKey = generateCategoryKey(regiuneRoName);
         Map<String, String> categories = new HashMap<String, String>();
 
-        StringBuilder mainRaionCategory = new StringBuilder("[[Categorie:Raioane în regiunea ");
+        StringBuilder mainRaionCategory = new StringBuilder();
+        mainRaionCategory.append("[[Categorie:Raioane în regiunea ");
         mainRaionCategory.append(regiuneRoName);
         mainRaionCategory.append('|').append(raionCategoryKey);
         mainRaionCategory.append("]]");
@@ -344,7 +359,7 @@ public class UAWikiGenerator {
         villageRaionCategory.append("\n[[Categorie:Sate în Ucraina după raion");
         villageRaionCategory.append('|').append(raionCategoryKey).append(", ").append(regiuneCategoryKey);
         villageRaionCategory.append("]]");
-        
+
         villageRaionCategory.append("\n[[Categorie:Raionul " + raionRoName + ", " + regiuneRoName);
         categories.put("Sate în raionul " + raionRoName + ", " + regiuneRoName, villageRaionCategory.toString());
 
@@ -352,6 +367,58 @@ public class UAWikiGenerator {
             if (!rowiki.exists(new String[] { eachCatToCreate.getKey() })[0]) {
                 executor.save("Categorie:" + eachCatToCreate.getKey(), eachCatToCreate.getValue(),
                     "Robot - creare categorie pentru raionul " + raionRoName);
+            }
+        }
+    }
+
+    private void generateCityCategories(final Commune com) throws Exception {
+        if (2 > com.getTown()) {
+            return;
+        }
+        String cityRoName = obtainActualRomanianName(com);
+        String regiuneRoName = obtainActualRomanianName(com.computeRegion());
+        String cityCategoryKey = generateCategoryKey(cityRoName);
+        String regiuneCategoryKey = generateCategoryKey(regiuneRoName);
+
+        int count = hib.countCommunesByRomanianOrTransliteratedName(cityRoName);
+        String disambiggedName = cityRoName + (1 < count ? ", " + regiuneRoName : "");
+        Map<String, String> categories = new HashMap<String, String>();
+
+        StringBuilder mainRaionCategory = new StringBuilder();
+        mainRaionCategory.append("[[Categorie:Orașe regionale în regiunea ");
+        mainRaionCategory.append(regiuneRoName);
+        mainRaionCategory.append('|').append(cityCategoryKey);
+        mainRaionCategory.append("]]");
+        mainRaionCategory.append("\n[[Categorie:Orașe regionale în Ucraina");
+        mainRaionCategory.append('|');
+        mainRaionCategory.append(cityCategoryKey).append(", ").append(regiuneCategoryKey);
+        mainRaionCategory.append("]]");
+        categories.put(disambiggedName, mainRaionCategory.toString());
+
+        StringBuilder smtsRaionCategory = new StringBuilder("[[Categorie:Așezări de tip urban în regiunea ");
+        smtsRaionCategory.append(regiuneRoName).append(" după raion");
+        smtsRaionCategory.append('|').append(cityCategoryKey);
+        smtsRaionCategory.append("]]");
+        smtsRaionCategory.append("\n[[Categorie:Așezări de tip urban în Ucraina după raion");
+        smtsRaionCategory.append('|').append(cityCategoryKey).append(", ").append(regiuneCategoryKey);
+        smtsRaionCategory.append("]]");
+        smtsRaionCategory.append("\n[[Categorie:" + disambiggedName);
+        categories.put("Așezări de tip urban în orașul regional " + disambiggedName, smtsRaionCategory.toString());
+
+        StringBuilder villageRaionCategory = new StringBuilder("[[Categorie:Sate în regiunea ");
+        villageRaionCategory.append(regiuneRoName).append(" după raion");
+        villageRaionCategory.append('|').append(cityCategoryKey);
+        villageRaionCategory.append("]]");
+        villageRaionCategory.append("\n[[Categorie:Sate în Ucraina după raion");
+        villageRaionCategory.append('|').append(cityCategoryKey).append(", ").append(regiuneCategoryKey);
+        villageRaionCategory.append("]]");
+        villageRaionCategory.append("\n[[Categorie:" + disambiggedName);
+        categories.put("Sate în orașul regional " + disambiggedName, villageRaionCategory.toString());
+
+        for (Entry<String, String> eachCatToCreate : categories.entrySet()) {
+            if (!rowiki.exists(new String[] { eachCatToCreate.getKey() })[0]) {
+                executor.save("Categorie:" + eachCatToCreate.getKey(), eachCatToCreate.getValue(),
+                    "Robot - creare categorie pentru raionul " + cityRoName);
             }
         }
     }
@@ -463,10 +530,13 @@ public class UAWikiGenerator {
     }
 
     private void generateRaionText(final Raion raion) throws Exception {
+        if (raion.isMiskrada()) {
+            return;
+        }
         final String raionRoName = defaultIfBlank(raion.getRomanianName(), raion.getTransliteratedName());
         System.out.println("------ generating text for raion " + raion.getName() + "/" + raionRoName);
         final int countRaionsWithThisName = hib.countRaionsByRomanianOrTransliteratedName(raionRoName);
-        final List<String> possibleRaionNames = UAUtils.getPossibleRaionNames(raion, rowiki, 1 == countRaionsWithThisName);
+        final List<String> possibleRaionNames = UAUtils.getPossibleRaionNames(raion, rowiki, 2 > countRaionsWithThisName);
 
         String actualTitle = null;
         final StringBuilder currentText = new StringBuilder();
@@ -544,6 +614,23 @@ public class UAWikiGenerator {
             currentText.append("[[Categorie:Raioane în ").append("regiunea ")
                 .append(obtainActualRomanianName(raion.getRegion())).append('|').append(obtainActualRomanianName(raion))
                 .append("]]\n");
+        }
+
+        String raionKey = generateCategoryKey(raionRoName);
+        String regionRoName = obtainActualRomanianName(raion.computeRegion());
+        StringBuilder categories = new StringBuilder();
+        categories.append("[[Categorie:Raioane în regiunea ");
+        categories.append(regionRoName);
+        categories.append('|').append(raionKey);
+        categories.append("]]\n");
+        categories.append("[[Categorie:Comunele Ucrainei");
+        categories.append('|').append(raionKey).append(", ").append(generateCategoryKey(regionRoName));
+        categories.append("]]\n");
+
+        if (0 > currentText.indexOf("[[Categorie:")) {
+            currentText.append(categories);
+        } else {
+            currentText.insert(currentText.indexOf("[[Categorie:"), categories);
         }
 
         executor.save(actualTitle, currentText.toString(), "Robot - creare/completare articol despre raionul ucrainean "
@@ -699,7 +786,7 @@ public class UAWikiGenerator {
         final int countCommunesWithThisNameInRegion = hib.countCommunesInRegionByRomanianOrTransliteratedName(communeRoName,
             com.computeRegion());
         final List<String> possibleCommuneNames = UAUtils.getPossibleCommuneNames(com, rowiki,
-            1 == countCommunesWithThisName, 1 == countCommunesWithThisNameInRegion);
+            2 > countCommunesWithThisName, 2 > countCommunesWithThisNameInRegion);
 
         String actualTitle = null;
         final StringBuilder currentText = new StringBuilder();
@@ -775,10 +862,47 @@ public class UAWikiGenerator {
             currentText.append(getArticleName(com));
             currentText.append("}}\n");
         }
-        if (0 > currentText.indexOf("[[Categorie:")) {
-            currentText.append("[[Categorie:Comune în ")
+
+        String nationalCategoryName = null;
+        String unarticulatedTypeName = null;
+        if (com.getTown() == 0) {
+            nationalCategoryName = "Comunele Ucrainei";
+            unarticulatedTypeName = "Comune";
+        } else if (com.getTown() == 1) {
+            nationalCategoryName = "Așezări de tip urban în Ucraina";
+            unarticulatedTypeName = "Așezări de tip urban";
+        } else if (com.getRaion() == null) {
+            nationalCategoryName = "Orașe raionale în Ucraina";
+            unarticulatedTypeName = "Orașe raionale";
+        } else {
+            nationalCategoryName = "Orașe regionale în Ucraina";
+            unarticulatedTypeName = "Orașe regionale";
+        }
+
+        String communeKey = generateCategoryKey(communeRoName);
+        String communeRaionKey = communeKey + ", " + generateCategoryKey(obtainActualRomanianName(com.getRaion()));
+        String regionRoName = obtainActualRomanianName(com.computeRegion());
+
+        StringBuilder categories = new StringBuilder();
+        if (null != com.getRaion()) {
+            categories.append("[[Categorie:").append(unarticulatedTypeName).append(" în ")
                 .append(com.getRaion().isMiskrada() ? "orașul regional " : "raionul ")
-                .append(obtainActualRomanianName(com.getRaion())).append("]]\n");
+                .append(obtainActualRomanianName(com.getRaion()));
+            categories.append('|').append(communeKey);
+            categories.append("]]\n");
+        }
+        categories.append("[[Categorie:").append(unarticulatedTypeName).append(" în regiunea ");
+        categories.append(regionRoName);
+        categories.append('|').append(communeRaionKey);
+        categories.append("]]\n");
+        categories.append("[[Categorie:").append(nationalCategoryName);
+        categories.append('|').append(communeRaionKey).append(", ").append(generateCategoryKey(regionRoName));
+        categories.append("]]\n");
+
+        if (0 > currentText.indexOf("[[Categorie:")) {
+            currentText.append(categories);
+        } else {
+            currentText.insert(currentText.indexOf("[[Categorie:"), categories);
         }
 
         executor.save(actualTitle, currentText.toString(), "Robot - creare/completare articol despre comuna ucraineană "
@@ -832,6 +956,15 @@ public class UAWikiGenerator {
             raionPart.append("|raionul ");
             raionPart.append(obtainActualRomanianName(raion));
             raionPart.append("]], ");
+        } else if (null != raion) {
+            raionPart.append("orașul regional [[");
+            String regTownActualName = obtainActualRomanianName(raion.getCapital());
+            String regTownArticleName = getArticleName(raion.getCapital());
+            raionPart.append(regTownArticleName);
+            if (!StringUtils.equals(regTownActualName, regTownArticleName)) {
+                raionPart.append('|').append(regTownActualName);
+            }
+            raionPart.append("]], ");
         }
         introTmpl.add("raion", raionPart.toString());
 
@@ -870,7 +1003,6 @@ public class UAWikiGenerator {
         } else {
             introTmpl.add("sate", "nu cuprinde și alte sate");
         }
-        List<Raion> outerRaions = hib.findOuterRaionsForCity(com);
         return introTmpl.render();
     }
 
@@ -997,6 +1129,7 @@ public class UAWikiGenerator {
         final String villageRoName = defaultIfBlank(com.getRomanianName(), com.getTransliteratedName());
         final StringBuilder sb = new StringBuilder("{{Infocaseta Așezare");
         sb.append("\n|tip_asezare = ");
+        Raion raion = com.getRaion();
         switch (com.getTown()) {
         case 0:
             sb.append("Comună");
@@ -1005,13 +1138,13 @@ public class UAWikiGenerator {
             sb.append("Așezare de tip urban");
             break;
         case 2:
-            sb.append(null != com.getRaion() ? "Oraș" : "Oraș regional");
+            sb.append(null != raion ? "Oraș" : "Oraș regional");
             break;
         }
         sb.append("\n|nume=").append(villageRoName);
         sb.append("\n|nume_nativ=").append(com.getName());
-        if (null != com.getRaion()) {
-            obtainActualRomanianName(com.getRaion());
+        if (null != raion) {
+            obtainActualRomanianName(raion);
         }
         final Region region = com.computeRegion();
         final String regionRoName = obtainActualRomanianName(region);
@@ -1022,19 +1155,23 @@ public class UAWikiGenerator {
         sb.append("\n|nume_subdiviziune1=[[");
         sb.append(getArticleName(region));
         sb.append("|").append(regionRoName).append("]]");
-        if (null != com.getRaion()) {
-            if (com.getRaion().isMiskrada()) {
+        if (null != raion) {
+            if (raion.isMiskrada()) {
                 sb.append("\n|tip_subdiviziune2=Oraș regional");
                 sb.append("\n|nume_subdiviziune2=[[");
-                sb.append(getArticleName(com.getRaion().getCapital()));
-                sb.append('|');
-                sb.append(obtainActualRomanianName(com.getRaion().getCapital()));
+                String regTownArticleName = getArticleName(raion.getCapital());
+                sb.append(regTownArticleName);
+                String regTownActualName = obtainActualRomanianName(raion.getCapital());
+                if (!StringUtils.equals(regTownArticleName, regTownActualName)) {
+                    sb.append('|');
+                    sb.append(regTownActualName);
+                }
             } else {
                 sb.append("\n|tip_subdiviziune2=[[Raioanele Ucrainei|Raion]]");
                 sb.append("\n|nume_subdiviziune2=[[");
-                sb.append(getArticleName(com.getRaion()));
+                sb.append(getArticleName(raion));
                 sb.append('|');
-                sb.append(obtainActualRomanianName(com.getRaion()));
+                sb.append(obtainActualRomanianName(raion));
             }
             sb.append("]]");
         }
@@ -1276,19 +1413,20 @@ public class UAWikiGenerator {
 
     private void generateVillageText(final Settlement s) throws Exception {
         final String villageRoName = defaultIfBlank(s.getRomanianName(), s.getTransliteratedName());
-        if (s.getCommune().getSettlements().size() <= 1) {
+        if (2 > s.getCommune().getSettlements().size()) {
             return;
         }
         final int countVillagesWithThisName = hib.countSettlementsByRomanianOrTransliteratedName(villageRoName);
         int countVillagesWithThisNameInRaion = 1;
-        if (null != s.getCommune().getRaion()) {
-            countVillagesWithThisNameInRaion = hib.countSettlementsInRaionByRomanianOrTransliteratedName(villageRoName, s
-                .getCommune().getRaion());
+        Raion raion = s.getCommune().getRaion();
+        if (null != raion) {
+            countVillagesWithThisNameInRaion = hib.countSettlementsInRaionByRomanianOrTransliteratedName(villageRoName,
+                raion);
         }
         final int countVillagesWithThisNameInRegion = hib.countSettlementsInRegionByRomanianOrTransliteratedName(
             villageRoName, s.computeRegion());
         final List<String> possibleSettlementNames = UAUtils.getPossibleSettlementNames(s, rowiki,
-            1 == countVillagesWithThisName, 1 == countVillagesWithThisNameInRegion, 1 == countVillagesWithThisNameInRaion);
+            2 > countVillagesWithThisName, 2 > countVillagesWithThisNameInRegion, 2 > countVillagesWithThisNameInRaion);
 
         String actualTitle = null;
         final StringBuilder currentText = new StringBuilder();
@@ -1356,10 +1494,29 @@ public class UAWikiGenerator {
             currentText.append(roArticleNames.get(s.getCommune()).get());
             currentText.append("}}\n");
         }
+
+        String communeRoName = obtainActualRomanianName(s.getCommune());
+        String villageKey = generateCategoryKey(villageRoName + ", " + communeRoName);
+        String communeRaionKey = villageKey + ", " + generateCategoryKey(obtainActualRomanianName(raion));
+        String regionRoName = obtainActualRomanianName(s.computeRegion());
+
+        StringBuilder categories = new StringBuilder();
+        categories.append("[[Categorie:Sate în ").append(raion.isMiskrada() ? "orașul regional " : "raionul ")
+            .append(obtainActualRomanianName(raion));
+        categories.append('|').append(villageKey);
+        categories.append("]]\n");
+        categories.append("[[Categorie:Sate în regiunea ");
+        categories.append(regionRoName);
+        categories.append('|').append(communeRaionKey);
+        categories.append("]]\n");
+        categories.append("[[Categorie:Sate în Ucraina");
+        categories.append('|').append(communeRaionKey).append(", ").append(generateCategoryKey(regionRoName));
+        categories.append("]]\n");
+
         if (0 > currentText.indexOf("[[Categorie:")) {
-            currentText.append("[[Categorie:Sate în ")
-                .append(s.getCommune().getRaion().isMiskrada() ? "orașul regional " : "raionul ")
-                .append(obtainActualRomanianName(s.getCommune().getRaion())).append("]]\n");
+            currentText.append(categories);
+        } else {
+            currentText.insert(currentText.indexOf("[[Categorie:"), categories);
         }
 
         executor.save(actualTitle, currentText.toString(), "Robot - creare/completare articol despre satul ucrainean "

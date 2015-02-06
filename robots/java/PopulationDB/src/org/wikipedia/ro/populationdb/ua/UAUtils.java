@@ -45,7 +45,7 @@ public class UAUtils {
 
         final Set<String> ret = new LinkedHashSet<String>();
 
-        if (singleInRegion) {
+        if (null == commune.getRaion() || singleInRegion) {
             if (0 == commune.getTown()) {
                 ret.add("Comuna " + roName + ", " + roRegionName);
                 ret.add("Comuna " + roName + ", " + translRegionName);
