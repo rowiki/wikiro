@@ -192,27 +192,27 @@ public class UAWikiGenerator {
                 for (final Commune com : raion.getCommunes()) {
                     if (1 < com.getSettlements().size()) {
                         for (final Settlement s : com.getSettlements()) {
-                            // generateVillageText(s);
+                            generateVillageText(s);
                         }
-                        // generateCommuneText(com);
-                        // generateCommuneNavBox(com);
+                        generateCommuneText(com);
+                        generateCommuneNavBox(com);
                     }
                 }
                 if (!raion.isMiskrada()) {
                     generateRaionText(raion);
                 }
-                // generateRaionNavBox(raion);
-                // generateRaionCategories(raion);
+                generateRaionNavBox(raion);
+                generateRaionCategories(raion);
             }
 
             for (final Commune com : eachReg.getCities()) {
-                // generateCommuneText(com);
-                // generateCommuneNavBox(com);
-                // generateCityCategories(com);
+                generateCommuneText(com);
+                generateCommuneNavBox(com);
+                generateCityCategories(com);
             }
-            // generateRegionText(eachReg);
-            // generateRegionNavBox(eachReg);
-            // generateRegionCategories(eachReg);
+            generateRegionText(eachReg);
+            generateRegionNavBox(eachReg);
+            generateRegionCategories(eachReg);
 
         }
     }
