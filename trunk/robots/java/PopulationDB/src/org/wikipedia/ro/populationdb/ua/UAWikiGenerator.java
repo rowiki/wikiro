@@ -940,7 +940,7 @@ public class UAWikiGenerator {
 
         com.getCapital();
 
-        introTmpl.add("statut", 1 == com.getTown() ? "o așezare de tip urban" : "un oraș");
+        introTmpl.add("statut", 1 == com.getTown() ? "o [[așezare de tip urban]]" : "un oraș");
 
         final StringBuilder raionPart = new StringBuilder();
         final Raion raion = com.getRaion();
