@@ -1,15 +1,48 @@
 ﻿#!/usr/bin/python
 # -*- coding: utf-8  -*-
-'''
-Based on the output from parse_monument_article.py and update_database.py 
-identify different improvements and further errors in the monument pages and database
-* să adauge linkuri către articolul despre un monument acolo unde există - d
-* să adauge coordonate în listă dacă ele există în articol - d
-* să adauge automat poza în listă dacă există una singură cu monumentul respectiv - d
-* să raporteze la [[Proiect:Monumente istorice/Erori/Automate]] următoarele situații:
-** în listă nu există codul respectiv, dar codul are formatul corect în articol/imagine
-** în listă nu există imagine și există mai multe imagini disponibile la commons - i
-** în listă și articol coordonatele sunt diferite (diferențe mai mari de 0,001 grade sau ~3,6 de secunde de grad)
+'''Based on the output from parse_monument_article.py and update_database.py 
+identify different improvements and further errors in the monument pages and
+database.
+
+Improvements:
+* add a link to the article about the monument (where such article exists)
+* add the coordinates of the monument if they can be extracted from the 
+  available data (list/article/pictures)
+* add a picture if available
+  - if the article has a picture, add that one
+  - if there is only one picture, add it
+  - if there are several pictures, add the one which has some quality
+    recognition or a random one
+   
+Errors reported to a log file:
+* The list does not have that code, but it has the coorect format in the
+  article/image
+* there are more than one categories/articles for a certain code
+* the list/article/pictures have different coordinates (difference larger than
+  0.001 grade or ~3,6 degree seconds)
+
+Example: "python corroborate_monument_data.py -lang:ro -db:lmi -updateArticle"
+
+Command-line arguments:
+
+-import         Name of the file containing additional data; this can be either
+                a JSON or a CSV file. The JSON keys or CSV columns must match
+                the fields from the config
+
+-db             Together with "-lang" specifies the config to be used.
+                Default is "lmi"
+
+-addRan         [ro specific] Add RAN codes and use RAN db to update monuments
+
+-updateArticle  Update the link to the article if available
+
+-updateImage    Update the image if available
+
+-updateCoord    Update the coords if available
+
+-updateCreator  Update the creator(s) if available
+
+-updateCommons  Update the link to Wikimedia Commons if available
 '''
 
 import sys, time, warnings, json, string, random, re
@@ -41,40 +74,34 @@ countries = {
 		'headerTemplate' : u'ÎnceputTabelLMI',
 		'rowTemplate' : u'ElementLMI',
 		'footerTemplate' : u'SfârșitTabelLMI',
-		'commonsTemplate' : u'Monument istoric',
-		'commonsTrackerCategory' : u'Cultural heritage monuments in Romania with known IDs',
-		'commonsCategoryBase' : u'Historical monuments in Romania',
-		'unusedImagesPage' : u'User:Multichill/Unused Monument istoric',
-		'imagesWithoutIdPage' : u'User:Multichill/Monument istoric without ID',
 		'namespaces' : [0],
-		'table' : u'monuments_ro_(ro)',
-		'truncate' : False, 
-		'primkey' : u'Cod',
-		'fields' : collections.OrderedDict({
-					u'Cod': {'code': Changes.all, }, 
-					u'NotăCod': {'code': Changes.all, },
-					u'FostCod': {'code': Changes.other, },
-					u'CodRan': {'code': Changes.other, },
-					u'Cod92': {'code': Changes.other, },
-					u'Denumire': {'code': Changes.article, },
-					u'Localitate': {'code': Changes.all, },
-					u'Adresă': {'code': Changes.all, },
-					u'Datare': {'code': Changes.all, },
-					u'Creatori': {'code': Changes.creator, },
-					u'Lat': {'code': Changes.coord, },
-					u'Lon': {'code': Changes.coord, },
-					u'Imagine': {'code': Changes.image, },
-					u'Commons': {'code': Changes.commons, },
-					u'Copyright': {'code': Changes.all, },
-			 }),
+		'codeRegexp' : "(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))",
+		'fields' : collections.OrderedDict([
+						(u'Cod', {'code': Changes.all, }),
+						(u'NotăCod', {'code': Changes.all, }),
+						(u'FostCod', {'code': Changes.other, }),
+						(u'CodRan', {'code': Changes.other, }),
+						(u'Cod92', {'code': Changes.other, }),
+						(u'Denumire', {'code': Changes.article, }),
+						(u'Localitate', {'code': Changes.all, }),
+						(u'Adresă', {'code': Changes.all, }),
+						(u'Datare', {'code': Changes.all, }),
+						(u'Creatori', {'code': Changes.creator, }),
+						(u'Lat', {'code': Changes.coord, }),
+						(u'Lon', {'code': Changes.coord, }),
+						(u'Imagine', {'code': Changes.image, }),
+						(u'Commons', {'code': Changes.commons, }),
+						(u'Copyright', {'code': Changes.all, }),
+					]),
 	},
 }
 
-        
-_log = "link.err.log"
 _flog = None
 _coordVariance = 0.001 #decimal degrees
 _changes = Changes.none
+_lang ='ro'
+_db = 'lmi'
+_log = _lang + _db + "_link.err.log"
 
 
 def initLog():
@@ -90,8 +117,8 @@ def log(string):
 	_flog.write(string.encode("utf8") + "\n")
 	
 def rebuildTemplate(params):
-	my_template = u"{{" + countries.get(('ro', 'lmi')).get('rowTemplate') + u"\n"
-	for name in countries.get(('ro', 'lmi')).get('fields'):
+	my_template = u"{{" + countries.get((_lang, _db)).get('rowTemplate') + u"\n"
+	for name in countries.get((_lang, _db)).get('fields'):
 		if name in params and params[name] <> u"":
 			my_template += u"| " + name + u" = " + params[name] + u"\n"
 	my_template += u"}}\n"
@@ -119,7 +146,7 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 	:return: The modified text of the page
 	:rtype: string
 	"""
-	if (countries.get(('ro', 'lmi')).get('fields')[field]['code'] & _changes) == Changes.none:
+	if (countries.get((_lang, _db)).get('fields')[field]['code'] & _changes) == Changes.none:
 		pywikibot.output("Skipping %s for %s" % (field, code))
 		return
 	pywikibot.output("Uploading %s for %s; value \"%s\"" % (field, code, newvalue))
@@ -136,9 +163,9 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 	last = None
 	rawCode = None
 	my_params = {}
-	rowTemplate = countries.get(('ro', 'lmi')).get('rowTemplate')
+	rowTemplate = countries.get((_lang, _db)).get('rowTemplate')
 	
-	templates = pywikibot.extract_templates_and_params(text)
+	templates = pywikibot.textlib.extract_templates_and_params(text)
 	for (template, params) in templates:
 		if template == rowTemplate:
 			for param in params:
@@ -186,7 +213,7 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 		# if we cannot find another template after the current, we
 		# are most likely the last template on the page
 		if cliva < 0:
-			cliva = after.find(u"{{" + countries.get(('ro', 'lmi')).get('footerTemplate'))
+			cliva = after.find(u"{{" + countries.get((_lang, _db)).get('footerTemplate'))
 		if cliva >= 0 and clivb >= 0:
 			after = after[cliva:]
 			before = before[:clivb]
@@ -214,12 +241,15 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 	return text
 	
 def readJson(filename, what):
-	f = open(filename, "r+")
-	pywikibot.output("Reading " + what + " file...")
-	db = json.load(f)
-	pywikibot.output("...done")
-	f.close();
-	return db
+	try:
+		f = open(filename, "r+")
+		pywikibot.output("Reading " + what + " file...")
+		db = json.load(f)
+		pywikibot.output("...done")
+		f.close();
+		return db
+	except IOError:
+		pywikibot.output("Failed to read " + filename + ". Trying to do without it.")
 	
 def readOtherData(filename):
 	if not os.path.exists(filename):
@@ -239,6 +269,9 @@ def readOtherData(filename):
 	return db
 	
 def readRan(filename):
+	"""
+	This function is specific to ('ro','lmi'). We need to find a way to remove the need for it
+	"""
 	f = open(filename, "r+")
 	pywikibot.output("Reading archeological monuments file...")
 	ran = json.load(f)
@@ -277,7 +310,9 @@ def parseArticleCoords(code, allPages):
 	return (artLat, artLon, artSrc, updateCoord)
 
 def parseRanCoords(code, ran_data):
-	#search in RAN database
+	"""
+	search in RAN database
+	"""
 	ranLat = 0
 	ranLon = 0
 	ranCod = u""
@@ -298,7 +333,9 @@ def parseRanCoords(code, ran_data):
 	return (ranLat, ranLon, u"RAN: " + ranCod, updateCoord)
 	
 def parseOtherCoords(code, other_data):
-	#search in external data
+	"""
+	search in external data
+	"""
 	updateCoord = False
 	otherLat = 0
 	otherLong = 0
@@ -344,7 +381,7 @@ def chooseImagePicky(files):
 	return artimage
 	
 def checkNewMonuments(other_data, db):
-	f = codecs.open("lmi_monumente_noi.wiki", "w", "utf8")
+	f = codecs.open(_db + "_monumente_noi.wiki", "w", "utf8")
 	for monument in other_data:
 		if monument in db:
 			continue
@@ -362,6 +399,8 @@ def main():
 			otherFile = arg [len('-import:'):]
 		if arg.startswith('-addRan'):
 			addRan = True
+		if arg.startswith('-db'):
+			_db = arg [len('-db:'):]
 		if arg.startswith('-updateArticle'):
 			_changes = _changes | Changes.article
 		if arg.startswith('-updateImage'):
@@ -375,31 +414,41 @@ def main():
 
 	if _changes == Changes.none:
 		_changes = Changes.all
-			
-	db =				readJson("lmi_db.json", "database")
-	pages_ro =			readJson("ro_pages.json", "ro.wp pages")
-	authors_ro =		readJson("ro_authors.json", "ro.wp authors")
-	files_ro =			readJson("ro_Fișier_pages.json", "ro.wp files")
-	categories_commons =readJson("commons_Category_pages.json", "commons categories")
-	pages_commons =		readJson("commons_File_pages.json", "commons images")
+
+	_lang = pywikibot.Site().lang
+	if countries.get((_lang, _db)) == None:
+		pywikibot.output("Couldn't find the config for lang %s, database %s. Please check the help below." % (_lang, _db))
+		pywikibot.output("----")
+		pywikibot.showHelp()
+		return
+	
+	db_json =				readJson(_db + "_db.json", "database")
+	pages_local =			readJson(_lang + "_pages.json", _lang + ".wp pages")
+	authors_local =			readJson(_lang + "_authors.json", _lang + ".wp authors")
+	files_local =			readJson(_lang + "_" + pywikibot.Site().namespace(6) + "_pages.json", _lang + ".wp files")
+	categories_commons =	readJson("commons_Category_pages.json", "commons categories")
+	pages_commons =			readJson("commons_File_pages.json", "commons images")
 	
 	other_data = readOtherData(otherFile)
 	
-	checkNewMonuments(other_data, db)
+	checkNewMonuments(other_data, db_json)
 	
-	ran_data = readRan("ran_db.json")
+	if addRan:
+		ran_data = readRan("ran_db.json")
+	else:
+		ran_data = {}
 
 	initLog()
 	lastSource = None
 
 	#this is the big loop that must only happen once
-	for monument in db:
+	for monument in db_json:
 		if monument["source"] <> lastSource:
 			articleText = None
 			lastSource = monument["source"]
 
 		rawCode = monument["Cod"]
-		regexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
+		regexp = re.compile(countries.get((_lang, _db)).get('codeRegexp'), re.I)
 		result = re.findall(regexp, rawCode)
 		if len(result) > 0:
 			code = result[0][0]
@@ -415,8 +464,8 @@ def main():
 		ran = None
 		
 		try:
-			if code in pages_ro:
-				allPages.extend(pages_ro[code])
+			if code in pages_local:
+				allPages.extend(pages_local[code])
 				if len(allPages) > 1:
 					msg = u"* [WP] ''E'': ''[%s]'' Codul este prezent în mai multe articole pe Wikipedia: " % code
 					for page in allPages:
@@ -460,8 +509,8 @@ def main():
 					if pic_author == None and author_list <> "":
 						log(u"* [COM] '''E''': ''[%s]'' În lista de imagini sunt trecuți mai multi autori: %s" % (code, author_list))
 				allPages.extend(pages_commons[code])
-			if code in files_ro:
-				allPages.extend(files_ro[code])
+			if code in files_local:
+				allPages.extend(files_local[code])
 			if code in categories_commons:
 				allPages.extend(categories_commons[code])
 				if len(categories_commons[code]) > 1:
@@ -515,10 +564,10 @@ def main():
 				#	log(u"*''W'': ''[%s]'' Câmpul Creatori este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
 
 		#add the author(s) extracted from author pages
-		elif code in authors_ro:
+		elif code in authors_local:
 			print "autor2"
 			authors = monument["Creatori"]
-			for author in authors_ro[code]:
+			for author in authors_local[code]:
 				if authors.find(author) == -1: #we don't already know the author
 					if authors <> "":
 						authors = author + ", " + authors
@@ -587,8 +636,8 @@ def main():
 					artimage = "File:" + artimage
 				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
 			#final option: perhaps we have a local image?
-			elif (code in files_ro) and len(files_ro[code]) > 0:
-				localimage = chooseImagePicky(files_ro[code])
+			elif (code in files_local) and len(files_local[code]) > 0:
+				localimage = chooseImagePicky(files_local[code])
 				if localimage.find(':') < 0:#nonamespace
 					localimage = "File:" + localimage
 				articleText = updateTableData(monument["source"], code, "Imagine", localimage, text=articleText)
