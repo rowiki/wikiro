@@ -10,6 +10,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.wikipedia.ro.populationdb.ua.model.Commune;
 import org.wikipedia.ro.populationdb.ua.model.Language;
@@ -124,7 +125,7 @@ public class Hibernator {
 
     public List<Region> getAllRegions() {
         final Session ses = sessionFactory.getCurrentSession();
-        final Criteria crit = ses.createCriteria(Region.class);
+        final Criteria crit = ses.createCriteria(Region.class).addOrder(Order.asc("name"));
         final List list = crit.list();
         return list;
     }
