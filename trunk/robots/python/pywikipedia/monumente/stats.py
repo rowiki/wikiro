@@ -142,7 +142,7 @@ def main():
 			image_interest[interest] += 1
 		if monument["Lat"] <> "" or monument["Lon"] <> "":
 			coords += 1
-		if monument["Arhitect"] <> "":
+		if monument["Creatori"] <> "":
 			authors += 1
 			
 	total_images = 0

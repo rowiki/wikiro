@@ -14,17 +14,19 @@ from pywikibot import pagegenerators
 from pywikibot import config as user
 
 options = {
-	'ro': 
+	('ro', 'lmi'): 
 	{
-	'namespaces': [0],
-	'codeTemplate': "codLMI",
-	'authorTemplate': "autorCodLMI",
+		'namespaces': [0],
+		'codeTemplate': "codLMI",
+		'authorTemplate': "autorCodLMI",
+		'codeRegexp': re.compile("\{\{[aA]utorCodLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 	},
-	'commons':
+	('commons', 'lmi'):
 	{
-	'namespaces': [6],
-	'codeTemplate': "Monument_istoric",
-	'authorTemplate': "",
+		'namespaces': [6],
+		'codeTemplate': "Monument_istoric",
+		'authorTemplate': "",
+		'codeRegexp': "",
 	}
 }
 
@@ -32,7 +34,7 @@ fullDict = {}
 
 def processArticle(text, page, conf):
 	pywikibot.output(u'Working on "%s"' % page.title(True))
-	regexp = re.compile("\{\{[aA]utorCodLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
+	regexp = conf['codeRegexp']
 	results = re.findall(regexp, text)
 	if results == None:
 		return	
@@ -47,6 +49,7 @@ def processArticle(text, page, conf):
 	
 def main():
 	lang = u'ro'
+	db = u'lmi'
 	textfile = u''
 
 	for arg in pywikibot.handleArgs():
@@ -55,14 +58,16 @@ def main():
 			user.mylang = lang
 		if arg.startswith('-family'):
 			user.family = arg [len('-family:'):]
+		if arg.startswith('-db'):
+			db = arg [len('-db:'):]
 	
-	site = pywikibot.getSite()
+	site = pywikibot.Site()
 	lang = site.language()
-	if not options.get(lang):
+	if not options.get((lang,db)):
 		pywikibot.output(u'I have no options for language "%s"' % lang)
 		return False
 	
-	langOpt = options.get(lang)
+	langOpt = options.get((lang,db))
 			
 	authorTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), langOpt.get('authorTemplate')))
 
@@ -78,7 +83,7 @@ def main():
 			processArticle(page.get(), page, langOpt)
 			count += 1
 	print count
-	f = open(lang + "_authors.json", "w+")
+	f = open("_".join([lang, db, "authors.json"]), "w+")
 	json.dump(fullDict, f)
 	f.close();
 

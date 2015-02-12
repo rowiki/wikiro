@@ -625,9 +625,12 @@ def main():
 		filename = "_".join(filter(None, [lang, _db, namespaceName, "pages.json"]))
 		print filename
 		if parse_type != PARSE_FULL:
-			f = open(filename, "r+")
-			jsonFile = json.load(f)
-			f.close();
+			try:
+				f = open(filename, "r+")
+				jsonFile = json.load(f)
+				f.close();
+			except:
+				jsonFile = {}
 			#pre-calculate as much as possible of the information we'll need
 			vallist = jsonFile.values() # extract list of values
 			valCount = len(vallist)
