@@ -173,9 +173,9 @@ minormistakes = {
 }
 
 deprecated = {
-	u'\|\s?Coordonate\s=.*(\r?)\n': u'',
-	u'\| Arhitect =\s{0,2}\n': u'',
-	u'\| Arhitect = (.*)\n': u'| Creatori = \g<1>\n',
+	u'\|(\s*)Coordonate\s=.*(\r?)\n': u'',
+	u'\|(\s*)Arhitect(\s*)=(\s*)\n': u'',
+	u'\|(\s*)Arhitect(\s*)=(\s*)(.*)\n': u'| Creatori = \g<4>\n',
 }
 
 improvements = OrderedDict([
@@ -211,8 +211,8 @@ def processList(page):
 	origtext = text = page.get()
 	changed = False
 	#comment = u'Înlocuiesc spațiul cu non-breaking space (U+00A0) în unitățile de distranță din articolul [[%s]]' % page.title(True)
-	#comment = u'Scot câmpul învechite din {{ElementLMI}} în articolul [[%s]]' % page.title(True)
-	comment = u'Se corectează anumite erori frecvente din articolul [[%s]]' % page.title(True)
+	comment = u'Scot câmpul învechite din {{ElementLMI}} în articolul [[%s]]' % page.title(True)
+	#comment = u'Se corectează anumite erori frecvente din articolul [[%s]]' % page.title(True)
 	#for mistake in improvements.keys():
 	#	newtext = re.sub(mistake, improvements[mistake], text)
 	#	if text <> newtext:
@@ -223,18 +223,16 @@ def processList(page):
 	#	if newtext != text:
 	#		text = checkAndUpload(page, text, newtext, comment)
 	
-	for mistake in minormistakes.keys():
-		newtext = re.sub(mistake, minormistakes[mistake], text)
-		if newtext != text:
-			print mistake
-			text = checkAndUpload(page, text, newtext, comment)
-	#for field in deprecated.keys():
-	#	newtext = re.sub(field, deprecated[field], text)
-	#	if text <> newtext:
-	#		changed = True
-	#		print author
-	#		text = newtext
-	return
+	#for mistake in minormistakes.keys():
+	#	newtext = re.sub(mistake, minormistakes[mistake], text)
+	#	if newtext != text:
+	#		print mistake
+	#		text = checkAndUpload(page, text, newtext, comment)
+	for field in deprecated.keys():
+		newtext = re.sub(field, deprecated[field], text)
+		if text <> newtext:
+			changed = True
+			text = newtext
 	if changed == True:
 		pywikibot.showDiff(origtext, text)
 		resp = pywikibot.input("Do you agree with ALL the changes above? [y/n]")
