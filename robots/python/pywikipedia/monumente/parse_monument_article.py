@@ -3,7 +3,20 @@
 '''
 Parse the monument pages (articles and images) and put the output in a json file
 with the following format:
-dict{code, list[dict{name, project, lat, lon, image, author}, ...]}
+dict{
+    code: list[
+	     dict{
+		name, 
+		project, 
+		lat, 
+		lon, 
+		image, 
+		author
+             },
+             ...
+          ],
+    ...
+}
 
 '''
 
@@ -26,68 +39,89 @@ import strainu_functions as strainu
 options = {
 	'ro':
 	{
-		'namespaces': [0, 6],
-		#'namespaces': [6],
-		'templateRegexp': re.compile("\{\{[a-z]*codLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
-		'codeTemplate': ["codLMI", "Monument istoric"],
-		'codeTemplateParams': 
-		[
-		],
+		'lmi':#database we work on
+		{
+			'namespaces': [0, 6],
+			#'namespaces': [6],
+			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
+			'templateRegexp': re.compile("\{\{[a-z]*codLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
+			'codeTemplate': ["codLMI", "Monument istoric"],
+			'codeTemplateParams': 
+			[
+			],
+		},
 		'infoboxes':
 		[
 		{
 			'name': u'Infocaseta Monument|Cutie Monument',
 			'author': [u'artist', u'artist1', u'artist2', u'arhitect'],
 			'image': u'imagine',
+			# the databases we work on
 			'ran': u'',#TODO
+			'lmi': u'',
 		},
 		{
 			'name': u'Clădire Istorică',
 			'author': [u'arhitect'],
 			'image': u'imagine',
 			'ran': u'cod-ran',
+			'lmi': u'',
 		},
 		{
 			'name': u'Cutie Edificiu Religios|Infocaseta Edificiu religios|Infocaseta Teatru|Moschee',
 			'author': [u'arhitect'],
 			'image': u'imagine',
+			# the databases we work on
 			'ran': u'',#nada yet
+			'lmi': u'',
 		},
 		{
 			'name': u'Castru|Infocaseta Castru|Infocaseta Cetate dacică|Infocaseta Villa rustica',
 			'author': [],
 			'image': u'imagine',
+			# the databases we work on
 			'ran': u'cod RAN',
+			'lmi': u'',
 		},
 		{
 			'name': u'Infocasetă Davă|Infocaseta Davă',
 			'author': [],
 			'image': u'imagine',
+			# the databases we work on
 			'ran': u'ref:RO:RAN',
+			'lmi': u'',
 		},
 		{
-			'name': u'Infocaseta Gară|Mănăstire',
+			'name': u'Infocaseta Gară',
 			'author': [],
 			'image': u'imagine',
+			# the databases we work on
 			'ran': u'',
+			'lmi': u'',
 		},
 		{
 			'name': u'Infocaseta Biserică din lemn',
 			'author': [u'meșteri'],
 			'image': u'imagine',
-			'ran': u'cod RAN'
+			# the databases we work on
+			'ran': u'cod RAN',
+			'lmi': u'',
 		},
 		{
-			'name': u'Infocaseta Lăcaș de cult',
+			'name': u'Infocaseta Lăcaș de cult|Mănăstire',
 			'author': [u'arhitect', u'constructor', u'pictor'],
 			'image': u'imagine',
-			'ran': u'codRAN'
+			# the databases we work on
+			'ran': u'codRAN',
+			'lmi': u'',
 		},
 		{
 			'name': u'Infocaseta clădire|Infobox cladire|Infobox building',
 			'author': [u'arhitect'],
 			'image': u'image',
-			'ran': u''#nada yet
+			# the databases we work on
+			'ran': u'',#nada yet
+			'lmi': u'',
 		},
 		],
 		'qualityTemplates':
@@ -99,15 +133,20 @@ options = {
 	},
 	'commons':
 	{
-		#'namespaces': [14, 6],
-		'namespaces': [6],
-		'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
-		'codeTemplate': ["Monument istoric", "codLMI"],
-		'codeTemplateParams': 
-		[
-			u'lmi92',
-			u'ran',
-		],
+		'lmi':
+		{
+			'namespaces': [14, 6],
+			#'namespaces': [6],
+			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
+			'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
+			'codeTemplate': ["Monument istoric", "codLMI"],
+			'codeTemplateParams': 
+			[
+				u'lmi92',
+				u'ran',
+				u'eroare',
+			],
+		},
 		'infoboxes': 
 		[
 			{
@@ -115,7 +154,9 @@ options = {
 				'name': u'Creator',
 				'author': [u'_name'],
 				'image': u'imagine',
+				# the databases we work on
 				'ran': u'',
+				'lmi': u'',
 			},
 		],
 		'qualityTemplates':
@@ -144,7 +185,6 @@ options = {
 }
 
 
-codeRegexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
 errorRegexp = re.compile("eroare\s?=\s?([^0])", re.I)
 geohackRegexp = re.compile("geohack\.php\?pagename=(.*?)&(amp;)?params=(.*?)&(amp;)?language=")
 qualityRegexp = None
@@ -152,6 +192,7 @@ fullDict = {}
 _log = "pages.err.log"
 _flog = None
 _trace = False
+_db = "lmi"
 
 class Trace:
 	def __init__(self, name):
@@ -291,7 +332,7 @@ def parseGeohackLinks(page):
 		return 0,0
 	if lat < 43 or lat > 48.25 or long < 20 or long > 29.67:
 		log(u"*''E'': [[:%s]] Coordonate invalide pentru România: %f,%f" \
-			u" (extra	se din %s)" % (title, lat, long, link))
+			u" (extrase din %s)" % (title, lat, long, link))
 		return 0,0
 	return lat,long
 
@@ -388,13 +429,13 @@ def processArticle(text, page, conf):
 		pywikibot.output("Skipping page containing copyrighted material")
 		return
 		
-	global codeRegexp
-	code = checkAllCodes(re.findall(codeRegexp, text), title)
+	global _db
+	code = checkAllCodes(re.findall(conf[_db]['codeRegexp'], text), title)
 	if code is None: #no valid code in page
 		pywikibot.output("No valid code in page " + title)
 		return
 	elif code == "": #more than one code, juse use the one that is marked as {{codLMI|code}}
-		code = checkAllCodes(re.findall(conf['templateRegexp'], text), title, False)
+		code = checkAllCodes(re.findall(conf[_db]['templateRegexp'], text), title, False)
 		if code is None or code == "": # either no code or more than one code is marked; just ignore
 			   pywikibot.output("Too many codes in page " + title)
 			   return
@@ -408,8 +449,7 @@ def processArticle(text, page, conf):
 	else:
 		quality = False
 	
-	try:
-		
+	try:		
 		coor = page.coordinates(True)
 		if coor:
 			#print coor
@@ -483,17 +523,17 @@ def processArticle(text, page, conf):
 				'ran': ran
 			   }
 
-	if len(conf['codeTemplateParams']):
+	if len(conf[_db]['codeTemplateParams']):
 		i = 0
-		while tl == None and i < len(conf['codeTemplate']):
-			tl = strainu.extractTemplate(text, conf['codeTemplate'][i])
+		while tl == None and i < len(conf[_db]['codeTemplate']):
+			tl = strainu.extractTemplate(text, conf[_db]['codeTemplate'][i])
 			i += 1
 		if tl == None:
 			print "Cannot find any valid templates!"
 			return
 		(tlcont, tlparam) = strainu.tl2Dict(tl)
 							
-		for param in conf['codeTemplateParams']:
+		for param in conf[_db]['codeTemplateParams']:
 			if param in tlcont:
 				dictElem[param] = tlcont[param]
 		
@@ -547,7 +587,7 @@ def main():
 	langOpt = options.get(lang)
 
 	rowTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), \
-								langOpt.get('codeTemplate')[0]))
+								langOpt.get(_db).get('codeTemplate')[0]))
 	global _log
 	global fullDict
 	global qualityRegexp
@@ -562,7 +602,7 @@ def main():
 	#print qReg
 	qualityRegexp = re.compile(qReg, re.I)
 
-	for namespace in langOpt.get('namespaces'):
+	for namespace in langOpt.get(_db).get('namespaces'):
 		transGen = pagegenerators.ReferringPageGenerator(rowTemplate,
 									onlyTemplateInclusion=True, step=1000)
 		#transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, u"Categorie:1735_în_arhitectură"))
