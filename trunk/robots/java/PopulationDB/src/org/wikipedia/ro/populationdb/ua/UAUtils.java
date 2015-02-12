@@ -31,7 +31,13 @@ public class UAUtils {
         ret.add(raionulText + translRaionName + ", " + roRegionName);
         ret.add(raionulText + roName + ", " + translRegionName);
         ret.add(raionulText + roName + ", " + roRegionName);
-
+        
+        if (raion.isMiskrada()) {
+            ret.add(roName + ", " + translRegionName);
+            ret.add(roName + ", " + roRegionName);
+            ret.add(roName);
+        }
+        
         return new ArrayList<String>(ret);
     }
 

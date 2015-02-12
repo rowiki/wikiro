@@ -433,7 +433,11 @@ public class UAWikiGenerator {
         navBox.append("nume=" + articleName);
         navBox.append("\n|titlu=Unități administrative componente ale ");
         if (raion.isMiskrada()) {
-            navBox.append("orașului raional ").append("[[").append(articleName).append('|').append(raionName).append("]]");
+            navBox.append("orașului regional ").append("[[").append(articleName);
+            if (!StringUtils.equals(raionName, articleName)) {
+                navBox.append('|').append(raionName);
+            }
+            navBox.append("]]");
         } else {
             navBox.append("[[").append(articleName).append('|').append("raionului ").append(raionName).append("]]");
         }
@@ -1191,7 +1195,7 @@ public class UAWikiGenerator {
             if (!StringUtils.isEmpty(uaText)
                 && (StringUtils.contains(uaText, "{{Сільська рада") || StringUtils.contains(uaText, "{{Смт") || StringUtils
                     .contains(uaText, "{{Місто"))) {
-                final int indexOfIB = StringUtils.indexOfAny(uaText, "{{Село", "{{Смт", "{{Місто");
+                final int indexOfIB = StringUtils.indexOfAny(uaText, "{{Село", "{{Смт", "{{Місто", "{{Сільська рада");
                 final String textFromInfobox = uaText.substring(indexOfIB);
                 final ParameterReader ukIBPR = new ParameterReader(textFromInfobox);
                 ukIBPR.run();
