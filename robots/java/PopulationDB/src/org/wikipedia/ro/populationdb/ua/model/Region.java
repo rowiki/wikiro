@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyJoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -58,6 +59,7 @@ public class Region implements LanguageStructurable {
     }
 
     @OneToMany(mappedBy = "region")
+    @OrderBy("name")
     public Set<Raion> getRaioane() {
         return raioane;
     }
@@ -71,6 +73,7 @@ public class Region implements LanguageStructurable {
     private Map<Language, Double> languageStructure = new HashMap<Language, Double>();
 
     @OneToMany(mappedBy = "region")
+    @OrderBy("name")
     public Set<Commune> getCities() {
         return cities;
     }

@@ -1,10 +1,16 @@
 package org.wikipedia.ro.populationdb.ua;
 
 import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isAlpha;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
+import static org.apache.commons.lang3.StringUtils.removeStart;
+import static org.apache.commons.lang3.StringUtils.replace;
 import static org.apache.commons.lang3.StringUtils.split;
+import static org.apache.commons.lang3.StringUtils.substringBefore;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -123,7 +129,14 @@ public class UAPercentagesParser {
             ses.saveOrUpdate(crimeaRegion);
         }
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Bratska", "Krasnoperekopsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Azovske", "Djankoi");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Starîi Krîm", "Kirovske");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Șciolkine", "Lenine");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Novofedorivskîi", "Sakî");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Hvardiiske", "Simferopol");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Berezneanska", "Hmilnîk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Braiiliv", "Jmerînka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Brodețke", "Kozeatîn");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Bohdanivska", "Pavlohrad");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Oleksandro-Kalînovska", "Kosteantînivka");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "V" + lowerCase("ELÎKOȘÎȘIVSKA"), "Șahtarsk");
@@ -155,6 +168,22 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Antîpivska", "Zolotonoșa");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Berzokivska", "Kaniv");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Balakliivska", "Smila");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Vendîceanî", "Mohîliv-Podilskîi");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Hnivan", "Tîvriv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Holobî", "Kovel");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Rokîni", "Luțk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Pidhorodne", "Dnipropetrovsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Radușne", "Krivîi Rih");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Cervonohrîhorivka", "Nikopol");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Pereșcepîne", "Novomoskovsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Ilarionove", "Sînelnîkove");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Siversk", "Artemivsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Sveatohorivka", "Dobropillea");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Hrodivka", "Krasnoarmiisk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Drobîșeve", "Krasnîi Lîman");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Andriivka", "Sloveansk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Komsomolske", "Starobeșeve");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Velîkoșîșivska", "Șahtarsk");
 
         if (null != kievReg) {
             final Raion raion = hib.getRaionByTransliteratedNameAndRegion("Volodarska", kievReg);
@@ -178,7 +207,7 @@ public class UAPercentagesParser {
         if (null != reg) {
             final Raion raion = hib.getRaionByTransliteratedNameAndRegion(raionWrongName, reg);
             if (null != raion) {
-                final Commune com = hib.getCommuneByTransliteratedNameAndRaion(correctCapitalName, reg);
+                final Commune com = hib.getCommuneByTransliteratedNameAndRegion(correctCapitalName, reg);
                 if (null != com) {
                     raion.setTransliteratedName(com.getTransliteratedName());
                     raion.setName(com.getName());
@@ -431,7 +460,7 @@ public class UAPercentagesParser {
                                 }
                             }
                             if ((null == currentRaion || currentRaion.isMiskrada()) && null != currentRegion) {
-                                if (StringUtils.isEmpty(currentRegion.getName())) {
+                                if (isEmpty(currentRegion.getName())) {
                                     currentRegion.setName(currentCommune.getName());
                                     currentRegion.setTransliteratedName(currentCommune.getTransliteratedName());
                                     currentRegion.setRomanianName(getRomanianName(getPossibleNames(currentRegion)));
@@ -452,10 +481,11 @@ public class UAPercentagesParser {
 
                         if (null != currentRaion) {
                             if (currentRaion.getCommunes().size() == 0) {
-                                currentRaion.setRomanianName(getRomanianName(getPossibleNames(
-                                    currentRaion,
-                                    StringUtils.defaultString(currentCommune.getRomanianName(),
-                                        currentCommune.getTransliteratedName()))));
+                                currentRaion
+                                    .setRomanianName(getRomanianName(getPossibleNames(
+                                        currentRaion,
+                                        defaultString(currentCommune.getRomanianName(),
+                                            currentCommune.getTransliteratedName()))));
                                 currentRaion.setName(currentCommune.getName());
                                 currentRaion.setTransliteratedName(new UkrainianTransliterator(currentCommune.getName())
                                     .transliterate());
@@ -480,7 +510,7 @@ public class UAPercentagesParser {
                     if (StringUtils.equals(splitName[0], "s.") || StringUtils.equals(splitName[0], "s-șce.")) {
                         int i = splitName.length;
                         final Settlement sat = new Settlement();
-                        for (i = 1; i < splitName.length && isAlpha(StringUtils.replace(splitName[i], "-", "")); i++) {
+                        for (i = 1; i < splitName.length && isAlpha(replace(splitName[i], "-", "")); i++) {
                             final String[] lineSeparatedParts = split(splitName[i], '-');
                             for (int j = 0; j < lineSeparatedParts.length; j++) {
                                 lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
@@ -578,14 +608,14 @@ public class UAPercentagesParser {
                     continue;
                 }
                 String redirectResolution = rowiki.resolveRedirect(possibleNames.get(i));
-                if (StringUtils.isEmpty(redirectResolution)) {
+                if (isEmpty(redirectResolution)) {
                     redirectResolution = possibleNames.get(i);
                 }
-                redirectResolution = StringUtils.removeStart(redirectResolution, "Raionul ");
-                redirectResolution = StringUtils.removeStart(redirectResolution, "Regiunea ");
-                redirectResolution = StringUtils.substringBefore(redirectResolution, ",");
-                redirectResolution = StringUtils.substringBefore(redirectResolution, "(");
-                redirectResolution = StringUtils.trim(redirectResolution);
+                redirectResolution = removeStart(redirectResolution, "Raionul ");
+                redirectResolution = removeStart(redirectResolution, "Regiunea ");
+                redirectResolution = substringBefore(redirectResolution, ",");
+                redirectResolution = substringBefore(redirectResolution, "(");
+                redirectResolution = trim(redirectResolution);
                 return redirectResolution;
             }
         } catch (final IOException e) {

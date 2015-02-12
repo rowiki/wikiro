@@ -75,7 +75,7 @@ public class UkrainianTransliterator extends Transliterator {
                     transformedChar = "C";
                 } else if (Arrays.asList('И', 'О', 'У').contains(Character.toUpperCase(text.charAt(i + 1)))) {
                     transformedChar = "CI";
-                } else if (text.charAt(i + 1) == 'А') {
+                } else if (Character.toUpperCase(text.charAt(i + 1)) == 'А') {
                     transformedChar = "CE";
                 } else {
                     transformedChar = charmap.get(crt);
@@ -88,7 +88,7 @@ public class UkrainianTransliterator extends Transliterator {
                     transformedChar = "ȘC";
                 } else if (Arrays.asList('И', 'О', 'У').contains(Character.toUpperCase(text.charAt(i + 1)))) {
                     transformedChar = "ȘCI";
-                } else if (text.charAt(i + 1) == 'А') {
+                } else if (Character.toUpperCase(text.charAt(i + 1)) == 'А') {
                     transformedChar = "ȘCE";
                 } else {
                     transformedChar = charmap.get(crt);
@@ -116,9 +116,9 @@ public class UkrainianTransliterator extends Transliterator {
                 transformedChar = "";
                 break;
             case 'Я':
-                if (null == prev || Arrays.asList('А', 'Е', 'О', 'У', 'Ъ', 'Ю', 'Я', 'Э', 'И').contains(prev)) {
+                if (null == prev || Arrays.asList('А', 'Е', 'О', 'У', 'Ъ', 'Ю', 'Я', 'Э', 'И').contains(Character.toUpperCase(prev))) {
                     transformedChar = "IA";
-                } else if (Arrays.asList('І', 'Й', 'Ї').contains(prev)) {
+                } else if (Arrays.asList('І', 'Й', 'Ї').contains(Character.toUpperCase(prev))) {
                     transformedChar = "A";
                 } else {
                     transformedChar = charmap.get(crt);
@@ -127,7 +127,7 @@ public class UkrainianTransliterator extends Transliterator {
             case 'Є':
                 if (null == prev || Arrays.asList('А', 'Е', 'О', 'У', 'Ъ', 'Ю', 'Я', 'Э', 'И').contains(prev)) {
                     transformedChar = "IE";
-                } else if (Arrays.asList('І', 'Й', 'Ї').contains(prev)) {
+                } else if (Arrays.asList('І', 'Й', 'Ї').contains(Character.toUpperCase(prev))) {
                     transformedChar = "E";
                 } else {
                     transformedChar = charmap.get(crt);
@@ -136,7 +136,7 @@ public class UkrainianTransliterator extends Transliterator {
             case 'Ї':
                 if (null == prev || Arrays.asList('А', 'Е', 'О', 'У', 'Ъ', 'Ю', 'Я', 'Э', 'И').contains(prev)) {
                     transformedChar = "II";
-                } else if (Arrays.asList('І', 'Й', 'Ї').contains(prev)) {
+                } else if (Arrays.asList('І', 'Й', 'Ї').contains(Character.toUpperCase(prev))) {
                     transformedChar = "I";
                 } else {
                     transformedChar = charmap.get(crt);

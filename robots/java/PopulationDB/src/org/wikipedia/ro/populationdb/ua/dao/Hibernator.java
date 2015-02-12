@@ -85,7 +85,7 @@ public class Hibernator {
         return null;
     }
 
-    public Commune getCommuneByTransliteratedNameAndRaion(final String needle, final Region region) {
+    public Commune getCommuneByTransliteratedNameAndRegion(final String needle, final Region region) {
         final Session ses = sessionFactory.getCurrentSession();
         final Criteria crit = ses.createCriteria(Commune.class).add(Restrictions.eq("transliteratedName", needle))
             .add(Restrictions.eq("region", region));
