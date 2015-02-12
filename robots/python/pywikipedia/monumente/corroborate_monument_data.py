@@ -93,6 +93,12 @@ countries = {
 						(u'Commons', {'code': Changes.commons, }),
 						(u'Copyright', {'code': Changes.all, }),
 					]),
+		'geolimits': {
+			'north': 48.3,
+			'south': 43.6,
+			'west':  20.27,
+			'east':  29.7,
+		},
 	},
 }
 
@@ -392,7 +398,7 @@ def checkNewMonuments(other_data, db):
 def main():
 	otherFile = "other_monument_data.csv"
 	addRan = False
-	global _changes
+	global _changes, _db
 	
 	for arg in pywikibot.handleArgs():
 		if arg.startswith('-import:'):
@@ -417,7 +423,7 @@ def main():
 
 	_lang = pywikibot.Site().lang
 	if countries.get((_lang, _db)) == None:
-		pywikibot.output("Couldn't find the config for lang %s, database %s. Please check the help below." % (_lang, _db))
+		pywikibot.output("Couldn't find the config for lang %s, database %s. Did you miss a parameter?" % (_lang, _db))
 		pywikibot.output("----")
 		pywikibot.showHelp()
 		return
@@ -681,12 +687,14 @@ def main():
 			if (otherLat > 0 and strainu.getSec(otherLat) == 0) and \
 				(otherLong > 0 and strainu.getSec(otherLong) == 0):
 				log(u"* [%s] ''W'': ''[%s]'' Coordonatele (%f,%f) au nevoie de o verificare - secundele sunt 0" \
-				 %	(otherSrc[:3], code, otherLat, otherLong))
+				 %(otherSrc[:3], code, otherLat, otherLong))
 				otherValid = False
 				continue
 			elif (otherLat > 0 or otherLong > 0) and \
-				(otherLat > 48.3 or otherLat < 43.6 or \
-				otherLong > 29.7 or otherLong < 20.27) :
+				(otherLat > countries.get((_lang, _db)).get('geolimits').get('north') or \
+				otherLat < countries.get((_lang, _db)).get('geolimits').get('south') or \
+				otherLong > countries.get((_lang, _db)).get('geolimits').get('east') or \
+				otherLong < countries.get((_lang, _db)).get('geolimits').get('west')) :
 				log(u"* [%s] ''W'': ''[%s]'' Coordonatele (%f,%f) au nevoie de o verificare - nu par " \
 						"a fi din Romania" %	(otherSrc[:3], code, otherLat, otherLong))
 				otherValid = False
