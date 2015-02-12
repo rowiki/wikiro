@@ -171,14 +171,6 @@ def processDatabase(countryconfig, dbname="lmi"):
 	f.close();
 
 
-def processTextfile(textfile, countryconfig,):
-	'''
-	Process the contents of a text file containing one or more lines with the Tabelrij rijksmonument template
-	'''
-	file = open(textfile, 'r')
-	for line in file:
-		processText(line.decode('UTF-8').strip(), textfile, countryconfig)
-
 def main():
 	'''
 	The main loop
@@ -204,17 +196,6 @@ def main():
 			pywikibot.output(u'Working on database "%s" in language "%s"' % (database, lang))
 			processDatabase(countryconfig, database)
 	
-	'''
-	generator = genFactory.getCombinedGenerator()
-	if not generator:
-		pywikibot.output(u'You have to specify what to work on. This can either be -textfile:<filename> to work on a local file or you can use one of the standard pagegenerators (in pagegenerators.py)')
-	else:
-		pregenerator = pagegenerators.PreloadingGenerator(generator)
-		for page in pregenerator:
-		if page.exists() and not page.isRedirectPage():
-			# Do some checking
-			processText(page.get(), page.permalink(), page=page)
-	'''
 
 if __name__ == "__main__":
 	try:

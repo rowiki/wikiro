@@ -1,23 +1,50 @@
 ﻿#!/usr/bin/python
 # -*- coding: utf-8  -*-
-'''
-Parse the monument pages (articles and images) and put the output in a json file
-with the following format:
-dict{
-    code: list[
-	     dict{
-		name, 
-		project, 
-		lat, 
-		lon, 
-		image, 
-		author
-             },
-             ...
-          ],
-    ...
-}
+'''Parse the monument pages (articles and images) and put the output in a json
+file with the following format:
+dict{ code: list[dict{name, project, lat, lon, image, author},...],...}
 
+The script requires some configuration for each database one plans to work on.
+The global variable ''options'' is a dictionary. The key is a tuple containing
+the language. The value is another dictionary containing the following fields:
+* infoboxes: a list of dictionaries describing each infobox the we might encounter
+	in the articles; these infoboxes can contain additional monument data
+	For infobox we register the following information:
+	- name: regex describing the infobox names; for speed, we group similar
+		templates together
+	- author: list of fields that can contain the creator of the monument
+	- image: the field containing the monument image
+	- one entry for each database we work on, containing the field of the
+		code for that database
+* qualityTemplates: list of templates that indicate that the page is a quality
+	product of Wikimedia; this offers that page a bonus when filling the list
+* one entry for each database we work on; this is a dictionary containing:
+	- namespaces: the namespaces we should work on; these are parsed one at
+		a time, not in parallel
+	- codeTemplate: list of templates that mark the code in the page
+	- codeTemplateParams: parameters of codeTemplate; these can be used to
+		extract additional information from that template
+	- codeRegexp: regular expression identifying the codes from the parsed
+		database
+	- templateRegexp: regular expression identifying the codeTemplate
+
+Additionally, 'commons' has a key called 'validOccupations' that defines the
+occupations we search for in the {{Creator}} templates and their Romanian
+translations/ We use this to separate between the picture creator (e.g. painter,
+photographer) and the monument creator.
+
+Command line options:
+-nopreload	Do not preload pages, but retrieve them as we need them.
+                 Default: false; true when using -parse:quick
+-incremental	Save the output files after each processed page; skipped pages
+                 do not count
+-parse		There are three possible values:
+		* quick: All pages that are already in our database are skipped.
+			Only new pages are parsed.
+		* normal: New pages are parsed, as well as pages that were edited
+			since the last script run
+		* full: All pages are parsed
+		Default: normal
 '''
 
 import sys

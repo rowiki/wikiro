@@ -5,6 +5,17 @@ Parse the author articles and put the output in a json file
 with the following format:
 dict{code, list[dict{author}, ...]}
 
+The script requires some configuration for each database one plans to work on.
+The global variable ''options'' is a dictionary. The key is a tuple containing
+the language and the database. The value is another dict containing the
+following fields:
+* namespaces: the namespaces to scan for author data
+* authorTemplate: The template that marks the code from the database
+* codeRegexp: regular expression used for searching for the codes
+
+Command line parameters:
+-db	The database to work with. Together with -lang they give the configuration
+         to be used for retrieving data
 '''
 
 import sys, time, warnings, json, string, re
@@ -17,14 +28,12 @@ options = {
 	('ro', 'lmi'): 
 	{
 		'namespaces': [0],
-		'codeTemplate': "codLMI",
 		'authorTemplate': "autorCodLMI",
 		'codeRegexp': re.compile("\{\{[aA]utorCodLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 	},
 	('commons', 'lmi'):
 	{
 		'namespaces': [6],
-		'codeTemplate': "Monument_istoric",
 		'authorTemplate': "",
 		'codeRegexp': "",
 	}
@@ -73,7 +82,7 @@ def main():
 
 	transGen = pagegenerators.ReferringPageGenerator(authorTemplate, onlyTemplateInclusion=True)
 	filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen, langOpt.get('namespaces'), site)
-	pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 125)
+	pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 50)
 	
 	#page = pywikibot.Page(site, "File:Icoanei 56 (2).jpg")
 	count = 0
