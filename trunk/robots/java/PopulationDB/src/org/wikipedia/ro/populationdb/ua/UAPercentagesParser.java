@@ -184,6 +184,11 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Andriivka", "Sloveansk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Komsomolske", "Starobeșeve");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Velîkoșîșivska", "Șahtarsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Verhnotorețke", "Iasînuvata");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Jîtomîr", "Dovbîș", "Baranivka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Jîtomîr", "Hrîșkivți", "Berdîciv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Jîtomîr", "Novohuivînske", "Jîtomîr");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Jîtomîr", "Horodnîțea", "Novohrad-Volînskîi");
 
         if (null != kievReg) {
             final Raion raion = hib.getRaionByTransliteratedNameAndRegion("Volodarska", kievReg);
