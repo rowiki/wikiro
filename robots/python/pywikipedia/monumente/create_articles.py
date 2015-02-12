@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8  -*-
 
+"""This script is used to create new historic monument articles on ro.wp
+"""
+
 import pywikibot
 import json
 import re
