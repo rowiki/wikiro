@@ -1,7 +1,24 @@
 ﻿#!/usr/bin/python
 # -*- coding: utf-8  -*-
-'''
-Update the monuments database either from a text file or from some wiki page(s)
+'''Update the monuments database from some wiki page(s). The databases must be
+made from 3 templates: one at the beginning, one at the end, and one for each
+line in the database.
+
+The script requires some configuration for each database the user wants to parse.
+The global variable ''countries'' is a dictionary. The key is a tuple containing
+the language and the database. The value is another dict containing the
+following fields:
+* project: the project family to work on
+* lang: the language to work on
+* namespaces: the namespaces that contain the pages to be parsed
+* fields: The acceptable fields of rowTemplate; if some other field is found, an
+           error message is thrown and that field is ignored
+* pagePrefix: A list of page prefixes that we will work on; all other pages are
+               ignored
+
+Command line options:
+
+-db	The database to work on. If none is specified, we parse all databases
 
 '''
 import sys, time, warnings, json, re
@@ -14,29 +31,25 @@ countries = {
 	('ro', 'lmi') : {
 		'project' : u'wikipedia',
 		'lang' : u'ro',
-		'headerTemplate' : u'ÎnceputTabelLMI',
 		'rowTemplate' : u'ElementLMI',
-		'footerTemplate' : u'SfârșitTabelLMI',
 		'namespaces' : [0],
-		'fields' : {
-			u'Cod': u'Cod',
-			u'Denumire': u'Denumire',
-			u'Localitate': u'Localitate',
-			u'Adresă': u'Adresă',
-			u'Datare': u'Datare',
-			u'Arhitect': u'Creatori',
-			u'Creatori': u'Creatori',
-			u'Lat': u'Lat',
-			u'Coordonate': u'Coordonate',
-			u'Lon': u'Lon',
-			u'Imagine': u'Imagine',
-			u'Commons': u'Commons',
-			u'NotăCod': u'Notăcod',
-			u'FostCod': u'FostCod',
-			u'Cod92': u'Cod92',
-			u'CodRan': u'CodRan',
-			u'Copyright': u'Copyright',
-			},
+		'fields' : [
+			u'Cod',
+			u'Denumire',
+			u'Localitate',
+			u'Adresă',
+			u'Datare',
+			u'Creatori',
+			u'Lat',
+			u'Lon',
+			u'Imagine',
+			u'Commons',
+			u'NotăCod',
+			u'FostCod',
+			u'Cod92',
+			u'CodRan',
+			u'Copyright',
+			],
 		'pagePrefix': {
 			u'Lista monumentelor istorice din județul',
 			u'Lista monumentelor istorice din București',
@@ -45,9 +58,7 @@ countries = {
 	('ro', 'ran') : {
 		'project' : u'wikipedia',
 		'lang' : u'ro',
-		'headerTemplate' : u'ÎnceputTabelRAN',
 		'rowTemplate' : u'ElementRAN',
-		'footerTemplate' : u'SfârșitTabelRAN',
 		'namespaces' : [0],
 		'fields' : {
 			u'Cod': u'Cod',
@@ -94,7 +105,7 @@ def processMonument(params, source, countryconfig, title):
 	contents['source'] = source
 	fields = countryconfig.get('fields')
 	for field in fields:
-		contents[fields[field]] = u''
+		contents[field] = u''
 
 	for param in params:
 		# Remove leading or trailing spaces
@@ -107,9 +118,9 @@ def processMonument(params, source, countryconfig, title):
 			if field in fields:
 				#Load it with Big fucking escape hack. Stupid mysql lib
 				if field == "Cod":
-					contents[fields[field]] = re.sub(r'\s', '', value.encode("utf8")) # Do this somewhere else.replace("'", "\\'")
+					contents[field] = re.sub(r'\s', '', value.encode("utf8")) # Do this somewhere else.replace("'", "\\'")
 				else:
-					contents[fields[field]] = value.encode("utf8") # Do this somewhere else.replace("'", "\\'")
+					contents[field] = value.encode("utf8") # Do this somewhere else.replace("'", "\\'")
 			else:
 				#FIXME: Include more information where it went wrong
 				pywikibot.output(u'Found unknown field: %s on page %s' % (field, title) )
@@ -155,7 +166,7 @@ def processDatabase(countryconfig, dbname="lmi"):
 			# Do some checking
 			processText(page.permalink(), countryconfig, page=page)
 			
-	f = open(dbname + "_db.json", "w+")
+	f = open("_".join([countryconfig.get('lang'), dbname, "db.json"]), "w+")
 	json.dump(monuments_db, f, indent=2)
 	f.close();
 
@@ -174,7 +185,7 @@ def main():
 	'''
 	# First find out what to work on
 
-	database = u'lmi'
+	database = None
 	textfile = u''
 
 	for arg in pywikibot.handleArgs():
