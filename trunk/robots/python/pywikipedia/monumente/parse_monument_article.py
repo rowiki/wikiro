@@ -331,7 +331,7 @@ def parseGeohackLinks(page):
 			u" identifica nicio coordonată: %s" % (title, link))
 		return 0,0
 	if lat < 43 or lat > 48.25 or long < 20 or long > 29.67:
-		log(u"*''E'': [[:%s]] Coordonate invalide pentru România: %f,%f" \
+		log(u"*''E'': [[:%s]] Coordonate invalide pentru țară: %f,%f" \
 			u" (extrase din %s)" % (title, lat, long, link))
 		return 0,0
 	return lat,long
@@ -561,6 +561,11 @@ def main():
 	preload = True
 	incremental = False
 
+	global _log
+	global fullDict
+	global qualityRegexp
+	global _db
+
 	for arg in pywikibot.handleArgs():
 		if arg.startswith('-lang:'):
 			lang = arg [len('-lang:'):]
@@ -588,10 +593,7 @@ def main():
 
 	rowTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), \
 								langOpt.get(_db).get('codeTemplate')[0]))
-	global _log
-	global fullDict
-	global qualityRegexp
-	_log = lang + "_" + _log;
+	_log = "_".join([lang, _db, _log]);
 	initLog()
 
 	qReg = u"\{\{("
@@ -617,13 +619,13 @@ def main():
 		if namespace == 0:
 			namespaceName = ""
 		else:
-			namespaceName = "_" + site.namespace(namespace)
+			namespaceName = site.namespace(namespace)
 		#no need to parse everything if we're gonna go through all the pages
 		reworkedDict = {}
-		filename = lang + namespaceName + "_pages.json"
+		filename = "_".join(filter(None, [lang, _db, namespaceName, "pages.json"]))
+		print filename
 		if parse_type != PARSE_FULL:
 			f = open(filename, "r+")
-			print f
 			jsonFile = json.load(f)
 			f.close();
 			#pre-calculate as much as possible of the information we'll need
