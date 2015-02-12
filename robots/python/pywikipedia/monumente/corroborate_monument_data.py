@@ -285,6 +285,7 @@ def readJson(filename, what):
 		return db
 	except IOError:
 		pywikibot.output("Failed to read " + filename + ". Trying to do without it.")
+		return {}
 	
 def readOtherData(filename):
 	if not os.path.exists(filename):
@@ -383,7 +384,7 @@ def parseOtherCoords(code, other_data):
 			pass
 	return (otherLat, otherLong, u"ALT: External data", updateCoord)
 	
-def addRan(code, monument, ran_data, articleText):
+def addRanData(code, monument, ran_data, articleText):
 	if code in ran_data:
 		sites = []
 		for site in ran_data[code]:
@@ -457,19 +458,19 @@ def main():
 		pywikibot.showHelp()
 		return
 	
-	db_json =				readJson(_db + "_db.json", "database")
-	pages_local =			readJson(_lang + "_pages.json", _lang + ".wp pages")
-	authors_local =			readJson(_lang + "_authors.json", _lang + ".wp authors")
-	files_local =			readJson(_lang + "_" + pywikibot.Site().namespace(6) + "_pages.json", _lang + ".wp files")
-	categories_commons =	readJson("commons_Category_pages.json", "commons categories")
-	pages_commons =			readJson("commons_File_pages.json", "commons images")
+	db_json =			readJson("_".join(filter(None, [_lang, _db, "db.json"])), "database")
+	pages_local =			readJson("_".join(filter(None, [_lang, _db, "pages.json"])), _lang + ".wp pages")
+	authors_local =			readJson("_".join(filter(None, [_lang, _db, "authors.json"])), _lang + ".wp authors")
+	files_local =			readJson("_".join(filter(None, [_lang, _db,  pywikibot.Site().namespace(6), "pages.json"])), _lang + ".wp files")
+	categories_commons =		readJson("commons_lmi_Category_pages.json", "commons categories")
+	pages_commons =			readJson("commons_lmi_File_pages.json", "commons images")
 	
 	other_data = readOtherData(otherFile)
 	
 	checkNewMonuments(other_data, db_json)
 	
 	if addRan:
-		ran_data = readRan("ran_db.json")
+		ran_data = readRan("ro_ran_db.json")
 	else:
 		ran_data = {}
 
