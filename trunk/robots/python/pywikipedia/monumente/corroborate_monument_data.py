@@ -21,6 +21,38 @@ Errors reported to a log file:
 * the list/article/pictures have different coordinates (difference larger than
   0.001 grade or ~3,6 degree seconds)
 
+The script requires some configuration for each database one plans to work on.
+The global variable ''countries'' is a dictionary. The key is a tuple containing
+the language and the database. The value is another dict containing the
+following fields:
+* headerTemplate: The template that marks the beginning of the list in the page
+* rowTemplate: The template that contains a row from the list; this is the 
+		actual template containing the data
+* footerTemplate: The template that marks the end of the list in the page
+* codeRegexp: Regular expression alowing easy identification of the code.
+	       This is needed in order to make sure the codes in the database/
+	       pages/files are correct
+* fields: An ordered dictionary of all the fields the rowTemplate can contain.
+           They are used to maintain the same order of parameters for all
+           instances of rowTemplate and to decide wether the current config
+           requires the field to be updated (see below for details)
+* geolimits: the limits of the area containing the monuments. It it a dictionary
+		containing integer values for north, south, east and west
+
+The script allows the user to choose which fields to update in the current run
+by using the "update..." command line parameters described below. By default,
+all the changes are uploaded. The actual fields that are updated are controlled
+by the value of the "fields" dictionary in the config. Each one is a constant
+from the Changes class:
+* article - this field should be updated when the updateArticle param is given
+* image - this field should be updated when the updateImage param is given
+* coord - this field should be updated when the updateCoord param is given
+* creator - this field should be updated when the updateCreator param is given
+* commons - this field should be updated when the updateCommons param is given
+* all - this field should be updated no matter what command line params are
+         given; this should also be used for fields that are not automatically
+         updated by this script
+
 Example: "python corroborate_monument_data.py -lang:ro -db:lmi -updateArticle"
 
 Command-line arguments:
@@ -69,12 +101,9 @@ class Changes:
 
 countries = {
 	('ro', 'lmi') : {
-		'project' : u'wikipedia',
-		'lang' : u'ro',
 		'headerTemplate' : u'ÎnceputTabelLMI',
 		'rowTemplate' : u'ElementLMI',
 		'footerTemplate' : u'SfârșitTabelLMI',
-		'namespaces' : [0],
 		'codeRegexp' : "(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))",
 		'fields' : collections.OrderedDict([
 						(u'Cod', {'code': Changes.all, }),
