@@ -13,6 +13,7 @@ import static org.apache.commons.lang3.StringUtils.substringBefore;
 import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -78,11 +79,14 @@ public class UAPercentagesParser {
             final String user = credentials.getProperty("Username");
             final String pass = credentials.getProperty("Password");
             rowiki.login(user, pass.toCharArray());
-            final File[] files = inDir.listFiles();
-            List<File> fileList = new ArrayList<File>();
-            fileList.addAll(Arrays.asList(files));
-            Collections.sort(fileList);
-            final UAPercentagesParser parser = new UAPercentagesParser(fileList.toArray(new File[fileList.size()]));
+            final File[] files = inDir.listFiles(new FileFilter() {
+                
+                public boolean accept(File arg0) {
+                    return true;
+                    //return arg0.getName().contains("kirovohrad");
+                }
+            });
+            final UAPercentagesParser parser = new UAPercentagesParser(files);
             parser.parse();
             parser.performCorrection();
         } catch (final IOException e) {
