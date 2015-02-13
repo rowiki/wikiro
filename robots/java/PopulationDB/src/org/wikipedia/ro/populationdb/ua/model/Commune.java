@@ -178,4 +178,17 @@ public class Commune implements LanguageStructurable {
         return null == getRegion() ? getRaion().getRegion() : getRegion();
     }
 
+    @Transient
+    public String getNominative() {
+        switch (town) {
+        case 0:
+            return "satul";
+        case 1:
+            return "așezarea de tip urban";
+        case 2:
+            return "orașul";
+        }
+        return null;
+    }
+
 }

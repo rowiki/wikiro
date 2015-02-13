@@ -126,6 +126,11 @@ public class Region implements LanguageStructurable {
     }
 
     @Transient
+    public String getNominative() {
+        return "regiunea";
+    }
+
+    @Transient
     public Region computeRegion() {
         return this;
     }

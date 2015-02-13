@@ -112,6 +112,7 @@ public class UkrainianTransliterator extends Transliterator {
                     transformedChar = "";
                 }
                 break;
+            case '’':
             case SEMN_TARE:
                 transformedChar = "";
                 break;
