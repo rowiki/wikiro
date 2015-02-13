@@ -122,4 +122,9 @@ public class Settlement implements LanguageStructurable {
         return getCommune().computeRegion();
     }
 
+    @Transient
+    public String getNominative() {
+        return "localitatea";
+    }
+
 }

@@ -1,21 +1,7 @@
 package org.wikipedia.ro.populationdb.ua;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
-import static org.apache.commons.lang3.StringUtils.appendIfMissing;
-import static org.apache.commons.lang3.StringUtils.contains;
-import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
-import static org.apache.commons.lang3.StringUtils.defaultString;
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.*;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.apache.commons.lang3.StringUtils.join;
-import static org.apache.commons.lang3.StringUtils.lowerCase;
-import static org.apache.commons.lang3.StringUtils.removeEnd;
-import static org.apache.commons.lang3.StringUtils.replace;
-import static org.apache.commons.lang3.StringUtils.substring;
-import static org.apache.commons.lang3.StringUtils.substringBefore;
-import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.awt.Color;
 import java.io.FileNotFoundException;
@@ -944,17 +930,31 @@ public class UAWikiGenerator {
 
         com.getCapital();
 
-        introTmpl.add("statut", 1 == com.getTown() ? "o [[așezare de tip urban]]" : "un oraș");
+        final Raion raion = com.getRaion();
+        if (null != raion) {
+            if (1 == com.getTown()) {
+                if (com.equals(raion.getCapital())) {
+                    introTmpl.add("statut", "[[Așezare de tip urban|așezarea de tip urban]] de reședință a [["
+                        + getArticleName(raion) + "|raionului " + obtainActualRomanianName(raion) + "]]");
+                } else {
+                    introTmpl.add("statut", "o [[așezare de tip urban]]");
+                }
+            } else {
+                if (com.equals(raion.getCapital())) {
+                    introTmpl.add("statut", "orașul raional de reședință al [[" + getArticleName(raion) + "|raionului "
+                        + obtainActualRomanianName(raion) + "]]");
+                } else {
+                    introTmpl.add("statut", "un oraș raional");
+                }
+            }
+        } else {
+            introTmpl.add("statut", "un oraș regional");
+        }
 
         final StringBuilder raionPart = new StringBuilder();
-        final Raion raion = com.getRaion();
-        if (null != raion && !raion.isMiskrada()) {
-            raionPart.append("[[");
-            raionPart.append(getArticleName(raion));
-            raionPart.append("|raionul ");
-            raionPart.append(obtainActualRomanianName(raion));
-            raionPart.append("]], ");
-        } else if (null != raion) {
+        if (null != raion && !raion.isMiskrada() && !com.equals(raion.getCapital())) {
+            raionPart.append(makeLink(raion)).append(", ");
+        } else if (null != raion && raion.isMiskrada()) {
             raionPart.append("orașul regional [[");
             String regTownActualName = obtainActualRomanianName(raion.getCapital());
             String regTownArticleName = getArticleName(raion.getCapital());
@@ -1016,7 +1016,18 @@ public class UAWikiGenerator {
         }
         introTmpl.add("nume_uk", ukName);
 
-        introTmpl.add("statut", null == com.getRaion() ? "oraș regional" : "oraș raional");
+        Raion raion = com.getRaion();
+        if (null == raion) {
+            introTmpl.add("statut", "oraș regional în ");
+        } else {
+            if (com.equals(raion.getCapital())) {
+                String raionLink = "[[" + getArticleName(raion) + "|" + "raionului "
+                    + StringUtils.defaultIfEmpty(raion.getRomanianName(), raion.getTransliteratedName()) + "]]";
+                introTmpl.add("statut", "orașul raional de reședință al " + raionLink + " din ");
+            } else {
+                introTmpl.add("statut", "oraș raional în " + makeLink(raion));
+            }
+        }
 
         final StringBuilder regionPart = new StringBuilder("[[");
         final Region reg = com.computeRegion();
@@ -1053,11 +1064,49 @@ public class UAWikiGenerator {
             }
             villageEnumeration.setLength(villageEnumeration.length() - 2);
             villageEnumeration.append(" și ").append(villageNames.get(villageNames.size() - 1));
+            villageEnumeration.append('.');
             introTmpl.add("are_sate", villageEnumeration.toString());
         } else {
             introTmpl.add("are_sate", "");
         }
+
+        if (null == com.getRaion()) {
+            List<Raion> raions = hib.findOuterRaionsForCity(com);
+            StringBuilder sb = new StringBuilder();
+            if (0 < raions.size()) {
+                sb.append("Deși subordonat direct regiunii, orașul este și reședința");
+                if (1 == raions.size()) {
+                    sb.append(" [[").append(getArticleName(raions.get(0))).append("|raionului ")
+                        .append(obtainActualRomanianName(raion)).append("]]");
+                } else {
+                    sb.append(" raioanelor ");
+                    List<String> commaSeparatedRaions = new ArrayList<String>();
+                    for (int i = 0; i < raions.size() - 1; i++) {
+                        commaSeparatedRaions.add("[[" + getArticleName(raions.get(i)) + '|'
+                            + obtainActualRomanianName(raions.get(i)));
+                    }
+                    sb.append(join(commaSeparatedRaions, ", "));
+                    sb.append(" și ").append(" [[").append(getArticleName(raions.get(raions.size() - 1))).append('|')
+                        .append(obtainActualRomanianName(raions.get(raions.size() - 1)));
+                }
+                sb.append('.');
+            }
+            introTmpl.add("are_raioane", sb.toString());
+        }
+
         return introTmpl.render();
+    }
+
+    private String makeLink(LanguageStructurable ls) {
+        StringBuilder sb = new StringBuilder("[[");
+        String articleName = getArticleName(ls);
+        sb.append(articleName);
+        String textualDescription = obtainActualRomanianName(ls);
+        if (!StringUtils.equals(articleName, textualDescription)) {
+            sb.append('|').append(textualDescription);
+        }
+        sb.append("]]");
+        return sb.toString();
     }
 
     private String generateRuralCommuneIntro(final Commune com, final String actualTitle) {
@@ -1569,6 +1618,8 @@ public class UAWikiGenerator {
                 communePart.append("orașul ");
                 if (null == com.getRaion() || com.getRaion().isMiskrada()) {
                     communePart.append("regional ");
+                } else {
+                    communePart.append("raional ");
                 }
             }
             communePart.append("[[");

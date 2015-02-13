@@ -149,4 +149,8 @@ public class Raion implements LanguageStructurable {
     public void setOriginalName(final String originalName) {
         this.originalName = originalName;
     }
+    @Transient
+    public String getNominative() {
+        return "raionul";
+    }
 }

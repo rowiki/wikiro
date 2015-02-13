@@ -79,7 +79,10 @@ public class UAPercentagesParser {
             final String pass = credentials.getProperty("Password");
             rowiki.login(user, pass.toCharArray());
             final File[] files = inDir.listFiles();
-            final UAPercentagesParser parser = new UAPercentagesParser(files);
+            List<File> fileList = new ArrayList<File>();
+            fileList.addAll(Arrays.asList(files));
+            Collections.sort(fileList);
+            final UAPercentagesParser parser = new UAPercentagesParser(fileList.toArray(new File[fileList.size()]));
             parser.parse();
             parser.performCorrection();
         } catch (final IOException e) {
@@ -128,6 +131,9 @@ public class UAPercentagesParser {
             crimeaRegion.setCapital(simferopol);
             ses.saveOrUpdate(crimeaRegion);
         }
+
+        Commune kiev = hib.getCommuneByTransliteratedName("Kîiiv");
+
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Bratska", "Krasnoperekopsk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Azovske", "Djankoi");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Starîi Krîm", "Kirovske");
@@ -189,6 +195,106 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Jîtomîr", "Hrîșkivți", "Berdîciv");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Jîtomîr", "Novohuivînske", "Jîtomîr");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Jîtomîr", "Horodnîțea", "Novohrad-Volînskîi");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Zakarpatska", "Kolciîno", "Mukaceve");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Zakarpatska", "Ciop", "Ujhorod");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Zakarpatska", "Vîjkovo", "Hust");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Zaporijjea", "Andriivka", "Berdeansk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Zaporijjea", "Balabîne", "Zaporijjea");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Zaporijjea", "Mîrne", "Melitopol");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Zaporijjea", "Moloceansk", "Tokmak");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Ivano-Frankivsk", "Voinîliv", "Kaluș");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Ivano-Frankivsk", "Hvizdeț", "Kolomîia");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kiev", "Uzîn", "Bila Țerkva");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kiev", "Velîkooleksandrivska", "Borîspil");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kiev", "Velîka Dîmerka", "Brovarî");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kiev", "Hlevaha", "Vasîlkiv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kiev", "Ciornobîl", "Ivankiv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kiev", "Borova", "Fastiv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "Nova Praha", "Oleksandria");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "Pomicina", "Dobrovelîcikivka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "Bohdanivska", "Znameanka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "Adjamska", "Kirovohrad");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "Velîkoandrusivska", "Svitlovodsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Luhansk", "Iesaulivka", "Antrațît");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Luhansk", "Velîkîi Loh", "Krasnodon");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Luhansk", "Biriukove", "Sverdlovsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Luhansk", "Zîmohirea", "Sloveanoserbsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Lviv", "Medenîci", "Drohobîci");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Lviv", "Rudkî", "Sambir");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Lviv", "Morșîn", "Strîi");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Mîkolaiiv", "Oleksandrivka", "Voznesensk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Mîkolaiiv", "Olșanske", "Mîkolaiiv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Mîkolaiiv", "Pidhorodna", "Pervomaisk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Odesa", "Adamivska", "Bilhorod-Dnistrovskîi");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Odesa", "Suvorove", "Izmaiil");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Odesa", "Oleksiivska", "Kotovsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Poltava", "Komîșnea", "Mîrhorod");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Rivne", "Smîha", "Dubno");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Rivne", "Kvasîliv", "Rivne");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Sumî", "Ciupahivka", "Ohtîrka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Sumî", "Cervone", "Hluhiv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Sumî", "Duboveazivka", "Konotop");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Sumî", "Bîșkinska", "Lebedîn");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Sumî", "Anastasivska", "Romnî");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Sumî", "Nîzî", "Sumî");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Sumî", "Voronij", "Șostka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Sumî", "Drujba", "Iampil");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Ternopil", "Kopîciînți", "Huseatîn");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Ternopil", "Skalat", "Pidvolociîsk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Ternopil", "Velîka Berezovîțea", "Ternopil");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Oleksandrivska", "Izium");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Vîșnivska", "Kupean");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Krasnopavlivka", "Lozova");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Merefa", "Harkiv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Harkiv", "Vvedenka", "Ciuhuiv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Hmelnîțkîi", "Stara Ușîțea", "Kameaneț-Podilskîi");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Hmelnîțkîi", "Ciornîi Ostriv", "Hmelnîțkîi");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Hmelnîțkîi", "Hrîțiv", "Șepetivka");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Antîpivska", "Zolotonoșa");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Berkozivska", "Kaniv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Balakliivska", "Smila");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Babanka", "Uman");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Irdîn", "Cerkasî");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Cernihiv", "Oster", "Kozeleț");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Cernihiv", "Losînivka", "Nijîn");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Cernihiv", "Ladan", "Prîlukî");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Cernihiv", "Honcearivske", "Cernihiv");
+
+        Region donetkReg = hib.getRegionByTransliteratedName("Donețk");
+        if (null != donetkReg) {
+            Raion pershotravnevyi = hib.getRaionByTransliteratedNameAndRegion("Manhuș", donetkReg);
+            if (null != pershotravnevyi) {
+                pershotravnevyi.setName("Першотравневий");
+                pershotravnevyi.setTransliteratedName(new UkrainianTransliterator("Першотравневий").transliterate());
+                ses.saveOrUpdate(pershotravnevyi);
+            }
+        }
+
+        Region mikolaiivReg = hib.getRegionByTransliteratedName("Mîkolaiiv");
+        Commune mikolaiivCity = hib.getCommuneByTransliteratedNameAndRegion("Mîkolaiiv", mikolaiivReg);
+        if (null != mikolaiivReg && null != mikolaiivCity) {
+            Raion raion = hib.getRaionByTransliteratedNameAndRegion("Voskresenske", mikolaiivReg);
+            if (null != raion) {
+                raion.setCapital(mikolaiivCity);
+                raion.setName("Жовтневий");
+                raion.setOriginalName("Жовтневий");
+                raion.setTransliteratedName(new UkrainianTransliterator(raion.getName()).transliterate());
+                ses.saveOrUpdate(raion);
+            }
+        }
+
+        if (null != kievReg) {
+            final Raion raion = hib.getRaionByTransliteratedNameAndRegion("Boiarka", kievReg);
+            if (null != raion) {
+                raion.setTransliteratedName("Kîiiv-Sveatoșîn");
+                raion.setOriginalName("Києво-Святошинський");
+                raion.setRomanianName("Kiev-Sveatoșîn");
+                if (null != kiev) {
+                    raion.setCapital(kiev);
+                    ses.saveOrUpdate(raion);
+                }
+            }
+        }
 
         if (null != kievReg) {
             final Raion raion = hib.getRaionByTransliteratedNameAndRegion("Volodarska", kievReg);
@@ -266,6 +372,9 @@ public class UAPercentagesParser {
                 Region currentRegion = null;
                 while (null != (line = reader.readNext())) {
                     final String nume = line[0];
+                    if (isEmpty(nume) || line.length < 2) {
+                        continue;
+                    }
                     final Transliterator t = new UkrainianTransliterator(nume);
                     final String numeTransliterat = t.transliterate();
 
@@ -605,28 +714,32 @@ public class UAPercentagesParser {
     }
 
     private String getRomanianName(final List<String> possibleNames) {
-        try {
+        boolean error = false;
+        do {
+            try {
 
-            final boolean[] existance = rowiki.exists(possibleNames.toArray(new String[possibleNames.size()]));
-            for (int i = 0; i < possibleNames.size(); i++) {
-                if (!existance[i]) {
-                    continue;
+                final boolean[] existance = rowiki.exists(possibleNames.toArray(new String[possibleNames.size()]));
+                for (int i = 0; i < possibleNames.size(); i++) {
+                    if (!existance[i]) {
+                        continue;
+                    }
+                    String redirectResolution = rowiki.resolveRedirect(possibleNames.get(i));
+                    if (isEmpty(redirectResolution)) {
+                        redirectResolution = possibleNames.get(i);
+                    }
+                    redirectResolution = removeStart(redirectResolution, "Raionul ");
+                    redirectResolution = removeStart(redirectResolution, "Regiunea ");
+                    redirectResolution = substringBefore(redirectResolution, ",");
+                    redirectResolution = substringBefore(redirectResolution, "(");
+                    redirectResolution = trim(redirectResolution);
+                    return redirectResolution;
                 }
-                String redirectResolution = rowiki.resolveRedirect(possibleNames.get(i));
-                if (isEmpty(redirectResolution)) {
-                    redirectResolution = possibleNames.get(i);
-                }
-                redirectResolution = removeStart(redirectResolution, "Raionul ");
-                redirectResolution = removeStart(redirectResolution, "Regiunea ");
-                redirectResolution = substringBefore(redirectResolution, ",");
-                redirectResolution = substringBefore(redirectResolution, "(");
-                redirectResolution = trim(redirectResolution);
-                return redirectResolution;
+            } catch (final IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                error = true;
             }
-        } catch (final IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        } while (error);
         return "";
     }
 
@@ -636,7 +749,9 @@ public class UAPercentagesParser {
         possibleNames.add(sat.getTransliteratedName() + " (Ucraina)");
         if (null != sat.getCommune().getRaion()) {
             possibleNames.add(sat.getTransliteratedName() + ", " + sat.getCommune().getRaion().getTransliteratedName());
-            possibleNames.add(sat.getTransliteratedName() + ", " + sat.getCommune().getRaion().getRomanianName());
+            if (!isEmpty(sat.getCommune().getRaion().getRomanianName())) {
+                possibleNames.add(sat.getTransliteratedName() + ", " + sat.getCommune().getRaion().getRomanianName());
+            }
         }
         possibleNames.add(sat.getTransliteratedName());
         return possibleNames;
@@ -648,7 +763,9 @@ public class UAPercentagesParser {
         possibleNames.add(commune.getTransliteratedName() + " (Ucraina)");
         if (null != commune.getRaion()) {
             possibleNames.add(commune.getTransliteratedName() + ", " + commune.getRaion().getTransliteratedName());
-            possibleNames.add(commune.getTransliteratedName() + ", " + commune.getRaion().getRomanianName());
+            if (!isEmpty(commune.getRaion().getRomanianName())) {
+                possibleNames.add(commune.getTransliteratedName() + ", " + commune.getRaion().getRomanianName());
+            }
         }
         possibleNames.add(commune.getTransliteratedName());
         return possibleNames;
@@ -660,17 +777,19 @@ public class UAPercentagesParser {
         possibleNames.add("Raionul " + roName + " (Ucraina)");
         if (null != raion.getRegion()) {
             possibleNames.add("Raionul " + roName + ", " + raion.getRegion().getTransliteratedName());
-            possibleNames.add("Raionul " + roName + ", " + raion.getRegion().getRomanianName());
+            if (!isEmpty(raion.getRegion().getRomanianName())) {
+                possibleNames.add("Raionul " + roName + ", " + raion.getRegion().getRomanianName());
+            }
         }
         possibleNames.add("Raionul " + roName);
         return possibleNames;
     }
 
-    private List<String> getPossibleNames(final Region raion) {
+    private List<String> getPossibleNames(final Region region) {
         final List<String> possibleNames = new ArrayList<String>();
-        possibleNames.add("Regiunea " + raion.getTransliteratedName() + ", Ucraina");
-        possibleNames.add("Regiunea " + raion.getTransliteratedName() + " (Ucraina)");
-        possibleNames.add("Regiunea " + raion.getTransliteratedName());
+        possibleNames.add("Regiunea " + region.getTransliteratedName() + ", Ucraina");
+        possibleNames.add("Regiunea " + region.getTransliteratedName() + " (Ucraina)");
+        possibleNames.add("Regiunea " + region.getTransliteratedName());
         return possibleNames;
     }
 }
