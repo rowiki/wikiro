@@ -47,8 +47,11 @@ add_template_to_images.py - adds the {{Monument istoric}} template to images use
 error_remove.py - removes a set of errors from the lists using regular expressions. 
 			DO NOT USE unless you are familiar with regexps.
 
-lmi_shortcuts.py - create pages in the Cod:LMI namespace that redirect to the 
-			monument lists
+create_shortcuts.py - create pages in the "Cod" namespace that redirect to the 
+			database entries
+
+create_articles.py - a highly customized script used to create articles about LMI
+			monuments.
 
 cleanup_code.py - remove spaces and potentially other detectable errors from the
 			codes, either in image pages or monument lists
