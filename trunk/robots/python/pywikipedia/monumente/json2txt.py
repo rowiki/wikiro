@@ -16,13 +16,13 @@ def split_code(code):
 config = {
 	'lmiro': {
 		'output': u"rofiles.txt",
-		'input': u"ro_Fișier_pages.json",
+		'input': u"ro_lmi_Fișier_pages.json",
 		'lang': u"ro",
 		'family': u"wikipedia",
 	},
 	'lmicommons': {
 		'output': u"monumentfiles.txt",
-		'input': u"commons_File_pages.json",
+		'input': u"commons_lmi_File_pages.json",
 		'lang': u"commons",
 		'family': u"commons",
 	},

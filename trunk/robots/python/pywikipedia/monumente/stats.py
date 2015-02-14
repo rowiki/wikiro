@@ -17,31 +17,31 @@ def split_code(code):
 	return (parts[0], parts[1], parts[2], parts[3])
 
 def main():
-	f = open("lmi_db.json", "r+")
+	f = open("ro_lmi_db.json", "r+")
 	pywikibot.output("Reading database file...")
 	db = json.load(f)
 	pywikibot.output("...done")
 	f.close();
 	
-	f = open("commons_Category_pages.json", "r+")
+	f = open("commons_lmi_Category_pages.json", "r+")
 	pywikibot.output("Reading commons categories file...")
 	cat_commons = json.load(f)
 	pywikibot.output("...done")
 	f.close();
 	
-	f = open("commons_File_pages.json", "r+")
+	f = open("commons_lmi_File_pages.json", "r+")
 	pywikibot.output("Reading commons images file...")
 	pages_commons = json.load(f)
 	pywikibot.output("...done")
 	f.close();
 	
-	f = open("ro_pages.json", "r+")
+	f = open("ro_lmi_pages.json", "r+")
 	pywikibot.output("Reading articles file...")
 	pages_ro = json.load(f)
 	pywikibot.output("...done")
 	f.close();
 	
-	f = open("ro_Fișier_pages.json", "r+")
+	f = open("ro_lmi_Fișier_pages.json", "r+")
 	pywikibot.output("Reading ro images file...")
 	files_ro = json.load(f)
 	pywikibot.output("...done")
