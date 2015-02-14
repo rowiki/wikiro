@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8  -*-
 
-import json, csv, codecs
+import json, csv, codecs, collections
 
 def csvToJson( inFile, outFile=None, field=u"Cod"):
     out = None;
@@ -10,11 +10,11 @@ def csvToJson( inFile, outFile=None, field=u"Cod"):
         #Note this reads the first line as the keys we can add specific keys with:
         #csv.DictReader( csvFile, fieldnames=<LIST HERE>, restkey=None, restval=None, )
         csvDict = csv.DictReader( csvFile, restkey=None, restval=None, )
-        out = {}
+        out = collections.OrderedDict({})
         for row in csvDict:
             if field not in row:
                 return None
-            out.update({row[field]: dict([(key, unicode(value, 'utf-8')) for key, value in row.iteritems()])})
+            out.update({row[field]: dict([(unicode(key, 'utf-8'), unicode(value, 'utf-8')) for key, value in row.iteritems()])})
 
     if outFile and out:
         with open( outFile, 'w' ) as jsonFile:
