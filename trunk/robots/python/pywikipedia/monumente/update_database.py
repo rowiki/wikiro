@@ -148,6 +148,8 @@ def processDatabase(countryconfig, dbname="lmi"):
 	Process all the monuments of one database
 	'''
 
+	global monuments_db
+
 	site = pywikibot.Site(countryconfig.get('lang'), countryconfig.get('project'))
 	rowTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), countryconfig.get('rowTemplate')))
 
@@ -169,6 +171,7 @@ def processDatabase(countryconfig, dbname="lmi"):
 	f = open("_".join([countryconfig.get('lang'), dbname, "db.json"]), "w+")
 	json.dump(monuments_db, f, indent=2)
 	f.close();
+	monuments_db = []
 
 
 def main():
