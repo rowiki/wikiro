@@ -188,12 +188,12 @@ def main():
 		if arg.startswith('-cat'):
 			cat = arg [len('-cat:'):]
 	initLog()
-	f = open("lmi_db.json", "r+")
+	f = open("ro_lmi_db.json", "r+")
 	pywikibot.output("Reading database file...")
 	db = json.load(f)
 	pywikibot.output("...done")
 	f.close();
-	f = open("commons_Category_pages.json", "r+")
+	f = open("commons_lmi_Category_pages.json", "r+")
 	pywikibot.output("Reading commons categories file...")
 	categs = json.load(f)
 	pywikibot.output("...done")
