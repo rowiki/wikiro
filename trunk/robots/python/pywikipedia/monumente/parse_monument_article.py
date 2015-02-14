@@ -76,6 +76,12 @@ options = {
 			'codeTemplateParams': 
 			[
 			],
+			'geolimits': {
+				'north': 48.3,
+				'south': 43.6,
+				'west':  20.27,
+				'east':  29.7,
+			},
 		},
 		'infoboxes':
 		[
@@ -173,6 +179,12 @@ options = {
 				u'ran',
 				u'eroare',
 			],
+			'geolimits': {
+				'north': 48.3,
+				'south': 43.6,
+				'west':  20.27,
+				'east':  29.7,
+			},
 		},
 		'infoboxes': 
 		[
@@ -252,7 +264,7 @@ def isCoor( ns, ew ):
 	return ((ns == "N" or ns == "S") and
 			(ew == "E" or ew == "W"))
 
-def parseGeohackLinks(page):
+def parseGeohackLinks(page, conf):
 	trace = Trace(sys._getframe().f_code.co_name)
 	#pywikibot.output("=> Trying to retrieve: " + page.site.base_url("/w/api.php?action=parse&format=json&page=" +
         #                page.title(asUrl=True) + "&prop=externallinks&uselang=ro"))
@@ -357,7 +369,8 @@ def parseGeohackLinks(page):
 		log(u"*''E'': [[:%s]] Problemă (3) cu legătura Geohack: nu pot" \
 			u" identifica nicio coordonată: %s" % (title, link))
 		return 0,0
-	if lat < 43 or lat > 48.25 or long < 20 or long > 29.67:
+	if lat < langOpt[_db]['south'] or lat > langOpt[_db]['north'] or \
+		long < langOpt[_db]['west'] or long > langOpt[_db]['east']:
 		log(u"*''E'': [[:%s]] Coordonate invalide pentru țară: %f,%f" \
 			u" (extrase din %s)" % (title, lat, long, link))
 		return 0,0
@@ -483,10 +496,10 @@ def processArticle(text, page, conf):
 			lat = coor.lat
 			long = coor.lon
 		else:
-			lat, long = parseGeohackLinks(page)
+			lat, long = parseGeohackLinks(page, conf)
 	except KeyError as e:
 		print "KeyError " + repr(e)
-		lat, long = parseGeohackLinks(page)
+		lat, long = parseGeohackLinks(page, conf)
 	except Exception as e:
 		print "Exception " + repr(e)
 		lat = long = 0
@@ -634,7 +647,7 @@ def main():
 	for namespace in langOpt.get(_db).get('namespaces'):
 		transGen = pagegenerators.ReferringPageGenerator(rowTemplate,
 									onlyTemplateInclusion=True, step=1000)
-		#transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, u"Categorie:1735_în_arhitectură"))
+		#filteredGen = transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, u"Category:1690s churches in Romania"))
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen,
 									[namespace], site)
 		if preload:
