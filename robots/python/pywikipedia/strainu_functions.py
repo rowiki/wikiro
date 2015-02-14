@@ -228,28 +228,28 @@ def capitalizeWithSigns(text, keep=[]):
     text = text.replace(u"@@0@@ ", u"-")
     return text
         
-    # def getDeg(self, decimal):
-        # if decimal < 0:
-            # decimal = -decimal
-        # return int(math.floor(decimal))
-        
-    # def getMin(self, decimal):
-        # if decimal < 0:
-            # decimal = -decimal
-        # return int(math.floor((decimal - math.floor(decimal)) * 60))
-        
-    # def getSec(self, decimal):
-        # if decimal < 0:
-            # decimal = -decimal
-        # return int(math.floor(((decimal - math.floor(decimal)) * 3600) % 60))
-        
-    # def geosign(self, check, plus, minus):
-        # if check == plus:
-            # return 1
-        # elif check == minus:
-            # return -1
-        # else:
-            # return 0 #this should really never happen
+def getDeg(decimal):
+    if decimal < 0:
+        decimal = -decimal
+    return int(math.floor(decimal))
+   
+def getMin(decimal):
+    if decimal < 0:
+        decimal = -decimal
+    return int(math.floor((decimal - math.floor(decimal)) * 60))
+   
+def getSec(decimal):
+    if decimal < 0:
+        decimal = -decimal
+    return int(math.floor(((decimal - math.floor(decimal)) * 3600) % 60))
+   
+def geosign(check, plus, minus):
+    if check == plus:
+        return 1
+    elif check == minus:
+        return -1
+    else:
+        return 0 #this should really never happen
             
 def linkedImages(page):
     """Return a list of Pages that this Page links to.
@@ -284,8 +284,13 @@ def linkedImages(page):
     #thistxt = page.site.resolvemagicwords(thistxt)
 
     for match in Rlink.finditer(thistxt):
+	#print match.group(0)
         title = match.group('title')
         title = title.replace("_", " ").strip(" ")
+	#print title
+	if title == u"":
+		# empty link - problem in the page
+		continue
         if page.namespace() in page.site.family.namespacesWithSubpage:
             # convert relative link to absolute link
             if title.startswith(".."):
