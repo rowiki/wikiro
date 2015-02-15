@@ -399,11 +399,12 @@ def addRanData(code, monument, ran_data, articleText):
 	
 def chooseImagePicky(files):
 	blacklist = [#all lowercase
-				u'detali',#detaliu, detalii
-				u'pisani',#pisanie, pisanii
-				u'interio',#interior, interioare
-				u'plac',#placa, placă
-				]
+			u'detali',#detaliu, detalii
+			u'pisani',#pisanie, pisanii
+			u'interio',#interior, interioare
+			u'plac',#placa, placă
+			u'logo',#logo
+		    ]
 	tries = 0
 	while tries < len(files):
 		artimage = random.sample(files,  1)[0]["name"]
@@ -710,7 +711,7 @@ def main():
 		if code in ran_data:
 			otherCoords.append(parseRanCoords(code, ran_data[code]))
 		if code in other_data:
-			print code
+			#print code
 			otherCoords.append(parseOtherCoords(code, other_data[code]))
 
 		for (otherLat, otherLong, otherSrc, otherValid) in otherCoords:
