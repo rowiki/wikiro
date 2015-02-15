@@ -43,6 +43,7 @@ countries = {
 			u'Lat',
 			u'Lon',
 			u'Imagine',
+			u'Plan',
 			u'Commons',
 			u'NotăCod',
 			u'FostCod',

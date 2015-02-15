@@ -99,6 +99,24 @@ class Changes:
 	other	= 0x200
 	all	= 0xFFF
 
+
+blacklist = [#all lowercase
+		u'detali',#detaliu, detalii
+		u'pisani',#pisanie, pisanii
+		u'interio',#interior, interioare
+		u'plac',#placa, placă
+		u'usa',
+		u'fereastr',
+		u'logo',#logo
+	    ]
+
+plan = 	[#all lowercase
+		u'.svg',#svg files are definetely not pictures
+		u'plan',#plans are plans
+		u'v1',
+		u'v2',
+	]
+
 countries = {
 	('ro', 'lmi') : {
 		'headerTemplate' : u'ÎnceputTabelLMI',
@@ -118,7 +136,8 @@ countries = {
 						(u'Creatori', {'code': Changes.creator, }),
 						(u'Lat', {'code': Changes.coord, }),
 						(u'Lon', {'code': Changes.coord, }),
-						(u'Imagine', {'code': Changes.image, }),
+						(u'Imagine', {'code': Changes.image, 'blacklist': blacklist + plan}),
+						(u'Plan', {'code': Changes.image, 'blacklist': blacklist}),
 						(u'Commons', {'code': Changes.commons, }),
 						(u'Copyright', {'code': Changes.all, }),
 					]),
@@ -181,7 +200,8 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 	:return: The modified text of the page
 	:rtype: string
 	"""
-	if (countries.get((_lang, _db)).get('fields')[field]['code'] & _changes) == Changes.none:
+	if (field not in countries.get((_lang, _db)).get('fields') or \
+	countries.get((_lang, _db)).get('fields')[field]['code'] & _changes) == Changes.none:
 		pywikibot.output("Skipping %s for %s" % (field, code))
 		return
 	pywikibot.output("Uploading %s for %s; value \"%s\"" % (field, code, newvalue))
@@ -396,26 +416,42 @@ def addRanData(code, monument, ran_data, articleText):
 		articleText = updateTableData(monument["source"], code, "CodRan", sites, \
 								 text=articleText, ask=False)
 	return articleText
-	
+
+def getImageType(image):
+	""" 
+	This function decides if an image should be uploaded or not, and if yes,
+	what field it should be uploaded to
+
+	:return: None if it should not be uploaded, otherwise the field it should
+		be uploaded to
+	:type: string or None
+	"""	
+	search = image.lower()
+	print search
+	fields = countries.get((_lang, _db)).get('fields')
+	for field in fields:
+		print "*" + field
+		if fields[field]['code'] == Changes.image:
+			for skip in fields[field]['blacklist']:
+				print "**" + skip
+				if search.find(skip) != -1:
+					break
+			else:
+				return field
+
+	return None
+
 def chooseImagePicky(files):
-	blacklist = [#all lowercase
-			u'detali',#detaliu, detalii
-			u'pisani',#pisanie, pisanii
-			u'interio',#interior, interioare
-			u'plac',#placa, placă
-			u'logo',#logo
-		    ]
+	print files
 	tries = 0
 	while tries < len(files):
 		artimage = random.sample(files,  1)[0]["name"]
 		tries += 1
 		#be picky and don't choose a detail picture; also stop on some arbitrary condition
-		for cond in blacklist:
-			if (artimage.lower().find(cond) != -1):
-				break
-		else:
-			return artimage
-	return artimage
+		imageType =  getImageType(artimage)
+		if imageType:
+			return (artimage, imageType)
+	return (artimage, getImageType(""))
 	
 def checkNewMonuments(other_data, db):
 	f = codecs.open(_db + "_monumente_noi.wiki", "w", "utf8")
@@ -640,44 +676,50 @@ def main():
 			else:
 				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
 	
-		#image from Commons, none in the list
-		if picture <> None and monument["Imagine"].strip() == "":
-			#pywikibot.output("Upload?" + picture)
-			if picture.find(':') < 0:#no namespace
-				picture = "File:" + picture
-			articleText = updateTableData(monument["source"], code, "Imagine", picture, text=articleText)
+		# --- Choose an image ---
+		#we will only consider other types of image if no picture exists
 
-		elif monument["Imagine"].strip() == "":
+		#image from Commons, none in the list
+		if monument["Imagine"].strip() == "":
+			if picture <> None:
+				#pywikibot.output("Upload?" + picture)
+				if picture.find(':') < 0:#no namespace
+					picture = "File:" + picture
+				picture, pictureType = chooseImagePicky([{"name": picture}])
+				articleText = updateTableData(monument["source"], code, pictureType, picture, text=articleText)
+
 			#use image from article only if none is available (or was selected) 
 			#from commons and we don't have a picture in the list
-			if article <> None and article["image"] <> None and article["image"] <> "":
+			elif article <> None and article["image"] <> None and article["image"] <> "":
 				pywikibot.output(article["image"])
 				artimage = strainu.extractImageLink(article["image"]).strip()
 				if artimage == None or artimage == "":
 					pywikibot.output("Wrong article image link: \"%s\"@%s" % (article["image"], article["name"]))
 				if artimage.find(':') < 0:#no namespace
 					artimage = "File:" + artimage
-				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
+				artimage,artimageType = chooseImagePicky([{"name": artimage}])
+				articleText = updateTableData(monument["source"], code, artimageType, artimage, text=articleText)
 			#next option: an image from the RAN database
 			elif code in ran_data:
 				for site in ran_data[code]:
 					if site[u"Imagine"] != u"":
 						ranimage = site[u"Imagine"] # it MUST have the namespace prefix
+						ranimage,ranimageType = chooseImagePicky([{"name": artimage}])
 						articleText = updateTableData(monument["source"], code, 
-											"Imagine", ranimage, text=articleText)
+											ranimageType, ranimage, text=articleText)
 						break
 			#next option: choose a random image from commons
 			elif (code in pages_commons) and len(pages_commons[code]) > 0:
-				artimage = chooseImagePicky(pages_commons[code])
+				artimage,artimageType = chooseImagePicky(pages_commons[code])
 				if artimage.find(':') < 0:#no namespace
 					artimage = "File:" + artimage
-				articleText = updateTableData(monument["source"], code, "Imagine", artimage, text=articleText)
+				articleText = updateTableData(monument["source"], code, artimageType, artimage, text=articleText)
 			#final option: perhaps we have a local image?
 			elif (code in files_local) and len(files_local[code]) > 0:
-				localimage = chooseImagePicky(files_local[code])
+				localimage,localimageType = chooseImagePicky(files_local[code])
 				if localimage.find(':') < 0:#nonamespace
 					localimage = "File:" + localimage
-				articleText = updateTableData(monument["source"], code, "Imagine", localimage, text=articleText)
+				articleText = updateTableData(monument["source"], code, localimageType, localimage, text=articleText)
 
 		#Commons category
 		if code in categories_commons:

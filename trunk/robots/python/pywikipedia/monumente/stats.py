@@ -48,6 +48,7 @@ def main():
 	f.close();
 	
 	images = 0
+	plans = 0
 	coords = 0
 	authors = 0
 	articles = 0
@@ -140,6 +141,9 @@ def main():
 			image_nature[nature] += 1
 			image_type[type] += 1
 			image_interest[interest] += 1
+		if monument["Plan"].strip() <> "":
+			#images += 1
+			plans += 1
 		if monument["Lat"] <> "" or monument["Lon"] <> "":
 			coords += 1
 		if monument["Creatori"] <> "":
@@ -153,6 +157,7 @@ def main():
 	
 	print "* Total imagini: ''%d''" % total_images
 	print "* Monumente cu imagini: ''%d/%d (%f%%)''" % (images, total, images * 100.0 / total)
+	print "* Monumente cu imagini sau plan: ''%d/%d (%f%%)''" % (images + plans, total, (images + plans) * 100.0 / total)
 	print "* Monumente cu coordonate: ''%d/%d (%f%%)''" % (coords, total, coords * 100.0 / total)
 	print "* Monumente cu arhitect: ''%d/%d (%f%%)''" % (authors, total, authors * 100.0 / total)
 	print "* Monumente cu articole: ''%d/%d (%f%%)''" % (articles, total, articles * 100.0 / total)
