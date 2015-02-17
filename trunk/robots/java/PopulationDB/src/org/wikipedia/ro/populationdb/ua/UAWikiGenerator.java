@@ -1025,7 +1025,7 @@ public class UAWikiGenerator {
                     + StringUtils.defaultIfEmpty(raion.getRomanianName(), raion.getTransliteratedName()) + "]]";
                 introTmpl.add("statut", "orașul raional de reședință al " + raionLink + " din ");
             } else {
-                introTmpl.add("statut", "oraș raional în " + makeLink(raion));
+                introTmpl.add("statut", "oraș raional în " + makeLink(raion) + " din ");
             }
         }
 
@@ -1101,7 +1101,7 @@ public class UAWikiGenerator {
         StringBuilder sb = new StringBuilder("[[");
         String articleName = getArticleName(ls);
         sb.append(articleName);
-        String textualDescription = obtainActualRomanianName(ls);
+        String textualDescription = ls.getNominative() + ' ' + obtainActualRomanianName(ls);
         if (!StringUtils.equals(articleName, textualDescription)) {
             sb.append('|').append(textualDescription);
         }
