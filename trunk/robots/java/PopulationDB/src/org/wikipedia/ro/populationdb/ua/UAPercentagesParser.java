@@ -7,7 +7,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.removeStart;
-import static org.apache.commons.lang3.StringUtils.replace;
+import static org.apache.commons.lang3.StringUtils.replaceEach;
 import static org.apache.commons.lang3.StringUtils.split;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 import static org.apache.commons.lang3.StringUtils.trim;
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.security.auth.login.FailedLoginException;
+import javax.swing.text.MaskFormatter;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -79,15 +80,18 @@ public class UAPercentagesParser {
             final String user = credentials.getProperty("Username");
             final String pass = credentials.getProperty("Password");
             rowiki.login(user, pass.toCharArray());
+
             final File[] files = inDir.listFiles(new FileFilter() {
-                
+
                 public boolean accept(File arg0) {
                     return true;
-                    //return arg0.getName().contains("kirovohrad");
+                    // return arg0.getName().contains("kirovohrad");
                 }
             });
             final UAPercentagesParser parser = new UAPercentagesParser(files);
-            parser.parse();
+            /*
+             * parser.parse();
+             */
             parser.performCorrection();
         } catch (final IOException e) {
             // TODO Auto-generated catch block
@@ -104,7 +108,7 @@ public class UAPercentagesParser {
         final Hibernator hib = new Hibernator();
         final Session ses = hib.getSession();
         ses.beginTransaction();
-        final Region kievReg = hib.getRegionByTransliteratedName("Bila Țerkva");
+        Region kievReg = hib.getRegionByTransliteratedName("Bila Țerkva");
         if (null != kievReg) {
             kievReg.setName(capitalize(lowerCase("КИЇВ")));
             kievReg.setTransliteratedName("Kîiiv");
@@ -113,20 +117,26 @@ public class UAPercentagesParser {
             final Commune kievCommune = hib.getCommuneByRomanianName("Kiev");
             kievReg.setCapital(kievCommune);
             ses.saveOrUpdate(kievReg);
+        } else {
+            kievReg = hib.getRegionByTransliteratedName("Kîiiv");
         }
-        final Region transcarpatiaRegion = hib.getRegionByTransliteratedName("Ujhorod");
+        Region transcarpatiaRegion = hib.getRegionByTransliteratedName("Ujhorod");
         if (null != transcarpatiaRegion) {
             transcarpatiaRegion.setName(capitalize(lowerCase("ЗАКАРПАТСЬКА")));
             transcarpatiaRegion.setRomanianName("Transcarpatia");
             transcarpatiaRegion.setTransliteratedName("Zakarpatska");
             ses.saveOrUpdate(transcarpatiaRegion);
+        } else {
+            transcarpatiaRegion = hib.getRegionByTransliteratedName("Zakarpatska");
         }
-        final Region volynRegion = hib.getRegionByTransliteratedName("Luțk");
+        Region volynRegion = hib.getRegionByTransliteratedName("Luțk");
         if (null != volynRegion) {
             volynRegion.setName(capitalize(lowerCase("Волин")));
             volynRegion.setRomanianName("Volînia");
             volynRegion.setTransliteratedName("Volîn");
             ses.saveOrUpdate(volynRegion);
+        } else {
+            volynRegion = hib.getRegionByTransliteratedName("Volîn");
         }
 
         final Region crimeaRegion = hib.getRegionByTransliteratedName("Krîm");
@@ -137,6 +147,20 @@ public class UAPercentagesParser {
         }
 
         Commune kiev = hib.getCommuneByTransliteratedName("Kîiiv");
+
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Hmilnîk", "Vinnîțea");
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Inhuleț", "Dnipropetrovsk");
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Mukaceve", "Zakarpatska");
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Burștîn", "Ivano-Frankivsk");
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Brovarî", "Kîiiv");
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Vasîlkiv", "Kîiiv");
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Sambir", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Strîi", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Truskaveț", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Novîi Rozdil", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Șostka", "Sumî");
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Kaniv", "Cerkasî");
+        fixCityWithoutRaionOrRegionBySettingRegion(hib, "Uman", "Vinnîțea");
 
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Bratska", "Krasnoperekopsk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Azovske", "Djankoi");
@@ -313,7 +337,99 @@ public class UAPercentagesParser {
                 }
             }
         }
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Beresteciko", "Horohiv", "Volîn");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Zelenodolsk", "Apostolove", "Dnipropetrovsk");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Verhivțeve", "Verhnodniprovsk", "Dnipropetrovsk");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Dniprorudne", "Vasîlivka", "Zaporijjea");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Vîșneve", "Kîiiv-Sveatoșîn", "Kîiiv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Ukraiinka", "Obuhiv", "Kîiiv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Șceastea", "Novoaidar", "Luhansk");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Artemivsk", "Perevalsk", "Luhansk");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Komarno", "Horodok", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Hodoriv", "Jîdaciv", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Hlîneanî", "Zolociv", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Sudova Vîșnea", "Mostîska", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Dubleanî", "Jovkva", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Rava-Ruska", "Jovkva", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Bibrka", "Peremîșleanî", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Belz", "Sokal", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Velîki Mostî", "Sokal", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Uhniv", "Sokal", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Dobromîl", "Starîi Sambir", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Hîriv", "Starîi Sambir", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Novoiavorivsk", "Iavoriv", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Vîlkove", "Kilia", "Odesa");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Cervonozavodske", "Lohvîțea", "Poltava");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Vorojba", "Bilopillea", "Sumî");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Horostkiv", "Huseatîn", "Ternopil");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Poceaiv", "Kremeneț", "Ternopil");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Vașkivți", "Vîjnîțea", "Cernivți");
+        fixCityWithoutRaionOrRegionBySettingRaion(hib, "Maslivka", "Nova Kahovka", "Herson");
+
+        fixCityWithoutRaionOrRegionBySettingRegionalTown(hib, "Oleksandrivsk", "Luhansk", "Luhansk");
+        fixCityWithoutRaionOrRegionBySettingRegionalTown(hib, "Vahrușeve", "Krasnîi Luci", "Luhansk");
+        fixCityWithoutRaionOrRegionBySettingRegionalTown(hib, "Miusînsk", "Krasnîi Luci", "Luhansk");
+        fixCityWithoutRaionOrRegionBySettingRegionalTown(hib, "Petrivske", "Krasnîi Luci", "Luhansk");
+        fixCityWithoutRaionOrRegionBySettingRegionalTown(hib, "Novodrujesk", "Lîsîceansk", "Luhansk");
+        fixCityWithoutRaionOrRegionBySettingRegionalTown(hib, "Prîvillea", "Lîsîceansk", "Luhansk");
+        fixCityWithoutRaionOrRegionBySettingRegionalTown(hib, "Almazna", "Stahanov", "Luhansk");
+        fixCityWithoutRaionOrRegionBySettingRegionalTown(hib, "Teplohirsk", "Stahanov", "Luhansk");
+        fixCityWithoutRaionOrRegionBySettingRegionalTown(hib, "Zorînsk", "Stahanov", "Luhansk");
+        fixCityWithoutRaionOrRegionBySettingRegionalTown(hib, "Vînnîkî", "Lviv", "Lviv");
+        fixCityWithoutRaionOrRegionBySettingRegionalTown(hib, "Stebnîk", "Drohobîci", "Lviv");
+
+        Commune teplohirsk = hib.getCommuneByTransliteratedNameAndRaion("Teplohirsk",
+            hib.getMiskradaByTransliteratedNameAndRegion("Stahanov", hib.getRegionByTransliteratedName("Luhansk")));
+        if (null != teplohirsk) {
+            teplohirsk.setName("Ірміно");
+            teplohirsk.setTransliteratedName("Irmino");
+            teplohirsk.setRomanianName("Irmino");
+            ses.saveOrUpdate(teplohirsk);
+        }
+
+        Commune inkerman = hib.getUnassignedCommuneByTransliteratedName("Inkerman");
+        if (null != inkerman) {
+            Raion sevastopol = hib.getMiskradaByTransliteratedNameAndRegion("Sevastopol", null);
+            inkerman.setRaion(sevastopol);
+            ses.saveOrUpdate(inkerman);
+        }
+
+        Raion novaKahovka = hib.getMiskradaByTransliteratedNameAndRegion("Nova Kahovka",
+            hib.getRegionByTransliteratedName("Herson"));
+        Commune maslivka = hib.getCommuneByTransliteratedNameAndRaion("Maslivka", novaKahovka);
+        if (null == maslivka) {
+            maslivka = hib.getUnassignedCommuneByTransliteratedName("Maslivka");
+        }
+        if (null == maslivka) {
+            maslivka = hib.getUnassignedCommuneByTransliteratedName("Raiske");
+        }
+        if (null != maslivka) {
+            maslivka.setName("Райське");
+            maslivka.setTransliteratedName("Raiske");
+            maslivka.setRaion(novaKahovka);
+            ses.saveOrUpdate(maslivka);
+        }
+
         ses.getTransaction().commit();
+    }
+
+    private void fixCityWithoutRaionOrRegionBySettingRegionalTown(Hibernator hib, String cityTranslName,
+                                                                  String miskradaTranslName, String regionTranslName) {
+        Session ses = hib.getSession();
+        Commune city = hib.getUnassignedCommuneByTransliteratedName(cityTranslName);
+        if (null == city) {
+            return;
+        }
+        Region reg = hib.getRegionByTransliteratedName(regionTranslName);
+        if (null == reg) {
+            return;
+        }
+        Raion raion = hib.getMiskradaByTransliteratedNameAndRegion(miskradaTranslName, reg);
+        if (null == raion) {
+            return;
+        }
+        city.setRaion(raion);
+        ses.saveOrUpdate(city);
     }
 
     private void fixRaionNameAndCapitalByTransliteratedNames(final Hibernator hib, final String regionName,
@@ -333,6 +449,39 @@ public class UAPercentagesParser {
                 }
             }
         }
+    }
+
+    private void fixCityWithoutRaionOrRegionBySettingRegion(Hibernator hib, String cityTranslName, String regionTranslName) {
+        Session ses = hib.getSession();
+        Commune city = hib.getUnassignedCommuneByTransliteratedName(cityTranslName);
+        if (null == city) {
+            return;
+        }
+        Region reg = hib.getRegionByTransliteratedName(regionTranslName);
+        if (null == reg) {
+            return;
+        }
+        city.setRegion(reg);
+        ses.saveOrUpdate(city);
+    }
+
+    private void fixCityWithoutRaionOrRegionBySettingRaion(Hibernator hib, String cityTranslName, String raionTranslName,
+                                                           String regionTranslName) {
+        Session ses = hib.getSession();
+        Commune city = hib.getUnassignedCommuneByTransliteratedName(cityTranslName);
+        if (null == city) {
+            return;
+        }
+        Region reg = hib.getRegionByTransliteratedName(regionTranslName);
+        if (null == reg) {
+            return;
+        }
+        Raion raion = hib.getRaionByTransliteratedNameAndRegion(raionTranslName, reg);
+        if (null == raion) {
+            return;
+        }
+        city.setRaion(raion);
+        ses.saveOrUpdate(city);
     }
 
     public void parse() {
@@ -509,7 +658,9 @@ public class UAPercentagesParser {
                         }
                         if (StringUtils.equals(splitName[0], "smt")) {
                             int i = splitName.length;
-                            for (i = 1; i < splitName.length && isAlpha(StringUtils.replace(splitName[i], "-", "")); i++) {
+                            for (i = 1; i < splitName.length
+                                && isAlpha(replaceEach(splitName[i], new String[] { "-", "`", "'" }, new String[] { "", "",
+                                    "" })); i++) {
                                 final String[] lineSeparatedParts = split(splitName[i], '-');
                                 for (int j = 0; j < lineSeparatedParts.length; j++) {
                                     lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
@@ -544,7 +695,9 @@ public class UAPercentagesParser {
                         }
                         if (StringUtils.equals(splitName[0], "m.")) {
                             int i = splitName.length;
-                            for (i = 1; i < splitName.length && isAlpha(StringUtils.replace(splitName[i], "-", "")); i++) {
+                            for (i = 1; i < splitName.length
+                                && isAlpha(replaceEach(splitName[i], new String[] { "-", "`", "'" }, new String[] { "", "",
+                                    "" })); i++) {
                                 final String[] lineSeparatedParts = split(splitName[i], '-');
                                 for (int j = 0; j < lineSeparatedParts.length; j++) {
                                     lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
@@ -628,7 +781,8 @@ public class UAPercentagesParser {
                     if (StringUtils.equals(splitName[0], "s.") || StringUtils.equals(splitName[0], "s-șce.")) {
                         int i = splitName.length;
                         final Settlement sat = new Settlement();
-                        for (i = 1; i < splitName.length && isAlpha(replace(splitName[i], "-", "")); i++) {
+                        for (i = 1; i < splitName.length
+                            && isAlpha(replaceEach(splitName[i], new String[] { "-", "`", "'" }, new String[] { "", "", "" })); i++) {
                             final String[] lineSeparatedParts = split(splitName[i], '-');
                             for (int j = 0; j < lineSeparatedParts.length; j++) {
                                 lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
