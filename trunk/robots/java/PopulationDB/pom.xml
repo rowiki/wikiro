@@ -78,5 +78,10 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.7</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.wikipedia</groupId>
+		    <artifactId>wiki-java</artifactId>
+		    <version>0.31-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>
