@@ -260,7 +260,7 @@ public class UAWikiGenerator {
         villageRegionCategory.append("]]");
         villageRegionCategory.append(regiuneRoName).append(" după raion").append("]]");
         villageRegionCategory.append("\n[[Categorie:Regiunea " + regiuneRoName);
-        villageRegionCategory.append("]]");
+        villageRegionCategory.append("| ]]");
         categories.put("Sate în regiunea " + regiuneRoName, villageRegionCategory.toString());
 
         StringBuilder byRaionVillageRegionCategory = new StringBuilder();
@@ -312,7 +312,7 @@ public class UAWikiGenerator {
         communesRaionCategory.append('|').append(raionCategoryKey);
         communesRaionCategory.append("]]");
         communesRaionCategory.append("\n[[Categorie:Raionul " + raionRoName + ", " + regiuneRoName);
-        communesRaionCategory.append("]]");
+        communesRaionCategory.append("| ]]");
         categories.put("Comune în raionul " + raionRoName + ", " + regiuneRoName, communesRaionCategory.toString());
 
         StringBuilder smtsRaionCategory = new StringBuilder("[[Categorie:Așezări de tip urban în regiunea ");
@@ -323,6 +323,8 @@ public class UAWikiGenerator {
         smtsRaionCategory.append('|').append(raionCategoryKey).append(", ").append(regiuneCategoryKey);
         smtsRaionCategory.append("]]");
         smtsRaionCategory.append("\n[[Categorie:Raionul " + raionRoName + ", " + regiuneRoName);
+        smtsRaionCategory.append('|').append(" ");
+        smtsRaionCategory.append("]]");
         categories
             .put("Așezări de tip urban în raionul " + raionRoName + ", " + regiuneRoName, smtsRaionCategory.toString());
 
@@ -334,6 +336,7 @@ public class UAWikiGenerator {
         cityRaionCategory.append('|').append(raionCategoryKey).append(", ").append(regiuneCategoryKey);
         cityRaionCategory.append("]]");
         cityRaionCategory.append("\n[[Categorie:Raionul " + raionRoName + ", " + regiuneRoName);
+        cityRaionCategory.append("| ]]");
         categories.put("Orașe raionale în raionul " + raionRoName + ", " + regiuneRoName, cityRaionCategory.toString());
 
         StringBuilder villageRaionCategory = new StringBuilder("[[Categorie:Sate în regiunea ");
@@ -345,6 +348,7 @@ public class UAWikiGenerator {
         villageRaionCategory.append("]]");
 
         villageRaionCategory.append("\n[[Categorie:Raionul " + raionRoName + ", " + regiuneRoName);
+        villageRaionCategory.append("| ]]");
         categories.put("Sate în raionul " + raionRoName + ", " + regiuneRoName, villageRaionCategory.toString());
 
         for (Entry<String, String> eachCatToCreate : categories.entrySet()) {
@@ -875,7 +879,7 @@ public class UAWikiGenerator {
         if (null != com.getRaion()) {
             categories.append("[[Categorie:").append(unarticulatedTypeName).append(" în ")
                 .append(com.getRaion().isMiskrada() ? "orașul regional " : "raionul ")
-                .append(obtainActualRomanianName(com.getRaion()));
+                .append(obtainActualRomanianName(com.getRaion())).append(", ").append(regionRoName);
             categories.append('|').append(communeKey);
             categories.append("]]\n");
         }
@@ -1555,7 +1559,7 @@ public class UAWikiGenerator {
 
         StringBuilder categories = new StringBuilder();
         categories.append("[[Categorie:Sate în ").append(raion.isMiskrada() ? "orașul regional " : "raionul ")
-            .append(obtainActualRomanianName(raion));
+            .append(obtainActualRomanianName(raion)).append(", ").append(regionRoName);
         categories.append('|').append(villageKey);
         categories.append("]]\n");
         categories.append("[[Categorie:Sate în regiunea ");
