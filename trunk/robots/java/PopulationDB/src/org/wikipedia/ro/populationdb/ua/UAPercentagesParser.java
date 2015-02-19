@@ -519,10 +519,10 @@ public class UAPercentagesParser {
         }
 
         session.getTransaction().commit();
-        session = hib.getSession();
-        session.beginTransaction();
 
         for (final File eachFile : files) {
+            session = hib.getSession();
+            session.beginTransaction();
             CSVReader reader = null;
             try {
 
@@ -595,6 +595,7 @@ public class UAPercentagesParser {
                         }
                         session.save(currentRaion);
                         currentCommuneLevel = 2;
+
                         continue;
                     }
                     if (ArrayUtils.contains(splitName, "(miskrada)")) {
