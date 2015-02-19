@@ -573,8 +573,10 @@ public class UAWikiGenerator {
         final int indexOfCurrentDemography = locateFirstOf(currentText, "==Populați", "== Populați", "== Demografie",
             "==Demografie");
         if (0 <= indexOfCurrentDemography) {
-            currentText.replace(indexOfCurrentDemography, currentText.indexOf("==", indexOfCurrentDemography + 2) + 2,
-                demografie);
+            if (!StringUtils.contains(currentText, "<!-- Start secțiune generată de Andrebot -->")) {
+                currentText.replace(indexOfCurrentDemography, currentText.indexOf("==", indexOfCurrentDemography + 2) + 2,
+                    demografie);
+            }
         } else {
             final int indexOfFutureDemographySection = locateFirstOf(currentText, "== Economie", "==Economie", "{{Ucraina",
                 "==Legături externe", "== Legături externe", "== Vezi și", "==Vezi și", "{{Localități în ", "{{Comune în ");
@@ -818,8 +820,10 @@ public class UAWikiGenerator {
         final int indexOfCurrentDemography = locateFirstOf(currentText, "==Populați", "== Populați", "== Demografie",
             "==Demografie");
         if (0 <= indexOfCurrentDemography) {
-            currentText.replace(indexOfCurrentDemography, currentText.indexOf("==", indexOfCurrentDemography + 2) + 2,
-                demografie);
+            if (!StringUtils.contains(currentText, "<!-- Start secțiune generată de Andrebot -->")) {
+                currentText.replace(indexOfCurrentDemography, currentText.indexOf("==", indexOfCurrentDemography + 2) + 2,
+                    demografie);
+            }
         } else {
             final int indexOfFutureDemographySection = locateFirstOf(currentText, "== Economie", "==Economie", "{{Ucraina",
                 "==Legături externe", "== Legături externe", "== Vezi și", "==Vezi și", "{{Localități în ", "{{Comune în ");
@@ -1522,8 +1526,10 @@ public class UAWikiGenerator {
         final int indexOfCurrentDemography = locateFirstOf(currentText, "==Populați", "== Populați", "== Demografie",
             "==Demografie");
         if (0 <= indexOfCurrentDemography) {
-            currentText.replace(indexOfCurrentDemography, currentText.indexOf("==", indexOfCurrentDemography + 2) + 2,
-                demografie);
+            if (!StringUtils.contains(currentText, "<!-- Start secțiune generată de Andrebot -->")) {
+                currentText.replace(indexOfCurrentDemography, currentText.indexOf("==", indexOfCurrentDemography + 2) + 2,
+                    demografie);
+            }
         } else {
             final int indexOfFutureDemographySection = locateFirstOf(currentText, "== Economie", "==Economie", "{{Ucraina",
                 "==Legături externe", "== Legături externe", "== Vezi și", "==Vezi și", "{{Localități în ", "{{Comune în ");
@@ -1953,8 +1959,10 @@ public class UAWikiGenerator {
             final int indexOfCurrentDemography = locateFirstOf(currentText, "==Populați", "== Populați", "== Demografie",
                 "==Demografie");
             if (0 <= indexOfCurrentDemography) {
-                currentText.replace(indexOfCurrentDemography, currentText.indexOf("==", indexOfCurrentDemography + 2) + 2,
-                    demografie);
+                if (!StringUtils.contains(currentText, "<!-- Start secțiune generată de Andrebot -->")) {
+                    currentText.replace(indexOfCurrentDemography,
+                        currentText.indexOf("==", indexOfCurrentDemography + 2) + 2, demografie);
+                }
             } else {
                 final int indexOfFutureDemographySection = locateFirstOf(currentText, "== Economie", "==Economie",
                     "{{Ucraina", "==Legături externe", "== Legături externe", "== Vezi și", "==Vezi și");
