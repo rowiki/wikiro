@@ -3,7 +3,9 @@ package org.wikipedia.ro.populationdb.ua;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.apache.commons.lang3.concurrent.LazyInitializer;
@@ -40,14 +42,18 @@ public class SettlementNameInitializer extends LazyInitializer<String> {
         } catch (final IOException e) {
             throw new ConcurrentException(e);
         }
+        Set<String> toRemove = new HashSet<String>();
         for (int i = 0; i < candidateNames.size(); i++) {
             if (existanceArray[i]) {
                 final String actualCandidateTitle = UAUtils.resolveRedirect(wiki, candidateNames.get(i));
                 if (UAUtils.isInAnyCategoryTree(actualCandidateTitle, wiki, 5, "Regiuni ale Ucrainei", "Raioanele Ucrainei")) {
                     return actualCandidateTitle;
+                } else {
+                    toRemove.add(actualCandidateTitle);
                 }
             }
         }
+        candidateNames.removeAll(toRemove);
         return candidateNames.get(candidateNames.size() - 1);
     }
 

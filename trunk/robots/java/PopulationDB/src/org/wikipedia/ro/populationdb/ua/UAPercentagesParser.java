@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.security.auth.login.FailedLoginException;
-import javax.swing.text.MaskFormatter;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -89,9 +88,9 @@ public class UAPercentagesParser {
                 }
             });
             final UAPercentagesParser parser = new UAPercentagesParser(files);
-            /*
-             * parser.parse();
-             */
+
+            parser.parse();
+
             parser.performCorrection();
         } catch (final IOException e) {
             // TODO Auto-generated catch block
@@ -106,7 +105,7 @@ public class UAPercentagesParser {
 
     public void performCorrection() {
         final Hibernator hib = new Hibernator();
-        final Session ses = hib.getSession();
+        Session ses = hib.getSession();
         ses.beginTransaction();
         Region kievReg = hib.getRegionByTransliteratedName("Bila Țerkva");
         if (null != kievReg) {
@@ -161,6 +160,10 @@ public class UAPercentagesParser {
         fixCityWithoutRaionOrRegionBySettingRegion(hib, "Șostka", "Sumî");
         fixCityWithoutRaionOrRegionBySettingRegion(hib, "Kaniv", "Cerkasî");
         fixCityWithoutRaionOrRegionBySettingRegion(hib, "Uman", "Vinnîțea");
+        ses.getTransaction().commit();
+
+        ses = hib.getSession();
+        ses.beginTransaction();
 
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Bratska", "Krasnoperekopsk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Krîm", "Azovske", "Djankoi");
@@ -171,6 +174,7 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Berezneanska", "Hmilnîk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Braiiliv", "Jmerînka");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Brodețke", "Kozeatîn");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Voronovîțea", "Vinnîțea");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Bohdanivska", "Pavlohrad");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Oleksandro-Kalînovska", "Kosteantînivka");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "V" + lowerCase("ELÎKOȘÎȘIVSKA"), "Șahtarsk");
@@ -204,8 +208,9 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Cerkasî", "Balakliivska", "Smila");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Vendîceanî", "Mohîliv-Podilskîi");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Hnivan", "Tîvriv");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Holobî", "Kovel");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Vinnîțea", "Rokîni", "Luțk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Volîn", "Holobî", "Kovel");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Volîn", "Rokîni", "Luțk");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Volîn", "Ustîluh", "Volodîmîr-Volînskîi");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Pidhorodne", "Dnipropetrovsk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Radușne", "Krivîi Rih");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Cervonohrîhorivka", "Nikopol");
@@ -288,6 +293,9 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Cernihiv", "Ladan", "Prîlukî");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Cernihiv", "Honcearivske", "Cernihiv");
 
+        ses.getTransaction().commit();
+        ses = hib.getSession();
+        ses.beginTransaction();
         Region donetkReg = hib.getRegionByTransliteratedName("Donețk");
         if (null != donetkReg) {
             Raion pershotravnevyi = hib.getRaionByTransliteratedNameAndRegion("Manhuș", donetkReg);
@@ -486,7 +494,7 @@ public class UAPercentagesParser {
 
     public void parse() {
         final Hibernator hib = new Hibernator();
-        final Session session = hib.getSession();
+        Session session = hib.getSession();
         session.beginTransaction();
 
         final List<Language> limbi = new ArrayList<Language>();
@@ -509,6 +517,10 @@ public class UAPercentagesParser {
         for (final Language lang : limbi) {
             session.save(lang);
         }
+
+        session.getTransaction().commit();
+        session = hib.getSession();
+        session.beginTransaction();
 
         for (final File eachFile : files) {
             CSVReader reader = null;
@@ -838,8 +850,8 @@ public class UAPercentagesParser {
                     }
                 }
             }
+            session.getTransaction().commit();
         }
-        session.getTransaction().commit();
     }
 
     private void extractLanguageData(final List<Language> limbi, final String[] line,

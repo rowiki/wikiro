@@ -109,7 +109,6 @@ public class UAUtils {
             ret.add(translCommuneName);
             ret.add(roName);
         }
-
         return new ArrayList<String>(ret);
     }
 

@@ -1,7 +1,9 @@
 package org.wikipedia.ro.populationdb.ua;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.concurrent.ConcurrentException;
@@ -37,14 +39,18 @@ public class CommuneNameInitializer extends LazyInitializer<String> {
         } catch (final IOException e) {
             throw new ConcurrentException(e);
         }
+        Set<String> toRemove = new HashSet<String>();
         for (int i = 0; i < candidateNames.size(); i++) {
             if (existanceArray[i]) {
                 final String actualCandidateTitle = UAUtils.resolveRedirect(wiki, candidateNames.get(i));
                 if (UAUtils.isInAnyCategoryTree(actualCandidateTitle, wiki, 3, "Regiuni ale Ucrainei", "Raioanele Ucrainei", "Orașe în Ucraina", "Localități în Ucraina")) {
                     return actualCandidateTitle;
+                } else {
+                    toRemove .add(actualCandidateTitle);
                 }
             }
         }
+        candidateNames.removeAll(toRemove);
         return candidateNames.get(candidateNames.size() - 1);
     }
 

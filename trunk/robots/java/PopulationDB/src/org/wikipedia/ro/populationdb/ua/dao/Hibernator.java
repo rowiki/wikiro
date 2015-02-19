@@ -95,7 +95,7 @@ public class Hibernator {
          * region), and(isNotNull("raion"), eq("raion.region", region))));
          */
         Query q = ses
-            .createQuery("from Commune c where c.transliteratedName=:transl and (c.region=:reg or (c.raion is not null and c.raion.region=:reg))");
+            .createQuery("select c from Commune c left join c.raion as raion where c.transliteratedName=:transl and (c.region=:reg or (raion is not null and raion.region=:reg))");
         q.setParameter("transl", needle);
         q.setParameter("reg", region);
         final List rez = q.list();

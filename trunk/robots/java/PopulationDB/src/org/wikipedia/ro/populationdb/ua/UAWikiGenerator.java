@@ -180,9 +180,9 @@ public class UAWikiGenerator {
                         for (final Settlement s : com.getSettlements()) {
                             generateVillageText(s);
                         }
-                        generateCommuneText(com);
-                        generateCommuneNavBox(com);
                     }
+                    generateCommuneText(com);
+                    generateCommuneNavBox(com);
                 }
                 if (!raion.isMiskrada()) {
                     generateRaionText(raion);
