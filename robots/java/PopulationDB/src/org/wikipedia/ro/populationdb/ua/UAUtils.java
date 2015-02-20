@@ -2,6 +2,7 @@ package org.wikipedia.ro.populationdb.ua;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,18 +32,18 @@ public class UAUtils {
         ret.add(raionulText + translRaionName + ", " + roRegionName);
         ret.add(raionulText + roName + ", " + translRegionName);
         ret.add(raionulText + roName + ", " + roRegionName);
-        
+
         if (raion.isMiskrada()) {
             ret.add(roName + ", " + translRegionName);
             ret.add(roName + ", " + roRegionName);
             ret.add(roName);
         }
-        
+
         return new ArrayList<String>(ret);
     }
 
     public static List<String> getPossibleCommuneNames(final Commune commune, final Wiki wiki, final boolean singleInWiki,
-                                                       final boolean singleInRegion) {
+                                                       final boolean singleInRegion) throws IOException {
         final String roName = StringUtils.defaultIfBlank(commune.getRomanianName(), commune.getTransliteratedName());
         final String translCommuneName = commune.getTransliteratedName();
         final String roRegionName = StringUtils.defaultIfBlank(commune.computeRegion().getRomanianName(), commune
@@ -89,7 +90,8 @@ public class UAUtils {
                 ret.add("Comuna " + roName + ", " + roRaionName);
 
             }
-            if (0 < commune.getTown() && !commune.equals(commune.getRaion().getCapital()) || commune.getSettlements().size() < 2) {
+            if (0 < commune.getTown() && !commune.equals(commune.getRaion().getCapital())
+                || commune.getSettlements().size() < 2) {
                 ret.add(roName + ", raionul " + roRaionName + ", regiunea " + roRegionName);
                 ret.add(roName + ", raionul " + translRaionName + ", regiunea " + roRegionName);
                 ret.add(roName + ", raionul " + roRaionName + ", regiunea " + translRegionName);
@@ -109,12 +111,14 @@ public class UAUtils {
             ret.add(translCommuneName);
             ret.add(roName);
         }
-        return new ArrayList<String>(ret);
+
+        List<String> retList = new ArrayList<String>();
+        return retList;
     }
 
     public static List<String> getPossibleSettlementNames(final Settlement settlement, final Wiki wiki,
                                                           final boolean singleInWiki, final boolean singleInRegion,
-                                                          final boolean singleInRaion) {
+                                                          final boolean singleInRaion) throws IOException {
         final Commune com = settlement.getCommune();
         final Raion rai = com.getRaion();
         settlement.computeRegion();
@@ -195,8 +199,8 @@ public class UAUtils {
                 ret.add(roSettlementName + ", " + roRaionName);
             }
         }
-
-        return new ArrayList<String>(ret);
+        List<String> retList = new ArrayList<String>();
+        return retList;
     }
 
     public static boolean isInCategoryTree(final String pageTitle, final Wiki wiki, final int depth, final String category) {

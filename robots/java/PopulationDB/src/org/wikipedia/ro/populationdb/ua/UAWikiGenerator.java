@@ -352,7 +352,7 @@ public class UAWikiGenerator {
         categories.put("Sate în raionul " + raionRoName + ", " + regiuneRoName, villageRaionCategory.toString());
 
         for (Entry<String, String> eachCatToCreate : categories.entrySet()) {
-            if (!rowiki.exists(new String[] { eachCatToCreate.getKey() })[0]) {
+            if (!rowiki.exists(new String[] { "Categorie:" + eachCatToCreate.getKey() })[0]) {
                 executor.save("Categorie:" + eachCatToCreate.getKey(), eachCatToCreate.getValue(),
                     "Robot - creare categorie pentru raionul " + raionRoName);
             }
@@ -848,7 +848,7 @@ public class UAWikiGenerator {
                 currentText.append("}}\n");
             }
         }
-        if (0 > currentText.indexOf("{{Comuna ")) {
+        if (1 < com.getSettlements().size() && 0 > currentText.indexOf("{{Comuna ")) {
             currentText.append("\n{{");
             currentText.append(getArticleName(com));
             currentText.append("}}\n");
