@@ -34,8 +34,13 @@ public class SettlementNameInitializer extends LazyInitializer<String> {
         final int nameOccurencesInRaion = hib.countSettlementsInRaionByRomanianOrTransliteratedName(
             defaultIfBlank(commune.getTransliteratedName(), commune.getRomanianName()), commune.getCommune().getRaion());
 
-        final List<String> candidateNames = UAUtils.getPossibleSettlementNames(commune, wiki, 1 == nameOccurences,
-            1 == nameOccurencesInRegion, 1 == nameOccurencesInRaion);
+        List<String> candidateNames;
+        try {
+            candidateNames = UAUtils.getPossibleSettlementNames(commune, wiki, 1 == nameOccurences,
+                1 == nameOccurencesInRegion, 1 == nameOccurencesInRaion);
+        } catch (IOException e1) {
+            throw new ConcurrentException(e1);
+        }
         boolean[] existanceArray = null;
         try {
             existanceArray = wiki.exists(candidateNames.toArray(new String[candidateNames.size()]));
@@ -50,6 +55,7 @@ public class SettlementNameInitializer extends LazyInitializer<String> {
                     return actualCandidateTitle;
                 } else {
                     toRemove.add(actualCandidateTitle);
+                    toRemove.add(candidateNames.get(i));
                 }
             }
         }
