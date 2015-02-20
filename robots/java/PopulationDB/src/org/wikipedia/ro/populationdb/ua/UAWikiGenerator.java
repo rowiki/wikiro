@@ -999,6 +999,7 @@ public class UAWikiGenerator {
                 }
                 villageNames.add(villageLinkBuilder.toString());
             }
+            Collections.sort(villageNames);
             final StringBuilder villageEnumeration = new StringBuilder("mai cuprinde și satele ");
             for (int i = 0; i < villageNames.size() - 1; i++) {
                 villageEnumeration.append(villageNames.get(i)).append(", ");
@@ -1065,6 +1066,7 @@ public class UAWikiGenerator {
                 }
                 villageNames.add(villageLinkBuilder.toString());
             }
+            Collections.sort(villageNames);
             final StringBuilder villageEnumeration = new StringBuilder(
                 "În afara localității principale, mai cuprinde și satele ");
             for (int i = 0; i < villageNames.size() - 1; i++) {
@@ -1167,6 +1169,7 @@ public class UAWikiGenerator {
                 }
                 villageNames.add(villageLinkBuilder.toString());
             }
+            Collections.sort(villageNames);
             final StringBuilder villageEnumeration = new StringBuilder("din satele ");
             for (int i = 0; i < villageNames.size() - 1; i++) {
                 villageEnumeration.append(villageNames.get(i)).append(", ");
