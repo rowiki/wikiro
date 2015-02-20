@@ -1253,8 +1253,56 @@ public class UAWikiGenerator {
             sb.append("\n|resedinta=");
             if (1 < com.getSettlements().size()) {
                 sb.append(makeLink(com.getCapital()));
+                List<Settlement> sate = new ArrayList<Settlement>();
+                sate.addAll(com.getSettlements());
+                Collections.sort(sate, new Comparator<Settlement>() {
+
+                    public int compare(Settlement o1, Settlement o2) {
+                        return ROMANIAN_COLLATOR.compare(obtainActualRomanianName(o1), obtainActualRomanianName(o2));
+                    }
+
+                });
+                for (int i = 0; i < sate.size(); i++) {
+                    sb.append("\n|p").append(i).append('=');
+                    sb.append(makeLink(sate.get(i)));
+                }
+                sb.append("\n|componenta=").append(sate.size()).append(" sate");
+                if (sate.size() < 3) {
+                    sb.append("\n|componenta_stil=para");
+                }
             } else {
                 sb.append(obtainActualRomanianName(com.getCapital()));
+                sb.append("\n|p1=").append(obtainActualRomanianName(com.getCapital()));
+                sb.append("\n|componenta_stil=para");
+            }
+        } else {
+            List<Settlement> sate = new ArrayList<Settlement>();
+            sate.addAll(com.getSettlements());
+            Set<Settlement> toRemove = new HashSet<Settlement>();
+            for (Settlement village : sate) {
+                if (StringUtils.equals(village.getTransliteratedName(), com.getTransliteratedName())) {
+                    toRemove.add(village);
+                }
+            }
+            sate.removeAll(toRemove);
+            Collections.sort(sate, new Comparator<Settlement>() {
+
+                public int compare(Settlement o1, Settlement o2) {
+                    return ROMANIAN_COLLATOR.compare(obtainActualRomanianName(o1), obtainActualRomanianName(o2));
+                }
+
+            });
+            if (0 < sate.size()) {
+                for (int i = 0; i < sate.size(); i++) {
+                    sb.append("\n|p").append(i).append('=');
+                    sb.append(makeLink(sate.get(i)));
+                }
+                if (3 > sate.size()) {
+                    sb.append("\n|componenta_stil=para");
+                }
+                if (1 < sate.size()) {
+                    sb.append("\n|componenta=").append(sate.size()).append(" sate");
+                }
             }
         }
 
