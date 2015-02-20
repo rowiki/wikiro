@@ -702,7 +702,8 @@ public class UAWikiGenerator {
         sb.append("\n|tip_subdiviziune1=[[Regiunile Ucrainei|Regiune]]");
         sb.append("\n|nume_subdiviziune1=[[");
         sb.append(getArticleName(region));
-        sb.append("|").append(regionRoName).append("]]");
+        sb.append('|').append(regionRoName).append("]]");
+        sb.append("\n|").append("resedinta").append('=').append(makeLink(raion.getCapital()));
 
         String coordonate = ibParaReader.getParams().get("coordonate");
         if (StringUtils.isBlank(coordonate)) {
@@ -1246,6 +1247,15 @@ public class UAWikiGenerator {
                 sb.append(obtainActualRomanianName(raion));
             }
             sb.append("]]");
+        }
+
+        if (com.getTown() == 0) {
+            sb.append("\n|resedinta=");
+            if (1 < com.getSettlements().size()) {
+                sb.append(makeLink(com.getCapital()));
+            } else {
+                sb.append(obtainActualRomanianName(com.getCapital()));
+            }
         }
 
         String coordonate = ibParaReader.getParams().get("coordonate");
