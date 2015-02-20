@@ -6,7 +6,10 @@ import static org.apache.commons.lang3.StringUtils.*;
 import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.CollationKey;
+import java.text.Collator;
 import java.text.NumberFormat;
+import java.text.RuleBasedCollator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -72,6 +75,8 @@ public class UAWikiGenerator {
     private final Map<LanguageStructurable, LazyInitializer<String>> uaArticleNames = new HashMap<LanguageStructurable, LazyInitializer<String>>();
     private final Map<Language, Color> nationColorMap = new HashMap<Language, Color>();
     private final Map<String, Language> nationNameMap = new HashMap<String, Language>();
+    public static final Collator ROMANIAN_COLLATOR = Collator.getInstance(new Locale("ro"));
+
     private final Map<String, String> urls = new HashMap<String, String>() {
         private static final long serialVersionUID = 4662530944404292327L;
 
@@ -475,7 +480,8 @@ public class UAWikiGenerator {
             Collections.sort(eachList, new Comparator<Commune>() {
 
                 public int compare(Commune arg0, Commune arg1) {
-                    return obtainActualRomanianName(arg0).compareTo(obtainActualRomanianName(arg1));
+
+                    return ROMANIAN_COLLATOR.compare(obtainActualRomanianName(arg0), obtainActualRomanianName(arg1));
                 }
             });
         }
@@ -1007,7 +1013,7 @@ public class UAWikiGenerator {
                 }
                 villageNames.add(villageLinkBuilder.toString());
             }
-            Collections.sort(villageNames);
+            Collections.sort(villageNames, new CollatorComparator(ROMANIAN_COLLATOR));
             final StringBuilder villageEnumeration = new StringBuilder("mai cuprinde și satele ");
             for (int i = 0; i < villageNames.size() - 1; i++) {
                 villageEnumeration.append(villageNames.get(i)).append(", ");
@@ -1074,7 +1080,7 @@ public class UAWikiGenerator {
                 }
                 villageNames.add(villageLinkBuilder.toString());
             }
-            Collections.sort(villageNames);
+            Collections.sort(villageNames, new CollatorComparator(ROMANIAN_COLLATOR));
             final StringBuilder villageEnumeration = new StringBuilder(
                 "În afara localității principale, mai cuprinde și satele ");
             for (int i = 0; i < villageNames.size() - 1; i++) {
@@ -1177,7 +1183,7 @@ public class UAWikiGenerator {
                 }
                 villageNames.add(villageLinkBuilder.toString());
             }
-            Collections.sort(villageNames);
+            Collections.sort(villageNames, new CollatorComparator(ROMANIAN_COLLATOR));
             final StringBuilder villageEnumeration = new StringBuilder("din satele ");
             for (int i = 0; i < villageNames.size() - 1; i++) {
                 villageEnumeration.append(villageNames.get(i)).append(", ");
@@ -1449,7 +1455,7 @@ public class UAWikiGenerator {
             Collections.sort(villages, new Comparator<Settlement>() {
 
                 public int compare(final Settlement o1, final Settlement o2) {
-                    return obtainActualRomanianName(o1).compareTo(obtainActualRomanianName(o2));
+                    return ROMANIAN_COLLATOR.compare(obtainActualRomanianName(o1), obtainActualRomanianName(o2));
                 }
             });
             for (final Settlement eachVillage : villages) {
@@ -1838,14 +1844,14 @@ public class UAWikiGenerator {
         Collections.sort(regionalCities, new Comparator<Commune>() {
 
             public int compare(final Commune o1, final Commune o2) {
-                return obtainActualRomanianName(o1).compareTo(obtainActualRomanianName(o2));
+                return ROMANIAN_COLLATOR.compare(obtainActualRomanianName(o1), obtainActualRomanianName(o2));
             }
         });
         final List<Raion> raions = new ArrayList<Raion>(hib.getRaionsForRegion(region));
         Collections.sort(raions, new Comparator<Raion>() {
 
             public int compare(final Raion o1, final Raion o2) {
-                return obtainActualRomanianName(o1).compareTo(obtainActualRomanianName(o2));
+                return ROMANIAN_COLLATOR.compare(obtainActualRomanianName(o1), obtainActualRomanianName(o2));
             }
         });
         int section = 0;
@@ -2391,4 +2397,18 @@ public class UAWikiGenerator {
 
         return ukTitle;
     }
+}
+
+class CollatorComparator implements Comparator<String> {
+
+    private Collator collator;
+
+    public CollatorComparator(Collator c) {
+        collator = c;
+    }
+
+    public int compare(String arg0, String arg1) {
+        return collator.compare(arg0, arg1);
+    }
+
 }
