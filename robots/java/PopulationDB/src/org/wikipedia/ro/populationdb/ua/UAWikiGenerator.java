@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -174,7 +175,14 @@ public class UAWikiGenerator {
         hib.getSession().beginTransaction();
         final List<Region> regions = hib.getAllRegions();
         for (final Region eachReg : regions) {
+            Set<String> raionsFinished = new HashSet<String>();
+            if (StringUtils.equals("Vinnîțea", eachReg.getTransliteratedName())) {
+                raionsFinished.add("Bar");
+            }
             for (final Raion raion : eachReg.getRaioane()) {
+                if (raionsFinished.contains(raion.getTransliteratedName())) {
+                    continue;
+                }
                 for (final Commune com : raion.getCommunes()) {
                     if (1 < com.getSettlements().size()) {
                         for (final Settlement s : com.getSettlements()) {
