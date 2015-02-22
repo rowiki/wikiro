@@ -66,6 +66,10 @@ public class UAUtils {
                 ret.add(translCommuneName + ", " + translRegionName);
             }
         }
+        if (singleInWiki && commune.getSettlements().size() < 2 && 0 == commune.getTown()) {
+            ret.add(translCommuneName);
+            ret.add(roName);
+        }
         if (null != commune.getRaion()) {
             final Raion raion = commune.getRaion();
             final String roRaionName = StringUtils.defaultIfBlank(raion.getRomanianName(), raion.getTransliteratedName());
@@ -107,12 +111,13 @@ public class UAUtils {
             }
         }
 
-        if (singleInWiki && (0 < commune.getTown() || commune.getSettlements().size() < 2)) {
+        if (singleInWiki && (0 < commune.getTown())) {
             ret.add(translCommuneName);
             ret.add(roName);
         }
 
         List<String> retList = new ArrayList<String>();
+        retList.addAll(ret);
         return retList;
     }
 
@@ -200,6 +205,7 @@ public class UAUtils {
             }
         }
         List<String> retList = new ArrayList<String>();
+        retList.addAll(ret);
         return retList;
     }
 

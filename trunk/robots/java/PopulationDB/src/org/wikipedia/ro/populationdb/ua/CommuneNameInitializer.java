@@ -44,7 +44,7 @@ public class CommuneNameInitializer extends LazyInitializer<String> {
         for (int i = 0; i < candidateNames.size(); i++) {
             if (existanceArray[i]) {
                 final String actualCandidateTitle = UAUtils.resolveRedirect(wiki, candidateNames.get(i));
-                if (UAUtils.isInAnyCategoryTree(actualCandidateTitle, wiki, 3, "Regiuni ale Ucrainei", "Raioanele Ucrainei",
+                if (UAUtils.isInAnyCategoryTree(actualCandidateTitle, wiki, 3, "Așezări de tip urban în Ucraina", "Comunele Ucrainei", "Regiuni ale Ucrainei", "Raioanele Ucrainei",
                     "Orașe în Ucraina", "Localități în Ucraina")) {
                     return actualCandidateTitle;
                 } else {
@@ -54,6 +54,9 @@ public class CommuneNameInitializer extends LazyInitializer<String> {
             }
         }
         candidateNames.removeAll(toRemove);
+        if (0 == candidateNames.size()) {
+        	return null;
+        }
         return candidateNames.get(candidateNames.size() - 1);
     }
 
