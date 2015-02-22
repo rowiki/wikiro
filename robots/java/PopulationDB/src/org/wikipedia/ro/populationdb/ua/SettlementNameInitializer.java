@@ -51,13 +51,17 @@ public class SettlementNameInitializer extends LazyInitializer<String> {
         for (int i = 0; i < candidateNames.size(); i++) {
             if (existanceArray[i]) {
                 final String actualCandidateTitle = UAUtils.resolveRedirect(wiki, candidateNames.get(i));
-                if (UAUtils.isInAnyCategoryTree(actualCandidateTitle, wiki, 5, "Regiuni ale Ucrainei", "Raioanele Ucrainei")) {
+                if (UAUtils.isInAnyCategoryTree(actualCandidateTitle, wiki, 5, "Sate în Ucraina", "Regiuni ale Ucrainei", "Raioanele Ucrainei")) {
                     return actualCandidateTitle;
                 } else {
+                	System.out.println("Removing " + actualCandidateTitle + " and " + candidateNames.get(i));
                     toRemove.add(actualCandidateTitle);
                     toRemove.add(candidateNames.get(i));
                 }
             }
+        }
+        if (candidateNames.size() == 0) {
+        	System.out.println("Village name could not be found for " + commune);
         }
         candidateNames.removeAll(toRemove);
         return candidateNames.get(candidateNames.size() - 1);
