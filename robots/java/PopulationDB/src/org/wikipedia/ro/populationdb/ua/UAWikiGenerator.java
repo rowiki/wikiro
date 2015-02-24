@@ -194,9 +194,13 @@ public class UAWikiGenerator {
     private void generateRegions() throws Exception {
         hib.getSession().beginTransaction();
         final List<Region> regions = hib.getAllRegions();
+        Set<String> regionsFinished = new HashSet<String>();
+        regionsFinished.add("Vinnîțea");
+        
         for (final Region eachReg : regions) {
-            if (!StringUtils.equals("Vinnîțea", eachReg.getTransliteratedName())) {
+            if (regionsFinished.contains(eachReg.getTransliteratedName())) {
                 Set<String> raionsFinished = new HashSet<String>();
+                raionsFinished.addAll(Arrays.asList("Volodîmîr-Volînskîi", "Horohiv", "Ivanîci", "Kamin-Kașîrskîi", "Kiverți"));
                 for (final Raion raion : eachReg.getRaioane()) {
                     if (raionsFinished.contains(raion.getTransliteratedName())) {
                         generateRaionCategories(raion);
