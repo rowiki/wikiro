@@ -200,30 +200,31 @@ public class UAWikiGenerator {
         regionsFinished.add("Vinnîțea");
 
         for (final Region eachReg : regions) {
-            if (!regionsFinished.contains(eachReg.getTransliteratedName())) {
-                Set<String> raionsFinished = new HashSet<String>();
-                raionsFinished.addAll(Arrays.asList("Volodîmîr-Volînskîi",
-                        "Horohiv", "Ivanîci", "Kamin-Kașîrskîi", "Kiverți"));
-                for (final Raion raion : eachReg.getRaioane()) {
-                    if (raionsFinished.contains(raion.getTransliteratedName())) {
-                        generateRaionCategories(raion);
-                        continue;
-                    }
-                    for (final Commune com : raion.getCommunes()) {
-                        if (1 < com.getSettlements().size()) {
-                            for (final Settlement s : com.getSettlements()) {
-                                generateVillageText(s);
-                            }
-                        }
-                        generateCommuneText(com);
-                        generateCommuneNavBox(com);
-                    }
-                    if (!raion.isMiskrada()) {
-                        generateRaionText(raion);
-                    }
-                    generateRaionNavBox(raion);
+            if (regionsFinished.contains(eachReg.getTransliteratedName())) {
+                continue;
+            }
+            Set<String> raionsFinished = new HashSet<String>();
+            raionsFinished.addAll(Arrays.asList("Volodîmîr-Volînskîi",
+                    "Horohiv", "Ivanîci", "Kamin-Kașîrskîi", "Kiverți"));
+            for (final Raion raion : eachReg.getRaioane()) {
+                if (raionsFinished.contains(raion.getTransliteratedName())) {
                     generateRaionCategories(raion);
+                    continue;
                 }
+                for (final Commune com : raion.getCommunes()) {
+                    if (1 < com.getSettlements().size()) {
+                        for (final Settlement s : com.getSettlements()) {
+                            generateVillageText(s);
+                        }
+                    }
+                    generateCommuneText(com);
+                    generateCommuneNavBox(com);
+                }
+                if (!raion.isMiskrada()) {
+                    generateRaionText(raion);
+                }
+                generateRaionNavBox(raion);
+                generateRaionCategories(raion);
             }
 
             for (final Commune com : eachReg.getCities()) {
