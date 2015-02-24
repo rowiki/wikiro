@@ -198,7 +198,7 @@ public class UAWikiGenerator {
         regionsFinished.add("Vinnîțea");
         
         for (final Region eachReg : regions) {
-            if (regionsFinished.contains(eachReg.getTransliteratedName())) {
+            if (!regionsFinished.contains(eachReg.getTransliteratedName())) {
                 Set<String> raionsFinished = new HashSet<String>();
                 raionsFinished.addAll(Arrays.asList("Volodîmîr-Volînskîi", "Horohiv", "Ivanîci", "Kamin-Kașîrskîi", "Kiverți"));
                 for (final Raion raion : eachReg.getRaioane()) {
@@ -1120,7 +1120,7 @@ public class UAWikiGenerator {
                 }
                 sb.append('.');
             }
-            introTmpl.add("are_raioane", sb.toString());
+            introTmpl.add("are_raion", sb.toString());
         }
 
         return introTmpl.render();
