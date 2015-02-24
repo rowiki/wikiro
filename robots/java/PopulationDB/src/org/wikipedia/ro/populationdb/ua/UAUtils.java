@@ -112,6 +112,8 @@ public class UAUtils {
         }
 
         if (singleInWiki && (0 < commune.getTown())) {
+            ret.add(translCommuneName + ", Ucraina");
+            ret.add(roName + ", Ucraina");
             ret.add(translCommuneName);
             ret.add(roName);
         }

@@ -1811,6 +1811,10 @@ public class UAWikiGenerator {
         if (2 > s.getCommune().getSettlements().size()) {
             return;
         }
+        if (s.getCommune().getTown() > 0
+                && (s.equals(s.getCommune().getCapital()))) {
+            return;
+        }
         final int countVillagesWithThisName = hib
                 .countSettlementsByRomanianOrTransliteratedName(villageRoName);
         int countVillagesWithThisNameInRaion = 1;
