@@ -208,7 +208,7 @@ public class UAWikiGenerator {
             Set<String> raionsFinished = new HashSet<String>();
             raionsFinished.addAll(Arrays.asList("Apostolove", "Vasîlkivka",
                     "Verhodniprovsk", "Jovti Vodî", "Mejova", "Mahdalînivka",
-                    "Krînîcikî", "Krîvîi Rih", "Nikopol"));
+                    "Krînîcikî", "Krîvîi Rih", "Nikopol", "Pavlohrad", "Petrîkivka", "Petropavlivka"));
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
