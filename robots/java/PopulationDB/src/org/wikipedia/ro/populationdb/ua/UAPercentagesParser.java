@@ -89,7 +89,7 @@ public class UAPercentagesParser {
             });
             final UAPercentagesParser parser = new UAPercentagesParser(files);
 
-            parser.parse();
+            // parser.parse();
 
             parser.performCorrection();
         } catch (final IOException e) {
@@ -212,7 +212,7 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Volîn", "Rokîni", "Luțk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Volîn", "Ustîluh", "Volodîmîr-Volînskîi");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Pidhorodne", "Dnipropetrovsk");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Radușne", "Krivîi Rih");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Radușne", "Krîvîi Rih");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Cervonohrîhorivka", "Nikopol");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Pereșcepîne", "Novomoskovsk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Dnipropetrovsk", "Ilarionove", "Sînelnîkove");
@@ -419,6 +419,121 @@ public class UAPercentagesParser {
         }
 
         ses.getTransaction().commit();
+
+        ses = hib.getSession();
+        ses.beginTransaction();
+
+        resetVillageRomanianName(hib, "Suvorove");
+        resetCommuneRomanianNameExceptIds(hib, "Suvorove", 6212);
+        resetVillageRomanianName(hib, "Berehove");
+        resetCommuneRomanianNameExceptIds(hib, "Berehove", 2426);
+        resetCommuneRomanianNameExceptIds(hib, "Suvorove", 2426);
+        resetVillageRomanianNameExceptIds(hib, "Zaliznîcine", 14211);
+        resetCommuneRomanianNameExceptIds(hib, "Zaliznîcine", 6167);
+        resetVillageRomanianNameExceptIds(hib, "Nahirne", 14782);
+        resetVillageRomanianNameExceptIds(hib, "Krînîcine", 14213);
+        resetCommuneRomanianNameExceptIds(hib, "Krînîcine", 6169);
+        resetVillageRomanianName(hib, "Berezivka");
+        resetCommuneRomanianNameExceptIds(hib, "Berezivka", 0);
+        resetVillageRomanianNameExceptIds(hib, "Horodnie", 14207);
+        resetVillageRomanianNameExceptIds(hib, "Novoselîțea", 23190);
+        resetCommuneRomanianNameExceptIds(hib, "Novoselîțea", 9980, 10014);
+        resetVillageRomanianNameExceptIds(hib, "Jovtneve", 14209);
+        resetCommuneRomanianNameExceptIds(hib, "Jovtneve", 6166);
+        resetVillageRomanianName(hib, "Pidlisne");
+        resetCommuneRomanianNameExceptIds(hib, "Pidlisne");
+        resetVillageRomanianName(hib, "Luka");
+        resetCommuneRomanianNameExceptIds(hib, "Luka");
+        resetVillageRomanianName(hib, "Skala");
+        resetCommuneRomanianNameExceptIds(hib, "Skala");
+        resetVillageRomanianName(hib, "Murafa");
+        resetCommuneRomanianNameExceptIds(hib, "Murafa");
+        resetVillageRomanianName(hib, "Sokîreanî");
+        resetCommuneRomanianNameExceptIds(hib, "Sokîreanî", 10059);
+        resetVillageRomanianName(hib, "Serhiivka");
+        resetCommuneRomanianNameExceptIds(hib, "Serhiivka", 6020);
+        resetVillageRomanianName(hib, "Kutî");
+        resetCommuneRomanianNameExceptIds(hib, "Kutî", 3313);
+        resetVillageRomanianName(hib, "Krupa");
+        resetVillageRomanianNameExceptIds(hib, "Vînohradivka", 14204);
+        resetCommuneRomanianNameExceptIds(hib, "Vînohradivka", 6161);
+        resetVillageRomanianNameExceptIds(hib, "Komintern");
+        resetCommuneRomanianNameExceptIds(hib, "Komintern");
+        resetVillageRomanianNameExceptIds(hib, "Kodak");
+        resetVillageRomanianNameExceptIds(hib, "Koson");
+        resetCommuneRomanianNameExceptIds(hib, "Koson");
+        resetVillageRomanianNameExceptIds(hib, "Ciornîi Potik", 23161);
+        resetCommuneRomanianNameExceptIds(hib, "Ciornîi Potik", 9956);
+        resetVillageRomanianNameExceptIds(hib, "Osii");
+        resetCommuneRomanianNameExceptIds(hib, "Osii");
+        resetVillageRomanianNameExceptIds(hib, "Torun");
+        resetCommuneRomanianNameExceptIds(hib, "Torun");
+        resetVillageRomanianNameExceptIds(hib, "Lîpoveț");
+        resetCommuneRomanianNameExceptIds(hib, "Lîpoveț", 576);
+        resetVillageRomanianNameExceptIds(hib, "Iza");
+        resetCommuneRomanianNameExceptIds(hib, "Iza");
+        resetVillageRomanianNameExceptIds(hib, "Plavni", 14785);
+        resetVillageRomanianNameExceptIds(hib, "Hoverla");
+        resetCommuneRomanianNameExceptIds(hib, "Hoverla");
+        resetVillageRomanianNameExceptIds(hib, "Roztokî", 23308);
+        resetCommuneRomanianNameExceptIds(hib, "Roztokî", 10053);
+        resetVillageRomanianNameExceptIds(hib, "Krasna");
+        resetCommuneRomanianNameExceptIds(hib, "Krasna");
+        resetVillageRomanianNameExceptIds(hib, "Hlîboka");
+        resetVillageRomanianNameExceptIds(hib, "Hora");
+        resetCommuneRomanianNameExceptIds(hib, "Hora");
+        resetVillageRomanianNameExceptIds(hib, "Vînnîkî");
+        resetCommuneRomanianNameExceptIds(hib, "Vînnîkî");
+        resetVillageRomanianNameExceptIds(hib, "Rata");
+        resetVillageRomanianNameExceptIds(hib, "Pasat");
+        resetCommuneRomanianNameExceptIds(hib, "Pasat");
+        resetVillageRomanianNameExceptIds(hib, "Lviv");
+        resetCommuneRomanianNameExceptIds(hib, "Lviv", 4995);
+        resetVillageRomanianNameExceptIds(hib, "Zatoka");
+        resetVillageRomanianNameExceptIds(hib, "Proletar");
+        resetVillageRomanianNameExceptIds(hib, "Hotîn");
+        resetCommuneRomanianNameExceptIds(hib, "Hotîn", 10107);
+        resetVillageRomanianNameExceptIds(hib, "Poznan");
+        resetCommuneRomanianNameExceptIds(hib, "Poznan");
+        resetVillageRomanianNameExceptIds(hib, "Stanislav");
+        resetCommuneRomanianNameExceptIds(hib, "Stanislav");
+        resetVillageRomanianNameExceptIds(hib, "Hatna");
+        resetCommuneRomanianNameExceptIds(hib, "Hatna");
+        resetVillageRomanianNameExceptIds(hib, "Vasîlkiv");
+        resetCommuneRomanianNameExceptIds(hib, "Vasîlkiv");
+        resetVillageRomanianNameExceptIds(hib, "Zbruci");
+        resetVillageRomanianNameExceptIds(hib, "Hutir");
+        ses.getTransaction().commit();
+    }
+
+    private void resetVillageRomanianName(Hibernator hib, String string) {
+        List<Settlement> villagesWithName = hib.findAllVillagesWithName(string);
+        for (Settlement eachVillage : villagesWithName) {
+            eachVillage.setRomanianName("");
+            hib.getSession().saveOrUpdate(eachVillage);
+        }
+    }
+
+    private void resetVillageRomanianNameExceptIds(Hibernator hib, String string, long... ids) {
+        List<Settlement> villagesWithName = hib.findAllVillagesWithName(string);
+        for (Settlement eachVillage : villagesWithName) {
+            if (ArrayUtils.contains(ids, eachVillage.getId())) {
+                continue;
+            }
+            eachVillage.setRomanianName("");
+            hib.getSession().saveOrUpdate(eachVillage);
+        }
+    }
+
+    private void resetCommuneRomanianNameExceptIds(Hibernator hib, String string, long... ids) {
+        List<Commune> communesWithName = hib.findAllCommunesWithName(string);
+        for (Commune eachVillage : communesWithName) {
+            if (ArrayUtils.contains(ids, eachVillage.getId())) {
+                continue;
+            }
+            eachVillage.setRomanianName("");
+            hib.getSession().saveOrUpdate(eachVillage);
+        }
     }
 
     private void fixCityWithoutRaionOrRegionBySettingRegionalTown(Hibernator hib, String cityTranslName,

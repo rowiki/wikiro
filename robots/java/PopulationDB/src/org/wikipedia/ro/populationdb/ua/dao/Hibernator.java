@@ -19,6 +19,7 @@ import org.wikipedia.ro.populationdb.ua.model.Commune;
 import org.wikipedia.ro.populationdb.ua.model.Language;
 import org.wikipedia.ro.populationdb.ua.model.Raion;
 import org.wikipedia.ro.populationdb.ua.model.Region;
+import org.wikipedia.ro.populationdb.ua.model.Settlement;
 import org.wikipedia.ro.populationdb.util.HibernateUtil;
 
 public class Hibernator {
@@ -266,6 +267,18 @@ public class Hibernator {
 
     public SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    public List<Settlement> findAllVillagesWithName(String string) {
+        final Session ses = sessionFactory.getCurrentSession();
+        Criteria crit = ses.createCriteria(Settlement.class).add(eq("transliteratedName", string)).addOrder(asc("id"));
+        return crit.list();
+    }
+
+    public List<Commune> findAllCommunesWithName(String string) {
+        final Session ses = sessionFactory.getCurrentSession();
+        Criteria crit = ses.createCriteria(Commune.class).add(eq("transliteratedName", string)).addOrder(asc("id"));
+        return crit.list();
     }
 
 }
