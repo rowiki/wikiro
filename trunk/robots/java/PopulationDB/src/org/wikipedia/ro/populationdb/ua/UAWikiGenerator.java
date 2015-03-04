@@ -1275,7 +1275,7 @@ public class UAWikiGenerator {
         sb.append(getArticleName(region));
         sb.append("|").append(regionRoName).append("]]");
         if (null != raion) {
-            if (raion.isMiskrada()) {
+            if (raion.isMiskrada() && !StringUtils.equals(raion.getTransliteratedName(), com.getTransliteratedName())) {
                 sb.append("\n|tip_subdiviziune2=Oraș regional");
                 sb.append("\n|nume_subdiviziune2=[[");
                 String regTownArticleName = getArticleName(raion.getCapital());
@@ -1285,7 +1285,7 @@ public class UAWikiGenerator {
                     sb.append('|');
                     sb.append(regTownActualName);
                 }
-            } else {
+            } else if (!raion.isMiskrada()) {
                 sb.append("\n|tip_subdiviziune2=[[Raioanele Ucrainei|Raion]]");
                 sb.append("\n|nume_subdiviziune2=[[");
                 sb.append(getArticleName(raion));
