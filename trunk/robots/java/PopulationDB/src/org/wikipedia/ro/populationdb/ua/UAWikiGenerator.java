@@ -200,6 +200,7 @@ public class UAWikiGenerator {
         Set<String> regionsFinished = new HashSet<String>();
         regionsFinished.add("Vinnîțea");
         regionsFinished.add("Volîn");
+        String regionWithCitiesFinished = "Dnipropetrovsk";
 
         for (final Region eachReg : regions) {
             if (regionsFinished.contains(eachReg.getTransliteratedName())) {
@@ -214,6 +215,9 @@ public class UAWikiGenerator {
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
+                    continue;
+                }
+                if (StringUtils.equals(eachReg.getTransliteratedName(), regionWithCitiesFinished) && raion.isMiskrada()) {
                     continue;
                 }
                 for (final Commune com : raion.getCommunes()) {
