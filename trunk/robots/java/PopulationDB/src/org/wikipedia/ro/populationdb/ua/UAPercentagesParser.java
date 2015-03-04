@@ -179,6 +179,8 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "Oleksandro-Kalînovska", "Kosteantînivka");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Donețk", "V" + lowerCase("ELÎKOȘÎȘIVSKA"), "Șahtarsk");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Jîtomîr", "B" + lowerCase("ILKIVSKA"), "Korosten");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Zakarpatska", "Batovo", "Berehove");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Zakarpatska", "Vîșkovo", "Hust");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Zaporijjea", "V" + lowerCase("ELÎKOBILOZERSKA"),
             "Velîka Bilozerka");
         fixRaionNameAndCapitalByTransliteratedNames(hib, kievReg.getTransliteratedName(), "V"
