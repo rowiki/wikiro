@@ -207,8 +207,10 @@ public class UAWikiGenerator {
             }
             Set<String> raionsFinished = new HashSet<String>();
             raionsFinished.addAll(Arrays.asList("Apostolove", "Vasîlkivka",
-                    "Verhodniprovsk", "Jovti Vodî", "Mejova", "Mahdalînivka",
-                    "Krînîcikî", "Krîvîi Rih", "Nikopol", "Pavlohrad", "Petrîkivka", "Petropavlivka"));
+                    "Verhnodniprovsk", "Jovti Vodî", "Mejova", "Mahdalînivka",
+                    "Dnipropetrovsk", "Novomoskovsk", "Krînîcikî",
+                    "Krîvîi Rih", "Nikopol", "Pavlohrad", "Petrîkivka",
+                    "Petropavlivka", "Pokrovske"));
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
@@ -2818,8 +2820,10 @@ public class UAWikiGenerator {
         final Region reg = raion.computeRegion();
         final String regName = getUkrainianRegionName(reg);
         if (!raion.isMiskrada()) {
-            ret.add(raion.getOriginalName() + " район (" + regName + ")");
-            ret.add(raion.getOriginalName() + " район ");
+            String originalName = StringUtils.replace(raion.getOriginalName(),
+                    "`", "'");
+            ret.add(originalName + " район (" + regName + ")");
+            ret.add(originalName + " район ");
         }
         return ret;
     }
@@ -2829,15 +2833,19 @@ public class UAWikiGenerator {
         final Raion r = s.getCommune().getRaion();
         final Region reg = s.computeRegion();
         final String regName = getUkrainianRegionName(reg);
+        String raionOriginalName = StringUtils.replace(r.getOriginalName(),
+                "`", "'");
+
+        String settlementName = StringUtils.replace(s.getName(), "`", "'");
         if (null != r && !r.isMiskrada()) {
-            ret.add(s.getName() + " (" + r.getOriginalName() + " район, "
+            ret.add(settlementName + " (" + raionOriginalName + " район, "
                     + regName + ")");
         }
         if (null != r && !r.isMiskrada()) {
-            ret.add(s.getName() + " (" + r.getOriginalName() + " район)");
+            ret.add(settlementName + " (" + raionOriginalName + " район)");
         }
-        ret.add(s.getName() + " (село)");
-        ret.add(s.getName());
+        ret.add(settlementName + " (село)");
+        ret.add(settlementName);
         return ret;
     }
 
@@ -2846,28 +2854,29 @@ public class UAWikiGenerator {
         final Raion r = c.getRaion();
         final Region reg = c.computeRegion();
         final String regName = getUkrainianRegionName(reg);
-        String silradaName = trim(removeEnd(trim(c.getOriginalName()),
+        String silradaName = trim(removeEnd(trim(replace(c.getOriginalName(), "`", "'")),
                 "сілрада")) + " сільська рада";
+        String communeName = replace(c.getName(), "`", "'");
         if (0 == c.getTown()) {
 
             if (null != r && !r.isMiskrada()) {
-                ret.add(c.getName() + " (" + r.getOriginalName() + " район, "
+                ret.add(communeName + " (" + r.getOriginalName() + " район, "
                         + regName + ")");
                 ret.add(silradaName + " (" + r.getOriginalName() + " район, "
                         + regName + ")");
             }
             if (null != r && !r.isMiskrada()) {
-                ret.add(c.getName() + " (" + r.getOriginalName() + " район)");
+                ret.add(communeName + " (" + r.getOriginalName() + " район)");
                 ret.add(silradaName + " (" + r.getOriginalName() + " район)");
             }
         }
         if (1 == c.getTown()) {
-            ret.add(c.getName() + " (смт)");
+            ret.add(communeName + " (смт)");
         } else if (2 == c.getTown()) {
-            ret.add(c.getName() + " (місто)");
+            ret.add(communeName + " (місто)");
         }
         ret.add(silradaName);
-        ret.add(c.getName());
+        ret.add(communeName);
         return ret;
     }
 
