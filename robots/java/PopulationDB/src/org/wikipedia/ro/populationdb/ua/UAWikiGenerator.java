@@ -198,16 +198,15 @@ public class UAWikiGenerator {
         Set<String> regionsFinished = new HashSet<String>();
         regionsFinished.add("Vinnîțea");
         regionsFinished.add("Volîn");
-        String regionWithCitiesFinished = "Dnipropetrovsk";
+        regionsFinished.add("Dnipropetrovsk");
+        String regionWithCitiesFinished = "";
 
         for (final Region eachReg : regions) {
             if (regionsFinished.contains(eachReg.getTransliteratedName())) {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
-            raionsFinished.addAll(Arrays.asList("Apostolove", "Vasîlkivka", "Verhnodniprovsk", "Jovti Vodî", "Mejova",
-                "Mahdalînivka", "Dnipropetrovsk", "Novomoskovsk", "Krînîcikî", "Krîvîi Rih", "Nikopol", "Pavlohrad",
-                "Petrîkivka", "Petropavlivka", "Pokrovske", "Peatîhatkî"));
+            raionsFinished.addAll(Arrays.asList("Andrușivka"));
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
@@ -333,7 +332,15 @@ public class UAWikiGenerator {
         byRaionVillageRegionCategory.append("[[Categorie:Sate în regiunea " + regiuneRoName);
         byRaionVillageRegionCategory.append("| ]]");
         categories.put("Sate în regiunea " + regiuneRoName + " după raion", byRaionVillageRegionCategory.toString());
-
+        
+        StringBuilder raionsCategory = new StringBuilder();
+        raionsCategory.append("[[Categorie:Raioanele Ucrainei după regiune|");
+        raionsCategory.append(regiuneCategoryKey);
+        raionsCategory.append("]]");
+        raionsCategory.append("\n[[Categorie:Regiunea ").append(regiuneRoName);
+        raionsCategory.append("| ]]");
+        categories.put("Raioane în regiunea " + regiuneRoName, raionsCategory.toString());
+        
         for (Entry<String, String> eachCatToCreate : categories.entrySet()) {
             executor.save("Categorie:" + eachCatToCreate.getKey(), eachCatToCreate.getValue(),
                 "Robot - creare categorie pentru regiunea " + regiuneRoName);
