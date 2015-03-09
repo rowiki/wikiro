@@ -206,7 +206,7 @@ public class UAWikiGenerator {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
-            raionsFinished.addAll(Arrays.asList("Andrușivka", "Baranivka"));
+            raionsFinished.addAll(Arrays.asList("Andrușivka", "Baranivka", "Berdîciv"));
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
