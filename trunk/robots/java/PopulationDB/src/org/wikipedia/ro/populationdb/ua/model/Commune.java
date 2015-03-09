@@ -164,7 +164,7 @@ public class Commune implements LanguageStructurable {
     public String getGenitive() {
         switch (town) {
         case 0:
-            return "satului";
+            return "comunei";
         case 1:
             return "așezării de tip urban";
         case 2:
@@ -182,7 +182,7 @@ public class Commune implements LanguageStructurable {
     public String getNominative() {
         switch (town) {
         case 0:
-            return "satul";
+            return "comuna";
         case 1:
             return "așezarea de tip urban";
         case 2:
