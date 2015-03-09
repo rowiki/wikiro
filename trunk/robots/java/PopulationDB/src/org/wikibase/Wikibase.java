@@ -80,7 +80,7 @@ public class Wikibase extends Wiki {
         String res = fetch(getTokenURL.toString(), "linkPages");
 
         final int pagestartindex = res.indexOf("<page ");
-        final int pageendindex = res.indexOf(">", startindex);
+        final int pageendindex = res.indexOf(">", pagestartindex);
         final String pageTag = res.substring(pagestartindex, pageendindex);
 
         String edittoken = null;
