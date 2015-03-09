@@ -21,10 +21,8 @@ import static org.apache.commons.lang3.StringUtils.trim;
 import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.CollationKey;
 import java.text.Collator;
 import java.text.NumberFormat;
-import java.text.RuleBasedCollator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -200,13 +198,13 @@ public class UAWikiGenerator {
         regionsFinished.add("Volîn");
         regionsFinished.add("Dnipropetrovsk");
         String regionWithCitiesFinished = "";
-
+        
         for (final Region eachReg : regions) {
             if (regionsFinished.contains(eachReg.getTransliteratedName())) {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
-            raionsFinished.addAll(Arrays.asList("Andrușivka", "Baranivka", "Berdîciv"));
+            raionsFinished.addAll(Arrays.asList("Andrușivka", "Baranivka", "Berdîciv", "Brusîliv"));
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
@@ -1500,8 +1498,14 @@ public class UAWikiGenerator {
                         if (existance[i]) {
                             final String articleCandidateTitle = UAUtils.resolveRedirect(ukwiki,
                                 possibleUkrainianArticleNames.get(i));
-                            List<String> allowedCategories = new ArrayList<String>(Arrays.asList("Сільські ради України",
-                                "Міста України", "Селища міського типу України"));
+                            List<String> allowedCategories = new ArrayList<String>();
+                            if (com.getTown() == 0) {
+                                allowedCategories.add("Сільські ради України");
+                            } else if (com.getTown() == 1) {
+                                allowedCategories.add("Селища міського типу України");
+                            } else {
+                                allowedCategories.add("Міста України");
+                            }
                             if (com.getSettlements().size() == 1) {
                                 allowedCategories.add("Села України");
                             }
