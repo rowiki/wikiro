@@ -1,6 +1,6 @@
 package org.wikipedia.ro.populationdb.bg;
 
-import static org.apache.commons.collections.ListUtils.transformedList;
+import static org.apache.commons.collections4.ListUtils.transformedList;
 import static org.apache.commons.lang3.ArrayUtils.contains;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
-import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
