@@ -221,9 +221,12 @@ public class UAWikiGenerator {
                 }
                 for (final Commune com : raion.getCommunes()) {
                     List<Settlement> settlementsOtherThanMain = getSettlementsOtherThanMain(com);
+                    List<Settlement> allSettlements = new ArrayList<Settlement>();
+                    CollectionUtils.addAll(allSettlements, com.getSettlements());
+                    List<Settlement> settlementsToGenerate = com.getTown() > 0 ? settlementsOtherThanMain : allSettlements;
 
-                    if (0 < settlementsOtherThanMain.size()) {
-                        for (final Settlement s : settlementsOtherThanMain) {
+                    if (0 < settlementsToGenerate.size()) {
+                        for (final Settlement s : settlementsToGenerate) {
                             generateVillageText(s);
                         }
                     }
