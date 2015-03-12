@@ -46,6 +46,7 @@ import org.apache.commons.lang3.concurrent.ConcurrentException;
 import org.apache.commons.lang3.concurrent.LazyInitializer;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.property.Getter;
 import org.jfree.data.general.DefaultPieDataset;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
@@ -209,7 +210,7 @@ public class UAWikiGenerator {
             Set<String> raionsFinished = new HashSet<String>();
             raionsFinished.addAll(Arrays.asList("Andrușivka", "Baranivka", "Berdîciv", "Brusîliv", "Volodarsk-Volînskîi",
                 "Dzerjînsk", "Iemilciîne", "Jîtomîr", "Korosten", "Korostîșiv", "Luhînî", "Liubar", "Malîn", "Narodîci",
-                "Novohrad-Volînskîi", "Ovruci", "Olevsk", "Popilnea", "Radomîșl"));
+                "Novohrad-Volînskîi", "Ovruci", "Olevsk", "Popilnea", "Dovbîș", "Radomîșl"));
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
@@ -1181,7 +1182,7 @@ public class UAWikiGenerator {
             }
             villageEnumeration.append("]]");
             introTmpl.add("sate", villageEnumeration.toString());
-        }else {
+        } else {
             introTmpl.add("are_sate", "");
         }
 
@@ -1918,7 +1919,24 @@ public class UAWikiGenerator {
             sb.append("]]");
         }
 
-        sb.append("\n|tip_subdiviziune3=[[Comunele Ucrainei|Comună]]");
+        sb.append("\n|tip_subdiviziune3=");
+        switch (s.getCommune().getTown()) {
+        case 0:
+            sb.append("[[Comunele Ucrainei|Comună");
+            break;
+        case 1:
+            sb.append("[[Așezare de tip urban");
+            break;
+        case 2:
+            sb.append("[[Orașele Ucrainei|Oraș ");
+            if (null != s.getCommune().getRaion() && ! s.getCommune().getRaion().isMiskrada()) {
+                sb.append("raional");
+            } else {
+                sb.append("regional");
+            }
+            break;
+        }
+        sb.append("]]");
         sb.append("\n|nume_subdiviziune3=[[");
         sb.append(getArticleName(commune));
         sb.append("|").append(communeRoName).append("]]");
