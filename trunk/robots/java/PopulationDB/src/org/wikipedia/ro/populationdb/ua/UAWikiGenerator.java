@@ -38,6 +38,8 @@ import java.util.Set;
 
 import javax.security.auth.login.FailedLoginException;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.concurrent.ConcurrentException;
@@ -198,7 +200,7 @@ public class UAWikiGenerator {
         regionsFinished.add("Volîn");
         regionsFinished.add("Dnipropetrovsk");
         String regionWithCitiesFinished = "";
-        // regions = Arrays.asList(hib.getRegionByTransliteratedName("Jîtomîr"));
+        regions = Arrays.asList(hib.getRegionByTransliteratedName("Jîtomîr"));
 
         for (final Region eachReg : regions) {
             if (regionsFinished.contains(eachReg.getTransliteratedName())) {
@@ -206,7 +208,8 @@ public class UAWikiGenerator {
             }
             Set<String> raionsFinished = new HashSet<String>();
             raionsFinished.addAll(Arrays.asList("Andrușivka", "Baranivka", "Berdîciv", "Brusîliv", "Volodarsk-Volînskîi",
-                "Dzerjînsk"));
+                "Dzerjînsk", "Iemilciîne", "Jîtomîr", "Korosten", "Korostîșiv", "Luhînî", "Liubar", "Malîn", "Narodîci",
+                "Novohrad-Volînskîi", "Ovruci", "Olevsk", "Popilnea", "Radomîșl"));
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
@@ -216,8 +219,10 @@ public class UAWikiGenerator {
                     continue;
                 }
                 for (final Commune com : raion.getCommunes()) {
-                    if (1 < com.getSettlements().size()) {
-                        for (final Settlement s : com.getSettlements()) {
+                    List<Settlement> settlementsOtherThanMain = getSettlementsOtherThanMain(com);
+
+                    if (0 < settlementsOtherThanMain.size()) {
+                        for (final Settlement s : settlementsOtherThanMain) {
                             generateVillageText(s);
                         }
                     }
@@ -266,6 +271,18 @@ public class UAWikiGenerator {
             generateRegionCategories(eachReg);
 
         }
+    }
+
+    private List<Settlement> getSettlementsOtherThanMain(final Commune com) {
+        List<Settlement> settlementsOtherThanMain = new ArrayList<Settlement>();
+        CollectionUtils.addAll(settlementsOtherThanMain, com.getSettlements());
+        CollectionUtils.filter(settlementsOtherThanMain, new Predicate<Settlement>() {
+
+            public boolean evaluate(Settlement arg0) {
+                return !StringUtils.equals(arg0.getTransliteratedName(), com.getTransliteratedName());
+            }
+        });
+        return settlementsOtherThanMain;
     }
 
     private void generateRegionCategories(Region region) throws Exception {
@@ -1047,9 +1064,11 @@ public class UAWikiGenerator {
         regionPart.append("]]");
         introTmpl.add("regiune", regionPart.toString());
 
-        if (com.getSettlements().size() > 1) {
+        List<Settlement> settlementsOtherThanMain = getSettlementsOtherThanMain(com);
+
+        if (settlementsOtherThanMain.size() > 1) {
             final List<String> villageNames = new ArrayList<String>();
-            for (final Settlement eachVillage : com.getSettlements()) {
+            for (final Settlement eachVillage : settlementsOtherThanMain) {
                 final String villageRoName = obtainActualRomanianName(eachVillage);
                 final String villageArticleName = getArticleName(eachVillage);
                 final StringBuilder villageLinkBuilder = new StringBuilder("[[");
@@ -1070,6 +1089,16 @@ public class UAWikiGenerator {
             }
             villageEnumeration.setLength(villageEnumeration.length() - 2);
             villageEnumeration.append(" și ").append(villageNames.get(villageNames.size() - 1));
+            introTmpl.add("sate", villageEnumeration.toString());
+        } else if (1 == settlementsOtherThanMain.size()) {
+            StringBuilder villageEnumeration = new StringBuilder("mai cuprinde și satul ");
+            String villageRoName = obtainActualRomanianName(settlementsOtherThanMain.get(0));
+            String villageArticleName = getArticleName(settlementsOtherThanMain.get(0));
+            villageEnumeration.append("[[").append(villageArticleName);
+            if (!StringUtils.equals(villageRoName, villageArticleName)) {
+                villageEnumeration.append('|').append(villageRoName);
+            }
+            villageEnumeration.append("]]");
             introTmpl.add("sate", villageEnumeration.toString());
         } else {
             introTmpl.add("sate", "nu cuprinde și alte sate");
@@ -1111,9 +1140,11 @@ public class UAWikiGenerator {
         regionPart.append("]]");
         introTmpl.add("regiune", regionPart.toString());
 
-        if (com.getSettlements().size() > 1) {
+        List<Settlement> settlementsOtherThanMain = getSettlementsOtherThanMain(com);
+
+        if (settlementsOtherThanMain.size() > 0) {
             final List<String> villageNames = new ArrayList<String>();
-            for (final Settlement eachVillage : com.getSettlements()) {
+            for (final Settlement eachVillage : settlementsOtherThanMain) {
                 final String villageRoName = obtainActualRomanianName(eachVillage);
                 final String villageArticleName = getArticleName(eachVillage);
                 final StringBuilder villageLinkBuilder = new StringBuilder("[[");
@@ -1140,7 +1171,17 @@ public class UAWikiGenerator {
             villageEnumeration.append(" și ").append(villageNames.get(villageNames.size() - 1));
             villageEnumeration.append('.');
             introTmpl.add("are_sate", villageEnumeration.toString());
-        } else {
+        } else if (1 == settlementsOtherThanMain.size()) {
+            StringBuilder villageEnumeration = new StringBuilder("mai cuprinde și satul ");
+            String villageRoName = obtainActualRomanianName(settlementsOtherThanMain.get(0));
+            String villageArticleName = getArticleName(settlementsOtherThanMain.get(0));
+            villageEnumeration.append("[[").append(villageArticleName);
+            if (!StringUtils.equals(villageRoName, villageArticleName)) {
+                villageEnumeration.append('|').append(villageRoName);
+            }
+            villageEnumeration.append("]]");
+            introTmpl.add("sate", villageEnumeration.toString());
+        }else {
             introTmpl.add("are_sate", "");
         }
 
@@ -1612,7 +1653,8 @@ public class UAWikiGenerator {
 
     private void generateVillageText(final Settlement s) throws Exception {
         final String villageRoName = defaultIfBlank(s.getRomanianName(), s.getTransliteratedName());
-        if (2 > s.getCommune().getSettlements().size()) {
+        List<Settlement> settlementsOtherThanMain = getSettlementsOtherThanMain(s.getCommune());
+        if (1 > settlementsOtherThanMain.size()) {
             return;
         }
         if (s.getCommune().getTown() > 0 && (s.equals(s.getCommune().getCapital()))) {
@@ -2481,16 +2523,14 @@ public class UAWikiGenerator {
         final String regName = getUkrainianRegionName(reg);
         String silradaName = trim(removeEnd(trim(replace(c.getOriginalName(), "`", "'")), "сілрада")) + " сільська рада";
         String communeName = replace(c.getName(), "`", "'");
-        if (0 == c.getTown()) {
 
-            if (null != r && !r.isMiskrada()) {
-                ret.add(communeName + " (" + r.getOriginalName() + " район, " + regName + ")");
-                ret.add(silradaName + " (" + r.getOriginalName() + " район, " + regName + ")");
-            }
-            if (null != r && !r.isMiskrada()) {
-                ret.add(communeName + " (" + r.getOriginalName() + " район)");
-                ret.add(silradaName + " (" + r.getOriginalName() + " район)");
-            }
+        if (null != r && !r.isMiskrada()) {
+            ret.add(communeName + " (" + r.getOriginalName() + " район, " + regName + ")");
+            ret.add(silradaName + " (" + r.getOriginalName() + " район, " + regName + ")");
+        }
+        if (null != r && !r.isMiskrada()) {
+            ret.add(communeName + " (" + r.getOriginalName() + " район)");
+            ret.add(silradaName + " (" + r.getOriginalName() + " район)");
         }
         if (1 == c.getTown()) {
             ret.add(communeName + " (смт)");
