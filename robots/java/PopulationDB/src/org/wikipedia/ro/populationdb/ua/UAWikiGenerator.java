@@ -1409,44 +1409,11 @@ public class UAWikiGenerator {
 
         String coordonate = ibParaReader.getParams().get("coordonate");
         if (StringUtils.isBlank(coordonate)) {
-            final String ukrainianCommuneArticleName = getUkrainianCommuneArticleName(com);
-
-            boolean uaTextRead = false;
-            String uaText = null;
-            do {
-                try {
-                    uaText = ukwiki.getPageText(ukrainianCommuneArticleName);
-                    uaTextRead = true;
-                } catch (final FileNotFoundException fnfe) {
-                    fnfe.printStackTrace();
-                    uaTextRead = true;
-                } catch (final IOException e) {
-                    e.printStackTrace();
-                }
-            } while (!uaTextRead);
-
-            if (!StringUtils.isEmpty(uaText)
-                && (StringUtils.contains(uaText, "{{Сільська рада") || StringUtils.contains(uaText, "{{Смт") || StringUtils
-                    .contains(uaText, "{{Місто"))) {
-                final int indexOfIB = StringUtils.indexOfAny(uaText, "{{Село", "{{Смт", "{{Місто", "{{Сільська рада");
-                final String textFromInfobox = uaText.substring(indexOfIB);
-                final ParameterReader ukIBPR = new ParameterReader(textFromInfobox);
-                ukIBPR.run();
-                final Map<String, String> ukIBParams = ukIBPR.getParams();
-                coordonate = ukIBParams.get("координати");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "щільність", "densitate");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "висота", "altitudine");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "телефонний код", "prefix_telefonic");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "поштовий індекс", "cod_poștal");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "площа", "suprafață_totală_km2");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "населення", "populație");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "зображення", "imagine");
-                if (ukIBParams.containsKey("код КОАТУУ")) {
-                    sb.append("|tip_cod_clasificare=").append(
-                        "{{Ill|uk|KOATUU|Класифікатор об'єктів адміністративно-територіального устрою України|Cod KOATUU}}");
-                    UAUtils.copyParameterFromTemplate(ukIBPR, sb, "код КОАТУУ", "cod_clasificare");
-                }
-            }
+            coordonate = copyParametersFromUACommuneInfobox(com, sb, coordonate);
+        }
+        List<Settlement> settlementsOtherThanMain = getSettlementsOtherThanMain(com);
+        if (0 == settlementsOtherThanMain.size() && null != com.getCapital() && StringUtils.isBlank(coordonate)) {
+            coordonate = copyInfoboxParamsFromUAVillageInfobox(com.getCapital(), sb, coordonate);
         }
 
         if (StringUtils.isNotBlank(coordonate)) {
@@ -1485,6 +1452,49 @@ public class UAWikiGenerator {
         }
         sb.append("\n}}\n");
         return sb.toString();
+    }
+
+    private String copyParametersFromUACommuneInfobox(final Commune com, final StringBuilder sb, String coordonate)
+        throws ConcurrentException {
+        final String ukrainianCommuneArticleName = getUkrainianCommuneArticleName(com);
+
+        boolean uaTextRead = false;
+        String uaText = null;
+        do {
+            try {
+                uaText = ukwiki.getPageText(ukrainianCommuneArticleName);
+                uaTextRead = true;
+            } catch (final FileNotFoundException fnfe) {
+                fnfe.printStackTrace();
+                uaTextRead = true;
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
+        } while (!uaTextRead);
+
+        if (!StringUtils.isEmpty(uaText)
+            && (StringUtils.contains(uaText, "{{Сільська рада") || StringUtils.contains(uaText, "{{Смт") || StringUtils
+                .contains(uaText, "{{Місто"))) {
+            final int indexOfIB = StringUtils.indexOfAny(uaText, "{{Село", "{{Смт", "{{Місто", "{{Сільська рада");
+            final String textFromInfobox = uaText.substring(indexOfIB);
+            final ParameterReader ukIBPR = new ParameterReader(textFromInfobox);
+            ukIBPR.run();
+            final Map<String, String> ukIBParams = ukIBPR.getParams();
+            coordonate = ukIBParams.get("координати");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "щільність", "densitate");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "висота", "altitudine");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "телефонний код", "prefix_telefonic");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "поштовий індекс", "cod_poștal");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "площа", "suprafață_totală_km2");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "населення", "populație");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "зображення", "imagine");
+            if (ukIBParams.containsKey("код КОАТУУ")) {
+                sb.append("|tip_cod_clasificare=").append(
+                    "{{Ill|uk|KOATUU|Класифікатор об'єктів адміністративно-територіального устрою України|Cod KOATUU}}");
+                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "код КОАТУУ", "cod_clasificare");
+            }
+        }
+        return coordonate;
     }
 
     private String getUkrainianRaionArticleName(final Raion raion) throws ConcurrentException {
@@ -1930,7 +1940,7 @@ public class UAWikiGenerator {
             break;
         case 2:
             sb.append("[[Orașele Ucrainei|Oraș ");
-            if (null != s.getCommune().getRaion() && ! s.getCommune().getRaion().isMiskrada()) {
+            if (null != s.getCommune().getRaion() && !s.getCommune().getRaion().isMiskrada()) {
                 sb.append("raional");
             } else {
                 sb.append("regional");
@@ -1944,42 +1954,7 @@ public class UAWikiGenerator {
 
         String coordonate = ibParaReader.getParams().get("coordonate");
         if (StringUtils.isBlank(coordonate)) {
-            final String ukrainianVillageArticleName = getUkrainianVillageArticleName(s);
-
-            boolean uaTextRead = false;
-            String uaText = null;
-            do {
-                try {
-                    uaText = ukwiki.getPageText(ukrainianVillageArticleName);
-                    uaTextRead = true;
-                } catch (final FileNotFoundException fnfe) {
-                    fnfe.printStackTrace();
-                    uaTextRead = true;
-                } catch (final IOException e) {
-                    e.printStackTrace();
-                }
-            } while (!uaTextRead);
-
-            if (!StringUtils.isEmpty(uaText) && (StringUtils.contains(uaText, "{{Село"))) {
-                final int indexOfIB = uaText.indexOf("{{Село");
-                final String textFromInfobox = uaText.substring(indexOfIB);
-                final ParameterReader ukIBPR = new ParameterReader(textFromInfobox);
-                ukIBPR.run();
-                final Map<String, String> ukIBParams = ukIBPR.getParams();
-                coordonate = ukIBParams.get("координати");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "щільність", "densitate");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "висота", "altitudine");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "телефонний код", "prefix_telefonic");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "поштовий індекс", "cod_poștal");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "площа", "suprafață_totală_km2");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "населення", "populație");
-                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "розташування", "imagine");
-                if (ukIBParams.containsKey("код КОАТУУ")) {
-                    sb.append("|tip_cod_clasificare=").append(
-                        "{{Ill|uk|KOATUU|Класифікатор об'єктів адміністративно-територіального устрою України|Cod KOATUU}}");
-                    UAUtils.copyParameterFromTemplate(ukIBPR, sb, "код КОАТУУ", "cod_clasificare");
-                }
-            }
+            coordonate = copyInfoboxParamsFromUAVillageInfobox(s, sb, coordonate);
         }
 
         if (StringUtils.isNotBlank(coordonate)) {
@@ -2018,6 +1993,47 @@ public class UAWikiGenerator {
         }
         sb.append("\n}}\n");
         return sb.toString();
+    }
+
+    private String copyInfoboxParamsFromUAVillageInfobox(final Settlement s, final StringBuilder sb, String coordonate)
+        throws ConcurrentException {
+        final String ukrainianVillageArticleName = getUkrainianVillageArticleName(s);
+
+        boolean uaTextRead = false;
+        String uaText = null;
+        do {
+            try {
+                uaText = ukwiki.getPageText(ukrainianVillageArticleName);
+                uaTextRead = true;
+            } catch (final FileNotFoundException fnfe) {
+                fnfe.printStackTrace();
+                uaTextRead = true;
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
+        } while (!uaTextRead);
+
+        if (!StringUtils.isEmpty(uaText) && (StringUtils.contains(uaText, "{{Село"))) {
+            final int indexOfIB = uaText.indexOf("{{Село");
+            final String textFromInfobox = uaText.substring(indexOfIB);
+            final ParameterReader ukIBPR = new ParameterReader(textFromInfobox);
+            ukIBPR.run();
+            final Map<String, String> ukIBParams = ukIBPR.getParams();
+            coordonate = ukIBParams.get("координати");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "щільність", "densitate");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "висота", "altitudine");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "телефонний код", "prefix_telefonic");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "поштовий індекс", "cod_poștal");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "площа", "suprafață_totală_km2");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "населення", "populație");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "розташування", "imagine");
+            if (ukIBParams.containsKey("код КОАТУУ")) {
+                sb.append("|tip_cod_clasificare=").append(
+                    "{{Ill|uk|KOATUU|Класифікатор об'єктів адміністративно-територіального устрою України|Cod KOATUU}}");
+                UAUtils.copyParameterFromTemplate(ukIBPR, sb, "код КОАТУУ", "cod_clasificare");
+            }
+        }
+        return coordonate;
     }
 
     private void generateRegionNavBox(final Region region) throws Exception {
