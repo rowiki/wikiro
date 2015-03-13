@@ -1144,7 +1144,7 @@ public class UAWikiGenerator {
 
         List<Settlement> settlementsOtherThanMain = getSettlementsOtherThanMain(com);
 
-        if (settlementsOtherThanMain.size() > 0) {
+        if (settlementsOtherThanMain.size() > 1) {
             final List<String> villageNames = new ArrayList<String>();
             for (final Settlement eachVillage : settlementsOtherThanMain) {
                 final String villageRoName = obtainActualRomanianName(eachVillage);
