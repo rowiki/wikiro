@@ -200,17 +200,15 @@ public class UAWikiGenerator {
         regionsFinished.add("Vinnîțea");
         regionsFinished.add("Volîn");
         regionsFinished.add("Dnipropetrovsk");
+        regionsFinished.add("Jîtomîr");
         String regionWithCitiesFinished = "";
-        regions = Arrays.asList(hib.getRegionByTransliteratedName("Jîtomîr"));
 
         for (final Region eachReg : regions) {
             if (regionsFinished.contains(eachReg.getTransliteratedName())) {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
-            raionsFinished.addAll(Arrays.asList("Andrușivka", "Baranivka", "Berdîciv", "Brusîliv", "Volodarsk-Volînskîi",
-                "Dzerjînsk", "Iemilciîne", "Jîtomîr", "Korosten", "Korostîșiv", "Luhînî", "Liubar", "Malîn", "Narodîci",
-                "Novohrad-Volînskîi", "Ovruci", "Olevsk", "Popilnea", "Dovbîș", "Radomîșl"));
+            raionsFinished.addAll(Arrays.asList(""));
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);

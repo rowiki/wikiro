@@ -1,5 +1,9 @@
 package org.wikipedia.ro.populationdb.ua.dao;
 
+import static org.hibernate.criterion.Order.asc;
+import static org.hibernate.criterion.Restrictions.eq;
+import static org.hibernate.criterion.Restrictions.eqOrIsNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -10,11 +14,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
-
-import static org.hibernate.criterion.Order.*;
-import static org.hibernate.criterion.Restrictions.*;
-
 import org.wikipedia.ro.populationdb.ua.model.Commune;
 import org.wikipedia.ro.populationdb.ua.model.Language;
 import org.wikipedia.ro.populationdb.ua.model.Raion;
