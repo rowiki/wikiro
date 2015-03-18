@@ -1126,8 +1126,8 @@ public class UAWikiGenerator {
         introTmpl.add("nume_uk", ukName);
 
         Raion raion = com.getRaion();
-        if (null == raion || (raion.isMiskrada()
-            && StringUtils.equals(raion.getTransliteratedName(), com.getTransliteratedName()))) {
+        if (null == raion
+            || (raion.isMiskrada() && StringUtils.equals(raion.getTransliteratedName(), com.getTransliteratedName()))) {
             introTmpl.add("statut", "oraș regional în ");
         } else {
             if (com.equals(raion.getCapital())) {
@@ -1258,6 +1258,9 @@ public class UAWikiGenerator {
             raionPart.append("|raionul ");
             raionPart.append(obtainActualRomanianName(raion));
             raionPart.append("]], ");
+        } else if (null != raion && raion.isMiskrada()
+            && !StringUtils.equals(com.getTransliteratedName(), raion.getTransliteratedName())) {
+            raionPart.append("orașul regional [[").append(getArticleName(raion)).append("|]], ");
         }
         introTmpl.add("raion", raionPart.toString());
 
