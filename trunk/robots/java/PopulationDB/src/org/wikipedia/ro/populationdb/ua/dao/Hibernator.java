@@ -8,8 +8,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections4.SetUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -28,8 +32,7 @@ public class Hibernator {
         final URL url = this.getClass().getResource(".");
         File f;
         try {
-            f = new File(new File(url.toURI()).getParentFile(),
-                    "hibernate.cfg.xml");
+            f = new File(new File(url.toURI()).getParentFile(), "hibernate.cfg.xml");
             sessionFactory = HibernateUtil.getSessionFactory(f);
         } catch (final URISyntaxException e) {
             // TODO Auto-generated catch block
@@ -50,8 +53,7 @@ public class Hibernator {
 
     public Region getRegionByTransliteratedName(final String needle) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Criteria crit = ses.createCriteria(Region.class).add(
-                eq("transliteratedName", needle));
+        final Criteria crit = ses.createCriteria(Region.class).add(eq("transliteratedName", needle));
         final List rez = crit.list();
         if (0 < rez.size()) {
             return (Region) rez.get(0);
@@ -61,8 +63,7 @@ public class Hibernator {
 
     public Commune getCommuneByRomanianName(final String needle) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Criteria crit = ses.createCriteria(Commune.class).add(
-                eq("romanianName", needle));
+        final Criteria crit = ses.createCriteria(Commune.class).add(eq("romanianName", needle));
         final List rez = crit.list();
         if (0 < rez.size()) {
             return (Commune) rez.get(0);
@@ -72,8 +73,7 @@ public class Hibernator {
 
     public Commune getCommuneByTransliteratedName(final String needle) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Criteria crit = ses.createCriteria(Commune.class).add(
-                eq("transliteratedName", needle));
+        final Criteria crit = ses.createCriteria(Commune.class).add(eq("transliteratedName", needle));
         final List rez = crit.list();
         if (0 < rez.size()) {
             return (Commune) rez.get(0);
@@ -81,11 +81,10 @@ public class Hibernator {
         return null;
     }
 
-    public Commune getCommuneByTransliteratedNameAndRaion(final String needle,
-            final Raion raion) {
+    public Commune getCommuneByTransliteratedNameAndRaion(final String needle, final Raion raion) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Criteria crit = ses.createCriteria(Commune.class)
-                .add(eq("transliteratedName", needle)).add(eq("raion", raion));
+        final Criteria crit = ses.createCriteria(Commune.class).add(eq("transliteratedName", needle))
+            .add(eq("raion", raion));
         final List rez = crit.list();
         if (0 < rez.size()) {
             return (Commune) rez.get(0);
@@ -93,17 +92,14 @@ public class Hibernator {
         return null;
     }
 
-    public Commune getCommuneByTransliteratedNameAndRegion(final String needle,
-            final Region region) {
+    public Commune getCommuneByTransliteratedNameAndRegion(final String needle, final Region region) {
         final Session ses = sessionFactory.getCurrentSession();
         /*
-         * final Criteria crit =
-         * ses.createCriteria(Commune.class).add(eq("transliteratedName",
-         * needle)) .add(or(eq("region", region), and(isNotNull("raion"),
-         * eq("raion.region", region))));
+         * final Criteria crit = ses.createCriteria(Commune.class).add(eq("transliteratedName", needle)) .add(or(eq("region",
+         * region), and(isNotNull("raion"), eq("raion.region", region))));
          */
         Query q = ses
-                .createQuery("select c from Commune c left join c.raion as raion where c.transliteratedName=:transl and (c.region=:reg or (raion is not null and raion.region=:reg))");
+            .createQuery("select c from Commune c left join c.raion as raion where c.transliteratedName=:transl and (c.region=:reg or (raion is not null and raion.region=:reg))");
         q.setParameter("transl", needle);
         q.setParameter("reg", region);
         final List rez = q.list();
@@ -113,13 +109,10 @@ public class Hibernator {
         return null;
     }
 
-    public Raion getRaionByTransliteratedNameAndRegion(final String needle,
-            final Region region) {
+    public Raion getRaionByTransliteratedNameAndRegion(final String needle, final Region region) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Criteria crit = ses.createCriteria(Raion.class)
-                .add(eq("transliteratedName", needle))
-                .add(eqOrIsNull("region", region))
-                .add(eq("miskrada", Boolean.FALSE));
+        final Criteria crit = ses.createCriteria(Raion.class).add(eq("transliteratedName", needle))
+            .add(eqOrIsNull("region", region)).add(eq("miskrada", Boolean.FALSE));
         final List rez = crit.list();
         if (0 < rez.size()) {
             return (Raion) rez.get(0);
@@ -129,8 +122,7 @@ public class Hibernator {
 
     public Language getLanguageByName(final String languageName) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Query findNat = ses
-                .createQuery("from Language nat where nat.name=:natName");
+        final Query findNat = ses.createQuery("from Language nat where nat.name=:natName");
         findNat.setParameter("natName", languageName);
         final List<Language> res = findNat.list();
         Language ret = null;
@@ -146,95 +138,91 @@ public class Hibernator {
 
     public List<Region> getAllRegions() {
         final Session ses = sessionFactory.getCurrentSession();
-        final Criteria crit = ses.createCriteria(Region.class).addOrder(
-                asc("name"));
+        final Criteria crit = ses.createCriteria(Region.class).addOrder(asc("name"));
         final List list = crit.list();
         return list;
     }
 
     public List<Commune> getRegionalCitiesForRegion(final Region eachReg) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Query q = ses
-                .createQuery("from Commune com where (com.raion is null and com.region=:region) or (com.raion is not null and com.raion.miskrada=:true and com.raion.region=:region)");
-        q.setParameter("region", eachReg);
-        q.setParameter("true", Boolean.TRUE);
-        return q.list();
+        final Query q1 = ses
+            .createQuery("from Commune com where com.town=:townLevel and com.raion is null and com.region=:region");
+        q1.setParameter("townLevel", 2);
+        q1.setParameter("region", eachReg);
+        Query q2 = ses
+            .createQuery("from Commune com where com.town=:townLevel and com.raion is not null and com.raion.miskrada=:true and com.raion.region=:region and com.transliteratedName=com.raion.transliteratedName");
+        q2.setParameter("true", Boolean.TRUE);
+        q2.setParameter("townLevel", 2);
+        q2.setParameter("region", eachReg);
+
+        return new ArrayList<Commune>(CollectionUtils.union(q1.list(), q2.list()));
     }
 
     public List<Raion> getRaionsForRegion(final Region eachReg) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Query q = ses
-                .createQuery("from Raion r where r.miskrada is not true and r.region=:region");
+        final Query q = ses.createQuery("from Raion r where r.miskrada is not true and r.region=:region");
         q.setParameter("region", eachReg);
         return q.list();
     }
 
-    public List<Raion> getRaionsByRomanianOrTransliteratedName(
-            final String roName) {
+    public List<Raion> getRaionsByRomanianOrTransliteratedName(final String roName) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Query q = ses
-                .createQuery("from Raion r where r.transliteratedName=:translName or r.romanianName=:translName");
+        final Query q = ses.createQuery("from Raion r where r.transliteratedName=:translName or r.romanianName=:translName");
         q.setParameter("translName", roName);
         return q.list();
     }
 
-    public int countRaionsByRomanianOrTransliteratedName(
-            final String transliteratedName) {
+    public int countRaionsByRomanianOrTransliteratedName(final String transliteratedName) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-                .createQuery("select count(r) from Raion r where r.transliteratedName=:translName or r.romanianName=:translName");
+            .createQuery("select count(r) from Raion r where r.transliteratedName=:translName or r.romanianName=:translName");
         q.setParameter("translName", transliteratedName);
         final Long uniqueResult = (Long) q.uniqueResult();
         return uniqueResult.intValue();
     }
 
-    public int countCommunesByRomanianOrTransliteratedName(
-            final String transliteratedName) {
+    public int countCommunesByRomanianOrTransliteratedName(final String transliteratedName) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-                .createQuery("select count(c) from Commune c where c.transliteratedName=:translName or c.romanianName=:translName");
+            .createQuery("select count(c) from Commune c where c.transliteratedName=:translName or c.romanianName=:translName");
         q.setParameter("translName", transliteratedName);
         final Long uniqueResult = (Long) q.uniqueResult();
         return uniqueResult.intValue();
     }
 
-    public int countCommunesInRegionByRomanianOrTransliteratedName(
-            final String transliteratedName, final Region region) {
+    public int countCommunesInRegionByRomanianOrTransliteratedName(final String transliteratedName, final Region region) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-                .createQuery("select count(c) from Commune c where (c.transliteratedName=:translName or c.romanianName=:translName) and ((c.raion is not null and c.raion.region=:region) or c.region=:region)");
+            .createQuery("select count(c) from Commune c where (c.transliteratedName=:translName or c.romanianName=:translName) and ((c.raion is not null and c.raion.region=:region) or c.region=:region)");
         q.setParameter("translName", transliteratedName);
         q.setParameter("region", region);
         final Long uniqueResult = (Long) q.uniqueResult();
         return uniqueResult.intValue();
     }
 
-    public int countSettlementsInRaionByRomanianOrTransliteratedName(
-            final String transliteratedName, final Raion raion) {
+    public int countSettlementsInRaionByRomanianOrTransliteratedName(final String transliteratedName, final Raion raion) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-                .createQuery("select count(s) from Settlement s left join s.commune as c where (s.transliteratedName=:translName or s.romanianName=:translName) and (c.raion is not null and c.raion=:raion)");
+            .createQuery("select count(s) from Settlement s left join s.commune as c where (s.transliteratedName=:translName or s.romanianName=:translName) and (c.raion is not null and c.raion=:raion)");
         q.setParameter("translName", transliteratedName);
         q.setParameter("raion", raion);
         final Long uniqueResult = (Long) q.uniqueResult();
         return uniqueResult.intValue();
     }
 
-    public int countSettlementsByRomanianOrTransliteratedName(
-            final String transliteratedName) {
+    public int countSettlementsByRomanianOrTransliteratedName(final String transliteratedName) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-                .createQuery("select count(s) from Settlement s where (s.transliteratedName=:translName or s.romanianName=:translName)");
+            .createQuery("select count(s) from Settlement s where (s.transliteratedName=:translName or s.romanianName=:translName)");
         q.setParameter("translName", transliteratedName);
         final Long uniqueResult = (Long) q.uniqueResult();
         return uniqueResult.intValue();
     }
 
-    public int countSettlementsInRegionByRomanianOrTransliteratedName(
-            final String transliteratedName, final Region region) {
+    public int countSettlementsInRegionByRomanianOrTransliteratedName(final String transliteratedName, final Region region) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-                .createQuery("select count(s) from Settlement s left join s.commune as c where (s.transliteratedName=:translName or s.romanianName=:translName) and ((c.raion is not null and c.raion.region=:region) or c.region=:region)");
+            .createQuery("select count(s) from Settlement s left join s.commune as c where (s.transliteratedName=:translName or s.romanianName=:translName) and ((c.raion is not null and c.raion.region=:region) or c.region=:region)");
         q.setParameter("translName", transliteratedName);
         q.setParameter("region", region);
         final Long uniqueResult = (Long) q.uniqueResult();
@@ -243,8 +231,7 @@ public class Hibernator {
 
     public List<Raion> findOuterRaionsForCity(Commune city) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Query q = ses
-                .createQuery("select raion from Raion raion left join raion.capital as c where c=:city");
+        final Query q = ses.createQuery("select raion from Raion raion left join raion.capital as c where c=:city");
         q.setParameter("city", city);
         return q.list();
     }
@@ -255,11 +242,10 @@ public class Hibernator {
         ses.getTransaction().commit();
     }
 
-    public Commune getUnassignedCommuneByTransliteratedName(
-            String cityTranslName) {
+    public Commune getUnassignedCommuneByTransliteratedName(String cityTranslName) {
         final Session ses = sessionFactory.getCurrentSession();
         final Query q = ses
-                .createQuery("from Commune c where c.raion is null and c.region is null and c.transliteratedName=:name");
+            .createQuery("from Commune c where c.raion is null and c.region is null and c.transliteratedName=:name");
         q.setParameter("name", cityTranslName);
         List<Commune> communes = q.list();
         if (null == communes || 0 == communes.size()) {
@@ -268,8 +254,7 @@ public class Hibernator {
         return communes.get(0);
     }
 
-    public Raion getMiskradaByTransliteratedNameAndRegion(
-            String miskradaTranslName, Region reg) {
+    public Raion getMiskradaByTransliteratedNameAndRegion(String miskradaTranslName, Region reg) {
         final Session ses = sessionFactory.getCurrentSession();
         Query q = null;
         if (null == reg) {
@@ -295,24 +280,20 @@ public class Hibernator {
 
     public List<Settlement> findAllVillagesWithName(String string) {
         final Session ses = sessionFactory.getCurrentSession();
-        Criteria crit = ses.createCriteria(Settlement.class)
-                .add(eq("transliteratedName", string)).addOrder(asc("id"));
+        Criteria crit = ses.createCriteria(Settlement.class).add(eq("transliteratedName", string)).addOrder(asc("id"));
         return crit.list();
     }
 
     public List<Commune> findAllCommunesWithName(String string) {
         final Session ses = sessionFactory.getCurrentSession();
-        Criteria crit = ses.createCriteria(Commune.class)
-                .add(eq("transliteratedName", string)).addOrder(asc("id"));
+        Criteria crit = ses.createCriteria(Commune.class).add(eq("transliteratedName", string)).addOrder(asc("id"));
         return crit.list();
     }
 
-    public Settlement getSettlementByTransliteratedNameAndCommune(
-            String needle, Commune com) {
+    public Settlement getSettlementByTransliteratedNameAndCommune(String needle, Commune com) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Criteria crit = ses.createCriteria(Settlement.class)
-                .add(eq("transliteratedName", needle))
-                .add(eqOrIsNull("commune", com));
+        final Criteria crit = ses.createCriteria(Settlement.class).add(eq("transliteratedName", needle))
+            .add(eqOrIsNull("commune", com));
         final List rez = crit.list();
         if (0 < rez.size()) {
             return (Settlement) rez.get(0);
