@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.ua.model.Commune;
@@ -241,13 +242,32 @@ public class UAUtils {
 
     public static boolean isInAnyCategoryTree(final String pageTitle, final Wiki wiki, final int depth,
                                               final String... categories) {
-        for (final String eachCat : categories) {
-            if (isInCategoryTree(pageTitle, wiki, depth, eachCat)) {
+        String[] cats = null;
+        boolean categoriesRead = false;
+
+        do {
+            try {
+                cats = wiki.getCategories(pageTitle);
+                categoriesRead = true;
+            } catch (final IOException e) {
+                e.printStackTrace();
+                System.err.println("Retrying");
+                categoriesRead = false;
+            }
+        } while (!categoriesRead);
+
+        for (final String eachCat : cats) {
+            if (ArrayUtils.contains(categories, StringUtils.substringAfter(eachCat, ":"))) {
                 return true;
+            }
+            if (0 < depth) {
+                if (isInAnyCategoryTree(eachCat, wiki, depth - 1, categories)) {
+                    return true;
+                }
             }
         }
         return false;
-
+        
     }
 
     public static String resolveRedirect(final Wiki wiki, final String title) {
