@@ -212,7 +212,9 @@ public class UAWikiGenerator {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
-            raionsFinished.addAll(Arrays.asList("Bohorodceanî", "Verhovîna"));
+            raionsFinished.addAll(Arrays.asList("Bohorodceanî", "Verhovîna",
+                    "Halîci", "Bolehiv", "Kosiv", "Ivano-Frankivsk", "Dolîna",
+                    "Horodenka", "Kosiv", "Kaluș", "Nadvirna", "Kolomîia", "Rohatîn"));
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
