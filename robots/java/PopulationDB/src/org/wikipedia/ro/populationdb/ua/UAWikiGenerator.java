@@ -203,7 +203,7 @@ public class UAWikiGenerator {
         regionsFinished.add("Jîtomîr");
         regionsFinished.add("Zakarpatska");
         regionsFinished.add("Zaporijjea");
-        // regionsFinished.add("Ivano-Frankivsk");
+        regionsFinished.add("Ivano-Frankivsk");
         String regionWithCitiesFinished = "";
 
         for (final Region eachReg : regions) {
@@ -211,9 +211,7 @@ public class UAWikiGenerator {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
-            raionsFinished.addAll(Arrays.asList("Bohorodceanî", "Verhovîna", "Halîci", "Bolehiv", "Kosiv",
-                "Ivano-Frankivsk", "Dolîna", "Horodenka", "Kosiv", "Kaluș", "Nadvirna", "Kolomîia", "Rohatîn", "Rojneativ",
-                "Sneatîn", "Tîsmenîțea", "Tlumaci", "Iaremce"));
+            raionsFinished.addAll(Arrays.asList(""));
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
@@ -337,6 +335,14 @@ public class UAWikiGenerator {
         mainRaionCityRegionCategory.append("\n[[Categorie:Regiunea " + regiuneRoName);
         mainRaionCityRegionCategory.append("]]");
         categories.put("Orașe raionale în regiunea " + regiuneRoName, mainRaionCityRegionCategory.toString());
+
+        StringBuilder mainRegionCityRegionCategory = new StringBuilder();
+        mainRegionCityRegionCategory.append("[[Categorie:Orașe regionale în Ucraina după regiune");
+        mainRegionCityRegionCategory.append('|').append(regiuneCategoryKey);
+        mainRegionCityRegionCategory.append("]]");
+        mainRegionCityRegionCategory.append("\n[[Categorie:Regiunea " + regiuneRoName);
+        mainRegionCityRegionCategory.append("]]");
+        categories.put("Orașe regionale în regiunea " + regiuneRoName, mainRegionCityRegionCategory.toString());
 
         StringBuilder byRaionCityRegionCategory = new StringBuilder();
         byRaionCityRegionCategory.append("[[Categorie:Orașe raionale în regiunea " + regiuneRoName);
@@ -1694,7 +1700,7 @@ public class UAWikiGenerator {
         navBox.append("</noinclude>");
 
         executor.save("Format:" + articleName, navBox.toString(),
-            "Robot: creare/regenerare casetă de navigare pentru comuna ucraineană " + articleName);
+            "Robot: creare/regenerare casetă de navigare pentru rraineană " + articleName);
     }
 
     private void generateVillageText(final Settlement s) throws Exception {
