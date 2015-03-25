@@ -139,6 +139,8 @@ public class UAUtils {
         final String translCommuneName = com.getTransliteratedName();
 
         final Set<String> ret = new LinkedHashSet<String>();
+        
+        boolean communeIsOwnedByMiskrada = null == rai || (rai.isMiskrada() && !StringUtils.equals(translCommuneName, rai.getTransliteratedName()));
 
         if (singleInRegion) {
             ret.add(roSettlementName + ", " + roRegionName);
@@ -146,7 +148,17 @@ public class UAUtils {
             ret.add(translSettlementName + ", " + roRegionName);
             ret.add(translSettlementName + ", " + translRegionName);
         }
-        if (null != rai) {
+        if (communeIsOwnedByMiskrada && !StringUtils.equals(translSettlementName, translCommuneName)) {
+            ret.add(roSettlementName + " (" + roCommuneName + "), regiunea " + roRegionName);
+            ret.add(roSettlementName + " (" + translCommuneName + "), regiunea " + roRegionName);
+            ret.add(translSettlementName + " (" + roCommuneName + "), regiunea " + roRegionName);
+            ret.add(translSettlementName + " (" + translCommuneName + "), regiunea " + roRegionName);
+            ret.add(roSettlementName + " (" + roCommuneName + "), " + roRegionName);
+            ret.add(roSettlementName + " (" + translCommuneName + "), " + roRegionName);
+            ret.add(translSettlementName + " (" + roCommuneName + "), " + roRegionName);
+            ret.add(translSettlementName + " (" + translCommuneName + "), " + roRegionName);
+        }
+        if (!communeIsOwnedByMiskrada) {
             final String roRaionName = StringUtils.defaultIfBlank(rai.getRomanianName(), rai.getTransliteratedName());
             final String translRaionName = rai.getTransliteratedName();
 

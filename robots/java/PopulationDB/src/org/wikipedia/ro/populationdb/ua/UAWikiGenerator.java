@@ -203,7 +203,7 @@ public class UAWikiGenerator {
         regionsFinished.add("Jîtomîr");
         regionsFinished.add("Zakarpatska");
         regionsFinished.add("Zaporijjea");
-        regionsFinished.add("Ivano-Frankivsk");
+        //regionsFinished.add("Ivano-Frankivsk");
         String regionWithCitiesFinished = "";
 
         for (final Region eachReg : regions) {
@@ -213,7 +213,7 @@ public class UAWikiGenerator {
             Set<String> raionsFinished = new HashSet<String>();
             raionsFinished.addAll(Arrays.asList("Bohorodceanî", "Verhovîna", "Halîci", "Bolehiv", "Kosiv",
                 "Ivano-Frankivsk", "Dolîna", "Horodenka", "Kosiv", "Kaluș", "Nadvirna", "Kolomîia", "Rohatîn", "Rojneativ",
-                "Sneatîn", "Tîsmenîțea", "Tlumaci"));
+                "Sneatîn", "Tîsmenîțea", "Tlumaci", "Iaremce"));
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
@@ -1338,7 +1338,7 @@ public class UAWikiGenerator {
             sb.append("Așezare de tip urban");
             break;
         case 2:
-            sb.append(null != raion ? "Oraș" : "Oraș regional");
+            sb.append((null != raion || raion.isMiskrada() && StringUtils.equals(raion.getTransliteratedName(), com.getTransliteratedName()))? "Oraș" : "Oraș regional");
             break;
         }
         sb.append("\n|nume=").append(villageRoName);

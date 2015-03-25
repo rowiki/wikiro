@@ -36,8 +36,8 @@ public class SettlementNameInitializer extends LazyInitializer<String> {
 
         List<String> candidateNames;
         try {
-            candidateNames = UAUtils.getPossibleSettlementNames(commune, wiki, 1 == nameOccurences,
-                1 == nameOccurencesInRegion, 1 == nameOccurencesInRaion);
+            candidateNames = UAUtils.getPossibleSettlementNames(commune, wiki, 1 >= nameOccurences,
+                1 >= nameOccurencesInRegion, 1 >= nameOccurencesInRaion);
         } catch (IOException e1) {
             throw new ConcurrentException(e1);
         }
