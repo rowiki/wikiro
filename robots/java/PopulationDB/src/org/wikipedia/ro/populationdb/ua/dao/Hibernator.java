@@ -109,9 +109,13 @@ public class Hibernator {
 
     public Raion getRaionByTransliteratedNameAndRegion(final String needle, final Region region) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Criteria crit = ses.createCriteria(Raion.class).add(eq("transliteratedName", needle))
-            .add(eqOrIsNull("region", region)).add(eq("miskrada", Boolean.FALSE));
-        final List rez = crit.list();
+        //final Criteria crit = ses.createCriteria(Raion.class).add(eq("transliteratedName", needle))
+        //    .add(eqOrIsNull("region", region)).add(eq("miskrada", Boolean.FALSE));
+        Query q = ses.createQuery("from Raion r where r.region=:region and r.transliteratedName=:needle and r.miskrada=:f");
+        q.setParameter("region", region);
+        q.setParameter("needle", needle);
+        q.setParameter("f", false);
+        final List rez = q.list();
         if (0 < rez.size()) {
             return (Raion) rez.get(0);
         }
