@@ -215,7 +215,7 @@ public class UAWikiGenerator {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
-            raionsFinished.addAll(Arrays.asList("Barîșivka"));
+            raionsFinished.addAll(Arrays.asList("Barîșivka", "Bohuslav", "Borîspil", "Borodeanka"));
 
             for (final Raion raion : eachReg.getRaioane()) {
                 if (raionsFinished.contains(raion.getTransliteratedName())) {
@@ -718,6 +718,7 @@ public class UAWikiGenerator {
         String raionKey = generateCategoryKey(raionRoName);
         String regionRoName = obtainActualRomanianName(raion.computeRegion());
         StringBuilder categories = new StringBuilder();
+        categories.append("[[Categorie:").append(actualTitle).append("| ]]\n");
         categories.append("[[Categorie:Raioane în regiunea ");
         categories.append(regionRoName);
         categories.append('|').append(raionKey);
@@ -1030,7 +1031,7 @@ public class UAWikiGenerator {
 
         executor.save(actualTitle, currentText.toString(),
             "Robot - creare/completare articol despre " + StringUtils.lowerCase(com.getNominative()) + " ucrainean"
-                + (2 > com.getTown() ? "ă" : "") + "" + obtainActualRomanianName(com));
+                + (2 > com.getTown() ? "ă" : "") + " " + obtainActualRomanianName(com));
 
         List<String> possibleCommuneNames = UAUtils.getPossibleCommuneNames(com, rowiki, 1 == countCommunesWithThisName,
             1 == countCommunesWithThisNameInRegion);

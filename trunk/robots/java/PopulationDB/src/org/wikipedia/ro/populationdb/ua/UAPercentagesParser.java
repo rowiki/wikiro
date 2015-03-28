@@ -239,12 +239,12 @@ public class UAPercentagesParser {
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Zaporijjea", "Moloceansk", "Tokmak");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Ivano-Frankivsk", "Voinîliv", "Kaluș");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Ivano-Frankivsk", "Hvizdeț", "Kolomîia");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kiev", "Uzîn", "Bila Țerkva");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kiev", "Velîkooleksandrivska", "Borîspil");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kiev", "Velîka Dîmerka", "Brovarî");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kiev", "Hlevaha", "Vasîlkiv");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kiev", "Ciornobîl", "Ivankiv");
-        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kiev", "Borova", "Fastiv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kîiiv", "Uzîn", "Bila Țerkva");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kîiiv", "Velîkooleksandrivska", "Borîspil");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kîiiv", "Velîka Dîmerka", "Brovarî");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kîiiv", "Hlevaha", "Vasîlkiv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kîiiv", "Ciornobîl", "Ivankiv");
+        fixRaionNameAndCapitalByTransliteratedNames(hib, "Kîiiv", "Borova", "Fastiv");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "Nova Praha", "Oleksandria");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "Pomicina", "Dobrovelîcikivka");
         fixRaionNameAndCapitalByTransliteratedNames(hib, "Kirovohrad", "Bohdanivska", "Znameanka");
