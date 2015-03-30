@@ -215,10 +215,10 @@ public class UAWikiGenerator {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
-            raionsFinished.addAll(Arrays.asList("Barîșivka", "Bohuslav", "Borîspil", "Borodeanka"));
+            raionsFinished.addAll(Arrays.asList("Barîșivka", "Bohuslav", "Borîspil", "Borodeanka", "Bila Țerkva", "Brovarî"));
 
             for (final Raion raion : eachReg.getRaioane()) {
-                if (raionsFinished.contains(raion.getTransliteratedName())) {
+                if (!raion.isMiskrada() && raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
                     continue;
                 }
