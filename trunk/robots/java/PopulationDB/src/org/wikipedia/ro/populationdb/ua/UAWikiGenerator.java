@@ -2019,8 +2019,8 @@ public class UAWikiGenerator {
         navBox.append("</noinclude>");
 
         executor.save("Format:" + articleName, navBox.toString(),
-                "Robot: creare/regenerare casetă de navigare pentru rraineană "
-                        + articleName);
+                "Robot: creare/regenerare casetă de navigare pentru "
+                        + articleName + " din Ucraina");
     }
 
     private void generateVillageText(final Settlement s) throws Exception {
