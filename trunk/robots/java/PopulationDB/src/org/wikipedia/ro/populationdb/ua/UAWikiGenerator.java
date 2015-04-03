@@ -209,14 +209,14 @@ public class UAWikiGenerator {
         regionsFinished.add("Kîiiv-oraș");
         regionsFinished.add("Ivano-Frankivsk");
         String regionWithCitiesFinished = "";
-
+        
         for (final Region eachReg : regions) {
             if (regionsFinished.contains(eachReg.getTransliteratedName())) {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
             raionsFinished.addAll(Arrays.asList("Barîșivka", "Bohuslav", "Borîspil", "Borodeanka", "Bila Țerkva", "Brovarî",
-                "Vasîlkiv", "Vîșhorod", "Volodarka", "Zhurivka", "Ivankiv"));
+                "Vasîlkiv", "Vîșhorod", "Volodarka", "Zhurivka", "Ivankiv", "Kaharlîk"));
             Set<String> miskradasFinished = new HashSet<String>();
             miskradasFinished.addAll(Arrays.asList("Borîspil", "Irpin"));
 
@@ -915,14 +915,19 @@ public class UAWikiGenerator {
         if (StringUtils.contains(currentText, "de Andrebot -->")) {
             return;
         }
-
-        final ParameterReader ibParaReader = new ParameterReader(currentText.toString());
+        
+        String infoboxAnalysisText = currentText.toString();
+        int ibStart = locateFirstOf(infoboxAnalysisText, "{{Cutie", "{{Caset", "{{Ora", "{{Infocaset");
+        if (0 < ibStart) {
+            infoboxAnalysisText = infoboxAnalysisText.substring(ibStart);
+        }
+        final ParameterReader ibParaReader = new ParameterReader(infoboxAnalysisText);
         ibParaReader.run();
         final String villageIBText = generateCommuneInfobox(com, ibParaReader);
 
         String communeIntro = generateCommuneIntro(com, actualTitle);
 
-        String currentCommuneIntro = substringBefore(substring(currentText.toString(), ibParaReader.getTemplateLength()),
+        String currentCommuneIntro = substringBefore(substring(currentText.toString(), ibParaReader.getTemplateLength() + (0 < ibStart ? ibStart : 0)),
             "==");
         currentCommuneIntro = substringBefore(currentCommuneIntro, "{{Localități în ");
         currentCommuneIntro = substringBefore(currentCommuneIntro, "{{Comune în ");
@@ -1525,6 +1530,19 @@ public class UAWikiGenerator {
         if (0 > sb.indexOf("suprafață_totală_km2")) {
             UAUtils.copyParameterFromTemplate(ibParaReader, sb, "suprafață", "suprafață_totală_km2");
         }
+        if (0 > sb.indexOf("imagine")) {
+            UAUtils.copyParameterFromTemplate(ibParaReader, sb, "imagine");
+        }
+        if (0 > sb.indexOf("imagine_descriere")) {
+            UAUtils.copyParameterFromTemplate(ibParaReader, sb, "imagine_descriere");
+        }
+        if (0 > sb.indexOf("hartă")) {
+            UAUtils.copyParameterFromTemplate(ibParaReader, sb, "hartă");
+        }
+        if (0 > sb.indexOf("descriere_hartă")) {
+            UAUtils.copyParameterFromTemplate(ibParaReader, sb, "descriere_hartă");
+        }
+        
         sb.append("\n}}\n");
         return sb.toString();
     }

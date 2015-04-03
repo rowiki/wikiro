@@ -26,10 +26,16 @@ public class CommuneNameInitializer extends LazyInitializer<String> {
 
     @Override
     protected String initialize() throws ConcurrentException {
-        final int nameOccurences = hib.countCommunesByRomanianOrTransliteratedName(StringUtils.defaultIfBlank(
+        int nameOccurences = hib.countCommunesByRomanianOrTransliteratedName(StringUtils.defaultIfBlank(
             commune.getTransliteratedName(), commune.getRomanianName()));
-        final int nameOccurencesInRegion = hib.countCommunesInRegionByRomanianOrTransliteratedName(
+        int nameOccurencesInRegion = hib.countCommunesInRegionByRomanianOrTransliteratedName(
             StringUtils.defaultIfBlank(commune.getTransliteratedName(), commune.getRomanianName()), commune.computeRegion());
+        if (0 < commune.getTown()) {
+            nameOccurences = hib.countTownsByRomanianOrTransliteratedName(StringUtils.defaultIfBlank(
+                commune.getTransliteratedName(), commune.getRomanianName()));
+            nameOccurencesInRegion = hib.countTownsInRegionByRomanianOrTransliteratedName(
+                StringUtils.defaultIfBlank(commune.getTransliteratedName(), commune.getRomanianName()), commune.computeRegion());
+        }
 
         List<String> candidateNames;
         boolean[] existanceArray = null;
