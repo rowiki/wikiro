@@ -216,11 +216,16 @@ public class UAWikiGenerator {
             }
             Set<String> raionsFinished = new HashSet<String>();
             raionsFinished.addAll(Arrays.asList("Barîșivka", "Bohuslav", "Borîspil", "Borodeanka", "Bila Țerkva", "Brovarî",
-                "Vasîlkiv", "Vîșhorod", "Volodarka", "Zhurivka"));
+                "Vasîlkiv", "Vîșhorod", "Volodarka", "Zhurivka", "Ivankiv"));
+            Set<String> miskradasFinished = new HashSet<String>();
+            miskradasFinished.addAll(Arrays.asList("Borîspil", "Irpin"));
 
             for (final Raion raion : eachReg.getRaioane()) {
                 if (!raion.isMiskrada() && raionsFinished.contains(raion.getTransliteratedName())) {
                     // generateRaionCategories(raion);
+                    continue;
+                }
+                if (raion.isMiskrada() && miskradasFinished.contains(raion.getTransliteratedName())) {
                     continue;
                 }
                 if (StringUtils.equals(eachReg.getTransliteratedName(), regionWithCitiesFinished) && raion.isMiskrada()) {
