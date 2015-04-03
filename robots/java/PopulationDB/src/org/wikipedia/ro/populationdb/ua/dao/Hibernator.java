@@ -109,8 +109,8 @@ public class Hibernator {
 
     public Raion getRaionByTransliteratedNameAndRegion(final String needle, final Region region) {
         final Session ses = sessionFactory.getCurrentSession();
-        //final Criteria crit = ses.createCriteria(Raion.class).add(eq("transliteratedName", needle))
-        //    .add(eqOrIsNull("region", region)).add(eq("miskrada", Boolean.FALSE));
+        // final Criteria crit = ses.createCriteria(Raion.class).add(eq("transliteratedName", needle))
+        // .add(eqOrIsNull("region", region)).add(eq("miskrada", Boolean.FALSE));
         Query q = ses.createQuery("from Raion r where r.region=:region and r.transliteratedName=:needle and r.miskrada=:f");
         q.setParameter("region", region);
         q.setParameter("needle", needle);
@@ -302,5 +302,23 @@ public class Hibernator {
         }
         return null;
     }
+
+    public int countTownsByRomanianOrTransliteratedName(String transliteratedName) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query q = ses
+            .createQuery("select count(c) from Commune c where c.town>0 and (c.transliteratedName=:translName or c.romanianName=:translName)");
+        q.setParameter("translName", transliteratedName);
+        final Long uniqueResult = (Long) q.uniqueResult();
+        return uniqueResult.intValue();
+    }
+
+    public int countTownsInRegionByRomanianOrTransliteratedName(String transliteratedName, Region region) {
+        final Session ses = sessionFactory.getCurrentSession();
+        final Query q = ses
+            .createQuery("select count(c) from Commune c where c.town>0 and (c.transliteratedName=:translName or c.romanianName=:translName) and ((c.raion is not null and c.raion.region=:region) or c.region=:region)");
+        q.setParameter("translName", transliteratedName);
+        q.setParameter("region", region);
+        final Long uniqueResult = (Long) q.uniqueResult();
+        return uniqueResult.intValue();    }
 
 }

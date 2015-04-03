@@ -92,6 +92,7 @@ public class UAPercentagesParser {
             // parser.parse();
 
             parser.performCorrection();
+            
         } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

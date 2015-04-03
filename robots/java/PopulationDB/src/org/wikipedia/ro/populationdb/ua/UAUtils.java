@@ -106,8 +106,16 @@ public class UAUtils {
                 ret.add(translCommuneName + ", raionul " + translRaionName + ", regiunea " + translRegionName);
                 ret.add(translCommuneName + ", " + translRaionName);
                 ret.add(translCommuneName + ", " + roRaionName);
-                ret.add(roName + ", " + translRaionName);
-                ret.add(roName + ", " + roRaionName);
+                if (StringUtils.equals(roName, translRaionName)) {
+                    ret.add(roName);
+                } else {
+                    ret.add(roName + ", " + translRaionName);
+                }
+                if (StringUtils.equals(roName, roRaionName)) {
+                    ret.add(roName + ", " + translRaionName);
+                } else {
+                    ret.add(roName + ", " + roRaionName);
+                }
             }
         }
 
@@ -139,8 +147,9 @@ public class UAUtils {
         final String translCommuneName = com.getTransliteratedName();
 
         final Set<String> ret = new LinkedHashSet<String>();
-        
-        boolean communeIsOwnedByMiskrada = null == rai || (rai.isMiskrada() && !StringUtils.equals(translCommuneName, rai.getTransliteratedName()));
+
+        boolean communeIsOwnedByMiskrada = null == rai
+            || (rai.isMiskrada() && !StringUtils.equals(translCommuneName, rai.getTransliteratedName()));
 
         if (singleInRegion) {
             ret.add(roSettlementName + ", " + roRegionName);
@@ -279,7 +288,7 @@ public class UAUtils {
             }
         }
         return false;
-        
+
     }
 
     public static String resolveRedirect(final Wiki wiki, final String title) {
