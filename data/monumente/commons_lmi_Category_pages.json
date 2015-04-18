@@ -83,6 +83,20 @@
       "quality": false
     }
   ], 
+  "B-II-m-B-19317": [
+    {
+      "code": "B-II-m-B-19317", 
+      "lastedit": "20150408034124", 
+      "name": "Category:O\u0163etari Church", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "MM-II-a-A-04587": [
     {
       "code": "MM-II-a-A-04587", 
@@ -489,18 +503,18 @@
       "quality": false
     }
   ], 
-  "AR-II-m-B-00543": [
+  "VL-I-s-A-09580": [
     {
-      "code": "AR-II-m-B-00543", 
-      "lastedit": "20131026135157", 
-      "name": "Category:Lutheran church in Arad", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
       "project": "commons", 
+      "ran": null, 
+      "code": "VL-I-s-A-09580", 
+      "lastedit": "20150414210607", 
+      "name": "Category:Castra Buridava", 
+      "author": null, 
       "lat": 0, 
-      "quality": false
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "CJ-II-m-B-07592": [
@@ -517,11 +531,11 @@
       "quality": false
     }
   ], 
-  "SV-II-m-A-05475": [
+  "BZ-II-a-A-20156": [
     {
-      "code": "SV-II-m-A-05475", 
-      "lastedit": "20130516022538", 
-      "name": "Category:Biserica Mir\u0103u\u0163i, Suceava", 
+      "code": "BZ-II-a-A-20156", 
+      "lastedit": "20150414121054", 
+      "name": "Category:Poiana M\u0103rului Monastery", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -772,7 +786,7 @@
   "AG-II-m-B-13478": [
     {
       "code": "AG-II-m-B-13478", 
-      "lastedit": "20141024120723", 
+      "lastedit": "20150408034248", 
       "name": "Category:Biserica \u201eSfin\u021bii Voievozi\" din B\u0103lteni", 
       "author": null, 
       "ran": null, 
@@ -1065,16 +1079,16 @@
   ], 
   "B-II-m-B-18148": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-B-18148", 
       "lastedit": "20150403053510", 
       "name": "Category:Amzei Church, Bucharest", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "VL-II-a-A-09666": [
@@ -1331,30 +1345,30 @@
   ], 
   "B-II-m-A-19860": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-A-19860", 
       "lastedit": "20150403193230", 
       "name": "Category:\u0218tirbei Palace, Bucharest", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-II-m-A-19861": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-A-19861", 
       "lastedit": "20150403201055", 
       "name": "Category:White Church", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "IS-II-m-B-03861": [
@@ -1502,6 +1516,20 @@
       "code": "BC-II-m-B-00903", 
       "lastedit": "20140225170217", 
       "name": "Category:Wooden church in \u0218esuri, Bac\u0103u", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "MM-II-m-B-04504": [
+    {
+      "code": "MM-II-m-B-04504", 
+      "lastedit": "20141220222730", 
+      "name": "Category:Prim\u0103ria Baia Sprie", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -2006,6 +2034,20 @@
       "code": "SV-II-m-B-05540", 
       "lastedit": "20141002162448", 
       "name": "Category:F\u0103lticeni City Hall", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-19580": [
+    {
+      "code": "B-II-m-B-19580", 
+      "lastedit": "20150408161514", 
+      "name": "Category:Sabba \u0218tef\u0103nescu House", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -2547,11 +2589,11 @@
       "quality": false
     }
   ], 
-  "MM-II-m-B-04513": [
+  "IS-II-m-B-03795": [
     {
-      "code": "MM-II-m-B-04513", 
-      "lastedit": "20141220224443", 
-      "name": "Category:\u0218coala general\u0103 nr. 1 Baia Sprie", 
+      "code": "IS-II-m-B-03795", 
+      "lastedit": "20120907142608", 
+      "name": "Category:Mihail Kog\u01celniceanu School in Ia\u0219i", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -2563,16 +2605,16 @@
   ], 
   "B-II-m-A-18781.01": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-A-18781.01", 
       "lastedit": "20150328044100", 
       "name": "Category:Curtea Veche Church", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "MM-II-m-A-04770": [
@@ -2773,16 +2815,16 @@
   ], 
   "B-II-m-B-18598": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-B-18598", 
       "lastedit": "20150331025242", 
       "name": "Category:Central University Library of Bucharest", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "MM-II-m-A-04689": [
@@ -3028,6 +3070,20 @@
       "code": "SV-II-a-A-05675", 
       "lastedit": "20130629103638", 
       "name": "Category:Vorone\u021b Monastery", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-19316": [
+    {
+      "code": "B-II-m-B-19316", 
+      "lastedit": "20150408015352", 
+      "name": "Category:Vila Matilda, Bucharest", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -3305,16 +3361,16 @@
   ], 
   "AR-II-a-A-00618": [
     {
+      "project": "commons", 
+      "ran": null, 
       "code": "AR-II-a-A-00618", 
-      "lastedit": "20141203160213", 
+      "lastedit": "20150415003248", 
       "name": "Category:\u015eoimo\u015f Citadel", 
       "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "commons", 
       "lat": 0, 
-      "quality": false
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "CJ-II-m-B-07721": [
@@ -3448,20 +3504,6 @@
       "code": "SJ-II-m-B-05147.02", 
       "lastedit": "20140804211450", 
       "name": "Category:Parcul conacului Zsombory", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "commons", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
-  "VL-I-s-A-09555": [
-    {
-      "code": "VL-I-s-A-09555", 
-      "lastedit": "20141214103636", 
-      "name": "Category:Dacian Fortress Buridava", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -3625,6 +3667,20 @@
       "quality": false
     }
   ], 
+  "SV-II-m-A-05475": [
+    {
+      "code": "SV-II-m-A-05475", 
+      "lastedit": "20130516022538", 
+      "name": "Category:Biserica Mir\u0103u\u0163i, Suceava", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "SB-II-m-A-12400.01": [
     {
       "code": "SB-II-m-A-12400.01", 
@@ -3653,11 +3709,11 @@
       "quality": false
     }
   ], 
-  "MM-IV-m-A-04835": [
+  "B-II-a-A-19655": [
     {
-      "code": "MM-IV-m-A-04835", 
-      "lastedit": "20140910175503", 
-      "name": "Category:Casa Mihalyi de Ap\u0219a", 
+      "code": "B-II-a-A-19655", 
+      "lastedit": "20130508183845", 
+      "name": "Category:Ci\u0219migiu", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -3695,11 +3751,11 @@
       "quality": false
     }
   ], 
-  "CJ-II-m-B-07712": [
+  "MM-IV-m-A-04835": [
     {
-      "code": "CJ-II-m-B-07712", 
-      "lastedit": "20141023192204", 
-      "name": "Category:Biserica unitarian\u0103 din Mihai Viteazu", 
+      "code": "MM-IV-m-A-04835", 
+      "lastedit": "20140910175503", 
+      "name": "Category:Casa Mihalyi de Ap\u0219a", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -3723,11 +3779,11 @@
       "quality": false
     }
   ], 
-  "SV-II-a-A-05485": [
+  "SV-II-m-A-05603": [
     {
-      "code": "SV-II-a-A-05485", 
-      "lastedit": "20130516054004", 
-      "name": "Category:Zamca Monastery", 
+      "code": "SV-II-m-A-05603", 
+      "lastedit": "20140824113408", 
+      "name": "Category:Bogdana Monastery", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -4215,16 +4271,16 @@
   ], 
   "B-II-m-A-19833": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-A-19833", 
       "lastedit": "20150401152905", 
       "name": "Category:Anglican Church of the Resurrection, Bucharest", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "MM-II-m-A-04633": [
@@ -4594,7 +4650,7 @@
   "IS-II-m-B-04138": [
     {
       "code": "IS-II-m-B-04138", 
-      "lastedit": "20130608143229", 
+      "lastedit": "20150408034252", 
       "name": "Category:Biserica Sfin\u021bii Voievozi din Cozme\u0219ti", 
       "author": null, 
       "ran": null, 
@@ -5109,20 +5165,6 @@
       "quality": false
     }
   ], 
-  "BH-II-m-B-01067": [
-    {
-      "code": "BH-II-m-B-01067", 
-      "lastedit": "20131105114507", 
-      "name": "Category:Palace of Justice (Oradea)", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "commons", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
   "AG-II-m-B-20973": [
     {
       "code": "AG-II-m-B-20973", 
@@ -5529,18 +5571,18 @@
       "quality": false
     }
   ], 
-  "B-II-a-A-19655": [
+  "BH-II-m-B-20983": [
     {
-      "code": "B-II-a-A-19655", 
-      "lastedit": "20130508183845", 
-      "name": "Category:Ci\u0219migiu", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
       "project": "commons", 
+      "ran": null, 
+      "code": "BH-II-m-B-20983", 
+      "lastedit": "20150416213434", 
+      "name": "Category:Greek Catolic Church in Beiu\u015f", 
+      "author": null, 
       "lat": 0, 
-      "quality": false
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "HD-II-a-A-03216": [
@@ -6185,6 +6227,20 @@
       "quality": false
     }
   ], 
+  "BV-II-a-B-11743": [
+    {
+      "code": "BV-II-a-B-11743", 
+      "lastedit": "20150414111802", 
+      "name": "Category:Predeal Monastery", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "MS-II-m-B-15493": [
     {
       "code": "MS-II-m-B-15493", 
@@ -6439,16 +6495,16 @@
   ], 
   "B-II-m-B-19729": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-B-19729", 
       "lastedit": "20150331011632", 
       "name": "Category:Banca de Credit Rom\u00e2n Building", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-II-m-A-19877": [
@@ -6831,16 +6887,16 @@
   ], 
   "B-II-m-A-19107": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-A-19107", 
-      "lastedit": "20150402050639", 
-      "name": "Category:Casa Universitatilor, Bucharest", 
+      "lastedit": "20150408181315", 
+      "name": "Category:Casa Universitarilor, Bucharest", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-II-a-A-19152": [
@@ -7139,16 +7195,16 @@
   ], 
   "B-II-m-B-19187": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-B-19187", 
       "lastedit": "20150403052745", 
       "name": "Category:Cl\u0103dire monument istoric, str.Mendeleev, nr.35 bis", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "SB-II-m-A-12091.01": [
@@ -7755,16 +7811,16 @@
   ], 
   "B-II-m-B-19072": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-B-19072", 
       "lastedit": "20150406235921", 
       "name": "Category:Popa Chi\u021bu Church", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "BH-II-m-B-01122": [
@@ -8122,6 +8178,20 @@
       "code": "GJ-III-a-A-09465", 
       "lastedit": "20150217163553", 
       "name": "Category:Sculptural Ensemble of Constantin Br\u00e2ncu\u015fi in T\u00e2rgu Jiu", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CJ-II-m-B-07712": [
+    {
+      "code": "CJ-II-m-B-07712", 
+      "lastedit": "20141023192204", 
+      "name": "Category:Biserica unitarian\u0103 din Mihai Viteazu", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -8635,6 +8705,20 @@
       "quality": false
     }
   ], 
+  "B-II-m-B-17949": [
+    {
+      "code": "B-II-m-B-17949", 
+      "lastedit": "20150409161256", 
+      "name": "Category:Strada Alecsandri Vasile, nr. 20, Bucharest", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "CJ-II-m-B-07574": [
     {
       "code": "CJ-II-m-B-07574", 
@@ -8850,6 +8934,20 @@
       "code": "GJ-II-m-B-09254", 
       "lastedit": "20140408031313", 
       "name": "Category:Lainici Monastery", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "AR-II-m-B-00543": [
+    {
+      "code": "AR-II-m-B-00543", 
+      "lastedit": "20131026135157", 
+      "name": "Category:Lutheran church in Arad", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -9307,11 +9405,11 @@
       "quality": false
     }
   ], 
-  "BH-II-m-B-01184": [
+  "CV-I-s-A-13047": [
     {
-      "code": "BH-II-m-B-01184", 
-      "lastedit": "20120806121726", 
-      "name": "Category:Wooden church in P\u0103u\u0219a, Bihor", 
+      "code": "CV-I-s-A-13047", 
+      "lastedit": "20150414204542", 
+      "name": "Category:Castra of Boro\u0219neu Mare", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -9326,6 +9424,20 @@
       "code": "SJ-II-m-B-05149.02", 
       "lastedit": "20140804205425", 
       "name": "Category:Clopotni\u021ba de lemn a bisericii reformate din Zimbor", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-19577": [
+    {
+      "code": "B-II-m-B-19577", 
+      "lastedit": "20150409005834", 
+      "name": "Category:Nicolae Petra\u015fcu House", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -9517,6 +9629,20 @@
       "quality": false
     }
   ], 
+  "MM-II-m-B-04513": [
+    {
+      "code": "MM-II-m-B-04513", 
+      "lastedit": "20141220224443", 
+      "name": "Category:\u0218coala general\u0103 nr. 1 Baia Sprie", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BN-II-a-A-01649": [
     {
       "code": "BN-II-a-A-01649", 
@@ -9690,6 +9816,20 @@
       "code": "AG-II-m-A-13609", 
       "lastedit": "20140301000036", 
       "name": "Category:Wooden church in Tele\u015fti, Arge\u015f", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-20974": [
+    {
+      "code": "B-II-m-B-20974", 
+      "lastedit": "20150414033158", 
+      "name": "Category:Demostene M. Cuculi House, Bucharest", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -11071,16 +11211,16 @@
   ], 
   "TL-I-m-A-05785.01": [
     {
+      "project": "commons", 
+      "ran": null, 
       "code": "TL-I-m-A-05785.01", 
-      "lastedit": "20130601125333", 
+      "lastedit": "20150415001945", 
       "name": "Category:Enisala Castle", 
       "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "commons", 
       "lat": 0, 
-      "quality": false
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "PH-II-m-A-16246": [
@@ -11541,11 +11681,11 @@
       "quality": false
     }
   ], 
-  "IS-II-m-B-03795": [
+  "CT-I-s-A-02600": [
     {
-      "code": "IS-II-m-B-03795", 
-      "lastedit": "20120907142608", 
-      "name": "Category:Mihail Kog\u01celniceanu School in Ia\u0219i", 
+      "code": "CT-I-s-A-02600", 
+      "lastedit": "20150414200721", 
+      "name": "Category:Capidava", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -11753,16 +11893,16 @@
   ], 
   "AG-I-s-A-13357": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "AG-I-s-A-13357", 
       "lastedit": "20150331002942", 
       "name": "Category:Castra Jidava", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "CL-II-a-A-14710": [
@@ -12495,16 +12635,16 @@
   ], 
   "B-II-m-B-19427": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-B-19427", 
       "lastedit": "20150405023509", 
       "name": "Category:Constantin Geblescu Villa, Bucharest", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "CJ-II-m-B-07804": [
@@ -12521,11 +12661,11 @@
       "quality": false
     }
   ], 
-  "MM-II-m-B-04737": [
+  "BH-II-m-B-01184": [
     {
-      "code": "MM-II-m-B-04737", 
-      "lastedit": "20140910175014", 
-      "name": "Category:Restaurant Curtea Veche Sighet", 
+      "code": "BH-II-m-B-01184", 
+      "lastedit": "20120806121726", 
+      "name": "Category:Wooden church in P\u0103u\u0219a, Bihor", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -12776,7 +12916,7 @@
   "GJ-II-m-A-09189": [
     {
       "code": "GJ-II-m-A-09189", 
-      "lastedit": "20120907134001", 
+      "lastedit": "20150408034303", 
       "name": "Category:Sfin\u0163ii Voievozi Church, T\u00e2rgu Jiu", 
       "author": null, 
       "ran": null, 
@@ -12862,6 +13002,20 @@
       "code": "B-II-m-B-19579", 
       "lastedit": "20121127223026", 
       "name": "Category:Academy of Economic Studies of Bucharest", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-19578": [
+    {
+      "code": "B-II-m-B-19578", 
+      "lastedit": "20150408044100", 
+      "name": "Category:Gheorghe Petra\u015fcu House", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -13237,30 +13391,30 @@
   ], 
   "B-II-m-B-19834": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-B-19834", 
       "lastedit": "20150402054519", 
       "name": "Category:D.A. Sturdza House, Bucharest", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-II-m-B-19835": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-B-19835", 
       "lastedit": "20150402224643", 
       "name": "Category:Ion Mincu House, Bucharest", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "PH-II-m-A-16247": [
@@ -13697,10 +13851,24 @@
       "quality": false
     }
   ], 
+  "B-II-m-B-17941": [
+    {
+      "code": "B-II-m-B-17941", 
+      "lastedit": "20150409161245", 
+      "name": "Category:Strada Alecsandri Vasile, nr. 6, Bucharest", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "IS-II-m-B-04119.01": [
     {
       "code": "IS-II-m-B-04119.01", 
-      "lastedit": "20140517110518", 
+      "lastedit": "20150408034256", 
       "name": "Category:Biserica Sfin\u0163ii Voievozi din Cepleni\u0163a", 
       "author": null, 
       "ran": null, 
@@ -13783,16 +13951,16 @@
   ], 
   "B-II-m-B-19106": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-B-19106", 
       "lastedit": "20150407040604", 
       "name": "Category:Casa Prof. Dr. Turnescu", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "BV-II-a-B-11562": [
@@ -14383,6 +14551,20 @@
       "quality": false
     }
   ], 
+  "CV-I-s-A-13050": [
+    {
+      "code": "CV-I-s-A-13050", 
+      "lastedit": "20150414204238", 
+      "name": "Category:Castra Angustia", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "VL-II-a-A-09894": [
     {
       "code": "VL-II-a-A-09894", 
@@ -14472,6 +14654,20 @@
       "code": "BN-II-m-A-01612", 
       "lastedit": "20130606180736", 
       "name": "Category:Wooden church in Apatiu, Bistri\u021ba-N\u0103s\u0103ud", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "MM-II-m-B-04737": [
+    {
+      "code": "MM-II-m-B-04737", 
+      "lastedit": "20140910175014", 
+      "name": "Category:Restaurant Curtea Veche Sighet", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -14987,16 +15183,16 @@
   ], 
   "B-II-m-B-18534": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "B-II-m-B-18534", 
       "lastedit": "20150406021129", 
       "name": "Category:Bulevardul Dacia 74 house", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "MM-II-m-B-04511": [
@@ -15433,18 +15629,18 @@
       "quality": false
     }
   ], 
-  "MM-II-m-B-04504": [
+  "VL-I-m-A-09555.01": [
     {
-      "code": "MM-II-m-B-04504", 
-      "lastedit": "20141220222730", 
-      "name": "Category:Prim\u0103ria Baia Sprie", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
       "project": "commons", 
+      "ran": null, 
+      "code": "VL-I-m-A-09555.01", 
+      "lastedit": "20150414210105", 
+      "name": "Category:Dacian Fortress Buridava", 
+      "author": null, 
       "lat": 0, 
-      "quality": false
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "B-II-a-A-18571": [
@@ -15615,11 +15811,11 @@
       "quality": false
     }
   ], 
-  "SV-II-m-A-05603": [
+  "SV-II-a-A-05485": [
     {
-      "code": "SV-II-m-A-05603", 
-      "lastedit": "20140824113408", 
-      "name": "Category:Bogdana Monastery", 
+      "code": "SV-II-a-A-05485", 
+      "lastedit": "20130516054004", 
+      "name": "Category:Zamca Monastery", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -16199,6 +16395,20 @@
       "quality": false
     }
   ], 
+  "MS-II-m-A-15978": [
+    {
+      "code": "MS-II-m-A-15978", 
+      "lastedit": "20150408191706", 
+      "name": "Category:Covered staircase in Sighi\u0219oara", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BT-II-m-B-02011": [
     {
       "code": "BT-II-m-B-02011", 
@@ -16440,7 +16650,7 @@
   "B-II-m-B-19755": [
     {
       "code": "B-II-m-B-19755", 
-      "lastedit": "20120907113127", 
+      "lastedit": "20150408034406", 
       "name": "Category:St. Archangels Michael and Gabriel (Manu Cavafu), Bucharest", 
       "author": null, 
       "ran": null, 
@@ -16731,11 +16941,11 @@
       "quality": false
     }
   ], 
-  "B-II-m-A-18157": [
+  "BH-II-m-B-01067": [
     {
-      "code": "B-II-m-A-18157", 
-      "lastedit": "20140307120909", 
-      "name": "Category:M\u0103rcu\u0163a Monastery, Bucharest", 
+      "code": "BH-II-m-B-01067", 
+      "lastedit": "20131105114507", 
+      "name": "Category:Palace of Justice (Oradea)", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -16750,6 +16960,20 @@
       "code": "VL-II-m-B-09810", 
       "lastedit": "20130531182106", 
       "name": "Category:Wooden church in M\u0103gureni, V\u00e2lcea", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-17947": [
+    {
+      "code": "B-II-m-B-17947", 
+      "lastedit": "20150409161252", 
+      "name": "Category:Frederic and Cecilia Cu\u021bescu Storck Museum", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -17151,6 +17375,20 @@
       "quality": false
     }
   ], 
+  "B-II-m-B-21064": [
+    {
+      "code": "B-II-m-B-21064", 
+      "lastedit": "20150408161727", 
+      "name": "Category:Pia\u021ba Roman\u0103, nr. 7", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "IS-II-m-A-03963": [
     {
       "code": "IS-II-m-A-03963", 
@@ -17251,16 +17489,16 @@
   ], 
   "AG-II-a-A-13507": [
     {
-      "project": "commons", 
-      "ran": null, 
       "code": "AG-II-a-A-13507", 
       "lastedit": "20150331002936", 
       "name": "Category:Poenari Citadel", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "BC-II-m-B-00894": [
@@ -17313,6 +17551,20 @@
       "author": null, 
       "ran": null, 
       "image": "File:Monument istoric.svg", 
+      "long": 0, 
+      "project": "commons", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-A-18157": [
+    {
+      "code": "B-II-m-A-18157", 
+      "lastedit": "20150408101243", 
+      "name": "Category:M\u0103rcu\u021ba Monastery, Bucharest", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
       "long": 0, 
       "project": "commons", 
       "lat": 0, 
@@ -17429,6 +17681,20 @@
       "project": "commons", 
       "lat": 0, 
       "quality": false
+    }
+  ], 
+  "SJ-II-m-A-05095": [
+    {
+      "project": "commons", 
+      "ran": null, 
+      "code": "SJ-II-m-A-05095", 
+      "lastedit": "20150417214553", 
+      "name": "Category:Wooden church in Poarta S\u0103lajului", 
+      "author": null, 
+      "lat": 0, 
+      "image": null, 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "AG-II-a-B-13828": [

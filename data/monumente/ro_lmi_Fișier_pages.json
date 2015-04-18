@@ -3277,6 +3277,20 @@
       "quality": false
     }
   ], 
+  "PH-IV-m-B-16926": [
+    {
+      "code": "PH-IV-m-B-16926", 
+      "lastedit": "20150417115229", 
+      "name": "Fi\u0219ier:Cruce mormant Badea Cartan Sinaia.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BV-II-m-A-11610.02": [
     {
       "code": "BV-II-m-A-11610.02", 
@@ -10727,16 +10741,16 @@
   ], 
   "CJ-II-m-B-07778": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07778", 
       "lastedit": "20150406194449", 
       "name": "Fi\u0219ier:BisericaTautiCJ.JPG", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "CJ-II-m-B-07779": [
@@ -12489,6 +12503,104 @@
       "quality": false
     }
   ], 
+  "BC-II-m-B-00810": [
+    {
+      "code": "BC-II-m-B-00810", 
+      "lastedit": "20150414070301", 
+      "name": "Fi\u0219ier:Catapeteasm\u0103 Ciolpani.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BC-II-m-B-00810", 
+      "lastedit": "20150414070301", 
+      "name": "Fi\u0219ier:Interior Ciolpani.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BC-II-m-B-00810", 
+      "lastedit": "20150414070301", 
+      "name": "Fi\u0219ier:Icoana Sf.Nicolae.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BC-II-m-B-00810", 
+      "lastedit": "20150414070303", 
+      "name": "Fi\u0219ier:Tavan Ciolpani.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BC-II-m-B-00810", 
+      "lastedit": "20150414070304", 
+      "name": "Fi\u0219ier:Bisericu\u0163a Ciolpani.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BC-II-m-B-00810", 
+      "lastedit": "20150414070305", 
+      "name": "Fi\u0219ier:Cruce catapeteasm\u0103.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BC-II-m-B-00810", 
+      "lastedit": "20150414070305", 
+      "name": "Fi\u0219ier:Ferestruic\u0103.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BC-II-m-B-00810", 
+      "lastedit": "20150415104402", 
+      "name": "Fi\u0219ier:Catapeteasm\u0103 Ciolpani22.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "VL-II-m-B-09754": [
     {
       "code": "VL-II-m-B-09754", 
@@ -13685,28 +13797,28 @@
   ], 
   "SV-II-a-A-05592": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SV-II-a-A-05592", 
       "lastedit": "20150406080813", 
       "name": "Fi\u0219ier:Ansamblu Probota2.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }, 
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SV-II-a-A-05592", 
       "lastedit": "20150406080652", 
       "name": "Fi\u0219ier:Ansamblu Probota1.jpg", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "SB-II-m-B-12572": [

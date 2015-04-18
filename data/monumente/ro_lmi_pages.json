@@ -293,14 +293,14 @@
       "quality": false
     }
   ], 
-  "SV-II-a-A-05638": [
+  "VL-II-m-B-20824": [
     {
-      "code": "SV-II-a-A-05638", 
-      "lastedit": "20140914081336", 
-      "name": "Biserica Sf\u00e2ntul Ilie din Sf\u00e2ntu Ilie", 
+      "code": "VL-II-m-B-20824", 
+      "lastedit": "20120401164017", 
+      "name": "Biserica de lemn din Prundeni-T\u0103t\u0103roaia", 
       "author": null, 
       "ran": null, 
-      "image": "Fi\u0219ier:Biserica Sf\u00e2ntul Ilie din Sf\u00e2ntu Ilie.jpg", 
+      "image": "Fi\u0219ier:Prundeni VL.VSV portal.jpg", 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
@@ -603,16 +603,16 @@
   ], 
   "B-II-m-A-19863": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "B-II-m-A-19863", 
-      "lastedit": "20141112155738", 
+      "lastedit": "20150408191917", 
       "name": "Uniunea Scriitorilor din Rom\u00e2nia", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Casa Monteoru-Catargi.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Casa Monteoru-Catargi.jpg", 
+      "quality": false, 
+      "long": 0
     }, 
     {
       "code": "B-II-m-A-19863", 
@@ -685,16 +685,16 @@
   ], 
   "B-II-m-A-19869": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "B-II-m-A-19869", 
       "lastedit": "20150406222859", 
       "name": "Palatul Cantacuzino (Bucure\u0219ti)", 
       "author": "[[Ion D. Berindey]] (arhitect)", 
-      "lat": 0, 
+      "ran": null, 
       "image": "Palatul Cantacuzino, Calea Victoriei 141.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "BV-II-a-B-11697": [
@@ -2097,16 +2097,16 @@
   ], 
   "VS-IV-m-B-06909": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "VS-IV-m-B-06909", 
       "lastedit": "20150324143328", 
       "name": "Statuia eroului caporal Constantin Mu\u0219at din B\u00e2rlad", 
       "author": "[[Ion Dimitriu-B\u00e2rlad]] (artist)", 
-      "lat": 0, 
+      "ran": null, 
       "image": "Statuia_caporalului_Mu\u0219at_din_B\u00e2rlad.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "SV-II-a-B-05582": [
@@ -2405,16 +2405,16 @@
   ], 
   "SB-IV-m-B-12606": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-IV-m-B-12606", 
       "lastedit": "20150406124047", 
       "name": "Zaharia Boiu", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:Biserica Buna Vestire din Sibiu11.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "MM-II-m-A-04479": [
@@ -2543,14 +2543,14 @@
       "quality": false
     }
   ], 
-  "VL-II-m-B-20824": [
+  "SV-II-a-A-05638": [
     {
-      "code": "VL-II-m-B-20824", 
-      "lastedit": "20120401164017", 
-      "name": "Biserica de lemn din Prundeni-T\u0103t\u0103roaia", 
+      "code": "SV-II-a-A-05638", 
+      "lastedit": "20140914081336", 
+      "name": "Biserica Sf\u00e2ntul Ilie din Sf\u00e2ntu Ilie", 
       "author": null, 
       "ran": null, 
-      "image": "Fi\u0219ier:Prundeni VL.VSV portal.jpg", 
+      "image": "Fi\u0219ier:Biserica Sf\u00e2ntul Ilie din Sf\u00e2ntu Ilie.jpg", 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
@@ -3077,16 +3077,16 @@
   ], 
   "HD-I-s-A-03190": [
     {
-      "project": "ro", 
-      "ran": " 90397.01 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=18 October 2012}}</ref>", 
       "code": "HD-I-s-A-03190", 
       "lastedit": "20150403072057", 
       "name": "Sarmizegetusa Regia", 
       "author": null, 
-      "lat": 45.6219, 
+      "ran": " 90397.01 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=18 October 2012}}</ref>", 
       "image": " Sarmizegetusa Regia (Grigore Roibu).jpg", 
-      "quality": false, 
-      "long": 23.3093
+      "long": 23.3093, 
+      "project": "ro", 
+      "lat": 45.6219, 
+      "quality": false
     }
   ], 
   "VS-II-m-B-06786": [
@@ -3119,16 +3119,16 @@
   ], 
   "MM-II-m-A-04604": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "MM-II-m-A-04604", 
       "lastedit": "20150406092139", 
       "name": "Biserica de lemn din Plopi\u0219", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:PlopisMM (153).JPG", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-II-m-A-19877": [
@@ -3203,16 +3203,16 @@
   ], 
   "B-II-m-A-19500": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "B-II-m-A-19500", 
       "lastedit": "20150406225134", 
       "name": "Biserica Bucur", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:Biserica Bucur Pixi.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "HR-I-s-B-12641": [
@@ -3889,16 +3889,16 @@
   ], 
   "SB-II-a-A-12526": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-a-A-12526", 
       "lastedit": "20150324102729", 
       "name": "Biserica fortificat\u0103 din Ro\u0219ia, Sibiu", 
       "author": null, 
-      "lat": 45.8169, 
+      "ran": null, 
       "image": "RosiaSB (18).jpg", 
-      "quality": false, 
-      "long": 24.3144
+      "long": 24.3144, 
+      "project": "ro", 
+      "lat": 45.8169, 
+      "quality": false
     }
   ], 
   "SB-II-a-A-12522": [
@@ -4575,16 +4575,16 @@
   ], 
   "BN-II-m-B-01655": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-B-01655", 
-      "lastedit": "20120327202028", 
+      "lastedit": "20150407220823", 
       "name": "Biserica de lemn din F\u00e2na\u021bele Siliva\u0219ului", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Biserica de lemn din Fanatele04.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Biserica de lemn din Fanatele04.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "SJ-II-m-B-05114": [
@@ -4603,16 +4603,16 @@
   ], 
   "BN-II-m-B-01651": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-B-01651", 
-      "lastedit": "20120327182008", 
+      "lastedit": "20150407220756", 
       "name": "Biserica de lemn din Dumbrava (Livezile)", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Biserica de lemn din Dumbrava02.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Biserica de lemn din Dumbrava02.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "MS-II-m-A-15676": [
@@ -4925,16 +4925,16 @@
   ], 
   "BV-II-s-B-11296": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "BV-II-s-B-11296", 
       "lastedit": "20150406125652", 
       "name": "\u0218cheii Bra\u0219ovului", 
       "author": null, 
-      "lat": 45.6358, 
+      "ran": null, 
       "image": "Fi\u0219ier:Biserica Sfantu Nicolae.JPG", 
-      "quality": false, 
-      "long": 25.58
+      "long": 25.58, 
+      "project": "ro", 
+      "lat": 45.6358, 
+      "quality": false
     }
   ], 
   "SM-III-m-A-05382": [
@@ -5357,14 +5357,14 @@
       "quality": false
     }
   ], 
-  "AB-II-m-A-00133": [
+  "HD-II-m-B-03248": [
     {
-      "code": "AB-II-m-A-00133", 
-      "lastedit": "20141127222745", 
-      "name": "Palatul Principilor din Alba Iulia", 
+      "code": "HD-II-m-B-03248", 
+      "lastedit": "20140925205328", 
+      "name": "Biserica de lemn din B\u0103r\u0103\u0219tii Iliei", 
       "author": null, 
       "ran": null, 
-      "image": null, 
+      "image": "Fi\u0219ier:RO HD Barastii Iliei 1.jpg", 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
@@ -5793,16 +5793,16 @@
   ], 
   "B-II-a-A-18091": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "B-II-a-A-18091", 
-      "lastedit": "20150213095030", 
+      "lastedit": "20150415133909", 
       "name": "Uzinele Faur", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Logo-faur.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Logo-faur.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "CV-II-a-A-13090": [
@@ -6745,16 +6745,16 @@
   ], 
   "CJ-III-m-B-07823": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-III-m-B-07823", 
       "lastedit": "20150407190015", 
       "name": "Statuia Dr. Ioan Ra\u021biu din Turda", 
       "author": "[[Cornel Medrea]] (artist)", 
-      "lat": 0, 
+      "ran": null, 
       "image": "2011-IMG 4694.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "CJ-III-m-B-07824": [
@@ -7135,16 +7135,16 @@
   ], 
   "CS-II-m-B-11085": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "CS-II-m-B-11085", 
-      "lastedit": "20130920120833", 
+      "lastedit": "20150414204542", 
       "name": "Sinagoga din Caransebe\u0219", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Sinagoga Caransebes.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Sinagoga Caransebes.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "NT-II-m-B-10628": [
@@ -7373,16 +7373,16 @@
   ], 
   "PH-II-m-A-16696.01": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "PH-II-m-A-16696.01", 
-      "lastedit": "20150202153715", 
+      "lastedit": "20150416102919", 
       "name": "Castelul Pele\u0219", 
       "author": "[[Johannes Schultz]], [[Carol Benesch]], [[Karel Liman]] (arhitect)", 
-      "ran": null, 
-      "image": "01 Chateau Peles.jpg", 
-      "long": 25.5427, 
-      "project": "ro", 
       "lat": 45.36, 
-      "quality": false
+      "image": "01 Chateau Peles.jpg", 
+      "quality": false, 
+      "long": 25.5427
     }
   ], 
   "PH-II-m-A-16696.02": [
@@ -7595,14 +7595,14 @@
       "quality": false
     }
   ], 
-  "B-III-m-A-20030": [
+  "SM-II-a-B-05266": [
     {
-      "code": "B-III-m-A-20030", 
-      "lastedit": "20140903074239", 
-      "name": "Monumentul lui C. A. Rosetti", 
-      "author": "[[Wladimir Hegel]] (sculptor)", 
+      "code": "SM-II-a-B-05266", 
+      "lastedit": "20150408113553", 
+      "name": "M\u0103n\u0103stirea Bixad", 
+      "author": null, 
       "ran": null, 
-      "image": "Statuia C.A.ROSETTI.jpg", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
@@ -7847,20 +7847,6 @@
       "quality": false
     }
   ], 
-  "AB-II-a-B-20914": [
-    {
-      "code": "AB-II-a-B-20914", 
-      "lastedit": "20150312082217", 
-      "name": "Moc\u0103ni\u021b\u0103", 
-      "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Mocanita resita 764 400 locomotiva cu abur din anii 1950 cffviseudesus valea vaserului viseu de sus.png", 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
   "HD-II-m-A-03367": [
     {
       "code": "HD-II-m-A-03367", 
@@ -7943,20 +7929,6 @@
       "project": "ro", 
       "lat": 44.4413, 
       "quality": false
-    }
-  ], 
-  "AB-II-m-A-00248": [
-    {
-      "project": "ro", 
-      "ran": null, 
-      "code": "AB-II-m-A-00248", 
-      "lastedit": "20150404072835", 
-      "name": "Comuna Lup\u0219a, Alba", 
-      "author": null, 
-      "lat": 0, 
-      "image": "Fi\u0219ier:Actual Alba county CoA.png", 
-      "quality": false, 
-      "long": 0
     }
   ], 
   "AB-IV-m-A-00422": [
@@ -8404,6 +8376,20 @@
       "long": 24.7914, 
       "project": "ro", 
       "lat": 46.0214, 
+      "quality": false
+    }
+  ], 
+  "CT-I-m-A-02600.03": [
+    {
+      "code": "CT-I-m-A-02600.03", 
+      "lastedit": "20150414202326", 
+      "name": "Capidava", 
+      "author": null, 
+      "ran": " 63063.01", 
+      "image": " [[Imagine:Capidava.jpg|250px]]", 
+      "long": 28.0903, 
+      "project": "ro", 
+      "lat": 44.4936, 
       "quality": false
     }
   ], 
@@ -9039,16 +9025,16 @@
   ], 
   "CJ-II-m-B-07611": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "CJ-II-m-B-07611", 
-      "lastedit": "20141231111532", 
+      "lastedit": "20150410195320", 
       "name": "Biserica Sfin\u021bii Arhangheli Mihail \u0219i Gavriil din Feiurdeni", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:FeiurdeniCJ (93).JPG", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:FeiurdeniCJ (93).JPG", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "B-II-m-B-18703": [
@@ -9641,16 +9627,16 @@
   ], 
   "BN-II-m-B-01634": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-B-01634", 
-      "lastedit": "20130919130123", 
+      "lastedit": "20150407220707", 
       "name": "Biserica de lemn din Comlod", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:ComlodBN (44).JPG", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:ComlodBN (44).JPG", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "SB-II-m-A-12487": [
@@ -9683,16 +9669,16 @@
   ], 
   "SV-IV-m-B-05697": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SV-IV-m-B-05697", 
       "lastedit": "20150331063853", 
       "name": "Ciprian Porumbescu", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:Ciprian Porumbescu - Foto02.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "CJ-II-m-B-07720": [
@@ -10159,16 +10145,16 @@
   ], 
   "IF-II-a-A-15298": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "IF-II-a-A-15298", 
       "lastedit": "20150331122058", 
       "name": "Palatul Mogo\u0219oaia", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "RO IF Mogosoaia Palace front.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-II-m-A-18781.01": [
@@ -10327,16 +10313,16 @@
   ], 
   "SV-II-a-A-05673": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SV-II-a-A-05673", 
       "lastedit": "20150324163907", 
       "name": "M\u0103n\u0103stirea Moldovi\u021ba", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Biserica din incinta Manastirii Moldovita.JPG", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "SV-II-m-B-05648": [
@@ -10369,16 +10355,16 @@
   ], 
   "SV-II-a-A-05675": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SV-II-a-A-05675", 
       "lastedit": "20150330055922", 
       "name": "M\u0103n\u0103stirea Vorone\u021b", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Voronet Intrare.JPG", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "MS-II-m-B-15690": [
@@ -10565,16 +10551,16 @@
   ], 
   "IF-II-m-A-15298.02": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "IF-II-m-A-15298.02", 
       "lastedit": "20150406162412", 
       "name": "Biserica din Mogo\u0219oaia", 
       "author": null, 
-      "lat": 44.5278, 
+      "ran": null, 
       "image": " RO IF Mogosoaia St George church.jpg ", 
-      "quality": false, 
-      "long": 25.9941
+      "long": 25.9941, 
+      "project": "ro", 
+      "lat": 44.5278, 
+      "quality": false
     }
   ], 
   "IS-II-m-B-03827": [
@@ -11011,16 +10997,16 @@
   ], 
   "TL-II-m-A-06000": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "TL-II-m-A-06000", 
-      "lastedit": "20141024175141", 
+      "lastedit": "20150413130216", 
       "name": "Geamia Ali-Gazi Pa\u0219a din Babadag", 
       "author": null, 
-      "ran": null, 
-      "image": " Babadag geamia.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": " Babadag geamia.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "TL-II-m-A-06006": [
@@ -11095,16 +11081,16 @@
   ], 
   "BN-II-m-A-01637": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-A-01637", 
-      "lastedit": "20130924162052", 
+      "lastedit": "20150407221142", 
       "name": "Biserica de lemn din S\u00e2ngeorz B\u0103i", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Biserica de lemn din Sangeorz-Bai01.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Biserica de lemn din Sangeorz-Bai01.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "B-II-m-B-21043": [
@@ -11669,16 +11655,16 @@
   ], 
   "CJ-II-m-A-07469": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-A-07469", 
       "lastedit": "20150407075927", 
       "name": "Biserica Sf\u00e2ntul Mihail din Cluj", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Kolozsvar_Fo_ter5.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "CJ-II-m-B-07607": [
@@ -11809,16 +11795,16 @@
   ], 
   "B-III-m-B-19962": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "B-III-m-B-19962", 
       "lastedit": "20150407050810", 
       "name": "Statuia sp\u0103tarului Mihai Cantacuzino", 
       "author": "[[Karl Storck]] (sculptor)", 
-      "lat": 0, 
+      "ran": null, 
       "image": "Statuia sp\u0103tarului Mihail Cantacuzino.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-III-m-B-19967": [
@@ -12591,16 +12577,16 @@
   ], 
   "CT-II-a-A-02786": [
     {
-      "code": "CT-II-a-A-02786", 
-      "lastedit": "20150121141243", 
-      "name": "Silozurile Anghel Saligny", 
-      "author": null, 
-      "ran": null, 
-      "image": " Silozurile Anghel Saligny 03.jpg", 
-      "long": 0, 
       "project": "ro", 
+      "ran": null, 
+      "code": "CT-II-a-A-02786", 
+      "lastedit": "20150416212249", 
+      "name": "Silozurile Anghel Saligny", 
+      "author": "[[Petre Antonescu]] (arhitect), [[Anghel Saligny]] (constructor)", 
       "lat": 0, 
-      "quality": false
+      "image": " Silozurile Anghel Saligny 02.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "BZ-II-m-B-02472": [
@@ -12745,16 +12731,16 @@
   ], 
   "SV-II-a-A-05449": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SV-II-a-A-05449", 
       "lastedit": "20150404192402", 
       "name": "Cetatea de Scaun a Sucevei", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:Cetatea de Scaun a Sucevei9.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "AG-III-m-B-13868": [
@@ -13151,16 +13137,16 @@
   ], 
   "GJ-II-m-A-09256.01": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "GJ-II-m-A-09256.01", 
-      "lastedit": "20140921082346", 
+      "lastedit": "20150408170822", 
       "name": "Cula Cornoiu", 
       "author": null, 
-      "ran": null, 
-      "image": "Cula-Cornoiu-Curtisoara.jpg", 
-      "long": 23.35, 
-      "project": "ro", 
       "lat": 45.1042, 
-      "quality": false
+      "image": "Fi\u0219ier:Constantin Neam\u021bu.png", 
+      "quality": false, 
+      "long": 23.35
     }
   ], 
   "CJ-II-B-m-07769": [
@@ -13557,16 +13543,16 @@
   ], 
   "BN-II-m-A-01626": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-A-01626", 
-      "lastedit": "20140404183749", 
+      "lastedit": "20150407220626", 
       "name": "Biserica de lemn din Bungard", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:RO BN Bungard wooden church 33.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:RO BN Bungard wooden church 33.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "B-II-a-A-18994": [
@@ -14033,16 +14019,16 @@
   ], 
   "BN-II-m-A-01551": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-A-01551", 
-      "lastedit": "20141110175924", 
+      "lastedit": "20150408155819", 
       "name": "Colegiul Na\u021bional \u201eLiviu Rebreanu\u201d, Bistri\u021ba", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Evangelischen Gymnasiums.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Evangelischen Gymnasiums.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "SB-II-a-A-12582": [
@@ -14505,14 +14491,14 @@
       "quality": false
     }
   ], 
-  "SB-II-m-B-12530": [
+  "IS-II-a-A-04243": [
     {
-      "code": "SB-II-m-B-12530", 
-      "lastedit": "20111210083601", 
-      "name": "Biserica de lemn din Sadu", 
+      "code": "IS-II-a-A-04243", 
+      "lastedit": "20130820144935", 
+      "name": "M\u0103n\u0103stirea Stavnic", 
       "author": null, 
       "ran": null, 
-      "image": "Fi\u0219ier:RO SB Sadu wooden church 28.jpg", 
+      "image": "Fi\u0219ier:M\u0103n\u0103stirea Stavnic1.jpg", 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
@@ -14633,16 +14619,16 @@
   ], 
   "BZ-II-m-B-02317": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BZ-II-m-B-02317", 
-      "lastedit": "20140222183655", 
+      "lastedit": "20150413075258", 
       "name": "Muzeul Jude\u021bean Buz\u0103u", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Colti amber museum.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Colti amber museum.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "HD-I-s-B-03208": [
@@ -15275,14 +15261,14 @@
       "quality": false
     }
   ], 
-  "IS-II-a-A-04243": [
+  "SB-II-m-B-12530": [
     {
-      "code": "IS-II-a-A-04243", 
-      "lastedit": "20130820144935", 
-      "name": "M\u0103n\u0103stirea Stavnic", 
+      "code": "SB-II-m-B-12530", 
+      "lastedit": "20111210083601", 
+      "name": "Biserica de lemn din Sadu", 
       "author": null, 
       "ran": null, 
-      "image": "Fi\u0219ier:M\u0103n\u0103stirea Stavnic1.jpg", 
+      "image": "Fi\u0219ier:RO SB Sadu wooden church 28.jpg", 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
@@ -16017,16 +16003,16 @@
   ], 
   "CT-II-m-A-02798": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CT-II-m-A-02798", 
       "lastedit": "20150406215530", 
       "name": "Casa cu Lei (Constan\u021ba)", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": " Casa cu Lei 3.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "AB-II-m-A-00361": [
@@ -16115,16 +16101,16 @@
   ], 
   "SV-II-m-A-05549": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "SV-II-m-A-05549", 
-      "lastedit": "20140914074743", 
+      "lastedit": "20150414194112", 
       "name": "Biserica de lemn din For\u0103\u0219ti", 
       "author": null, 
-      "ran": null, 
-      "image": " [[Fi\u0219ier:Biserica de lemn din For\u0103\u015fti.jpg|310px]]", 
-      "long": 26.4689, 
-      "project": "ro", 
       "lat": 47.3486, 
-      "quality": false
+      "image": " [[Fi\u0219ier:Biserica de lemn din For\u0103\u015fti.jpg|310px]]", 
+      "quality": false, 
+      "long": 26.4689
     }
   ], 
   "SV-II-m-B-05599": [
@@ -16143,16 +16129,16 @@
   ], 
   "BN-II-m-A-01612": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-A-01612", 
-      "lastedit": "20140828213647", 
+      "lastedit": "20150407221958", 
       "name": "Biserica de lemn din Apatiu", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Biserica de lemn din Apatiu (32).JPG", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Biserica de lemn din Apatiu (32).JPG", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "MM-II-m-B-04794": [
@@ -16843,16 +16829,16 @@
   ], 
   "IS-II-a-A-04076": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "IS-II-a-A-04076", 
       "lastedit": "20150326131043", 
       "name": "M\u0103n\u0103stirea Sfin\u021bii Trei Ierarhi din Ia\u0219i", 
       "author": null, 
-      "lat": 47.1597, 
+      "ran": null, 
       "image": "Iglesia Trei Ierarhi (acabada).jpg", 
-      "quality": false, 
-      "long": 27.5845
+      "long": 27.5845, 
+      "project": "ro", 
+      "lat": 47.1597, 
+      "quality": false
     }
   ], 
   "CJ-II-m-B-07296": [
@@ -17333,16 +17319,16 @@
   ], 
   "BV-II-a-A-11412": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "BV-II-a-A-11412", 
       "lastedit": "20150320191930", 
       "name": "Biserica Neagr\u0103", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Brasov The Black Church.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-I-s-A-17896": [
@@ -17361,16 +17347,16 @@
   ], 
   "BZ-II-m-A-02323": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "BZ-II-m-A-02323", 
       "lastedit": "20150406080531", 
       "name": "Palatul Comunal, Buz\u0103u", 
       "author": "[[Alexandru S\u0103vulescu (arhitect)]] (arhitect)", 
-      "lat": 45.1536, 
+      "ran": null, 
       "image": "RO BZ Palat Comunal frontal straight cloudy.jpg", 
-      "quality": false, 
-      "long": 26.8208
+      "long": 26.8208, 
+      "project": "ro", 
+      "lat": 45.1536, 
+      "quality": false
     }
   ], 
   "NT-II-a-B-10732": [
@@ -17779,16 +17765,16 @@
   ], 
   "BN-II-a-A-01702": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-a-A-01702", 
-      "lastedit": "20141127214041", 
+      "lastedit": "20150407221241", 
       "name": "Biserica de lemn din Siliva\u0219u de C\u00e2mpie", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Biserica din Silivasu.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Biserica din Silivasu.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "MS-II-m-B-15804": [
@@ -17863,16 +17849,16 @@
   ], 
   "IS-II-m-B-04085": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "IS-II-m-B-04085", 
       "lastedit": "20150322160235", 
       "name": "Universitatea de Medicin\u0103 \u0219i Farmacie Grigore T. Popa", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:Sigla UMF Iasi.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "IS-II-m-B-04082": [
@@ -17905,16 +17891,16 @@
   ], 
   "GJ-II-a-A-09413": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "GJ-II-a-A-09413", 
       "lastedit": "20150406145533", 
       "name": "M\u0103n\u0103stirea Tismana", 
       "author": null, 
-      "lat": 45.0459, 
+      "ran": null, 
       "image": " RO GJ - M\u0103n\u0103stirea Tismana.jpg", 
-      "quality": false, 
-      "long": 22.9518
+      "long": 22.9518, 
+      "project": "ro", 
+      "lat": 45.0459, 
+      "quality": false
     }
   ], 
   "NT-II-m-B-10574": [
@@ -20395,16 +20381,16 @@
   ], 
   "SV-II-a-B-05463": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SV-II-a-B-05463", 
       "lastedit": "20150406135850", 
       "name": "M\u0103n\u0103stirea Teodoreni", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "M\u0103n\u0103stirea Teodoreni.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "MM-II-m-A-04732": [
@@ -21037,16 +21023,16 @@
   ], 
   "NT-II-m-A-10707": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "NT-II-m-A-10707", 
       "lastedit": "20150404192136", 
       "name": "Cetatea Neam\u021b", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:Cetatea Neamtului.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "CT-II-m-A-02915": [
@@ -21201,20 +21187,6 @@
       "quality": false
     }
   ], 
-  "MS-II-m-A-15950": [
-    {
-      "project": "ro", 
-      "ran": null, 
-      "code": "MS-II-m-A-15950", 
-      "lastedit": "20150405084702", 
-      "name": "Michael Albert (scriitor sas)", 
-      "author": null, 
-      "lat": 0, 
-      "image": "Fi\u0219ier:Flag of the Habsburg Monarchy.svg", 
-      "quality": false, 
-      "long": 0
-    }
-  ], 
   "PH-II-m-A-16395": [
     {
       "code": "PH-II-m-A-16395", 
@@ -21223,6 +21195,20 @@
       "author": null, 
       "ran": null, 
       "image": "Fi\u0219ier:S5300024hasedu.JPG", 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BV-II-a-B-11743": [
+    {
+      "code": "BV-II-a-B-11743", 
+      "lastedit": "20150414113931", 
+      "name": "M\u0103n\u0103stirea Predeal", 
+      "author": null, 
+      "ran": null, 
+      "image": "Manastirea Predeal Biserica.jpg", 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
@@ -21663,16 +21649,16 @@
   ], 
   "BN-II-m-A-01707": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-A-01707", 
-      "lastedit": "20150318174905", 
+      "lastedit": "20150407221349", 
       "name": "Biserica de lemn din Suplai", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:RO BN Suplai wooden church 10.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:RO BN Suplai wooden church 10.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "B-II-m-B-18510": [
@@ -21761,30 +21747,30 @@
   ], 
   "BN-II-m-A-01705": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-A-01705", 
-      "lastedit": "20140828210721", 
+      "lastedit": "20150407221326", 
       "name": "Biserica de lemn din Strugureni", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:StrugureniBN (78).jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:StrugureniBN (78).jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "BN-II-m-A-01704": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-A-01704", 
-      "lastedit": "20120401170059", 
+      "lastedit": "20150407221301", 
       "name": "Biserica de lemn din Spermezeu", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:RO BN Spermezeu wooden church 26.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:RO BN Spermezeu wooden church 26.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "BT-II-m-B-01958": [
@@ -22151,16 +22137,16 @@
   ], 
   "TR-II-m-A-14267": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "TR-II-m-A-14267", 
       "lastedit": "20150331200225", 
       "name": "Biserica din Balaci", 
       "author": null, 
-      "lat": 44.3425, 
+      "ran": null, 
       "image": " Biserica din Balaci \u00een Anuarul Com. Mon. Ist. 1914.jpg ", 
-      "quality": false, 
-      "long": 24.9237
+      "long": 24.9237, 
+      "project": "ro", 
+      "lat": 44.3425, 
+      "quality": false
     }
   ], 
   "IF-II-m-A-15265": [
@@ -22459,16 +22445,16 @@
   ], 
   "B-II-s-A-17909": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "B-II-s-A-17909", 
       "lastedit": "20150322200003", 
       "name": "Centrul istoric al Bucure\u0219tiului", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "RO B St George church km 0.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "SB-II-a-A-12416": [
@@ -22725,16 +22711,16 @@
   ], 
   "CV-I-s-A-13047": [
     {
+      "project": "ro", 
+      "ran": " 63946.01", 
       "code": "CV-I-s-A-13047", 
-      "lastedit": "20140303143139", 
+      "lastedit": "20150414204452", 
       "name": "Castrul roman de la Boro\u0219neu Mare", 
       "author": null, 
-      "ran": " 63946.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?loc=440&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=loc&ids=3 Repertoriul Arheologic Na\u021bional]</ref>", 
-      "image": " [[Imagine:Castra_of_Borosneu_Mare_00.jpg|300px]]", 
-      "long": 26.017, 
-      "project": "ro", 
       "lat": 45.8439, 
-      "quality": false
+      "image": " [[Imagine:Castra_of_Borosneu_Mare_00.jpg|300px]]", 
+      "quality": false, 
+      "long": 26.017
     }
   ], 
   "BN-II-a-A-01728": [
@@ -22767,16 +22753,16 @@
   ], 
   "IF-II-m-A-15285": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "IF-II-m-A-15285", 
       "lastedit": "20150406181729", 
       "name": "Biserica Fundenii Doamnei", 
       "author": null, 
-      "lat": 44.4568, 
+      "ran": null, 
       "image": "RO IF Fundenii Doamnei St Euthymius church 1.jpg", 
-      "quality": false, 
-      "long": 26.1636
+      "long": 26.1636, 
+      "project": "ro", 
+      "lat": 44.4568, 
+      "quality": false
     }
   ], 
   "MS-II-m-A-15774": [
@@ -23229,30 +23215,30 @@
   ], 
   "SB-II-a-A-12091": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-a-A-12091", 
       "lastedit": "20150319192517", 
       "name": "Biserica ursulinelor din Sibiu", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Biserica ursulinelor din Sibiu5.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-II-m-B-19844": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "B-II-m-B-19844", 
       "lastedit": "20150406182732", 
       "name": "Biserica Zl\u0103tari", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:Adler - Biserica Zl\u0103tari.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-II-m-B-19846": [
@@ -23901,16 +23887,16 @@
   ], 
   "TM-II-m-A-06275": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "TM-II-m-A-06275", 
       "lastedit": "20150323212233", 
       "name": "Biserica de lemn din Pov\u00e2rgina", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:RO TM Povergina 5.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "TM-II-m-A-06274": [
@@ -23985,16 +23971,16 @@
   ], 
   "HD-II-m-A-03475": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "HD-II-m-A-03475", 
       "lastedit": "20150404183857", 
       "name": "Biserica de lemn din Zam", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:Zam HD.bislemn SV.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "VL-II-m-B-09809": [
@@ -24431,46 +24417,18 @@
       "quality": false
     }
   ], 
-  "AB-II-m-B-20914.08": [
+  "B-III-m-B-20056": [
     {
-      "code": "AB-II-m-B-20914.08", 
-      "lastedit": "20150312074700", 
-      "name": "Comuna S\u0103lciua, Alba", 
-      "author": null, 
+      "code": "B-III-m-B-20056", 
+      "lastedit": "20141124102312", 
+      "name": "Bustul generalului Alexandru Cernat din Bucure\u0219ti", 
+      "author": "[[Ion Georgescu]] (sculptor)", 
       "ran": null, 
-      "image": "Fi\u0219ier:Actual Alba county CoA.png", 
+      "image": "Monumentul generalului Alexandru Cernat, Bucuresti \u2013 sculptor Ion Georgescu (1894).JPG", 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
       "quality": false
-    }
-  ], 
-  "AB-II-m-B-20914.09": [
-    {
-      "code": "AB-II-m-B-20914.09", 
-      "lastedit": "20150312071956", 
-      "name": "Ocoli\u0219, Alba", 
-      "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Actual Alba county CoA.png", 
-      "long": 23.4675, 
-      "project": "ro", 
-      "lat": 46.4781, 
-      "quality": false
-    }
-  ], 
-  "AB-II-m-B-20914.04": [
-    {
-      "project": "ro", 
-      "ran": null, 
-      "code": "AB-II-m-B-20914.04", 
-      "lastedit": "20150405094828", 
-      "name": "Bistra, Alba", 
-      "author": null, 
-      "lat": 46.3769, 
-      "image": "Fi\u0219ier:Josephinische Landaufnahme pg122.jpg", 
-      "quality": false, 
-      "long": 23.1036
     }
   ], 
   "SB-II-a-A-12355": [
@@ -24487,86 +24445,18 @@
       "quality": false
     }
   ], 
-  "AB-II-m-B-20914.06": [
+  "BN-II-m-A-01683": [
     {
-      "code": "AB-II-m-B-20914.06", 
-      "lastedit": "20150312065556", 
-      "name": "Baia de Arie\u0219", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 23.2797, 
       "project": "ro", 
-      "lat": 46.3794, 
-      "quality": false
-    }
-  ], 
-  "AB-II-m-B-20914.07": [
-    {
-      "code": "AB-II-m-B-20914.07", 
-      "lastedit": "20150312071527", 
-      "name": "Br\u0103ze\u0219ti, Alba", 
-      "author": null, 
       "ran": null, 
-      "image": "Fi\u0219ier:Josephinische Landaufnahme pg122.jpg", 
-      "long": 0, 
-      "project": "ro", 
+      "code": "BN-II-m-A-01683", 
+      "lastedit": "20150407220959", 
+      "name": "Biserica de lemn din Petri\u0219", 
+      "author": null, 
       "lat": 0, 
-      "quality": false
-    }
-  ], 
-  "AB-II-m-B-20914.01": [
-    {
-      "code": "AB-II-m-B-20914.01", 
-      "lastedit": "20150312082555", 
-      "name": "Abrud", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 23.067, 
-      "project": "ro", 
-      "lat": 46.267, 
-      "quality": false
-    }
-  ], 
-  "AB-II-m-B-20914.02": [
-    {
-      "code": "AB-II-m-B-20914.02", 
-      "lastedit": "20150312073441", 
-      "name": "Gura Ro\u0219iei, Alba", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 23.0572, 
-      "project": "ro", 
-      "lat": 46.3094, 
-      "quality": false
-    }, 
-    {
-      "code": "AB-II-m-B-20914.02", 
-      "lastedit": "20150312072927", 
-      "name": "Comuna Ro\u0219ia Montan\u0103, Alba", 
-      "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Actual Alba county CoA.png", 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
-  "AB-II-m-B-20914.03": [
-    {
-      "project": "ro", 
-      "ran": null, 
-      "code": "AB-II-m-B-20914.03", 
-      "lastedit": "20150407054240", 
-      "name": "C\u00e2mpeni", 
-      "author": null, 
-      "lat": 46.3625, 
-      "image": null, 
+      "image": "Fi\u0219ier:Biserica de lemn din Pietris01.jpg", 
       "quality": false, 
-      "long": 23.0456
+      "long": 0
     }
   ], 
   "OT-II-m-B-08911": [
@@ -25339,6 +25229,20 @@
       "quality": false
     }
   ], 
+  "BV-II-a-A-11754": [
+    {
+      "code": "BV-II-a-A-11754", 
+      "lastedit": "20150414184638", 
+      "name": "Castelul S\u00fck\u00f6sd-Bethlen", 
+      "author": null, 
+      "ran": null, 
+      "image": " Ansamblul_S\u00fck\u00f6sd-Bethlen_4.JPG", 
+      "long": 25.4085, 
+      "project": "ro", 
+      "lat": 46.0236, 
+      "quality": false
+    }
+  ], 
   "MM-II-m-A-04640": [
     {
       "code": "MM-II-m-A-04640", 
@@ -26053,20 +25957,6 @@
       "quality": false
     }
   ], 
-  "HD-II-m-A-03436": [
-    {
-      "code": "HD-II-m-A-03436", 
-      "lastedit": "20141020112117", 
-      "name": "Biserica de lemn din Rovina", 
-      "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:RO HD Rovina 12.jpg", 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
   "CS-II-a-A-11004": [
     {
       "code": "CS-II-a-A-11004", 
@@ -26391,16 +26281,16 @@
   ], 
   "BN-II-m-A-01659": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-A-01659", 
-      "lastedit": "20121223205846", 
+      "lastedit": "20150407220854", 
       "name": "Biserica de lemn din Gersa I", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Biserica Gersa.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Biserica Gersa.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "HD-II-m-A-03313": [
@@ -26781,16 +26671,16 @@
   ], 
   "BN-II-m-A-01721": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-A-01721", 
-      "lastedit": "20120328164828", 
+      "lastedit": "20150407215859", 
       "name": "Biserica de lemn din \u021aig\u0103u", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Biserica de lemn din Tigau (11).JPG", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Biserica de lemn din Tigau (11).JPG", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "SB-II-a-A-12316": [
@@ -26823,16 +26713,16 @@
   ], 
   "BN-II-m-A-01729": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-A-01729", 
-      "lastedit": "20130103100929", 
+      "lastedit": "20150407221545", 
       "name": "Biserica de lemn din Zagra", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:RO BN Zagra wooden church 121.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:RO BN Zagra wooden church 121.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "AR-II-a-A-00475": [
@@ -27939,20 +27829,6 @@
       "quality": false
     }
   ], 
-  "B-III-m-B-20056": [
-    {
-      "code": "B-III-m-B-20056", 
-      "lastedit": "20141124102312", 
-      "name": "Bustul generalului Alexandru Cernat din Bucure\u0219ti", 
-      "author": "[[Ion Georgescu]] (sculptor)", 
-      "ran": null, 
-      "image": "Monumentul generalului Alexandru Cernat, Bucuresti \u2013 sculptor Ion Georgescu (1894).JPG", 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
   "GR-II-m-B-15057": [
     {
       "code": "GR-II-m-B-15057", 
@@ -28364,7 +28240,7 @@
       "project": "ro", 
       "ran": null, 
       "code": "CT-I-s-A-02567", 
-      "lastedit": "20150329103929", 
+      "lastedit": "20150417211448", 
       "name": "Tropaeum Traiani", 
       "author": null, 
       "lat": 0, 
@@ -29001,16 +28877,16 @@
   ], 
   "BV-II-m-A-11610.01": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "BV-II-m-A-11610.01", 
       "lastedit": "20150406073027", 
       "name": "Castelul Bran", 
       "author": null, 
-      "lat": 45.515, 
+      "ran": null, 
       "image": "Bran Castle.jpg", 
-      "quality": false, 
-      "long": 25.3672
+      "long": 25.3672, 
+      "project": "ro", 
+      "lat": 45.515, 
+      "quality": false
     }
   ], 
   "HD-II-m-A-03378": [
@@ -29211,16 +29087,16 @@
   ], 
   "BN-II-m-A-01647": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-A-01647", 
-      "lastedit": "20140429200758", 
+      "lastedit": "20150407220730", 
       "name": "Biserica de lemn din Dobricel", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:RO BN Dobricel wooden church 1.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:RO BN Dobricel wooden church 1.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "CT-II-m-A-02852": [
@@ -29449,16 +29325,16 @@
   ], 
   "SV-II-m-B-05507": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "SV-II-m-B-05507", 
-      "lastedit": "20140914074058", 
+      "lastedit": "20150416211551", 
       "name": "Biserica de lemn din C\u0103line\u0219ti-Enache", 
       "author": null, 
-      "ran": null, 
-      "image": " [[Fi\u0219ier:Biserica de lemn din C\u0103line\u015fti.jpg|310px]]", 
-      "long": 26.1347, 
-      "project": "ro", 
       "lat": 47.7761, 
-      "quality": false
+      "image": " [[Fi\u0219ier:Biserica_de_lemn_\"Sf._Dumitru\"_din_C\u0103line\u0219ti-Enache,_jude\u021bul_Suceava.jpg|310px]]", 
+      "quality": false, 
+      "long": 26.1347
     }
   ], 
   "VS-II-m-A-06852": [
@@ -30023,16 +29899,16 @@
   ], 
   "CJ-II-m-B-07760": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07760", 
       "lastedit": "20150407113905", 
       "name": "Biserica de lemn din Sic", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:Biserica de lemn Sic1.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "CJ-II-m-B-07763": [
@@ -30471,16 +30347,16 @@
   ], 
   "IF-II-a-B-15300": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "IF-II-a-B-15300", 
       "lastedit": "20150331135459", 
       "name": "M\u0103n\u0103stirea Cernica", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "RO IF Cernica monastery from island.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "IF-II-a-B-15301": [
@@ -30541,16 +30417,16 @@
   ], 
   "SJ-II-m-A-05095": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "SJ-II-m-A-05095", 
-      "lastedit": "20130822090127", 
+      "lastedit": "20150418152252", 
       "name": "Biserica de lemn din Poarta S\u0103lajului", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Biserica din Poarta Salajului.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Biserica din Poarta Salajului.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "SJ-II-m-A-05092": [
@@ -30835,30 +30711,30 @@
   ], 
   "B-II-m-A-18220.02": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "B-II-m-A-18220.02", 
       "lastedit": "20150407063832", 
       "name": "Spitalul Clinic Col\u021bea", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Spitalul Col\u021bea (noaptea).jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-II-m-A-18220.01": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "B-II-m-A-18220.01", 
       "lastedit": "20150406171205", 
       "name": "Biserica Col\u021bea", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:Biserica sf gh cel nou.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "IF-II-a-B-15274": [
@@ -31129,16 +31005,16 @@
   ], 
   "BN-II-m-B-01699": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-B-01699", 
-      "lastedit": "20120401170555", 
+      "lastedit": "20150407221209", 
       "name": "Biserica de lemn din S\u00e2ngeorzu Nou", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:RO BN Sangeorzu Nou wooden church 2.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:RO BN Sangeorzu Nou wooden church 2.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "B-II-m-A-19003": [
@@ -31269,16 +31145,16 @@
   ], 
   "SB-II-a-B-12587": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SB-II-a-B-12587", 
       "lastedit": "20150324103043", 
       "name": "Biserica fortificat\u0103 din Veseud (Chirp\u0103r)", 
       "author": null, 
-      "lat": 45.9294, 
+      "ran": null, 
       "image": "Kirchenburg Zied 01.jpg", 
-      "quality": false, 
-      "long": 24.6411
+      "long": 24.6411, 
+      "project": "ro", 
+      "lat": 45.9294, 
+      "quality": false
     }
   ], 
   "VS-II-a-A-06898": [
@@ -31359,6 +31235,20 @@
       "author": "[[Johann Eberhard Blaumann]] (arhitect)", 
       "ran": null, 
       "image": "B\u00e1nffy Palace in Kluj-Napoca.PNG", 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-III-m-A-20030": [
+    {
+      "code": "B-III-m-A-20030", 
+      "lastedit": "20140903074239", 
+      "name": "Monumentul lui C. A. Rosetti", 
+      "author": "[[Wladimir Hegel]] (sculptor)", 
+      "ran": null, 
+      "image": "Statuia C.A.ROSETTI.jpg", 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
@@ -31633,16 +31523,16 @@
   ], 
   "CS-III-m-A-11232": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "CS-III-m-A-11232", 
-      "lastedit": "20140813054246", 
+      "lastedit": "20150417193906", 
       "name": "Statuia lui Hercules din B\u0103ile Herculane", 
       "author": null, 
-      "ran": null, 
-      "image": " Hercules From Herculane.jpg", 
-      "long": 22.425, 
-      "project": "ro", 
       "lat": 44.8908, 
-      "quality": false
+      "image": " Hercules From Herculane.jpg", 
+      "quality": false, 
+      "long": 22.425
     }
   ], 
   "SV-II-m-A-05529": [
@@ -31787,16 +31677,16 @@
   ], 
   "B-II-m-A-18132": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "B-II-m-A-18132", 
       "lastedit": "20150404221643", 
       "name": "Catedrala Sf\u00e2ntul Iosif din Bucure\u0219ti", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Catedrala sfantul-iosif.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "HD-II-m-A-03442": [
@@ -31857,16 +31747,16 @@
   ], 
   "BN-II-m-A-01691": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-A-01691", 
-      "lastedit": "20120920085309", 
+      "lastedit": "20150407221034", 
       "name": "Biserica de lemn Sf. Arhangheli din Runcu Salvei", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:RO BN Runcu Salvei wooden church 12.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:RO BN Runcu Salvei wooden church 12.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "AR-II-m-B-00543": [
@@ -31955,15 +31845,29 @@
   ], 
   "HR-II-m-B-12824": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "HR-II-m-B-12824", 
-      "lastedit": "20120328113142", 
+      "lastedit": "20150411151021", 
       "name": "Biserica de lemn din G\u0103l\u0103u\u021ba\u0219", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Biserica de lemn din Galautas01.JPG", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
+      "image": "Fi\u0219ier:Biserica de lemn din Galautas01.JPG", 
+      "quality": false, 
+      "long": 0
+    }
+  ], 
+  "MS-II-a-A-15777": [
+    {
+      "code": "MS-II-a-A-15777", 
+      "lastedit": "20150416205235", 
+      "name": "Muzeul Etnografic din Reghin", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 24.7013, 
+      "project": "ro", 
+      "lat": 46.7865, 
       "quality": false
     }
   ], 
@@ -32711,16 +32615,16 @@
   ], 
   "CJ-II-m-B-07578": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "CJ-II-m-B-07578", 
       "lastedit": "20150321082524", 
       "name": "Conacul Schirling de la Corneni", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": " Conacul Schirling din Corneni (5).JPG", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-II-m-B-18118": [
@@ -32807,16 +32711,16 @@
   ], 
   "BN-II-a-A-01692": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-a-A-01692", 
-      "lastedit": "20141127213949", 
+      "lastedit": "20150407221058", 
       "name": "Biserica de lemn din S\u0103lcu\u021ba", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:RO BN Salcuta wooden church 47.jpg", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:RO BN Salcuta wooden church 47.jpg", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "IS-II-a-A-03691": [
@@ -32855,6 +32759,20 @@
       "author": null, 
       "ran": null, 
       "image": "Fi\u0219ier:Univ Oradea - Corpul A (1).jpg", 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BC-II-m-B-00810": [
+    {
+      "code": "BC-II-m-B-00810", 
+      "lastedit": "20150415104453", 
+      "name": "Biserica de lemn din Ciolpani", 
+      "author": null, 
+      "ran": null, 
+      "image": " [[File:Igreja Ciolpani.jpg|300px]]", 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
@@ -33631,14 +33549,14 @@
       "quality": false
     }
   ], 
-  "HD-II-m-B-03248": [
+  "AB-II-m-A-00133": [
     {
-      "code": "HD-II-m-B-03248", 
-      "lastedit": "20140925205328", 
-      "name": "Biserica de lemn din B\u0103r\u0103\u0219tii Iliei", 
+      "code": "AB-II-m-A-00133", 
+      "lastedit": "20141127222745", 
+      "name": "Palatul Principilor din Alba Iulia", 
       "author": null, 
       "ran": null, 
-      "image": "Fi\u0219ier:RO HD Barastii Iliei 1.jpg", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
@@ -33815,16 +33733,16 @@
   ], 
   "SV-I-s-A-05389": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "SV-I-s-A-05389", 
       "lastedit": "20150404192421", 
       "name": "Cetatea \u0218cheia", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": "Fi\u0219ier:Cetatea \u015echeia.jpg", 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "SJ-II-m-B-05074": [
@@ -34233,14 +34151,14 @@
       "quality": false
     }
   ], 
-  "BN-II-m-A-01683": [
+  "HD-II-m-A-03436": [
     {
-      "code": "BN-II-m-A-01683", 
-      "lastedit": "20131018185215", 
-      "name": "Biserica de lemn din Petri\u0219", 
+      "code": "HD-II-m-A-03436", 
+      "lastedit": "20141020112117", 
+      "name": "Biserica de lemn din Rovina", 
       "author": null, 
       "ran": null, 
-      "image": "Fi\u0219ier:Biserica de lemn din Pietris01.jpg", 
+      "image": "Fi\u0219ier:RO HD Rovina 12.jpg", 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
@@ -34613,16 +34531,16 @@
   ], 
   "HD-I-s-A-03200": [
     {
-      "project": "ro", 
-      "ran": " 88500.02 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=18 October 2012}}</ref>", 
       "code": "HD-I-s-A-03200", 
       "lastedit": "20150327054738", 
       "name": "Cetatea dacic\u0103 Piatra Ro\u0219ie", 
       "author": null, 
-      "lat": 45.8, 
+      "ran": " 88500.02 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=18 October 2012}}</ref>", 
       "image": " Welterbe.svg", 
-      "quality": false, 
-      "long": 22.7
+      "long": 22.7, 
+      "project": "ro", 
+      "lat": 45.8, 
+      "quality": false
     }
   ], 
   "GJ-II-m-B-09207": [
@@ -34921,16 +34839,16 @@
   ], 
   "B-III-m-A-19953": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "B-III-m-A-19953", 
-      "lastedit": "20140912194956", 
+      "lastedit": "20150410110239", 
       "name": "Monumentul Eroilor Aerului", 
       "author": "[[Lidia Kotzebue]], [[Iosif Fekete]] (sculptori)", 
-      "ran": null, 
-      "image": " Monumentul Eroilor Aerului.jpg", 
-      "long": 26.0862, 
-      "project": "ro", 
       "lat": 44.4596, 
-      "quality": false
+      "image": " Monumentul Eroilor Aerului.jpg", 
+      "quality": false, 
+      "long": 26.0862
     }
   ], 
   "AB-II-m-B-00246": [
@@ -35145,16 +35063,16 @@
   ], 
   "NT-I-s-A-10534": [
     {
-      "project": "ro", 
-      "ran": null, 
       "code": "NT-I-s-A-10534", 
       "lastedit": "20150404192232", 
       "name": "Cetatea Veche a Romanului", 
       "author": null, 
-      "lat": 0, 
+      "ran": null, 
       "image": null, 
-      "quality": false, 
-      "long": 0
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "TM-II-m-A-06163": [
@@ -35397,16 +35315,16 @@
   ], 
   "BN-II-m-B-01713": [
     {
+      "project": "ro", 
+      "ran": null, 
       "code": "BN-II-m-B-01713", 
-      "lastedit": "20120920092651", 
+      "lastedit": "20150407221827", 
       "name": "Biserica de lemn din \u0218ieu Sf\u00e2ntu", 
       "author": null, 
-      "ran": null, 
-      "image": "Fi\u0219ier:Biserica de lemn din Sieu Sfantu (8).JPG", 
-      "long": 0, 
-      "project": "ro", 
       "lat": 0, 
-      "quality": false
+      "image": "Fi\u0219ier:Biserica de lemn din Sieu Sfantu (8).JPG", 
+      "quality": false, 
+      "long": 0
     }
   ], 
   "SB-II-m-A-12469": [
@@ -36005,6 +35923,20 @@
       "author": null, 
       "ran": null, 
       "image": " \u0218coala de B\u0103ie\u021bi Roman.jpg", 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "MS-II-a-A-15973": [
+    {
+      "code": "MS-II-a-A-15973", 
+      "lastedit": "20150414181930", 
+      "name": "\u0218coala din deal din Sighi\u0219oara", 
+      "author": null, 
+      "ran": null, 
+      "image": "Fi\u0219ier:Liceul teoretic Joseph Haltrich.jpg", 
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
