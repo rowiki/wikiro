@@ -125,7 +125,7 @@ options = {
 			'lmi': u'',
 		},
 		{
-			'name': u'Infocaseta Gară',
+			'name': u'Infocaseta Gară|Infocaseta Muzeu',
 			'author': [],
 			'image': u'imagine',
 			# the databases we work on
@@ -287,7 +287,7 @@ def parseGeohackLinks(page, conf):
 			#print geohack_match.group(3)
 			break
 	if geohack_match == None or link == None or link == "":
-		pywikibot.output("No geohack link found in article")
+		#pywikibot.output("No geohack link found in article")
 		return 0,0
 	#valid formats:
 	# D_M_S_N_D_M_S_E
