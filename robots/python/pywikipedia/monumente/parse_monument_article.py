@@ -369,8 +369,8 @@ def parseGeohackLinks(page, conf):
 		log(u"*''E'': [[:%s]] Problemă (3) cu legătura Geohack: nu pot" \
 			u" identifica nicio coordonată: %s" % (title, link))
 		return 0,0
-	if lat < langOpt[_db]['south'] or lat > langOpt[_db]['north'] or \
-		long < langOpt[_db]['west'] or long > langOpt[_db]['east']:
+	if lat < conf[_db]['geolimits']['south'] or lat > conf[_db]['geolimits']['north'] or \
+		long < conf[_db]['geolimits']['west'] or long > conf[_db]['geolimits']['east']:
 		log(u"*''E'': [[:%s]] Coordonate invalide pentru țară: %f,%f" \
 			u" (extrase din %s)" % (title, lat, long, link))
 		return 0,0
