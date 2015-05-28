@@ -83,6 +83,23 @@ options = {
 				'east':  29.7,
 			},
 		},
+		'ran':#database we work on
+		{
+			'namespaces': [0, 6],
+			#'namespaces': [6],
+			'codeRegexp': re.compile("([0-9]{4,6}(\.[0-9][0-9]){1,3})", re.I),
+			'templateRegexp': re.compile("\{\{codRAN\|([0-9]{4,6}(\.[0-9][0-9]){1,3})", re.I),
+			'codeTemplate': ["codRAN"],
+			'codeTemplateParams': 
+			[
+			],
+			'geolimits': {
+				'north': 48.3,
+				'south': 43.6,
+				'west':  20.27,
+				'east':  29.7,
+			},
+		},
 		'infoboxes':
 		[
 		{
@@ -122,7 +139,7 @@ options = {
 			'image': u'imagine',
 			# the databases we work on
 			'ran': u'ref:RO:RAN',
-			'lmi': u'',
+			'lmi': u'ref:RO:LMI',
 		},
 		{
 			'name': u'Infocaseta Gară|Infocaseta Muzeu',
@@ -169,7 +186,7 @@ options = {
 		'lmi':
 		{
 			'namespaces': [14, 6],
-			#'namespaces': [6],
+			#'namespaces': [14],
 			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'codeTemplate': ["Monument istoric", "codLMI"],
@@ -178,6 +195,23 @@ options = {
 				u'lmi92',
 				u'ran',
 				u'eroare',
+			],
+			'geolimits': {
+				'north': 48.3,
+				'south': 43.6,
+				'west':  20.27,
+				'east':  29.7,
+			},
+		},
+		'ran':#database we work on
+		{
+			'namespaces': [14, 6],
+			#'namespaces': [6],
+			'codeRegexp': re.compile("([0-9]{4,6}(\.[0-9][0-9]){1,3})", re.I),
+			'templateRegexp': re.compile("\{\{codRAN\|([0-9]{4,6}(\.[0-9][0-9]){1,3})", re.I),
+			'codeTemplate': ["codRAN", "RAN"],
+			'codeTemplateParams': 
+			[
 			],
 			'geolimits': {
 				'north': 48.3,
@@ -474,7 +508,7 @@ def processArticle(text, page, conf):
 	if code is None: #no valid code in page
 		pywikibot.output("No valid code in page " + title)
 		return
-	elif code == "": #more than one code, juse use the one that is marked as {{codLMI|code}}
+	elif code == "": #more than one code, juse use the one that is marked with the template
 		code = checkAllCodes(re.findall(conf[_db]['templateRegexp'], text), title, False)
 		if code is None or code == "": # either no code or more than one code is marked; just ignore
 			   pywikibot.output("Too many codes in page " + title)
@@ -504,10 +538,13 @@ def processArticle(text, page, conf):
 		print "Exception " + repr(e)
 		lat = long = 0
 
-	#lat = long = 0
-	author = None
-	image = None
-	ran = None
+	dictElem = {'name': title,
+		    'project': user.mylang,
+		    'lat': lat, 'long': long,
+		    'quality': quality,
+		    'lastedit': page.editTime().totimestampformat(),
+		    'code': code,
+		}
 
 	for box in conf['infoboxes']:
 		tl = strainu.extractTemplate(text, box['name'])
@@ -534,34 +571,25 @@ def processArticle(text, page, conf):
 		else:
 			author = author[:-2] #remove the final comma
 			#pywikibot.output(author)
-		if box['image'] in _dict and _dict[box['image']].strip() <> "":
-			#TODO:prefix with the namespace
-			image = _dict[box['image']]
-			#pywikibot.output(image)
-		if box['ran'] in _dict and _dict[box['ran']].strip() <> "":
-			ran = _dict[box['ran']]
-			#pywikibot.output(ran)
-		if author <> None and image <> None and ran <> None:
-			break # stop only if we have all the information we need
+			dictElem['author'] = author
+		for key in box:
+			#print key
+			#TODO: second condition borks for anything else but strings
+			if key not in dictElem and \
+			   str(box[key]) in _dict and \
+			   _dict[box[key]].strip() <> "":
+				dictElem[key] = _dict[box[key]]
+				#pywikibot.output(key + u"=" + dictElem[key])
 
-	if image == None:
+	if 'image' not in dictElem:
 	# if there are images in the article, use the first image
 	# I'm deliberately skipping images in templates (they have been treated
 	# above) and galleries, which usually contain non-selected images
 	#	for img in page.imagelinks(total=1):
 		for img in strainu.linkedImages(page):
 			#print img
-			image = img.title()
+			dictElem['image'] = img.title()
 			break
-	dictElem = {'name': title,
-				'project': user.mylang,
-				'lat': lat, 'long': long,
-				'author': author, 'image': image,
-				'quality': quality,
-				'lastedit': page.editTime().totimestampformat(),
-				'code': code,
-				'ran': ran
-			   }
 
 	if len(conf[_db]['codeTemplateParams']):
 		i = 0
@@ -612,6 +640,8 @@ def main():
 			user.mylang = lang
 		if arg.startswith('-family'):
 			user.family = arg [len('-family:'):]
+		if arg.startswith('-db:'):
+			_db = arg [len('-db:'):]
 		if arg.startswith('-nopreload'):
 			preload = False
 		if arg.startswith('-incremental'):
