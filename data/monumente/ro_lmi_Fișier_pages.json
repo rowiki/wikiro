@@ -124,6 +124,18 @@
     }, 
     {
       "code": "MH-II-m-A-10406.01", 
+      "lastedit": "20150429092426", 
+      "name": "Fi\u0219ier:M\u0103n\u0103stirea Strehaia 1927.bis V.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "MH-II-m-A-10406.01", 
       "lastedit": "20140302173735", 
       "name": "Fi\u0219ier:M\u0103n\u0103stirea Strehaia 1927.intrarea bis.jpg", 
       "author": null, 
@@ -3086,7 +3098,7 @@
   "SV-II-m-A-05673.03": [
     {
       "code": "SV-II-m-A-05673.03", 
-      "lastedit": "20131009111729", 
+      "lastedit": "20150425154319", 
       "name": "Fi\u0219ier:M\u0103n\u0103stirea Moldovi\u021ba4.jpg", 
       "author": null, 
       "ran": null, 
@@ -3114,7 +3126,7 @@
   "SV-II-m-A-05673.01": [
     {
       "code": "SV-II-m-A-05673.01", 
-      "lastedit": "20131009111655", 
+      "lastedit": "20150425154316", 
       "name": "Fi\u0219ier:M\u0103n\u0103stirea Moldovi\u021ba3.jpg", 
       "author": null, 
       "ran": null, 
@@ -3214,7 +3226,7 @@
   "SV-II-m-A-05673.05": [
     {
       "code": "SV-II-m-A-05673.05", 
-      "lastedit": "20131009111736", 
+      "lastedit": "20150425154309", 
       "name": "Fi\u0219ier:M\u0103n\u0103stirea Moldovi\u0163a7.jpg", 
       "author": null, 
       "ran": null, 
@@ -3280,7 +3292,7 @@
   "PH-IV-m-B-16926": [
     {
       "code": "PH-IV-m-B-16926", 
-      "lastedit": "20150417115229", 
+      "lastedit": "20150424092018", 
       "name": "Fi\u0219ier:Cruce mormant Badea Cartan Sinaia.jpg", 
       "author": null, 
       "ran": null, 
@@ -3336,7 +3348,7 @@
   "SV-IV-m-B-05695": [
     {
       "code": "SV-IV-m-B-05695", 
-      "lastedit": "20131204211506", 
+      "lastedit": "20150425140632", 
       "name": "Fi\u0219ier:Suceava-center.jpg", 
       "author": null, 
       "ran": null, 
@@ -3348,7 +3360,7 @@
     }, 
     {
       "code": "SV-IV-m-B-05695", 
-      "lastedit": "20131204211458", 
+      "lastedit": "20150425140047", 
       "name": "Fi\u0219ier:Statuia lui Petru I Mu\u015fat din Suceava.jpg", 
       "author": null, 
       "ran": null, 
@@ -4428,7 +4440,19 @@
   "SV-IV-m-B-05689": [
     {
       "code": "SV-IV-m-B-05689", 
-      "lastedit": "20131204211436", 
+      "lastedit": "20150425135612", 
+      "name": "Fi\u0219ier:Statuia ecvestr\u0103 Suceava.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SV-IV-m-B-05689", 
+      "lastedit": "20150425135609", 
       "name": "Fi\u0219ier:Statuia ecvestr\u0103 a lui \u015etefan cel Mare din Suceava.jpg", 
       "author": null, 
       "ran": null, 
@@ -6855,6 +6879,210 @@
       "project": "ro", 
       "lat": 0, 
       "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193101", 
+      "name": "Fi\u0219ier:Cetate N\u01621.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193059", 
+      "name": "Fi\u0219ier:Intrare cetate11.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193105", 
+      "name": "Fi\u0219ier:Cetate Neam\u01632.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193055", 
+      "name": "Fi\u0219ier:Cetate Neam\u01633.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193048", 
+      "name": "Fi\u0219ier:Cetate Neam\u01635.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193051", 
+      "name": "Fi\u0219ier:Cetate Neam\u01634.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193044", 
+      "name": "Fi\u0219ier:Pecetea Moldovei.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193041", 
+      "name": "Fi\u0219ier:Cetate Neam\u01637.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193037", 
+      "name": "Fi\u0219ier:Cetate Neam\u01638.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193033", 
+      "name": "Fi\u0219ier:Cetate Neam\u01636.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193030", 
+      "name": "Fi\u0219ier:Cetate Neam\u01639.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193027", 
+      "name": "Fi\u0219ier:Cetate Neam\u01639 (sc\u0103ri).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193023", 
+      "name": "Fi\u0219ier:Cetate Neam\u016310.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193019", 
+      "name": "Fi\u0219ier:Cetate Neam\u016312.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193015", 
+      "name": "Fi\u0219ier:Cetate Neam\u016314.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193011", 
+      "name": "Fi\u0219ier:Cetatea Neam\u016315.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-A-10707", 
+      "lastedit": "20150513193002", 
+      "name": "Fi\u0219ier:Cetate Neam\u016316.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "B-II-m-A-19206": [
@@ -7836,7 +8064,7 @@
   "SV-II-m-A-05651.01": [
     {
       "code": "SV-II-m-A-05651.01", 
-      "lastedit": "20131009111927", 
+      "lastedit": "20150425150957", 
       "name": "Fi\u0219ier:M\u0103n\u0103stirea Sucevi\u0163a.jpg", 
       "author": null, 
       "ran": null, 
@@ -8077,11 +8305,11 @@
       "quality": false
     }
   ], 
-  "PH-II-m-A-16691.01": [
+  "SM-II-a-A-05220": [
     {
-      "code": "PH-II-m-A-16691.01", 
-      "lastedit": "20140226154411", 
-      "name": "Fi\u0219ier:Biserica manastirii SINAIA.jpg", 
+      "code": "SM-II-a-A-05220", 
+      "lastedit": "20140627232631", 
+      "name": "Fi\u0219ier:Centru SM1.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -8091,9 +8319,93 @@
       "quality": false
     }, 
     {
-      "code": "PH-II-m-A-16691.01", 
-      "lastedit": "20140226194723", 
-      "name": "Fi\u0219ier:Biserica veche a manastirii SINAIA.jpg", 
+      "code": "SM-II-a-A-05220", 
+      "lastedit": "20140627223536", 
+      "name": "Fi\u0219ier:SM6.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SM-II-a-A-05220", 
+      "lastedit": "20140627223811", 
+      "name": "Fi\u0219ier:SM7.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SM-II-a-A-05220", 
+      "lastedit": "20140927201412", 
+      "name": "Fi\u0219ier:Ansamblul urban \u201ePia\u021ba Libert\u0103\u021bii\u201d - latura estica.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SM-II-a-A-05220", 
+      "lastedit": "20140927201412", 
+      "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura nordica.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SM-II-a-A-05220", 
+      "lastedit": "20141112135548", 
+      "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura nordica 1.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SM-II-a-A-05220", 
+      "lastedit": "20140927201414", 
+      "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura vestica.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SM-II-a-A-05220", 
+      "lastedit": "20140927201414", 
+      "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura sudica.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "SM-II-a-A-05220", 
+      "lastedit": "20140927201415", 
+      "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura sudica 1.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -8392,20 +8704,6 @@
       "code": "GJ-III-m-A-09465.01", 
       "lastedit": "20150218082622", 
       "name": "Fi\u0219ier:Coloana infinitului, Targu Jiu, vedere cu parc.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
-  "SV-II-m-B-05450": [
-    {
-      "code": "SV-II-m-B-05450", 
-      "lastedit": "20140718224749", 
-      "name": "Fi\u0219ier:Bustul lui Stefan cel Mare Colegiul National Stefan cel Mare Suceava.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -9668,7 +9966,7 @@
   "SV-IV-m-B-05699": [
     {
       "code": "SV-IV-m-B-05699", 
-      "lastedit": "20141001171047", 
+      "lastedit": "20150425140000", 
       "name": "Fi\u0219ier:Statuia lui Mihail Sadoveanu, F\u0103lticeni.JPG", 
       "author": null, 
       "ran": null, 
@@ -13685,11 +13983,11 @@
       "quality": false
     }
   ], 
-  "SM-II-a-A-05220": [
+  "PH-II-m-A-16691.01": [
     {
-      "code": "SM-II-a-A-05220", 
-      "lastedit": "20140627232631", 
-      "name": "Fi\u0219ier:Centru SM1.jpg", 
+      "code": "PH-II-m-A-16691.01", 
+      "lastedit": "20140226154411", 
+      "name": "Fi\u0219ier:Biserica manastirii SINAIA.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -13699,93 +13997,9 @@
       "quality": false
     }, 
     {
-      "code": "SM-II-a-A-05220", 
-      "lastedit": "20140627223536", 
-      "name": "Fi\u0219ier:SM6.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SM-II-a-A-05220", 
-      "lastedit": "20140627223811", 
-      "name": "Fi\u0219ier:SM7.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SM-II-a-A-05220", 
-      "lastedit": "20140927201412", 
-      "name": "Fi\u0219ier:Ansamblul urban \u201ePia\u021ba Libert\u0103\u021bii\u201d - latura estica.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SM-II-a-A-05220", 
-      "lastedit": "20140927201412", 
-      "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura nordica.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SM-II-a-A-05220", 
-      "lastedit": "20141112135548", 
-      "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura nordica 1.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SM-II-a-A-05220", 
-      "lastedit": "20140927201414", 
-      "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura vestica.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SM-II-a-A-05220", 
-      "lastedit": "20140927201414", 
-      "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura sudica.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SM-II-a-A-05220", 
-      "lastedit": "20140927201415", 
-      "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura sudica 1.JPG", 
+      "code": "PH-II-m-A-16691.01", 
+      "lastedit": "20140226194723", 
+      "name": "Fi\u0219ier:Biserica veche a manastirii SINAIA.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -14510,6 +14724,20 @@
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "PH-IV-m-A-16882": [
+    {
+      "code": "PH-IV-m-A-16882", 
+      "lastedit": "20150513193314", 
+      "name": "Fi\u0219ier:Monument Aurel Vlaicu Banesti.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 25.7647, 
+      "project": "ro", 
+      "lat": 45.094, 
       "quality": false
     }
   ], 
@@ -17454,7 +17682,7 @@
   "SV-II-m-B-05494": [
     {
       "code": "SV-II-m-B-05494", 
-      "lastedit": "20150204223050", 
+      "lastedit": "20150425162818", 
       "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u0219ti3.jpg", 
       "author": null, 
       "ran": null, 
@@ -17466,7 +17694,7 @@
     }, 
     {
       "code": "SV-II-m-B-05494", 
-      "lastedit": "20150204222348", 
+      "lastedit": "20150425162839", 
       "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u0219ti5.jpg", 
       "author": null, 
       "ran": null, 
@@ -17478,7 +17706,7 @@
     }, 
     {
       "code": "SV-II-m-B-05494", 
-      "lastedit": "20150204222356", 
+      "lastedit": "20150425162858", 
       "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u0219ti6.jpg", 
       "author": null, 
       "ran": null, 
@@ -17490,7 +17718,7 @@
     }, 
     {
       "code": "SV-II-m-B-05494", 
-      "lastedit": "20150204222408", 
+      "lastedit": "20150425162914", 
       "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u0219ti8.jpg", 
       "author": null, 
       "ran": null, 
@@ -17514,7 +17742,7 @@
     }, 
     {
       "code": "SV-II-m-B-05494", 
-      "lastedit": "20150204222636", 
+      "lastedit": "20150425162458", 
       "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u0219ti11.jpg", 
       "author": null, 
       "ran": null, 
@@ -17526,7 +17754,7 @@
     }, 
     {
       "code": "SV-II-m-B-05494", 
-      "lastedit": "20150204222747", 
+      "lastedit": "20150425162523", 
       "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u0219ti12.jpg", 
       "author": null, 
       "ran": null, 
@@ -17538,7 +17766,7 @@
     }, 
     {
       "code": "SV-II-m-B-05494", 
-      "lastedit": "20131201001641", 
+      "lastedit": "20150425163116", 
       "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u015fti13.jpg", 
       "author": null, 
       "ran": null, 
@@ -17550,7 +17778,7 @@
     }, 
     {
       "code": "SV-II-m-B-05494", 
-      "lastedit": "20150204223002", 
+      "lastedit": "20150425162756", 
       "name": "Fi\u0219ier:Biserica de lemn din B\u0103ne\u0219ti14.jpg", 
       "author": null, 
       "ran": null, 
@@ -17562,7 +17790,7 @@
     }, 
     {
       "code": "SV-II-m-B-05494", 
-      "lastedit": "20140226141516", 
+      "lastedit": "20150425162933", 
       "name": "Fi\u0219ier:Biserica din Banesti1.jpg", 
       "author": null, 
       "ran": null, 
@@ -17574,7 +17802,7 @@
     }, 
     {
       "code": "SV-II-m-B-05494", 
-      "lastedit": "20140226141519", 
+      "lastedit": "20150425162951", 
       "name": "Fi\u0219ier:Biserica din Banesti2.jpg", 
       "author": null, 
       "ran": null, 
@@ -17586,7 +17814,7 @@
     }, 
     {
       "code": "SV-II-m-B-05494", 
-      "lastedit": "20140226141522", 
+      "lastedit": "20150425163012", 
       "name": "Fi\u0219ier:Biserica din Banesti3.jpg", 
       "author": null, 
       "ran": null, 
@@ -17598,7 +17826,7 @@
     }, 
     {
       "code": "SV-II-m-B-05494", 
-      "lastedit": "20140226141513", 
+      "lastedit": "20150425163052", 
       "name": "Fi\u0219ier:Biserica din Banesti5.jpg", 
       "author": null, 
       "ran": null, 
@@ -18802,7 +19030,7 @@
   "SV-III-m-B-05685": [
     {
       "code": "SV-III-m-B-05685", 
-      "lastedit": "20140301085939", 
+      "lastedit": "20150425105712", 
       "name": "Fi\u0219ier:Casa memorial\u0103 Nicolae Labi\u015f de la M\u0103lini.jpg", 
       "author": null, 
       "ran": null, 
