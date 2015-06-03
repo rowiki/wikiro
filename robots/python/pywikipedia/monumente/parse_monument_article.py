@@ -114,8 +114,9 @@ options = {
 			'name': u'Clădire Istorică',
 			'author': [u'arhitect'],
 			'image': u'imagine',
+			# the databases we work on
 			'ran': u'cod-ran',
-			'lmi': u'',
+			'lmi': u'cod-lmi',
 		},
 		{
 			'name': u'Cutie Edificiu Religios|Infocaseta Edificiu religios|Infocaseta Teatru|Moschee',
@@ -126,15 +127,15 @@ options = {
 			'lmi': u'',
 		},
 		{
-			'name': u'Castru|Infocaseta Castru|Infocaseta Cetate dacică|Infocaseta Villa rustica',
+			'name': u'Castru|Infocaseta Castru|Infocaseta Villa rustica',
 			'author': [],
 			'image': u'imagine',
 			# the databases we work on
 			'ran': u'cod RAN',
-			'lmi': u'',
+			'lmi': u'cod LMI',
 		},
 		{
-			'name': u'Infocasetă Davă|Infocaseta Davă',
+			'name': u'Infocasetă Davă|Infocaseta Davă|Infocaseta Cetate dacică',
 			'author': [],
 			'image': u'imagine',
 			# the databases we work on
@@ -151,11 +152,11 @@ options = {
 		},
 		{
 			'name': u'Infocaseta Biserică din lemn',
-			'author': [u'meșteri'],
+			'author': [u'meșteri', 'zugravi'],
 			'image': u'imagine',
 			# the databases we work on
 			'ran': u'cod RAN',
-			'lmi': u'',
+			'lmi': u'cod LMI',
 		},
 		{
 			'name': u'Infocaseta Lăcaș de cult|Mănăstire',
@@ -163,11 +164,11 @@ options = {
 			'image': u'imagine',
 			# the databases we work on
 			'ran': u'codRAN',
-			'lmi': u'',
+			'lmi': u'codLMI',
 		},
 		{
 			'name': u'Infocaseta clădire|Infobox cladire|Infobox building',
-			'author': [u'arhitect'],
+			'author': [u'arhitect', 'firma_arhitectura', 'inginer', 'alti_designeri'],
 			'image': u'image',
 			# the databases we work on
 			'ran': u'',#nada yet
@@ -240,6 +241,8 @@ options = {
 			u'Wiki Loves Monuments 2011 Europe nominee',
 			u'WLM finalist or winner image 2012',
 			u'WLM finalist or winner image',
+			u'Picture of the day',
+			u'Media of the day',
 		],
 		'validOccupations':
 		{
@@ -249,7 +252,10 @@ options = {
 			u'artist': u'artist',
 			u'artisan': u'artizan',
 			u'author': u'autor',
+			u'carpenter': u'tâmplar',
+			u'decorator': u'decorator',
 			u'engineer': u'inginer',
+			u'engraver': u'gravor',
 			u'entrepreneur': u'întreprinzător',
 			u'ornamental painter': u'pictor ornamental',
 			u'sculptor': u'sculptor',
@@ -410,11 +416,12 @@ def parseGeohackLinks(page, conf):
 		return 0,0
 	return lat,long
 
+#TODO: lmi-specific
 def checkAllCodes(result, title, logMsg = True):
 	trace = Trace(sys._getframe().f_code.co_name)
 	if len(result) == 0:
 		if logMsg:
-			log(u"*''E'': [[:%s]] nu conține niciun cod LMI valid" % title)
+			log(u"*''E'': [[:%s]] nu conține niciun cod %s valid" % (title, _db))
 			return None
 	elif len(result) > 1:
 		code = result[0][0]
@@ -431,8 +438,8 @@ def checkAllCodes(result, title, logMsg = True):
 					c2 = res[0][-5:]
 				if c1 != c2: #they're NOT sub-monuments
 					if logMsg:
-						log(u"*''I'': [[:%s]] conține mai multe coduri LMI" \
-						u" distincte: %s, %s." % (title, code, res[0]))
+						log(u"*''I'': [[:%s]] conține mai multe coduri %s" \
+						u" distincte: %s, %s." % (title, _db, code, res[0]))
 					return ""
 		return code
 	else:
@@ -515,7 +522,7 @@ def processArticle(text, page, conf):
 			   return
 	if re.search(errorRegexp, text) <> None:
 		log(u"*''E'': [[:%s]] a fost marcat de un editor ca având o eroare în" \
-			" codul LMI %s" % (title, code))
+			" codul %s %s" % (title, _db, code))
 		return
 
 	if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
@@ -613,10 +620,6 @@ def processArticle(text, page, conf):
 		fullDict[code].append(dictElem)
 	else:
 		fullDict[code] = [dictElem]
-
-def processImagePage(text, page, conf):
-	trace = Trace(sys._getframe().f_code.co_name)
-	pass
 
 def main():
 	trace = Trace(sys._getframe().f_code.co_name)
