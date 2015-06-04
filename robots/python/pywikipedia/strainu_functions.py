@@ -26,7 +26,7 @@ def extractTemplate(text, template):
     #pywikibot.output(text)
     template = template.replace("_", " ")
     template = template.replace(" ", "[ _]")
-    match = re.search("\{\{\s*" + template, text, re.I)
+    match = re.search("\{\{\s*(" + template + ")", text, re.I)
     if match == None:
         return None
     tl = text[match.start():]
@@ -117,6 +117,7 @@ def tl2Dict(template):
             _dict[key] = _dict[key] + u"|" + line[0]
             if not key in _keyList:
                 _keyList.append(key)
+	#TODO: add anonymous parameters
     for key, value in _dict.items():
         matches = Rmarker.findall(value)
         for match in matches:
