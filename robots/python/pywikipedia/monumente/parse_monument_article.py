@@ -107,8 +107,8 @@ options = {
 			'author': [u'artist', u'artist1', u'artist2', u'arhitect'],
 			'image': u'imagine',
 			# the databases we work on
-			'ran': u'',#TODO
-			'lmi': u'',
+			'ran': u'cod2',#TODO: this is a hack, we probably need to duplicate the entry
+			'lmi': u'cod',
 		},
 		{
 			'name': u'Clădire Istorică',
@@ -186,8 +186,8 @@ options = {
 	{
 		'lmi':
 		{
-			'namespaces': [14, 6],
-			#'namespaces': [14],
+			#'namespaces': [14, 6],
+			'namespaces': [6],
 			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'codeTemplate': ["Monument istoric", "codLMI"],
@@ -231,6 +231,14 @@ options = {
 				# the databases we work on
 				'ran': u'',
 				'lmi': u'',
+			},
+			{
+				'name': u'codLMI|Monument istoric',
+				'author': [],
+				'image': u'imagine',
+				# the databases we work on
+				'ran': u'ran',
+				'lmi': u'1',#TODO
 			},
 		],
 		'qualityTemplates':
@@ -416,35 +424,6 @@ def parseGeohackLinks(page, conf):
 		return 0,0
 	return lat,long
 
-#TODO: lmi-specific
-def checkAllCodes(result, title, logMsg = True):
-	trace = Trace(sys._getframe().f_code.co_name)
-	if len(result) == 0:
-		if logMsg:
-			log(u"*''E'': [[:%s]] nu conține niciun cod %s valid" % (title, _db))
-			return None
-	elif len(result) > 1:
-		code = result[0][0]
-		if (code.rfind('.') > -1):
-			c1 = code[-8:code.rfind('.')]
-		else:
-			c1 = code[-5:]
-		for res in result:
-			if code != res[0]:
-				point = res[0].rfind('.')
-				if (point > -1):
-					c2 = res[0][-8:point]
-				else:
-					c2 = res[0][-5:]
-				if c1 != c2: #they're NOT sub-monuments
-					if logMsg:
-						log(u"*''I'': [[:%s]] conține mai multe coduri %s" \
-						u" distincte: %s, %s." % (title, _db, code, res[0]))
-					return ""
-		return code
-	else:
-		return result[0][0]#first regular expression
-
 def commaRepl(matchobj):
 	trace = Trace(sys._getframe().f_code.co_name)
 	if matchobj.group(1) == u"și":
@@ -497,33 +476,55 @@ def processCreatorTemplate(name, conf):
 				#print occupation
 				return formatAuthor(name) + u" (" + conf['validOccupations'][valid] + u")"
 	return u""
+
+def invalidCount(count, title, db, list=None):
+	if count == 0:
+		log(u"*''E'': [[:%s]] nu conține niciun cod %s valid" % (title, db))
+	else:
+		log(u"*''I'': [[:%s]] conține %d coduri %s" \
+			u" distincte: %s." % (title, count, db, list))
 		
+#TODO:still database specific
+def checkMultipleMonuments(codes, separator='.'):
+	if len(codes) == 0:
+		return False
+	last = codes[0][strainu.findDigit(codes[0]):strainu.rfindOrLen(codes[0], separator)]
+	for code in codes:
+		code = code[strainu.findDigit(code):strainu.rfindOrLen(code, separator)]
+		#print code
+		if code != last:
+			return True
+	return False
 
 def processArticle(text, page, conf):
 	trace = Trace(sys._getframe().f_code.co_name)
 	title = page.title()
 	pywikibot.output(u'Working on "%s"' % title)
+	global _db
 
-	#skip pictures under copyright
+	#skip pictures under copyright (not available on commons)
+	#TODO: rowp-specific
 	tl = strainu.extractTemplate(text, "Material sub drepturi de autor")
 	if tl != None:
 		pywikibot.output("Skipping page containing copyrighted material")
 		return
-		
-	global _db
-	code = checkAllCodes(re.findall(conf[_db]['codeRegexp'], text), title)
-	if code is None: #no valid code in page
-		pywikibot.output("No valid code in page " + title)
-		return
-	elif code == "": #more than one code, juse use the one that is marked with the template
-		code = checkAllCodes(re.findall(conf[_db]['templateRegexp'], text), title, False)
-		if code is None or code == "": # either no code or more than one code is marked; just ignore
-			   pywikibot.output("Too many codes in page " + title)
-			   return
 	if re.search(errorRegexp, text) <> None:
 		log(u"*''E'': [[:%s]] a fost marcat de un editor ca având o eroare în" \
-			" codul %s %s" % (title, _db, code))
+			" codul %s" % (title, _db))
 		return
+
+	code = None
+	codes = re.findall(conf[_db]['codeRegexp'], text)
+	if len(codes) == 0: # no code was found
+		invalidCount(0, title, _db)
+		return
+	elif len(codes) > 1 and checkMultipleMonuments([res[0] for res in codes]): #more than one code, juse use the one that is marked with the template
+		tlCodes = re.findall(conf[_db]['templateRegexp'], text)
+		if len(tlCodes) == 1:
+			code = tlCodes[0][0]
+		# if no or more than one code was found, we'll try extracting the correct one from the templates in the page
+	else:#exactly 1 code
+		code = codes[0][0]
 
 	if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
 		quality = True
@@ -581,6 +582,16 @@ def processArticle(text, page, conf):
 			dictElem['author'] = author
 		for key in box:
 			#print key
+			#try to identify the correct code
+			if dictElem['code'] == None and key == _db and box[key] in _dict:
+				infoCodes = re.findall(conf[_db]['codeRegexp'], _dict[box[key]])
+				#print codes
+				if len(infoCodes) != 1 and checkMultipleMonuments([res[0] for res in infoCodes]): # more or less than one code is marked; just ignore
+					invalidCount(len(codes), title, _db, [res[0] for res in codes])#count comes from the first search
+					return
+				else:
+					dictElem['code'] = infoCodes[0][0]
+					#print dictElem
 			#TODO: second condition borks for anything else but strings
 			if key not in dictElem and \
 			   str(box[key]) in _dict and \
@@ -588,6 +599,9 @@ def processArticle(text, page, conf):
 				dictElem[key] = _dict[box[key]]
 				#pywikibot.output(key + u"=" + dictElem[key])
 
+	if dictElem['code'] == None:
+		invalidCount(len(codes), title, _db, [res[0] for res in codes])#count comes from the first search
+		return
 	if 'image' not in dictElem:
 	# if there are images in the article, use the first image
 	# I'm deliberately skipping images in templates (they have been treated
