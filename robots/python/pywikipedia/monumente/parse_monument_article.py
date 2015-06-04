@@ -553,6 +553,9 @@ def processArticle(text, page, conf):
 		    'lastedit': page.editTime().totimestampformat(),
 		    'code': code,
 		}
+	for key in conf['infoboxes'][0]:
+		if key not in dictElem:
+			dictElem[key] = None
 
 	for box in conf['infoboxes']:
 		tl = strainu.extractTemplate(text, box['name'])
@@ -579,6 +582,7 @@ def processArticle(text, page, conf):
 		else:
 			author = author[:-2] #remove the final comma
 			#pywikibot.output(author)
+		if dictElem['author'] == None:
 			dictElem['author'] = author
 		for key in box:
 			#print key
@@ -592,10 +596,11 @@ def processArticle(text, page, conf):
 				else:
 					dictElem['code'] = infoCodes[0][0]
 					#print dictElem
+
 			#TODO: second condition borks for anything else but strings
-			if key not in dictElem and \
-			   str(box[key]) in _dict and \
-			   _dict[box[key]].strip() <> "":
+			if dictElem[key] == None and \
+			    str(box[key]) in _dict and \
+			    _dict[box[key]].strip() <> "":
 				dictElem[key] = _dict[box[key]]
 				#pywikibot.output(key + u"=" + dictElem[key])
 
@@ -611,6 +616,8 @@ def processArticle(text, page, conf):
 			#print img
 			dictElem['image'] = img.title()
 			break
+
+	#print dictElem
 
 	if len(conf[_db]['codeTemplateParams']):
 		i = 0
