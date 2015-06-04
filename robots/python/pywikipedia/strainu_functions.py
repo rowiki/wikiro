@@ -2,7 +2,7 @@
 # -*- coding: utf-8  -*-
 
 #
-# (C) Strainu, 2012
+# (C) Strainu, 2012-2015
 #
 # Distributed under the terms of the GPLv2 license.
 #
@@ -144,7 +144,7 @@ def stripLink(text):
         return text[start+2:end]
     else:
         return text[sep+1:end]
-        
+
 #from [[a|b]] get a
 def extractLink(text):
     start = text.find("[[")
@@ -176,7 +176,7 @@ def extractLinkAndSurroundingText(text):
         return [text[:start], text[start+2:end], text[end+2:]]
     else:
         return [text[:start], text[start+2:sep], text[end+2:]]
-        
+
 def extractImageLink(text):
     start = text.find("[[")
     end = text.rfind("]]")
@@ -193,7 +193,7 @@ def extractImageLink(text):
         return text[start+2:end]
     else:
         return text[start+2:sep]
-        
+
 def stripExternalLink(text):
     start = text.find("[")
     end = text.rfind("]")
@@ -213,7 +213,9 @@ def stripExternalLink(text):
 
 def stripNamespace(link):
     return link[link.find(':')+1:]
-    
+
+
+# --------- String functions ----------
 def capitalizeWithSigns(text, keep=[]):
     text = text.replace(u"-", u"@@0@@ ")
     text = text.replace(u".", u"@@1@@ ")
@@ -228,7 +230,21 @@ def capitalizeWithSigns(text, keep=[]):
     text = text.replace(u"@@1@@ ", u".")
     text = text.replace(u"@@0@@ ", u"-")
     return text
-        
+
+def findDigit(s):
+    for i, c in enumerate(s):
+        if c.isdigit():
+            return i
+    return -1;
+
+def rfindOrLen(s, f):
+    r = s.rfind(f)
+    if r >= 0:
+        return r
+    else:
+        return len(s)
+
+# --------- Geo functions ------------
 def getDeg(decimal):
     if decimal < 0:
         decimal = -decimal
@@ -238,12 +254,12 @@ def getMin(decimal):
     if decimal < 0:
         decimal = -decimal
     return int(math.floor((decimal - math.floor(decimal)) * 60))
-   
+
 def getSec(decimal):
     if decimal < 0:
         decimal = -decimal
     return int(math.floor(((decimal - math.floor(decimal)) * 3600) % 60))
-   
+
 def geosign(check, plus, minus):
     if check == plus:
         return 1
@@ -251,7 +267,7 @@ def geosign(check, plus, minus):
         return -1
     else:
         return 0 #this should really never happen
-            
+
 def linkedImages(page):
     """Return a list of Pages that this Page links to.
 
@@ -316,12 +332,13 @@ def linkedImages(page):
             if page2.title(withSection=False) and page2 not in result:
                 result.append(page2)
     return result
-    
+
+# --------------- CSV functions -------------------
 def unicode_csv_reader(utf8_data, dialect=csv.excel, **kwargs):
     csv_reader = csv.reader(utf8_data, dialect=dialect, **kwargs)
     for row in csv_reader:
         yield [unicode(cell, 'utf-8') for cell in row]
-            
+
 if __name__ == "__main__":
     print extractTemplate("{{Sema_2|a=b<ref>{{citat|}}</ref>|e=f}}", "Sema 2")
     print extractTemplate("{{Sema 2|a=b<ref>{{citat|}}</ref>|e=f}}", "Sema_2")
