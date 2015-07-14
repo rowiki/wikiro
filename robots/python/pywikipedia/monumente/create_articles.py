@@ -245,72 +245,108 @@ def addVillageToTitle(title, village):
         title = re.sub(ur'Podul (.*)', ur'Podul \1 din %s' % village, title)
         title = re.sub(ur'Cazinou(.*)', ur'Cazinoul\1 din %s' % village, title)
         title = re.sub(ur'Hotel(.*)', ur'Hotelul\1 din %s' % village, title)
+
+    if title.find(u" din ") == -1 and (not village or title.find(village) == -1):
+        title = title + (" din %s" % village)
     return title
 
 def generateList(seq):
     seen = set()
     seen_add = seen.add
-    return [ x for x in seq if not (x in seen or seen_add(x))]
+    return [ x.strip() for x in seq if not (x in seen or seen_add(x))]
     
 def cleanupTitle(monument):
     ret = set()
     title = monument["Denumire"]
     village = monument["Localitate"]
     address = monument[u"Adresă"]
-    print title
+    print "***" + title
     village = strainu_functions.extractLink(village)
     if village and village.find(",") > -1:
         village = village[:village.find(",")]
 
     title = re.sub(ur'(.*?)?"(.*?)"', ur'\1„\2”', title)
+    #print title
     ret.add(title)
-    ret.add(title.strip(u" „”"))
 
     if title.find(u"„") > -1:
+        #print title[title.find(u"„")+1:title.find(u"”")]
         ret.add(title[title.find(u"„")+1:title.find(u"”")])
 
-    title2 = title.replace(u'Ansamblul bisericii', u'Biserica').replace(u'Ansamblul conacului', u'Conacul').replace(u'Ansamblul castelului', u'Castelul').replace(u'Ansamblul cetății', u'Ctatea')
+    title2 = title.replace(u'Ansamblul bisericii', u'Biserica').\
+		replace(u'Ansamblul conacului', u'Conacul').\
+		replace(u'Ansamblul castelului', u'Castelul').\
+		replace(u'Ansamblul cetății', u'Cetatea').\
+		replace(u'Ansamblul capelei', u'Capela')
     if title2 != title:
+        #print title2
         ret.add(title2)
         ret.add(title2.strip(u"„”"))
 
     title3 = addVillageToTitle(title, village)
     if title3 != title:
+        #print title3
 	ret.add(title3)
         ret.add(title3.replace(u"„", u"").replace(u"”", u""))
     title3 = addVillageToTitle(title2, village)
     if title3 != title2:
+        #print title3
 	ret.add(title3)
         ret.add(title3.replace(u"„", u"").replace(u"”", u""))
         
     if title == u'Casă':
         title = u'Casă din %s (%s)' % (village, address)
+        #print title
 	ret.add(title)
     if title == u'Gară':
         title = u'Gara din %s' % (village)
+        #print title
 	ret.add(title)
 
     if title.find(u"(") > -1:
-        title = title[:title.find(u"(")]
-        ret.add(title)
-        title3 = addVillageToTitle(title, village)
-        if title3 != title:
+        title2 = title[:title.find(u"(")]
+        #print title2
+        ret.add(title2)
+        title3 = addVillageToTitle(title2, village)
+        if title3 != title2:
+            #print title3
 	    ret.add(title3)
             ret.add(title3.replace(u"„", u"").replace(u"”", u""))
     if title.find(u",") > -1:
-        title = title[:title.find(u",")]
-        ret.add(title)
-        title3 = addVillageToTitle(title, village)
-        if title3 != title:
+        title2 = title[:title.find(u",")]
+        #print title2
+        ret.add(title2)
+        title3 = addVillageToTitle(title2, village)
+        if title3 != title2:
+            #print title3
 	    ret.add(title3)
             ret.add(title3.replace(u"„", u"").replace(u"”", u""))
     if title.find(u";") > -1:
-        title = title[:title.find(u";")]
-        ret.add(title)
-        title3 = addVillageToTitle(title, village)
-        if title3 != title:
+        title2 = title[:title.find(u";")]
+        #print title2
+        ret.add(title2)
+        title3 = addVillageToTitle(title2, village)
+        if title3 != title2:
+            #print title3
 	    ret.add(title3)
             ret.add(title3.replace(u"„", u"").replace(u"”", u""))
+
+    if title.find(u"azi ") > -1:
+        title2 = title[:title.find(u"azi ")]
+	if title2.endswith(u', '):
+            title2 = title2[:-2]
+        #print title2
+        ret.add(title2)
+        title2 = addVillageToTitle(title2, village)
+        #print title2
+        ret.add(title2)
+        title3 = title[title.find(u"azi ")+len(u"azi"):]
+        #print title3
+        ret.add(title3)
+        title3 = addVillageToTitle(title3, village)
+        #print title3
+        ret.add(title3)
+    #print ret
     return generateList(ret)
     
 def generateGallery(imageList, articleImage):
@@ -375,17 +411,17 @@ if __name__ == "__main__":
     j = json.load(f)
     pywikibot.output("...done")
     f.close()
-    f = open("lmi_db.json", "r+")
+    f = open("ro_lmi_db.json", "r+")
     pywikibot.output("Reading database file...")
     db = json.load(f, encoding="utf8")
     pywikibot.output("...done")
     f.close()
-    f = open("ro_pages.json", "r+")
+    f = open("ro_lmi_pages.json", "r+")
     pywikibot.output("Reading articles file...")
     art = json.load(f)
     pywikibot.output("...done")
     f.close()
-    f = open("commons_File_pages.json", "r+")
+    f = open("commons_lmi_File_pages.json", "r+")
     pywikibot.output("Reading images file...")
     images = json.load(f)
     pywikibot.output("...done")
@@ -430,17 +466,15 @@ if __name__ == "__main__":
                 for clasif in ['a', 's', 'm']:
                     for importance in ['A', 'B']:
                         check = subcode[0] + "-" + nature + "-" + clasif + "-" + importance + "-" + subcode[4] + "." + ("%02d" % suffix)
-                        #print check
+                        print check
                         if check in newdb:
                             submonuments.append(newdb[check])
                             break
                     else:
-                       continue
+                        continue
                     break
                 else:
                     continue
-                break
-            else:
                 break
 
         text = buildArticle(monument)
