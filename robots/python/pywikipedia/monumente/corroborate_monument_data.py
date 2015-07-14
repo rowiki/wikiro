@@ -81,7 +81,7 @@ import sys, time, warnings, json, string, random, re
 import math, urlparse, os
 import codecs
 import collections
-sys.path.append("..")
+sys.path.append(".")
 import strainu_functions as strainu
 import csvUtils
 
@@ -115,6 +115,8 @@ plan = 	[#all lowercase
 		u'plan',#plans are plans
 		u'v1',
 		u'v2',
+		u'reconstituire',
+		u'3d',
 	]
 
 countries = {
@@ -136,6 +138,8 @@ countries = {
 						(u'Creatori', {'code': Changes.creator, }),
 						(u'Lat', {'code': Changes.coord, }),
 						(u'Lon', {'code': Changes.coord, }),
+						(u'OsmLat', {'code': Changes.coord, }),
+						(u'OsmLon', {'code': Changes.coord, }),
 						(u'Imagine', {'code': Changes.image, 'blacklist': blacklist + plan}),
 						(u'Plan', {'code': Changes.image, 'blacklist': blacklist}),
 						(u'Commons', {'code': Changes.commons, }),
@@ -363,7 +367,7 @@ def parseArticleCoords(code, allPages):
 				artLon = page["long"]
 				artSrc = u"WP : " + page["name"]
 				updateCoord = True
-	return (artLat, artLon, artSrc, updateCoord)
+	return (artLat, artLon, artSrc, updateCoord, {"lat": u"Lat", "lon": u"Lon", "prefix": artSrc})
 
 def parseRanCoords(code, ran_data):
 	"""
@@ -373,6 +377,7 @@ def parseRanCoords(code, ran_data):
 	ranLon = 0
 	ranCod = u""
 	updateCoord = False
+	prefix = u"RAN"
 	for site in ran_data:
 		if site[u"Lat"] == u"" or site[u"Lon"] == u"":
 			continue
@@ -383,26 +388,26 @@ def parseRanCoords(code, ran_data):
 			updateCoord = True
 		elif math.fabs(ranLat - float(site["Lat"])) > _coordVariance or \
 			 math.fabs(ranLon - float(site["Lon"])) > _coordVariance:
-				log(u"* [RAN] ''E'': ''[%s]'' Coordonate diferite între RAN:%s (%f,%f) și RAN:%s (%f,%f)" % \
-					(code, site["Cod"], float(site["Lat"]), float(site["Lon"]), ranCod, ranLat, ranLon))
+				log(u"* [%s] ''E'': ''[%s]'' Coordonate diferite între RAN:%s (%f,%f) și RAN:%s (%f,%f)" % \
+					(prefix, code, site["Cod"], float(site["Lat"]), float(site["Lon"]), ranCod, ranLat, ranLon))
 				updateCoord = False
-	return (ranLat, ranLon, u"RAN: " + ranCod, updateCoord)
+	return (ranLat, ranLon, prefix + ranCod, updateCoord, {"lat": u"Lat", "lon": u"Lon", "prefix": prefix})
 	
-def parseOtherCoords(code, other_data):
+def parseOtherCoords(code, other_data, fields):
 	"""
 	search in external data
 	"""
 	updateCoord = False
 	otherLat = 0
 	otherLong = 0
-	if u"Lat" in other_data and u"Lon" in other_data:
+	if fields["lat"] in other_data and fields["lon"] in other_data:
 		try:
-			otherLat = float(other_data["Lat"])
-			otherLong = float(other_data["Lon"])
+			otherLat = float(other_data[fields["lat"]])
+			otherLong = float(other_data[fields["lon"]])
 			updateCoord = True
 		except ValueError:
 			pass
-	return (otherLat, otherLong, u"ALT: External data", updateCoord)
+	return (otherLat, otherLong, u"%s: External data" % fields["prefix"], updateCoord, fields)
 	
 def addRanData(code, monument, ran_data, articleText):
 	if code in ran_data:
@@ -427,13 +432,13 @@ def getImageType(image):
 	:type: string or None
 	"""	
 	search = image.lower()
-	print search
+	#print search
 	fields = countries.get((_lang, _db)).get('fields')
 	for field in fields:
-		print "*" + field
+		#print "*" + field
 		if fields[field]['code'] == Changes.image:
 			for skip in fields[field]['blacklist']:
-				print "**" + skip
+				#print "**" + skip
 				if search.find(skip) != -1:
 					break
 			else:
@@ -499,8 +504,8 @@ def main():
 	pages_local =			readJson("_".join(filter(None, [_lang, _db, "pages.json"])), _lang + ".wp pages")
 	authors_local =			readJson("_".join(filter(None, [_lang, _db, "authors.json"])), _lang + ".wp authors")
 	files_local =			readJson("_".join(filter(None, [_lang, _db,  pywikibot.Site().namespace(6), "pages.json"])), _lang + ".wp files")
-	categories_commons =		readJson("commons_lmi_Category_pages.json", "commons categories")
-	pages_commons =			readJson("commons_lmi_File_pages.json", "commons images")
+	categories_commons =		readJson("_".join(filter(None, ["commons", _db, "Category_pages.json"])), "commons categories")
+	pages_commons =			readJson("_".join(filter(None, ["commons", _db, "File_pages.json"])), "commons images")
 	
 	other_data = readOtherData(otherFile)
 	
@@ -754,13 +759,14 @@ def main():
 			otherCoords.append(parseRanCoords(code, ran_data[code]))
 		if code in other_data:
 			#print code
-			otherCoords.append(parseOtherCoords(code, other_data[code]))
+			otherCoords.append(parseOtherCoords(code, other_data[code], {"lat": u"Lat", "lon": u"Lon", "prefix": u"ALT"}))
+			otherCoords.append(parseOtherCoords(code, other_data[code], {"lat": u"OsmLat", "lon": u"OsmLon", "prefix": u"OSM"}))
 
-		for (otherLat, otherLong, otherSrc, otherValid) in otherCoords:
+		for (otherLat, otherLong, otherSrc, otherValid, otherFields) in otherCoords:
 			if (otherLat > 0 and strainu.getSec(otherLat) == 0) and \
 				(otherLong > 0 and strainu.getSec(otherLong) == 0):
-				log(u"* [%s] ''W'': ''[%s]'' Coordonatele (%f,%f) au nevoie de o verificare - secundele sunt 0" \
-				 %(otherSrc[:3], code, otherLat, otherLong))
+				log(u"* [%s] ''W'': ''[%s]'' Coordonatele (%f,%f) din %s au nevoie de o verificare - secundele sunt 0" \
+				 %(otherSrc[:3], code, otherLat, otherLong, otherSrc))
 				otherValid = False
 				continue
 			elif (otherLat > 0 or otherLong > 0) and \
@@ -769,7 +775,7 @@ def main():
 				otherLong > countries.get((_lang, _db)).get('geolimits').get('east') or \
 				otherLong < countries.get((_lang, _db)).get('geolimits').get('west')) :
 				log(u"* [%s] ''W'': ''[%s]'' Coordonatele (%f,%f) au nevoie de o verificare - nu par " \
-						"a fi din Romania" %	(otherSrc[:3], code, otherLat, otherLong))
+						u"a fi din România" %	(otherSrc[:3], code, otherLat, otherLong))
 				otherValid = False
 				continue
 			if lat <> 0 and \
@@ -791,12 +797,10 @@ def main():
 				ask = True
 				#if otherSrc[5:] == monument["CodRan"]:
 				#	ask = False
-				uploadlat = False
-				if "Lon" in monument and monument["Lon"] != "":
-					uploadlat = True
-				articleText = updateTableData(monument["source"], code, "Lat", str(otherLat), 
+				uploadlat = ("Lon" in monument and monument["Lon"] != "")
+				articleText = updateTableData(monument["source"], code, otherFields["lat"], str(otherLat), 
 								upload = uploadlat, text = articleText, ask = ask)
-				articleText = updateTableData(monument["source"], code, "Lon", str(otherLong), 
+				articleText = updateTableData(monument["source"], code, otherFields["lon"], str(otherLong), 
 								upload = True, text = articleText, ask = ask)
 			
 		#Codes from 1992
