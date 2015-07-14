@@ -144,7 +144,7 @@ def main():
 		if monument["Plan"].strip() <> "":
 			#images += 1
 			plans += 1
-		if monument["Lat"] <> "" or monument["Lon"] <> "":
+		if monument["Lat"] <> "" or monument["Lon"] <> "" or monument["OsmLat"] <> "" or monument["OsmLon"] <> "":
 			coords += 1
 		if monument["Creatori"] <> "":
 			authors += 1

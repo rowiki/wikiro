@@ -42,6 +42,8 @@ countries = {
 			u'Creatori',
 			u'Lat',
 			u'Lon',
+			u'OsmLat',
+			u'OsmLon',
 			u'Imagine',
 			u'Plan',
 			u'Commons',
