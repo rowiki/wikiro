@@ -29,30 +29,78 @@ def log(string):
 	_flog.write(string.encode("utf8") + "\n")
 
 def commonsImage(image):
-	site = pywikibot.getSite('commons', 'commons')
+	site = pywikibot.Site('commons', 'commons')
+	print image
         try:
                 page = pywikibot.Page(site, image)
 		if not page.exists():
+			print "Page does not exists on commons"
 			return None
                 if page.isRedirectPage():
                         page = page.getRedirectTarget()
 
-        except Exception:
+        except Exception as e:
+		print e
                 return None
 	return page
 
 def localImage(image):
-	site = pywikibot.getSite('ro', 'wikipedia')
+	site = pywikibot.Site('ro', 'wikipedia')
 	try:
 		page = pywikibot.Page(site, image)
 		if not page.exists():
+			print "Page does not exists on ro.wp"
 			return None
 		if page.isRedirectPage():
 			page = page.getRedirectTarget()
 	except Exception as e:
 		return None
 	return page
-	
+
+def checkForCode(page):
+	regexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
+	ret = re.findall(regexp, page.get())
+	if len(ret) == 0:
+		return None
+	else:
+		return ret[0][0]
+
+def addCodeToTemplate(page, code):
+	if code == None:
+		return
+	templates = page.templatesWithParams()
+        info_params = None
+        text = page.get()
+        for (template, params) in templates:
+                #print template
+                if unicode(template.title(withNamespace = False)) == u"Information" or unicode(template.title(withNamespace = False)) == u"Informații":
+                        pass
+                        info_params = params
+                        #print params
+
+        #print text
+        addedText = "{{Monument istoric|%s}}" % code
+        if info_params == None:
+                text = addedText + "\n" + text
+                #print text
+                page.put(text, comment="Adding {{tl|Monument istoric}}")
+        else:
+                description = None
+                for param in info_params:
+                        pos = unicode(param.lower()).find(u"descri")
+                        if  pos == 0 or (pos > 0 and param[0:pos].strip() == ""):
+                                description = unicode(param)
+                                break
+                if description:
+                        #print addedText
+                        new = description + addedText + "\n"
+                        #print new
+                        text = text.replace(description, new)
+                        #print text
+                        page.put(text, comment="Adding {{tl|Monument istoric}}")
+                else:
+                        log(u"E: Imaginea pentru %s are formatul {{f|information}} dar nu și o descriere" % code)
+
 def list2commons(db):
 	#this is the big loop that should only happen once
 	for monument in db:
@@ -104,7 +152,8 @@ def list2commons(db):
 			addedText = "{{Monument istoric|%s}}" % code
 			if info_params == None:
 				text = addedText + "\n" + text
-				#print text
+				print text
+				pywikibot.input()
 				page.put(text, comment="Adding {{tl|Monument istoric}}")
 			else:
 				description = None
@@ -181,12 +230,37 @@ def cat2commons(cat):
 			else:
 				log(u"E: Imaginea pentru %s are formatul {{f|information}} dar nu și o descriere" % code)
 
+def article2commons(article):
+	site = pywikibot.Site('ro', 'wikipedia')
+	if article == None:
+		return
+	art = pywikibot.Page(site, title=article)
+	code = checkForCode(art)
+	for image in pagegenerators.ImagesPageGenerator(art):
+		title = image.title().replace(u'Fișier', u'File').replace(u'Imagine', u'File')
+		if title.find("logo")>-1 or \
+			title.find("coa")>-1 or\
+			title.find("Coa")>-1:
+			continue
+		page = commonsImage(title)
+		if page == None:
+			page = image
+		imagecode = checkForCode(page)
+		if imagecode == None:
+			print code
+			addCodeToTemplate(page, code)
+		elif imagecode != code:
+			log(u"W: Nepotrivire între codul din articol (%s) și unul din codurile din imagine (%s)" % (code, imagecode))
+
 def main():
 	cat = None
+	pg = None
 	
 	for arg in pywikibot.handleArgs():
 		if arg.startswith('-cat'):
 			cat = arg [len('-cat:'):]
+		if arg.startswith('-pg'):
+			pg = arg[len('-pg:'):]
 	initLog()
 	f = open("ro_lmi_db.json", "r+")
 	pywikibot.output("Reading database file...")
@@ -198,13 +272,15 @@ def main():
 	categs = json.load(f)
 	pywikibot.output("...done")
 	f.close();
+	#list2commons(db)
 	if cat:
 		for code in categs.keys():
 			if categs[code][0][u"name"] != cat:
 				del categs[code]
-	print categs
-	#list2commons(db)
-	cat2commons(categs)
+		print categs
+		cat2commons(categs)
+	if pg:
+		article2commons(pg)
 	closeLog()
 
 if __name__ == "__main__":
