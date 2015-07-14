@@ -152,7 +152,7 @@ minormistakes = {
 	u'deoparte(\s*)': u'de o parte ',
 	u' și(de|a|pe)': u' și \g<1>',
 	u' k ': u' km ',
-	u'([^aeiourpăâc\(" ])și': u'\g<1> și',
+	u'([^aeiourpăâc\(_" ])și': u'\g<1> și',
 	u' de([bg])': u' de \g<1>',
 	u' de(pe|la|sub|peste|o|lemn|locul) ': u' de \g<1> ',
 	u' la(vecini|extremitatea) ': u' de \g<1> ',
@@ -170,6 +170,13 @@ minormistakes = {
 	u'satpedrum': u'sat pe drum',
 	u'([Aa])ripade(.*)': u'\g<1>ripa de \g<2>',
 	u'([VE])a ': u'\g<1> a ',
+	u'ridin': u'ri din',
+	u'\[\[(.*)_(.*)\]\]': u'[[\g<1> \g<2>]]',
+	u'(\s?)-(\s?)catolică': u'-catolică',
+	u'o(\s?)-(\s?)(dac|roman)': u'o-\g<3>',
+	#u'(\| (?!Imagine|Commons|NotăCod))(.*) -([^\s])': u'\g<1>\g<2>-\g<3>',
+	#u'(\| (?!Imagine|Commons|NotăCod))(.*)([^\s])- ': u'\g<1>\g<2>\g<3>-',
+	u'([Cc])as([aă])d': u'\g<1>as\g<2> d',
 }
 
 deprecated = {
@@ -211,8 +218,8 @@ def processList(page):
 	origtext = text = page.get()
 	changed = False
 	#comment = u'Înlocuiesc spațiul cu non-breaking space (U+00A0) în unitățile de distranță din articolul [[%s]]' % page.title(True)
-	comment = u'Scot câmpul învechite din {{ElementLMI}} în articolul [[%s]]' % page.title(True)
-	#comment = u'Se corectează anumite erori frecvente din articolul [[%s]]' % page.title(True)
+	#comment = u'Scot câmpul învechite din {{ElementLMI}} în articolul [[%s]]' % page.title(True)
+	comment = u'Se corectează anumite erori frecvente din articolul [[%s]]' % page.title(True)
 	#for mistake in improvements.keys():
 	#	newtext = re.sub(mistake, improvements[mistake], text)
 	#	if text <> newtext:
@@ -223,16 +230,16 @@ def processList(page):
 	#	if newtext != text:
 	#		text = checkAndUpload(page, text, newtext, comment)
 	
-	#for mistake in minormistakes.keys():
-	#	newtext = re.sub(mistake, minormistakes[mistake], text)
-	#	if newtext != text:
-	#		print mistake
-	#		text = checkAndUpload(page, text, newtext, comment)
-	for field in deprecated.keys():
-		newtext = re.sub(field, deprecated[field], text)
-		if text <> newtext:
-			changed = True
-			text = newtext
+	for mistake in minormistakes.keys():
+		newtext = re.sub(mistake, minormistakes[mistake], text)
+		if newtext != text:
+			print mistake
+			text = checkAndUpload(page, text, newtext, comment)
+	#for field in deprecated.keys():
+	#	newtext = re.sub(field, deprecated[field], text)
+	#	if text <> newtext:
+	#		changed = True
+	#		text = newtext
 	if changed == True:
 		pywikibot.showDiff(origtext, text)
 		resp = pywikibot.input("Do you agree with ALL the changes above? [y/n]")
