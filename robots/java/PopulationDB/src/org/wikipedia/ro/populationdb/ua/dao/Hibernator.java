@@ -233,8 +233,9 @@ public class Hibernator {
 
     public List<Raion> findOuterRaionsForCity(Commune city) {
         final Session ses = sessionFactory.getCurrentSession();
-        final Query q = ses.createQuery("select raion from Raion raion left join raion.capital as c where c=:city");
+        final Query q = ses.createQuery("select raion from Raion raion left join raion.capital as c where c=:city and raion.miskrada=:nu");
         q.setParameter("city", city);
+        q.setParameter("nu", false);
         return q.list();
     }
 
