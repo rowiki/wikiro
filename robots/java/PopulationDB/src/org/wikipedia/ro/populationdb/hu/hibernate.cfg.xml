@@ -6,7 +6,7 @@
 	<session-factory>
 		<!-- Database connection settings -->
 		<property name="connection.driver_class">org.postgresql.Driver</property>
-		<property name="connection.url">jdbc:postgresql://localhost/populatie_ungaria_2011</property>
+		<property name="connection.url">jdbc:postgresql://192.168.1.10/populatie_ungaria_2011</property>
 		<property name="connection.username">postgres</property>
 		<property name="connection.password">postgres</property>
 
