@@ -211,6 +211,8 @@ public class UAWikiGenerator {
         regionsFinished.add("Kîiiv");
         regionsFinished.add("Kirovohrad");
         regionsFinished.add("Krîm");
+        regionsFinished.add("Luhansk");
+        
         String regionWithCitiesFinished = "";
 
         for (final Region eachReg : regions) {
@@ -218,19 +220,9 @@ public class UAWikiGenerator {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
-            raionsFinished.addAll(Arrays.asList("Antrațît", "Bilokurakîne",
-                    "Bilovodsk", "Krasnodon", "Kreminna", "Lutuhîne",
-                    "Markivka", "Milove", "Novoaidar", "Novopskov",
-                    "Perevalsk", "Popasna", "Sloveanoserbsk",
-                    "Stanîcino-Luhanske", "Starobilsk", "Svatove",
-                    "Sverdlovsk", "Troițke"));
+            raionsFinished.addAll(Arrays.asList(""));
             Set<String> miskradasFinished = new HashSet<String>();
-            miskradasFinished.addAll(Arrays.asList("Alcevsk", "Antrațît",
-                    "Kirovsk", "Breanka", "Cervonopartîzansk", "Hirske",
-                    "Krasnîi Luci", "Krasnodon", "Lîsîceansk", "Luhansk",
-                    "Molodohvardiisk", "Pervomaisk", "Rubijne",
-                    "Sieverodonețk", "Stahanov", "Suhodilsk", "Sverdlovsk",
-                    "Zolote", "Rovenkî"));
+            miskradasFinished.addAll(Arrays.asList("Borîslav"));
 
             for (final Raion raion : eachReg.getRaioane()) {
                 if (!raion.isMiskrada() && raionsFinished.contains(raion.getTransliteratedName())) {
