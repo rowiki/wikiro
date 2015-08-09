@@ -46,65 +46,68 @@ import au.com.bytecode.opencsv.CSVReader;
 
 public class UAPercentagesParser {
 
-    private static File[] files;
+	private static File[] files;
 
-    public UAPercentagesParser(final File[] files2) {
-        final List<File> fileList = new ArrayList<File>();
-        fileList.addAll(Arrays.asList(files2));
-        Collections.sort(fileList, new Comparator<File>() {
+	public UAPercentagesParser(final File[] files2) {
+		final List<File> fileList = new ArrayList<File>();
+		fileList.addAll(Arrays.asList(files2));
+		Collections.sort(fileList, new Comparator<File>() {
 
-            public int compare(final File arg0, final File arg1) {
-                return arg0.getName().compareTo(arg1.getName());
-            }
-        });
-        this.files = fileList.toArray(new File[fileList.size()]);
-    }
+			public int compare(final File arg0, final File arg1) {
+				return arg0.getName().compareTo(arg1.getName());
+			}
+		});
+		this.files = fileList.toArray(new File[fileList.size()]);
+	}
 
-    private static Wiki rowiki = null;
+	private static Wiki rowiki = null;
 
-    public static void main(final String[] args) {
-        if (args.length < 1) {
-            System.out.println("Missing argument to point directory with data xls files");
-            // System.exit(1);
-        }
-        final File inDir = new File(args[0]);
-        if (!inDir.isDirectory()) {
-            System.out.println("Specified argument is not an existing directory");
-            // System.exit(1);
-        }
-        rowiki = new Wiki("ro.wikipedia.org");
-        try {
-            final Properties credentials = new Properties();
-            credentials.load(UAPercentagesParser.class.getClassLoader().getResourceAsStream("credentials.properties"));
-            final String user = credentials.getProperty("Username");
-            final String pass = credentials.getProperty("Password");
-            rowiki.login(user, pass.toCharArray());
+	public static void main(final String[] args) {
+		if (args.length < 1) {
+			System.out
+					.println("Missing argument to point directory with data xls files");
+			// System.exit(1);
+		}
+		final File inDir = new File(args[0]);
+		if (!inDir.isDirectory()) {
+			System.out
+					.println("Specified argument is not an existing directory");
+			// System.exit(1);
+		}
+		rowiki = new Wiki("ro.wikipedia.org");
+		try {
+			final Properties credentials = new Properties();
+			credentials.load(UAPercentagesParser.class.getClassLoader()
+					.getResourceAsStream("credentials.properties"));
+			final String user = credentials.getProperty("Username");
+			final String pass = credentials.getProperty("Password");
+			rowiki.login(user, pass.toCharArray());
 
-            final File[] files = inDir.listFiles(new FileFilter() {
+			final File[] files = inDir.listFiles(new FileFilter() {
 
-                public boolean accept(File arg0) {
-                    return true;
-                    // return arg0.getName().contains("kirovohrad");
-                }
-            });
-            final UAPercentagesParser parser = new UAPercentagesParser(files);
+				public boolean accept(File arg0) {
+					return true;
+					// return arg0.getName().contains("kirovohrad");
+				}
+			});
+			final UAPercentagesParser parser = new UAPercentagesParser(files);
 
-            // parser.parse();
+			// parser.parse();
 
-            parser.performCorrection();
-            
-        } catch (final IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (final FailedLoginException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } finally {
-            rowiki.logout();
-        }
-    }
+			parser.performCorrection();
 
-    public void performCorrection() {
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final FailedLoginException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			rowiki.logout();
+		}
+	}
+
+	public void performCorrection() {
         final Hibernator hib = new Hibernator();
         Session ses = hib.getSession();
         ses.beginTransaction();
@@ -524,668 +527,802 @@ public class UAPercentagesParser {
         setCommuneUkrainianNameTo(hib, "Нижня Апша", "Нижньоапшанська", "Dibrova", "Teaciv", "Zakarpatska");
         setVillageRomanianNameTo(hib, "Apșa de Mijloc", "Serednie Vodeane", "Serednie Vodeane", "Rahiv", "Zakarpatska");
         setCommuneRomanianNameTo(hib, "Apșa de Mijloc", "Serednie Vodeane", "Rahiv", "Zakarpatska");
+        setCommuneRomanianNameTo(hib, "Cetatea Albă", "Bilhorod Dnistrovskîi", null, "Odesa");
+        
+        Region odesaRegion = hib.getRegionByTransliteratedName("Odesa");
+        Raion cetAlba = hib.getRaionByTransliteratedNameAndRegion("Bilhorod-Dnistrovskîi", odesaRegion);
 
         ses.getTransaction().commit();
     }
 
-    private void setCommuneUkrainianNameTo(Hibernator hib, String toName, String toOriginalName, String fromName,
-                                           String raionName, String regionName) {
-        Region reg = hib.getRegionByTransliteratedName(regionName);
-        if (null == reg) {
-            return;
-        }
-        Raion raion = hib.getRaionByTransliteratedNameAndRegion(raionName, reg);
-        if (null == raion) {
-            return;
-        }
-        Commune com = hib.getCommuneByTransliteratedNameAndRaion(fromName, raion);
-        if (null == com) {
-            return;
-        }
-        if (null != toName) {
-            com.setName(toName);
-            com.setTransliteratedName(new UkrainianTransliterator(toName).transliterate());
-        }
-        if (null != toOriginalName)
-            com.setOriginalName(toOriginalName);
-        hib.getSession().saveOrUpdate(com);
-    }
+	private void setCommuneUkrainianNameTo(Hibernator hib, String toName,
+			String toOriginalName, String fromName, String raionName,
+			String regionName) {
+		Region reg = hib.getRegionByTransliteratedName(regionName);
+		if (null == reg) {
+			return;
+		}
+		Raion raion = hib.getRaionByTransliteratedNameAndRegion(raionName, reg);
+		if (null == raion) {
+			return;
+		}
+		Commune com = hib.getCommuneByTransliteratedNameAndRaion(fromName,
+				raion);
+		if (null == com) {
+			return;
+		}
+		if (null != toName) {
+			com.setName(toName);
+			com.setTransliteratedName(new UkrainianTransliterator(toName)
+					.transliterate());
+		}
+		if (null != toOriginalName)
+			com.setOriginalName(toOriginalName);
+		hib.getSession().saveOrUpdate(com);
+	}
 
-    private void setCommuneRomanianNameTo(Hibernator hib, String toName, String fromName, String raionName, String regionName) {
-        Region reg = hib.getRegionByTransliteratedName(regionName);
-        if (null == reg) {
-            return;
-        }
-        Raion raion = hib.getRaionByTransliteratedNameAndRegion(raionName, reg);
-        if (null == raion) {
-            return;
-        }
-        Commune com = hib.getCommuneByTransliteratedNameAndRaion(fromName, raion);
-        if (null == com) {
-            return;
-        }
+	private void setCommuneRomanianNameTo(Hibernator hib, String toName,
+			String fromName, String raionName, String regionName) {
+		Region reg = hib.getRegionByTransliteratedName(regionName);
+		if (null == reg) {
+			return;
+		}
 
-        com.setRomanianName(toName);
-        hib.getSession().saveOrUpdate(com);
-    }
+		Raion raion = null;
+		if (null != raionName) {
+			raion = hib.getRaionByTransliteratedNameAndRegion(raionName, reg);
+			if (null == raion) {
+				return;
+			}
+		}
+		Commune com = null;
+		if (null != raionName) {
+			com = hib.getCommuneByTransliteratedNameAndRaion(fromName, raion);
+		} else {
+			com = hib.getCommuneByTransliteratedNameAndRegion(fromName, reg);
+		}
+		if (null == com) {
+			return;
+		}
 
-    private void setVillageRomanianNameTo(Hibernator hib, String toName, String fromName, String communeName,
-                                          String raionName, String regionName) {
-        Region reg = hib.getRegionByTransliteratedName(regionName);
-        if (null == reg) {
-            return;
-        }
-        Raion raion = hib.getRaionByTransliteratedNameAndRegion(raionName, reg);
-        if (null == raion) {
-            return;
-        }
-        Commune com = hib.getCommuneByTransliteratedNameAndRaion(communeName, raion);
-        if (null == com) {
-            return;
-        }
-        Settlement village = hib.getSettlementByTransliteratedNameAndCommune(fromName, com);
-        if (null == village) {
-            return;
-        }
+		com.setRomanianName(toName);
+		hib.getSession().saveOrUpdate(com);
+	}
 
-        village.setRomanianName(toName);
-        hib.getSession().saveOrUpdate(village);
-    }
+	private void setVillageRomanianNameTo(Hibernator hib, String toName,
+			String fromName, String communeName, String raionName,
+			String regionName) {
+		Region reg = hib.getRegionByTransliteratedName(regionName);
+		if (null == reg) {
+			return;
+		}
+		Raion raion = hib.getRaionByTransliteratedNameAndRegion(raionName, reg);
+		if (null == raion) {
+			return;
+		}
+		Commune com = hib.getCommuneByTransliteratedNameAndRaion(communeName,
+				raion);
+		if (null == com) {
+			return;
+		}
+		Settlement village = hib.getSettlementByTransliteratedNameAndCommune(
+				fromName, com);
+		if (null == village) {
+			return;
+		}
 
-    private void setVillageUkrainianNameTo(Hibernator hib, String toName, String fromTranslName, String communeName,
-                                           String raionName, String regionName) {
-        Region reg = hib.getRegionByTransliteratedName(regionName);
-        if (null == reg) {
-            return;
-        }
-        Raion raion = hib.getRaionByTransliteratedNameAndRegion(raionName, reg);
-        if (null == raion) {
-            return;
-        }
-        Commune com = hib.getCommuneByTransliteratedNameAndRaion(communeName, raion);
-        if (null == com) {
-            return;
-        }
-        Settlement village = hib.getSettlementByTransliteratedNameAndCommune(fromTranslName, com);
-        if (null == village) {
-            return;
-        }
+		village.setRomanianName(toName);
+		hib.getSession().saveOrUpdate(village);
+	}
 
-        village.setName(toName);
-        village.setTransliteratedName(new UkrainianTransliterator(toName).transliterate());
-        hib.getSession().saveOrUpdate(village);
-    }
+	private void setVillageUkrainianNameTo(Hibernator hib, String toName,
+			String fromTranslName, String communeName, String raionName,
+			String regionName) {
+		Region reg = hib.getRegionByTransliteratedName(regionName);
+		if (null == reg) {
+			return;
+		}
+		Raion raion = hib.getRaionByTransliteratedNameAndRegion(raionName, reg);
+		if (null == raion) {
+			return;
+		}
+		Commune com = hib.getCommuneByTransliteratedNameAndRaion(communeName,
+				raion);
+		if (null == com) {
+			return;
+		}
+		Settlement village = hib.getSettlementByTransliteratedNameAndCommune(
+				fromTranslName, com);
+		if (null == village) {
+			return;
+		}
 
-    private void resetVillageRomanianName(Hibernator hib, String string) {
-        List<Settlement> villagesWithName = hib.findAllVillagesWithName(string);
-        for (Settlement eachVillage : villagesWithName) {
-            eachVillage.setRomanianName("");
-            hib.getSession().saveOrUpdate(eachVillage);
-        }
-    }
+		village.setName(toName);
+		village.setTransliteratedName(new UkrainianTransliterator(toName)
+				.transliterate());
+		hib.getSession().saveOrUpdate(village);
+	}
 
-    private void resetVillageRomanianNameExceptIds(Hibernator hib, String string, long... ids) {
-        List<Settlement> villagesWithName = hib.findAllVillagesWithName(string);
-        for (Settlement eachVillage : villagesWithName) {
-            if (ArrayUtils.contains(ids, eachVillage.getId())) {
-                continue;
-            }
-            eachVillage.setRomanianName("");
-            hib.getSession().saveOrUpdate(eachVillage);
-        }
-    }
+	private void resetVillageRomanianName(Hibernator hib, String string) {
+		List<Settlement> villagesWithName = hib.findAllVillagesWithName(string);
+		for (Settlement eachVillage : villagesWithName) {
+			eachVillage.setRomanianName("");
+			hib.getSession().saveOrUpdate(eachVillage);
+		}
+	}
 
-    private void resetCommuneRomanianNameExceptIds(Hibernator hib, String string, long... ids) {
-        List<Commune> communesWithName = hib.findAllCommunesWithName(string);
-        for (Commune eachVillage : communesWithName) {
-            if (ArrayUtils.contains(ids, eachVillage.getId())) {
-                continue;
-            }
-            eachVillage.setRomanianName("");
-            hib.getSession().saveOrUpdate(eachVillage);
-        }
-    }
+	private void resetVillageRomanianNameExceptIds(Hibernator hib,
+			String string, long... ids) {
+		List<Settlement> villagesWithName = hib.findAllVillagesWithName(string);
+		for (Settlement eachVillage : villagesWithName) {
+			if (ArrayUtils.contains(ids, eachVillage.getId())) {
+				continue;
+			}
+			eachVillage.setRomanianName("");
+			hib.getSession().saveOrUpdate(eachVillage);
+		}
+	}
 
-    private void fixCityWithoutRaionOrRegionBySettingRegionalTown(Hibernator hib, String cityTranslName,
-                                                                  String miskradaTranslName, String regionTranslName) {
-        Session ses = hib.getSession();
-        Commune city = hib.getUnassignedCommuneByTransliteratedName(cityTranslName);
-        if (null == city) {
-            return;
-        }
-        Region reg = hib.getRegionByTransliteratedName(regionTranslName);
-        if (null == reg) {
-            return;
-        }
-        Raion raion = hib.getMiskradaByTransliteratedNameAndRegion(miskradaTranslName, reg);
-        if (null == raion) {
-            return;
-        }
-        city.setRaion(raion);
-        ses.saveOrUpdate(city);
-    }
+	private void resetCommuneRomanianNameExceptIds(Hibernator hib,
+			String string, long... ids) {
+		List<Commune> communesWithName = hib.findAllCommunesWithName(string);
+		for (Commune eachVillage : communesWithName) {
+			if (ArrayUtils.contains(ids, eachVillage.getId())) {
+				continue;
+			}
+			eachVillage.setRomanianName("");
+			hib.getSession().saveOrUpdate(eachVillage);
+		}
+	}
 
-    private void fixRaionNameAndCapitalByTransliteratedNames(final Hibernator hib, final String regionName,
-                                                             final String raionWrongName, final String correctCapitalName) {
-        final Region reg = hib.getRegionByTransliteratedName(regionName);
-        if (null != reg) {
-            final Raion raion = hib.getRaionByTransliteratedNameAndRegion(raionWrongName, reg);
-            if (null != raion) {
-                final Commune com = hib.getCommuneByTransliteratedNameAndRegion(correctCapitalName, reg);
-                if (null != com) {
-                    raion.setTransliteratedName(com.getTransliteratedName());
-                    raion.setName(com.getName());
-                    raion.setRomanianName(com.getRomanianName());
-                    raion.setCapital(com);
-                    final Session ses = hib.getSession();
-                    ses.saveOrUpdate(raion);
-                }
-            }
-        }
-    }
+	private void fixCityWithoutRaionOrRegionBySettingRegionalTown(
+			Hibernator hib, String cityTranslName, String miskradaTranslName,
+			String regionTranslName) {
+		Session ses = hib.getSession();
+		Commune city = hib
+				.getUnassignedCommuneByTransliteratedName(cityTranslName);
+		if (null == city) {
+			return;
+		}
+		Region reg = hib.getRegionByTransliteratedName(regionTranslName);
+		if (null == reg) {
+			return;
+		}
+		Raion raion = hib.getMiskradaByTransliteratedNameAndRegion(
+				miskradaTranslName, reg);
+		if (null == raion) {
+			return;
+		}
+		city.setRaion(raion);
+		ses.saveOrUpdate(city);
+	}
 
-    private void fixCityWithoutRaionOrRegionBySettingRegion(Hibernator hib, String cityTranslName, String regionTranslName) {
-        Session ses = hib.getSession();
-        Commune city = hib.getUnassignedCommuneByTransliteratedName(cityTranslName);
-        if (null == city) {
-            return;
-        }
-        Region reg = hib.getRegionByTransliteratedName(regionTranslName);
-        if (null == reg) {
-            return;
-        }
-        city.setRegion(reg);
-        ses.saveOrUpdate(city);
-    }
+	private void fixRaionNameAndCapitalByTransliteratedNames(
+			final Hibernator hib, final String regionName,
+			final String raionWrongName, final String correctCapitalName) {
+		final Region reg = hib.getRegionByTransliteratedName(regionName);
+		if (null != reg) {
+			final Raion raion = hib.getRaionByTransliteratedNameAndRegion(
+					raionWrongName, reg);
+			if (null != raion) {
+				final Commune com = hib
+						.getCommuneByTransliteratedNameAndRegion(
+								correctCapitalName, reg);
+				if (null != com) {
+					raion.setTransliteratedName(com.getTransliteratedName());
+					raion.setName(com.getName());
+					raion.setRomanianName(com.getRomanianName());
+					raion.setCapital(com);
+					final Session ses = hib.getSession();
+					ses.saveOrUpdate(raion);
+				}
+			}
+		}
+	}
 
-    private void fixCityWithoutRaionOrRegionBySettingRaion(Hibernator hib, String cityTranslName, String raionTranslName,
-                                                           String regionTranslName) {
-        Session ses = hib.getSession();
-        Commune city = hib.getUnassignedCommuneByTransliteratedName(cityTranslName);
-        if (null == city) {
-            return;
-        }
-        Region reg = hib.getRegionByTransliteratedName(regionTranslName);
-        if (null == reg) {
-            return;
-        }
-        Raion raion = hib.getRaionByTransliteratedNameAndRegion(raionTranslName, reg);
-        if (null == raion) {
-            return;
-        }
-        city.setRaion(raion);
-        ses.saveOrUpdate(city);
-    }
+	private void fixCityWithoutRaionOrRegionBySettingRegion(Hibernator hib,
+			String cityTranslName, String regionTranslName) {
+		Session ses = hib.getSession();
+		Commune city = hib
+				.getUnassignedCommuneByTransliteratedName(cityTranslName);
+		if (null == city) {
+			return;
+		}
+		Region reg = hib.getRegionByTransliteratedName(regionTranslName);
+		if (null == reg) {
+			return;
+		}
+		city.setRegion(reg);
+		ses.saveOrUpdate(city);
+	}
 
-    public void parse() {
-        final Hibernator hib = new Hibernator();
-        Session session = hib.getSession();
-        session.beginTransaction();
+	private void fixCityWithoutRaionOrRegionBySettingRaion(Hibernator hib,
+			String cityTranslName, String raionTranslName,
+			String regionTranslName) {
+		Session ses = hib.getSession();
+		Commune city = hib
+				.getUnassignedCommuneByTransliteratedName(cityTranslName);
+		if (null == city) {
+			return;
+		}
+		Region reg = hib.getRegionByTransliteratedName(regionTranslName);
+		if (null == reg) {
+			return;
+		}
+		Raion raion = hib.getRaionByTransliteratedNameAndRegion(
+				raionTranslName, reg);
+		if (null == raion) {
+			return;
+		}
+		city.setRaion(raion);
+		ses.saveOrUpdate(city);
+	}
 
-        final List<Language> limbi = new ArrayList<Language>();
-        limbi.add(new Language("Ucraineană"));
-        limbi.add(new Language("Rusă"));
-        limbi.add(new Language("Belarusă"));
-        limbi.add(new Language("Bulgară"));
-        limbi.add(new Language("Armeană"));
-        limbi.add(new Language("Găgăuză"));
-        limbi.add(new Language("Tătară crimeeană"));
-        limbi.add(new Language("Română"));
-        limbi.add(new Language("Germană"));
-        limbi.add(new Language("Polonă"));
-        limbi.add(new Language("Romani"));
-        limbi.add(new Language("Slovacă"));
-        limbi.add(new Language("Maghiară"));
-        limbi.add(new Language("Karaim"));
-        limbi.add(new Language("Ebraică"));
-        limbi.add(new Language("Greacă"));
-        for (final Language lang : limbi) {
-            session.save(lang);
-        }
+	public void parse() {
+		final Hibernator hib = new Hibernator();
+		Session session = hib.getSession();
+		session.beginTransaction();
 
-        session.getTransaction().commit();
+		final List<Language> limbi = new ArrayList<Language>();
+		limbi.add(new Language("Ucraineană"));
+		limbi.add(new Language("Rusă"));
+		limbi.add(new Language("Belarusă"));
+		limbi.add(new Language("Bulgară"));
+		limbi.add(new Language("Armeană"));
+		limbi.add(new Language("Găgăuză"));
+		limbi.add(new Language("Tătară crimeeană"));
+		limbi.add(new Language("Română"));
+		limbi.add(new Language("Germană"));
+		limbi.add(new Language("Polonă"));
+		limbi.add(new Language("Romani"));
+		limbi.add(new Language("Slovacă"));
+		limbi.add(new Language("Maghiară"));
+		limbi.add(new Language("Karaim"));
+		limbi.add(new Language("Ebraică"));
+		limbi.add(new Language("Greacă"));
+		for (final Language lang : limbi) {
+			session.save(lang);
+		}
 
-        for (final File eachFile : files) {
-            session = hib.getSession();
-            session.beginTransaction();
-            CSVReader reader = null;
-            try {
+		session.getTransaction().commit();
 
-                reader = new CSVReader(new InputStreamReader(new FileInputStream(eachFile), "Cp1251"), '\t', '\"');
-                String[] line = null;
-                for (int i = 0; i < 5; i++) {
-                    line = reader.readNext();
-                }
-                Commune currentCommune = null;
-                int currentCommuneLevel = 2;
-                Raion currentRaion = null;
-                Region currentRegion = null;
-                while (null != (line = reader.readNext())) {
-                    final String nume = line[0];
-                    if (isEmpty(nume) || line.length < 2) {
-                        continue;
-                    }
-                    final Transliterator t = new UkrainianTransliterator(nume);
-                    final String numeTransliterat = t.transliterate();
+		for (final File eachFile : files) {
+			session = hib.getSession();
+			session.beginTransaction();
+			CSVReader reader = null;
+			try {
 
-                    final String[] splitName = split(numeTransliterat);
-                    final String[] splitNameUa = split(nume);
+				reader = new CSVReader(new InputStreamReader(
+						new FileInputStream(eachFile), "Cp1251"), '\t', '\"');
+				String[] line = null;
+				for (int i = 0; i < 5; i++) {
+					line = reader.readNext();
+				}
+				Commune currentCommune = null;
+				int currentCommuneLevel = 2;
+				Raion currentRaion = null;
+				Region currentRegion = null;
+				while (null != (line = reader.readNext())) {
+					final String nume = line[0];
+					if (isEmpty(nume) || line.length < 2) {
+						continue;
+					}
+					final Transliterator t = new UkrainianTransliterator(nume);
+					final String numeTransliterat = t.transliterate();
 
-                    if (splitName.length < 2) {
-                        continue;
-                    }
+					final String[] splitName = split(numeTransliterat);
+					final String[] splitNameUa = split(nume);
 
-                    // regiune
-                    if (ArrayUtils.contains(splitName, "OBLAST")
-                        || (ArrayUtils.contains(splitName, "KRÎM") && ArrayUtils.contains(splitName, "AVTONOMNA") && ArrayUtils
-                            .contains(splitName, "RESPUBLIKA"))) {
-                        currentRegion = new Region();
-                        currentRaion = null;
-                        if (ArrayUtils.contains(splitName, "KRÎM")) {
-                            currentRegion.setRomanianName("Crimeea");
-                            currentRegion.setTransliteratedName("Krîm");
-                            currentRegion.setName(capitalize(lowerCase("КРИМ")));
-                        }
-                        extractLanguageData(limbi, line, currentRegion);
-                        session.save(currentRegion);
-                        currentCommuneLevel = 2;
-                        continue;
-                    }
-                    // raion
-                    if (ArrayUtils.contains(splitName, "RAION")) {
-                        currentRaion = new Raion();
-                        currentRegion.getRaioane().add(currentRaion);
-                        currentRaion.setRegion(currentRegion);
-                        if (ArrayUtils.contains(splitName, "RAION")) {
-                            final int indexOfRaion = ArrayUtils.indexOf(splitName, "RAION");
-                            final String[] nameParts = ArrayUtils.subarray(splitName, 0, indexOfRaion);
-                            final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 0, indexOfRaion);
-                            for (int i = 0; i < nameParts.length; i++) {
-                                final String[] lineSeparatedParts = split(nameParts[i], '-');
-                                for (int j = 0; j < lineSeparatedParts.length; j++) {
-                                    lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
-                                }
-                                nameParts[i] = join(lineSeparatedParts, '-');
+					if (splitName.length < 2) {
+						continue;
+					}
 
-                                final String[] lineSeparatedPartsUa = split(namePartsUa[i], '-');
-                                for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
-                                    lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
-                                }
-                                namePartsUa[i] = join(lineSeparatedPartsUa, '-');
-                            }
-                            currentRaion.setTransliteratedName(join(nameParts, " "));
-                            currentRaion.setName(join(namePartsUa, " "));
-                            currentRaion.setOriginalName(join(namePartsUa, " "));
-                            extractLanguageData(limbi, line, currentRaion);
-                        }
-                        session.save(currentRaion);
-                        currentCommuneLevel = 2;
+					// regiune
+					if (ArrayUtils.contains(splitName, "OBLAST")
+							|| (ArrayUtils.contains(splitName, "KRÎM")
+									&& ArrayUtils.contains(splitName,
+											"AVTONOMNA") && ArrayUtils
+										.contains(splitName, "RESPUBLIKA"))) {
+						currentRegion = new Region();
+						currentRaion = null;
+						if (ArrayUtils.contains(splitName, "KRÎM")) {
+							currentRegion.setRomanianName("Crimeea");
+							currentRegion.setTransliteratedName("Krîm");
+							currentRegion
+									.setName(capitalize(lowerCase("КРИМ")));
+						}
+						extractLanguageData(limbi, line, currentRegion);
+						session.save(currentRegion);
+						currentCommuneLevel = 2;
+						continue;
+					}
+					// raion
+					if (ArrayUtils.contains(splitName, "RAION")) {
+						currentRaion = new Raion();
+						currentRegion.getRaioane().add(currentRaion);
+						currentRaion.setRegion(currentRegion);
+						if (ArrayUtils.contains(splitName, "RAION")) {
+							final int indexOfRaion = ArrayUtils.indexOf(
+									splitName, "RAION");
+							final String[] nameParts = ArrayUtils.subarray(
+									splitName, 0, indexOfRaion);
+							final String[] namePartsUa = ArrayUtils.subarray(
+									splitNameUa, 0, indexOfRaion);
+							for (int i = 0; i < nameParts.length; i++) {
+								final String[] lineSeparatedParts = split(
+										nameParts[i], '-');
+								for (int j = 0; j < lineSeparatedParts.length; j++) {
+									lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
+								}
+								nameParts[i] = join(lineSeparatedParts, '-');
 
-                        continue;
-                    }
-                    if (ArrayUtils.contains(splitName, "(miskrada)")) {
-                        currentRaion = new Raion();
-                        final int indexOfMiskrada = ArrayUtils.indexOf(splitName, "(miskrada)");
-                        final String[] nameParts = ArrayUtils.subarray(splitName, 0, indexOfMiskrada);
-                        final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 0, indexOfMiskrada);
+								final String[] lineSeparatedPartsUa = split(
+										namePartsUa[i], '-');
+								for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
+									lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
+								}
+								namePartsUa[i] = join(lineSeparatedPartsUa, '-');
+							}
+							currentRaion.setTransliteratedName(join(nameParts,
+									" "));
+							currentRaion.setName(join(namePartsUa, " "));
+							currentRaion
+									.setOriginalName(join(namePartsUa, " "));
+							extractLanguageData(limbi, line, currentRaion);
+						}
+						session.save(currentRaion);
+						currentCommuneLevel = 2;
 
-                        for (int i = 0; i < nameParts.length; i++) {
-                            final String[] lineSeparatedParts = split(nameParts[i], '-');
-                            for (int j = 0; j < lineSeparatedParts.length; j++) {
-                                lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
-                            }
-                            nameParts[i] = join(lineSeparatedParts, '-');
+						continue;
+					}
+					if (ArrayUtils.contains(splitName, "(miskrada)")) {
+						currentRaion = new Raion();
+						final int indexOfMiskrada = ArrayUtils.indexOf(
+								splitName, "(miskrada)");
+						final String[] nameParts = ArrayUtils.subarray(
+								splitName, 0, indexOfMiskrada);
+						final String[] namePartsUa = ArrayUtils.subarray(
+								splitNameUa, 0, indexOfMiskrada);
 
-                            final String[] lineSeparatedPartsUa = split(namePartsUa[i], '-');
-                            for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
-                                lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
-                            }
-                            namePartsUa[i] = join(lineSeparatedPartsUa, '-');
-                        }
-                        currentRaion.setTransliteratedName(join(nameParts, " "));
-                        currentRaion.setName(join(namePartsUa, " "));
-                        currentRaion.setOriginalName(join(namePartsUa, " "));
-                        currentRaion.setMiskrada(true);
-                        currentRaion.setRegion(currentRegion);
-                        currentCommuneLevel = 2;
-                        System.out.println(" -- MISKRADA " + currentRaion.getName() + " - "
-                            + currentRaion.getTransliteratedName());
-                        extractLanguageData(limbi, line, currentRaion);
-                        session.save(currentRaion);
+						for (int i = 0; i < nameParts.length; i++) {
+							final String[] lineSeparatedParts = split(
+									nameParts[i], '-');
+							for (int j = 0; j < lineSeparatedParts.length; j++) {
+								lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
+							}
+							nameParts[i] = join(lineSeparatedParts, '-');
 
-                        if (null != currentCommune
-                            && StringUtils.equals(currentCommune.getName(), capitalize(lowerCase("СЕВАСТОПОЛЬ")))) {
-                            currentRegion = new Region();
-                            currentRegion.setName(capitalize(lowerCase("СЕВАСТОПОЛЬ")));
-                            currentRegion.setTransliteratedName("Sevastopol-oraș");
-                            currentRegion.setRomanianName("orașul Sevastopol");
-                            session.save(currentRegion);
-                        }
-                    }
-                    // comuna, oras, asezare urbana
-                    if (ArrayUtils.contains(splitName, "silrada") || StringUtils.equals(splitName[0], "smt")
-                        || StringUtils.equals(splitName[0], "m.")) {
+							final String[] lineSeparatedPartsUa = split(
+									namePartsUa[i], '-');
+							for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
+								lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
+							}
+							namePartsUa[i] = join(lineSeparatedPartsUa, '-');
+						}
+						currentRaion
+								.setTransliteratedName(join(nameParts, " "));
+						currentRaion.setName(join(namePartsUa, " "));
+						currentRaion.setOriginalName(join(namePartsUa, " "));
+						currentRaion.setMiskrada(true);
+						currentRaion.setRegion(currentRegion);
+						currentCommuneLevel = 2;
+						System.out.println(" -- MISKRADA "
+								+ currentRaion.getName() + " - "
+								+ currentRaion.getTransliteratedName());
+						extractLanguageData(limbi, line, currentRaion);
+						session.save(currentRaion);
 
-                        currentCommune = new Commune();
-                        if (ArrayUtils.contains(splitName, "silrada")) {
-                            final int indexOfSilrada = ArrayUtils.indexOf(splitName, "silrada");
-                            final String[] nameParts = ArrayUtils.subarray(splitName, 0, indexOfSilrada);
-                            final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 0, indexOfSilrada);
+						if (null != currentCommune
+								&& StringUtils.equals(currentCommune.getName(),
+										capitalize(lowerCase("СЕВАСТОПОЛЬ")))) {
+							currentRegion = new Region();
+							currentRegion
+									.setName(capitalize(lowerCase("СЕВАСТОПОЛЬ")));
+							currentRegion
+									.setTransliteratedName("Sevastopol-oraș");
+							currentRegion.setRomanianName("orașul Sevastopol");
+							session.save(currentRegion);
+						}
+					}
+					// comuna, oras, asezare urbana
+					if (ArrayUtils.contains(splitName, "silrada")
+							|| StringUtils.equals(splitName[0], "smt")
+							|| StringUtils.equals(splitName[0], "m.")) {
 
-                            for (int i = 0; i < nameParts.length; i++) {
-                                final String[] lineSeparatedParts = split(nameParts[i], '-');
-                                for (int j = 0; j < lineSeparatedParts.length; j++) {
-                                    lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
-                                }
-                                nameParts[i] = join(lineSeparatedParts, '-');
+						currentCommune = new Commune();
+						if (ArrayUtils.contains(splitName, "silrada")) {
+							final int indexOfSilrada = ArrayUtils.indexOf(
+									splitName, "silrada");
+							final String[] nameParts = ArrayUtils.subarray(
+									splitName, 0, indexOfSilrada);
+							final String[] namePartsUa = ArrayUtils.subarray(
+									splitNameUa, 0, indexOfSilrada);
 
-                                final String[] lineSeparatedPartsUa = split(namePartsUa[i], '-');
-                                for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
-                                    lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
-                                }
-                                namePartsUa[i] = join(lineSeparatedPartsUa, '-');
-                            }
+							for (int i = 0; i < nameParts.length; i++) {
+								final String[] lineSeparatedParts = split(
+										nameParts[i], '-');
+								for (int j = 0; j < lineSeparatedParts.length; j++) {
+									lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
+								}
+								nameParts[i] = join(lineSeparatedParts, '-');
 
-                            currentCommune.setTransliteratedName(join(nameParts, " "));
-                            // currentCommune.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
-                            currentCommune.setName(join(namePartsUa, " "));
-                            currentCommune.setTown(0);
-                            currentCommune.setRaion(currentRaion);
-                            currentCommune.setOriginalName(currentCommune.getName());
-                            session.save(currentCommune);
-                        }
-                        if (StringUtils.equals(splitName[0], "smt")) {
-                            int i = splitName.length;
-                            for (i = 1; i < splitName.length
-                                && isAlpha(replaceEach(splitName[i], new String[] { "-", "`", "'" }, new String[] { "", "",
-                                    "" })); i++) {
-                                final String[] lineSeparatedParts = split(splitName[i], '-');
-                                for (int j = 0; j < lineSeparatedParts.length; j++) {
-                                    lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
-                                }
-                                splitName[i] = join(lineSeparatedParts, '-');
+								final String[] lineSeparatedPartsUa = split(
+										namePartsUa[i], '-');
+								for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
+									lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
+								}
+								namePartsUa[i] = join(lineSeparatedPartsUa, '-');
+							}
 
-                                final String[] lineSeparatedPartsUa = split(splitNameUa[i], '-');
-                                for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
-                                    lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
-                                }
-                                splitNameUa[i] = join(lineSeparatedPartsUa, '-');
-                            }
-                            final String[] nameParts = ArrayUtils.subarray(splitName, 1, i);
-                            final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 1, i);
-                            currentCommune.setTown(1);
-                            currentCommune.setTransliteratedName(join(nameParts, " "));
-                            currentCommune.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
-                            currentCommune.setName(join(namePartsUa, " "));
-                            currentCommune.setOriginalName(currentCommune.getName());
+							currentCommune.setTransliteratedName(join(
+									nameParts, " "));
+							// currentCommune.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
+							currentCommune.setName(join(namePartsUa, " "));
+							currentCommune.setTown(0);
+							currentCommune.setRaion(currentRaion);
+							currentCommune.setOriginalName(currentCommune
+									.getName());
+							session.save(currentCommune);
+						}
+						if (StringUtils.equals(splitName[0], "smt")) {
+							int i = splitName.length;
+							for (i = 1; i < splitName.length
+									&& isAlpha(replaceEach(splitName[i],
+											new String[] { "-", "`", "'" },
+											new String[] { "", "", "" })); i++) {
+								final String[] lineSeparatedParts = split(
+										splitName[i], '-');
+								for (int j = 0; j < lineSeparatedParts.length; j++) {
+									lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
+								}
+								splitName[i] = join(lineSeparatedParts, '-');
 
-                            if (null == currentRaion) {
-                                currentCommune.setRegion(currentRegion);
-                                currentRegion.getCities().add(currentCommune);
-                                session.save(currentRegion);
-                            } else {
-                                currentCommune.setRaion(currentRaion);
-                            }
-                            session.save(currentCommune);
+								final String[] lineSeparatedPartsUa = split(
+										splitNameUa[i], '-');
+								for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
+									lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
+								}
+								splitNameUa[i] = join(lineSeparatedPartsUa, '-');
+							}
+							final String[] nameParts = ArrayUtils.subarray(
+									splitName, 1, i);
+							final String[] namePartsUa = ArrayUtils.subarray(
+									splitNameUa, 1, i);
+							currentCommune.setTown(1);
+							currentCommune.setTransliteratedName(join(
+									nameParts, " "));
+							currentCommune
+									.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
+							currentCommune.setName(join(namePartsUa, " "));
+							currentCommune.setOriginalName(currentCommune
+									.getName());
 
-                            System.out.println(currentCommune.getTown() + " - " + currentCommune.getName() + " - "
-                                + currentCommune.getTransliteratedName());
-                        }
-                        if (StringUtils.equals(splitName[0], "m.")) {
-                            int i = splitName.length;
-                            for (i = 1; i < splitName.length
-                                && isAlpha(replaceEach(splitName[i], new String[] { "-", "`", "'" }, new String[] { "", "",
-                                    "" })); i++) {
-                                final String[] lineSeparatedParts = split(splitName[i], '-');
-                                for (int j = 0; j < lineSeparatedParts.length; j++) {
-                                    lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
-                                }
-                                splitName[i] = join(lineSeparatedParts, '-');
+							if (null == currentRaion) {
+								currentCommune.setRegion(currentRegion);
+								currentRegion.getCities().add(currentCommune);
+								session.save(currentRegion);
+							} else {
+								currentCommune.setRaion(currentRaion);
+							}
+							session.save(currentCommune);
 
-                                final String[] lineSeparatedPartsUa = split(splitNameUa[i], '-');
-                                for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
-                                    lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
-                                }
-                                splitNameUa[i] = join(lineSeparatedPartsUa, '-');
-                            }
-                            final String[] nameParts = ArrayUtils.subarray(splitName, 1, i);
-                            final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 1, i);
-                            currentCommune.setTown(2);
-                            currentCommune.setTransliteratedName(join(nameParts, " "));
-                            currentCommune.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
-                            currentCommune.setName(join(namePartsUa, " "));
-                            currentCommune.setOriginalName(currentCommune.getName());
+							System.out.println(currentCommune.getTown() + " - "
+									+ currentCommune.getName() + " - "
+									+ currentCommune.getTransliteratedName());
+						}
+						if (StringUtils.equals(splitName[0], "m.")) {
+							int i = splitName.length;
+							for (i = 1; i < splitName.length
+									&& isAlpha(replaceEach(splitName[i],
+											new String[] { "-", "`", "'" },
+											new String[] { "", "", "" })); i++) {
+								final String[] lineSeparatedParts = split(
+										splitName[i], '-');
+								for (int j = 0; j < lineSeparatedParts.length; j++) {
+									lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
+								}
+								splitName[i] = join(lineSeparatedParts, '-');
 
-                            if (currentCommuneLevel < 2) {
-                                currentRaion = null;
-                            }
-                            if (null == currentRaion && null == currentRegion) {
-                                if (StringUtils.equals(currentCommune.getName(), capitalize(lowerCase("КИЇВ")))) {
-                                    currentRegion = new Region();
-                                    currentRegion.setName(capitalize(lowerCase("КИЇВ")));
-                                    currentRegion.setTransliteratedName("Kîiiv-oraș");
-                                    currentRegion.setRomanianName("orașul Kiev");
-                                    session.save(currentRegion);
-                                }
-                            }
-                            if ((null == currentRaion || currentRaion.isMiskrada()) && null != currentRegion) {
-                                if (isEmpty(currentRegion.getName())) {
-                                    currentRegion.setName(currentCommune.getName());
-                                    currentRegion.setTransliteratedName(currentCommune.getTransliteratedName());
-                                    currentRegion.setRomanianName(getRomanianName(getPossibleNames(currentRegion)));
-                                    currentRegion.setCapital(currentCommune);
-                                    System.out.println("REGION - " + currentRegion.getName() + " - "
-                                        + currentRegion.getTransliteratedName());
-                                }
-                                if (null == currentRaion) {
-                                    currentRegion.getCities().add(currentCommune);
-                                    currentCommune.setRegion(currentRegion);
-                                }
-                                session.save(currentRegion);
-                            }
-                            session.save(currentCommune);
-                        }
-                        final Transliterator t1 = new UkrainianTransliterator(currentCommune.getName());
-                        t1.transliterate();
+								final String[] lineSeparatedPartsUa = split(
+										splitNameUa[i], '-');
+								for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
+									lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
+								}
+								splitNameUa[i] = join(lineSeparatedPartsUa, '-');
+							}
+							final String[] nameParts = ArrayUtils.subarray(
+									splitName, 1, i);
+							final String[] namePartsUa = ArrayUtils.subarray(
+									splitNameUa, 1, i);
+							currentCommune.setTown(2);
+							currentCommune.setTransliteratedName(join(
+									nameParts, " "));
+							currentCommune
+									.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
+							currentCommune.setName(join(namePartsUa, " "));
+							currentCommune.setOriginalName(currentCommune
+									.getName());
 
-                        if (null != currentRaion) {
-                            if (currentRaion.getCommunes().size() == 0) {
-                                currentRaion
-                                    .setRomanianName(getRomanianName(getPossibleNames(
-                                        currentRaion,
-                                        defaultString(currentCommune.getRomanianName(),
-                                            currentCommune.getTransliteratedName()))));
-                                currentRaion.setName(currentCommune.getName());
-                                currentRaion.setTransliteratedName(new UkrainianTransliterator(currentCommune.getName())
-                                    .transliterate());
-                                currentRaion.setCapital(currentCommune);
-                                currentCommune.setRaion(currentRaion);
-                                System.out.println("Raion " + currentRaion.getName() + " - "
-                                    + currentRaion.getTransliteratedName());
-                            }
-                            currentRaion.getCommunes().add(currentCommune);
-                            session.save(currentRaion);
-                        }
-                        if (2 == currentCommune.getTown()) {
-                            System.out.println(currentCommune.getTown() + " - " + currentCommune.getName() + " - "
-                                + currentCommune.getTransliteratedName());
-                        }
+							if (currentCommuneLevel < 2) {
+								currentRaion = null;
+							}
+							if (null == currentRaion && null == currentRegion) {
+								if (StringUtils.equals(
+										currentCommune.getName(),
+										capitalize(lowerCase("КИЇВ")))) {
+									currentRegion = new Region();
+									currentRegion
+											.setName(capitalize(lowerCase("КИЇВ")));
+									currentRegion
+											.setTransliteratedName("Kîiiv-oraș");
+									currentRegion
+											.setRomanianName("orașul Kiev");
+									session.save(currentRegion);
+								}
+							}
+							if ((null == currentRaion || currentRaion
+									.isMiskrada()) && null != currentRegion) {
+								if (isEmpty(currentRegion.getName())) {
+									currentRegion.setName(currentCommune
+											.getName());
+									currentRegion
+											.setTransliteratedName(currentCommune
+													.getTransliteratedName());
+									currentRegion
+											.setRomanianName(getRomanianName(getPossibleNames(currentRegion)));
+									currentRegion.setCapital(currentCommune);
+									System.out.println("REGION - "
+											+ currentRegion.getName()
+											+ " - "
+											+ currentRegion
+													.getTransliteratedName());
+								}
+								if (null == currentRaion) {
+									currentRegion.getCities().add(
+											currentCommune);
+									currentCommune.setRegion(currentRegion);
+								}
+								session.save(currentRegion);
+							}
+							session.save(currentCommune);
+						}
+						final Transliterator t1 = new UkrainianTransliterator(
+								currentCommune.getName());
+						t1.transliterate();
 
-                        extractLanguageData(limbi, line, currentCommune);
-                        session.save(currentCommune);
-                        currentCommuneLevel = currentCommune.getTown();
-                    }
-                    // sat
-                    if (StringUtils.equals(splitName[0], "s.") || StringUtils.equals(splitName[0], "s-șce.")) {
-                        int i = splitName.length;
-                        final Settlement sat = new Settlement();
-                        for (i = 1; i < splitName.length
-                            && isAlpha(replaceEach(splitName[i], new String[] { "-", "`", "'" }, new String[] { "", "", "" })); i++) {
-                            final String[] lineSeparatedParts = split(splitName[i], '-');
-                            for (int j = 0; j < lineSeparatedParts.length; j++) {
-                                lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
-                            }
-                            splitName[i] = join(lineSeparatedParts, '-');
+						if (null != currentRaion) {
+							if (currentRaion.getCommunes().size() == 0) {
+								currentRaion
+										.setRomanianName(getRomanianName(getPossibleNames(
+												currentRaion,
+												defaultString(
+														currentCommune
+																.getRomanianName(),
+														currentCommune
+																.getTransliteratedName()))));
+								currentRaion.setName(currentCommune.getName());
+								currentRaion
+										.setTransliteratedName(new UkrainianTransliterator(
+												currentCommune.getName())
+												.transliterate());
+								currentRaion.setCapital(currentCommune);
+								currentCommune.setRaion(currentRaion);
+								System.out.println("Raion "
+										+ currentRaion.getName() + " - "
+										+ currentRaion.getTransliteratedName());
+							}
+							currentRaion.getCommunes().add(currentCommune);
+							session.save(currentRaion);
+						}
+						if (2 == currentCommune.getTown()) {
+							System.out.println(currentCommune.getTown() + " - "
+									+ currentCommune.getName() + " - "
+									+ currentCommune.getTransliteratedName());
+						}
 
-                            final String[] lineSeparatedPartsUa = split(splitNameUa[i], '-');
-                            for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
-                                lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
-                            }
-                            splitNameUa[i] = join(lineSeparatedPartsUa, '-');
-                        }
+						extractLanguageData(limbi, line, currentCommune);
+						session.save(currentCommune);
+						currentCommuneLevel = currentCommune.getTown();
+					}
+					// sat
+					if (StringUtils.equals(splitName[0], "s.")
+							|| StringUtils.equals(splitName[0], "s-șce.")) {
+						int i = splitName.length;
+						final Settlement sat = new Settlement();
+						for (i = 1; i < splitName.length
+								&& isAlpha(replaceEach(splitName[i],
+										new String[] { "-", "`", "'" },
+										new String[] { "", "", "" })); i++) {
+							final String[] lineSeparatedParts = split(
+									splitName[i], '-');
+							for (int j = 0; j < lineSeparatedParts.length; j++) {
+								lineSeparatedParts[j] = capitalize(lowerCase(lineSeparatedParts[j]));
+							}
+							splitName[i] = join(lineSeparatedParts, '-');
 
-                        final String[] nameParts = ArrayUtils.subarray(splitName, 1, i);
-                        final String[] namePartsUa = ArrayUtils.subarray(splitNameUa, 1, i);
-                        sat.setTransliteratedName(join(nameParts, " "));
-                        sat.setName(join(namePartsUa, " "));
-                        if (0 == currentCommune.getSettlements().size() && 0 == currentCommune.getTown()) {
-                            currentCommune.setName(sat.getName());
-                            currentCommune.setTransliteratedName(sat.getTransliteratedName());
-                            currentCommune.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
-                            currentCommune.setCapital(sat);
-                            System.out.println(currentCommune.getTown() + " - " + currentCommune.getName() + " - "
-                                + currentCommune.getTransliteratedName());
-                        }
-                        sat.setCommune(currentCommune);
-                        sat.setRomanianName(getRomanianName(getPossibleNames(sat)));
-                        currentCommune.getSettlements().add(sat);
+							final String[] lineSeparatedPartsUa = split(
+									splitNameUa[i], '-');
+							for (int j = 0; j < lineSeparatedPartsUa.length; j++) {
+								lineSeparatedPartsUa[j] = capitalize(lowerCase(lineSeparatedPartsUa[j]));
+							}
+							splitNameUa[i] = join(lineSeparatedPartsUa, '-');
+						}
 
-                        extractLanguageData(limbi, line, sat);
+						final String[] nameParts = ArrayUtils.subarray(
+								splitName, 1, i);
+						final String[] namePartsUa = ArrayUtils.subarray(
+								splitNameUa, 1, i);
+						sat.setTransliteratedName(join(nameParts, " "));
+						sat.setName(join(namePartsUa, " "));
+						if (0 == currentCommune.getSettlements().size()
+								&& 0 == currentCommune.getTown()) {
+							currentCommune.setName(sat.getName());
+							currentCommune.setTransliteratedName(sat
+									.getTransliteratedName());
+							currentCommune
+									.setRomanianName(getRomanianName(getPossibleNames(currentCommune)));
+							currentCommune.setCapital(sat);
+							System.out.println(currentCommune.getTown() + " - "
+									+ currentCommune.getName() + " - "
+									+ currentCommune.getTransliteratedName());
+						}
+						sat.setCommune(currentCommune);
+						sat.setRomanianName(getRomanianName(getPossibleNames(sat)));
+						currentCommune.getSettlements().add(sat);
 
-                        session.save(sat);
-                        session.save(currentCommune);
-                        System.out.println("\tsat " + sat.getName() + " - " + sat.getTransliteratedName());
-                    }
-                }
-            } catch (final UnsupportedEncodingException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (final FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (final IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } finally {
-                if (null != reader) {
-                    try {
-                        reader.close();
-                    } catch (final IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-            session.getTransaction().commit();
-        }
-    }
+						extractLanguageData(limbi, line, sat);
 
-    private void extractLanguageData(final List<Language> limbi, final String[] line,
-                                     final LanguageStructurable currentCommune) {
-        for (int langIndex = 0; langIndex < line.length - 1; langIndex++) {
-            final String langData = line[1 + langIndex];
-            int langListIndex = langIndex;
-            if (langIndex == 11) {
-                langListIndex = 7;
-            }
-            if (langIndex > 11) {
-                langListIndex = langIndex - 1;
-            }
-            Double langNumber = -1.0;
-            try {
-                langNumber = Double.parseDouble(langData);
-            } catch (final NumberFormatException nfe) {
-                continue;
-            }
-            if (langIndex == 11) {
-                final Double moldValue = currentCommune.getLanguageStructure().get(limbi.get(7));
-                if (null != moldValue && 0 < moldValue.doubleValue()) {
-                    langNumber += moldValue;
-                }
-            }
-            if (0 < langNumber) {
-                currentCommune.getLanguageStructure().put(limbi.get(langListIndex), langNumber);
-            }
-        }
-    }
+						session.save(sat);
+						session.save(currentCommune);
+						System.out.println("\tsat " + sat.getName() + " - "
+								+ sat.getTransliteratedName());
+					}
+				}
+			} catch (final UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (final FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (final IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				if (null != reader) {
+					try {
+						reader.close();
+					} catch (final IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			session.getTransaction().commit();
+		}
+	}
 
-    private String getRomanianName(final List<String> possibleNames) {
-        boolean error = false;
-        do {
-            try {
+	private void extractLanguageData(final List<Language> limbi,
+			final String[] line, final LanguageStructurable currentCommune) {
+		for (int langIndex = 0; langIndex < line.length - 1; langIndex++) {
+			final String langData = line[1 + langIndex];
+			int langListIndex = langIndex;
+			if (langIndex == 11) {
+				langListIndex = 7;
+			}
+			if (langIndex > 11) {
+				langListIndex = langIndex - 1;
+			}
+			Double langNumber = -1.0;
+			try {
+				langNumber = Double.parseDouble(langData);
+			} catch (final NumberFormatException nfe) {
+				continue;
+			}
+			if (langIndex == 11) {
+				final Double moldValue = currentCommune.getLanguageStructure()
+						.get(limbi.get(7));
+				if (null != moldValue && 0 < moldValue.doubleValue()) {
+					langNumber += moldValue;
+				}
+			}
+			if (0 < langNumber) {
+				currentCommune.getLanguageStructure().put(
+						limbi.get(langListIndex), langNumber);
+			}
+		}
+	}
 
-                final boolean[] existance = rowiki.exists(possibleNames.toArray(new String[possibleNames.size()]));
-                for (int i = 0; i < possibleNames.size(); i++) {
-                    if (!existance[i]) {
-                        continue;
-                    }
-                    String redirectResolution = rowiki.resolveRedirect(possibleNames.get(i));
-                    if (isEmpty(redirectResolution)) {
-                        redirectResolution = possibleNames.get(i);
-                    }
-                    redirectResolution = removeStart(redirectResolution, "Raionul ");
-                    redirectResolution = removeStart(redirectResolution, "Regiunea ");
-                    redirectResolution = substringBefore(redirectResolution, ",");
-                    redirectResolution = substringBefore(redirectResolution, "(");
-                    redirectResolution = trim(redirectResolution);
-                    return redirectResolution;
-                }
-            } catch (final IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                error = true;
-            }
-        } while (error);
-        return "";
-    }
+	private String getRomanianName(final List<String> possibleNames) {
+		boolean error = false;
+		do {
+			try {
 
-    private List<String> getPossibleNames(final Settlement sat) {
-        final List<String> possibleNames = new ArrayList<String>();
-        possibleNames.add(sat.getTransliteratedName() + ", Ucraina");
-        possibleNames.add(sat.getTransliteratedName() + " (Ucraina)");
-        if (null != sat.getCommune().getRaion()) {
-            possibleNames.add(sat.getTransliteratedName() + ", " + sat.getCommune().getRaion().getTransliteratedName());
-            if (!isEmpty(sat.getCommune().getRaion().getRomanianName())) {
-                possibleNames.add(sat.getTransliteratedName() + ", " + sat.getCommune().getRaion().getRomanianName());
-            }
-        }
-        possibleNames.add(sat.getTransliteratedName());
-        return possibleNames;
-    }
+				final boolean[] existance = rowiki.exists(possibleNames
+						.toArray(new String[possibleNames.size()]));
+				for (int i = 0; i < possibleNames.size(); i++) {
+					if (!existance[i]) {
+						continue;
+					}
+					String redirectResolution = rowiki
+							.resolveRedirect(possibleNames.get(i));
+					if (isEmpty(redirectResolution)) {
+						redirectResolution = possibleNames.get(i);
+					}
+					redirectResolution = removeStart(redirectResolution,
+							"Raionul ");
+					redirectResolution = removeStart(redirectResolution,
+							"Regiunea ");
+					redirectResolution = substringBefore(redirectResolution,
+							",");
+					redirectResolution = substringBefore(redirectResolution,
+							"(");
+					redirectResolution = trim(redirectResolution);
+					return redirectResolution;
+				}
+			} catch (final IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				error = true;
+			}
+		} while (error);
+		return "";
+	}
 
-    private List<String> getPossibleNames(final Commune commune) {
-        final List<String> possibleNames = new ArrayList<String>();
-        possibleNames.add(commune.getTransliteratedName() + ", Ucraina");
-        possibleNames.add(commune.getTransliteratedName() + " (Ucraina)");
-        if (null != commune.getRaion()) {
-            possibleNames.add(commune.getTransliteratedName() + ", " + commune.getRaion().getTransliteratedName());
-            if (!isEmpty(commune.getRaion().getRomanianName())) {
-                possibleNames.add(commune.getTransliteratedName() + ", " + commune.getRaion().getRomanianName());
-            }
-        }
-        possibleNames.add(commune.getTransliteratedName());
-        return possibleNames;
-    }
+	private List<String> getPossibleNames(final Settlement sat) {
+		final List<String> possibleNames = new ArrayList<String>();
+		possibleNames.add(sat.getTransliteratedName() + ", Ucraina");
+		possibleNames.add(sat.getTransliteratedName() + " (Ucraina)");
+		if (null != sat.getCommune().getRaion()) {
+			possibleNames.add(sat.getTransliteratedName() + ", "
+					+ sat.getCommune().getRaion().getTransliteratedName());
+			if (!isEmpty(sat.getCommune().getRaion().getRomanianName())) {
+				possibleNames.add(sat.getTransliteratedName() + ", "
+						+ sat.getCommune().getRaion().getRomanianName());
+			}
+		}
+		possibleNames.add(sat.getTransliteratedName());
+		return possibleNames;
+	}
 
-    private List<String> getPossibleNames(final Raion raion, final String roName) {
-        final List<String> possibleNames = new ArrayList<String>();
-        possibleNames.add("Raionul " + roName + ", Ucraina");
-        possibleNames.add("Raionul " + roName + " (Ucraina)");
-        if (null != raion.getRegion()) {
-            possibleNames.add("Raionul " + roName + ", " + raion.getRegion().getTransliteratedName());
-            if (!isEmpty(raion.getRegion().getRomanianName())) {
-                possibleNames.add("Raionul " + roName + ", " + raion.getRegion().getRomanianName());
-            }
-        }
-        possibleNames.add("Raionul " + roName);
-        return possibleNames;
-    }
+	private List<String> getPossibleNames(final Commune commune) {
+		final List<String> possibleNames = new ArrayList<String>();
+		possibleNames.add(commune.getTransliteratedName() + ", Ucraina");
+		possibleNames.add(commune.getTransliteratedName() + " (Ucraina)");
+		if (null != commune.getRaion()) {
+			possibleNames.add(commune.getTransliteratedName() + ", "
+					+ commune.getRaion().getTransliteratedName());
+			if (!isEmpty(commune.getRaion().getRomanianName())) {
+				possibleNames.add(commune.getTransliteratedName() + ", "
+						+ commune.getRaion().getRomanianName());
+			}
+		}
+		possibleNames.add(commune.getTransliteratedName());
+		return possibleNames;
+	}
 
-    private List<String> getPossibleNames(final Region region) {
-        final List<String> possibleNames = new ArrayList<String>();
-        possibleNames.add("Regiunea " + region.getTransliteratedName() + ", Ucraina");
-        possibleNames.add("Regiunea " + region.getTransliteratedName() + " (Ucraina)");
-        possibleNames.add("Regiunea " + region.getTransliteratedName());
-        return possibleNames;
-    }
+	private List<String> getPossibleNames(final Raion raion, final String roName) {
+		final List<String> possibleNames = new ArrayList<String>();
+		possibleNames.add("Raionul " + roName + ", Ucraina");
+		possibleNames.add("Raionul " + roName + " (Ucraina)");
+		if (null != raion.getRegion()) {
+			possibleNames.add("Raionul " + roName + ", "
+					+ raion.getRegion().getTransliteratedName());
+			if (!isEmpty(raion.getRegion().getRomanianName())) {
+				possibleNames.add("Raionul " + roName + ", "
+						+ raion.getRegion().getRomanianName());
+			}
+		}
+		possibleNames.add("Raionul " + roName);
+		return possibleNames;
+	}
+
+	private List<String> getPossibleNames(final Region region) {
+		final List<String> possibleNames = new ArrayList<String>();
+		possibleNames.add("Regiunea " + region.getTransliteratedName()
+				+ ", Ucraina");
+		possibleNames.add("Regiunea " + region.getTransliteratedName()
+				+ " (Ucraina)");
+		possibleNames.add("Regiunea " + region.getTransliteratedName());
+		return possibleNames;
+	}
 }
