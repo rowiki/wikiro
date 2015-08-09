@@ -28,7 +28,7 @@ public class ParameterReader {
         }
         final char[] chars = analyzedText.toCharArray();
         int index = 0;
-        while (chars[index] != '|') { // skip initial template name
+        while (index < chars.length && chars[index] != '|') { // skip initial template name
             index++;
         }
         index++;
