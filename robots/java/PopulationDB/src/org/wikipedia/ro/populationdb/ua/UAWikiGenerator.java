@@ -219,6 +219,7 @@ public class UAWikiGenerator {
         regionsFinished.add("Mîkolaiiv");
         regionsFinished.add("Odesa");
         regionsFinished.add("Poltava");
+        regionsFinished.add("Rivne");
 
         String regionWithCitiesFinished = "";
 
@@ -232,7 +233,7 @@ public class UAWikiGenerator {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
-            raionsFinished.addAll(Arrays.asList("Berezne", "Demîdivka", "Dubno", "Dubrovîțea", "Hoșcea", "Koreț", "Kostopil", "Mlîniv", "Ostroh", "Volodîmîreț", "Zaricine", "Zdolbuniv"));
+            raionsFinished.addAll(Arrays.asList("Bilopillea", "Burîn", "Velîka Pîsarivka"));
             Set<String> miskradasFinished = new HashSet<String>();
             miskradasFinished.addAll(Arrays.asList(""));
 
