@@ -235,7 +235,7 @@ public class UAWikiGenerator {
             Set<String> raionsFinished = new HashSet<String>();
             raionsFinished.addAll(Arrays.asList("Bilopillea", "Burîn", "Velîka Pîsarivka"));
             Set<String> miskradasFinished = new HashSet<String>();
-            miskradasFinished.addAll(Arrays.asList(""));
+            miskradasFinished.addAll(Arrays.asList("Hluhiv"));
 
             for (final Raion raion : eachReg.getRaioane()) {
                 if (!raion.isMiskrada()
