@@ -1031,6 +1031,17 @@ public class UAWikiGenerator {
         }
         if (0 > sb.indexOf("populație")) {
             String pop = ibParaReader.getParams().get("populație");
+            if (StringUtils.contains(pop, "<ref")) {
+                pop = StringUtils.substringBefore(pop, "<ref");
+                String popref = "<ref" + StringUtils.substringAfter(pop, "<ref");
+                
+                if (StringUtils.contains(popref, "</ref>")) {
+                    popref = StringUtils.substringBefore(popref, "</ref>") + "</ref>";
+                } else if (StringUtils.contains(popref, "/>")) {
+                    popref = StringUtils.substringBefore(popref, "/>") + "/>";
+                }
+                ibParaReader.getParams().put("populație_note_subsol", popref);
+            }
             if (null != pop) {
                 ibParaReader.getParams().put("populație",
                         pop.replaceAll("[^0-9]", ""));
