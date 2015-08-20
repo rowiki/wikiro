@@ -222,6 +222,7 @@ public class UAWikiGenerator {
         regionsFinished.add("Odesa");
         regionsFinished.add("Poltava");
         regionsFinished.add("Rivne");
+        regionsFinished.add("Sumî");
 
         String regionWithCitiesFinished = "";
 
@@ -235,7 +236,8 @@ public class UAWikiGenerator {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
-            raionsFinished.addAll(Arrays.asList("Bilopillea", "Burîn", "Velîka Pîsarivka"));
+            raionsFinished.addAll(Arrays.asList("Berejanî", "Borșciv", "Buceaci", "Huseatîn", "Kozova", "Kremeneț",
+                "Lanivți", "Monastîrîska", "Pidhaiți", "Pidvolociîsk", "Terebovlea", "Zalișciîkî", "Zbaraj", "Zboriv"));
             Set<String> miskradasFinished = new HashSet<String>();
             miskradasFinished.addAll(Arrays.asList("Hluhiv"));
 
@@ -1660,11 +1662,6 @@ public class UAWikiGenerator {
             ukIBPR.run();
             final Map<String, String> ukIBParams = ukIBPR.getParams();
             coordonate = ukIBParams.get("координати");
-            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "щільність", "densitate");
-            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "висота", "altitudine");
-            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "телефонний код", "prefix_telefonic");
-            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "поштовий індекс", "cod_poștal");
-            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "площа", "suprafață_totală_km2");
 
             if (ukIBParams.containsKey("населення")) {
                 String pop = ukIBParams.get("населення");
@@ -1698,6 +1695,12 @@ public class UAWikiGenerator {
                 }
             }
             // UAUtils.copyParameterFromTemplate(ukIBPR, sb, "населення", "populație");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "щільність", "densitate");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "висота", "altitudine");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "телефонний код", "prefix_telefonic");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "поштовий індекс", "cod_poștal");
+            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "площа", "suprafață_totală_km2");
+            String pop = ukIBPR.getParams().get("населення");
             UAUtils.copyParameterFromTemplate(ukIBPR, sb, "зображення", "imagine");
             if (ukIBParams.containsKey("код КОАТУУ")) {
                 sb.append("|tip_cod_clasificare=").append(
