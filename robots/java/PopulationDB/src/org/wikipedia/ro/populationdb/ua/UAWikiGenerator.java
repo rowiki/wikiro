@@ -1688,7 +1688,7 @@ public class UAWikiGenerator {
                 }
                 if (null != pop) {
                     sb.append("\n|populație=")
-                        .append(join(popInsideOfTemplate, new String[] { pop.replaceAll("[^0-9]", ""), " " }));
+                        .append(join(new String[] {"{{" + popInsideOfTemplate + "}}", pop.replaceAll("[^0-9]", "")}, " " ));
                 }
                 if (null != popInsideOfBrackets) {
                     sb.append("\n|recensământ=").append(popInsideOfBrackets);
