@@ -1568,10 +1568,37 @@ public class UAWikiGenerator {
         }
         if (0 > sb.indexOf("populație")) {
             String pop = ibParaReader.getParams().get("populație");
+            if (StringUtils.contains(pop, "<ref")) {
+                String popref = "<ref" + StringUtils.substringAfter(pop, "<ref");
+
+                if (StringUtils.contains(popref, "</ref>")) {
+                    popref = StringUtils.substringBefore(popref, "</ref>") + "</ref>";
+                } else if (StringUtils.contains(popref, "/>")) {
+                    popref = StringUtils.substringBefore(popref, "/>") + "/>";
+                }
+                ibParaReader.getParams().put("populație_note_subsol", popref);
+                pop = StringUtils.substringBefore(pop, "<ref");
+            }
+            String popInsideOfTemplate = null;
+            String popInsideOfBrackets = null;
+            if (StringUtils.contains(pop, "{{")) {
+                popInsideOfTemplate = substringBetween(pop, "{{", "}}");
+                pop = substringBefore(pop, "{{") + substringAfter(pop, "}}");
+            }
+            if (StringUtils.contains(pop, "(")) {
+                popInsideOfBrackets = substringBetween(pop, "(", ")");
+                pop = substringBefore(pop, "(") + substringAfter(pop, ")");
+            }
             if (null != pop) {
-                ibParaReader.getParams().put("populație", pop.replaceAll("[^0-9]", ""));
+                ibParaReader.getParams().put("populație",
+                    join(popInsideOfTemplate, new String[] { pop.replaceAll("[^0-9]", ""), " " }));
             }
             UAUtils.copyParameterFromTemplate(ibParaReader, sb, "populație");
+            if (null != ibParaReader.getParams().get("recensământ")) {
+                UAUtils.copyParameterFromTemplate(ibParaReader, sb, "recensământ");
+            } else if (null != popInsideOfBrackets) {
+                ibParaReader.getParams().put("recensământ", popInsideOfBrackets);
+            }
         }
         UAUtils.copyParameterFromTemplate(ibParaReader, sb, "recensământ");
         if (0 > sb.indexOf("altitudine")) {
@@ -1638,12 +1665,39 @@ public class UAWikiGenerator {
             UAUtils.copyParameterFromTemplate(ukIBPR, sb, "телефонний код", "prefix_telefonic");
             UAUtils.copyParameterFromTemplate(ukIBPR, sb, "поштовий індекс", "cod_poștal");
             UAUtils.copyParameterFromTemplate(ukIBPR, sb, "площа", "suprafață_totală_km2");
-            String pop = ukIBPR.getParams().get("населення");
-            if (null != pop) {
-                ukIBPR.getParams().put("населення", pop.replaceAll("[^0-9]", ""));
-            }
 
-            UAUtils.copyParameterFromTemplate(ukIBPR, sb, "населення", "populație");
+            if (ukIBParams.containsKey("населення")) {
+                String pop = ukIBParams.get("населення");
+                if (StringUtils.contains(pop, "<ref")) {
+                    String popref = "<ref" + StringUtils.substringAfter(pop, "<ref");
+
+                    if (StringUtils.contains(popref, "</ref>")) {
+                        popref = StringUtils.substringBefore(popref, "</ref>") + "</ref>";
+                    } else if (StringUtils.contains(popref, "/>")) {
+                        popref = StringUtils.substringBefore(popref, "/>") + "/>";
+                    }
+                    sb.append("\n|populație_note_subsol=").append(popref);
+                    pop = StringUtils.substringBefore(pop, "<ref");
+                }
+                String popInsideOfTemplate = null;
+                String popInsideOfBrackets = null;
+                if (StringUtils.contains(pop, "{{")) {
+                    popInsideOfTemplate = substringBetween(pop, "{{", "}}");
+                    pop = substringBefore(pop, "{{") + substringAfter(pop, "}}");
+                }
+                if (StringUtils.contains(pop, "(")) {
+                    popInsideOfBrackets = substringBetween(pop, "(", ")");
+                    pop = substringBefore(pop, "(") + substringAfter(pop, ")");
+                }
+                if (null != pop) {
+                    sb.append("\n|populație=")
+                        .append(join(popInsideOfTemplate, new String[] { pop.replaceAll("[^0-9]", ""), " " }));
+                }
+                if (null != popInsideOfBrackets) {
+                    sb.append("\n|recensământ=").append(popInsideOfBrackets);
+                }
+            }
+            // UAUtils.copyParameterFromTemplate(ukIBPR, sb, "населення", "populație");
             UAUtils.copyParameterFromTemplate(ukIBPR, sb, "зображення", "imagine");
             if (ukIBParams.containsKey("код КОАТУУ")) {
                 sb.append("|tip_cod_clasificare=").append(
