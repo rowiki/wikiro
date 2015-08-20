@@ -1700,7 +1700,6 @@ public class UAWikiGenerator {
             UAUtils.copyParameterFromTemplate(ukIBPR, sb, "телефонний код", "prefix_telefonic");
             UAUtils.copyParameterFromTemplate(ukIBPR, sb, "поштовий індекс", "cod_poștal");
             UAUtils.copyParameterFromTemplate(ukIBPR, sb, "площа", "suprafață_totală_km2");
-            String pop = ukIBPR.getParams().get("населення");
             UAUtils.copyParameterFromTemplate(ukIBPR, sb, "зображення", "imagine");
             if (ukIBParams.containsKey("код КОАТУУ")) {
                 sb.append("|tip_cod_clasificare=").append(
