@@ -27,9 +27,9 @@ __version__ = '$Id: diacritics_redirects.py 7918 2010-02-08 11:24:22Z xqt $'
 import time, sys, re
 import string
 import datetime
-sys.path.append("..")
-import wikipedia as pywikibot
-import pagegenerators
+sys.path.append(".")
+import pywikibot
+from pywikibot import pagegenerators
 
 docuReplacements = {
     '&params;': pagegenerators.parameterHelp
