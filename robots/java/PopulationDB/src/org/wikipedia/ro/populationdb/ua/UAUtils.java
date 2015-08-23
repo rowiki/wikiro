@@ -15,15 +15,20 @@ import org.wikipedia.ro.populationdb.ua.model.Settlement;
 import org.wikipedia.ro.populationdb.util.ParameterReader;
 
 public class UAUtils {
-    public static List<String> getPossibleRaionNames(final Raion raion, final Wiki wiki, final boolean singleInWiki) {
-        final String roName = StringUtils.defaultIfBlank(raion.getRomanianName(), raion.getTransliteratedName());
+    public static List<String> getPossibleRaionNames(final Raion raion,
+            final Wiki wiki, final boolean singleInWiki) {
+        final String roName = StringUtils.defaultIfBlank(
+                raion.getRomanianName(), raion.getTransliteratedName());
         final String translRaionName = raion.getTransliteratedName();
-        final String roRegionName = StringUtils.defaultIfBlank(raion.getRegion().getRomanianName(), raion.getRegion()
-            .getTransliteratedName());
-        final String translRegionName = raion.getRegion().getTransliteratedName();
+        final String roRegionName = StringUtils.defaultIfBlank(raion
+                .getRegion().getRomanianName(), raion.getRegion()
+                .getTransliteratedName());
+        final String translRegionName = raion.getRegion()
+                .getTransliteratedName();
 
         final Set<String> ret = new LinkedHashSet<String>();
-        final String raionulText = raion.isMiskrada() ? "Orașul regional " : "Raionul ";
+        final String raionulText = raion.isMiskrada() ? "Orașul regional "
+                : "Raionul ";
         if (singleInWiki) {
             ret.add(raionulText + roName);
             ret.add(raionulText + translRaionName);
@@ -42,17 +47,24 @@ public class UAUtils {
         return new ArrayList<String>(ret);
     }
 
-    public static List<String> getPossibleCommuneNames(final Commune commune, final Wiki wiki, final boolean singleInWiki,
-                                                       final boolean singleInRegion) throws IOException {
-        final String roName = StringUtils.defaultIfBlank(commune.getRomanianName(), commune.getTransliteratedName());
+    public static List<String> getPossibleCommuneNames(final Commune commune,
+            final Wiki wiki, final boolean singleInWiki,
+            final boolean singleInRegion) throws IOException {
+        final String roName = StringUtils.defaultIfBlank(
+                commune.getRomanianName(), commune.getTransliteratedName());
         final String translCommuneName = commune.getTransliteratedName();
-        final String roRegionName = StringUtils.defaultIfBlank(commune.computeRegion().getRomanianName(), commune
-            .computeRegion().getTransliteratedName());
-        final String translRegionName = commune.computeRegion().getTransliteratedName();
+        final String roRegionName = StringUtils.defaultIfBlank(commune
+                .computeRegion().getRomanianName(), commune.computeRegion()
+                .getTransliteratedName());
+        final String translRegionName = commune.computeRegion()
+                .getTransliteratedName();
 
         final Set<String> ret = new LinkedHashSet<String>();
+        Raion rai = commune.getRaion();
+        boolean communeIsOwnedByMiskrada = null == rai
+            || (rai.isMiskrada() && !StringUtils.equals(translCommuneName, rai.getTransliteratedName()));
 
-        if (null == commune.getRaion() || singleInRegion) {
+        if (null == rai || singleInRegion) {
             if (0 == commune.getTown()) {
                 ret.add("Comuna " + roName + ", " + roRegionName);
                 ret.add("Comuna " + roName + ", " + translRegionName);
@@ -66,24 +78,26 @@ public class UAUtils {
                 ret.add(translCommuneName + ", " + translRegionName);
             }
         }
-        if (singleInWiki && commune.getSettlements().size() < 2 && 0 == commune.getTown()) {
+        if (singleInWiki && commune.getSettlements().size() < 2
+                && 0 == commune.getTown()) {
             ret.add(translCommuneName);
             ret.add(roName);
         }
-        if (null != commune.getRaion()) {
-            final Raion raion = commune.getRaion();
-            final String roRaionName = StringUtils.defaultIfBlank(raion.getRomanianName(), raion.getTransliteratedName());
-            final String translRaionName = raion.getTransliteratedName();
-
+        if (null != rai) {
+            final String roRaionName = StringUtils.defaultIfBlank(rai.getRomanianName(), rai.getTransliteratedName());
+            final String translRaionName = rai.getTransliteratedName();
+            String regType = StringUtils.equals(roRegionName, "Crimeea") ? " " : " regiunea ";
+            String nameOfUpperUnit = communeIsOwnedByMiskrada ? " orașul regional " : " raionul ";
             if (0 == commune.getTown()) {
-                ret.add("Comuna " + translCommuneName + ", raionul " + translRaionName + ", regiunea " + translRegionName);
-                ret.add("Comuna " + translCommuneName + ", raionul " + roRaionName + ", regiunea " + translRegionName);
-                ret.add("Comuna " + translCommuneName + ", raionul " + translRaionName + ", regiunea " + roRegionName);
-                ret.add("Comuna " + translCommuneName + ", raionul " + roRaionName + ", regiunea " + roRegionName);
-                ret.add("Comuna " + roName + ", raionul " + translRaionName + ", regiunea " + translRegionName);
-                ret.add("Comuna " + roName + ", raionul " + roRaionName + ", regiunea " + translRegionName);
-                ret.add("Comuna " + roName + ", raionul " + translRaionName + ", regiunea " + roRegionName);
-                ret.add("Comuna " + roName + ", raionul " + roRaionName + ", regiunea " + roRegionName);
+                    
+                ret.add("Comuna " + translCommuneName + "," + nameOfUpperUnit + translRaionName + "," + regType + translRegionName);
+                ret.add("Comuna " + translCommuneName + "," + nameOfUpperUnit + roRaionName + "," + regType + translRegionName);
+                ret.add("Comuna " + translCommuneName + "," + nameOfUpperUnit + translRaionName + "," + regType + roRegionName);
+                ret.add("Comuna " + translCommuneName + "," + nameOfUpperUnit + roRaionName + "," + regType + roRegionName);
+                ret.add("Comuna " + roName + "," + nameOfUpperUnit + translRaionName + "," + regType + translRegionName);
+                ret.add("Comuna " + roName + "," + nameOfUpperUnit + roRaionName + "," + regType + translRegionName);
+                ret.add("Comuna " + roName + "," + nameOfUpperUnit + translRaionName + "," + regType + roRegionName);
+                ret.add("Comuna " + roName + "," + nameOfUpperUnit + roRaionName + "," + regType + roRegionName);
                 if (singleInWiki) {
                     ret.add("Comuna " + translCommuneName);
                     ret.add("Comuna " + roName);
@@ -94,16 +108,16 @@ public class UAUtils {
                 ret.add("Comuna " + roName + ", " + roRaionName);
 
             }
-            if (0 < commune.getTown() && !commune.equals(commune.getRaion().getCapital())
+            if (0 < commune.getTown() && !commune.equals(rai.getCapital())
                 || commune.getSettlements().size() < 2) {
-                ret.add(roName + ", raionul " + roRaionName + ", regiunea " + roRegionName);
-                ret.add(roName + ", raionul " + translRaionName + ", regiunea " + roRegionName);
-                ret.add(roName + ", raionul " + roRaionName + ", regiunea " + translRegionName);
-                ret.add(roName + ", raionul " + translRaionName + ", regiunea " + translRegionName);
-                ret.add(translCommuneName + ", raionul " + roRaionName + ", regiunea " + roRegionName);
-                ret.add(translCommuneName + ", raionul " + translRaionName + ", regiunea " + roRegionName);
-                ret.add(translCommuneName + ", raionul " + roRaionName + ", regiunea " + translRegionName);
-                ret.add(translCommuneName + ", raionul " + translRaionName + ", regiunea " + translRegionName);
+                ret.add(roName + "," + nameOfUpperUnit + roRaionName + "," + regType + roRegionName);
+                ret.add(roName + "," + nameOfUpperUnit + translRaionName + "," + regType + roRegionName);
+                ret.add(roName + "," + nameOfUpperUnit + roRaionName + "," + regType + translRegionName);
+                ret.add(roName + "," + nameOfUpperUnit + translRaionName + "," + regType + translRegionName);
+                ret.add(translCommuneName + "," + nameOfUpperUnit + roRaionName + "," + regType + roRegionName);
+                ret.add(translCommuneName + "," + nameOfUpperUnit + translRaionName + "," + regType + roRegionName);
+                ret.add(translCommuneName + "," + nameOfUpperUnit + roRaionName + "," + regType + translRegionName);
+                ret.add(translCommuneName + "," + nameOfUpperUnit + translRaionName + "," + regType + translRegionName);
                 ret.add(translCommuneName + ", " + translRaionName);
                 ret.add(translCommuneName + ", " + roRaionName);
                 if (StringUtils.equals(roName, translRaionName)) {
@@ -157,56 +171,118 @@ public class UAUtils {
             ret.add(translSettlementName + ", " + roRegionName);
             ret.add(translSettlementName + ", " + translRegionName);
         }
+        String regType = StringUtils.equals(roRegionName, "Crimeea") ? " " : " regiunea ";
         if (communeIsOwnedByMiskrada && !StringUtils.equals(translSettlementName, translCommuneName)) {
-            ret.add(roSettlementName + " (" + roCommuneName + "), regiunea " + roRegionName);
-            ret.add(roSettlementName + " (" + translCommuneName + "), regiunea " + roRegionName);
-            ret.add(translSettlementName + " (" + roCommuneName + "), regiunea " + roRegionName);
-            ret.add(translSettlementName + " (" + translCommuneName + "), regiunea " + roRegionName);
+            ret.add(roSettlementName + " (" + roCommuneName + ")," + regType + roRegionName);
+            ret.add(roSettlementName + " (" + translCommuneName + ")," + regType + roRegionName);
+            ret.add(translSettlementName + " (" + roCommuneName + ")," + regType + roRegionName);
+            ret.add(translSettlementName + " (" + translCommuneName + ")," + regType + roRegionName);
             ret.add(roSettlementName + " (" + roCommuneName + "), " + roRegionName);
             ret.add(roSettlementName + " (" + translCommuneName + "), " + roRegionName);
             ret.add(translSettlementName + " (" + roCommuneName + "), " + roRegionName);
             ret.add(translSettlementName + " (" + translCommuneName + "), " + roRegionName);
+            if (null != rai) {
+                String translMiskradaName = rai.getTransliteratedName();
+                String roMiskradaName = StringUtils.defaultIfBlank(rai.getRomanianName(), translMiskradaName);
+                ret.add(roSettlementName + " (" + roCommuneName + "), orașul regional " + roMiskradaName + ", "
+                    + roRegionName);
+                ret.add(roSettlementName + " (" + translCommuneName + "), orașul regional " + roMiskradaName + ", "
+                    + roRegionName);
+                ret.add(translSettlementName + " (" + roCommuneName + "), orașul regional " + roMiskradaName + ", "
+                    + roRegionName);
+                ret.add(translSettlementName + " (" + translCommuneName + "), orașul regional " + roMiskradaName + ", "
+                    + roRegionName);
+                if (singleInRaion) {
+                    ret.add(roSettlementName + ", orașul regional " + roMiskradaName + "," + regType + roRegionName);
+                    ret.add(roSettlementName + ", orașul regional " + translMiskradaName + "," + regType + roRegionName);
+                    ret.add(roSettlementName + ", orașul regional " + roMiskradaName + "," + regType + translRegionName);
+                    ret.add(roSettlementName + ", orașul regional " + translMiskradaName + "," + regType + translRegionName);
+                    ret.add(translSettlementName + ", orașul regional " + roMiskradaName + "," + regType + roRegionName);
+                    ret.add(translSettlementName + ", orașul regional " + translMiskradaName + "," + regType + roRegionName);
+                    ret.add(translSettlementName + ", orașul regional " + roMiskradaName + "," + regType + translRegionName);
+                    ret.add(translSettlementName + ", orașul regional " + translMiskradaName + "," + regType
+                        + translRegionName);
+                    ret.add(translSettlementName + ", orașul regional " + roMiskradaName + "," + regType + translRegionName);
+                    ret.add(translSettlementName + ", orașul regional " + translMiskradaName + "," + regType
+                        + translRegionName);
+                    ret.add(translSettlementName + ", " + translMiskradaName);
+                    ret.add(translSettlementName + ", " + roMiskradaName);
+                    ret.add(roSettlementName + ", " + translMiskradaName);
+                    ret.add(roSettlementName + ", " + roMiskradaName);
+                }
+            }
+        } else if (StringUtils.equals(translSettlementName, translCommuneName)) {
+            ret.add(roSettlementName + " (" + roCommuneName + ")," + regType + roRegionName);
+            ret.add(roSettlementName + " (" + translCommuneName + ")," + regType + roRegionName);
+            ret.add(translSettlementName + " (" + roCommuneName + ")," + regType + roRegionName);
+            ret.add(translSettlementName + " (" + translCommuneName + ")," + regType + roRegionName);
+            ret.add(roSettlementName + " (" + roCommuneName + "), " + roRegionName);
+            ret.add(roSettlementName + " (" + translCommuneName + "), " + roRegionName);
+            ret.add(translSettlementName + " (" + roCommuneName + "), " + roRegionName);
+            ret.add(translSettlementName + " (" + translCommuneName + "), " + roRegionName);
+            if (null != rai) {
+                String translMiskradaName = rai.getTransliteratedName();
+                String roMiskradaName = StringUtils.defaultIfBlank(rai.getRomanianName(), translMiskradaName);
+                    ret.add(roSettlementName + ", orașul regional " + roMiskradaName + "," + regType + roRegionName);
+                    ret.add(roSettlementName + ", orașul regional " + translMiskradaName + "," + regType + roRegionName);
+                    ret.add(roSettlementName + ", orașul regional " + roMiskradaName + "," + regType + translRegionName);
+                    ret.add(roSettlementName + ", orașul regional " + translMiskradaName + "," + regType + translRegionName);
+                    ret.add(translSettlementName + ", orașul regional " + roMiskradaName + "," + regType + roRegionName);
+                    ret.add(translSettlementName + ", orașul regional " + translMiskradaName + "," + regType + roRegionName);
+                    ret.add(translSettlementName + ", orașul regional " + roMiskradaName + "," + regType + translRegionName);
+                    ret.add(translSettlementName + ", orașul regional " + translMiskradaName + "," + regType
+                        + translRegionName);
+                    ret.add(translSettlementName + ", orașul regional " + roMiskradaName + "," + regType + translRegionName);
+                    ret.add(translSettlementName + ", orașul regional " + translMiskradaName + "," + regType
+                        + translRegionName);
+                    ret.add(translSettlementName + ", " + translMiskradaName);
+                    ret.add(translSettlementName + ", " + roMiskradaName);
+                    ret.add(roSettlementName + ", " + translMiskradaName);
+                    ret.add(roSettlementName + ", " + roMiskradaName);
+            }
+            
         }
         if (!communeIsOwnedByMiskrada) {
             final String roRaionName = StringUtils.defaultIfBlank(rai.getRomanianName(), rai.getTransliteratedName());
             final String translRaionName = rai.getTransliteratedName();
 
-            ret.add(roSettlementName + " (" + translCommuneName + "), raionul " + roRaionName + ", regiunea " + roRegionName);
-            ret.add(roSettlementName + " (" + roCommuneName + "), raionul " + roRaionName + ", regiunea " + roRegionName);
-            ret.add(roSettlementName + " (" + translCommuneName + "), raionul " + translRaionName + ", regiunea "
+            ret.add(roSettlementName + " (" + translCommuneName + "), raionul "
+                    + roRaionName + "," + regType + " " + roRegionName);
+            ret.add(roSettlementName + " (" + roCommuneName + "), raionul " + roRaionName + "," + regType + " " + roRegionName);
+            ret.add(roSettlementName + " (" + translCommuneName + "), raionul " + translRaionName + "," + regType + " "
                 + roRegionName);
-            ret.add(roSettlementName + " (" + roCommuneName + "), raionul " + translRaionName + ", regiunea " + roRegionName);
-            ret.add(roSettlementName + " (" + translCommuneName + "), raionul " + roRaionName + ", regiunea "
+            ret.add(roSettlementName + " (" + roCommuneName + "), raionul " + translRaionName + "," + regType + " " + roRegionName);
+            ret.add(roSettlementName + " (" + translCommuneName + "), raionul " + roRaionName + "," + regType + " "
                 + translRegionName);
-            ret.add(roSettlementName + " (" + roCommuneName + "), raionul " + roRaionName + ", regiunea " + translRegionName);
-            ret.add(roSettlementName + " (" + translCommuneName + "), raionul " + translRaionName + ", regiunea "
+            ret.add(roSettlementName + " (" + roCommuneName + "), raionul " + roRaionName + "," + regType + " " + translRegionName);
+            ret.add(roSettlementName + " (" + translCommuneName + "), raionul " + translRaionName + "," + regType + " "
                 + translRegionName);
-            ret.add(roSettlementName + " (" + roCommuneName + "), raionul " + translRaionName + ", regiunea "
+            ret.add(roSettlementName + " (" + roCommuneName + "), raionul " + translRaionName + "," + regType + " "
                 + translRegionName);
-            ret.add(translSettlementName + " (" + translCommuneName + "), raionul " + roRaionName + ", regiunea "
+            ret.add(translSettlementName + " (" + translCommuneName + "), raionul " + roRaionName + "," + regType + " "
                 + roRegionName);
-            ret.add(translSettlementName + " (" + roCommuneName + "), raionul " + roRaionName + ", regiunea " + roRegionName);
-            ret.add(translSettlementName + " (" + translCommuneName + "), raionul " + translRaionName + ", regiunea "
+            ret.add(translSettlementName + " (" + roCommuneName + "), raionul " + roRaionName + "," + regType + " " + roRegionName);
+            ret.add(translSettlementName + " (" + translCommuneName + "), raionul " + translRaionName + "," + regType + " "
                 + roRegionName);
-            ret.add(translSettlementName + " (" + roCommuneName + "), raionul " + translRaionName + ", regiunea "
+            ret.add(translSettlementName + " (" + roCommuneName + "), raionul " + translRaionName + "," + regType + " "
                 + roRegionName);
-            ret.add(translSettlementName + " (" + translCommuneName + "), raionul " + roRaionName + ", regiunea "
+            ret.add(translSettlementName + " (" + translCommuneName + "), raionul " + roRaionName + "," + regType + " "
                 + translRegionName);
-            ret.add(translSettlementName + " (" + roCommuneName + "), raionul " + roRaionName + ", regiunea "
+            ret.add(translSettlementName + " (" + roCommuneName + "), raionul " + roRaionName + "," + regType + " "
                 + translRegionName);
-            ret.add(translSettlementName + " (" + translCommuneName + "), raionul " + translRaionName + ", regiunea "
+            ret.add(translSettlementName + " (" + translCommuneName + "), raionul " + translRaionName + "," + regType + " "
                 + translRegionName);
-            ret.add(translSettlementName + " (" + roCommuneName + "), raionul " + translRaionName + ", regiunea "
+            ret.add(translSettlementName + " (" + roCommuneName + "), raionul " + translRaionName + "," + regType + " "
                 + translRegionName);
             if (singleInRaion) {
-                ret.add(roSettlementName + ", raionul " + roRaionName + ", regiunea " + roRegionName);
-                ret.add(roSettlementName + ", raionul " + translRaionName + ", regiunea " + roRegionName);
-                ret.add(roSettlementName + ", raionul " + roRaionName + ", regiunea " + translRegionName);
-                ret.add(roSettlementName + ", raionul " + translRaionName + ", regiunea " + translRegionName);
-                ret.add(translSettlementName + ", raionul " + roRaionName + ", regiunea " + roRegionName);
-                ret.add(translSettlementName + ", raionul " + translRaionName + ", regiunea " + roRegionName);
-                ret.add(translSettlementName + ", raionul " + roRaionName + ", regiunea " + translRegionName);
-                ret.add(translSettlementName + ", raionul " + translRaionName + ", regiunea " + translRegionName);
+                ret.add(roSettlementName + ", raionul " + roRaionName + "," + regType + " " + roRegionName);
+                ret.add(roSettlementName + ", raionul " + translRaionName + "," + regType + " " + roRegionName);
+                ret.add(roSettlementName + ", raionul " + roRaionName + "," + regType + " " + translRegionName);
+                ret.add(roSettlementName + ", raionul " + translRaionName + "," + regType + " " + translRegionName);
+                ret.add(translSettlementName + ", raionul " + roRaionName + "," + regType + " " + roRegionName);
+                ret.add(translSettlementName + ", raionul " + translRaionName + "," + regType + " " + roRegionName);
+                ret.add(translSettlementName + ", raionul " + roRaionName + "," + regType + " " + translRegionName);
+                ret.add(translSettlementName + ", raionul " + translRaionName + "," + regType + " " + translRegionName);
             }
             if (singleInWiki) {
                 ret.add(translSettlementName);
@@ -232,7 +308,8 @@ public class UAUtils {
         return retList;
     }
 
-    public static boolean isInCategoryTree(final String pageTitle, final Wiki wiki, final int depth, final String category) {
+    public static boolean isInCategoryTree(final String pageTitle,
+            final Wiki wiki, final int depth, final String category) {
         String[] cats = null;
         boolean categoriesRead = false;
 
@@ -248,7 +325,8 @@ public class UAUtils {
         } while (!categoriesRead);
 
         for (final String eachCat : cats) {
-            if (StringUtils.equals(category, StringUtils.substringAfter(eachCat, ":"))) {
+            if (StringUtils.equals(category,
+                    StringUtils.substringAfter(eachCat, ":"))) {
                 return true;
             }
             if (0 < depth) {
@@ -261,8 +339,8 @@ public class UAUtils {
 
     }
 
-    public static boolean isInAnyCategoryTree(final String pageTitle, final Wiki wiki, final int depth,
-                                              final String... categories) {
+    public static boolean isInAnyCategoryTree(final String pageTitle,
+            final Wiki wiki, final int depth, final String... categories) {
         String[] cats = null;
         boolean categoriesRead = false;
 
@@ -278,7 +356,8 @@ public class UAUtils {
         } while (!categoriesRead);
 
         for (final String eachCat : cats) {
-            if (ArrayUtils.contains(categories, StringUtils.substringAfter(eachCat, ":"))) {
+            if (ArrayUtils.contains(categories,
+                    StringUtils.substringAfter(eachCat, ":"))) {
                 return true;
             }
             if (0 < depth) {
@@ -312,7 +391,8 @@ public class UAUtils {
         boolean redirectResolved = false;
         do {
             try {
-                retVal = StringUtils.defaultIfBlank(wiki.resolveRedirect(title), title);
+                retVal = StringUtils.defaultIfBlank(
+                        wiki.resolveRedirect(title), title);
                 redirectResolved = true;
             } catch (final IOException e) {
                 e.printStackTrace();
@@ -322,13 +402,15 @@ public class UAUtils {
         return retVal;
     }
 
-    public static void copyParameterFromTemplate(final ParameterReader ibParaReader, final StringBuilder sb,
-                                                 final String paramName) {
+    public static void copyParameterFromTemplate(
+            final ParameterReader ibParaReader, final StringBuilder sb,
+            final String paramName) {
         copyParameterFromTemplate(ibParaReader, sb, paramName, paramName);
     }
 
-    public static void copyParameterFromTemplate(final ParameterReader ibParaReader, final StringBuilder sb,
-                                                 final String paramName, final String targetParamName) {
+    public static void copyParameterFromTemplate(
+            final ParameterReader ibParaReader, final StringBuilder sb,
+            final String paramName, final String targetParamName) {
         if (!ibParaReader.getParams().containsKey(paramName)) {
             return;
         }

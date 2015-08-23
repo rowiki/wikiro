@@ -96,13 +96,16 @@ public class HUWikiGenerator {
         try {
             generator.init();
             generator.generateCounties();
+            
         } finally {
             generator.close();
         }
     }
 
     private void generateCounties() throws Exception {
-        final List<County> counties = hib.getAllCounties();
+        //final List<County> counties = hib.getAllCounties();
+    	final List<County> counties = new ArrayList<County>();
+    	counties.add(hib.getCountyByName("Vas"));
 
         for (final County county : counties) {
             final List<Settlement> communes = hib.getCommunesByCounty(county);

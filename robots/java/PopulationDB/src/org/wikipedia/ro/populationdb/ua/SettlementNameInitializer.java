@@ -54,7 +54,7 @@ public class SettlementNameInitializer extends LazyInitializer<String> {
                 if (UAUtils.isInAnyCategoryTree(actualCandidateTitle, wiki, 5, "Sate în Ucraina", "Localități în Ucraina",
                     "Regiuni ale Ucrainei", "Raioanele Ucrainei")) {
                     return actualCandidateTitle;
-                } else {
+                } else { 
                     System.out.println("Removing " + actualCandidateTitle + " and " + candidateNames.get(i));
                     toRemove.add(actualCandidateTitle);
                     toRemove.add(candidateNames.get(i));
