@@ -223,6 +223,8 @@ public class UAWikiGenerator {
         regionsFinished.add("Poltava");
         regionsFinished.add("Rivne");
         regionsFinished.add("Sumî");
+        regionsFinished.add("Ternopil");
+        regionsFinished.add("Cerkasî");
 
         String regionWithCitiesFinished = "";
 
@@ -236,10 +238,7 @@ public class UAWikiGenerator {
                 continue;
             }
             Set<String> raionsFinished = new HashSet<String>();
-            raionsFinished.addAll(Arrays.asList("Berejanî", "Borșciv",
-                    "Buceaci", "Huseatîn", "Kozova", "Kremeneț", "Lanivți",
-                    "Monastîrîska", "Pidhaiți", "Pidvolociîsk", "Terebovlea",
-                    "Zalișciîkî", "Zbaraj", "Zboriv"));
+            raionsFinished.addAll(Arrays.asList("Hlîboka", "Kelmenți", "Kițman", "Herța", "Vîjnîțea", "Zastavna"));
             Set<String> miskradasFinished = new HashSet<String>();
             miskradasFinished.addAll(Arrays.asList("Hluhiv"));
 
