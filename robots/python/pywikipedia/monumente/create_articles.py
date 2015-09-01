@@ -7,6 +7,9 @@
 import pywikibot
 import json
 import re
+import sys
+
+sys.path.append('.')
 import strainu_functions
 import csvUtils
 
