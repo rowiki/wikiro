@@ -45,6 +45,7 @@ Command line options:
 			since the last script run
 		* full: All pages are parsed
 		Default: normal
+-db		The database to work on; valid values can be found in the config
 '''
 
 import sys
@@ -60,7 +61,7 @@ from pywikibot import pagegenerators
 from pywikibot import config as user
 from pywikibot import catlib
 
-sys.path.append("..")
+sys.path.append('.')
 import strainu_functions as strainu
 
 options = {
@@ -186,8 +187,8 @@ options = {
 	{
 		'lmi':
 		{
-			#'namespaces': [14, 6],
-			'namespaces': [6],
+			'namespaces': [14, 6],
+			#'namespaces': [6],
 			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'codeTemplate': ["Monument istoric", "codLMI"],
@@ -553,13 +554,17 @@ def processArticle(text, page, conf):
 		    'lastedit': page.editTime().totimestampformat(),
 		    'code': code,
 		}
+	#print dictElem
 	for key in conf['infoboxes'][0]:
 		if key not in dictElem:
 			dictElem[key] = None
 
+	#print conf['infoboxes']
 	for box in conf['infoboxes']:
+		#pywikibot.output("Searching for template %s" % box['name'])
 		tl = strainu.extractTemplate(text, box['name'])
 		if tl == None:
+			#pywikibot.output("Template %s not found" % box['name'])
 			continue
 		(_dict, _keys) = strainu.tl2Dict(tl)
 		#print _dict
@@ -589,12 +594,12 @@ def processArticle(text, page, conf):
 			#try to identify the correct code
 			if dictElem['code'] == None and key == _db and box[key] in _dict:
 				infoCodes = re.findall(conf[_db]['codeRegexp'], _dict[box[key]])
-				#print codes
+				#print infoCodes
 				if len(infoCodes) != 1 and checkMultipleMonuments([res[0] for res in infoCodes]): # more or less than one code is marked; just ignore
 					invalidCount(len(codes), title, _db, [res[0] for res in codes])#count comes from the first search
 					return
 				else:
-					dictElem['code'] = infoCodes[0][0]
+					code = dictElem['code'] = infoCodes[0][0]
 					#print dictElem
 
 			#TODO: second condition borks for anything else but strings
@@ -604,6 +609,7 @@ def processArticle(text, page, conf):
 				dictElem[key] = _dict[box[key]]
 				#pywikibot.output(key + u"=" + dictElem[key])
 
+	#print dictElem['code']
 	if dictElem['code'] == None:
 		invalidCount(len(codes), title, _db, [res[0] for res in codes])#count comes from the first search
 		return

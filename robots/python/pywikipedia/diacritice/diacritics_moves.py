@@ -42,7 +42,7 @@ msg = {
      'ksh': u'Bot: oemleidung aanjelaat op [[%s]]',
      'nl': u'Bot: doorverwijzing gemaakt naar [[%s]]',
      'pt': u'Bot: Criando redirecionamento para [[%s]]',
-     'ro': u'Robot: Mută [[%s]] pentru [[pywikibot:corectarea diacriticelor|]]',
+     'ro': u'Robot: Mută [[%s]] pentru [[WP:CD|corectarea diacriticelor]]',
      'sv': u'Bot: Omdirigerar till [[%s]]',
      'zh': u'機器人: 建立重定向至[[%s]]',
     }
