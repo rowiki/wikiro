@@ -224,6 +224,7 @@ public class UAWikiGenerator {
         regionsFinished.add("Rivne");
         regionsFinished.add("Sumî");
         regionsFinished.add("Ternopil");
+        regionsFinished.add("Herson");
         regionsFinished.add("Cerkasî");
 
         String regionWithCitiesFinished = "";
