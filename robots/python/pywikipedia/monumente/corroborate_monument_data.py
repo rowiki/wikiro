@@ -152,6 +152,45 @@ countries = {
 			'east':  29.7,
 		},
 	},
+	('ro', 'ran') : {
+		'headerTemplate' : u'ÎnceputTabelRAN',
+		'rowTemplate' : u'ElementRAN',
+		'footerTemplate' : u'SfârșitTabelRAN',
+		'codeRegexp': "([0-9]{4,6}(\.[0-9][0-9]){1,3})",
+		'fields' : collections.OrderedDict([
+						(u'Cod', {'code': Changes.all, }),
+						(u'NotăCod', {'code': Changes.all, }),
+						(u'CodLMI', {'code': Changes.other, }),
+						(u'Nume', {'code': Changes.article, }),
+						(u'NumeAlternative', {'code': Changes.all, }),
+						(u'Categorie', {'code': Changes.all, }),
+						(u'TipMonument', {'code': Changes.all, }),
+						(u'Localitate', {'code': Changes.all, }),
+						(u'Adresă', {'code': Changes.all, }),
+						(u'Cultura', {'code': Changes.all, }),
+						(u'Faza', {'code': Changes.all, }),
+						(u'Datare', {'code': Changes.all, }),
+						(u'Descoperitor', {'code': Changes.creator, }),
+						(u'Descoperit', {'code': Changes.all, }),
+						(u'Lat', {'code': Changes.coord, }),
+						(u'Lon', {'code': Changes.coord, }),
+						(u'Latd', {'code': Changes.coord, }),
+						(u'Latm', {'code': Changes.coord, }),
+						(u'Lats', {'code': Changes.coord, }),
+						(u'Lond', {'code': Changes.coord, }),
+						(u'Lonm', {'code': Changes.coord, }),
+						(u'Lons', {'code': Changes.coord, }),
+						(u'Imagine', {'code': Changes.image, 'blacklist': blacklist + plan}),
+						(u'Commons', {'code': Changes.commons, }),
+						(u'Copyright', {'code': Changes.all, }),
+					]),
+		'geolimits': {
+			'north': 48.3,
+			'south': 43.6,
+			'west':  20.27,
+			'east':  29.7,
+		},
+	},
 }
 
 _flog = None
@@ -515,6 +554,16 @@ def main():
 		ran_data = readRan("ro_ran_db.json")
 	else:
 		ran_data = {}
+	articleField = u"Denumire"
+	for field in countries.get((_lang, _db))["fields"]:
+		if countries.get((_lang, _db))["fields"][field]['code'] == Changes.article:
+			articleField = field
+			break
+	creatorField = u"Creatori"
+	for field in countries.get((_lang, _db))["fields"]:
+		if countries.get((_lang, _db))["fields"][field]['code'] == Changes.creator:
+			creatorField = field
+			break
 
 	initLog()
 	lastSource = None
@@ -608,12 +657,12 @@ def main():
 	
 		#monument name and link
 		if article <> None and article["name"] <> None and article["name"] <> "":
-			if monument["Denumire"].find("[[") == -1:
-				link = u"[[" + article["name"] + "|" + monument["Denumire"] + "]]"
+			if monument[articleField].find("[[") == -1:
+				link = u"[[" + article["name"] + "|" + monument[articleField] + "]]"
 				#pywikibot.output(link)
-				articleText = updateTableData(monument["source"], code, "Denumire", link, text=articleText)
+				articleText = updateTableData(monument["source"], code, articleField, link, text=articleText)
 			else: # check if the 2 links are the same
-				link = strainu.extractLink(monument["Denumire"])
+				link = strainu.extractLink(monument[articleField])
 				if link == None:
 					log(u"* [Listă] ''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire" % code)
 				else:
@@ -631,43 +680,43 @@ def main():
 			author = article["author"].strip()
 			if author == None or author == "":
 				pywikibot.output("Wrong author link: \"%s\"@%s" % (article["author"], article["name"]))
-			elif monument["Creatori"].strip() == "":
+			elif monument[creatorField].strip() == "":
 				pywikibot.output(author)
-				articleText = updateTableData(monument["source"], code, "Creatori", author, text=articleText)
+				articleText = updateTableData(monument["source"], code, creatorField, author, text=articleText)
 			else:
 				a1 = author.strip()
-				a2 = monument["Creatori"].strip()
+				a2 = monument[creatorFeld].strip()
 				if a1 <> a2 and strainu.extractLink(a1) <> strainu.extractLink(a2):
-					articleText = updateTableData(monument["source"], code, "Creatori", a1, text=articleText)
+					articleText = updateTableData(monument["source"], code, creatorField, a1, text=articleText)
 				#	log(u"*''W'': ''[%s]'' Câmpul Creatori este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
 
 		#add the author(s) extracted from author pages
 		elif code in authors_local:
 			print "autor2"
-			authors = monument["Creatori"]
+			authors = monument[creatorField]
 			for author in authors_local[code]:
 				if authors.find(author) == -1: #we don't already know the author
 					if authors <> "":
 						authors = author + ", " + authors
 					else:
 						authors = author
-			a2 = monument["Creatori"].strip()
+			a2 = monument[creatorField].strip()
 			if authors <> a2  and strainu.extractLink(authors) <> strainu.extractLink(a2): # if something changed, update the text
 				pywikibot.output(authors)
-				articleText = updateTableData(monument["source"], code, "Creatori", authors, text=articleText)
+				articleText = updateTableData(monument["source"], code, creatorField, authors, text=articleText)
 			else:
 				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
 
 		elif pic_author <> None and pic_author.strip() <> "":
 			print "autor3"
-			if strainu.stripLink(pic_author) <> strainu.stripLink(monument["Creatori"]).strip():
-				articleText = updateTableData(monument["source"], code, "Creatori", pic_author, text=articleText)
+			if strainu.stripLink(pic_author) <> strainu.stripLink(monument[creatorField]).strip():
+				articleText = updateTableData(monument["source"], code, creatorField, pic_author, text=articleText)
 
 		#try to find the author in external data
-		elif code in other_data and "Creatori" in other_data[code]:
+		elif code in other_data and creatorField in other_data[code]:
 			print "autor4"
-			authors = monument["Creatori"].strip()
-			author = other_data[code]["Creatori"]
+			authors = monument[creatorField].strip()
+			author = other_data[code][creatorField]
 			if authors <> u"" and authors.find(author) == -1: #we don't already know the author
 				authors = author + ", " + authors
 			elif authors == u"":
@@ -675,9 +724,9 @@ def main():
 			else:
 				log("* [Listă] ''W'': ''[%s]'' Lista are creatorii %s, iar în fișierul importat apare %s" % \
 						code, authors, author)
-			if authors <> monument["Creatori"]: # if something changed, update the text
+			if authors <> monument[creatorField]: # if something changed, update the text
 				pywikibot.output(authors)
-				articleText = updateTableData(monument["source"], code, "Creatori", authors, text=articleText)
+				articleText = updateTableData(monument["source"], code, creatorField, authors, text=articleText)
 			else:
 				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
 	
