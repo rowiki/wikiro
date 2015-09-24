@@ -48,7 +48,7 @@ Command line options:
 -db		The database to work on; valid values can be found in the config
 '''
 
-import sys
+import sys, os
 import time, datetime
 import warnings
 import json
@@ -187,8 +187,8 @@ options = {
 	{
 		'lmi':
 		{
-			'namespaces': [14, 6],
-			#'namespaces': [6],
+			#'namespaces': [14, 6],
+			'namespaces': [6],
 			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'codeTemplate': ["Monument istoric", "codLMI"],
@@ -723,10 +723,15 @@ def main():
 		#no need to parse everything if we're gonna go through all the pages
 		reworkedDict = {}
 		filename = "_".join(filter(None, [lang, _db, namespaceName, "pages.json"]))
+		tempfile = u"." + filename
 		print filename
 		if parse_type != PARSE_FULL:
 			try:
-				f = open(filename, "r+")
+				if incremental and os.path.exists(tempfile):
+					f = open(tempfile, "r+")
+				else:
+					f = open(filename, "r+")
+				print f.name
 				jsonFile = json.load(f)
 				f.close();
 			except:
@@ -779,7 +784,7 @@ def main():
 				processArticle(page.get(), page, langOpt)
 				count += 1
 				if incremental:
-					f = open(filename, "w+")
+					f = open(tempfile, "w+")
 					json.dump(fullDict, f, indent = 2)
 					f.close();
 		print count
@@ -787,6 +792,7 @@ def main():
 		f = open(filename, "w+")
 		json.dump(fullDict, f, indent = 2)
 		f.close();
+		os.unlink(tempfile)
 		fullDict = {}
 	closeLog()
 
