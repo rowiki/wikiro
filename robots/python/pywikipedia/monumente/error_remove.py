@@ -126,7 +126,10 @@ mistakes = {
 	u'([^\s])„\s': u'\g<1> „',
 	u'([a-zA-ZăîâșțĂÂÎȘȚ])„([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1> „\g<2>',
 	u'([a-zA-ZăîâșțĂÂÎȘȚ])”([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1>” \g<2>',
-	u'\s”([^\s])': u'” \g<1>',
+	u'„ ([A-Za-z])': u'„\g<1>',
+	u'([A-Za-zîăâșț]) ”': u'\g<1>”',
+	u'([a-zA-ZăîâșțĂÂÎȘȚ])\(([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1> (\g<2>',
+	u'([a-zA-ZăîâșțĂÂÎȘȚ])\)([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1>) \g<2>',
 }
 minormistakes = {
 	u'([Zz])iddeapărare': u'\g<1>id de apărare',
@@ -177,6 +180,9 @@ minormistakes = {
 	#u'(\| (?!Imagine|Commons|NotăCod))(.*) -([^\s])': u'\g<1>\g<2>-\g<3>',
 	#u'(\| (?!Imagine|Commons|NotăCod))(.*)([^\s])- ': u'\g<1>\g<2>\g<3>-',
 	u'([Cc])as([aă])d': u'\g<1>as\g<2> d',
+	u'([a-z])înpartea': u'\g<1> în partea',
+	u'([a-z])depământ': u'\g<1> de pământ',
+	u'{{CompactTOC6}}': u'{{CuprinsPrefix|prefix={{subst:PAGENAME}}}}',
 }
 
 deprecated = {
