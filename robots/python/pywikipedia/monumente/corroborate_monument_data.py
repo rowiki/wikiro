@@ -685,7 +685,7 @@ def main():
 				articleText = updateTableData(monument["source"], code, creatorField, author, text=articleText)
 			else:
 				a1 = author.strip()
-				a2 = monument[creatorFeld].strip()
+				a2 = monument[creatorField].strip()
 				if a1 <> a2 and strainu.extractLink(a1) <> strainu.extractLink(a2):
 					articleText = updateTableData(monument["source"], code, creatorField, a1, text=articleText)
 				#	log(u"*''W'': ''[%s]'' Câmpul Creatori este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
