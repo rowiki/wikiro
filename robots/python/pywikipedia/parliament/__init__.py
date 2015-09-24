@@ -32,7 +32,9 @@ months_names = {
 
 def niceDate(date):
 	_list = date.split("-")
-	return " ".join([_list[2], months_names[int(_list[1])], _list[0]]) 
+	if len(_list) < 3:
+		return u""
+	return u" ".join([ "%d" % int(_list[2]), months_names[int(_list[1])], _list[0]]) 
 
 def allCommas(s):
 	s = s.replace(u"ţ", u"ț");
