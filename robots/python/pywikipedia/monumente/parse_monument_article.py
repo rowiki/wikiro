@@ -792,7 +792,8 @@ def main():
 		f = open(filename, "w+")
 		json.dump(fullDict, f, indent = 2)
 		f.close();
-		os.unlink(tempfile)
+		if incremental and os.path.exists(tempfile):
+			os.unlink(tempfile)
 		fullDict = {}
 	closeLog()
 
