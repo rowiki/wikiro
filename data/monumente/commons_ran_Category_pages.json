@@ -2,10 +2,14 @@
   "167561.01": [
     {
       "code": "167561.01", 
-      "lastedit": "20150528212433", 
+      "lastedit": "20150816115242", 
       "name": "Category:Castra Buridava", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
       "long": 0, 
       "project": "commons", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -15,8 +19,12 @@
       "code": "16356.02", 
       "lastedit": "20140503033255", 
       "name": "Category:Oratea Fortress", 
+      "author": null, 
+      "ran": "16356.02", 
+      "image": null, 
       "long": 0, 
       "project": "commons", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -26,8 +34,12 @@
       "code": "64103.03", 
       "lastedit": "20150528212442", 
       "name": "Category:Castra Angustia", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
       "long": 0, 
       "project": "commons", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -37,8 +49,12 @@
       "code": "63946.01", 
       "lastedit": "20150528212351", 
       "name": "Category:Castra of Boro\u0219neu Mare", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
       "long": 0, 
       "project": "commons", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }

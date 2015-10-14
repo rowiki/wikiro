@@ -2,11 +2,14 @@
   "26573.32": [
     {
       "code": "26573.32", 
-      "lastedit": "20141127212948", 
+      "lastedit": "20150720075851", 
       "name": "Capela romano-catolic\u0103 \u201e\u00cengerii p\u0103zitori\u201d", 
+      "author": null, 
+      "ran": " 26573.32", 
       "image": " Fosta capel\u0103 a Mizericordienilor (lateral) - Oradea.JPG", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " BH-II-m-A-01079", 
       "lat": 0, 
       "quality": false
     }
@@ -16,9 +19,12 @@
       "code": "53283.04.01", 
       "lastedit": "20141127224450", 
       "name": "Cetatea medieval\u0103 de la Mehadia", 
+      "author": null, 
+      "ran": " 53283.04.01, 53283.04.02", 
       "image": " Cetatea Mehadia, Dealul Grad.JPG", 
       "long": 22.3519, 
       "project": "ro", 
+      "lmi": " CS-I-s-A-10854", 
       "lat": 44.9222, 
       "quality": false
     }
@@ -26,11 +32,14 @@
   "110884.01": [
     {
       "code": "110884.01", 
-      "lastedit": "20140816201007", 
+      "lastedit": "20150825074117", 
       "name": "Cula Cu\u021bui", 
+      "author": null, 
+      "ran": " 110884.01", 
       "image": " RO MH - Cula Cu\u021bui - vedere din spate.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " MH-II-m-A-10272", 
       "lat": 0, 
       "quality": false
     }
@@ -40,9 +49,12 @@
       "code": "140716.01", 
       "lastedit": "20140303143300", 
       "name": "Castrul roman de la Brusturi", 
+      "author": null, 
       "ran": " 140716.01 <ref name=\"ran\">[http://ran.cimec.ro/sel.asp?Ocat=1&Lang=EN&Ojud=1&Oloc=1&nr=109&ids=10803 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 23.2243, 
       "project": "ro", 
+      "lmi": " SJ-I-s-A-04859 <ref name=\"ran\"/>", 
       "lat": 47.1602, 
       "quality": false
     }
@@ -52,9 +64,12 @@
       "code": "9583.04.01", 
       "lastedit": "20141127211558", 
       "name": "Bazarul \u201eSub dughene\u201d", 
+      "author": null, 
+      "ran": " 9583.04.01", 
       "image": " Bazarul turcesc din Lipova, jud. AR.JPG", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " AR-II-m-A-00623", 
       "lat": 0, 
       "quality": false
     }
@@ -64,9 +79,12 @@
       "code": "85047.01", 
       "lastedit": "20140303150313", 
       "name": "Castrul roman de la S\u00e2npaul (Harghita)", 
+      "author": null, 
       "ran": " 85047.01", 
+      "image": null, 
       "long": 25.3817, 
       "project": "ro", 
+      "lmi": " HR-I-s-B-12710", 
       "lat": 46.1964, 
       "quality": false
     }
@@ -74,11 +92,14 @@
   "91198.02": [
     {
       "code": "91198.02", 
-      "lastedit": "20140816194708", 
+      "lastedit": "20150812133312", 
       "name": "Biserica parohial\u0103 reformat\u0103 din R\u00e2u Alb", 
+      "author": null, 
+      "ran": " 91198.02", 
       "image": " R\u00eeu Alb Biserica romano catolica, din sec. XIII. mai tirziu reformata, azi ruina ortodoxa.JPG", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " HD-II-m-A-03427", 
       "lat": 0, 
       "quality": false
     }
@@ -88,9 +109,12 @@
       "code": "128150.01", 
       "lastedit": "20140302155156", 
       "name": "Castrul roman Acidava", 
+      "author": null, 
       "ran": " 128150.01", 
+      "image": null, 
       "long": 24.2646, 
       "project": "ro", 
+      "lmi": " OT-I-s-A-08526", 
       "lat": 44.3781, 
       "quality": false
     }
@@ -98,11 +122,14 @@
   "88485.01": [
     {
       "code": "88485.01", 
-      "lastedit": "20150528225642", 
+      "lastedit": "20150604183531", 
       "name": "Villa rustica de la Chitid", 
+      "author": null, 
       "ran": " 88485.01", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " HD-I-s-B-03171", 
       "lat": 0, 
       "quality": false
     }
@@ -112,9 +139,12 @@
       "code": "90360.03", 
       "lastedit": "20140303143411", 
       "name": "Castrul roman de la Bucium", 
+      "author": null, 
       "ran": " 90360.03 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 23.1667, 
       "project": "ro", 
+      "lmi": " HD-I-s-A-03168 <ref name=\"ran\"/>", 
       "lat": 45.7333, 
       "quality": false
     }
@@ -122,11 +152,14 @@
   "7393.01.01": [
     {
       "code": "7393.01.01", 
-      "lastedit": "20141127210458", 
+      "lastedit": "20150818162116", 
       "name": "Biserica reformat\u0103 din S\u00e2ntimbru", 
+      "author": null, 
+      "ran": " 7393.01.01, 7393.01.02", 
       "image": " Santimbru calvinist church.jpg", 
       "long": 23.65, 
       "project": "ro", 
+      "lmi": " AB-II-m-A-00324", 
       "lat": 46.1333, 
       "quality": false
     }
@@ -136,7 +169,9 @@
       "code": "90360.01", 
       "lastedit": "20130715222946", 
       "name": "Cetatea dacic\u0103 de la Bucium", 
+      "author": null, 
       "ran": " 90360.01 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 23.189, 
       "project": "ro", 
       "lmi": " HD-I-s-A-03166 <ref name=\"ran\"/>", 
@@ -149,6 +184,7 @@
       "code": "90379.01", 
       "lastedit": "20150226163753", 
       "name": "Cetatea dacic\u0103 Coste\u0219ti-Cet\u0103\u021buie", 
+      "author": null, 
       "ran": " 90379.01 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=18 October 2012}}</ref> ", 
       "image": " Cetatea Costesti.JPG", 
       "long": 23.1543, 
@@ -163,9 +199,12 @@
       "code": "138093.05.01", 
       "lastedit": "20150103213455", 
       "name": "Castelul L\u00f3nyai", 
+      "author": null, 
+      "ran": " 138093.05.01", 
       "image": " Castelul Lonyai 01.jpg", 
       "long": 23.1329, 
       "project": "ro", 
+      "lmi": " SM-II-a-A-05332", 
       "lat": 47.4786, 
       "quality": false
     }
@@ -175,9 +214,12 @@
       "code": "151889.03", 
       "lastedit": "20140303150643", 
       "name": "Castrul roman de la Ro\u0219iorii de Vede (1)", 
+      "author": null, 
       "ran": " 151889.03", 
+      "image": null, 
       "long": 24.9833, 
       "project": "ro", 
+      "lmi": " TR-I-s-A-14221", 
       "lat": 44.1, 
       "quality": false
     }
@@ -187,6 +229,7 @@
       "code": "90379.05", 
       "lastedit": "20140702113329", 
       "name": "Cetatea dacic\u0103 Coste\u0219ti-Blidaru", 
+      "author": null, 
       "ran": " 90379.05 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=18 October 2012}}</ref>", 
       "image": " Cetatea Blidaru2.JPG", 
       "long": 23.1628, 
@@ -201,9 +244,12 @@
       "code": "127545.01", 
       "lastedit": "20130714134838", 
       "name": "Villa rustica de la Mih\u0103e\u0219ti", 
+      "author": null, 
       "ran": " 127545.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=47 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " OT-I-s-A-08519<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -213,11 +259,28 @@
       "code": "140388.03", 
       "lastedit": "20140303143458", 
       "name": "Castrul roman de la Buciumi", 
+      "author": null, 
       "ran": " 140388.03", 
       "image": " [[Fi\u0219ier:Castra of Buciumi 106-110 stitch5.jpg|300px]]", 
       "long": 23.0447, 
       "project": "ro", 
+      "lmi": " SJ-I-s-A-04862", 
       "lat": 47.0483, 
+      "quality": false
+    }
+  ], 
+  "87736.08": [
+    {
+      "code": "87736.08", 
+      "lastedit": "20130715075252", 
+      "name": "Villa rustica de la Uroi", 
+      "author": null, 
+      "ran": " 87736.08 <ref name=\"ran\">[http://ran.cimec.ro/sel.asp?loc=3562&Lang=RO&crsl=2&csel=2&clst=1&lpag=20&campsel=loc&ids=1 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": " [[File:RO_HD_Chimindia_1.jpg|300px]]", 
+      "long": 23.035, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 45.8622, 
       "quality": false
     }
   ], 
@@ -226,7 +289,9 @@
       "code": "86785.01", 
       "lastedit": "20130715223058", 
       "name": "Cetatea dacic\u0103 de la Cozia", 
+      "author": null, 
       "ran": " 86785.01 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 22.843, 
       "project": "ro", 
       "lmi": " HD-I-s-B-03183 <ref name=\"ran\"/>", 
@@ -237,13 +302,30 @@
   "51038.01.03": [
     {
       "code": "51038.01.03", 
-      "lastedit": "20150217204510", 
+      "lastedit": "20150813023408", 
       "name": "Tibiscum", 
+      "author": null, 
       "ran": " 51038.01.03", 
       "image": " [[File:Castrum Tibiscum - 07.jpg|250px]]", 
       "long": 22.1895, 
       "project": "ro", 
+      "lmi": " CS-I-s-A-10805", 
       "lat": 45.4664, 
+      "quality": false
+    }
+  ], 
+  "1026.08": [
+    {
+      "code": "1026.08", 
+      "lastedit": "20141127222536", 
+      "name": "Palatul Episcopiei romano-catolice din Alba Iulia", 
+      "author": null, 
+      "ran": " 1026.08", 
+      "image": " Palatul arhiepiscopal romano-catolic.JPG", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " AB-II-a-A-00130", 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -252,22 +334,28 @@
       "code": "124741.01", 
       "lastedit": "20150425104256", 
       "name": "Biserica \u201eDuminica Tuturor Sfin\u021bilor\u201d din Miron Costin", 
+      "author": null, 
+      "ran": " 124741.01", 
       "image": " Igreja do Miron Costin.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " NT-II-m-A-10634", 
       "lat": 0, 
       "quality": false
     }
   ], 
-  "144937.05": [
+  "52730.08": [
     {
-      "code": "144937.05", 
-      "lastedit": "20130714134754", 
-      "name": "Villa rustica de la Miercurea Sibiului (1)", 
-      "ran": " 144937.05 <ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=42 Repertoriul Arheologic Na\u021bional]</ref>", 
-      "long": 0, 
+      "code": "52730.08", 
+      "lastedit": "20140302155906", 
+      "name": "Castrul roman Ad Pannonios", 
+      "author": null, 
+      "ran": " 52730.08", 
+      "image": null, 
+      "long": 22.3068, 
       "project": "ro", 
-      "lat": 0, 
+      "lmi": " CS-I-m-A-10885.02", 
+      "lat": 45.1686, 
       "quality": false
     }
   ], 
@@ -276,7 +364,9 @@
       "code": "99236.01", 
       "lastedit": "20130715224311", 
       "name": "Cetatea dacic\u0103 de la Crive\u0219ti", 
+      "author": null, 
       "ran": " 99236.01 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 26.7738, 
       "project": "ro", 
       "lmi": " IS-I-s-B-03568 <ref name=\"ran\"/>", 
@@ -289,9 +379,12 @@
       "code": "42138.01", 
       "lastedit": "20141027153939", 
       "name": "Castrul roman de la Feldioara", 
+      "author": null, 
       "ran": " 42138.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?loc=1316&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=loc&ids=1 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 24.6902, 
       "project": "ro", 
+      "lmi": " BV-I-s-A-11277<ref name=\"ran\"/>", 
       "lat": 45.7984, 
       "quality": false
     }
@@ -301,9 +394,12 @@
       "code": "72043.01", 
       "lastedit": "20140303150533", 
       "name": "Castrul roman de la Desa", 
+      "author": null, 
       "ran": " 72043.01", 
+      "image": null, 
       "long": 22.9476, 
       "project": "ro", 
+      "lmi": " DJ-I-s-A-07889", 
       "lat": 43.8264, 
       "quality": false
     }
@@ -313,21 +409,42 @@
       "code": "91072.03", 
       "lastedit": "20140704171443", 
       "name": "Villa rustica de la Breazova", 
+      "author": null, 
       "ran": " 91072.03<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=11 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 22.7948, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 45.5289, 
+      "quality": false
+    }
+  ], 
+  "60785.09": [
+    {
+      "code": "60785.09", 
+      "lastedit": "20140303143847", 
+      "name": "Castrul roman de la Cernavod\u0103", 
+      "author": null, 
+      "ran": " 60785.09<ref name=\"ran\">[http://www.cimec.ro/scripts/ARH/RAN/sel.asp?loc=725&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=loc&ids=1 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
+      "long": 28.0333, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 44.3333, 
       "quality": false
     }
   ], 
   "120879.06.01": [
     {
       "code": "120879.06.01", 
-      "lastedit": "20150218220247", 
+      "lastedit": "20150822103236", 
       "name": "Fosta biseric\u0103 armeneasc\u0103 din Roman", 
+      "author": null, 
+      "ran": " 120879.06.01", 
       "image": " RO NT Roman Armenian Church.jpg", 
       "long": 26.9278, 
       "project": "ro", 
+      "lmi": " NT-II-m-A-10666", 
       "lat": 46.9234, 
       "quality": false
     }
@@ -337,9 +454,12 @@
       "code": "86954.01", 
       "lastedit": "20130714134148", 
       "name": "Villa rustica de la Cinci\u0219-Cerna", 
+      "author": null, 
       "ran": " 86954.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=1 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " HD-I-s-B-03173<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -349,10 +469,28 @@
       "code": "62495.01", 
       "lastedit": "20140302160938", 
       "name": "Castrul roman Altenum", 
+      "author": null, 
       "ran": " 62495.01", 
+      "image": null, 
       "long": 27.6952, 
       "project": "ro", 
+      "lmi": " CT-I-s-B-02717", 
       "lat": 44.1906, 
+      "quality": false
+    }
+  ], 
+  "106988.01": [
+    {
+      "code": "106988.01", 
+      "lastedit": "20150806210906", 
+      "name": "Biserica romano-catolic\u0103 \u201eIoan \u0219i Ana\u201d din Vi\u0219eu de Sus", 
+      "author": null, 
+      "ran": " 106988.01", 
+      "image": " Viseul de SusMM (6).JPG", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " MM-II-m-A-04799", 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -361,9 +499,12 @@
       "code": "142836.02", 
       "lastedit": "20140303150200", 
       "name": "Castrul roman de la Tih\u0103u", 
+      "author": null, 
       "ran": " 142836.02", 
+      "image": null, 
       "long": 23.3167, 
       "project": "ro", 
+      "lmi": " SJ-I-s-A-04971", 
       "lat": 47.2167, 
       "quality": false
     }
@@ -373,9 +514,12 @@
       "code": "141241.03", 
       "lastedit": "20130714134701", 
       "name": "Villa rustica de la G\u00e2rbou", 
+      "author": null, 
       "ran": " 141241.03<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=35 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 23.4189, 
       "project": "ro", 
+      "lmi": " SJ-I-s-B-04897<ref name=\"ran\"/>", 
       "lat": 47.1597, 
       "quality": false
     }
@@ -385,9 +529,12 @@
       "code": "126415.01", 
       "lastedit": "20140303150606", 
       "name": "Castrul roman de la Cr\u00e2mpoia", 
+      "author": null, 
       "ran": " 126415.01", 
+      "image": null, 
       "long": 24.7271, 
       "project": "ro", 
+      "lmi": " OT-I-s-B-08510", 
       "lat": 44.3104, 
       "quality": false
     }
@@ -397,9 +544,12 @@
       "code": "90967.03.01", 
       "lastedit": "20141201143240", 
       "name": "Cetatea Col\u021b", 
+      "author": null, 
+      "ran": " 90967.03.01", 
       "image": " Colt2.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " HD-II-a-A-03458", 
       "lat": 0, 
       "quality": false
     }
@@ -409,9 +559,12 @@
       "code": "144937.01", 
       "lastedit": "20130913133746", 
       "name": "Villa rustica de la Miercurea Sibiului (3)", 
+      "author": null, 
       "ran": " 144937.01", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " SB-I-s-B-11971", 
       "lat": 0, 
       "quality": false
     }
@@ -421,10 +574,43 @@
       "code": "51859.01", 
       "lastedit": "20130714134455", 
       "name": "Villa rustica de la C\u0103rbunari", 
+      "author": null, 
       "ran": " 51859.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=21 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " CS-I-s-B-10809<ref name=\"ran\"/>", 
       "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "64201.05": [
+    {
+      "code": "64201.05", 
+      "lastedit": "20130715222958", 
+      "name": "Cetatea dacic\u0103 de la Cernat", 
+      "author": null, 
+      "ran": " 64201.05 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=15 October 2012}}</ref>", 
+      "image": null, 
+      "long": 26, 
+      "project": "ro", 
+      "lmi": " CV-I-m-A-13056.02 <ref name=\"lmi\"/>", 
+      "lat": 45.97, 
+      "quality": false
+    }
+  ], 
+  "87870.01": [
+    {
+      "code": "87870.01", 
+      "lastedit": "20150620033002", 
+      "name": "Cetatea dacic\u0103 de la Ardeu", 
+      "author": null, 
+      "ran": " 87870.01 <ref name=\"ran\">{{cite web|title=Repertoriul Arheologic Na\u021bional (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=15 October 2012}}</ref>", 
+      "image": null, 
+      "long": 23.146, 
+      "project": "ro", 
+      "lmi": " HD-I-m-A-03151.02 <ref name=\"lmi\">{{cite web|title=Lista Monumentelor Istorice, Jude\u021bul Hunedoara|url=http://www.inmi.ro/lmi/HUNEDOARA.pdf|publisher=www.inmi.ro|accessdate=15 October 2012}}</ref>", 
+      "lat": 46.0161, 
       "quality": false
     }
   ], 
@@ -433,7 +619,9 @@
       "code": "63955.01", 
       "lastedit": "20130715222924", 
       "name": "Cetatea dacic\u0103 de la Boro\u0219neu Mic", 
+      "author": null, 
       "ran": " 63955.01 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 25.993, 
       "project": "ro", 
       "lmi": " CV-I-s-A-13048 <ref name=\"lmi\">{{cite web|title=National Register of Historic Monuments in Romania, Covasna County|url=http://www.inmi.ro/lmi/covasna.pdf|publisher=www.inmi.ro|accessdate=15 October 2012}}</ref>", 
@@ -446,9 +634,12 @@
       "code": "62618.01", 
       "lastedit": "20140715203842", 
       "name": "Castrul roman Ulmetum", 
+      "author": null, 
       "ran": " 62618.01", 
+      "image": null, 
       "long": 28.3417, 
       "project": "ro", 
+      "lmi": " CT-I-m-A-02726", 
       "lat": 44.5475, 
       "quality": false
     }
@@ -458,9 +649,12 @@
       "code": "90903.02", 
       "lastedit": "20130714134323", 
       "name": "Villa rustica de la Clopotiva", 
+      "author": null, 
       "ran": " 90903.02<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=7 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -470,23 +664,28 @@
       "code": "91367.04", 
       "lastedit": "20140704174606", 
       "name": "Villa rustica de la Boholt", 
+      "author": null, 
       "ran": " 91367.04<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=10 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 22.9217, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 45.9467, 
       "quality": false
     }
   ], 
-  "105179.03.01": [
+  "70931.01": [
     {
-      "code": "105179.03.01", 
-      "lastedit": "20141201145308", 
-      "name": "M\u0103n\u0103stirea Snagov", 
-      "ran": "105179.03.01, 105179.03.02", 
-      "image": "[[File:M\u00e2n\u0103stirea Snagov.jpg|thumb|M\u00e2n\u0103stirea Snagov]]", 
-      "long": 0, 
+      "code": "70931.01", 
+      "lastedit": "20140303150527", 
+      "name": "Castrul roman de la Plosca", 
+      "author": null, 
+      "ran": " 70931.01", 
+      "image": null, 
+      "long": 23.5481, 
       "project": "ro", 
-      "lat": 0, 
+      "lmi": " DJ-I-s-B-07908", 
+      "lat": 43.8191, 
       "quality": false
     }
   ], 
@@ -495,9 +694,12 @@
       "code": "87647.05.01", 
       "lastedit": "20140816193807", 
       "name": "Biserica reformat\u0103 din Or\u0103\u0219tie", 
+      "author": null, 
+      "ran": " 87647.05.01", 
       "image": " OrastieHD2012 (30).JPG", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " HD-II-m-A-03378", 
       "lat": 0, 
       "quality": false
     }
@@ -505,12 +707,15 @@
   "107537.02": [
     {
       "code": "107537.02", 
-      "lastedit": "20141201161125", 
+      "lastedit": "20150706191129", 
       "name": "Biserica de lemn din S\u00e2rbi Josani", 
+      "author": null, 
+      "ran": " 107537.02", 
       "image": " S\u00e2rbi Josani.jpg", 
-      "long": 0, 
+      "long": 23.9453, 
       "project": "ro", 
-      "lat": 0, 
+      "lmi": " MM-II-m-A-04639", 
+      "lat": 47.7992, 
       "quality": false
     }
   ], 
@@ -519,6 +724,7 @@
       "code": "168194.01", 
       "lastedit": "20140721184420", 
       "name": "Buridava", 
+      "author": null, 
       "ran": " 168194.01 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=18 October 2012}}</ref>  ", 
       "image": " Dacian Fortress Buridava 00.JPG", 
       "long": 24.2876, 
@@ -531,11 +737,14 @@
   "109844.05": [
     {
       "code": "109844.05", 
-      "lastedit": "20150217220521", 
+      "lastedit": "20150813182718", 
       "name": "Cula Tudor Vladimirescu", 
+      "author": null, 
+      "ran": " 109844.05", 
       "image": " Cula Tudor Vladimirescu 3.JPG", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " MH-II-m-A-10287", 
       "lat": 0, 
       "quality": false
     }
@@ -543,24 +752,60 @@
   "108213.03": [
     {
       "code": "108213.03", 
-      "lastedit": "20150313192026", 
-      "name": "Biserica de lemn din Ieud Deal", 
+      "lastedit": "20150803143823", 
+      "name": "Biserica de lemn din Ieud", 
+      "author": null, 
+      "ran": " 108213.03", 
       "image": " Ieud deal.ulita bisericii.jpg", 
       "long": 24.2365, 
       "project": "ro", 
+      "lmi": " MM-II-m-A-04588", 
       "lat": 47.6762, 
       "quality": true
     }
   ], 
-  "88458.02": [
+  "159623.01": [
     {
-      "code": "88458.02", 
-      "lastedit": "20130715222935", 
-      "name": "Cetatea dacic\u0103 de la Bo\u0219orod", 
-      "ran": " 88458.02 <ref name=\"ran\"/>", 
-      "long": 23.092, 
+      "code": "159623.01", 
+      "lastedit": "20140816210425", 
+      "name": "Aegyssus", 
+      "author": null, 
+      "ran": " 159623.01", 
+      "image": " Cetatea Aegyssus2.JPG", 
+      "long": 0, 
       "project": "ro", 
-      "lat": 45.682, 
+      "lmi": " TL-I-s-A-05718", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "69937.01": [
+    {
+      "code": "69937.01", 
+      "lastedit": "20140303145748", 
+      "name": "Pelendava", 
+      "author": null, 
+      "ran": " 69937.01", 
+      "image": null, 
+      "long": 23.7469, 
+      "project": "ro", 
+      "lmi": " DJ-I-s-A-07878", 
+      "lat": 44.2836, 
+      "quality": false
+    }
+  ], 
+  "52794.02": [
+    {
+      "code": "52794.02", 
+      "lastedit": "20140302155926", 
+      "name": "Castrul roman Aizis", 
+      "author": null, 
+      "ran": " 52794.02", 
+      "image": null, 
+      "long": 21.8561, 
+      "project": "ro", 
+      "lmi": " CS-I-m-B-10827.02", 
+      "lat": 45.4925, 
       "quality": false
     }
   ], 
@@ -569,35 +814,88 @@
       "code": "51519.01", 
       "lastedit": "20140303141752", 
       "name": "Castrul roman Bersobis", 
+      "author": null, 
       "ran": " 51519.01", 
+      "image": null, 
       "long": 21.6151, 
       "project": "ro", 
+      "lmi": " CS-I-s-A-10785", 
       "lat": 45.433, 
       "quality": false
     }
   ], 
-  "16356.02": [
+  "88038.01": [
     {
-      "code": "16356.02", 
-      "lastedit": "20140118052723", 
-      "name": "Cetatea Oratea", 
-      "image": "Fi\u0219ier:Cetatea Oratea-2012.jpg", 
+      "code": "88038.01", 
+      "lastedit": "20130714134912", 
+      "name": "Villa rustica de la Valea Lupului", 
+      "author": null, 
+      "ran": " 88038.01 <ref name=\"ran\"> [http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=50 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " HD-I-s-B-03212 <ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
   ], 
-  "141955.01": [
+  "7927.05": [
     {
-      "code": "141955.01", 
-      "lastedit": "20130715212008", 
-      "name": "Cetatea dacic\u0103 de la Marca", 
-      "ran": " 141955.01 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=16 October 2012}}</ref> ", 
-      "long": 22.55, 
+      "code": "7927.05", 
+      "lastedit": "20150806203247", 
+      "name": "Biserica reformat\u0103 din S\u00e2nmicl\u0103u\u0219", 
+      "author": null, 
+      "ran": " 7927.05", 
+      "image": " RO AB Biserica reformata din Sanmiclaus (1).JPG", 
+      "long": 0, 
       "project": "ro", 
-      "lmi": " SJ-I-s-A-04917 <ref name=\"lmi\"/>", 
-      "lat": 47.21, 
+      "lmi": " AB-II-m-A-00321", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "140734.14": [
+    {
+      "code": "140734.14", 
+      "lastedit": "20140303150416", 
+      "name": "Castrul roman de la Jac", 
+      "author": null, 
+      "ran": " 140734.14<ref name=\"ran\">[http://archweb.cimec.ro/scripts/ARH/RAN/sel.asp?loc=1761&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=loc&Ojud=1&Oloc=1&ids=10 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
+      "long": 23.1833, 
+      "project": "ro", 
+      "lmi": " SJ-I-m-A-04909.17<ref name=\"ran\"/>", 
+      "lat": 47.1667, 
+      "quality": false
+    }
+  ], 
+  "33444.05": [
+    {
+      "code": "33444.05", 
+      "lastedit": "20141127213645", 
+      "name": "Ansamblul bisericii reformate din Lechin\u021ba", 
+      "author": null, 
+      "ran": " 33444.05", 
+      "image": " Biserica evanghelica din Lechinta (11).JPG", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " BN-II-a-A-01664", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "88662.01": [
+    {
+      "code": "88662.01", 
+      "lastedit": "20140704171257", 
+      "name": "Villa rustica de la B\u0103\u021b\u0103lar", 
+      "author": null, 
+      "ran": " 88662.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=4 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
+      "long": 23.0175, 
+      "project": "ro", 
+      "lmi": " HD-I-s-B-03158<ref name=\"ran\"/>", 
+      "lat": 45.6983, 
       "quality": false
     }
   ], 
@@ -606,9 +904,12 @@
       "code": "130543.09", 
       "lastedit": "20140303150618", 
       "name": "Castrul roman de la Ploie\u0219ti", 
+      "author": null, 
       "ran": " 130543.09", 
+      "image": null, 
       "long": 26.0167, 
       "project": "ro", 
+      "lmi": " PH-I-s-B-16123", 
       "lat": 44.9333, 
       "quality": false
     }
@@ -618,9 +919,12 @@
       "code": "33186.01", 
       "lastedit": "20141127213333", 
       "name": "Podul gr\u0103niceresc peste r\u00e2ul S\u0103lau\u021ba", 
+      "author": null, 
+      "ran": " 33186.01", 
       "image": " Cosbuc-podul-graniceresc-salauta.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " BN-II-m-A-01639", 
       "lat": 0, 
       "quality": false
     }
@@ -630,10 +934,58 @@
       "code": "1856.01", 
       "lastedit": "20140303150507", 
       "name": "Castrul roman de la R\u0103zboieni-Cetate", 
+      "author": null, 
       "ran": " 1856.01", 
+      "image": null, 
       "long": 23.8683, 
       "project": "ro", 
+      "lmi": " AB-I-s-B-00062", 
       "lat": 46.4172, 
+      "quality": false
+    }
+  ], 
+  "51154.01.01": [
+    {
+      "code": "51154.01.01", 
+      "lastedit": "20150906120606", 
+      "name": "Agadici (sit arheologic)", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "106568.05": [
+    {
+      "code": "106568.05", 
+      "lastedit": "20150813124553", 
+      "name": "M\u0103n\u0103stirea Piari\u0219tilor din Sighetul Marma\u021biei", 
+      "author": null, 
+      "ran": " 106568.05", 
+      "image": " Manastirea Piaristilor din Sighet.JPG", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " MM-II-a-A-04724", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "136535.04.01": [
+    {
+      "code": "136535.04.01", 
+      "lastedit": "20140816224405", 
+      "name": "Ansamblul castelului K\u00e1rolyi din Carei", 
+      "author": "[[Arthur Meinig]] (arhitect)", 
+      "ran": " 136535.04.01", 
+      "image": " Carei03.jpg", 
+      "long": 22.4673, 
+      "project": "ro", 
+      "lmi": " SM-II-a-A-05280", 
+      "lat": 47.6838, 
       "quality": false
     }
   ], 
@@ -642,9 +994,12 @@
       "code": "152118.02", 
       "lastedit": "20130714162153", 
       "name": "Biserica de lemn din Sericu", 
-      "image": "Fi\u0219ier:Sericu TR.bislemn.S.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -654,9 +1009,12 @@
       "code": "151745.02", 
       "lastedit": "20140303172528", 
       "name": "Castrul roman de la Islaz (2)", 
+      "author": null, 
       "ran": " 151745.02<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?Ocat=1&Lang=EN&Ojud=1&Oloc=1&nr=109&ids=10814 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 24.75, 
       "project": "ro", 
+      "lmi": " TR-I-s-B-14207<ref name=\"ran\"/>", 
       "lat": 43.7, 
       "quality": false
     }
@@ -666,9 +1024,12 @@
       "code": "128329.01", 
       "lastedit": "20140303142658", 
       "name": "Castrul roman de la Albe\u0219ti", 
+      "author": null, 
       "ran": " 128329.01", 
+      "image": null, 
       "long": 24.438, 
       "project": "ro", 
+      "lmi": " OT-I-s-A-08480", 
       "lat": 44.6711, 
       "quality": false
     }
@@ -678,9 +1039,12 @@
       "code": "151745.01", 
       "lastedit": "20140303150546", 
       "name": "Castrul roman de la Islaz (1)", 
+      "author": null, 
       "ran": " 151745.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?Ocat=1&Lang=EN&Ojud=1&Oloc=1&nr=109&ids=10814 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 24.75, 
       "project": "ro", 
+      "lmi": " TR-I-s-B-14206<ref name=\"ran\"/>", 
       "lat": 43.7333, 
       "quality": false
     }
@@ -690,10 +1054,28 @@
       "code": "139759.01", 
       "lastedit": "20140816204440", 
       "name": "Biserica reformat\u0103 din Cehu Silvaniei", 
+      "author": null, 
+      "ran": " 139759.01", 
       "image": " Hungarian Reformed Church from Szil\u00e1gycseh - Szil\u00e1gycsehi Reform\u00e1tus Templom - Biserica Reformat\u0103 din Cehu-Silvaniei.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " SJ-II-m-A-05034", 
       "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "21392.01": [
+    {
+      "code": "21392.01", 
+      "lastedit": "20150221210348", 
+      "name": "Conacul Rosetti-Tescanu din Tescani", 
+      "author": null, 
+      "ran": " 21392.01", 
+      "image": " Muzeul national \u201dGeorge Enescu\u201d.jpg", 
+      "long": 26.6497, 
+      "project": "ro", 
+      "lmi": " BC-II-a-A-00914", 
+      "lat": 46.5118, 
       "quality": false
     }
   ], 
@@ -702,9 +1084,12 @@
       "code": "172260.01", 
       "lastedit": "20140303150410", 
       "name": "Castrul roman de la Tite\u0219ti", 
+      "author": null, 
       "ran": " 172260.01", 
+      "image": null, 
       "long": 24.3833, 
       "project": "ro", 
+      "lmi": " VL-I-s-A-09587", 
       "lat": 45.4167, 
       "quality": false
     }
@@ -714,9 +1099,12 @@
       "code": "71108.02", 
       "lastedit": "20140303150520", 
       "name": "Castrul roman de la R\u0103carii de Jos", 
+      "author": null, 
       "ran": " 71108.02", 
+      "image": null, 
       "long": 23.5718, 
       "project": "ro", 
+      "lmi": " DJ-I-s-B-07912", 
       "lat": 44.514, 
       "quality": false
     }
@@ -724,12 +1112,30 @@
   "89614.01": [
     {
       "code": "89614.01", 
-      "lastedit": "20141124221010", 
+      "lastedit": "20150905095052", 
       "name": "Castrul roman Germisara", 
+      "author": null, 
       "ran": " 89614.01", 
+      "image": " [[Fi\u0219ier:Castra_of_Cigmau_-_26.JPG|250px]]", 
       "long": 23.1903, 
       "project": "ro", 
+      "lmi": " HD-I-s-A-03172", 
       "lat": 45.8939, 
+      "quality": false
+    }
+  ], 
+  "144937.05": [
+    {
+      "code": "144937.05", 
+      "lastedit": "20130714134754", 
+      "name": "Villa rustica de la Miercurea Sibiului (1)", 
+      "author": null, 
+      "ran": " 144937.05 <ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=42 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -738,9 +1144,12 @@
       "code": "160412.07", 
       "lastedit": "20130714134607", 
       "name": "Villa rustica de la Po\u0219ta (2)", 
+      "author": null, 
       "ran": " 160412.07<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " TL-I-s-B-05887<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -750,9 +1159,12 @@
       "code": "16935.01", 
       "lastedit": "20140303150441", 
       "name": "Castrul roman de la Voine\u0219ti", 
+      "author": null, 
       "ran": " 16935.01<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 25.0667, 
       "project": "ro", 
+      "lmi": " AG-I-s-A-13387<ref name=\"ran\"/>", 
       "lat": 45.3, 
       "quality": false
     }
@@ -762,9 +1174,12 @@
       "code": "160412.05", 
       "lastedit": "20130714134555", 
       "name": "Villa rustica de la Po\u0219ta (1)", 
+      "author": null, 
       "ran": " 160412.05<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " TL-I-s-B-05885<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -772,12 +1187,30 @@
   "132903.01": [
     {
       "code": "132903.01", 
-      "lastedit": "20150511235912", 
+      "lastedit": "20150602234207", 
       "name": "Castrul roman de la Drajna de Sus", 
+      "author": null, 
       "ran": " 132903.01", 
+      "image": null, 
       "long": 26.0729, 
       "project": "ro", 
+      "lmi": " PH-I-s-B-16174", 
       "lat": 45.2567, 
+      "quality": false
+    }
+  ], 
+  "141955.01": [
+    {
+      "code": "141955.01", 
+      "lastedit": "20130715212008", 
+      "name": "Cetatea dacic\u0103 de la Marca", 
+      "author": null, 
+      "ran": " 141955.01 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=16 October 2012}}</ref> ", 
+      "image": null, 
+      "long": 22.55, 
+      "project": "ro", 
+      "lmi": " SJ-I-s-A-04917 <ref name=\"lmi\"/>", 
+      "lat": 47.21, 
       "quality": false
     }
   ], 
@@ -786,9 +1219,12 @@
       "code": "90903.01", 
       "lastedit": "20130715223034", 
       "name": "Cetatea dacic\u0103 de la Clopotiva", 
+      "author": null, 
       "ran": " 90903.01 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 22.805, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 45.477, 
       "quality": false
     }
@@ -798,9 +1234,12 @@
       "code": "87451.02", 
       "lastedit": "20140303091035", 
       "name": "Villa rustica de la Batiz", 
+      "author": null, 
       "ran": " 87451.02<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=5 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 23.0007, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 45.8976, 
       "quality": false
     }
@@ -808,27 +1247,45 @@
   "145916.01": [
     {
       "code": "145916.01", 
-      "lastedit": "20140715123730", 
+      "lastedit": "20150826121905", 
       "name": "Cetatea dacic\u0103 de la Tili\u0219ca", 
+      "author": null, 
       "ran": " 145916.01", 
       "image": " Dacian Fortress of Tilisca - 02.jpg", 
-      "long": 23.8483, 
+      "long": 0, 
       "project": "ro", 
       "lmi": " SB-I-s-A-12008", 
-      "lat": 45.8023, 
+      "lat": 0, 
       "quality": false
     }
   ], 
-  "87736.08": [
+  "52589.02": [
     {
-      "code": "87736.08", 
-      "lastedit": "20130715075252", 
-      "name": "Villa rustica de la Uroi", 
-      "ran": " 87736.08 <ref name=\"ran\">[http://ran.cimec.ro/sel.asp?loc=3562&Lang=RO&crsl=2&csel=2&clst=1&lpag=20&campsel=loc&ids=1 Repertoriul Arheologic Na\u021bional]</ref>", 
-      "image": " [[File:RO_HD_Chimindia_1.jpg|300px]]", 
-      "long": 23.035, 
+      "code": "52589.02", 
+      "lastedit": "20130714134444", 
+      "name": "Villa rustica de la Dalbo\u0219e\u021b", 
+      "author": null, 
+      "ran": " 52589.02<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=20 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
+      "long": 0, 
       "project": "ro", 
-      "lat": 45.8622, 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "64354.04": [
+    {
+      "code": "64354.04", 
+      "lastedit": "20141127231810", 
+      "name": "Ansamblul bisericii reformate din Ghidfal\u0103u", 
+      "author": null, 
+      "ran": " 64354.04", 
+      "image": " Ghidfal\u0103uFotoThalerTamas.JPG", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " CV-II-a-A-13218", 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -837,9 +1294,12 @@
       "code": "51029.27", 
       "lastedit": "20141127225444", 
       "name": "Cazarma gr\u0103nicerilor din Caransebe\u0219", 
+      "author": null, 
+      "ran": " 51029.27", 
       "image": " Caransebes Cazarma granicerilor.jpg", 
       "long": 22.2138, 
       "project": "ro", 
+      "lmi": " CS-II-m-A-11063", 
       "lat": 45.4144, 
       "quality": false
     }
@@ -849,7 +1309,9 @@
       "code": "63535.01", 
       "lastedit": "20150430095112", 
       "name": "Cetatea Z\u00e2nelor", 
+      "author": null, 
       "ran": " 63535.01 <ref name=\"ran\">{{cite web|title=Repertoriul Arheologic Na\u021bional (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=15 October 2012}}</ref>", 
+      "image": null, 
       "long": 26.2, 
       "project": "ro", 
       "lmi": " CV-I-s-A-13058 <ref name=\"lmi\">{{cite web|title=Lista Monumentelor Istorice, Jude\u021bul Covasna|url=http://www.inmi.ro/lmi/covasna.pdf|publisher=www.inmi.ro|accessdate=15 October 2012}}</ref>", 
@@ -862,9 +1324,12 @@
       "code": "83302.01", 
       "lastedit": "20130714134953", 
       "name": "Villa rustica de la V\u0103leni", 
+      "author": null, 
       "ran": " 83302.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=55 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " HR-I-s-B-12718<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -874,10 +1339,12 @@
       "code": "140734.08", 
       "lastedit": "20150218224546", 
       "name": "Porolissum", 
+      "author": null, 
       "ran": " 140734.08", 
       "image": " [[Fi\u0219ier:Gate Porolissum.jpg|300px]]", 
       "long": 23.1568, 
       "project": "ro", 
+      "lmi": " SJ-I-s-A-04909", 
       "lat": 47.1799, 
       "quality": false
     }
@@ -887,7 +1354,9 @@
       "code": "98211.01", 
       "lastedit": "20140528142111", 
       "name": "Cetatea dacic\u0103 de la Mo\u0219na", 
+      "author": null, 
       "ran": " 98211.01 <ref name=\"ran\">{{cite web|title=Repertoriul Arheologic Na\u021bional (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=16 October 2012}}</ref>", 
+      "image": null, 
       "long": 27.95, 
       "project": "ro", 
       "lmi": " IS-I-s-B-03619 <ref name=\"lmi\"/>", 
@@ -900,9 +1369,42 @@
       "code": "55909.09", 
       "lastedit": "20130714135003", 
       "name": "Villa rustica de la Suceagu", 
+      "author": null, 
       "ran": " 55909.09<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=57 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "16356.02": [
+    {
+      "code": "16356.02", 
+      "lastedit": "20140118052723", 
+      "name": "Cetatea Oratea", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "33239.02": [
+    {
+      "code": "33239.02", 
+      "lastedit": "20150614200641", 
+      "name": "Biserica Evanghelic\u0103-Lutheran\u0103 din T\u0103rpiu", 
+      "author": null, 
+      "ran": " 33239.02", 
+      "image": " Tarpiu Biserica evanghelica (8).JPG", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " BN-II-a-A-01716", 
       "lat": 0, 
       "quality": false
     }
@@ -912,9 +1414,27 @@
       "code": "143940.01", 
       "lastedit": "20130714134743", 
       "name": "Villa rustica de la S\u00e2ng\u0103tin", 
+      "author": null, 
       "ran": " 143940.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=41 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "106568.02.01": [
+    {
+      "code": "106568.02.01", 
+      "lastedit": "20150813124804", 
+      "name": "Biserica reformat\u0103 din Sighetu Marma\u021biei", 
+      "author": null, 
+      "ran": " 106568.02.01", 
+      "image": " Biserica reformata din Sighet (7).JPG", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " MM-II-m-A-04743", 
       "lat": 0, 
       "quality": false
     }
@@ -924,33 +1444,42 @@
       "code": "96487.02", 
       "lastedit": "20130715223046", 
       "name": "Cetatea dacic\u0103 de la Cotnari", 
+      "author": null, 
       "ran": " 96487.02 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 26.94, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 47.34, 
       "quality": false
     }
   ], 
-  "161507.08": [
+  "160920.02": [
     {
-      "code": "161507.08", 
-      "lastedit": "20140920060613", 
-      "name": "Villa rustica de la Agighiol", 
-      "ran": " 161507.08<ref name=\"ran\"/>", 
-      "long": 28.9887, 
+      "code": "160920.02", 
+      "lastedit": "20150731164720", 
+      "name": "Halmyris", 
+      "author": null, 
+      "ran": " 160920.02", 
+      "image": null, 
+      "long": 29.1978, 
       "project": "ro", 
-      "lat": 45.0759, 
+      "lmi": " TL-I-s-A-05844", 
+      "lat": 45.025, 
       "quality": false
     }
   ], 
-  "88038.01": [
+  "160573.01": [
     {
-      "code": "88038.01", 
-      "lastedit": "20130714134912", 
-      "name": "Villa rustica de la Valea Lupului", 
-      "ran": " 88038.01 <ref name=\"ran\"> [http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=50 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "code": "160573.01", 
+      "lastedit": "20140920061102", 
+      "name": "Castrul roman de la Izvoarele", 
+      "author": null, 
+      "ran": " 160573.01", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " TL-I-m-B-05805.01", 
       "lat": 0, 
       "quality": false
     }
@@ -958,11 +1487,14 @@
   "112085.01": [
     {
       "code": "112085.01", 
-      "lastedit": "20140303150247", 
+      "lastedit": "20150807085344", 
       "name": "Castrul roman de la Hinova", 
+      "author": null, 
       "ran": " 112085.01<ref name=\"ran\">[http://www.cimec.ro/scripts/ARH/RAN/sel.asp?loc=1619&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=loc&ids=2 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 22.7667, 
       "project": "ro", 
+      "lmi": " MH-I-s-A-10076", 
       "lat": 44.5333, 
       "quality": false
     }
@@ -972,9 +1504,12 @@
       "code": "153945.01", 
       "lastedit": "20140303150649", 
       "name": "Castrul roman de la Salcia", 
+      "author": null, 
       "ran": " 153945.01", 
+      "image": null, 
       "long": 24.9, 
       "project": "ro", 
+      "lmi": " TR-I-s-B-20757", 
       "lat": 43.9333, 
       "quality": false
     }
@@ -984,9 +1519,27 @@
       "code": "111792.02", 
       "lastedit": "20130714134734", 
       "name": "Villa rustica de la G\u00e2rla Mare", 
+      "author": null, 
       "ran": " 111792.02<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "105892.03": [
+    {
+      "code": "105892.03", 
+      "lastedit": "20140815224350", 
+      "name": "Curtea lui Radu \u0219i Constantin \u0218erban", 
+      "author": null, 
+      "ran": " 105892.03", 
+      "image": " Seria+2+(6).JPG", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " GR-II-a-A-14982", 
       "lat": 0, 
       "quality": false
     }
@@ -996,9 +1549,12 @@
       "code": "54984.21", 
       "lastedit": "20130714134158", 
       "name": "Villa rustica de la Cluj-Napoca", 
+      "author": null, 
       "ran": " 54984.210<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=2 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -1006,11 +1562,14 @@
   "60954.04": [
     {
       "code": "60954.04", 
-      "lastedit": "20140703235730", 
+      "lastedit": "20150901210500", 
       "name": "Villa rustica de la Albe\u0219ti", 
-      "ran": " 60954.04<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=50&campsel=tip&Oloc=1&ids=2 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "author": null, 
+      "ran": " 60954.04", 
+      "image": null, 
       "long": 28.4294, 
       "project": "ro", 
+      "lmi": " CT-I-s-B-02580", 
       "lat": 43.8009, 
       "quality": false
     }
@@ -1020,9 +1579,12 @@
       "code": "112502.01", 
       "lastedit": "20140303150612", 
       "name": "Castrul roman de la Pu\u021binei", 
+      "author": null, 
       "ran": " 112502.01", 
+      "image": null, 
       "long": 22.7, 
       "project": "ro", 
+      "lmi": " MH-I-s-B-10091", 
       "lat": 44.6667, 
       "quality": false
     }
@@ -1032,8 +1594,12 @@
       "code": "9663.01", 
       "lastedit": "20140224122445", 
       "name": "Cetatea P\u00e2ncota", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -1043,9 +1609,12 @@
       "code": "87530.01", 
       "lastedit": "20130714134923", 
       "name": "Villa rustica de la Strei", 
+      "author": null, 
       "ran": " 87530.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=10 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " HD-I-s-B-03208<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -1055,9 +1624,12 @@
       "code": "4936.01", 
       "lastedit": "20140303150514", 
       "name": "Castrul roman de la Ighiu", 
+      "author": null, 
       "ran": " 4936.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?loc=1699&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=loc&Ocat=2&Otip=1&ids=1 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 23.4952, 
       "project": "ro", 
+      "lmi": " AB-I-s-B-00048", 
       "lat": 46.1293, 
       "quality": false
     }
@@ -1065,11 +1637,14 @@
   "82449.04": [
     {
       "code": "82449.04", 
-      "lastedit": "20150523083027", 
+      "lastedit": "20150722195100", 
       "name": "M\u0103n\u0103stirea Tismana", 
+      "author": null, 
+      "ran": " 82449.04", 
       "image": " RO GJ - M\u0103n\u0103stirea Tismana.jpg", 
       "long": 22.9518, 
       "project": "ro", 
+      "lmi": " GJ-II-a-A-09413", 
       "lat": 45.0459, 
       "quality": false
     }
@@ -1079,10 +1654,58 @@
       "code": "131522.01", 
       "lastedit": "20140303150631", 
       "name": "Castrul roman de la Sf\u00e2rleanca", 
+      "author": null, 
       "ran": " 131522.01", 
+      "image": null, 
       "long": 26, 
       "project": "ro", 
+      "lmi": " PH-I-s-A-16208", 
       "lat": 45.0833, 
+      "quality": false
+    }
+  ], 
+  "171281.02.01": [
+    {
+      "code": "171281.02.01", 
+      "lastedit": "20150825073740", 
+      "name": "Cula Greceanu", 
+      "author": null, 
+      "ran": "  171281.02.01", 
+      "image": " Cula Greceanu, sat M\u0103ld\u0103re\u0219ti, jud. V\u00e2lcea.jpg|Cula Greceanu, sat M\u0103ld\u0103re\u0219ti, jud. V\u00e2lcea", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": "  VL-II-a-A-09812", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "83142.02": [
+    {
+      "code": "83142.02", 
+      "lastedit": "20130715212045", 
+      "name": "Cetatea dacic\u0103 de la Odorheiu Secuiesc", 
+      "author": null, 
+      "ran": " 83142.02 <ref name=\"ran\"/>", 
+      "image": null, 
+      "long": 25.3, 
+      "project": "ro", 
+      "lmi": " HR-I-m-A-12693.02 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=16 October 2012}}</ref> ", 
+      "lat": 46.3, 
+      "quality": false
+    }
+  ], 
+  "109782.06": [
+    {
+      "code": "109782.06", 
+      "lastedit": "20140303150147", 
+      "name": "Castrul roman Drobeta", 
+      "author": null, 
+      "ran": " 109782.06", 
+      "image": " [[Fi\u0219ier:Turnu Severin Drobeta.jpg|250px]]", 
+      "long": 22.668, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 44.6249, 
       "quality": false
     }
   ], 
@@ -1091,10 +1714,12 @@
       "code": "40376.01", 
       "lastedit": "20141027153825", 
       "name": "Castrul roman Cumidava", 
+      "author": null, 
       "ran": " 40376.01", 
-      "image": "Fi\u0219ier:Cetatea rasnov cumidava.png", 
+      "image": null, 
       "long": 25.4407, 
       "project": "ro", 
+      "lmi": " BV-I-s-A-11283", 
       "lat": 45.6187, 
       "quality": false
     }
@@ -1104,9 +1729,12 @@
       "code": "89357.20", 
       "lastedit": "20130714134219", 
       "name": "Villa rustica de la Densu\u0219 (1)", 
+      "author": null, 
       "ran": " 89357.20<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=4 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -1116,9 +1744,12 @@
       "code": "3967.02", 
       "lastedit": "20140303144026", 
       "name": "Castrul roman de la Cetatea de Balt\u0103 - S\u00e2nt\u0103m\u0103rie", 
+      "author": null, 
       "ran": " 3967.02", 
+      "image": null, 
       "long": 24.1753, 
       "project": "ro", 
+      "lmi": " AB-I-s-B-00023", 
       "lat": 46.246, 
       "quality": false
     }
@@ -1128,9 +1759,12 @@
       "code": "52892.01", 
       "lastedit": "20140303142502", 
       "name": "Castrul roman Centum Putei", 
+      "author": null, 
       "ran": " 52892.01", 
+      "image": null, 
       "long": 21.5992, 
       "project": "ro", 
+      "lmi": " CS-I-s-B-10877", 
       "lat": 45.2734, 
       "quality": false
     }
@@ -1140,7 +1774,9 @@
       "code": "41051.03", 
       "lastedit": "20130715224325", 
       "name": "Cetatea dacic\u0103 de la Crizbav", 
+      "author": null, 
       "ran": " 41051.03 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=15 October 2012}}</ref>", 
+      "image": null, 
       "long": 25.4388, 
       "project": "ro", 
       "lmi": " BV-I-s-A-11273 <ref name=\"lmi\"/>", 
@@ -1151,11 +1787,14 @@
   "89384.03": [
     {
       "code": "89384.03", 
-      "lastedit": "20140816194619", 
+      "lastedit": "20150811202116", 
       "name": "Biserica reformat\u0103 din Pe\u0219teana", 
+      "author": null, 
+      "ran": " 89384.03", 
       "image": " Biserica Reformata din Pesteana.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " HD-II-m-A-03404", 
       "lat": 0, 
       "quality": false
     }
@@ -1165,9 +1804,12 @@
       "code": "106327.23", 
       "lastedit": "20140815232617", 
       "name": "Monet\u0103ria Maramure\u0219", 
+      "author": null, 
+      "ran": " 106327.23", 
       "image": " Monet\u0103ria, Baia Mare.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " MM-II-m-A-04477", 
       "lat": 0, 
       "quality": false
     }
@@ -1177,9 +1819,12 @@
       "code": "52810.02", 
       "lastedit": "20140303150332", 
       "name": "Castrul roman de la Duleu", 
+      "author": null, 
       "ran": " 52810.02", 
+      "image": null, 
       "long": 21.7776, 
       "project": "ro", 
+      "lmi": " CS-I-s-B-10826", 
       "lat": 45.5115, 
       "quality": false
     }
@@ -1187,11 +1832,14 @@
   "106719.02": [
     {
       "code": "106719.02", 
-      "lastedit": "20140816195940", 
-      "name": "Biserica romano catolic\u0103 \u201eT\u0103ierea Capului Sf. Ioan\u201d din T\u0103u\u021bii de Sus", 
+      "lastedit": "20150813125055", 
+      "name": "Biserica romano-catolic\u0103 din T\u0103u\u021bii de Sus", 
+      "author": null, 
+      "ran": " 106719.02", 
       "image": " Biserica romano-catolica din Tautii de SusMM (21).JPG", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " MM-II-m-A-04770", 
       "lat": 0, 
       "quality": false
     }
@@ -1201,9 +1849,12 @@
       "code": "106719.01", 
       "lastedit": "20150217220314", 
       "name": "Biserica de piatr\u0103 \u201eSf. Apostoli Petru \u0219i Pavel\u201d din T\u0103u\u021bii de Sus", 
+      "author": null, 
+      "ran": " 106719.01", 
       "image": " Biserica Sfintii Apostoli Petru si Pavel din Tautii de Sus (2).JPG", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " MM-II-m-A-04771", 
       "lat": 0, 
       "quality": false
     }
@@ -1213,9 +1864,12 @@
       "code": "33550.09", 
       "lastedit": "20141127213714", 
       "name": "Ansamblu rural \u201eLivezile\u201d", 
+      "author": null, 
+      "ran": " 33550.09", 
       "image": " RO BN Ansamblul rural Livezile (1).JPG", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " BN-II-a-A-01667", 
       "lat": 0, 
       "quality": false
     }
@@ -1225,9 +1879,12 @@
       "code": "51029.18", 
       "lastedit": "20140704174827", 
       "name": "Villa rustica de la Caransebe\u0219", 
+      "author": null, 
       "ran": " 51029.18<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=14 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 22.2051, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 45.4169, 
       "quality": false
     }
@@ -1237,23 +1894,13 @@
       "code": "88582.03", 
       "lastedit": "20130714134435", 
       "name": "Villa rustica de la C\u0103be\u0219ti", 
+      "author": null, 
       "ran": " 88582.03<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=10 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
-      "quality": false
-    }
-  ], 
-  "52268.01": [
-    {
-      "code": "52268.01", 
-      "lastedit": "20140716222714", 
-      "name": "Castrul roman Potaissa", 
-      "ran": " 52268.01 ", 
-      "image": " [[Fi\u0219ier:2006 0602TurdaPotaissaBath0109.jpg|300px]]", 
-      "long": 23.7725, 
-      "project": "ro", 
-      "lat": 46.5703, 
       "quality": false
     }
   ], 
@@ -1262,10 +1909,73 @@
       "code": "1883.20", 
       "lastedit": "20141127210931", 
       "name": "Casa Zapolya", 
+      "author": null, 
+      "ran": " 1883.20", 
       "image": " Sebes Casa Zapolya (2).JPG", 
       "long": 23.5696, 
       "project": "ro", 
+      "lmi": " AB-II-m-A-00354", 
       "lat": 45.9579, 
+      "quality": false
+    }
+  ], 
+  "52268.01": [
+    {
+      "code": "52268.01", 
+      "lastedit": "20140716222714", 
+      "name": "Castrul roman Potaissa", 
+      "author": null, 
+      "ran": " 52268.01 ", 
+      "image": " [[Fi\u0219ier:2006 0602TurdaPotaissaBath0109.jpg|300px]]", 
+      "long": 23.7725, 
+      "project": "ro", 
+      "lmi": " CJ-I-s-A-07208 ", 
+      "lat": 46.5703, 
+      "quality": false
+    }
+  ], 
+  "90397.07": [
+    {
+      "code": "90397.07", 
+      "lastedit": "20130715224352", 
+      "name": "Cetatea dacic\u0103 Fe\u021bele Albe", 
+      "author": null, 
+      "ran": " 90397.07 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=18 October 2012}}</ref> ", 
+      "image": null, 
+      "long": 23.2, 
+      "project": "ro", 
+      "lmi": " HD-I-s-A-03196 <ref name=\"lmi\">{{cite web|title=National Register of Historic Monuments in Romania, Hunedoara County|url=http://www.inmi.ro/lmi/HUNEDOARA.pdf|publisher=www.inmi.ro|accessdate=18 October 2012}}</ref>", 
+      "lat": 45.67, 
+      "quality": false
+    }
+  ], 
+  "64201.23": [
+    {
+      "code": "64201.23", 
+      "lastedit": "20141127231632", 
+      "name": "Ansamblul conacului Damokos D\u00e9nes din Cernat", 
+      "author": null, 
+      "ran": " 64201.23", 
+      "image": " Ansamblul conacului Damokos D\u00e9nes, cu poarta.JPG", 
+      "long": 26.0236, 
+      "project": "ro", 
+      "lmi": " CV-II-m-A-13173", 
+      "lat": 45.9644, 
+      "quality": false
+    }
+  ], 
+  "64434.07": [
+    {
+      "code": "64434.07", 
+      "lastedit": "20141229142433", 
+      "name": "Biserica fortificat\u0103 din Ilieni", 
+      "author": null, 
+      "ran": " 64434.07", 
+      "image": " Ilieni, Biserica Reformat\u0103, Jud. Covasna..jpg", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " CV-II-a-A-13228", 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -1274,7 +1984,9 @@
       "code": "66205.02", 
       "lastedit": "20130715222757", 
       "name": "Cetatea dacic\u0103 de la B\u0103leni-Rom\u00e2ni", 
+      "author": null, 
       "ran": " 66205.02 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 25.699, 
       "project": "ro", 
       "lmi": " DB-I-s-B-16959 <ref name=\"ran\"/>", 
@@ -1287,10 +1999,12 @@
       "code": "167918.03", 
       "lastedit": "20150426200435", 
       "name": "Schitul Ostrov", 
+      "author": null, 
       "ran": "167918.03", 
       "image": "Ostrov_Abbey.jpg", 
       "long": 24.3436, 
       "project": "ro", 
+      "lmi": "VL-II-m-A-09698", 
       "lat": 45.2456, 
       "quality": false
     }
@@ -1300,9 +2014,12 @@
       "code": "139991.03", 
       "lastedit": "20120326094900", 
       "name": "Cetatea Alma\u0219ului", 
-      "image": "Fi\u0219ier:Cetatea Almasului Almasu 1.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -1312,9 +2029,12 @@
       "code": "142435.01", 
       "lastedit": "20140303150233", 
       "name": "Castrul roman Largiana", 
+      "author": null, 
       "ran": " 142435.01", 
+      "image": null, 
       "long": 23.1752, 
       "project": "ro", 
+      "lmi": " SJ-I-s-A-04953", 
       "lat": 47.0992, 
       "quality": false
     }
@@ -1324,7 +2044,9 @@
       "code": "85065.01", 
       "lastedit": "20130715212020", 
       "name": "Cetatea dacic\u0103 de la Mere\u0219ti", 
+      "author": null, 
       "ran": " 85065.01 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=16 October 2012}}</ref> ", 
+      "image": null, 
       "long": 25.45, 
       "project": "ro", 
       "lmi": " HR-I-s-B-12679 <ref name=\"lmi\"/>", 
@@ -1337,7 +2059,9 @@
       "code": "50978.01", 
       "lastedit": "20130715222911", 
       "name": "Cetatea dacic\u0103 de la Boc\u0219a", 
+      "author": null, 
       "ran": " 50978.01 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 21.7187, 
       "project": "ro", 
       "lmi": " CS-I-s-B-10788 <ref name=\"ran\"/>", 
@@ -1350,9 +2074,12 @@
       "code": "4491.04.01", 
       "lastedit": "20141127205951", 
       "name": "Bazilica romanic\u0103 din G\u00e2rbova", 
+      "author": null, 
+      "ran": " 4491.04.01", 
       "image": " Urwegen-bergkirche.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " AB-II-m-A-00223", 
       "lat": 0, 
       "quality": false
     }
@@ -1362,9 +2089,27 @@
       "code": "86829.09", 
       "lastedit": "20140816193656", 
       "name": "Casa parohial\u0103 ortodox\u0103 din Ilia", 
+      "author": null, 
+      "ran": " 86829.09", 
       "image": " IliaHD (9).JPG", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " HD-II-m-A-03352", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "8103.03": [
+    {
+      "code": "8103.03", 
+      "lastedit": "20150813113358", 
+      "name": "M\u0103n\u0103stirea romano-catolic\u0103 din Teiu\u0219", 
+      "author": null, 
+      "ran": " 8103.03", 
+      "image": " Teiu\u0219 M\u0103n\u0103stirea romano-catolic\u0103 (1).jpg", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " AB-II-a-A-00374", 
       "lat": 0, 
       "quality": false
     }
@@ -1374,9 +2119,12 @@
       "code": "55268.06", 
       "lastedit": "20140716222535", 
       "name": "A\u0219ezarea roman\u0103 de la Turda - \u201eLi\u0219ca\u201d", 
+      "author": null, 
       "ran": " 55268.06", 
+      "image": null, 
       "long": 23.8026, 
       "project": "ro", 
+      "lmi": " CJ-I-s-A-07211", 
       "lat": 46.5316, 
       "quality": false
     }
@@ -1386,10 +2134,12 @@
       "code": "63946.01", 
       "lastedit": "20150414204452", 
       "name": "Castrul roman de la Boro\u0219neu Mare", 
+      "author": null, 
       "ran": " 63946.01", 
       "image": " [[Imagine:Castra_of_Borosneu_Mare_00.jpg|300px]]", 
       "long": 26.017, 
       "project": "ro", 
+      "lmi": " CV-I-s-A-13047", 
       "lat": 45.8439, 
       "quality": false
     }
@@ -1399,9 +2149,12 @@
       "code": "130035.03", 
       "lastedit": "20130714134900", 
       "name": "Villa rustica de la Vl\u0103dila (2)", 
+      "author": null, 
       "ran": " 130035.03<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=49 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " OT-I-s-B-08543<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -1411,9 +2164,12 @@
       "code": "130035.02", 
       "lastedit": "20130714134849", 
       "name": "Villa rustica de la Vl\u0103dila (1)", 
+      "author": null, 
       "ran": " 130035.02<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=48 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " OT-I-s-B-08542<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -1423,9 +2179,12 @@
       "code": "88270.04", 
       "lastedit": "20140303075907", 
       "name": "Villa rustica de la Beriu", 
+      "author": null, 
       "ran": " 88270.04<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=8 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 23.3257, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 45.981, 
       "quality": false
     }
@@ -1435,9 +2194,12 @@
       "code": "143183.01", 
       "lastedit": "20140303150734", 
       "name": "Castrul roman Optatiana", 
+      "author": null, 
       "ran": " 143183.01", 
+      "image": null, 
       "long": 23.2429, 
       "project": "ro", 
+      "lmi": " SJ-I-s-A-04964", 
       "lat": 46.9894, 
       "quality": false
     }
@@ -1447,9 +2209,12 @@
       "code": "55393.02", 
       "lastedit": "20140413090833", 
       "name": "Castrul roman de la Gherla", 
+      "author": null, 
       "ran": " 55393.02", 
+      "image": null, 
       "long": 23.8833, 
       "project": "ro", 
+      "lmi": " CJ-I-s-A-07059", 
       "lat": 47.0167, 
       "quality": false
     }
@@ -1459,10 +2224,28 @@
       "code": "115904.01", 
       "lastedit": "20150528225854", 
       "name": "Castrul roman de la Br\u00e2ncovene\u0219ti", 
+      "author": null, 
       "ran": " 115904.01", 
+      "image": null, 
       "long": 24.7686, 
       "project": "ro", 
+      "lmi": " MS-I-s-B-15351", 
       "lat": 46.8618, 
+      "quality": false
+    }
+  ], 
+  "91143.01": [
+    {
+      "code": "91143.01", 
+      "lastedit": "20150528230915", 
+      "name": "Cetatea M\u0103l\u0103ie\u0219ti", 
+      "author": null, 
+      "ran": " 91143.01", 
+      "image": " Cetatea Malaiesti.jpg", 
+      "long": 22.9473, 
+      "project": "ro", 
+      "lmi": " HD-II-a-A-03363", 
+      "lat": 45.4832, 
       "quality": false
     }
   ], 
@@ -1471,9 +2254,12 @@
       "code": "153838.01", 
       "lastedit": "20140303150637", 
       "name": "Castrul roman de la Putineiu", 
+      "author": null, 
       "ran": " 153838.01", 
+      "image": null, 
       "long": 24.9667, 
       "project": "ro", 
+      "lmi": " TR-I-s-A-14219", 
       "lat": 43.9, 
       "quality": false
     }
@@ -1483,10 +2269,12 @@
       "code": "127162.03", 
       "lastedit": "20140303150352", 
       "name": "Castrul roman de la Sl\u0103veni", 
+      "author": null, 
       "ran": " 127162.03", 
       "image": " [[Imagine:Castra of Slaveni - Plan.svg|250px]]", 
       "long": 24.515, 
       "project": "ro", 
+      "lmi": " OT-I-s-A-08533", 
       "lat": 44.0926, 
       "quality": false
     }
@@ -1494,13 +2282,30 @@
   "91991.01": [
     {
       "code": "91991.01", 
-      "lastedit": "20150219072624", 
+      "lastedit": "20150606120740", 
       "name": "Castrul roman Micia", 
+      "author": null, 
       "ran": " 91991.01", 
-      "image": "Fi\u0219ier:Maurischer Tempel in Micia-Rum\u00e4nien.png", 
+      "image": null, 
       "long": 22.8149, 
       "project": "ro", 
+      "lmi": " HD-I-s-A-03214", 
       "lat": 45.9146, 
+      "quality": false
+    }
+  ], 
+  "120735.07.01": [
+    {
+      "code": "120735.07.01", 
+      "lastedit": "20141201221355", 
+      "name": "Curtea Domneasc\u0103 din Piatra Neam\u021b", 
+      "author": null, 
+      "ran": " 120735.07.01, 120735.07.02, 120735.07.03", 
+      "image": " Curtea Domneasca.JPG", 
+      "long": 26.3681, 
+      "project": "ro", 
+      "lmi": " NT-II-a-A-10567", 
+      "lat": 46.9333, 
       "quality": false
     }
   ], 
@@ -1509,9 +2314,12 @@
       "code": "18581.01", 
       "lastedit": "20140825062433", 
       "name": "Castrul roman de la S\u0103pata de Jos (1)", 
+      "author": null, 
       "ran": " 18581.01", 
+      "image": null, 
       "long": 24.7167, 
       "project": "ro", 
+      "lmi": " AG-I-s-A-13376", 
       "lat": 44.7667, 
       "quality": false
     }
@@ -1521,9 +2329,12 @@
       "code": "87255.02", 
       "lastedit": "20140303143825", 
       "name": "Castrul roman de la B\u0103ni\u021ba", 
+      "author": null, 
       "ran": " 87255.02", 
+      "image": null, 
       "long": 23.25, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 45.4333, 
       "quality": false
     }
@@ -1533,9 +2344,12 @@
       "code": "91278.01", 
       "lastedit": "20140704171533", 
       "name": "Villa rustica de la Bucium-Orlea", 
+      "author": null, 
       "ran": " 91278.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=12 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 22.9706, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 45.5906, 
       "quality": false
     }
@@ -1545,9 +2359,12 @@
       "code": "89357.03", 
       "lastedit": "20130714134314", 
       "name": "Villa rustica de la Densu\u0219 (3)", 
+      "author": null, 
       "ran": " 89357.03<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=6 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -1557,6 +2374,7 @@
       "code": "87255.07", 
       "lastedit": "20130805182730", 
       "name": "Cetatea dacic\u0103 de la B\u0103ni\u021ba", 
+      "author": null, 
       "ran": " 87255.07 <ref name=\"ran\"/>", 
       "image": " Welterbe.svg", 
       "long": 23.2666, 
@@ -1571,9 +2389,12 @@
       "code": "54519.01", 
       "lastedit": "20140302155945", 
       "name": "Arcidava", 
+      "author": null, 
       "ran": " 54519.01", 
+      "image": null, 
       "long": 21.5512, 
       "project": "ro", 
+      "lmi": " CS-I-s-A-10892", 
       "lat": 45.0794, 
       "quality": false
     }
@@ -1583,9 +2404,12 @@
       "code": "73898.01", 
       "lastedit": "20141127235042", 
       "name": "Biserica \u201eSf. Gheorghe\u201d a fostului schit T\u00e2rnavi\u021ba", 
+      "author": null, 
+      "ran": " 73898.01", 
       "image": " Biserica \"Sf. Gheorghe\" satul Tarnava, com Radovan, Dolj.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " DJ-II-m-B-08380", 
       "lat": 0, 
       "quality": false
     }
@@ -1595,10 +2419,12 @@
       "code": "167954.01", 
       "lastedit": "20141124234526", 
       "name": "Castrul roman Arutela", 
+      "author": null, 
       "ran": " 167954.01", 
       "image": " [[Imagine:Castra Arutela 001.jpg|300px]]", 
       "long": 24.3119, 
       "project": "ro", 
+      "lmi": " VL-I-s-A-09562", 
       "lat": 45.2767, 
       "quality": false
     }
@@ -1608,9 +2434,12 @@
       "code": "78917.01", 
       "lastedit": "20130714134650", 
       "name": "Villa rustica de la Ciocadia", 
+      "author": null, 
       "ran": " 78917.01<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -1620,10 +2449,28 @@
       "code": "64201.16.01", 
       "lastedit": "20141127231321", 
       "name": "Ansamblul fostului conac Domokos Gyula", 
+      "author": null, 
+      "ran": " 64201.16.01, 64201.16.02, 64201.16.03", 
       "image": " Cernat Muzeu.jpg", 
       "long": 26.0231, 
       "project": "ro", 
+      "lmi": " CV-II-a-A-13169", 
       "lat": 45.9659, 
+      "quality": false
+    }
+  ], 
+  "88458.02": [
+    {
+      "code": "88458.02", 
+      "lastedit": "20130715222935", 
+      "name": "Cetatea dacic\u0103 de la Bo\u0219orod", 
+      "author": null, 
+      "ran": " 88458.02 <ref name=\"ran\"/>", 
+      "image": null, 
+      "long": 23.092, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 45.682, 
       "quality": false
     }
   ], 
@@ -1632,9 +2479,12 @@
       "code": "62805.02", 
       "lastedit": "20140303150422", 
       "name": "Castrul roman Sacidava", 
+      "author": null, 
       "ran": " 62805.02", 
+      "image": null, 
       "long": 27.9902, 
       "project": "ro", 
+      "lmi": " CT-I-s-B-02737", 
       "lat": 44.2338, 
       "quality": false
     }
@@ -1644,9 +2494,12 @@
       "code": "169930.01.01", 
       "lastedit": "20130824201403", 
       "name": "Biserica de piatr\u0103 din M\u0103n\u0103stirea Dintr-un lemn", 
-      "image": "Fi\u0219ier:Manastirea dintr-un lemn-Biserica Nasterea Maicii Domnului-dinspre intrare.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -1656,9 +2509,12 @@
       "code": "91072.02.01", 
       "lastedit": "20141201142459", 
       "name": "A\u0219ezarea Breazova", 
+      "author": null, 
+      "ran": " 91072.02.01", 
       "image": " HD-I-s-A-03164 - Asezare Breazova.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " HD-I-s-A-03164", 
       "lat": 0, 
       "quality": false
     }
@@ -1668,22 +2524,28 @@
       "code": "53443.01", 
       "lastedit": "20140303150759", 
       "name": "Castrul roman de la Cornu\u021bel", 
+      "author": null, 
       "ran": " 53443.01", 
+      "image": null, 
       "long": 22.092, 
       "project": "ro", 
+      "lmi": " CS-I-s-B-10814", 
       "lat": 45.4324, 
       "quality": false
     }
   ], 
-  "88494.04": [
+  "116616.01": [
     {
-      "code": "88494.04", 
-      "lastedit": "20130715223022", 
-      "name": "Cetatea dacic\u0103 de la Cioclovina", 
-      "ran": " 88494.04 <ref name=\"ran\"/>", 
-      "long": 23.123, 
+      "code": "116616.01", 
+      "lastedit": "20140303150226", 
+      "name": "Castrul roman de la C\u0103lug\u0103reni", 
+      "author": null, 
+      "ran": " 116616.01", 
+      "image": null, 
+      "long": 24.8836, 
       "project": "ro", 
-      "lat": 45.602, 
+      "lmi": " MS-I-m-B-15354.01", 
+      "lat": 46.6275, 
       "quality": false
     }
   ], 
@@ -1692,9 +2554,12 @@
       "code": "32928.01", 
       "lastedit": "20140303150220", 
       "name": "Castrul roman de la Orheiu Bistri\u021bei", 
+      "author": null, 
       "ran": " 32928.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?Ocat=1&nr=104 Repertoriul Arheologic Na\u021bional (RAN)]</ref>", 
+      "image": null, 
       "long": 24.5936, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 47.0967, 
       "quality": false
     }
@@ -1704,9 +2569,12 @@
       "code": "90681.05", 
       "lastedit": "20140704174527", 
       "name": "Villa rustica de la Bob\u00e2lna", 
+      "author": null, 
       "ran": " 90681.05<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=9 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 23.1243, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 45.873, 
       "quality": false
     }
@@ -1716,9 +2584,12 @@
       "code": "63919.02", 
       "lastedit": "20140303150153", 
       "name": "Castrul roman de la Olteni", 
+      "author": null, 
       "ran": " 63919.02", 
+      "image": null, 
       "long": 25.8496, 
       "project": "ro", 
+      "lmi": " CV-I-s-A-13073", 
       "lat": 45.971, 
       "quality": false
     }
@@ -1728,7 +2599,9 @@
       "code": "63919.01", 
       "lastedit": "20130715212058", 
       "name": "Cetatea dacic\u0103 de la Olteni", 
+      "author": null, 
       "ran": " 63919.01 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 25.84, 
       "project": "ro", 
       "lmi": " CV-I-s-A-13072 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=15 October 2012}}</ref>", 
@@ -1736,17 +2609,33 @@
       "quality": false
     }
   ], 
-  "71929.01": [
+  "73095.01": [
     {
-      "code": "71929.01", 
-      "lastedit": "20130405080909", 
-      "name": "Cetatea dacic\u0103 de la Co\u021bofenii din Dos", 
-      "ran": " 71929.01 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=23 October 2012}}</ref>", 
-      "image": " Imagine spre Cetatea Jidovilor.JPG", 
-      "long": 23.6324, 
+      "code": "73095.01", 
+      "lastedit": "20141127234851", 
+      "name": "Ansamblul cur\u021bii boierilor Jieni", 
+      "author": null, 
+      "ran": " 73095.01", 
+      "image": " Conacul lui Stan Jianu.jpg", 
+      "long": 0, 
       "project": "ro", 
-      "lmi": " DJ-I-s-A-07888 <ref name=\"lmi\">{{cite web|title=National Register of Historic Monuments in Romania, Dolj County|url=http://www.inmi.ro/lmi/dolj.pdf|publisher=www.inmi.ro|accessdate=23 October 2012}}</ref>", 
-      "lat": 44.4189, 
+      "lmi": " DJ-II-a-A-08348", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "63063.01": [
+    {
+      "code": "63063.01", 
+      "lastedit": "20150812134410", 
+      "name": "Capidava", 
+      "author": null, 
+      "ran": " 63063.01", 
+      "image": " [[Imagine:Capidava.jpg|250px]]", 
+      "long": 28.0903, 
+      "project": "ro", 
+      "lmi": " CT-I-m-A-02600.03", 
+      "lat": 44.4936, 
       "quality": false
     }
   ], 
@@ -1755,9 +2644,12 @@
       "code": "63063.03", 
       "lastedit": "20130920122326", 
       "name": "Villa rustica de la Capidava", 
+      "author": null, 
       "ran": " 63063.03<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=13 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 28.1677, 
       "project": "ro", 
+      "lmi": " CT-I-s-B-02602<ref name=\"ran\"/><ref name=\"cultura.ro\">[http://www.cultura.ro/sectiuni/Patrimoniu/Monumente/lista/constanta.pdf Lista monumentelor istorice 2004 - Jude\u021bul Constan\u021ba]</ref>", 
       "lat": 44.8484, 
       "quality": false
     }
@@ -1765,11 +2657,14 @@
   "139893.15.01": [
     {
       "code": "139893.15.01", 
-      "lastedit": "20141026170632", 
+      "lastedit": "20150731075232", 
       "name": "Biserica romano-catolic\u0103 din \u0218imleu Silvaniei", 
+      "author": null, 
+      "ran": " 139893.15.01, 139893.15.02", 
       "image": " RO SJ Biserica romano-catolica.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " SJ-II-m-A-05128", 
       "lat": 0, 
       "quality": false
     }
@@ -1779,7 +2674,9 @@
       "code": "55482.02", 
       "lastedit": "20130715222440", 
       "name": "Cetatea dacic\u0103 de la Aghire\u0219u", 
+      "author": null, 
       "ran": " 55482.02 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 23.241, 
       "project": "ro", 
       "lmi": " CJ-I-s-B-06935 <ref name=\"ran\"/>", 
@@ -1790,13 +2687,30 @@
   "160635.03": [
     {
       "code": "160635.03", 
-      "lastedit": "20141224115502", 
+      "lastedit": "20150813113129", 
       "name": "Dinogetia", 
+      "author": null, 
       "ran": " 160635.03", 
       "image": " [[Imagine:Dinogetia Panorama.jpg|300px]]", 
       "long": 28.1388, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 45.379, 
+      "quality": false
+    }
+  ], 
+  "109782.07.01": [
+    {
+      "code": "109782.07.01", 
+      "lastedit": "20150128102732", 
+      "name": "Ruinele Cet\u0103\u021bii Severinului", 
+      "author": null, 
+      "ran": " 109782.07.01", 
+      "image": " Cetatea Severinului.jpg", 
+      "long": 22.6642, 
+      "project": "ro", 
+      "lmi": " MH-II-a-A-10184", 
+      "lat": 44.6237, 
       "quality": false
     }
   ], 
@@ -1805,9 +2719,27 @@
       "code": "106568.08", 
       "lastedit": "20141201162525", 
       "name": "Biserica ucrainean\u0103 \u201e\u00cen\u0103l\u021barea Sfintei Cruci\u201d din Sighetu Marma\u021biei", 
+      "author": null, 
+      "ran": " 106568.08", 
       "image": " Sighetu Marmatiei Biserica ucrainiana.JPG", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " MM-II-m-A-04681", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "20304.02": [
+    {
+      "code": "20304.02", 
+      "lastedit": "20150806204327", 
+      "name": "Curtea Domneasc\u0103 din Bac\u0103u", 
+      "author": null, 
+      "ran": " 20304.02", 
+      "image": " Casa_Domneasc\u0103_Bac\u0103u_3.jpg", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " BC-II-a-A-00757", 
       "lat": 0, 
       "quality": false
     }
@@ -1817,9 +2749,12 @@
       "code": "56997.04", 
       "lastedit": "20150528225039", 
       "name": "Villa rustica de la Chinteni", 
+      "author": null, 
       "ran": " 56997.04<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 23.5772, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 46.8431, 
       "quality": false
     }
@@ -1829,9 +2764,57 @@
       "code": "161044.02", 
       "lastedit": "20130714134534", 
       "name": "Villa rustica de la Niculi\u021bel (1)", 
+      "author": null, 
       "ran": " 161044.02<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " TL-I-s-B-05857<ref name=\"ran\"/>", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "92934.01": [
+    {
+      "code": "92934.01", 
+      "lastedit": "20130715223837", 
+      "name": "Cetatea dacic\u0103 de la Cr\u0103sanii de Jos", 
+      "author": null, 
+      "ran": " 92934.01 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=15 October 2012}}</ref>", 
+      "image": null, 
+      "long": 26.8867, 
+      "project": "ro", 
+      "lmi": " IL-I-m-A-14039.01 <ref name=\"lmi\"/>", 
+      "lat": 44.6007, 
+      "quality": false
+    }
+  ], 
+  "33783.02": [
+    {
+      "code": "33783.02", 
+      "lastedit": "20140704171352", 
+      "name": "Villa rustica de la B\u00e2rla", 
+      "author": null, 
+      "ran": " 33783.02<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=7 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
+      "long": 24.5594, 
+      "project": "ro", 
+      "lmi": " BN-I-s-B-01287<ref name=\"ran\"/>", 
+      "lat": 47.0148, 
+      "quality": false
+    }
+  ], 
+  "125025.05": [
+    {
+      "code": "125025.05", 
+      "lastedit": "20140904144800", 
+      "name": "M\u0103n\u0103stirea Sih\u0103stria Secului", 
+      "author": null, 
+      "ran": " 125025.05", 
+      "image": " M\u0103n\u0103stirea Sih\u0103stria .jpg", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " NT-II-a-A-10736", 
       "lat": 0, 
       "quality": false
     }
@@ -1841,9 +2824,12 @@
       "code": "156810.01.01", 
       "lastedit": "20140816205241", 
       "name": "Cetatea medieval\u0103 de la F\u0103get", 
+      "author": null, 
+      "ran": " 156810.01.01", 
       "image": " Faget Cetate 15.JPG", 
       "long": 22.1743, 
       "project": "ro", 
+      "lmi": " TM-I-s-A-06059", 
       "lat": 45.8662, 
       "quality": false
     }
@@ -1853,11 +2839,28 @@
       "code": "41710.01", 
       "lastedit": "20150128074626", 
       "name": "Cetatea dacic\u0103 de la Raco\u0219", 
+      "author": null, 
       "ran": " 41710.01 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=18 October 2012}}</ref>", 
+      "image": null, 
       "long": 25.4206, 
       "project": "ro", 
       "lmi": " BV-I-s-A-11282 <ref name=\"lmi\">{{cite web|title=National Register of Historic Monuments in Romania, Bra\u0219ov County|url=http://www.inmi.ro/lmi/brasov.pdf|publisher=www.inmi.ro|accessdate=18 October 2012}}</ref>", 
       "lat": 46.0233, 
+      "quality": false
+    }
+  ], 
+  "125025.03": [
+    {
+      "code": "125025.03", 
+      "lastedit": "20140816231744", 
+      "name": "M\u0103n\u0103stirea Sihla", 
+      "author": null, 
+      "ran": " 125025.03", 
+      "image": " Ansamblul schitului Sihla.jpg", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " NT-II-a-B-10584", 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -1866,9 +2869,12 @@
       "code": "89357.19", 
       "lastedit": "20130714134304", 
       "name": "Villa rustica de la Densu\u0219 (2)", 
+      "author": null, 
       "ran": " 89357.19<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=5 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -1878,7 +2884,9 @@
       "code": "15411.02", 
       "lastedit": "20130715223010", 
       "name": "Cetatea dacic\u0103 de la Cet\u0103\u021beni", 
+      "author": null, 
       "ran": " 15411.02 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=15 October 2012}}</ref> ", 
+      "image": null, 
       "long": 25.21, 
       "project": "ro", 
       "lmi": " AG-I-s-B-13360 <ref name=\"lmi\"/>", 
@@ -1891,10 +2899,28 @@
       "code": "14566.01", 
       "lastedit": "20140303150447", 
       "name": "Castrul roman de la Urlueni (1)", 
+      "author": null, 
       "ran": " 14566.01", 
+      "image": null, 
       "long": 24.7667, 
       "project": "ro", 
+      "lmi": " AG-I-s-A-13385", 
       "lat": 44.4833, 
+      "quality": false
+    }
+  ], 
+  "70600.01": [
+    {
+      "code": "70600.01", 
+      "lastedit": "20141127232816", 
+      "name": "Ansamblul cur\u021bii Co\u021bofenilor", 
+      "author": null, 
+      "ran": " 70600.01", 
+      "image": " Conacul Cotofenilor.jpg", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " DJ-II-a-A-08252", 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -1903,10 +2929,12 @@
       "code": "167561.01", 
       "lastedit": "20140303141848", 
       "name": "Castrul roman Buridava", 
+      "author": null, 
       "ran": " 167561.01", 
       "image": " [[Imagine:Castra Buridava 00.JPG|250px]]", 
       "long": 24.3043, 
       "project": "ro", 
+      "lmi": " VL-I-s-A-09580", 
       "lat": 45.034, 
       "quality": false
     }
@@ -1916,6 +2944,7 @@
       "code": "83366.05", 
       "lastedit": "20141202221228", 
       "name": "Cetatea dacic\u0103 de la Jigodin", 
+      "author": null, 
       "ran": " 83366.05d <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=16 October 2012}}</ref> ", 
       "image": " Locatia gps a fostei cetati dacice.jpg", 
       "long": 25.8, 
@@ -1930,9 +2959,12 @@
       "code": "33550.01", 
       "lastedit": "20140303150435", 
       "name": "Castrul roman de la Livezile", 
+      "author": null, 
       "ran": " 33550.01", 
+      "image": null, 
       "long": 24.5667, 
       "project": "ro", 
+      "lmi": " BN-I-s-A-01361", 
       "lat": 47.1667, 
       "quality": false
     }
@@ -1942,9 +2974,12 @@
       "code": "169397.02", 
       "lastedit": "20140303150134", 
       "name": "Castra Traiana", 
+      "author": null, 
       "ran": " 169397.02", 
+      "image": null, 
       "long": 24.3771, 
       "project": "ro", 
+      "lmi": " VL-I-s-A-09575", 
       "lat": 45.2091, 
       "quality": false
     }
@@ -1954,34 +2989,43 @@
       "code": "18974.01", 
       "lastedit": "20140303150403", 
       "name": "Castrul roman de la F\u00e2lfani", 
+      "author": null, 
       "ran": " 18974.01", 
+      "image": null, 
       "long": 24.75, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 44.6, 
       "quality": false
     }
   ], 
-  "33550.08": [
+  "53283.01.01": [
     {
-      "code": "33550.08", 
-      "lastedit": "20141127213849", 
-      "name": "Biserica evanghelic\u0103 C.A. din Livezile", 
-      "image": " RO BN Biserica evanghelica din Livezile (1).JPG", 
-      "long": 0, 
+      "code": "53283.01.01", 
+      "lastedit": "20150216235700", 
+      "name": "Castrul roman Praetorium (Mehadia)", 
+      "author": null, 
+      "ran": " 53283.01.01", 
+      "image": null, 
+      "long": 22.35, 
       "project": "ro", 
-      "lat": 0, 
+      "lmi": " CS-I-m-B-10851.02", 
+      "lat": 44.9167, 
       "quality": false
     }
   ], 
   "107500.01": [
     {
       "code": "107500.01", 
-      "lastedit": "20141201160408", 
+      "lastedit": "20150626133537", 
       "name": "Biserica de lemn din Poienile Izei", 
+      "author": null, 
+      "ran": " 107500.01", 
       "image": " Biserica de lemn din Poiana Izei.jpg", 
-      "long": 0, 
+      "long": 24.1133, 
       "project": "ro", 
-      "lat": 0, 
+      "lmi": " MM-II-m-A-04605", 
+      "lat": 47.6988, 
       "quality": false
     }
   ], 
@@ -1990,9 +3034,12 @@
       "code": "60810.01", 
       "lastedit": "20140303142345", 
       "name": "Castrul roman Carsium", 
+      "author": null, 
       "ran": " 60810.01", 
+      "image": null, 
       "long": 27.9522, 
       "project": "ro", 
+      "lmi": " CT-I-s-A-02676", 
       "lat": 44.6811, 
       "quality": false
     }
@@ -2002,9 +3049,12 @@
       "code": "1883.11.01", 
       "lastedit": "20141127210626", 
       "name": "Fortifica\u021biile Sebe\u0219ului", 
+      "author": null, 
+      "ran": " 1883.11.01", 
       "image": " Sebes Fortificatiile (1).JPG", 
       "long": 23.5696, 
       "project": "ro", 
+      "lmi": " AB-II-a-A-00325", 
       "lat": 45.9588, 
       "quality": false
     }
@@ -2014,9 +3064,12 @@
       "code": "91642.01", 
       "lastedit": "20140421164852", 
       "name": "Villa rustica de la C\u00e2rne\u0219ti", 
+      "author": null, 
       "ran": " 91642.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=9 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -2026,10 +3079,43 @@
       "code": "91107.06", 
       "lastedit": "20150307144159", 
       "name": "Tapae", 
+      "author": null, 
       "ran": " 91107.06 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 22.7247, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 45.5056, 
+      "quality": false
+    }
+  ], 
+  "9583.03": [
+    {
+      "code": "9583.03", 
+      "lastedit": "20150806203449", 
+      "name": "Ansamblul bisericii \u201eAdormirea Maicii Domnului\u201d din Lipova", 
+      "author": null, 
+      "ran": " 9583.03", 
+      "image": " Biserica_Ortodoxa_Lipova.jpg", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " AR-II-a-A-00620", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "161197.06": [
+    {
+      "code": "161197.06", 
+      "lastedit": "20150111063643", 
+      "name": "Situl arheologic \u201eCetatea Enisala\u201d", 
+      "author": null, 
+      "ran": " 161197.06", 
+      "image": " Cetatea Enisala 2, TL.jpg", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " TL-I-s-A-05785", 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -2038,9 +3124,12 @@
       "code": "72392.01", 
       "lastedit": "20130714134827", 
       "name": "Villa rustica de la Galicea Mare", 
+      "author": null, 
       "ran": " 72392.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=46 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " DJ-I-s-B-07891<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -2050,10 +3139,28 @@
       "code": "54626.01", 
       "lastedit": "20140303150325", 
       "name": "Castrul roman de la Z\u0103voi", 
+      "author": null, 
       "ran": " 54626.01", 
+      "image": null, 
       "long": 21.8561, 
       "project": "ro", 
+      "lmi": " CS-I-s-B-10898", 
       "lat": 45.4925, 
+      "quality": false
+    }
+  ], 
+  "126754.01.02": [
+    {
+      "code": "126754.01.02", 
+      "lastedit": "20140303150016", 
+      "name": "Romula", 
+      "author": null, 
+      "ran": " 126754.01.02", 
+      "image": null, 
+      "long": 24.4, 
+      "project": "ro", 
+      "lmi": " OT-I-m-A-08527.02", 
+      "lat": 44.1667, 
       "quality": false
     }
   ], 
@@ -2062,9 +3169,12 @@
       "code": "26573.17", 
       "lastedit": "20141127212834", 
       "name": "Biserica romano-catolic\u0103 \u201eMaica \u00cendurerat\u0103\u201d", 
+      "author": null, 
+      "ran": " 26573.17", 
       "image": " Fost\u0103 biseric\u0103 a m\u0103n\u0103stirii premonstratense Oradea.JPG", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " BH-II-m-A-01040", 
       "lat": 0, 
       "quality": false
     }
@@ -2074,9 +3184,12 @@
       "code": "83945.01", 
       "lastedit": "20141201141822", 
       "name": "Biserica de lemn din Bilbor", 
+      "author": null, 
+      "ran": " 83945.01", 
       "image": " Biserica de lemn \u201eSf. Nicolae\u201d - Bilbor.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " HR-II-m-A-12753", 
       "lat": 0, 
       "quality": false
     }
@@ -2086,24 +3199,43 @@
       "code": "64103.03", 
       "lastedit": "20140302160951", 
       "name": "Castrul roman Angustia", 
+      "author": null, 
       "ran": " 64103.03", 
       "image": " [[Imagine:Castra Angustia 00.jpg|300px]]", 
       "long": 26.3128, 
       "project": "ro", 
+      "lmi": " CV-I-s-A-13050", 
       "lat": 46.051, 
       "quality": false
     }
   ], 
-  "83437.01": [
+  "34663.01.02": [
     {
-      "code": "83437.01", 
-      "lastedit": "20131012220050", 
-      "name": "Cetatea dacic\u0103 de la B\u0103ile Tu\u0219nad", 
-      "ran": " 83437.01 <ref name=\"ran\"/>", 
-      "long": 25.8721, 
+      "code": "34663.01.02", 
+      "lastedit": "20150905083750", 
+      "name": "Cetatea dacic\u0103 de la Ardan", 
+      "author": null, 
+      "ran": " 34663.01.02 <ref name=\"ran\">{{cite web|title=Repertoriul Arheologic Na\u021bional (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=15 October 2012}}</ref>", 
+      "image": null, 
+      "long": 24.66, 
       "project": "ro", 
-      "lmi": " HR-I-s-B-12652 <ref name=\"ran\"/>", 
-      "lat": 46.1465, 
+      "lmi": " BN-I-m-A-01285.02 <ref name=\"lmi\">{{cite web|title=Lista Monumentelor Istorice, Jude\u021bul Bistri\u021ba-N\u0103s\u0103ud|url=http://www.inmi.ro/lmi/bistrita.pdf|publisher=www.inmi.ro|accessdate=15 October 2012}}</ref>", 
+      "lat": 47.02, 
+      "quality": false
+    }
+  ], 
+  "84004.02.05": [
+    {
+      "code": "84004.02.05", 
+      "lastedit": "20141201141655", 
+      "name": "Biserica romano-catolic\u0103 \u201eZ\u0103mislirea Sf. Fecioare\u201d din Arm\u0103\u0219eni", 
+      "author": null, 
+      "ran": " 84004.02.05", 
+      "image": " Armaseni Biserica romano catolica (6).JPG", 
+      "long": 25.9631, 
+      "project": "ro", 
+      "lmi": " HR-II-a-A-12748", 
+      "lat": 46.3536, 
       "quality": false
     }
   ], 
@@ -2112,9 +3244,12 @@
       "code": "161393.01", 
       "lastedit": "20140920061741", 
       "name": "Villa rustica de la Topolog (1)", 
+      "author": null, 
       "ran": " 161393.01<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " TL-I-s-B-05938<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -2124,9 +3259,12 @@
       "code": "161393.02", 
       "lastedit": "20130714134524", 
       "name": "Villa rustica de la Topolog (2)", 
+      "author": null, 
       "ran": " 161393.02<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " TL-I-s-B-05939<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -2136,9 +3274,12 @@
       "code": "159972.01", 
       "lastedit": "20140704174844", 
       "name": "Villa rustica de la Casimcea", 
+      "author": null, 
       "ran": " 159972.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=15 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 28.3842, 
       "project": "ro", 
+      "lmi": " TL-I-s-B-05758<ref name=\"ran\"/>", 
       "lat": 44.7317, 
       "quality": false
     }
@@ -2148,11 +3289,43 @@
       "code": "59069.01", 
       "lastedit": "20140303150115", 
       "name": "Castrul roman Resculum", 
+      "author": null, 
       "ran": " 59069.01", 
       "image": " [[Imagine:Resculum 00.jpg|300px]]", 
       "long": 22.8846, 
       "project": "ro", 
+      "lmi": " CJ-I-s-A-06975", 
       "lat": 46.8857, 
+      "quality": false
+    }
+  ], 
+  "143977.01": [
+    {
+      "code": "143977.01", 
+      "lastedit": "20130715211941", 
+      "name": "Cetatea dacic\u0103 de la Arpa\u0219u de Sus", 
+      "author": null, 
+      "ran": " 143977.01 <ref name=\"ran\">{{cite web|title=Repertoriul Arheologic Na\u021bional (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=15 October 2012}}</ref>", 
+      "image": null, 
+      "long": 24.61, 
+      "project": "ro", 
+      "lmi": " SB-I-m-A-11937.01 <ref name=\"lmi\"/>", 
+      "lat": 45.73, 
+      "quality": false
+    }
+  ], 
+  "83437.01": [
+    {
+      "code": "83437.01", 
+      "lastedit": "20131012220050", 
+      "name": "Cetatea dacic\u0103 de la B\u0103ile Tu\u0219nad", 
+      "author": null, 
+      "ran": " 83437.01 <ref name=\"ran\"/>", 
+      "image": null, 
+      "long": 25.8721, 
+      "project": "ro", 
+      "lmi": " HR-I-s-B-12652 <ref name=\"ran\"/>", 
+      "lat": 46.1465, 
       "quality": false
     }
   ], 
@@ -2161,7 +3334,9 @@
       "code": "81399.01", 
       "lastedit": "20130715212110", 
       "name": "Cetatea dacic\u0103 de la Polovragi", 
+      "author": null, 
       "ran": " 81399.01 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 23.786, 
       "project": "ro", 
       "lmi": " GJ-I-s-B-09137 <ref name=\"ran\"/>", 
@@ -2174,9 +3349,12 @@
       "code": "1160.02", 
       "lastedit": "20140302160900", 
       "name": "Castellum de la Abrud - \"Cet\u0103\u021beaua\"", 
+      "author": null, 
       "ran": " 1160.02<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 23.0686, 
       "project": "ro", 
+      "lmi": " AB-I-s-B-00006 <ref name=\"ran\"/>", 
       "lat": 46.2722, 
       "quality": false
     }
@@ -2186,9 +3364,12 @@
       "code": "79647.01", 
       "lastedit": "20140302155742", 
       "name": "Castrul roman Ad Mutriam", 
+      "author": null, 
       "ran": " 79647.01", 
+      "image": null, 
       "long": 22.9318, 
       "project": "ro", 
+      "lmi": " GJ-I-s-B-09155 <ref name=\"lmi\">[http://www.inmi.ro/lmi/gorj.pdf Lista Monumentelor Istorice 2004 - Judetul Gorj, p.7]</ref>", 
       "lat": 44.833, 
       "quality": false
     }
@@ -2198,10 +3379,28 @@
       "code": "144946.01", 
       "lastedit": "20140303075529", 
       "name": "Villa rustica de la Apoldu de Sus", 
+      "author": null, 
       "ran": " 144946.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=3 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 23.8984, 
       "project": "ro", 
+      "lmi": " SB-I-s-A-11932<ref name=\"ran\"/>", 
       "lat": 45.9357, 
+      "quality": false
+    }
+  ], 
+  "40982.06": [
+    {
+      "code": "40982.06", 
+      "lastedit": "20150626113816", 
+      "name": "Biserica evanghelic\u0103 fortificat\u0103 din Rotbav", 
+      "author": null, 
+      "ran": " 40982.06", 
+      "image": " Ansamblul_bisericii_evanghelice_fortificat-vedere_aeriana.JPG", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " BV-II-a-A-11768", 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -2210,10 +3409,28 @@
       "code": "17245.01", 
       "lastedit": "20140303150500", 
       "name": "Castrul roman de la Purc\u0103reni", 
+      "author": null, 
       "ran": " 17245.01", 
+      "image": null, 
       "long": 24.8667, 
       "project": "ro", 
+      "lmi": " AG-I-s-A-13371", 
       "lat": 44.95, 
+      "quality": false
+    }
+  ], 
+  "41569.01": [
+    {
+      "code": "41569.01", 
+      "lastedit": "20130715222733", 
+      "name": "Cetatea dacic\u0103 de la Augustin", 
+      "author": null, 
+      "ran": " 41569.01 <ref name=\"ran\"/>", 
+      "image": null, 
+      "long": 25.5473, 
+      "project": "ro", 
+      "lmi": " BV-I-m-A-11260.01 <ref name=\"ran\"/>", 
+      "lat": 46.0451, 
       "quality": false
     }
   ], 
@@ -2222,9 +3439,12 @@
       "code": "84399.01", 
       "lastedit": "20130714134933", 
       "name": "Villa rustica de la D\u00e2rjiu", 
+      "author": null, 
       "ran": " 84399.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=53 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -2232,9 +3452,11 @@
   "71484.02": [
     {
       "code": "71484.02", 
-      "lastedit": "20130715222846", 
+      "lastedit": "20150905092046", 
       "name": "Cetatea dacic\u0103 de la B\u00e2zd\u00e2na", 
-      "ran": " 71484.02 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=15 October 2012}}</ref> ", 
+      "author": null, 
+      "ran": " 71484.02 <ref name=\"ran\">{{cite web|title=Repertoriul Arheologic Na\u021bional (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=15 October 2012}}</ref> ", 
+      "image": null, 
       "long": 23.83, 
       "project": "ro", 
       "lmi": " DJ-I-s-A-07872 <ref name=\"lmi\">{{cite web|title=National Register of Historic Monuments in Romania, Dolj County|url=http://www.inmi.ro/lmi/dolj.pdf|publisher=www.inmi.ro|accessdate=15 October 2012}}</ref>", 
@@ -2247,9 +3469,12 @@
       "code": "143860.05", 
       "lastedit": "20141027154000", 
       "name": "Castrul roman de la Ocna Sibiului", 
+      "author": null, 
       "ran": " 143860.05 <ref name=\"ran\">[http://www2.cimec.ro/scripts/ARH/RAN/sel.asp?lpag=25&layers=&crsl=2&csel=2&clst=1&Oloc=1&Lang=RO&nr=294&ids=7337 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 24.0167, 
       "project": "ro", 
+      "lmi": " SB-I-s-B-11980 <ref name=\"ran\"/>", 
       "lat": 45.8667, 
       "quality": false
     }
@@ -2259,7 +3484,9 @@
       "code": "159856.02", 
       "lastedit": "20140920060802", 
       "name": "Cetatea dacic\u0103 de la Beidaud", 
+      "author": null, 
       "ran": " 159856.02 <ref name=\"ran\"/>", 
+      "image": null, 
       "long": 28.5508, 
       "project": "ro", 
       "lmi": " TL-I-s-A-05742 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=13 November 2012}}</ref>", 
@@ -2272,22 +3499,28 @@
       "code": "7847.01", 
       "lastedit": "20140225211724", 
       "name": "Villa rustica de la B\u0103c\u0103in\u021bi", 
+      "author": null, 
       "ran": " 7847.01 <ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=6 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 23.4881, 
       "project": "ro", 
+      "lmi": " AB-I-s-B-00012 <ref name=\"ran\"/>", 
       "lat": 46.5729, 
       "quality": false
     }
   ], 
-  "60785.09": [
+  "151727.01": [
     {
-      "code": "60785.09", 
-      "lastedit": "20140303143847", 
-      "name": "Castrul roman de la Cernavod\u0103", 
-      "ran": " 60785.09<ref name=\"ran\">[http://www.cimec.ro/scripts/ARH/RAN/sel.asp?loc=725&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=loc&ids=1 Repertoriul Arheologic Na\u021bional]</ref>", 
-      "long": 28.0333, 
+      "code": "151727.01", 
+      "lastedit": "20150906103237", 
+      "name": "Castrul roman de la Ciuperceni", 
+      "author": null, 
+      "ran": " 151727.01 ", 
+      "image": null, 
+      "long": 24.9167, 
       "project": "ro", 
-      "lat": 44.3333, 
+      "lmi": " TR-I-m-B-14218.02 ", 
+      "lat": 43.75, 
       "quality": false
     }
   ], 
@@ -2296,9 +3529,12 @@
       "code": "40205.03", 
       "lastedit": "20141027154154", 
       "name": "Cetatea de pe dealul \u0218prenghi", 
+      "author": null, 
       "ran": " 40205.03", 
+      "image": null, 
       "long": 25.5782, 
       "project": "ro", 
+      "lmi": " BV-I-s-B-11258", 
       "lat": 45.6606, 
       "quality": false
     }
@@ -2308,9 +3544,12 @@
       "code": "144937.02", 
       "lastedit": "20130714134805", 
       "name": "Villa rustica de la Miercurea Sibiului (2)", 
+      "author": null, 
       "ran": " 144937.02 <ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=43 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " SB-I-s-B-11972 <ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -2320,9 +3559,12 @@
       "code": "18983.01", 
       "lastedit": "20140303150357", 
       "name": "Castrul roman de la Izb\u0103\u0219e\u0219ti", 
+      "author": null, 
       "ran": " 18983.01", 
+      "image": null, 
       "long": 24.6, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 44.5833, 
       "quality": false
     }
@@ -2332,9 +3574,12 @@
       "code": "54671.01", 
       "lastedit": "20140303150339", 
       "name": "Castrul roman Pons Augusti", 
+      "author": null, 
       "ran": " 54671.01", 
+      "image": null, 
       "long": 22.45, 
       "project": "ro", 
+      "lmi": " CS-I-s-B-10895", 
       "lat": 45.5167, 
       "quality": false
     }
@@ -2344,22 +3589,28 @@
       "code": "79317.04", 
       "lastedit": "20140303143554", 
       "name": "Castrul roman de la Bumbe\u0219ti-Jiu (1)", 
+      "author": null, 
       "ran": " 79317.04", 
+      "image": null, 
       "long": 23.3651, 
       "project": "ro", 
+      "lmi": " GJ-I-s-B-09129", 
       "lat": 45.1664, 
       "quality": false
     }
   ], 
-  "88662.01": [
+  "79317.02": [
     {
-      "code": "88662.01", 
-      "lastedit": "20140704171257", 
-      "name": "Villa rustica de la B\u0103\u021b\u0103lar", 
-      "ran": " 88662.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=4 Repertoriul Arheologic Na\u021bional]</ref>", 
-      "long": 23.0175, 
+      "code": "79317.02", 
+      "lastedit": "20140303155928", 
+      "name": "Castrul roman de la Bumbe\u0219ti-Jiu (2)", 
+      "author": null, 
+      "ran": " 79317.02", 
+      "image": null, 
+      "long": 23.3818, 
       "project": "ro", 
-      "lat": 45.6983, 
+      "lmi": " GJ-I-m-B-09127", 
+      "lat": 45.1664, 
       "quality": false
     }
   ], 
@@ -2368,9 +3619,12 @@
       "code": "79317.01", 
       "lastedit": "20140303143708", 
       "name": "Castrul roman de la Bumbe\u0219ti-Jiu (3)", 
+      "author": null, 
       "ran": " 79317.01", 
+      "image": null, 
       "long": 23.3726, 
       "project": "ro", 
+      "lmi": " GJ-I-s-A-09126", 
       "lat": 45.1552, 
       "quality": false
     }
@@ -2380,10 +3634,28 @@
       "code": "161044.06", 
       "lastedit": "20130714134545", 
       "name": "Villa rustica de la Niculi\u021bel (2)", 
+      "author": null, 
       "ran": " 161044.06<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " TL-I-s-B-05861<ref name=\"ran\"/>", 
       "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "161507.08": [
+    {
+      "code": "161507.08", 
+      "lastedit": "20140920060613", 
+      "name": "Villa rustica de la Agighiol", 
+      "author": null, 
+      "ran": " 161507.08<ref name=\"ran\"/>", 
+      "image": null, 
+      "long": 28.9887, 
+      "project": "ro", 
+      "lmi": " TL-I-s-B-05730<ref name=\"ran\"/>", 
+      "lat": 45.0759, 
       "quality": false
     }
   ], 
@@ -2392,9 +3664,12 @@
       "code": "83829.01", 
       "lastedit": "20140303150319", 
       "name": "Castrul roman Praetoria Augusta", 
+      "author": null, 
       "ran": " 83829.01", 
+      "image": null, 
       "long": 25.121, 
       "project": "ro", 
+      "lmi": " HR-I-s-B-12670", 
       "lat": 46.4322, 
       "quality": false
     }
@@ -2404,21 +3679,42 @@
       "code": "83829.03", 
       "lastedit": "20130714134943", 
       "name": "Villa rustica de la Inl\u0103ceni", 
+      "author": null, 
       "ran": " 83829.03<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=54 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
   ], 
-  "52589.02": [
+  "114907.01": [
     {
-      "code": "52589.02", 
-      "lastedit": "20130714134444", 
-      "name": "Villa rustica de la Dalbo\u0219e\u021b", 
-      "ran": " 52589.02<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=20 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "code": "114907.01", 
+      "lastedit": "20140303150702", 
+      "name": "Castrul roman de la S\u0103r\u0103\u021beni", 
+      "author": null, 
+      "ran": " 114907.01", 
+      "image": null, 
+      "long": 25.3448, 
+      "project": "ro", 
+      "lmi": " MS-I-m-B-15416.01", 
+      "lat": 46.5627, 
+      "quality": false
+    }
+  ], 
+  "33211.03": [
+    {
+      "code": "33211.03", 
+      "lastedit": "20150217203642", 
+      "name": "Ansamblul bisericii evanghelice C.A. din Dumitra", 
+      "author": null, 
+      "ran": " 33211.03", 
+      "image": " Dumitra Biserica evenghelica.JPG", 
       "long": 0, 
       "project": "ro", 
+      "lmi": " BN-II-a-A-01652", 
       "lat": 0, 
       "quality": false
     }
@@ -2426,11 +3722,14 @@
   "140636.05.01": [
     {
       "code": "140636.05.01", 
-      "lastedit": "20140816204503", 
+      "lastedit": "20150822143552", 
       "name": "Biserica reformat\u0103 din Crasna", 
+      "author": null, 
+      "ran": " 140636.05.01", 
       "image": " RO SJ Crasna 1.jpg", 
       "long": 22.8701, 
       "project": "ro", 
+      "lmi": " SJ-II-m-A-05043", 
       "lat": 47.1626, 
       "quality": false
     }
@@ -2440,22 +3739,28 @@
       "code": "58268.04", 
       "lastedit": "20130714134208", 
       "name": "Villa rustica de la Jucu de Sus", 
+      "author": null, 
       "ran": " 58268.04<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
   ], 
-  "33783.02": [
+  "172554.01.01": [
     {
-      "code": "33783.02", 
-      "lastedit": "20140704171352", 
-      "name": "Villa rustica de la B\u00e2rla", 
-      "ran": " 33783.02<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=300&campsel=tip&Oloc=1&ids=7 Repertoriul Arheologic Na\u021bional]</ref>", 
-      "long": 24.5594, 
+      "code": "172554.01.01", 
+      "lastedit": "20140907201853", 
+      "name": "Castrul roman Praetorium I", 
+      "author": null, 
+      "ran": " 172554.01.01", 
+      "image": null, 
+      "long": 24.3978, 
       "project": "ro", 
-      "lat": 47.0148, 
+      "lmi": " VL-I-m-A-09525.01", 
+      "lat": 45.0792, 
       "quality": false
     }
   ], 
@@ -2464,9 +3769,12 @@
       "code": "8835.11", 
       "lastedit": "20130714134723", 
       "name": "Villa rustica de la Vin\u021bu de Jos", 
+      "author": null, 
       "ran": " 8835.11<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " SJ-I-s-B-04897<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -2476,9 +3784,12 @@
       "code": "53522.01", 
       "lastedit": "20140303150346", 
       "name": "Castrul roman de la Pojejena", 
+      "author": null, 
       "ran": " 53522.01", 
+      "image": null, 
       "long": 21.5667, 
       "project": "ro", 
+      "lmi": " CS-I-s-A-10866", 
       "lat": 44.7667, 
       "quality": false
     }
@@ -2486,24 +3797,30 @@
   "23662.01.03": [
     {
       "code": "23662.01.03", 
-      "lastedit": "20150515003904", 
+      "lastedit": "20150906134036", 
       "name": "Zargidava", 
+      "author": null, 
+      "ran": " 23662.01.03", 
       "image": " Acropola Zargedava.JPG", 
       "long": 26.95, 
       "project": "ro", 
+      "lmi": " BC-I-s-A-00711", 
       "lat": 46.7253, 
       "quality": false
     }
   ], 
-  "106568.02.01": [
+  "71929.01": [
     {
-      "code": "106568.02.01", 
-      "lastedit": "20140816195833", 
-      "name": "Biserica reformat\u0103 din Sighetu Marma\u021biei", 
-      "image": " Biserica reformata din Sighet (7).JPG", 
-      "long": 0, 
+      "code": "71929.01", 
+      "lastedit": "20130405080909", 
+      "name": "Cetatea dacic\u0103 de la Co\u021bofenii din Dos", 
+      "author": null, 
+      "ran": " 71929.01 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=23 October 2012}}</ref>", 
+      "image": " Imagine spre Cetatea Jidovilor.JPG", 
+      "long": 23.6324, 
       "project": "ro", 
-      "lat": 0, 
+      "lmi": " DJ-I-s-A-07888 <ref name=\"lmi\">{{cite web|title=National Register of Historic Monuments in Romania, Dolj County|url=http://www.inmi.ro/lmi/dolj.pdf|publisher=www.inmi.ro|accessdate=23 October 2012}}</ref>", 
+      "lat": 44.4189, 
       "quality": false
     }
   ], 
@@ -2512,10 +3829,28 @@
       "code": "160403.01", 
       "lastedit": "20130714134628", 
       "name": "Villa rustica de la Cataloi (2)", 
+      "author": null, 
       "ran": " 160403.01<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " TL-I-s-B-05760<ref name=\"ran\"/>", 
       "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "88494.04": [
+    {
+      "code": "88494.04", 
+      "lastedit": "20130715223022", 
+      "name": "Cetatea dacic\u0103 de la Cioclovina", 
+      "author": null, 
+      "ran": " 88494.04 <ref name=\"ran\"/>", 
+      "image": null, 
+      "long": 23.123, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 45.602, 
       "quality": false
     }
   ], 
@@ -2524,9 +3859,12 @@
       "code": "160403.04", 
       "lastedit": "20130714134618", 
       "name": "Villa rustica de la Cataloi (1)", 
+      "author": null, 
       "ran": " 160403.04<ref name=\"ran\"/>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " TL-I-s-B-05763<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -2536,9 +3874,12 @@
       "code": "159874.01", 
       "lastedit": "20130714134640", 
       "name": "Villa rustica de la Sarighiol de Deal", 
+      "author": null, 
       "ran": " 159874.01<ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=33 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " TL-I-s-B-05905<ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -2548,9 +3889,12 @@
       "code": "136857.02.01", 
       "lastedit": "20150128102855", 
       "name": "Ruinele cet\u0103\u021bii K\u00e1rolyi", 
+      "author": null, 
+      "ran": " 136857.02.01", 
       "image": " Ardud Fortress 2012-010.JPG", 
       "long": 22.8879, 
       "project": "ro", 
+      "lmi": " SM-II-a-A-05261", 
       "lat": 47.6541, 
       "quality": false
     }
@@ -2560,10 +3904,12 @@
       "code": "57911.01", 
       "lastedit": "20140303150056", 
       "name": "Castrul roman de la Gil\u0103u", 
+      "author": null, 
       "ran": " 57911.01", 
       "image": " [[Fi\u0219ier:Roman castra of Gilau, Romania.jpg|300px]]", 
       "long": 23.3833, 
       "project": "ro", 
+      "lmi": " CJ-I-s-A-07068", 
       "lat": 46.75, 
       "quality": false
     }
@@ -2573,9 +3919,12 @@
       "code": "4179.01", 
       "lastedit": "20130714134712", 
       "name": "Villa rustica de la Tibru", 
+      "author": null, 
       "ran": " 4179.01 <ref name=\"ran\">[http://ran.cimec.ro/sel.asp?tip=148&Lang=RO&crsl=2&csel=2&clst=1&lpag=100&campsel=tip&ids=38 Repertoriul Arheologic Na\u021bional]</ref>", 
+      "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": " AB-I-s-B-00082 <ref name=\"ran\"/>", 
       "lat": 0, 
       "quality": false
     }
@@ -2585,9 +3934,12 @@
       "code": "42325.01", 
       "lastedit": "20141027153922", 
       "name": "Castrul roman de la Cinc\u0219or", 
+      "author": null, 
       "ran": " 42325.01", 
+      "image": null, 
       "long": 24.8666, 
       "project": "ro", 
+      "lmi": " BV-I-s-A-11266", 
       "lat": 45.8425, 
       "quality": false
     }
@@ -2597,6 +3949,7 @@
       "code": "7115.01", 
       "lastedit": "20140913200801", 
       "name": "Cetatea dacic\u0103 de la C\u0103p\u00e2lna", 
+      "author": null, 
       "ran": " 7115.01", 
       "image": " Dacian Fortress of Capalna 057.jpg", 
       "long": 23.6035, 
@@ -2611,9 +3964,12 @@
       "code": "153954.01", 
       "lastedit": "20140303143742", 
       "name": "Castrul roman de la B\u0103neasa", 
+      "author": null, 
       "ran": " 153954.01", 
+      "image": null, 
       "long": 24.9686, 
       "project": "ro", 
+      "lmi": " TR-I-s-B-14188", 
       "lat": 43.9414, 
       "quality": false
     }
@@ -2623,22 +3979,43 @@
       "code": "114523.02", 
       "lastedit": "20140405141029", 
       "name": "Castrul roman Stenarum", 
+      "author": null, 
       "ran": " 114523.02", 
+      "image": null, 
       "long": 24.7521, 
       "project": "ro", 
+      "lmi": " MS-I-s-A-15427", 
       "lat": 46.2394, 
       "quality": false
     }
   ], 
-  "70931.01": [
+  "105179.03.01": [
     {
-      "code": "70931.01", 
-      "lastedit": "20140303150527", 
-      "name": "Castrul roman de la Plosca", 
-      "ran": " 70931.01", 
-      "long": 23.5481, 
+      "code": "105179.03.01", 
+      "lastedit": "20150905152236", 
+      "name": "M\u0103n\u0103stirea Snagov", 
+      "author": null, 
+      "ran": "105179.03.01, 105179.03.02", 
+      "image": "M\u00e2n\u0103stirea Snagov.jpg", 
+      "long": 26.1756, 
       "project": "ro", 
-      "lat": 43.8191, 
+      "lmi": "IF-II-a-A-15312", 
+      "lat": 44.7294, 
+      "quality": false
+    }
+  ], 
+  "139820.04": [
+    {
+      "code": "139820.04", 
+      "lastedit": "20141026164816", 
+      "name": "Ansamblul castelului Wesselenyi din Jibou", 
+      "author": "[[Franz Wrabetz]] (arhitect)", 
+      "ran": " 139820.04", 
+      "image": " Jibou Castelul (2).JPG", 
+      "long": 23.2535, 
+      "project": "ro", 
+      "lmi": " SJ-II-a-A-05075", 
+      "lat": 47.2632, 
       "quality": false
     }
   ], 
@@ -2647,9 +4024,12 @@
       "code": "35303.02", 
       "lastedit": "20140302161051", 
       "name": "Castrul roman Arcobadara", 
+      "author": null, 
       "ran": " 35303.02", 
+      "image": null, 
       "long": 24.1401, 
       "project": "ro", 
+      "lmi": " BN-I-s-A-01354", 
       "lat": 47.2094, 
       "quality": false
     }
@@ -2659,10 +4039,28 @@
       "code": "53452.01", 
       "lastedit": "20140303142123", 
       "name": "Castrul roman Caput Bubali", 
+      "author": null, 
       "ran": " 53452.01", 
+      "image": null, 
       "long": 22.0667, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 45.3833, 
+      "quality": false
+    }
+  ], 
+  "33550.08": [
+    {
+      "code": "33550.08", 
+      "lastedit": "20141127213849", 
+      "name": "Biserica evanghelic\u0103 C.A. din Livezile", 
+      "author": null, 
+      "ran": " 33550.08", 
+      "image": " RO BN Biserica evanghelica din Livezile (1).JPG", 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": " BN-II-m-A-01668", 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -2671,9 +4069,12 @@
       "code": "62379.02", 
       "lastedit": "20140303142848", 
       "name": "Castrul roman de la Basarabi-Murfatlar", 
+      "author": null, 
       "ran": " 62379.02", 
+      "image": null, 
       "long": 28.4278, 
       "project": "ro", 
+      "lmi": " CT-I-s-A-02587", 
       "lat": 44.1842, 
       "quality": false
     }
@@ -2683,10 +4084,28 @@
       "code": "154442.01", 
       "lastedit": "20140303150540", 
       "name": "Castrul roman de la Gresia", 
+      "author": null, 
       "ran": " 154442.01", 
+      "image": null, 
       "long": 24.9167, 
       "project": "ro", 
+      "lmi": " TR-I-s-B-14205", 
       "lat": 44.1667, 
+      "quality": false
+    }
+  ], 
+  "60730.01": [
+    {
+      "code": "60730.01", 
+      "lastedit": "20150806212642", 
+      "name": "Stratonis", 
+      "author": null, 
+      "ran": "60730.01", 
+      "image": "Noviodunum-Tabula.jpg", 
+      "long": 28.5808, 
+      "project": "ro", 
+      "lmi": "CT-I-s-B-02769", 
+      "lat": 44.0117, 
       "quality": false
     }
   ], 
@@ -2695,10 +4114,12 @@
       "code": "88500.01", 
       "lastedit": "20140405140800", 
       "name": "Castrul roman de la T\u00e2rsa", 
+      "author": null, 
       "ran": " 88500.01 <ref name=\"ran\">[http://ran.cimec.ro/sel.asp?loc=2009&Lang=RO&crsl=2&csel=2&clst=1&lpag=20&campsel=loc&ids=7 Repertoriul Arheologic Na\u021bional]</ref>", 
       "image": " [[Fi\u0219ier:Castra of T\u00e2rsa.jpg|250px]]", 
       "long": 23.1577, 
       "project": "ro", 
+      "lmi": " HD-I-s-B-03199 <ref name=\"ran\"/>", 
       "lat": 45.6329, 
       "quality": false
     }
@@ -2706,8 +4127,9 @@
   "90397.01": [
     {
       "code": "90397.01", 
-      "lastedit": "20150403072057", 
+      "lastedit": "20150729135813", 
       "name": "Sarmizegetusa Regia", 
+      "author": null, 
       "ran": " 90397.01 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=18 October 2012}}</ref>", 
       "image": " Sarmizegetusa Regia (Grigore Roibu).jpg", 
       "long": 23.3093, 
@@ -2722,6 +4144,7 @@
       "code": "88500.02", 
       "lastedit": "20150327054738", 
       "name": "Cetatea dacic\u0103 Piatra Ro\u0219ie", 
+      "author": null, 
       "ran": " 88500.02 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=18 October 2012}}</ref>", 
       "image": " Welterbe.svg", 
       "long": 22.7, 
@@ -2731,16 +4154,18 @@
       "quality": false
     }
   ], 
-  "90397.07": [
+  "1026.01": [
     {
-      "code": "90397.07", 
-      "lastedit": "20130715224352", 
-      "name": "Cetatea dacic\u0103 Fe\u021bele Albe", 
-      "ran": " 90397.07 <ref name=\"ran\">{{cite web|title=National Archaeological Record (RAN)|url=http://ran.cimec.ro|publisher=ran.cimec.ro|accessdate=18 October 2012}}</ref> ", 
-      "long": 23.2, 
+      "code": "1026.01", 
+      "lastedit": "20140302161011", 
+      "name": "Castrul roman Apulum", 
+      "author": null, 
+      "ran": " 1026.01", 
+      "image": null, 
+      "long": 23.5722, 
       "project": "ro", 
-      "lmi": " HD-I-s-A-03196 <ref name=\"lmi\">{{cite web|title=National Register of Historic Monuments in Romania, Hunedoara County|url=http://www.inmi.ro/lmi/HUNEDOARA.pdf|publisher=www.inmi.ro|accessdate=18 October 2012}}</ref>", 
-      "lat": 45.67, 
+      "lmi": " AB-I-m-A-00001.01", 
+      "lat": 46.0664, 
       "quality": false
     }
   ]
