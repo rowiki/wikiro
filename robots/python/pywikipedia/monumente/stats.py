@@ -16,6 +16,9 @@ def split_code(code):
 		return (None, None, None, None)
 	return (parts[0], parts[1], parts[2], parts[3])
 
+clasament = {
+}
+
 def main():
 	f = open("ro_lmi_db.json", "r+")
 	pywikibot.output("Reading database file...")
@@ -148,12 +151,22 @@ def main():
 			coords += 1
 		if monument["Creatori"] <> "":
 			authors += 1
+		clasament[monument["Cod"]] = 0
+		if monument["Cod"] in pages_commons:
+			clasament[monument["Cod"]] += len(pages_commons[monument["Cod"]])
+		if monument["Cod"] in files_ro:
+			clasament[monument["Cod"]] += len(files_ro[monument["Cod"]])
 			
 	total_images = 0
 	for mon in pages_commons:
 		total_images += len(pages_commons[mon])
 	for mon in files_ro:
 		total_images += len(files_ro[mon])
+
+	import operator
+	sorted_clasament = sorted(clasament.items(), key=operator.itemgetter(1), reverse=True)
+	#print sorted_clasament
+
 	
 	print "* Total imagini: ''%d''" % total_images
 	print "* Monumente cu imagini: ''%d/%d (%f%%)''" % (images, total, images * 100.0 / total)
@@ -192,7 +205,7 @@ def main():
 if __name__ == "__main__":
 	try:
 		import update_database
-		update_database.main()
+		#update_database.main()
 		main()
 	finally:
 		pywikibot.stopme()
