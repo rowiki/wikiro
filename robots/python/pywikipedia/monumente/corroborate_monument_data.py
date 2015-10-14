@@ -66,6 +66,8 @@ Command-line arguments:
 
 -addRan         [ro specific] Add RAN codes and use RAN db to update monuments
 
+-force		Force the update of the fields even if we already have a value
+
 -updateArticle  Update the link to the article if available
 
 -updateImage    Update the image if available
@@ -486,7 +488,7 @@ def getImageType(image):
 	return None
 
 def chooseImagePicky(files):
-	print files
+	#print files
 	tries = 0
 	while tries < len(files):
 		artimage = random.sample(files,  1)[0]["name"]
@@ -509,6 +511,7 @@ def checkNewMonuments(other_data, db):
 def main():
 	otherFile = "other_monument_data.csv"
 	addRan = False
+	force = False
 	global _changes, _db
 	
 	for arg in pywikibot.handleArgs():
@@ -518,6 +521,8 @@ def main():
 			addRan = True
 		if arg.startswith('-db'):
 			_db = arg [len('-db:'):]
+		if arg.startswith('-force'):
+			force = True
 		if arg.startswith('-updateArticle'):
 			_changes = _changes | Changes.article
 		if arg.startswith('-updateImage'):
@@ -603,7 +608,7 @@ def main():
 					ran = allPages[0]['ran']
 			if code in pages_commons:
 				if len(pages_commons[code]) == 1: #exactly one picture
-					picture = pages_commons[code][0]["name"]
+					#picture = pages_commons[code][0]["name"]
 					if pic_author == None:
 						pic_author = pages_commons[code][0]["author"]
 					if "lmi92" in pages_commons[code]:
@@ -675,7 +680,7 @@ def main():
 
 		#author from article
 		if article <> None and article["author"] <> None and article["author"].strip() <> "":
-			print "autor1"
+			print "Author from article"
 			#author = strainu.stripLink(article["author"]).strip()
 			author = article["author"].strip()
 			if author == None or author == "":
@@ -686,13 +691,13 @@ def main():
 			else:
 				a1 = author.strip()
 				a2 = monument[creatorField].strip()
-				if a1 <> a2 and strainu.extractLink(a1) <> strainu.extractLink(a2):
+				if a1 <> a2 and strainu.extractLink(a1) <> strainu.extractLink(a2) and force:
 					articleText = updateTableData(monument["source"], code, creatorField, a1, text=articleText)
 				#	log(u"*''W'': ''[%s]'' Câmpul Creatori este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
 
 		#add the author(s) extracted from author pages
 		elif code in authors_local:
-			print "autor2"
+			print "Author from author pages"
 			authors = monument[creatorField]
 			for author in authors_local[code]:
 				if authors.find(author) == -1: #we don't already know the author
@@ -702,19 +707,20 @@ def main():
 						authors = author
 			a2 = monument[creatorField].strip()
 			if authors <> a2  and strainu.extractLink(authors) <> strainu.extractLink(a2): # if something changed, update the text
-				pywikibot.output(authors)
-				articleText = updateTableData(monument["source"], code, creatorField, authors, text=articleText)
+				if force:
+					pywikibot.output(authors)
+					articleText = updateTableData(monument["source"], code, creatorField, authors, text=articleText)
 			else:
 				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
 
 		elif pic_author <> None and pic_author.strip() <> "":
-			print "autor3"
+			print "Author from commons"
 			if strainu.stripLink(pic_author) <> strainu.stripLink(monument[creatorField]).strip():
 				articleText = updateTableData(monument["source"], code, creatorField, pic_author, text=articleText)
 
 		#try to find the author in external data
 		elif code in other_data and creatorField in other_data[code]:
-			print "autor4"
+			print "Author from other data"
 			authors = monument[creatorField].strip()
 			author = other_data[code][creatorField]
 			if authors <> u"" and authors.find(author) == -1: #we don't already know the author
@@ -725,8 +731,9 @@ def main():
 				log("* [Listă] ''W'': ''[%s]'' Lista are creatorii %s, iar în fișierul importat apare %s" % \
 						code, authors, author)
 			if authors <> monument[creatorField]: # if something changed, update the text
-				pywikibot.output(authors)
-				articleText = updateTableData(monument["source"], code, creatorField, authors, text=articleText)
+				if force:
+					pywikibot.output(authors)
+					articleText = updateTableData(monument["source"], code, creatorField, authors, text=articleText)
 			else:
 				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
 	
@@ -734,18 +741,17 @@ def main():
 		#we will only consider other types of image if no picture exists
 
 		#image from Commons, none in the list
-		if monument["Imagine"].strip() == "":
+		if monument["Imagine"].strip() == "" or force:
 			if picture <> None:
-				#pywikibot.output("Upload?" + picture)
+				pywikibot.output("We're uploading a selected picture from Commons: " + picture)
 				if picture.find(':') < 0:#no namespace
 					picture = "File:" + picture
 				picture, pictureType = chooseImagePicky([{"name": picture}])
 				articleText = updateTableData(monument["source"], code, pictureType, picture, text=articleText)
-
 			#use image from article only if none is available (or was selected) 
 			#from commons and we don't have a picture in the list
 			elif article <> None and article["image"] <> None and article["image"] <> "":
-				pywikibot.output(article["image"])
+				pywikibot.output("We're uploading image " + article["image"] + " from the article")
 				artimage = strainu.extractImageLink(article["image"]).strip()
 				if artimage == None or artimage == "":
 					pywikibot.output("Wrong article image link: \"%s\"@%s" % (article["image"], article["name"]))
@@ -778,7 +784,7 @@ def main():
 		#Commons category
 		if code in categories_commons:
 			cat = categories_commons[code][0]
-			if monument["Commons"] == "":
+			if monument["Commons"] == "" or force:
 				articleText = updateTableData(monument["source"], code,
 										"Commons", "commons:" + cat["name"], text=articleText)
 			elif monument["Commons"].strip() <> ("commons:" + cat["name"].strip()):
@@ -837,7 +843,7 @@ def main():
 					log(u"* [Listă] ''E'': ''[%s]'' Coordonate diferite între %s (%f,%f) și listă (%f,%f)" % \
 						(code, otherSrc, otherLat, otherLong, lat, long))
 
-			elif lat == 0 and otherValid:
+			elif (lat == 0 or force) and otherValid:
 				print otherCoords
 				pywikibot.output(u"Valid coord found:\n"
 								u"\tSource: " + otherSrc + "\n" 
