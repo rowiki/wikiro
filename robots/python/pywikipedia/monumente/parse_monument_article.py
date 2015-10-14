@@ -187,11 +187,11 @@ options = {
 	{
 		'lmi':
 		{
-			#'namespaces': [14, 6],
-			'namespaces': [6],
+			'namespaces': [14, 6],
+			#'namespaces': [14],
 			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
-			'codeTemplate': ["Monument istoric", "codLMI"],
+			'codeTemplate': ["Monument istoric", "Monumente istorice", "codLMI"],
 			'codeTemplateParams': 
 			[
 				u'lmi92',
