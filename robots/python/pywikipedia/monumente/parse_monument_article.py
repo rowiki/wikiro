@@ -264,7 +264,6 @@ options = {
 			u'carpenter': u'tâmplar',
 			u'decorator': u'decorator',
 			u'engineer': u'inginer',
-			u'engraver': u'gravor',
 			u'entrepreneur': u'întreprinzător',
 			u'ornamental painter': u'pictor ornamental',
 			u'sculptor': u'sculptor',
