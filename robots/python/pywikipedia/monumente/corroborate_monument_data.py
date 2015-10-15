@@ -698,20 +698,25 @@ def main():
 		#add the author(s) extracted from author pages
 		elif code in authors_local:
 			print "Author from author pages"
-			authors = monument[creatorField]
+			authors = monument[creatorField].strip()
+			last_death = 0
 			for author in authors_local[code]:
-				if authors.find(author) == -1: #we don't already know the author
+				if authors.find(author["name"]) == -1: #we don't already know the author
 					if authors <> "":
-						authors = author + ", " + authors
+						authors = author["name"] + ", " + authors
 					else:
-						authors = author
+						authors = author["name"]
+				if author["dead"] and author["dead"] > last_death:
+					last_death = author["dead"]
 			a2 = monument[creatorField].strip()
 			if authors <> a2  and strainu.extractLink(authors) <> strainu.extractLink(a2): # if something changed, update the text
-				if force:
+				if force or a2 == u"":
 					pywikibot.output(authors)
 					articleText = updateTableData(monument["source"], code, creatorField, authors, text=articleText)
 			else:
 				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
+			if last_death > 0:
+				articleText = updateTableData(monument["source"], code, u'Copyright', str(last_death), text=articleText)
 
 		elif pic_author <> None and pic_author.strip() <> "":
 			print "Author from commons"
@@ -748,6 +753,8 @@ def main():
 					picture = "File:" + picture
 				picture, pictureType = chooseImagePicky([{"name": picture}])
 				articleText = updateTableData(monument["source"], code, pictureType, picture, text=articleText)
+			elif force:
+				continue
 			#use image from article only if none is available (or was selected) 
 			#from commons and we don't have a picture in the list
 			elif article <> None and article["image"] <> None and article["image"] <> "":

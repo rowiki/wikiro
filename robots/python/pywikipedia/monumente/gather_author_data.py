@@ -41,6 +41,18 @@ options = {
 
 fullDict = {}
 
+def getYearsFromWikidata(page):
+	wdpage = page.data_item()
+	data = wdpage.get()
+	#print data['claims']
+	if 'P570' in data['claims']:
+		if len(data['claims']['P570']) > 1:
+			print data['claims']
+			return None
+		claim = data['claims']['P570'][0]
+		return claim.getTarget().year 
+	return None
+
 def processArticle(text, page, conf):
 	pywikibot.output(u'Working on "%s"' % page.title(True))
 	regexp = conf['codeRegexp']
@@ -49,12 +61,13 @@ def processArticle(text, page, conf):
 		return	
 	else:
 		print repr(results)
+		year = getYearsFromWikidata(page)
 		for result in results:
 			code = result[0]
 			if code in fullDict:
-				fullDict[code].append(page.title(withNamespace=False))
+				fullDict[code].append({"name": page.title(withNamespace=False), "dead": year})
 			else:
-				fullDict[code] = [page.title(withNamespace=False)]
+				fullDict[code] = [{"name": page.title(withNamespace=False), "dead": year}]
 	
 def main():
 	lang = u'ro'
