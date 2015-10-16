@@ -726,7 +726,8 @@ def main():
 		elif pic_author <> None and pic_author.strip() <> "":
 			print "Author from commons"
 			if strainu.stripLink(pic_author) <> strainu.stripLink(monument[creatorField]).strip():
-				articleText = updateTableData(monument["source"], code, creatorField, pic_author, text=articleText)
+				if force or monument[creatorField].strip() == u"":
+					articleText = updateTableData(monument["source"], code, creatorField, pic_author, text=articleText)
 
 		#try to find the author in external data
 		elif code in other_data and creatorField in other_data[code]:
