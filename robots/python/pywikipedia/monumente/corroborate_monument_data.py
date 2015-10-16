@@ -201,7 +201,7 @@ _changes = Changes.none
 _lang ='ro'
 _db = 'lmi'
 _log = _lang + _db + "_link.err.log"
-
+_differentCoords = {}
 
 def initLog():
 	global _flog, _log;
@@ -393,15 +393,16 @@ def parseArticleCoords(code, allPages):
 	artLon = 0
 	artSrc = None
 	updateCoord = False
+	global _differentCoords
 	for page in allPages:
 		if page["lat"] <> 0 and page["long"] <> 0:
 			if artLat <> 0: #this also means artLong <> 0
 				if math.fabs(artLat - page["lat"]) > _coordVariance or \
 					math.fabs(artLon - page["long"]) > _coordVariance:
-					log(u"* [WPCOM] ''E'': ''[%s]'' Coordonate diferite între "
-						u"[[:%s]] (%f,%f) și [[:%s]] (%f,%f)" % \
-						(code, page["name"], page["lat"], page["long"], artSrc[5:], artLat, artLon)
-						)
+					if page["name"] not in _differentCoords:
+						_differentCoords[page["name"]] = [page["lat"], page["long"]]
+					if artSrc[5:] not in _differentCoords:
+						_differentCoords[artSrc[5:]] = [artLat, artLon]
 					updateCoord = False
 			else:
 				artLat = page["lat"]
@@ -419,6 +420,7 @@ def parseRanCoords(code, ran_data):
 	ranCod = u""
 	updateCoord = False
 	prefix = u"RAN"
+	global _differentCoords
 	for site in ran_data:
 		if site[u"Lat"] == u"" or site[u"Lon"] == u"":
 			continue
@@ -429,8 +431,10 @@ def parseRanCoords(code, ran_data):
 			updateCoord = True
 		elif math.fabs(ranLat - float(site["Lat"])) > _coordVariance or \
 			 math.fabs(ranLon - float(site["Lon"])) > _coordVariance:
-				log(u"* [%s] ''E'': ''[%s]'' Coordonate diferite între RAN:%s (%f,%f) și RAN:%s (%f,%f)" % \
-					(prefix, code, site["Cod"], float(site["Lat"]), float(site["Lon"]), ranCod, ranLat, ranLon))
+				if site["Cod"] not in _differentCoords:
+					_differentCoords[site["Cod"]] = [float(site["Lat"]), float(site["Lon"])]
+				if ranCod not in _differentCoords:
+					_differentCoords[ranCod] = [ranLat, ranLon]
 				updateCoord = False
 	return (ranLat, ranLon, prefix + ranCod, updateCoord, {"lat": u"Lat", "lon": u"Lon", "prefix": prefix})
 	
@@ -512,7 +516,7 @@ def main():
 	otherFile = "other_monument_data.csv"
 	addRan = False
 	force = False
-	global _changes, _db
+	global _changes, _db, _differentCoords
 	
 	for arg in pywikibot.handleArgs():
 		if arg.startswith('-import:'):
@@ -594,6 +598,7 @@ def main():
 		pic_author = None
 		lmi92 = None
 		ran = None
+		_differentCoords = {}
 		
 		try:
 			if code in pages_local:
@@ -788,7 +793,7 @@ def main():
 					localimage = "File:" + localimage
 				articleText = updateTableData(monument["source"], code, localimageType, localimage, text=articleText)
 
-		#Commons category
+		# --- Commons category ---
 		if code in categories_commons:
 			cat = categories_commons[code][0]
 			if monument["Commons"] == "" or force:
@@ -805,7 +810,7 @@ def main():
 										"Commons", rancat, text=articleText)
 					break
 
-		#latitude and longitude
+		# --- Coordinates ---
 		try:
 			lat = float(monument["Lat"])
 		except ValueError:
@@ -847,8 +852,10 @@ def main():
 				 math.fabs(otherLat - lat) > _coordVariance or \
 				 math.fabs(otherLong - long) > _coordVariance \
 				):
-					log(u"* [Listă] ''E'': ''[%s]'' Coordonate diferite între %s (%f,%f) și listă (%f,%f)" % \
-						(code, otherSrc, otherLat, otherLong, lat, long))
+					if otherSrc not in _differentCoords:
+						_differentCoords[otherSrc] = [otherLat, otherLong]
+					if monument["source"] not in _differentCoords:
+						_differentCoords[monument["source"]] = [lat, long]
 
 			elif (lat == 0 or force) and otherValid:
 				print otherCoords
@@ -864,7 +871,12 @@ def main():
 								upload = uploadlat, text = articleText, ask = ask)
 				articleText = updateTableData(monument["source"], code, otherFields["lon"], str(otherLong), 
 								upload = True, text = articleText, ask = ask)
-			
+		if len(_differentCoords) > 0:
+			text = u"* ''E'': ''[%s]'' Coordonate diferite între " % code
+			for src in _differentCoords:
+				text += u"<br/>[[:%s]] (%f, %f), " % (src, _differentCoords[src][0], _differentCoords[src][1])
+			log(text)
+	
 		#Codes from 1992
 		if lmi92 <> None:
 			articleText = updateTableData(monument["source"], code, "Cod92", lmi92, upload = True, text = articleText)
