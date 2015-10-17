@@ -512,6 +512,46 @@ def checkNewMonuments(other_data, db):
 		f.write(outText)
 	f.close()
 
+
+def getYearsFromWikidata(page):
+	try:
+		wdpage = page.data_item()
+	except:#no wikidata item? Perhaps a new page?
+		return None
+        data = wdpage.get()
+        #print data['claims']
+        if 'P570' in data['claims']:
+                if len(data['claims']['P570']) > 1:
+                        print data['claims']
+                        return None
+                claim = data['claims']['P570'][0]
+                return claim.getTarget().year
+        return None
+
+def extractCopyrightField(creators):
+	last_death = 0
+	print creators
+	post = creators
+	while post:
+		parsed = strainu.extractLinkAndSurroundingText(post)
+		if parsed:
+			(pre, link, post) = parsed
+		else:
+			break
+		print u"a " + link
+		page = pywikibot.Page(pywikibot.Site(), link)
+		print u"b " + page.title()
+		if not page.exists():
+			continue
+		if page.isRedirectPage():
+			page = page.getRedirectTarget()
+		year = getYearsFromWikidata(page)
+		print year
+		if year > last_death:
+			last_death = year
+	return last_death
+
+
 def main():
 	otherFile = "other_monument_data.csv"
 	addRan = False
@@ -599,8 +639,12 @@ def main():
 		lmi92 = None
 		ran = None
 		_differentCoords = {}
+		last_death = 0
 		
 		try:
+			if monument[u"Creatori"] > "":
+				last_death = extractCopyrightField(monument[u"Creatori"])
+
 			if code in pages_local:
 				allPages.extend(pages_local[code])
 				if len(allPages) > 1:
@@ -659,6 +703,9 @@ def main():
 			#pywikibot.output(str(allPages))
 		except Exception as e:
 			pywikibot.output("Error: " + str(e))
+			import traceback
+			traceback.print_exc()
+			raise
 			pass #ignore errors
 
 		#RAN
@@ -704,7 +751,6 @@ def main():
 		elif code in authors_local:
 			print "Author from author pages"
 			authors = monument[creatorField].strip()
-			last_death = 0
 			for author in authors_local[code]:
 				if authors.find(author["name"]) == -1: #we don't already know the author
 					if authors <> "":
@@ -712,6 +758,7 @@ def main():
 					else:
 						authors = author["name"]
 				if author["dead"] and author["dead"] > last_death:
+					log(u"* [WPListă]''W'': ''[%s]'' Se pare că nu toți creatorii sunt menționați în listă. În articol, [[%s]] este menționat ca autor." % (code, author["name"]))
 					last_death = author["dead"]
 			a2 = monument[creatorField].strip()
 			if authors <> a2  and strainu.extractLink(authors) <> strainu.extractLink(a2): # if something changed, update the text
@@ -720,8 +767,6 @@ def main():
 					articleText = updateTableData(monument["source"], code, creatorField, authors, text=articleText)
 			else:
 				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
-			if last_death > 0:
-				articleText = updateTableData(monument["source"], code, u'Copyright', str(last_death), text=articleText)
 
 		elif pic_author <> None and pic_author.strip() <> "":
 			print "Author from commons"
@@ -747,6 +792,10 @@ def main():
 					articleText = updateTableData(monument["source"], code, creatorField, authors, text=articleText)
 			else:
 				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
+
+		# --- Copyright ---
+		if last_death > 0:
+			articleText = updateTableData(monument["source"], code, u'Copyright', str(last_death), text=articleText)
 	
 		# --- Choose an image ---
 		#we will only consider other types of image if no picture exists
