@@ -30,6 +30,7 @@ class ElectedPerson(object):
 		self.district = u""
 		self.name = u""
 		self.wiki = u""
+		self.index = -1
 
 	def addGroup(self, group):
 		self.groups.append(group)
@@ -71,10 +72,18 @@ class ElectedPerson(object):
 		return u""
 
 	def generateArticle(self):
-		firstParagraph = u"""'''%s''' este un %s român, ales în %d%s%s. %s
+		firstParagraph = u"""'''%s''' (n. {{Data nașterii|%s}}) este un %s român, ales în %d%s%s. %s
 
 """
 		mandateEnd = u"""Mandatul său a încetat pe %s."""
+		otherSections = u"""== Vezi și ==
+* [[Legislatura 2012-2016 (Camera Deputaților)]]
+* [[Parlamentul României]]
+
+== Legături externe ==
+* [http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%s&leg=2012&cam=%s&idl=1 Activitatea parlamentară]
+
+"""
 		text = self.generateInfobox()
 		function = u""
 		if self.chamber in chambers:
@@ -92,7 +101,8 @@ class ElectedPerson(object):
 		#print end
 		if function != u"" and end != u"":
 			function = u"fost " + function
-		text = text + firstParagraph % (self.name, function, begin, groupprefix, group, end)
+		birthdate = self.birthdate.replace(u"-", u"|")
+		text = text + firstParagraph % (self.name, birthdate, function, begin, groupprefix, group, end)
 
 		if len(self.groups) > 3:
 			grouptext = u"În timpului mandatului, a făcut parte din următoarele grupuri parlamentare: "
@@ -116,5 +126,7 @@ class ElectedPerson(object):
 		else:
 			grouptext = u""
 		text = text + grouptext
+		text = text + otherSections % (self.index, self.chamber)
+		text = text + u"{{DEFAULTSORT:{{subst:swap2|{{subst:PAGENAME}}}}}}\n"
 		text = text + self.generateCategory()
 		return text

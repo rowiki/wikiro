@@ -56,6 +56,7 @@ def ParliamentCsv(csvName):
 			people[name].chamber = int(row[2])
 			people[name].district = row[3]
 			people[name].wiki = row[4]
+			people[name].index = row[5]
 
 def ElectionsCsv(csvName):
 	with open(csvName, "r") as f:
@@ -130,7 +131,9 @@ def scrollThroughPages():
 				wiki = page.title()
 			print name
 			print extractBirthdate(parsed_html)
-			f.write(name + u";" + extractBirthdate(parsed_html) + u";" + str(camera) + u";\"" + extractElectoralDistrict(parsed_html) + u"\";\"" + wiki + u"\"\n")
+			text = name + u";" + extractBirthdate(parsed_html) + u";" + str(camera) + u";\"" + extractElectoralDistrict(parsed_html) + u"\";\"" + wiki + u"\";\"" + str(om) + "\"\n"
+			print text
+			f.write(text)
 			count[camera] += 1
 	f.close()
 
@@ -148,6 +151,14 @@ if __name__ == "__main__":
 	for person in people:
 		if people[person].chamber == 1:
 			continue
-		print people[person].generateArticle()
-		print u"----"
-		pass
+		if people[person].wiki != u"":
+			continue
+		art = people[person].generateArticle()
+		page = pywikibot.Page(pywikibot.getSite(), people[person].name)
+		if page.exists():
+			continue
+		answer = pywikibot.inputChoice(u"Upload page %s" % people[person].name, ['Yes', 'No'], ['y', 'n'], 'n')
+		if answer == 'y':
+			page.put(art, "Creez articol despre un parlamentar")
+		#print u"----"
+		#pass
