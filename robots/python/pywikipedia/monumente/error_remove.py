@@ -177,12 +177,16 @@ minormistakes = {
 	u'\[\[(.*)_(.*)\]\]': u'[[\g<1> \g<2>]]',
 	u'(\s?)-(\s?)catolică': u'-catolică',
 	u'o(\s?)-(\s?)(dac|roman)': u'o-\g<3>',
-	#u'(\| (?!Imagine|Commons|NotăCod))(.*) -([^\s])': u'\g<1>\g<2>-\g<3>',
-	#u'(\| (?!Imagine|Commons|NotăCod))(.*)([^\s])- ': u'\g<1>\g<2>\g<3>-',
+	#u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*) -([^\s])': u'\g<1>\g<2>-\g<3>',
+	#u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*)([^\s])- ': u'\g<1>\g<2>\g<3>-',
 	u'([Cc])as([aă])d': u'\g<1>as\g<2> d',
 	u'([a-z])înpartea': u'\g<1> în partea',
 	u'([a-z])depământ': u'\g<1> de pământ',
-	u'{{CompactTOC6}}': u'{{CuprinsPrefix|prefix={{subst:PAGENAME}}}}',
+	u'{{CompactTOC6}}': u'{{CuprinsPrefix|prefix={{subst:#invoke:String|sub|{{subst:urlencode:{{subst:PAGENAME}}|WIKI}}|1|-2}}}}\n{{-}}',
+	u'peambelemaluriale': u'pe ambele maluri ale',
+	u'fața([^d\s\)])': u'fața \g<1>',
+	u'părți([^lt\s\),.])': u'părți \g<1>',
+	u'învi([ae])': u'în vi\g<1>',
 }
 
 deprecated = {
