@@ -119,6 +119,7 @@ plan = 	[#all lowercase
 		u'v2',
 		u'reconstituire',
 		u'3d',
+		u'localizare',
 	]
 
 countries = {
@@ -223,7 +224,7 @@ def rebuildTemplate(params):
 	my_template += u"}}\n"
 	return my_template
 
-def updateTableData(url, code, field, newvalue, upload = True, text = None, ask = True):
+def updateTableData(url, code, field, newvalue, upload = True, text = None, ask = True, source = None):
 	"""
 	:param url: The wiki page that will be updated
 	:type url: string
@@ -242,6 +243,8 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 	:type text: string
 	:param ask: Whether to ask the user before uploading
 	:type ask: boolean
+	:param source: The source of the date; it is used in the commit description
+	:type source: string
 	:return: The modified text of the page
 	:rtype: string
 	"""
@@ -326,7 +329,11 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 		text = "".join((before, after))
 		
 		if upload == True or upload == None:
-			comment = u"Actualizez câmpul %s în lista de monumente" % field
+			if source:
+				s_text = u" folosind date din %s" % source
+			else:
+				s_text = u""
+			comment = u"Actualizez câmpul %s în lista de monumente%s" % (field, s_text)
 			try:
 				page.put(text, comment)
 			except pywikibot.exceptions.Error:
@@ -419,7 +426,7 @@ def parseRanCoords(code, ran_data):
 	ranLon = 0
 	ranCod = u""
 	updateCoord = False
-	prefix = u"RAN"
+	prefix = u"RAN: "
 	global _differentCoords
 	for site in ran_data:
 		if site[u"Lat"] == u"" or site[u"Lon"] == u"":
@@ -445,6 +452,7 @@ def parseOtherCoords(code, other_data, fields):
 	updateCoord = False
 	otherLat = 0
 	otherLong = 0
+	otherSrc = None
 	if fields["lat"] in other_data and fields["lon"] in other_data:
 		try:
 			otherLat = float(other_data[fields["lat"]])
@@ -452,7 +460,10 @@ def parseOtherCoords(code, other_data, fields):
 			updateCoord = True
 		except ValueError:
 			pass
-	return (otherLat, otherLong, u"%s: External data" % fields["prefix"], updateCoord, fields)
+	#print fields
+	if fields["prefix"]:
+		otherSrc = u"%s (date externe)" % fields["prefix"]
+	return (otherLat, otherLong, otherSrc, updateCoord, fields)
 	
 def addRanData(code, monument, ran_data, articleText):
 	if code in ran_data:
@@ -518,15 +529,15 @@ def getYearsFromWikidata(page):
 		wdpage = page.data_item()
 	except:#no wikidata item? Perhaps a new page?
 		return None
-        data = wdpage.get()
-        #print data['claims']
-        if 'P570' in data['claims']:
-                if len(data['claims']['P570']) > 1:
-                        print data['claims']
-                        return None
-                claim = data['claims']['P570'][0]
-                return claim.getTarget().year
-        return None
+	data = wdpage.get()
+	#print data['claims']
+	if 'P570' in data['claims']:
+		if len(data['claims']['P570']) > 1:
+			log(u"* [WD] '''W''': ''[%s]'' are mai multe date ale decesului la Wikidata" % (page.title()))
+			return None
+		claim = data['claims']['P570'][0]
+		return claim.getTarget().year
+	return None
 
 def extractCopyrightField(creators):
 	last_death = 0
@@ -538,14 +549,13 @@ def extractCopyrightField(creators):
 			(pre, link, post) = parsed
 		else:
 			break
-		print u"a " + link
 		page = pywikibot.Page(pywikibot.Site(), link)
-		print u"b " + page.title()
 		if not page.exists():
 			continue
 		if page.isRedirectPage():
 			page = page.getRedirectTarget()
 		year = getYearsFromWikidata(page)
+		print page.title()
 		print year
 		if year > last_death:
 			last_death = year
@@ -642,7 +652,7 @@ def main():
 		last_death = 0
 		
 		try:
-			if monument[u"Creatori"] > "":
+			if monument[u"Creatori"] > "" and (monument[u"Copyright"].strip() == u"" or force):
 				last_death = extractCopyrightField(monument[u"Creatori"])
 
 			if code in pages_local:
@@ -654,7 +664,7 @@ def main():
 					log(msg)
 				elif len(allPages) == 1:
 					article = allPages[0]
-					ran = allPages[0]['ran']
+					ran = allPages[0].get('ran')
 			if code in pages_commons:
 				if len(pages_commons[code]) == 1: #exactly one picture
 					#picture = pages_commons[code][0]["name"]
@@ -875,15 +885,17 @@ def main():
 		if code in ran_data:
 			otherCoords.append(parseRanCoords(code, ran_data[code]))
 		if code in other_data:
-			#print code
-			otherCoords.append(parseOtherCoords(code, other_data[code], {"lat": u"Lat", "lon": u"Lon", "prefix": u"ALT"}))
+			#print other_data[code]
+			otherCoords.append(parseOtherCoords(code, other_data[code], {"lat": u"Lat", "lon": u"Lon", "prefix": other_data[code].get("Source")}))
 			otherCoords.append(parseOtherCoords(code, other_data[code], {"lat": u"OsmLat", "lon": u"OsmLon", "prefix": u"OSM"}))
 
 		for (otherLat, otherLong, otherSrc, otherValid, otherFields) in otherCoords:
 			if (otherLat > 0 and strainu.getSec(otherLat) == 0) and \
 				(otherLong > 0 and strainu.getSec(otherLong) == 0):
+				if not otherSrc:
+					otherSrc = u"sursă externă necunoscută"
 				log(u"* [%s] ''W'': ''[%s]'' Coordonatele (%f,%f) din %s au nevoie de o verificare - secundele sunt 0" \
-				 %(otherSrc[:3], code, otherLat, otherLong, otherSrc))
+				 %(otherSrc, code, otherLat, otherLong, otherSrc))
 				otherValid = False
 				continue
 			elif (otherLat > 0 or otherLong > 0) and \
@@ -908,7 +920,6 @@ def main():
 						_differentCoords[monument["source"]] = [lat, long]
 
 			elif (lat == 0 or force) and otherValid:
-				print otherCoords
 				pywikibot.output(u"Valid coord found:\n"
 								u"\tSource: " + otherSrc + "\n" 
 								u"\tLatitude: " + str(otherLat) + "\n" 
@@ -918,9 +929,9 @@ def main():
 				#	ask = False
 				uploadlat = ("Lon" in monument and monument["Lon"] != "")
 				articleText = updateTableData(monument["source"], code, otherFields["lat"], str(otherLat), 
-								upload = uploadlat, text = articleText, ask = ask)
+								upload = uploadlat, text = articleText, ask = ask, source = otherSrc)
 				articleText = updateTableData(monument["source"], code, otherFields["lon"], str(otherLong), 
-								upload = True, text = articleText, ask = ask)
+								upload = True, text = articleText, ask = ask, source = otherSrc)
 		if len(_differentCoords) > 0:
 			text = u"* ''E'': ''[%s]'' Coordonate diferite între " % code
 			for src in _differentCoords:
