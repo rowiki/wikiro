@@ -597,6 +597,11 @@ def main():
 		pywikibot.output("----")
 		pywikibot.showHelp()
 		return
+
+	if force and _changes == Changes.all:
+		answer = pywikibot.inputChoice("Are you sure you want to force update ALL the fields? This will cause a lot of changes.", ["Yes", "No"], ["y", "n"])
+		if answer != 'y':
+			return
 	
 	db_json =			readJson("_".join(filter(None, [_lang, _db, "db.json"])), "database")
 	pages_local =			readJson("_".join(filter(None, [_lang, _db, "pages.json"])), _lang + ".wp pages")
