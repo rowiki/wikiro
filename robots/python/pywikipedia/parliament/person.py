@@ -16,9 +16,16 @@ chambers = {
 	2: u"[[Camera Deputaților din România|deputat]]",
 }
 
+chamber_link = {
+	1: u"[[Legislatura 2012-2016 (Senat)]]",
+	2: u"[[Legislatura 2012-2016 (Camera Deputaților)]]",
+}
+
 category = {
-	1: u"[[Categorie:Senatori români 2012-2016]]",
-	2: u"[[Categorie:Deputați români 2012-2016]]",
+	1: u"""[[Categorie:Senatori români %s-%s]]
+""",
+	2: u"""[[Categorie:Deputați români %s-%s]]
+""",
 }
 
 
@@ -31,6 +38,7 @@ class ElectedPerson(object):
 		self.name = u""
 		self.wiki = u""
 		self.index = -1
+		self.legislatures = {}
 
 	def addGroup(self, group):
 		self.groups.append(group)
@@ -40,6 +48,7 @@ class ElectedPerson(object):
 		self.groups[-1].end = endDate
 
 	def generateInfobox(self):
+		elections = [u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
 		text = u"""{{Infocaseta Om politic
 | nume = %s
 | functia = %s
@@ -48,14 +57,19 @@ class ElectedPerson(object):
 | circumscripția = %s
 | partid = %s
 | data_nașterii = %s
-}}
 """
 		function = u""
 		if self.chamber in chambers:
 			function = chambers[self.chamber]
-		begin = parliament.niceDate("2012-12-19")
+		begin = u"2012-12-19"
 		if len(self.groups) > 0:
-			begin = parliament.niceDate(self.groups[0].start)
+			begin = self.groups[0].start
+		for y in range(1, len(elections)):
+			year = elections[y]
+			if year in self.legislatures and self.chamber == self.legislatures[year]:
+				begin = year
+			else:
+				break
 		end = u""
 		if len(self.groups) > 0 and self.groups[-1].end != None:
 			end = parliament.niceDate(self.groups[-1].end)
@@ -63,13 +77,47 @@ class ElectedPerson(object):
 		party = u""
 		if len(self.groups):
 			party = self.groups[-1].party[0]
-		
-		return text % (self.name, function, begin, end, district, party, parliament.niceDate(self.birthdate))
+		birthdate = self.birthdate.replace(u"-", u"|")
+		birthdate = u"{{Data nașterii și vârsta|" + birthdate + u"}}"
+
+		text = text % (self.name, function, parliament.niceDate(begin), end, district, party, birthdate)
+		index = 2
+		print begin
+		t = u""
+		last_chamber = 0
+		for y in range(1, len(elections)):
+			year = elections[y]
+			if int(year) >= int(begin[:4]):
+				continue
+			if year not in self.legislatures:
+				last_chamber = 0
+				continue
+			if self.legislatures[year] == last_chamber:
+				t = t.replace(elections[y-1], year)
+			else:
+				text += t
+				t = u"""| functia%d = %s
+| început%d = %s
+| sfârșit%d = %s
+""" % (index, chambers[self.legislatures[year]], index, parliament.niceDate(year), index, parliament.niceDate(elections[y-1]))
+				index += 1
+			last_chamber = self.legislatures[year]
+		text += t
+		text += u"}}\n"
+		return text
 	
-	def generateCategory(self):
+	def generateCategories(self):
+		elections = [u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
+		commoncat = u"[[Categorie:Politicieni români în viață]]"
+		cat = u""
 		if self.chamber in category:
-			return category[self.chamber]
-		return u""
+			cat += category[self.chamber] % (u"2012", u"2016")
+			for y in range (1, len(elections)):
+				year = elections[y]
+				if year in self.legislatures:	
+					cat += category[self.chamber] % (year, elections[y-1])
+		cat += commoncat
+		return cat
 
 	def generateArticle(self):
 		firstParagraph = u"""'''%s''' (n. {{Data nașterii|%s}}) este un %s român, ales în %d%s%s. %s
@@ -77,7 +125,7 @@ class ElectedPerson(object):
 """
 		mandateEnd = u"""Mandatul său a încetat pe %s."""
 		otherSections = u"""== Vezi și ==
-* [[Legislatura 2012-2016 (Camera Deputaților)]]
+* %s
 * [[Parlamentul României]]
 
 == Legături externe ==
@@ -116,7 +164,7 @@ class ElectedPerson(object):
 					grouptext += u", "
 			grouptext += "\n\n"
 		elif len(self.groups) > 2:
-			grouptext = u"""Pe %s a trecut în %s, apoi s-a mutat în %s (pe data de %s).
+			grouptext = u"""Pe %s a trecut la %s, apoi s-a mutat în %s (pe data de %s).
 
 """ % (parliament.niceDate(self.groups[1].start), self.groups[1].name, self.groups[2].name, parliament.niceDate(self.groups[2].start))
 		elif len(self.groups) > 1:
@@ -126,7 +174,7 @@ class ElectedPerson(object):
 		else:
 			grouptext = u""
 		text = text + grouptext
-		text = text + otherSections % (self.index, self.chamber)
+		text = text + otherSections % (chamber_link[self.chamber], self.index, self.chamber)
 		text = text + u"{{DEFAULTSORT:{{subst:swap2|{{subst:PAGENAME}}}}}}\n"
-		text = text + self.generateCategory()
+		text = text + self.generateCategories()
 		return text

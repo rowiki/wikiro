@@ -7,6 +7,7 @@ import re
 import codecs
 import csv
 import sys
+import json
 
 sys.path.append(".")
 import strainu_functions
@@ -20,7 +21,7 @@ birthdate_regex = r"n\.\s+([0-9]{1,2})\s+([a-z\.]{3,4})\s+([0-9]{4})"
 people = {
 }
 
-invalid_group = u"Deputaţi neafiliaţi"
+invalid_group = u"Deputați neafiliați"
 
 def extractElectoralDistrict(bf):
 	res = bf.find('div', attrs={'class':'boxStiri'})
@@ -45,9 +46,23 @@ def extractBirthdate(bf):
 	else:
 		return u""
 
+def extractLegislatures(bf):
+	llist = bf.findAll('div', text=u"Alte legislaturi")[0].parent.parent.nextSibling.next
+	ret = {}
+	for i in llist:
+		element = str(i.next.next)
+		chamber = element[:element.find(' ')]
+		begin = element[element.find('-')+2:element.find('-')+6]
+		if chamber == "Deputat":
+			ret[begin] = 2
+		elif chamber == "Senator":
+			ret[begin] = 1
+	print ret
+	return ret
+
 def ParliamentCsv(csvName):
 	with open(csvName, "r") as f:
-		reader = strainu_functions.unicode_csv_reader(f, delimiter=';')
+		reader = strainu_functions.unicode_csv_reader(f, delimiter=';', quotechar="'")
 		for row in reader:
 			name = row[0]
 			people[name] = parliament.person.ElectedPerson()
@@ -57,6 +72,11 @@ def ParliamentCsv(csvName):
 			people[name].district = row[3]
 			people[name].wiki = row[4]
 			people[name].index = row[5]
+			try:
+				js = json.loads(row[6])
+			except ValueError:
+				js = {}
+			people[name].legislatures = js
 
 def ElectionsCsv(csvName):
 	with open(csvName, "r") as f:
@@ -105,7 +125,7 @@ def DemisionsCsv(csvName):
 
 def scrollThroughPages():
 	count = [0,0,0]
-	f = codecs.open("parliament.csv", "w+", "utf8")
+	f = codecs.open("parliament/parliament.csv", "w+", "utf8")
 	for camera in [1,2]:
 		for om in range(1,500):
 			url = 'http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%d&leg=2012&cam=%d&idl=1' % (om, camera)
@@ -119,10 +139,11 @@ def scrollThroughPages():
 				print u"Camera %d s-a terminat" % camera
 				break
 			new_man = len(parsed_html.findAll('div', text=u"Alte legislaturi")) == 0
+			prev_legislatures = {}
 			if new_man == False:
 				#TODO: also try these ones
 				print u"Parlamentarul a fost și în alte legislaturi"
-				continue
+				prev_legislatures = extractLegislatures(parsed_html)
 			wiki = u""
 			name = parliament.allCommas(parsed_html.find('div', attrs={'class':'boxTitle'}).h1.text.title())
 			page = pywikibot.Page(pywikibot.getSite(), name)
@@ -131,7 +152,8 @@ def scrollThroughPages():
 				wiki = page.title()
 			print name
 			print extractBirthdate(parsed_html)
-			text = name + u";" + extractBirthdate(parsed_html) + u";" + str(camera) + u";\"" + extractElectoralDistrict(parsed_html) + u"\";\"" + wiki + u"\";\"" + str(om) + "\"\n"
+			text = name + u";" + extractBirthdate(parsed_html) + u";" + str(camera) + u";\'" + extractElectoralDistrict(parsed_html) + u"\';\'" + wiki + \
+				u"\';\'" + str(om) + "\';\'" + json.dumps(prev_legislatures) + "\'\n"
 			print text
 			f.write(text)
 			count[camera] += 1
@@ -149,16 +171,29 @@ if __name__ == "__main__":
 	
 	print "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
 	for person in people:
-		if people[person].chamber == 1:
-			continue
+		print person
 		if people[person].wiki != u"":
-			continue
-		art = people[person].generateArticle()
-		page = pywikibot.Page(pywikibot.getSite(), people[person].name)
-		if page.exists():
-			continue
+			page = pywikibot.Page(pywikibot.getSite(), people[person].wiki)
+			if page.isRedirectPage():
+				page = page.getRedirectTarget()
+			art = page.get()
+			if art.find(u"{{Infocaseta") > -1 or art.find(u"{{Infobox") > -1 or art.find(u"Cutie") > -1:
+				print u"Există deja o infocasetă în articol"
+				continue
+			art = people[person].generateInfobox() + art
+		else:
+			art = people[person].generateArticle()
+			page = pywikibot.Page(pywikibot.getSite(), people[person].name)
+			if page.exists():
+				print u"Există deja articolul %s" % page.title()
+				continue
+		print art
 		answer = pywikibot.inputChoice(u"Upload page %s" % people[person].name, ['Yes', 'No'], ['y', 'n'], 'n')
 		if answer == 'y':
-			page.put(art, "Creez articol despre un parlamentar")
+			try:
+				page.put(art, "Completez articolul despre un parlamentar")
+			except pywikibot.exceptions.PageSaveRelatedError as e:
+				print "Eroare la salvarea paginii" + str(e)
+				pass
 		#print u"----"
 		#pass
