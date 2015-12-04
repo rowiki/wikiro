@@ -776,7 +776,7 @@ def main():
 					log(u"* [WPListă]''W'': ''[%s]'' Se pare că nu toți creatorii sunt menționați în listă. În articol, [[%s]] este menționat ca autor." % (code, author["name"]))
 					last_death = author["dead"]
 			a2 = monument[creatorField].strip()
-			if authors <> a2  and strainu.extractLink(authors) <> strainu.extractLink(a2): # if something changed, update the text
+			if a2 == u"" or authors <> a2  and strainu.extractLink(authors) <> strainu.extractLink(a2): # if something changed, update the text
 				if force or a2 == u"":
 					pywikibot.output(authors)
 					articleText = updateTableData(monument["source"], code, creatorField, authors, text=articleText)
