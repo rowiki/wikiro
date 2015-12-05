@@ -145,7 +145,8 @@ def scrollThroughPages():
 				print u"Parlamentarul a fost și în alte legislaturi"
 				prev_legislatures = extractLegislatures(parsed_html)
 			wiki = u""
-			name = parliament.allCommas(parsed_html.find('div', attrs={'class':'boxTitle'}).h1.text.title())
+			name = parsed_html.find('div', attrs={'class':'boxTitle'}).h1.next.title()
+			name = parliament.allCommas(name)
 			page = pywikibot.Page(pywikibot.getSite(), name)
 			if page.exists():
 				print u"ro.wp are deja articol"
@@ -163,7 +164,7 @@ def scrollThroughPages():
 	print u"Deputați: %d" % count[2]
 
 if __name__ == "__main__":
-	#scrollThroughPages()
+	scrollThroughPages()
 	ParliamentCsv("parliament/parliament.csv")
 	ElectionsCsv("parliament/alegeri.csv")
 	MovesCsv("parliament/migrari.csv")
@@ -177,17 +178,32 @@ if __name__ == "__main__":
 			if page.isRedirectPage():
 				page = page.getRedirectTarget()
 			art = page.get()
+			catl = people[person].generateCategoriesList()
+			for cat in page.categories():
+				if cat.title() in catl:
+					catl.remove(cat.title())
+			print catl
 			if art.find(u"{{Infocaseta") > -1 or art.find(u"{{Infobox") > -1 or art.find(u"Cutie") > -1:
 				print u"Există deja o infocasetă în articol"
-				continue
-			art = people[person].generateInfobox() + art
+				if len(catl) == 0:
+					continue
+			else:
+				art = people[person].generateInfobox() + art
+			index = art.rfind(u"Categorie:")
+			index = art.find(u"]]", index) + 2
+			if index == 1:
+				index = len(art)
+			for cat in catl:
+				art += u"\n[[%s]]" % cat
 		else:
 			art = people[person].generateArticle()
 			page = pywikibot.Page(pywikibot.getSite(), people[person].name)
 			if page.exists():
 				print u"Există deja articolul %s" % page.title()
 				continue
+
 		print art
+		
 		answer = pywikibot.inputChoice(u"Upload page %s" % people[person].name, ['Yes', 'No'], ['y', 'n'], 'n')
 		if answer == 'y':
 			try:

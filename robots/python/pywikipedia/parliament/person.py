@@ -22,10 +22,8 @@ chamber_link = {
 }
 
 category = {
-	1: u"""[[Categorie:Senatori români %s-%s]]
-""",
-	2: u"""[[Categorie:Deputați români %s-%s]]
-""",
+	1: u"Categorie:Senatori români %s-%s",
+	2: u"Categorie:Deputați români %s-%s",
 }
 
 
@@ -106,18 +104,24 @@ class ElectedPerson(object):
 		text += u"}}\n"
 		return text
 	
-	def generateCategories(self):
+	def generateCategoriesList(self):
 		elections = [u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
-		commoncat = u"[[Categorie:Politicieni români în viață]]"
-		cat = u""
+		cat = [u"Categorie:Politicieni români în viață"]
 		if self.chamber in category:
-			cat += category[self.chamber] % (u"2012", u"2016")
+			cat.append(category[self.chamber] % (u"2012", u"2016"))
 			for y in range (1, len(elections)):
 				year = elections[y]
 				if year in self.legislatures:	
-					cat += category[self.chamber] % (year, elections[y-1])
-		cat += commoncat
+					cat.append(category[self.chamber] % (year, elections[y-1]))
+		print cat
 		return cat
+
+	def generateCategories(self):
+		catl = self.generateCategoriesList()
+		cats = u""
+		for cat in catl:
+			cats += cat + "\n"
+		return cats
 
 	def generateArticle(self):
 		firstParagraph = u"""'''%s''' (n. {{Data nașterii|%s}}) este un %s român, ales în %d%s%s. %s
