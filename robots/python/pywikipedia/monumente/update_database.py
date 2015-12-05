@@ -97,6 +97,12 @@ countries = {
 
 monuments_db = []
 
+def filterOne(contents):
+	'''
+	Any kind of filtering of the data of a monument should happen in this functions
+	'''
+	return contents
+
 def processMonument(params, source, countryconfig, title):
 	'''
 	Process a single instance of a monument row template
@@ -131,7 +137,7 @@ def processMonument(params, source, countryconfig, title):
 				pywikibot.output(u'Value: %s' % value)
 				pywikibot.output(u'Params: %s\n%s' % (params, param))
 				#time.sleep(5)
-	return contents
+	return filterOne(contents)
 
 def processText(source, countryconfig, page=None):
 	'''
