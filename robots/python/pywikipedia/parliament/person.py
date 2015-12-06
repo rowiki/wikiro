@@ -109,10 +109,10 @@ class ElectedPerson(object):
 		cat = [u"Categorie:Politicieni români în viață"]
 		if self.chamber in category:
 			cat.append(category[self.chamber] % (u"2012", u"2016"))
-			for y in range (1, len(elections)):
-				year = elections[y]
-				if year in self.legislatures:	
-					cat.append(category[self.chamber] % (year, elections[y-1]))
+		for y in range (1, len(elections)):
+			year = elections[y]
+			if year in self.legislatures:	
+				cat.append(category[self.legislatures[year]] % (year, elections[y-1]))
 		print cat
 		return cat
 
