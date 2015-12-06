@@ -130,7 +130,10 @@ def scrollThroughPages():
 		for om in range(1,500):
 			url = 'http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%d&leg=2012&cam=%d&idl=1' % (om, camera)
 			print url
-			r = requests.get(url)
+			try:
+				r = requests.get(url)
+			except:
+				continue
 			#print r.status_code
 	
 			html = r.text
@@ -164,7 +167,7 @@ def scrollThroughPages():
 	print u"Deputați: %d" % count[2]
 
 if __name__ == "__main__":
-	scrollThroughPages()
+	#scrollThroughPages()
 	ParliamentCsv("parliament/parliament.csv")
 	ElectionsCsv("parliament/alegeri.csv")
 	MovesCsv("parliament/migrari.csv")
