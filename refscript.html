@@ -3,28 +3,14 @@
 <head><title>RefScript</title>
     <meta content="text/html; charset=utf-8;" http-equiv=Content-Type>
 <script type="text/JavaScript">
-function createDiv(responsetext)
+function createDiv()
 {
     var _div = document.getElementById('button');
-    _div.innerHTML = "<span title=\"RefScript\" style=\"background:#0070F0; font-size:2em;\">&nbsp;&nbsp;<a href=\"javascript:" + responsetext.replace(/"/g, "&quot;") + "\" title=\"RefScript\"><span style=\"color:#FFFFFF\">RefScript</span></a>&nbsp;&nbsp;</span>";
-}
-
-function httpGet(theUrl)
-{
-    xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function()
-    {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-        {
-            createDiv(xmlhttp.responseText);
-        }
-    }
-    xmlhttp.open("GET", theUrl, false);
-    xmlhttp.send();    
+    _div.innerHTML = "<span title=\"RefScript\" style=\"background:#0070F0; font-size:2em;\">&nbsp;&nbsp;<a href=\"javascript:document.body.appendChild(document.createElement('script')).setAttribute('src','https://raw.githubusercontent.com/rowiki/wikiro/master/js/refscript.js');void(0);\" title=\"RefScript\"><span style=\"color:#FFFFFF\">RefScript</span></a>&nbsp;&nbsp;</span>";
 }
 </script>
 </head>
-<body onload="javascript:httpGet('https://raw.githubusercontent.com/rowiki/wikiro/master/js/refscript.js')">
+<body onload="javascript:createDiv();">
 <br>
 <h2>RefScript Bookmarklet</h2>
 <br>
