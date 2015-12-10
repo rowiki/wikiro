@@ -642,14 +642,14 @@ if (u.match(/webcitation.org/)) {
 	};
 	if (u.match(/revista22.ro/)) {
 		var W_Title = document.title;
-		var titleregex = /<meta\s+property="og:title"\s+content="(.+?)"\s+\/>/g;
+		var titleregex = /<meta\s+property=.og:title.\s+content=.(.+?).\s+\/>/g;
 		var metas = document.getElementsByTagName('meta');
 		for (metasindex = 0; metasindex < metas.length; metasindex++) {
-			if (metas[metasindex].getAttribute("property") == "og:title") {
-				W_Title = metas[metasindex].getAttribute("content");
+			if (metas[metasindex].getAttribute('property') == 'og:title') {
+				W_Title = metas[metasindex].getAttribute('content');
 			};
 		};
-		var dateregex = /<div\s+class="date"><b>(.*?)<\/b><\/div>/g;
+		var dateregex = /<div\s+class=.date.><b>(.*?)<\/b><\/div>/g;
 		var datematches;
 		var x = '';
 		while (datematches = dateregex.exec(d)) {
@@ -657,7 +657,7 @@ if (u.match(/webcitation.org/)) {
 		};
 		var W_Date = x;
 		var authorregexes = [];
-		authorregexes.push(/<a href="autor\.php\?s=.*?"> <span style="color:#970606; font-family: 'Roboto', Arial, sans-serif; font-weight: 400; font-size:18px; letter-spacing: -1px;"> (.*?)<\/span><span style="color:#970606; font-family: 'Roboto', Arial, sans-serif; font-weight: 900; font-size:18px; letter-spacing: -1px;"> (.*?) <\/span> <\/a>/g);
+		authorregexes.push(/<a href=.autor\.php\?s=.*?.> <span style=.color:#970606; font-family: 'Roboto', Arial, sans-serif; font-weight: 400; font-size:18px; letter-spacing: -1px;.> (.*?)<\/span><span style=.color:#970606; font-family: 'Roboto', Arial, sans-serif; font-weight: 900; font-size:18px; letter-spacing: -1px;.> (.*?) <\/span> <\/a>/g);
 		var W_Authors = '';
 		var authorregexindex = 0;
 		while (W_Authors.length == 0 && authorregexindex < authorregexes.length) {
