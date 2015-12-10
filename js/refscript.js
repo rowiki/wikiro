@@ -1,4 +1,4 @@
-var Manifest = '   RefScript version 41 (2014-09-30). This program is in the Public Domain. You can use it as you wish.   ';
+var Manifest = '   RefScript version 42 (2015-12-10). This program is in the Public Domain. You can use it as you wish.   ';
 var Tips = '  Pentru scurtarea scriptului, stergeţi între crestinortodox.ro şi youtube.com  -  sau folosiţi bookmarklet-ul din secţiunea care urmează după aceasta';
 function toTitleCase(str) {
 	var str = str.toLowerCase();
