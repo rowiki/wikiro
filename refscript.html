@@ -6,7 +6,7 @@
 function createDiv(responsetext)
 {
     var _div = document.getElementById('button');
-    _div.innerHTML = "<a href=\"javascript:" + responsetext.replace(/"/g, "&quot;") + "\" title=\"RefScript\"><span title=\"RefScript\" style=\"background:#0070F0; color:#FFFFFF; font-size:2em;\">RefScript</span></a>";
+    _div.innerHTML = "<span title=\"RefScript\" style=\"background:#0070F0; font-size:2em;\">&nbsp;&nbsp;<a href=\"javascript:" + responsetext.replace(/"/g, "&quot;") + "\" title=\"RefScript\"><span style=\"color:#FFFFFF\">RefScript</span></a>&nbsp;&nbsp;</span>";
 }
 
 function httpGet(theUrl)
