@@ -1,0 +1,44 @@
+<html>
+
+<head><title>RefScript</title>
+    <meta content="text/html; charset=utf-8;" http-equiv=Content-Type>
+<script type="text/JavaScript">
+function createDiv(responsetext)
+{
+    var _div = document.getElementById('button');
+    _div.innerHTML = "<a href=\"javascript:" + responsetext.replace(/"/g, "&quot;") + "\" title=\"RefScript\"><span title=\"RefScript\" style=\"background:#0070F0; color:#FFFFFF; font-size:2em;\">RefScript</span></a>";
+}
+
+function httpGet(theUrl)
+{
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function()
+    {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
+        {
+            createDiv(xmlhttp.responseText);
+        }
+    }
+    xmlhttp.open("GET", theUrl, false);
+    xmlhttp.send();    
+}
+</script>
+</head>
+<body onload="javascript:httpGet('https://raw.githubusercontent.com/rowiki/wikiro/master/js/refscript.js')">
+<br>
+<h2>RefScript Bookmarklet</h2>
+<br>
+Main website: <a href="https://ro.wikipedia.org/wiki/Proiect:Cod_Wikipedia/Bookmarklets/Generare_referinte">https://ro.wikipedia.org/wiki/Proiect:Cod_Wikipedia/Bookmarklets/Generare_referinte</a>
+<br><br>
+<p>
+Trageţi butonul albastru de mai jos în bara pentru bookmark-uri a browser-ului dvs.<br /><br />
+
+După aceea, faceţi click pe noul bookmark (RefScript) pentru a genera automat referinţele, cu un singur click.<br /><br /><br />
+
+  &nbsp; &nbsp;
+<div id="button">
+</div><br /><br />
+</p>
+</body>
+</html>
+
