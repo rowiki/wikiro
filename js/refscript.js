@@ -649,11 +649,11 @@ if (u.match(/webcitation.org/)) {
 				W_Title = metas[metasindex].getAttribute('content');
 			};
 		};
-		var dateregex = /<div\s+class=.date.><b>(.*?)<\/b><\/div>/g;
+		var dateregex = /<div\s+class=.date.>(<b>)?(.*?)(<\/b>)?<\/div>/g;
 		var datematches;
 		var x = '';
 		while (datematches = dateregex.exec(d)) {
-			x = datematches[1];
+			x = datematches[2];
 		};
 		var W_Date = x;
 		var authorregexes = [];
