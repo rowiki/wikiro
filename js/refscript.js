@@ -649,7 +649,7 @@ if (u.match(/webcitation.org/)) {
 				W_Title = metas[metasindex].getAttribute('content');
 			};
 		};
-		var dateregex = /<div\s+class=.date.>(<b>)?(.*?)(<\/b>)?<\/div>/g;
+		var dateregex = /<div\s+class=.date.>(<b>)?(\d{4}\-\d{2}\-\d{2})(<\/b>)?<\/div>/g;
 		var datematches;
 		var x = '';
 		while (datematches = dateregex.exec(d)) {
