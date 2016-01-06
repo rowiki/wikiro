@@ -797,6 +797,21 @@
       "quality": false
     }
   ], 
+  "BH-II-m-B-21038": [
+    {
+      "code": "BH-II-m-B-21038", 
+      "lastedit": "20151113201303", 
+      "name": "Fi\u0219ier:Enciclopedia Rom\u00e2niei 1938 vol 1 pg 587 1782.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-III-m-B-19970": [
     {
       "code": "B-III-m-B-19970", 
@@ -1012,6 +1027,21 @@
       "quality": false
     }
   ], 
+  "PH-III-m-A-16863": [
+    {
+      "code": "PH-III-m-A-16863", 
+      "lastedit": "20151110193505", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 54 img 63.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "OT-II-m-B-08570": [
     {
       "code": "OT-II-m-B-08570", 
@@ -1036,6 +1066,21 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-18104": [
+    {
+      "code": "B-II-m-B-18104", 
+      "lastedit": "20151208144929", 
+      "name": "Fi\u0219ier:Imobil de Raport, Str. Nicolae Balcesu, 9, Bucuresti.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -1193,76 +1238,11 @@
       "quality": false
     }
   ], 
-  "IS-II-m-B-04073": [
+  "BR-II-m-B-02097": [
     {
-      "code": "IS-II-m-B-04073", 
-      "lastedit": "20150909095702", 
-      "name": "Fi\u0219ier:Casa Orest Tafrali 2.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04073", 
-      "lastedit": "20150909095702", 
-      "name": "Fi\u0219ier:Casa Orest Tafrali 1.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04073", 
-      "lastedit": "20150909095702", 
-      "name": "Fi\u0219ier:Casa Orest Tafrali 3.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04073", 
-      "lastedit": "20150909095703", 
-      "name": "Fi\u0219ier:Casa Orest Tafrali 4.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04073", 
-      "lastedit": "20150909095703", 
-      "name": "Fi\u0219ier:Casa Orest Tafrali 5.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04073", 
-      "lastedit": "20150909095704", 
-      "name": "Fi\u0219ier:Casa Orest Tafrali 6.JPG", 
+      "code": "BR-II-m-B-02097", 
+      "lastedit": "20151110202851", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 83 img 92.png", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -1354,44 +1334,18 @@
       "quality": false
     }
   ], 
-  "CT-II-m-A-02896": [
+  "CT-III-m-A-02928": [
     {
-      "code": "CT-II-m-A-02896", 
-      "lastedit": "20150930182558", 
-      "name": "Fi\u0219ier:Fosta vil\u0103 Regal\u0103, azi club \u201eCastel\u201d.jpg", 
+      "code": "CT-III-m-A-02928", 
+      "lastedit": "20151110203208", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 90 img 99.png", 
       "author": null, 
       "ran": null, 
       "image": null, 
-      "long": 28.6246, 
+      "long": 0, 
       "project": "ro", 
       "lmi": null, 
-      "lat": 44.2384, 
-      "quality": false
-    }, 
-    {
-      "code": "CT-II-m-A-02896", 
-      "lastedit": "20150930182558", 
-      "name": "Fi\u0219ier:Fosta vil\u0103 Regal\u0103, azi club \u201eCastel\u201d - vedere din spate.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 28.6246, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 44.2384, 
-      "quality": false
-    }, 
-    {
-      "code": "CT-II-m-A-02896", 
-      "lastedit": "20150930182558", 
-      "name": "Fi\u0219ier:Fosta vil\u0103 Regal\u0103, azi club \u201eCastel\u201d - Mamaia.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 28.6246, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 44.2384, 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -1504,13 +1458,14 @@
   "TM-II-a-A-06177": [
     {
       "code": "TM-II-a-A-06177", 
-      "lastedit": "20140228202112", 
+      "lastedit": "20151208184103", 
       "name": "Fi\u0219ier:Poarta dinspre gara.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
@@ -1868,6 +1823,19 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BR-III-m-B-02144", 
+      "lastedit": "20151110203004", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 84 img 93.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -2842,6 +2810,21 @@
       "quality": false
     }
   ], 
+  "VN-II-m-A-06417": [
+    {
+      "code": "VN-II-m-A-06417", 
+      "lastedit": "20151110201824", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 71 img 80.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "IS-IV-m-B-04342": [
     {
       "code": "IS-IV-m-B-04342", 
@@ -2880,6 +2863,21 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BH-II-m-B-01027": [
+    {
+      "code": "BH-II-m-B-01027", 
+      "lastedit": "20151110204535", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 214 img 223.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -3143,30 +3141,6 @@
       "code": "SB-II-m-B-12311", 
       "lastedit": "20131109132108", 
       "name": "Fi\u0219ier:ApolduDeJosSB (9).JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SB-II-m-B-12311", 
-      "lastedit": "20131109130835", 
-      "name": "Fi\u0219ier:ApolduDeJosSB (11).JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SB-II-m-B-12311", 
-      "lastedit": "20131109130845", 
-      "name": "Fi\u0219ier:ApolduDeJosSB (13).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -3890,104 +3864,6 @@
       "project": "ro", 
       "lat": 0, 
       "quality": false
-    }, 
-    {
-      "code": "SB-II-m-B-12311", 
-      "lastedit": "20131109130831", 
-      "name": "Fi\u0219ier:ApolduDeJosSB (102).JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SB-II-m-B-12311", 
-      "lastedit": "20131109130825", 
-      "name": "Fi\u0219ier:ApolduDeJosSB (105).JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SB-II-m-B-12311", 
-      "lastedit": "20131109130833", 
-      "name": "Fi\u0219ier:ApolduDeJosSB (106).JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SB-II-m-B-12311", 
-      "lastedit": "20150819212859", 
-      "name": "Fi\u0219ier:ApolduDeJosSB (111).JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SB-II-m-B-12311", 
-      "lastedit": "20150819212302", 
-      "name": "Fi\u0219ier:ApolduDeJosSB (113).JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SB-II-m-B-12311", 
-      "lastedit": "20131109130850", 
-      "name": "Fi\u0219ier:ApolduDeJosSB (115).JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SB-II-m-B-12311", 
-      "lastedit": "20131109130848", 
-      "name": "Fi\u0219ier:ApolduDeJosSB (116).JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SB-II-m-B-12311", 
-      "lastedit": "20131109130846", 
-      "name": "Fi\u0219ier:ApolduDeJosSB (117).JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
     }
   ], 
   "BH-III-m-B-01244": [
@@ -4187,6 +4063,19 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "BH-II-m-A-01048", 
+      "lastedit": "20151110190048", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 217 img 226.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -4673,6 +4562,19 @@
       "lmi": null, 
       "lat": 44.4828, 
       "quality": false
+    }, 
+    {
+      "code": "B-II-a-A-18802", 
+      "lastedit": "20151106145811", 
+      "name": "Fi\u0219ier:DSCF6443FantanaModura.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "TM-II-m-A-06176": [
@@ -5012,6 +4914,21 @@
       "quality": false
     }
   ], 
+  "CT-II-m-B-02824": [
+    {
+      "code": "CT-II-m-B-02824", 
+      "lastedit": "20151104175235", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. Mircea cel B\u0103tr\u00e2n 5.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "IS-II-m-A-04178.02": [
     {
       "code": "IS-II-m-A-04178.02", 
@@ -5334,18 +5251,6 @@
   "HR-II-m-B-12962": [
     {
       "code": "HR-II-m-B-12962", 
-      "lastedit": "20131018185640", 
-      "name": "Fi\u0219ier:Biserica de lemn din Sandominic01.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "HR-II-m-B-12962", 
       "lastedit": "20131018185724", 
       "name": "Fi\u0219ier:Biserica de lemn din Sandominic02.JPG", 
       "author": null, 
@@ -5606,7 +5511,7 @@
   "IL-II-m-B-14086": [
     {
       "code": "IL-II-m-B-14086", 
-      "lastedit": "20150921174024", 
+      "lastedit": "20151020064244", 
       "name": "Fi\u0219ier:Casa Marius Ionescu 2.jpg", 
       "author": null, 
       "ran": null, 
@@ -5619,7 +5524,7 @@
     }, 
     {
       "code": "IL-II-m-B-14086", 
-      "lastedit": "20150921174024", 
+      "lastedit": "20151208144807", 
       "name": "Fi\u0219ier:Casa Marius Ionescu 3.jpg", 
       "author": null, 
       "ran": null, 
@@ -5658,7 +5563,7 @@
     }, 
     {
       "code": "IL-II-m-B-14086", 
-      "lastedit": "20150921174026", 
+      "lastedit": "20151208144824", 
       "name": "Fi\u0219ier:Casa Marius Ionescu 4.jpg", 
       "author": null, 
       "ran": null, 
@@ -5790,7 +5695,7 @@
   "IL-II-m-B-14087": [
     {
       "code": "IL-II-m-B-14087", 
-      "lastedit": "20150921181832", 
+      "lastedit": "20151208145139", 
       "name": "Fi\u0219ier:Cas\u0103 cu pr\u0103v\u0103lie pe col\u021b.jpg", 
       "author": null, 
       "ran": null, 
@@ -7141,13 +7046,14 @@
     }, 
     {
       "code": "HR-II-m-B-12998", 
-      "lastedit": "20131018191205", 
+      "lastedit": "20160103164028", 
       "name": "Fi\u0219ier:Biserica de lemn din Uilac14.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -7669,13 +7575,14 @@
     }, 
     {
       "code": "GJ-II-m-B-09265", 
-      "lastedit": "20140227141527", 
+      "lastedit": "20151024163547", 
       "name": "Fi\u0219ier:CalugareasaTotoiGJ (8).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
@@ -7693,13 +7600,14 @@
     }, 
     {
       "code": "GJ-II-m-B-09265", 
-      "lastedit": "20140227141522", 
+      "lastedit": "20151024172122", 
       "name": "Fi\u0219ier:CalugareasaTotoiGJ (11).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
@@ -7801,14 +7709,30 @@
     }, 
     {
       "code": "GJ-II-m-B-09265", 
-      "lastedit": "20140227141528", 
+      "lastedit": "20151024172657", 
       "name": "Fi\u0219ier:CalugareasaTotoiGJ (55).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-18105": [
+    {
+      "code": "B-II-m-B-18105", 
+      "lastedit": "20151106233717", 
+      "name": "Fi\u0219ier:Bucharest Day 5 - Balcescu (9457990059).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 26.100627, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 44.439686, 
       "quality": false
     }
   ], 
@@ -8139,6 +8063,21 @@
       "quality": false
     }
   ], 
+  "B-II-m-B-18826": [
+    {
+      "code": "B-II-m-B-18826", 
+      "lastedit": "20151024143736", 
+      "name": "Fi\u0219ier:Palatul CFR.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BH-II-m-A-01086": [
     {
       "code": "BH-II-m-A-01086", 
@@ -8180,126 +8119,6 @@
     }
   ], 
   "CJ-II-m-B-07519": [
-    {
-      "code": "CJ-II-m-B-07519", 
-      "lastedit": "20131110195330", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu A17.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07519", 
-      "lastedit": "20131110195333", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A2.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07519", 
-      "lastedit": "20131110195335", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A3.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07519", 
-      "lastedit": "20131110195338", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A4.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07519", 
-      "lastedit": "20131110195339", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A5.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07519", 
-      "lastedit": "20131110195354", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A6.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07519", 
-      "lastedit": "20131110195350", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A7.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07519", 
-      "lastedit": "20131110195348", 
-      "name": "Fi\u0219ier:Biserica de lemn din Achileu A8.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07519", 
-      "lastedit": "20131110195346", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A9.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07519", 
-      "lastedit": "20131110195345", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mare A10.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
     {
       "code": "CJ-II-m-B-07519", 
       "lastedit": "20131110195341", 
@@ -8421,6 +8240,21 @@
       "quality": false
     }
   ], 
+  "PH-II-m-A-16772": [
+    {
+      "code": "PH-II-m-A-16772", 
+      "lastedit": "20151218140123", 
+      "name": "Fi\u0219ier:Targsoru Nou, biserica Sf Voievozi.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-II-m-A-19725": [
     {
       "code": "B-II-m-A-19725", 
@@ -8431,6 +8265,21 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "BR-II-m-B-02061": [
+    {
+      "code": "BR-II-m-B-02061", 
+      "lastedit": "20151110202730", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 81 img 90.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -8488,6 +8337,19 @@
       "long": 26.0975, 
       "project": "ro", 
       "lat": 44.4389, 
+      "quality": false
+    }, 
+    {
+      "code": "B-III-m-B-20028", 
+      "lastedit": "20151106095255", 
+      "name": "Fi\u0219ier:Piata Revolutiei, Statuia lui Carol.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -8585,6 +8447,21 @@
       "quality": false
     }
   ], 
+  "CT-II-m-A-02801": [
+    {
+      "code": "CT-II-m-A-02801", 
+      "lastedit": "20151110203052", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 89 img 98.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "TM-II-m-A-06103.03": [
     {
       "code": "TM-II-m-A-06103.03", 
@@ -8629,7 +8506,7 @@
   "B-II-m-B-18822": [
     {
       "code": "B-II-m-B-18822", 
-      "lastedit": "20150926135513", 
+      "lastedit": "20151107151827", 
       "name": "Fi\u0219ier:Cas\u0103 de t\u00e2rgove\u021b-1.JPG", 
       "author": null, 
       "ran": null, 
@@ -8642,7 +8519,7 @@
     }, 
     {
       "code": "B-II-m-B-18822", 
-      "lastedit": "20150926135513", 
+      "lastedit": "20151107152300", 
       "name": "Fi\u0219ier:Cas\u0103 de t\u00e2rgove\u021b-3.JPG", 
       "author": null, 
       "ran": null, 
@@ -8655,7 +8532,7 @@
     }, 
     {
       "code": "B-II-m-B-18822", 
-      "lastedit": "20150926135513", 
+      "lastedit": "20151107152156", 
       "name": "Fi\u0219ier:Cas\u0103 de t\u00e2rgove\u021b-2.JPG", 
       "author": null, 
       "ran": null, 
@@ -8757,6 +8634,19 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-A-07469", 
+      "lastedit": "20151110205529", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 201 img 210.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -9316,13 +9206,14 @@
     }, 
     {
       "code": "NT-II-m-A-10707", 
-      "lastedit": "20150513193101", 
-      "name": "Fi\u0219ier:Cetate N\u01621.jpg", 
+      "lastedit": "20151127113316", 
+      "name": "Fi\u0219ier:Cetate N\u021a1.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
@@ -9689,6 +9580,34 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-II-m-A-19201", 
+      "lastedit": "20151110191629", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 45 img 54.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-B-02791": [
+    {
+      "code": "CT-II-m-B-02791", 
+      "lastedit": "20151031094414", 
+      "name": "Fi\u0219ier:Banc\u0103, azi Sediul B. R. D. - Soci\u00e9t\u00e9 G\u00e9n\u00e9rale.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -10236,6 +10155,36 @@
       "quality": false
     }
   ], 
+  "CT-II-m-B-02803": [
+    {
+      "code": "CT-II-m-B-02803", 
+      "lastedit": "20151031185325", 
+      "name": "Fi\u0219ier:Casa B\u00e2rz\u0103nescu.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-B-02802": [
+    {
+      "code": "CT-II-m-B-02802", 
+      "lastedit": "20151031185057", 
+      "name": "Fi\u0219ier:Cas\u0103 - Bd. Elisabeta 3.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BV-II-a-B-11297": [
     {
       "code": "BV-II-a-B-11297", 
@@ -10693,6 +10642,36 @@
       "quality": false
     }
   ], 
+  "CT-II-m-B-02806": [
+    {
+      "code": "CT-II-m-B-02806", 
+      "lastedit": "20151031190057", 
+      "name": "Fi\u0219ier:Cas\u0103 - Bd. Elisabeta 15.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-18600": [
+    {
+      "code": "B-II-m-B-18600", 
+      "lastedit": "20151106091541", 
+      "name": "Fi\u0219ier:Sediul Uniunii Arhitec\u021bilor din Rom\u00e2nia.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "CS-II-m-A-11113": [
     {
       "code": "CS-II-m-A-11113", 
@@ -10703,6 +10682,21 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-B-02829": [
+    {
+      "code": "CT-II-m-B-02829", 
+      "lastedit": "20151031183105", 
+      "name": "Fi\u0219ier:Casa cu bovindouri - Pia\u021ba Ovidiu 4.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -11200,6 +11194,21 @@
       "quality": false
     }
   ], 
+  "B-II-a-A-19152": [
+    {
+      "code": "B-II-a-A-19152", 
+      "lastedit": "20151110191812", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 46 img 55.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BV-II-m-B-11775": [
     {
       "code": "BV-II-m-B-11775", 
@@ -11210,6 +11219,21 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "PH-II-m-B-16633": [
+    {
+      "code": "PH-II-m-B-16633", 
+      "lastedit": "20151026121842", 
+      "name": "Fi\u0219ier:Th. Aman nr. 7.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -11238,6 +11262,90 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-B-02790": [
+    {
+      "code": "CT-II-m-B-02790", 
+      "lastedit": "20151031183420", 
+      "name": "Fi\u0219ier:\u201eCasa func\u021biei\u201d - M.A.N.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-B-02795": [
+    {
+      "code": "CT-II-m-B-02795", 
+      "lastedit": "20151026234605", 
+      "name": "Fi\u0219ier:Casa - Str. Callatis 6 - Constanta.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02795", 
+      "lastedit": "20151026234605", 
+      "name": "Fi\u0219ier:Casa - Str. Callatis 6 - vedere laterala.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02795", 
+      "lastedit": "20151026234606", 
+      "name": "Fi\u0219ier:Casa - Str. Callatis 6.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-B-02799": [
+    {
+      "code": "CT-II-m-B-02799", 
+      "lastedit": "20151031095019", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. Drago\u0219 Vod\u0103 8 - detaliu.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02799", 
+      "lastedit": "20151031095019", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. Drago\u0219 Vod\u0103 8.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -11611,13 +11719,14 @@
     }, 
     {
       "code": "VN-II-m-A-06462", 
-      "lastedit": "20141110174249", 
-      "name": "Fi\u0219ier:Foc\u015fani Teatrul, march 2001.jpg", 
+      "lastedit": "20151020063836", 
+      "name": "Fi\u0219ier:Foc\u0219ani Teatrul, march 2001.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
@@ -11630,6 +11739,19 @@
       "image": "Fi\u0219ier:Foc\u015fani Teatrul, march 2001.jpg", 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "VN-II-m-A-06462", 
+      "lastedit": "20151110201955", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 72 img 81.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -11802,15 +11924,15 @@
   "B-II-m-B-19202": [
     {
       "code": "B-II-m-B-19202", 
-      "lastedit": "20150927131542", 
+      "lastedit": "20151231162031", 
       "name": "Fi\u0219ier:Teatru de var\u0103 Alhambra arh. N. Nenciulescu.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
-      "long": 26.0954, 
+      "long": 26.095437, 
       "project": "ro", 
       "lmi": null, 
-      "lat": 44.4354, 
+      "lat": 44.43538, 
       "quality": false
     }, 
     {
@@ -12415,164 +12537,8 @@
   "CJ-II-m-B-07520": [
     {
       "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142856", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic B2.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
       "lastedit": "20131129142858", 
       "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic B3.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142901", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic B5.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142908", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7882.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142904", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic B6.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142906", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic B7.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142911", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7886.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142853", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic 2 DSCF7927.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142929", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7921.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142927", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7918.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142921", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7917.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142919", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7909.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142916", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7908.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CJ-II-m-B-07520", 
-      "lastedit": "20131129142913", 
-      "name": "Fi\u0219ier:Biserica de lemn din Aschileu Mic DSCF7888.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -12666,6 +12632,21 @@
       "quality": false
     }
   ], 
+  "B-II-m-B-19115": [
+    {
+      "code": "B-II-m-B-19115", 
+      "lastedit": "20151106233823", 
+      "name": "Fi\u0219ier:Hotel Ambasador.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-II-a-A-19016": [
     {
       "code": "B-II-a-A-19016", 
@@ -12747,6 +12728,36 @@
       "quality": false
     }
   ], 
+  "B-III-m-A-20058": [
+    {
+      "code": "B-III-m-A-20058", 
+      "lastedit": "20151110200622", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 40 img 49.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "TM-II-a-A-06159": [
+    {
+      "code": "TM-II-a-A-06159", 
+      "lastedit": "20151110190852", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 211 img 220.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "SM-II-a-B-05246": [
     {
       "code": "SM-II-a-B-05246", 
@@ -12780,6 +12791,34 @@
       "code": "MS-II-s-A-15781", 
       "lastedit": "20150906185244", 
       "name": "Fi\u0219ier:\u0218coala german\u0103 din Saschiz.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-B-02809.01": [
+    {
+      "code": "CT-II-m-B-02809.01", 
+      "lastedit": "20151031095436", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. George Enescu 6 - detaliu.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02809.01", 
+      "lastedit": "20151031095436", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. George Enescu 6.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -12829,6 +12868,58 @@
       "lmi": null, 
       "lat": 0, 
       "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02845", 
+      "lastedit": "20151026193654", 
+      "name": "Fi\u0219ier:Hotel Intim.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02845", 
+      "lastedit": "20151026193654", 
+      "name": "Fi\u0219ier:Hotel Intim - Intrare.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02845", 
+      "lastedit": "20151026193654", 
+      "name": "Fi\u0219ier:Hotel Intim - intrare in curtea interioara.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02845", 
+      "lastedit": "20151026193655", 
+      "name": "Fi\u0219ier:Hotel Intim - placa memoriala.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "BV-II-m-A-11294.01": [
@@ -12845,16 +12936,45 @@
       "quality": false
     }
   ], 
+  "CT-II-m-B-02847": [
+    {
+      "code": "CT-II-m-B-02847", 
+      "lastedit": "20151031120754", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. Nicolae Titulescu 12.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02847", 
+      "lastedit": "20151031120754", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. Nicolae Titulescu 12 - Intrare.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "HD-II-m-B-03373": [
     {
       "code": "HD-II-m-B-03373", 
-      "lastedit": "20150218162240", 
+      "lastedit": "20151108234217", 
       "name": "Fi\u0219ier:OcisorHD2011.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -12903,6 +13023,34 @@
       "code": "B-II-m-B-18505", 
       "lastedit": "20150928120802", 
       "name": "Fi\u0219ier:Cas\u0103-4 Bdul George Co\u0219buc nr. 67.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-B-02843": [
+    {
+      "code": "CT-II-m-B-02843", 
+      "lastedit": "20151031184524", 
+      "name": "Fi\u0219ier:Hanul Balcan.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02843", 
+      "lastedit": "20151031184525", 
+      "name": "Fi\u0219ier:Hanul Balcan - detaliu.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -13300,6 +13448,21 @@
       "quality": false
     }
   ], 
+  "BZ-II-m-A-02453": [
+    {
+      "code": "BZ-II-m-A-02453", 
+      "lastedit": "20151110194909", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 67 img 76.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "IS-II-m-B-03765": [
     {
       "code": "IS-II-m-B-03765", 
@@ -13414,6 +13577,86 @@
       "code": "B-II-m-B-19377", 
       "lastedit": "20150929184927", 
       "name": "Fi\u0219ier:Bucuresti, Romania, Str. Alexandru Philippide nr. 4, sect. 2 (LMI B-II-m-B-19377) (2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "IS-II-m-B-04073": [
+    {
+      "code": "IS-II-m-B-04073", 
+      "lastedit": "20150909095702", 
+      "name": "Fi\u0219ier:Casa Orest Tafrali 2.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "IS-II-m-B-04073", 
+      "lastedit": "20150909095702", 
+      "name": "Fi\u0219ier:Casa Orest Tafrali 1.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "IS-II-m-B-04073", 
+      "lastedit": "20150909095702", 
+      "name": "Fi\u0219ier:Casa Orest Tafrali 3.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "IS-II-m-B-04073", 
+      "lastedit": "20150909095703", 
+      "name": "Fi\u0219ier:Casa Orest Tafrali 4.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "IS-II-m-B-04073", 
+      "lastedit": "20150909095703", 
+      "name": "Fi\u0219ier:Casa Orest Tafrali 5.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "IS-II-m-B-04073", 
+      "lastedit": "20150909095704", 
+      "name": "Fi\u0219ier:Casa Orest Tafrali 6.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -13582,6 +13825,21 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "AR-II-m-B-00548": [
+    {
+      "code": "AR-II-m-B-00548", 
+      "lastedit": "20151110204856", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 206 img 215.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -14127,6 +14385,21 @@
       "quality": false
     }
   ], 
+  "HD-II-m-B-03408": [
+    {
+      "code": "HD-II-m-B-03408", 
+      "lastedit": "20151118191228", 
+      "name": "Fi\u0219ier:Enciclopedia Rom\u00e2niei 1938 vol 1 pg 618 1999.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BT-II-m-B-01913": [
     {
       "code": "BT-II-m-B-01913", 
@@ -14222,6 +14495,21 @@
       "quality": false
     }
   ], 
+  "BR-II-m-A-02076": [
+    {
+      "code": "BR-II-m-A-02076", 
+      "lastedit": "20151110202459", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 78 img 87.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-II-m-A-18225": [
     {
       "code": "B-II-m-A-18225", 
@@ -14247,6 +14535,47 @@
       "long": 0, 
       "project": "ro", 
       "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-A-02896": [
+    {
+      "code": "CT-II-m-A-02896", 
+      "lastedit": "20150930182558", 
+      "name": "Fi\u0219ier:Fosta vil\u0103 Regal\u0103, azi club \u201eCastel\u201d.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 28.6246, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 44.2384, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-A-02896", 
+      "lastedit": "20150930182558", 
+      "name": "Fi\u0219ier:Fosta vil\u0103 Regal\u0103, azi club \u201eCastel\u201d - vedere din spate.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 28.6246, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 44.2384, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-A-02896", 
+      "lastedit": "20150930182558", 
+      "name": "Fi\u0219ier:Fosta vil\u0103 Regal\u0103, azi club \u201eCastel\u201d - Mamaia.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 28.6246, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 44.2384, 
       "quality": false
     }
   ], 
@@ -14340,6 +14669,21 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-A-19324": [
+    {
+      "code": "B-II-m-A-19324", 
+      "lastedit": "20151118185915", 
+      "name": "Fi\u0219ier:Enciclopedia Rom\u00e2niei 1938 vol 1 pg 615 1988.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -15219,14 +15563,15 @@
     }, 
     {
       "code": "B-II-m-B-18687", 
-      "lastedit": "20140918082140", 
+      "lastedit": "20151223232712", 
       "name": "Fi\u0219ier:2014-09-17-2124.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
-      "long": 26.094, 
+      "long": 26.09397677, 
       "project": "ro", 
-      "lat": 44.435, 
+      "lmi": null, 
+      "lat": 44.43504405, 
       "quality": false
     }
   ], 
@@ -15383,6 +15728,21 @@
       "quality": false
     }
   ], 
+  "BZ-II-m-A-02459": [
+    {
+      "code": "BZ-II-m-A-02459", 
+      "lastedit": "20151110194731", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 64 img 73.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "IS-II-m-A-04264.02": [
     {
       "code": "IS-II-m-A-04264.02", 
@@ -15501,6 +15861,34 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-B-02805": [
+    {
+      "code": "CT-II-m-B-02805", 
+      "lastedit": "20151031185841", 
+      "name": "Fi\u0219ier:Casa Zottu.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02805", 
+      "lastedit": "20151031185841", 
+      "name": "Fi\u0219ier:Casa Zottu - vedere lateral\u0103.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -16142,6 +16530,21 @@
       "quality": false
     }
   ], 
+  "CT-II-m-B-02819": [
+    {
+      "code": "CT-II-m-B-02819", 
+      "lastedit": "20151031125835", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. Teodorescu Valahu Ion 10.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "IS-II-a-B-03892": [
     {
       "code": "IS-II-a-B-03892", 
@@ -16196,6 +16599,34 @@
       "quality": false
     }
   ], 
+  "CT-II-m-B-02815": [
+    {
+      "code": "CT-II-m-B-02815", 
+      "lastedit": "20151031134258", 
+      "name": "Fi\u0219ier:Casa avocat Traian Bellu, azi Hotel - detaliu.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02815", 
+      "lastedit": "20151031134258", 
+      "name": "Fi\u0219ier:Casa avocat Traian Bellu, azi Hotel.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BN-II-a-A-01459": [
     {
       "code": "BN-II-a-A-01459", 
@@ -16211,18 +16642,6 @@
     }
   ], 
   "BV-II-m-B-11604.01": [
-    {
-      "code": "BV-II-m-B-11604.01", 
-      "lastedit": "20140226155730", 
-      "name": "Fi\u0219ier:Biserica ortodoxa din Beclean, judetul Brasov.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
     {
       "code": "BV-II-m-B-11604.01", 
       "lastedit": "20140226155756", 
@@ -16468,6 +16887,47 @@
       "quality": false
     }
   ], 
+  "B-II-m-B-19114": [
+    {
+      "code": "B-II-m-B-19114", 
+      "lastedit": "20151030092624", 
+      "name": "Fi\u0219ier:Bucuresti, Romania, Cladirea CICLOP, ART SAFARI exposition, 2015; B-II-m-B-19114.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-II-m-B-19114", 
+      "lastedit": "20151030092614", 
+      "name": "Fi\u0219ier:Bucuresti, Romania, ART SAFARI exposition, Cladirea CICLOP,13-17 Mai 2015 (3) B-II-m-B-19114.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-II-m-B-19114", 
+      "lastedit": "20151030092556", 
+      "name": "Fi\u0219ier:Bucuresti, Romania, ART SAFARI exposition, Cladirea CICLOP,13-17 Mai 2015 (4); B-II-m-B-19114.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "IL-II-m-B-20205": [
     {
       "code": "IL-II-m-B-20205", 
@@ -16535,6 +16995,21 @@
       "quality": false
     }
   ], 
+  "BH-II-m-A-01085": [
+    {
+      "code": "BH-II-m-A-01085", 
+      "lastedit": "20151110190237", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 216 img 225.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BZ-II-m-B-02314": [
     {
       "code": "BZ-II-m-B-02314", 
@@ -16580,13 +17055,14 @@
   "GR-II-m-B-15078": [
     {
       "code": "GR-II-m-B-15078", 
-      "lastedit": "20150128072509", 
+      "lastedit": "20151015190346", 
       "name": "Fi\u0219ier:Aper1.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -16845,6 +17321,21 @@
       "quality": false
     }
   ], 
+  "CT-II-m-B-02827": [
+    {
+      "code": "CT-II-m-B-02827", 
+      "lastedit": "20151031122947", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. Negru Vod\u0103 8.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "GL-II-m-B-03011": [
     {
       "code": "GL-II-m-B-03011", 
@@ -16945,13 +17436,14 @@
   "HD-II-m-B-03413": [
     {
       "code": "HD-II-m-B-03413", 
-      "lastedit": "20140301084217", 
+      "lastedit": "20151229143406", 
       "name": "Fi\u0219ier:PetrosaniLuncaJiuluiHD.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -17072,11 +17564,23 @@
       "quality": false
     }
   ], 
-  "HD-II-m-A-03306": [
+  "B-II-m-A-18688": [
     {
-      "code": "HD-II-m-A-03306", 
-      "lastedit": "20140301084048", 
-      "name": "Fi\u0219ier:DanulestiHD.JPG", 
+      "code": "B-II-m-A-18688", 
+      "lastedit": "20131014102209", 
+      "name": "Fi\u0219ier:Palatul Prim\u0103riei Capitalei.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-II-m-A-18688", 
+      "lastedit": "20131014102137", 
+      "name": "Fi\u0219ier:Palatul Ministerului Lucrarilor Publice.png", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -17286,6 +17790,34 @@
       "quality": false
     }
   ], 
+  "CT-II-m-B-02788": [
+    {
+      "code": "CT-II-m-B-02788", 
+      "lastedit": "20151031132111", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. Vasile Alecsandri 10 - detaliu.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02788", 
+      "lastedit": "20151107183829", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. Vasile Alecsandri 10.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-III-m-B-20029": [
     {
       "code": "B-III-m-B-20029", 
@@ -17309,6 +17841,21 @@
       "long": 26.0962, 
       "project": "ro", 
       "lat": 44.4472, 
+      "quality": false
+    }
+  ], 
+  "PH-II-m-B-16271": [
+    {
+      "code": "PH-II-m-B-16271", 
+      "lastedit": "20151110192145", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 48 img 57.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -17363,13 +17910,14 @@
     }, 
     {
       "code": "BC-II-m-B-00810", 
-      "lastedit": "20150414070304", 
-      "name": "Fi\u0219ier:Bisericu\u0163a Ciolpani.jpg", 
+      "lastedit": "20151028140418", 
+      "name": "Fi\u0219ier:Bisericu\u021ba Ciolpani.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
@@ -17877,17 +18425,18 @@
       "quality": false
     }
   ], 
-  "CV-II-m-B-13256": [
+  "B-II-m-B-21022": [
     {
-      "code": "CV-II-m-B-13256", 
-      "lastedit": "20131018185451", 
-      "name": "Fi\u0219ier:Biserica de lemn din Poian01.JPG", 
+      "code": "B-II-m-B-21022", 
+      "lastedit": "20151106233730", 
+      "name": "Fi\u0219ier:Bucharest Day 5 - Balcescu (9457981123).jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
-      "long": 0, 
+      "long": 26.100483, 
       "project": "ro", 
-      "lat": 0, 
+      "lmi": null, 
+      "lat": 44.438063, 
       "quality": false
     }
   ], 
@@ -17934,18 +18483,6 @@
     }
   ], 
   "BH-II-m-A-01152": [
-    {
-      "code": "BH-II-m-A-01152", 
-      "lastedit": "20131018122330", 
-      "name": "Fi\u0219ier:Biserica de lemn din Gheghie.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
     {
       "code": "BH-II-m-A-01152", 
       "lastedit": "20131018122335", 
@@ -18221,13 +18758,14 @@
   "GJ-II-m-B-09367": [
     {
       "code": "GJ-II-m-B-09367", 
-      "lastedit": "20131030223520", 
+      "lastedit": "20151024142109", 
       "name": "Fi\u0219ier:SaceluGJ (5).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -18286,6 +18824,19 @@
       "lmi": null, 
       "lat": 0, 
       "quality": false
+    }, 
+    {
+      "code": "CT-III-m-B-02934", 
+      "lastedit": "20151029223615", 
+      "name": "Fi\u0219ier:Basorelief ''Tineri Sportivi''.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "AG-II-m-B-13556": [
@@ -18306,7 +18857,20 @@
   "B-II-a-B-18026": [
     {
       "code": "B-II-a-B-18026", 
-      "lastedit": "20150724114440", 
+      "lastedit": "20151118191310", 
+      "name": "Fi\u0219ier:Enciclopedia Rom\u00e2niei 1938 vol 1 pg 618 2000.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-II-a-B-18026", 
+      "lastedit": "20151223232512", 
       "name": "Fi\u0219ier:8967 943797002316110 4787041111941868990 n.jpg", 
       "author": null, 
       "ran": null, 
@@ -18332,7 +18896,7 @@
     }, 
     {
       "code": "B-II-a-B-18026", 
-      "lastedit": "20150724155804", 
+      "lastedit": "20151223232243", 
       "name": "Fi\u0219ier:20150724 180047 02.jpg", 
       "author": null, 
       "ran": null, 
@@ -18345,7 +18909,7 @@
     }, 
     {
       "code": "B-II-a-B-18026", 
-      "lastedit": "20150724155804", 
+      "lastedit": "20151223232533", 
       "name": "Fi\u0219ier:20150724 180047 01.jpg", 
       "author": null, 
       "ran": null, 
@@ -18397,20 +18961,7 @@
     }, 
     {
       "code": "B-II-a-B-18026", 
-      "lastedit": "20150812122627", 
-      "name": "Fi\u0219ier:00000.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "B-II-a-B-18026", 
-      "lastedit": "20150724162619", 
+      "lastedit": "20151223232546", 
       "name": "Fi\u0219ier:20150724 175845.jpg", 
       "author": null, 
       "ran": null, 
@@ -18458,34 +19009,6 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
-  "SB-II-s-A-12011": [
-    {
-      "code": "SB-II-s-A-12011", 
-      "lastedit": "20150917073634", 
-      "name": "Fi\u0219ier:Pia\u021ba Mare din Sibiu - \u00een dreapta biserica parohial\u0103 romano-catolic\u0103.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "SB-II-s-A-12011", 
-      "lastedit": "20150917073559", 
-      "name": "Fi\u0219ier:Pia\u021ba Mic\u0103 Sibiu - vedere c\u0103tre vest.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -18862,6 +19385,49 @@
       "quality": false
     }
   ], 
+  "CT-II-m-A-02807": [
+    {
+      "code": "CT-II-m-A-02807", 
+      "lastedit": "20151031190326", 
+      "name": "Fi\u0219ier:Casa Com\u0103nescu, azi Sediu COSENA S.A.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-A-02807", 
+      "lastedit": "20151031190327", 
+      "name": "Fi\u0219ier:Casa Com\u0103nescu, azi Sediu COSENA S.A. - detaliu.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-A-02804": [
+    {
+      "code": "CT-II-m-A-02804", 
+      "lastedit": "20151031185532", 
+      "name": "Fi\u0219ier:Casa C\u0103n\u0103n\u0103u.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-III-m-B-20001": [
     {
       "code": "B-III-m-B-20001", 
@@ -18898,6 +19464,19 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "B-III-m-B-20000", 
+      "lastedit": "20151110200759", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 41 img 50.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -19078,6 +19657,34 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CJ-II-m-B-07316", 
+      "lastedit": "20151110205826", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 200 img 209.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-B-02844": [
+    {
+      "code": "CT-II-m-B-02844", 
+      "lastedit": "20151031184320", 
+      "name": "Fi\u0219ier:Fost Hotel - Str. Nicolae Titulescu 7.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -19330,20 +19937,6 @@
       "code": "SB-II-m-B-12478", 
       "lastedit": "20131018184329", 
       "name": "Fi\u0219ier:Biserica de lemn din Netus09.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
-  "HD-II-m-B-03361": [
-    {
-      "code": "HD-II-m-B-03361", 
-      "lastedit": "20140301084127", 
-      "name": "Fi\u0219ier:LuncaniValeHD.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -20007,13 +20600,14 @@
   "SV-II-m-A-05630.03": [
     {
       "code": "SV-II-m-A-05630.03", 
-      "lastedit": "20140301085821", 
-      "name": "Fi\u0219ier:M\u0103n\u0103stirea R\u00e2\u015fca8.jpg", 
+      "lastedit": "20151109102139", 
+      "name": "Fi\u0219ier:M\u0103n\u0103stirea R\u00e2\u0219ca8.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -20079,6 +20673,21 @@
       "long": 25.7647, 
       "project": "ro", 
       "lat": 45.094, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-B-02797.01": [
+    {
+      "code": "CT-II-m-B-02797.01", 
+      "lastedit": "20151031094720", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. Cuza Vod\u0103 30.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -20315,18 +20924,6 @@
     }
   ], 
   "BN-II-m-A-01683": [
-    {
-      "code": "BN-II-m-A-01683", 
-      "lastedit": "20131018185246", 
-      "name": "Fi\u0219ier:Biserica de lemn din Pietris01.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
     {
       "code": "BN-II-m-A-01683", 
       "lastedit": "20131018185304", 
@@ -20774,6 +21371,34 @@
       "quality": false
     }
   ], 
+  "CT-II-m-B-02809.02": [
+    {
+      "code": "CT-II-m-B-02809.02", 
+      "lastedit": "20151031095601", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. George Enescu 8 - vedere lateral\u0103.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-II-m-B-02809.02", 
+      "lastedit": "20151031095601", 
+      "name": "Fi\u0219ier:Cas\u0103 - Str. George Enescu 8.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "AB-II-m-B-00182.02": [
     {
       "code": "AB-II-m-B-00182.02", 
@@ -21088,20 +21713,6 @@
       "code": "BH-II-m-B-01223", 
       "lastedit": "20131015122714", 
       "name": "Fi\u0219ier:Tiganesti de Cris.NV.2002.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
-  "CV-II-m-A-13327": [
-    {
-      "code": "CV-II-m-A-13327", 
-      "lastedit": "20131019185852", 
-      "name": "Fi\u0219ier:Biserica de lemn din Zabala01.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -21748,6 +22359,21 @@
       "quality": false
     }
   ], 
+  "MS-II-m-A-15503": [
+    {
+      "code": "MS-II-m-A-15503", 
+      "lastedit": "20151110210852", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 193 img 202.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "SM-II-m-B-05223": [
     {
       "code": "SM-II-m-B-05223", 
@@ -21786,6 +22412,34 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "PH-III-m-B-16870": [
+    {
+      "code": "PH-III-m-B-16870", 
+      "lastedit": "20151107203424", 
+      "name": "Fi\u0219ier:Teodor Diamant statue Boldesti.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-III-m-B-16870", 
+      "lastedit": "20151107203437", 
+      "name": "Fi\u0219ier:Theodor Diamant statuie Scaeni 2.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -22097,6 +22751,21 @@
       "quality": false
     }
   ], 
+  "B-II-m-B-18990": [
+    {
+      "code": "B-II-m-B-18990", 
+      "lastedit": "20151107160124", 
+      "name": "Fi\u0219ier:Hotelul Triumf Bucuresti.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-II-m-B-18992": [
     {
       "code": "B-II-m-B-18992", 
@@ -22186,6 +22855,21 @@
       "project": "ro", 
       "lmi": null, 
       "lat": 45.925, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-18106": [
+    {
+      "code": "B-II-m-B-18106", 
+      "lastedit": "20151106233743", 
+      "name": "Fi\u0219ier:Bucharest Day 5 - Balcescu (9457982151).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 26.100116, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 44.439449, 
       "quality": false
     }
   ], 
@@ -22585,6 +23269,21 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-III-m-A-20030": [
+    {
+      "code": "B-III-m-A-20030", 
+      "lastedit": "20151110201055", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 57 img 66.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -23008,32 +23707,6 @@
       "quality": false
     }
   ], 
-  "B-II-m-A-18688": [
-    {
-      "code": "B-II-m-A-18688", 
-      "lastedit": "20131014102209", 
-      "name": "Fi\u0219ier:Palatul Prim\u0103riei Capitalei.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "B-II-m-A-18688", 
-      "lastedit": "20131014102137", 
-      "name": "Fi\u0219ier:Palatul Ministerului Lucrarilor Publice.png", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
   "IF-II-a-A-15298.05": [
     {
       "code": "IF-II-a-A-15298.05", 
@@ -23131,6 +23804,19 @@
     }
   ], 
   "BZ-II-m-A-02323": [
+    {
+      "code": "BZ-II-m-A-02323", 
+      "lastedit": "20151110193905", 
+      "name": "Fi\u0219ier:Rom\u00e2nia Mare Pitoreasc\u0103 pg 56 img 65.png", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
     {
       "code": "BZ-II-m-A-02323", 
       "lastedit": "20150922223554", 
@@ -23946,20 +24632,6 @@
       "quality": false
     }
   ], 
-  "CT-II-m-A-02872": [
-    {
-      "code": "CT-II-m-A-02872", 
-      "lastedit": "20140302171013", 
-      "name": "Fi\u0219ier:Cernavoda bridge 02.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
   "MS-II-m-A-16034": [
     {
       "code": "MS-II-m-A-16034", 
@@ -24090,6 +24762,32 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-B-10694", 
+      "lastedit": "20151127152657", 
+      "name": "Fi\u0219ier:Libreria Roman.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "NT-II-m-B-10694", 
+      "lastedit": "20151127152645", 
+      "name": "Fi\u0219ier:Biblioteca Roman.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -24494,25 +25192,27 @@
     }, 
     {
       "code": "GJ-II-m-B-09277", 
-      "lastedit": "20140328232023", 
+      "lastedit": "20151024160146", 
       "name": "Fi\u0219ier:CiocadiaGJ (9).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
     {
       "code": "GJ-II-m-B-09277", 
-      "lastedit": "20140328232018", 
+      "lastedit": "20151024155932", 
       "name": "Fi\u0219ier:CiocadiaGJ (10).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
@@ -24542,13 +25242,14 @@
     }, 
     {
       "code": "GJ-II-m-B-09277", 
-      "lastedit": "20140328232011", 
+      "lastedit": "20151024160638", 
       "name": "Fi\u0219ier:CiocadiaGJ (17).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
@@ -25337,8 +26038,8 @@
     }, 
     {
       "code": "CL-II-m-B-14617", 
-      "lastedit": "20150618120614", 
-      "name": "Fi\u0219ier:Judec\u0103toria veche din C\u0103l\u0103ra\u015fi.jpg", 
+      "lastedit": "20151109002043", 
+      "name": "Fi\u0219ier:Judec\u0103toria veche din C\u0103l\u0103ra\u0219i.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
