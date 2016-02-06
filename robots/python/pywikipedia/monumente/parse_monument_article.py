@@ -187,8 +187,8 @@ options = {
 	{
 		'lmi':
 		{
-			'namespaces': [14, 6],
-			#'namespaces': [14],
+			#'namespaces': [14, 6],
+			'namespaces': [6],
 			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'codeTemplate': ["Monument istoric", "Monumente istorice", "codLMI"],
@@ -748,44 +748,54 @@ def main():
 		for page in pregenerator:
 			#page = pywikibot.Page(site, u"File:Bucuresti punte 1837.jpg")
 			content = None
-			pageTitle = page.title()
-			if pageTitle in reworkedDict:
-				content = reworkedDict[pageTitle]
-			useCache = False
-			if content and parse_type != PARSE_FULL:
-				if 'lastedit' in content:
-					lastedit = content['lastedit']
-				else:
-					lastedit = 0
-				if 'code' in content:
-					code = content['code']
-				else:
-					code = 0
-				#on quick parse, we just use the previous values, even 
-				# if the page has changed 
-				#on normal parse, we first check if the page has changed
-				if parse_type == PARSE_QUICK:
-					useCache = True
-				elif parse_type == PARSE_NORMAL:
-					# if we preloaded the page, we already have the time
-					pageEdit = page.editTime().totimestampformat()
-					if int(pageEdit) <= int(lastedit):
+			try:
+				pageTitle = page.title()
+				if pageTitle in reworkedDict:
+					content = reworkedDict[pageTitle]
+				useCache = False
+				if content and parse_type != PARSE_FULL:
+					if 'lastedit' in content:
+						lastedit = content['lastedit']
+					else:
+						lastedit = 0
+					if 'code' in content:
+						code = content['code']
+					else:
+						code = 0
+					#on quick parse, we just use the previous values, even 
+					# if the page has changed 
+					#on normal parse, we first check if the page has changed
+					if parse_type == PARSE_QUICK:
 						useCache = True
-			if useCache:
-				if code in fullDict:
-					fullDict[code].append(content)
-				else:
-					fullDict[code] = [content]
-				pywikibot.output(u'Skipping "%s"' % page.title())
-				#continue
-			elif page.exists() and not page.isRedirectPage():
-				print page.title()
-				processArticle(page.get(), page, langOpt)
-				count += 1
-				if incremental:
-					f = open(tempfile, "w+")
-					json.dump(fullDict, f, indent = 2)
-					f.close();
+					elif parse_type == PARSE_NORMAL:
+						# if we preloaded the page, we already have the time
+						pageEdit = page.editTime().totimestampformat()
+						if int(pageEdit) <= int(lastedit):
+							useCache = True
+				if useCache:
+					if code in fullDict:
+						fullDict[code].append(content)
+					else:
+						fullDict[code] = [content]
+					pywikibot.output(u'Skipping "%s"' % page.title())
+					#continue
+				elif page.exists() and not page.isRedirectPage():
+					print page.title()
+					processArticle(page.get(), page, langOpt)
+					count += 1
+					if incremental:
+						f = open(tempfile, "w+")
+						json.dump(fullDict, f, indent = 2)
+						f.close();
+			except:
+				#this sucks, but we shouldn't stop
+				#keep the data we have and carry on
+				if content:
+					if code in fullDict:
+						fullDict[code].append(content)
+					else:
+						fullDict[code] = [content]
+				continue
 		print count
 		#print fullDict
 		f = open(filename, "w+")
