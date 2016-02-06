@@ -657,8 +657,8 @@ def main():
 		last_death = 0
 		
 		try:
-			if monument[u"Creatori"] > "" and (monument[u"Copyright"].strip() == u"" or force):
-				last_death = extractCopyrightField(monument[u"Creatori"])
+			if monument[creatorField] > "" and (monument[u"Copyright"].strip() == u"" or force):
+				last_death = extractCopyrightField(monument[creatorField])
 
 			if code in pages_local:
 				allPages.extend(pages_local[code])
@@ -678,7 +678,7 @@ def main():
 					if "lmi92" in pages_commons[code]:
 						lmi92 = pages_commons[code]["lmi92"]
 				elif monument["Imagine"].strip() == "" or \
-						monument["Creatori"].strip() == "" or \
+						monument[creatorField].strip() == "" or \
 						monument["Cod92"].strip() == "": 
 					#multiple images available, we need to parse them
 					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
