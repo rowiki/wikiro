@@ -124,7 +124,7 @@ def main():
             return
 
     gen = genFactory.getCombinedGenerator()
-    preloadingGen = pagegenerators.PreloadingGenerator(gen, 100)
+    preloadingGen = pagegenerators.PreloadingGenerator(gen, 50)
     bot = DiacriticsBot(preloadingGen, acceptall, titlecase)
     bot.run()
 
