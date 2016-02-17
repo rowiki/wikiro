@@ -21,64 +21,84 @@ import java.util.Hashtable;
  * @author acipu
  */
 public class PdfTestExtractor {
+    
+    private static class CountyData {
+        public String name;
+        public int startPage, endPage;
+        public CountyData(String name, int start, int end) {
+            this.name = name;
+            this.startPage = start;
+            this.endPage = end;
+        }
+    }
 
      /** The original PDF that will be parsed. */
-    public static final String pdf = "C:\\Users\\andrei\\Desktop\\LMI\\LMI-2010.pdf";
+    public static final String pdf = "/home/andrei/pywikibot-core/LMI2015.pdf";
     /** The resulting text file. */
-    public static final String txt = "C:\\Users\\andrei\\Desktop\\LMI\\LMI-2010_IL.txt";
+    public static String txt = "/home/andrei/pywikibot-core/LMI2015_**.txt";
     
-    private static String getCountyCode() {
-        int index = txt.lastIndexOf("_") + 1;
-        String countyCode = txt.substring(index, index + 2);
-        return countyCode;
+    public static final Hashtable<String, CountyData> counties = new Hashtable<String, CountyData>();
+    
+    private static String setCountyCode(String code) {
+        txt = txt.replaceFirst("_.{2}", "_" + code);
+        return txt;
     }
     
-    private static String getCountyFullName() {
-        Hashtable counties = new Hashtable(); 
-        counties.put("B.", "București");
-        counties.put("AB", "Alba");
-        counties.put("AR", "Arad");
-        counties.put("AG", "Argeș");
-        counties.put("BC", "Bacău");
-        counties.put("BH", "Bihor");
-        counties.put("BN", "Bistrița-Năsăud");
-        counties.put("BT", "Botoșani");
-        counties.put("BV", "Brașov");
-        counties.put("BR", "Brăila");
-        counties.put("BZ", "Buzău");
-        counties.put("CS", "Caraș-Severin");
-        counties.put("CL", "Călărași");
-        counties.put("CJ", "Cluj");
-        counties.put("CT", "Constanța");
-        counties.put("CV", "Covasna");
-        counties.put("DB", "Dâmbovița");
-        counties.put("DJ", "Dolj"); 
-        counties.put("GL", "Galați");
-        counties.put("GR", "Giurgiu");
-        counties.put("GJ", "Gorj"); 
-        counties.put("HR", "Harghita");
-        counties.put("HD", "Hunedoara");
-        counties.put("IL", "Ialomița");
-        counties.put("IS", "Iași");
-        counties.put("IF", "Ilfov");
-        counties.put("MM", "Maramureș");
-        counties.put("MH", "Mehedinți");
-        counties.put("MS", "Mureș");
-        counties.put("NT", "Neamț");
-        counties.put("OT", "Olt");
-        counties.put("PH", "Prahova");
-        counties.put("SM", "Satu Mare");
-        counties.put("SJ", "Sălaj");
-        counties.put("SB", "Sibiu");
-        counties.put("SV", "Suceava");
-        counties.put("TR", "Teleorman");
-        counties.put("TM", "Timiș");
-        counties.put("TL", "Tulcea");
-        counties.put("VS", "Vaslui");
-        counties.put("VL", "Vâlcea");
-        counties.put("VN", "Vrancea");
-        
-        return (String)counties.get(getCountyCode());
+    private static String getCountyFullName(String code) {
+        return counties.get(code).name;
+    }
+    
+    private static int getCountyStartPage(String code) {
+        return counties.get(code).startPage;
+    }
+    
+    private static int getCountyEndPage(String code) {
+        return counties.get(code).endPage;
+    }
+    
+    private static void buildDatabase() {
+        //counties.put("B.", new CountyData("București", 3, 64));
+        counties.put("AB", new CountyData("Alba", 3, 64));
+        counties.put("AR", new CountyData("Arad", 65, 102));
+        //counties.put("AG", new CountyData("Argeș", 103, 64));
+        //counties.put("BC", new CountyData("Bacău", 3, 64));
+        //counties.put("BH", new CountyData("Bihor", 3, 64));
+        //counties.put("BN", new CountyData("Bistrița-Năsăud", 3, 64));
+        //counties.put("BT", new CountyData("Botoșani", 3, 64));
+        //counties.put("BV", new CountyData("Brașov", 3, 64));
+        //counties.put("BR", new CountyData("Brăila", 3, 64));
+        //counties.put("BZ", new CountyData("Buzău", 3, 64));
+        //counties.put("CS", new CountyData("Caraș-Severin", 3, 64));
+        //counties.put("CL", new CountyData("Călărași", 3, 64));
+        //counties.put("CJ", new CountyData("Cluj", 3, 64));
+        //counties.put("CT", new CountyData("Constanța", 3, 64));
+        //counties.put("CV", new CountyData("Covasna", 3, 64));
+        //counties.put("DB", new CountyData("Dâmbovița", 3, 64));
+        //counties.put("DJ", new CountyData("Dolj", 3, 64)); 
+        //counties.put("GL", new CountyData("Galați", 3, 64));
+        //counties.put("GR", new CountyData("Giurgiu", 3, 64));
+        //counties.put("GJ", new CountyData("Gorj", 3, 64)); 
+        //counties.put("HR", new CountyData("Harghita", 3, 64));
+        //counties.put("HD", new CountyData("Hunedoara", 3, 64));
+        //counties.put("IL", new CountyData("Ialomița", 3, 64));
+        //counties.put("IS", new CountyData("Iași", 3, 64));
+        //counties.put("IF", new CountyData("Ilfov", 3, 64));
+        //counties.put("MM", new CountyData("Maramureș", 3, 64));
+        //counties.put("MH", new CountyData("Mehedinți", 3, 64));
+        //counties.put("MS", new CountyData("Mureș", 3, 64));
+        //counties.put("NT", new CountyData("Neamț", 3, 64));
+        //counties.put("OT", new CountyData("Olt", 3, 64));
+        //counties.put("PH", new CountyData("Prahova", 3, 64));
+        //counties.put("SM", new CountyData("Satu Mare", 3, 64));
+        //counties.put("SJ", new CountyData("Sălaj", 3, 64));
+        //counties.put("SB", new CountyData("Sibiu", 3, 64));
+        //counties.put("SV", new CountyData("Suceava", 3, 64));
+        //counties.put("TR", new CountyData("Teleorman", 3, 64));
+        //counties.put("TM", new CountyData("Timiș", 3, 64));
+        //counties.put("TL", new CountyData("Tulcea", 3, 64));
+        //counties.put("VS", new CountyData("Vaslui", 3, 64));
+        //counties.put("VL", new CountyData("Vâlcea", 3, 64));
+        //counties.put("VN", new CountyData("Vrancea", 3, 64));
     }
     
     /**
@@ -86,22 +106,27 @@ public class PdfTestExtractor {
      */
     public static void main(String[] args) 
         throws DocumentException, IOException{
-        PdfReader reader = new PdfReader(pdf);
-        PdfReaderContentParser parser = new PdfReaderContentParser(reader);
-        PrintStream out = new PrintStream(new FileOutputStream(txt), true, "UTF8");
-        TextExtractionStrategy strategy;
+        buildDatabase();
         //for (int i = 1; i <= reader.getNumberOfPages(); i++) {
         //for (int i = 171; i <= 385; i++) {
-        for (int i = 1490; i <= 1506; i++) {
-            try{
-                strategy = parser.processContent(i, new MyTextExtractionStrategy(getCountyCode(), getCountyFullName()));
-                out.println(strategy.getResultantText());
+        for (String county: counties.keySet()) {
+            setCountyCode(county);
+            PdfReader reader = new PdfReader(pdf);
+            PdfReaderContentParser parser = new PdfReaderContentParser(reader);
+            TextExtractionStrategy strategy;
+            PrintStream out = new PrintStream(new FileOutputStream(txt), true, "UTF8");
+            for (int i = getCountyStartPage(county); i <= getCountyEndPage(county); i++) {
+                try{
+                    MyTextExtractionStrategy listener = new MyTextExtractionStrategy(county, getCountyFullName(county));
+                    strategy = parser.processContent(i, listener);
+                    out.print(strategy.getResultantText());
+                }
+                catch(Exception e){
+                    out.println("Page " + i + " had an error: " + e.toString());
+                }
             }
-            catch(Exception e){
-                out.println("Page " + i + "had an error.");
-            }
+            out.flush();
+            out.close();
         }
-        out.flush();
-        out.close();
     }
 }
