@@ -21,7 +21,7 @@ import java.util.Hashtable;
  * @author acipu
  */
 public class PdfTestExtractor {
-    
+
     private static class CountyData {
         public String name;
         public int startPage, endPage;
@@ -36,26 +36,26 @@ public class PdfTestExtractor {
     public static final String pdf = "/home/andrei/pywikibot-core/LMI2015.pdf";
     /** The resulting text file. */
     public static String txt = "/home/andrei/pywikibot-core/LMI2015_**.txt";
-    
+
     public static final Hashtable<String, CountyData> counties = new Hashtable<String, CountyData>();
-    
+
     private static String setCountyCode(String code) {
         txt = txt.replaceFirst("_.{2}", "_" + code);
         return txt;
     }
-    
+
     private static String getCountyFullName(String code) {
         return counties.get(code).name;
     }
-    
+
     private static int getCountyStartPage(String code) {
         return counties.get(code).startPage;
     }
-    
+
     private static int getCountyEndPage(String code) {
         return counties.get(code).endPage;
     }
-    
+
     private static void buildDatabase() {
         //counties.put("B.", new CountyData("București", 3, 64));
         counties.put("AB", new CountyData("Alba", 3, 64));
@@ -74,10 +74,10 @@ public class PdfTestExtractor {
         //counties.put("CT", new CountyData("Constanța", 3, 64));
         //counties.put("CV", new CountyData("Covasna", 3, 64));
         //counties.put("DB", new CountyData("Dâmbovița", 3, 64));
-        //counties.put("DJ", new CountyData("Dolj", 3, 64)); 
+        //counties.put("DJ", new CountyData("Dolj", 3, 64));
         //counties.put("GL", new CountyData("Galați", 3, 64));
         //counties.put("GR", new CountyData("Giurgiu", 3, 64));
-        //counties.put("GJ", new CountyData("Gorj", 3, 64)); 
+        //counties.put("GJ", new CountyData("Gorj", 3, 64));
         //counties.put("HR", new CountyData("Harghita", 3, 64));
         //counties.put("HD", new CountyData("Hunedoara", 3, 64));
         //counties.put("IL", new CountyData("Ialomița", 3, 64));
@@ -100,31 +100,33 @@ public class PdfTestExtractor {
         //counties.put("VL", new CountyData("Vâlcea", 3, 64));
         //counties.put("VN", new CountyData("Vrancea", 3, 64));
     }
-    
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) 
+    public static void main(String[] args)
         throws DocumentException, IOException{
         buildDatabase();
         //for (int i = 1; i <= reader.getNumberOfPages(); i++) {
         //for (int i = 171; i <= 385; i++) {
         for (String county: counties.keySet()) {
+            //String county = "AR";
             setCountyCode(county);
             PdfReader reader = new PdfReader(pdf);
             PdfReaderContentParser parser = new PdfReaderContentParser(reader);
-            TextExtractionStrategy strategy;
             PrintStream out = new PrintStream(new FileOutputStream(txt), true, "UTF8");
+            MyTextExtractionStrategy strategy = new MyTextExtractionStrategy(county, getCountyFullName(county));
             for (int i = getCountyStartPage(county); i <= getCountyEndPage(county); i++) {
+            //for (int i = 77; i <= 78; i++) {
                 try{
-                    MyTextExtractionStrategy listener = new MyTextExtractionStrategy(county, getCountyFullName(county));
-                    strategy = parser.processContent(i, listener);
-                    out.print(strategy.getResultantText());
+                    parser.processContent(i, strategy);
+                    strategy.nextPage();
                 }
                 catch(Exception e){
                     out.println("Page " + i + " had an error: " + e.toString());
                 }
             }
+            out.print(strategy.getResultantText());
             out.flush();
             out.close();
         }
