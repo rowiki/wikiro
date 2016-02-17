@@ -20,7 +20,10 @@ import java.util.List;
 public class MyTextExtractionStrategy implements TextExtractionStrategy {
 
     /** set to true for debugging */
-    static boolean DUMP_STATE = false;
+    static boolean DUMP_STATE = true;
+
+    /** perpendicular distance (in Vector units) of the end of the page */
+    static final int pageSize = 520;
 
     /** a summary of all found text */
     private final List<TextChunk> locationalResult = new ArrayList<TextChunk>();
@@ -29,10 +32,12 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         "\n| Localitate = ", "\n| Adresă = ", "\n| Datare = ",
         "\n| Creatori = "};
 
-    private ArrayList<Integer> columnOffset = new ArrayList<Integer>();
+    /** a list of all found columns; it should differ from county to county */
+    private ArrayList<Integer> columnsOffset = new ArrayList<Integer>();
 
     private final String countyName;
     private final String countyCode;
+    private int pageNumber;
 
     /**
      * Creates a new text extraction renderer.
@@ -40,6 +45,28 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     public MyTextExtractionStrategy(String code, String county) {
         countyCode = code;
         countyName = county;
+        pageNumber = 0;
+    }
+
+    public int nextPage()
+    {
+        return ++pageNumber;
+    }
+
+    /**
+     * Reset the columns; can happen if they vary significantly between pages
+     */
+    public void resetColumnOffsets()
+    {
+        columnsOffset = new ArrayList<Integer>();
+    }
+
+    /**
+     * Don't keep the found text any more - we have delivered it to the superior layer
+     */
+    private void resetText()
+    {
+        locationalResult.clear();
     }
 
     /**
@@ -55,13 +82,35 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     }
 
     /**
+     *
+     * @see com.itextpdf.text.pdf.parser.RenderListener#renderText(com.itextpdf.text.pdf.parser.TextRenderInfo)
+     */
+    public void renderText(TextRenderInfo renderInfo) {
+    	LineSegment segment = renderInfo.getBaseline();
+        //bold text contains table header, so just throw it out
+        if(!renderInfo.getFont().getPostscriptFontName().contains("Bold") && !renderInfo.getFont().getPostscriptFontName().contains("Italic"))
+        {
+            TextChunk location = new TextChunk(renderInfo.getText(),
+                                                segment.getStartPoint(),
+                                                segment.getEndPoint(),
+                                                4/*renderInfo.getSingleSpaceWidth()*/,
+                                                pageNumber * pageSize);
+            //System.out.println(renderInfo.getText() + " font " + location.orientationMagnitude);
+            //non-vertical text, should be horizontal;
+            //959 is for oblique text ("Destinat...")
+            if(location.orientationMagnitude > 0 && location.orientationMagnitude != 959)
+                locationalResult.add(location);
+        }
+    }
+
+    /**
      * Returns the result so far.
      * @return  a String with the resulting text.
      */
     public String getResultantText(){
 
         //Collections.sort(locationalResult);
-        orderChunks(locationalResult);
+        orderChunks();
 
         if (DUMP_STATE) {
             dumpState();
@@ -78,6 +127,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             StringBuffer sbt = new StringBuffer();
             sbt.append("\n{{ElementLMI");
             int i = 0;
+            boolean emptyLine = true;
             //for each column
             for(i = 0; i < pageArray.get(line).length; i++) {
                 String value = pageArray.get(line)[i];
@@ -87,18 +137,18 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                     value = value.replace("null", "");
                     value = value.trim();
                 }
-                if(templateParams[i].contains("Cod") && value.isEmpty())
-                    break;
+                if(!value.isEmpty())
+                    emptyLine = false;
                 if(templateParams[i].contains("Localitate")) {
                     value = insertCityLinks(value);
                 }
                 sbt.append(templateParams[i]);
                 sbt.append(value);
             }
-            if (i < pageArray.get(line).length) //empty code?
-            {
+
+            if (emptyLine)
                 continue; //move to the next monument
-            }
+
             //append the remaining (hopefuly empty) parameters of the template
             for(; i < templateParams.length; i++) {
                 sbt.append(templateParams[i]);
@@ -118,6 +168,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         result = result.replace("","\"");
         result = result.replace("","-");
 
+        resetText();
+
         return result;
 
     }
@@ -126,6 +178,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     private void dumpState(){
         for (Iterator<TextChunk> iterator = locationalResult.iterator(); iterator.hasNext(); ) {
             TextChunk location = (TextChunk) iterator.next();
+            System.out.println(columnsOffset);
             location.printDiagnostics();
             System.out.println();
         }
@@ -134,51 +187,35 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
 
     private boolean chunksInDifferentColumns(TextChunk thisChunk, TextChunk nextChunk) {
         if(Math.round(nextChunk.distanceFromEndOf(thisChunk)) > 5 &&
-           (thisChunk.column >= columnOffset.size() - 1 ||
+           (thisChunk.column >= (columnsOffset.size() - 1) ||
            locateOffsetValue(Math.round(nextChunk.distParallelStart)) > -1))
             return true;
         return false;
     }
 
-    /**
-     *
-     * @see com.itextpdf.text.pdf.parser.RenderListener#renderText(com.itextpdf.text.pdf.parser.TextRenderInfo)
-     */
-    public void renderText(TextRenderInfo renderInfo) { 
-    	LineSegment segment = renderInfo.getBaseline();
-        //bold text contains table header, so just throw it out
-        if(!renderInfo.getFont().getPostscriptFontName().contains("Bold") && !renderInfo.getFont().getPostscriptFontName().contains("Italic"))
-        {
-            TextChunk location = new TextChunk(renderInfo.getText(), segment.getStartPoint(), segment.getEndPoint(), 4/*renderInfo.getSingleSpaceWidth()*/);
-            //System.out.println(renderInfo.getText() + " font " + location.orientationMagnitude);
-            //non-vertical text, should be horizontal; 
-            //959 is for oblique text ("Destinat...")
-            if(location.orientationMagnitude > 0 && location.orientationMagnitude != 959)
-                locationalResult.add(location);
-        }
-    }
-
-    private void orderChunks(List<TextChunk> locationalResult) {
+    private void orderChunks() {
         Collections.sort(locationalResult);
         if(true){
-            locationalResult.get(0).column = locateOffsetValue(Math.round(locationalResult.get(0).distParallelStart));
-            if(locationalResult.get(0).column < 0)
-                locationalResult.get(0).column = 0;
-            if(locationalResult.get(0).column < columnOffset.size())
-                columnOffset.set(locationalResult.get(0).column,
+            locationalResult.get(0).column = locateOffsetValue(Math.round(locationalResult.get(0).distParallelStart), false);
+            if(locationalResult.get(0).column < columnsOffset.size())
+                columnsOffset.set(locationalResult.get(0).column,
                         Math.round(locationalResult.get(0).distParallelStart));
             else
-                columnOffset.add(Math.round(locationalResult.get(0).distParallelStart));
+                columnsOffset.add(Math.round(locationalResult.get(0).distParallelStart));
 
             for(int i = 0; i < locationalResult.size() - 1; i++)
             {
                 TextChunk thisChunk = locationalResult.get(i);
                 TextChunk nextChunk = locationalResult.get(i+1);
-                //System.out.println(columnOffset);
+                //System.out.println(columnsOffset);
+                //thisChunk.printDiagnostics();
+                //nextChunk.printDiagnostics();
 
                 if (thisChunk.sameLine(nextChunk) &&
                         !chunksInDifferentColumns(thisChunk, nextChunk)) {
                     nextChunk.column = thisChunk.column;
+                    //System.out.println(thisChunk.column >= (columnsOffset.size() - 1));
+                    //System.out.println(locateOffsetValue(Math.round(nextChunk.distParallelStart)));
                     //System.out.println("Next chunk (" + nextChunk.text + ") has the same column ("+nextChunk.column+")");
                 }
                 else if (thisChunk.sameLine(nextChunk)) {//new column
@@ -190,14 +227,14 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                                 nextChunk.distParallelStart + " chunk " + nextChunk.text);
                         nextChunk.column = thisChunk.column + 1;
                     }
-                    if(nextChunk.column < columnOffset.size())
-                        columnOffset.set(nextChunk.column,
+                    if(nextChunk.column < columnsOffset.size())
+                        columnsOffset.set(nextChunk.column,
                                 Math.round(nextChunk.distParallelStart));
                     else
-                        columnOffset.add(Math.round(nextChunk.distParallelStart));
+                        columnsOffset.add(Math.round(nextChunk.distParallelStart));
                 }
                 else { //new line
-                    int index = locateOffsetValue(Math.round(nextChunk.distParallelStart));
+                    int index = locateOffsetValue(Math.round(nextChunk.distParallelStart), false);
                     if(index > -1)
                         nextChunk.column = index;
                     else {
@@ -214,12 +251,12 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         char last = lastChunk.text.charAt(lastChunk.text.length() - 1);
         char first = nextChunk.text.charAt(0);
 
-        // we only insert a blank space if the trailing character of the previous 
+        // we only insert a blank space if the trailing character of the previous
         // string wasn't a space, and the leading character of the current string
         // isn't a space
         if (Character.isWhitespace(last) || Character.isWhitespace(first))
             return "";
-        
+
         float dist = nextChunk.distanceFromEndOf(lastChunk);
 
         if(!lastChunk.sameLine(nextChunk))
@@ -233,13 +270,13 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         {
             return " ";
         }
-        
+
         //if the previous chunk ends in lower case and the new one begins with upper case
         if (Character.isLowerCase(last)
                 && Character.isUpperCase(first))
             return " ";
-        
-        if(!Character.isLetter(last) && 
+
+        if(!Character.isLetter(last) &&
                 last != '"' &&
                 last != '-' &&
                 Character.isLetter(first) && lastChunk.column > 0)
@@ -262,20 +299,20 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                 } else {
                     if(chunk.column == 0 && chunk.text.charAt(0) == countyCode.charAt(0)) {
                         //TODO: 1 letter comparison is not enough
-                        pageArray.add(new String[columnOffset.size()]);
+                        pageArray.add(new String[columnsOffset.size()]);
                         line++;
                         pageArray.get(line)[chunk.column] = chunk.text;
                     }
                     else {
                         String temp = pageArray.get(line)[chunk.column] +
-                                    needSpace(lastChunk, chunk) + 
+                                    needSpace(lastChunk, chunk) +
                                     chunk.text;
 
                         pageArray.get(line)[chunk.column] = temp;
                     }
                 }
             } else {
-                pageArray.add(new String[columnOffset.size()]);
+                pageArray.add(new String[columnsOffset.size()]);
                 pageArray.get(line)[chunk.column] = chunk.text;
             }
             lastChunk = chunk;
@@ -338,8 +375,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                 }
                 String prefix = (type == "comuna" ? "Comuna " : "") +
                                 capitalized + extra;
-                
-                String link = (prefix.equals(capitalized)) ? 
+
+                String link = (prefix.equals(capitalized)) ?
                             " [[" + prefix + "]]" :
                             " [[" + prefix + "|" + capitalized + "]]";
                 value = value.substring(0, index) + link;
@@ -351,13 +388,24 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     }
 
     private int locateOffsetValue(int round) {
-        for(int i = 0; i < columnOffset.size(); i++)
+        return locateOffsetValue(round, true);
+    }
+
+    private int locateOffsetValue(int round, boolean precise) {
+        int min = Integer.MAX_VALUE;
+        int column = 0;
+        for(int i = 0; i < columnsOffset.size(); i++)
         {
-            if(Math.abs(columnOffset.get(i) - round) <= 1)
+            int diff = Math.abs(columnsOffset.get(i) - round);
+            if (diff <= 1)
                 return i;
+            if (diff < min) {
+                min = diff;
+                column = i;
+            }
         }
-        
-        return -1;
+
+        return precise ? -1 : column;
     }
 
 
@@ -388,7 +436,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         /** the column this chunk belongs to */
         public int column;
 
-        public TextChunk(String string, Vector startLocation, Vector endLocation, float charSpaceWidth) {
+        public TextChunk(String string, Vector startLocation, Vector endLocation,
+                        float charSpaceWidth, int pageOffset) {
             this.text = string.replace('\u0002', ' ').
                                 replace('\u0003', '-').
                                 replace('\u0004', 'ă').
@@ -409,14 +458,16 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             orientationVector = endLocation.subtract(startLocation).normalize();
             orientationMagnitude = (int)(Math.atan2(orientationVector.get(Vector.I2), orientationVector.get(Vector.I1))*1000);
 
+            //calculate the distance from the origin of the page to our chunk
             // see http://mathworld.wolfram.com/Point-LineDistance2-Dimensional.html
             // the two vectors we are crossing are in the same plane, so the result will be purely
             // in the z-axis (out of plane) direction, so we just take the I3 component of the result
             Vector origin = new Vector(0,0,1);
-            distPerpendicular = (int)(startLocation.subtract(origin)).cross(orientationVector).get(Vector.I3);
+            distPerpendicular = (int)(startLocation.subtract(origin)).cross(orientationVector).get(Vector.I3) + pageOffset;
 
             distParallelStart = orientationVector.dot(startLocation);
             distParallelEnd = orientationVector.dot(endLocation);
+            //printDiagnostics();
         }
 
         private void printDiagnostics(){
