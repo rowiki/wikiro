@@ -52,21 +52,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.error_messages.MessageLocalization;
-import com.itextpdf.text.pdf.CMapAwareDocumentFont;
-import com.itextpdf.text.pdf.PRIndirectReference;
-import com.itextpdf.text.pdf.PRTokeniser;
-import com.itextpdf.text.pdf.PdfArray;
-import com.itextpdf.text.pdf.PdfContentParser;
-import com.itextpdf.text.pdf.PdfDictionary;
-import com.itextpdf.text.pdf.PdfIndirectReference;
-import com.itextpdf.text.pdf.PdfLiteral;
-import com.itextpdf.text.pdf.PdfName;
-import com.itextpdf.text.pdf.PdfNumber;
-import com.itextpdf.text.pdf.PdfObject;
-import com.itextpdf.text.pdf.PdfStream;
-import com.itextpdf.text.pdf.PdfString;
+import com.itextpdf.text.io.RandomAccessSourceFactory;
+import com.itextpdf.text.pdf.*;
 import java.lang.reflect.Field;
 
 /**
@@ -161,13 +151,21 @@ public class PdfContentStreamProcessor {
                 Field sbm = o.getClass().getDeclaredField("singleByteMappings");
                 sbm.setAccessible(true);
                 HashMap<Integer, String> hash = (HashMap<Integer, String>) sbm.get(um.get(font));
-                hash.put(2, "Ș");
-                hash.put(3, "ș");
+                hash.put(2, " ");
+                hash.put(3, "-");
                 hash.put(4, "ă");
                 hash.put(5, "ț");
-                hash.put(6, "Ț");
+                hash.put(6, "ș");
+                hash.put(7, "Ț");
+                hash.put(8, "Ș");
+                hash.put(9, "Ă");
+                hash.put(11, "ș");
+                hash.put(12, "Ș");
+                hash.put(13, "ț");
+                hash.put(14, "Ț");
+                //System.out.println(hash);
                 sbm.set(um.get(font), hash);
-                //um.set(font, sbm);
+                um.set(font, sbm);
             } catch (Exception ex) {
             }
             cachedFonts.put(n, font);
@@ -316,9 +314,7 @@ public class PdfContentStreamProcessor {
      */
     private void displayPdfString(PdfString string){
 
-        String unicode = decode(string);
-
-        TextRenderInfo renderInfo = new TextRenderInfo(unicode, gs(), textMatrix, markedContentStack);
+        TextRenderInfo renderInfo = new TextRenderInfo(string, gs(), textMatrix, markedContentStack);
 
         renderListener.renderText(renderInfo);
 
@@ -372,16 +368,15 @@ public class PdfContentStreamProcessor {
     public void processContent(byte[] contentBytes, PdfDictionary resources){
         this.resources.push(resources);
         try {
-            PRTokeniser tokeniser = new PRTokeniser(contentBytes);
+            PRTokeniser tokeniser = new PRTokeniser(new RandomAccessFileOrArray(new RandomAccessSourceFactory().createSource(contentBytes)));
             PdfContentParser ps = new PdfContentParser(tokeniser);
             ArrayList<PdfObject> operands = new ArrayList<PdfObject>();
             while (ps.parse(operands).size() > 0){
                 PdfLiteral operator = (PdfLiteral)operands.get(operands.size()-1);
                 if ("BI".equals(operator.toString())){
                     // we don't call invokeOperator for embedded images - this is one area of the PDF spec that is particularly nasty and inconsistent
-                    PdfDictionary colorSpaceDic = resources.getAsDict(PdfName.COLORSPACE);
-                    ImageRenderInfo renderInfo = ImageRenderInfo.createdForEmbeddedImage(gs().ctm, InlineImageUtils.parseInlineImage(ps, colorSpaceDic));
-                    renderListener.renderImage(renderInfo);
+                    PdfDictionary colorSpaceDic = resources != null ? resources.getAsDict(PdfName.COLORSPACE) : null;
+                    handleInlineImage(InlineImageUtils.parseInlineImage(ps, colorSpaceDic), colorSpaceDic);
                 } else {
                     invokeOperator(operator, operands);
                 }
@@ -393,6 +388,16 @@ public class PdfContentStreamProcessor {
         }
         this.resources.pop();
 
+    }
+
+    /**
+     * Callback when an inline image is found.  This requires special handling because inline images don't follow the standard operator syntax
+     * @param info the inline image
+     * @param colorSpaceDic the color space for the inline immage
+     */
+    protected void handleInlineImage(InlineImageInfo info, PdfDictionary colorSpaceDic){
+        ImageRenderInfo renderInfo = ImageRenderInfo.createForEmbeddedImage(gs(), info, colorSpaceDic);
+        renderListener.renderImage(renderInfo);
     }
 
 
@@ -856,8 +861,10 @@ public class PdfContentStreamProcessor {
     private static class ImageXObjectDoHandler implements XObjectDoHandler{
 
         public void handleXObject(PdfContentStreamProcessor processor, PdfStream xobjectStream, PdfIndirectReference ref) {
-            ImageRenderInfo renderInfo = ImageRenderInfo.createForXObject(processor.gs().ctm, ref);
+            PdfDictionary colorSpaceDic = processor.resources.getAsDict(PdfName.COLORSPACE);
+            ImageRenderInfo renderInfo = ImageRenderInfo.createForXObject(processor.gs(), ref, colorSpaceDic);
             processor.renderListener.renderImage(renderInfo);
+
         }
     }
 
