@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pdftestextractor;
+package org.wikipedia.ro.lmi.pdfextractor;
 
 import com.itextpdf.text.pdf.CMapAwareDocumentFont;
 import com.itextpdf.text.pdf.parser.*;

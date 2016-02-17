@@ -2,7 +2,7 @@
  * To change this template, choose Tools counties.put("Templates
  * and open the template in the editor.
  */
-package pdftestextractor;
+package org.wikipedia.ro.lmi.pdfextractor;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
