@@ -20,7 +20,7 @@ import java.util.List;
 public class MyTextExtractionStrategy implements TextExtractionStrategy {
 
     /** set to true for debugging */
-    static boolean DUMP_STATE = true;
+    static boolean DUMP_STATE = false;
 
     /** perpendicular distance (in Vector units) of the end of the page */
     static final int pageSize = 520;
@@ -88,19 +88,21 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     public void renderText(TextRenderInfo renderInfo) {
     	LineSegment segment = renderInfo.getBaseline();
         //bold text contains table header, so just throw it out
-        if(!renderInfo.getFont().getPostscriptFontName().contains("Bold") && !renderInfo.getFont().getPostscriptFontName().contains("Italic"))
-        {
-            TextChunk location = new TextChunk(renderInfo.getText(),
-                                                segment.getStartPoint(),
-                                                segment.getEndPoint(),
-                                                4/*renderInfo.getSingleSpaceWidth()*/,
-                                                pageNumber * pageSize);
-            //System.out.println(renderInfo.getText() + " font " + location.orientationMagnitude);
-            //non-vertical text, should be horizontal;
-            //959 is for oblique text ("Destinat...")
-            if(location.orientationMagnitude > 0 && location.orientationMagnitude != 959)
-                locationalResult.add(location);
-        }
+        if(renderInfo.getFont().getPostscriptFontName().contains("Bold") ||
+            renderInfo.getFont().getPostscriptFontName().contains("Italic"))
+            return;
+
+        TextChunk location = new TextChunk(renderInfo.getText(),
+                                            segment.getStartPoint(),
+                                            segment.getEndPoint(),
+                                            4/*renderInfo.getSingleSpaceWidth()*/,
+                                            pageNumber * pageSize);
+        if (location.text.trim().isEmpty())
+            return;
+        //System.out.println(renderInfo.getText() + " font " + location.orientationMagnitude);
+        //non-vertical text, should be horizontal;
+        if(location.orientationMagnitude >= Math.floor(1000 * Math.PI / 2))
+            locationalResult.add(location);
     }
 
     /**
@@ -238,10 +240,10 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                     if(index > -1)
                         nextChunk.column = index;
                     else {
-                        System.out.println("--New line-- Unknown column for offset " +
-                                nextChunk.distParallelStart + " chunk " + nextChunk.text);
                         nextChunk.column = 0;
                     }
+                    System.out.println("--New line-- Column " + nextChunk.column + " for offset " +
+                                nextChunk.distParallelStart + " chunk " + nextChunk.text);
                 }
             }
         }
