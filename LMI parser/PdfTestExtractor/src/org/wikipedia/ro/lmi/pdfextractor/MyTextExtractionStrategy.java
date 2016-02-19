@@ -278,6 +278,23 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                 && Character.isUpperCase(first))
             return " ";
 
+        //space after point and comma if not a number
+        if ((last == '.' || last == ',') &&
+                !Character.isDigit(first))
+            return " ";
+
+        //space after colon, semicolon and closing parathesis
+        if (last == ';' || last == ':')
+            return " ";
+
+        if  ((last == ')' || last == '”') &&
+                (Character.isLetterOrDigit(first)))
+            return " ";
+
+        //space before opening paranthesis
+        if (first == '(')
+            return " ";
+
         if(!Character.isLetter(last) &&
                 last != '"' &&
                 last != '-' &&
@@ -325,6 +342,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         StringBuffer sb = new StringBuffer();
         if(s.length() == 0)
             return s;
+        s = s.replace(" -", "-");
+        s = s.replace("- ", "-");
         //if the string does not start with space, we might want to add one
         if(s.charAt(0) != ' ')
             s = " " + s;
