@@ -57,7 +57,7 @@ public class PdfTestExtractor {
     }
 
     private static void buildDatabase() {
-        //counties.put("B.", new CountyData("București", 501, 733));
+        counties.put("B.", new CountyData("București", 501, 733));
         counties.put("AB", new CountyData("Alba", 3, 64));
         counties.put("AR", new CountyData("Arad", 65, 102));
         counties.put("AG", new CountyData("Argeș", 103, 195));
