@@ -103,7 +103,7 @@ def filterOne(contents):
 	'''
 	return contents
 
-def processMonument(params, source, countryconfig, title):
+def processMonument(params, source, countryconfig, title, previous):
 	'''
 	Process a single instance of a monument row template
 	'''
@@ -112,6 +112,7 @@ def processMonument(params, source, countryconfig, title):
 	contents = {}
 	# Add the source of information (permalink)
 	contents['source'] = source
+	contents['previous'] = previous
 	fields = countryconfig.get('fields')
 	for field in fields:
 		contents[field] = u''
@@ -126,7 +127,7 @@ def processMonument(params, source, countryconfig, title):
 			#Is it in the fields list?
 			if field in fields:
 				#Load it with Big fucking escape hack. Stupid mysql lib
-				if field == "Cod":
+				if field == u"Cod":
 					contents[field] = re.sub(r'\s', '', value.encode("utf8")) # Do this somewhere else.replace("'", "\\'")
 				else:
 					contents[field] = value.encode("utf8") # Do this somewhere else.replace("'", "\\'")
@@ -137,18 +138,19 @@ def processMonument(params, source, countryconfig, title):
 				pywikibot.output(u'Value: %s' % value)
 				pywikibot.output(u'Params: %s\n%s' % (params, param))
 				#time.sleep(5)
-	return filterOne(contents)
+	return filterOne(contents), contents[u"Cod"]
 
-def processText(source, countryconfig, page=None):
+def processText(source, countryconfig, text, title):
 	'''
 	Process a text containing one or multiple instances of the monument row template
 	'''
-	templates = pywikibot.textlib.extract_templates_and_params(page.get())
-	title = page.title(True)
+	templates = pywikibot.textlib.extract_templates_and_params(text)
 	pywikibot.output(u'Working on page "%s"' % title)
+	prevCode = None
 	for (template, params) in templates:
 		if template==countryconfig.get('rowTemplate'):
-			monuments_db.append(processMonument(params, source, countryconfig, title))
+			ret, prevCode = processMonument(params, source, countryconfig, title, prevCode)
+			monuments_db.append(ret)
 			#time.sleep(5)
  
 
@@ -175,7 +177,7 @@ def processDatabase(countryconfig, dbname="lmi"):
 			continue
 		if page.exists() and not page.isRedirectPage():
 			# Do some checking
-			processText(page.permalink(), countryconfig, page=page)
+			processText(page.permalink(), countryconfig, page.get(), page.title(True))
 			
 	f = open("_".join([countryconfig.get('lang'), dbname, "db.json"]), "w+")
 	json.dump(monuments_db, f, indent=2)
