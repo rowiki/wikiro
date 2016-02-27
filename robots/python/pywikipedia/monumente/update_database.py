@@ -153,6 +153,12 @@ def processText(source, countryconfig, text, title):
 			monuments_db.append(ret)
 			#time.sleep(5)
  
+def writeOutput(filename):
+	global monuments_db
+	f = open(filename, "w+")
+	json.dump(monuments_db, f, indent=2)
+	f.close();
+	monuments_db = []
 
 def processDatabase(countryconfig, dbname="lmi"):
 	'''
@@ -178,12 +184,8 @@ def processDatabase(countryconfig, dbname="lmi"):
 		if page.exists() and not page.isRedirectPage():
 			# Do some checking
 			processText(page.permalink(), countryconfig, page.get(), page.title(True))
-			
-	f = open("_".join([countryconfig.get('lang'), dbname, "db.json"]), "w+")
-	json.dump(monuments_db, f, indent=2)
-	f.close();
-	monuments_db = []
 
+	writeOutput("_".join([countryconfig.get('lang'), dbname, "db.json"]))
 
 def main():
 	'''
