@@ -10,7 +10,7 @@ from geo import overpass
 
 import strainu_functions
 
-outname = "bucharest2_addresses.csv"
+outname = "bucharest3_addresses.csv"
 polygon = u"București"
 
 def searchOsm(wikidata):
@@ -44,6 +44,8 @@ def searchOsm(wikidata):
          for element in obj["elements"]:
              if element["tags"]["addr:housenumber"] != nr:
                  continue
+             if element["tags"]["addr:street"] != strd:
+                 continue
              outfile.write(cod + u"," + str(element["lat"]) + u"," + str(element["lon"]) + u"," + str(element["id"]) + "\n")                
          outfile.close()
          print "-------------------------------"
@@ -53,6 +55,10 @@ def writeAddress():
     ret = []
     start = False
     for monument in db:
+	if monument["Lat"] != u"":
+		continue
+	if monument["OsmLat"] != u"":
+		continue
         cod = monument["Cod"]
         #if cod == "MS-II-m-B-15500":
         #    start = True
@@ -73,6 +79,8 @@ def writeAddress():
                     tempStr = u"Intrarea"
                 if tempStr == u"bd.":
                     tempStr = u"Bulevardul"
+                if tempStr == u"calea":
+                    tempStr = u"Calea"
                 print u"Strada=" + m.group(2)
                 print u"Număr=" + m.group(3)
                 #print u"Sector=" + m.group(6)
