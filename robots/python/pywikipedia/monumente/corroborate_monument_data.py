@@ -738,12 +738,12 @@ def main():
 				if link == None:
 					log(u"* [Listă] ''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire" % code)
 				else:
-					page1 = pywikibot.Page(pywikibot.Site(), link)
+					page1 = pywikibot.Page(pywikibot.Link(link, pywikibot.Site()))
 					page2 = pywikibot.Page(pywikibot.Site(), article["name"])
-					if page1 <> page2 and \
+					if page1.title() <> page2.title() and \
 					(not page1.isRedirectPage() or page1.getRedirectTarget() <> page2) and \
 					(not page2.isRedirectPage() or page2.getRedirectTarget() <> page1):
-						log(u"* [WPListă]''W'': ''[%s]'' Câmpul Denumire are o legătură internă către [[%s]], dar articolul despre monument este [[%s]]" % (code, page1, page2))
+						log(u"* [WPListă]''W'': ''[%s]'' Câmpul Denumire are o legătură internă către %s, dar articolul despre monument este %s" % (code, page1, page2))
 
 		#author from article
 		if article <> None and article["author"] <> None and article["author"].strip() <> "":
@@ -920,9 +920,10 @@ def main():
 				 math.fabs(otherLong - long) > _coordVariance \
 				):
 					if otherSrc not in _differentCoords:
-						_differentCoords[otherSrc] = [otherLat, otherLong]
+						_differentCoords[otherSrc[5:]] = [otherLat, otherLong]
 					if monument["source"] not in _differentCoords:
-						_differentCoords[monument["source"]] = [lat, long]
+						src = strainu.convertUrlToWikilink(monument["source"])
+						_differentCoords[src] = [lat, long]
 
 			elif (lat == 0 or force) and otherValid:
 				pywikibot.output(u"Valid coord found:\n"
