@@ -58,7 +58,8 @@ def extractTemplate(text, template):
 # need to keep the order of the keys in order to be able to reconstruct the
 # template
 # @param: the template text
-# @return: a dictionary containing the params as keys and the values as value \
+# @return: a tuple containing a dictionary containing the params as keys and \
+#	   the values as value and a list containing the parameter names \
 #          The name of the template has the key "_name"
 def tl2Dict(template):
     marker = "@@"
@@ -98,6 +99,7 @@ def tl2Dict(template):
     params = template.split('|')
     key = u""
     value = unicode("",'utf8')
+    anon_params = 1
     for line in params:
         line = line.split(u'=')
         #pywikibot.output(str(line))
@@ -117,6 +119,11 @@ def tl2Dict(template):
             _dict[key] = _dict[key] + u"|" + line[0]
             if not key in _keyList:
                 _keyList.append(key)
+        else:#anonymous param, hopefully
+            _dict[anon_params] = line[0]
+            if not anon_params in _keyList:
+                _keyList.append(anon_params)
+            anon_params += 1
 	#TODO: add anonymous parameters
     for key, value in _dict.items():
         matches = Rmarker.findall(value)
@@ -169,13 +176,33 @@ def extractLinkAndSurroundingText(text):
     
     if start < 0 or end < 0:
         return None
-    if start > end or (start > sep and sep > -1) or sep > end:
+    if start > end:
         return None
+    if (start > sep and sep > -1) or sep > end:
+        sep = -1 #pipe can come from some other item
         
     if sep < 0:
         return [text[:start], text[start+2:end], text[end+2:]]
     else:
         return [text[:start], text[start+2:sep], text[end+2:]]
+
+#from "pre [[a|b]] post" get [pre, b, post]
+def stripLinkWithSurroundingText(text):
+    start = text.find("[[")
+    end = text.find("]]")
+    sep = text.find("|")
+    
+    if start < 0 or end < 0:
+        return None
+    if start > end:
+        return None
+    if (start > sep and sep > -1) or sep > end:
+        sep = -1 #pipe can come from some other item
+        
+    if sep < 0:
+        return [text[:start], text[start+2:end], text[end+2:]]
+    else:
+        return [text[:start], text[sep+1:end], text[end+2:]]
 
 def extractImageLink(text):
     start = text.find("[[")
@@ -213,6 +240,22 @@ def stripExternalLink(text):
 
 def stripNamespace(link):
     return link[link.find(':')+1:]
+
+def convertUrlToWikilink(url):
+    """
+    Convert a wikipedia URL to an internal page.
+    Handles both /wiki/Title and /w/index.php?title= version
+    TODO: error checking; return a Page object
+    """
+    from urlparse import urlparse, parse_qs
+    import urllib
+    pr = urlparse(url)
+    if (pr.query != ""):
+	q = parse_qs(pr.query.encode("utf8"))
+	title = q["title"][0]
+    else:
+        title = urllib.unquote(pr.path.split('/')[-1].encode("utf8"))
+    return title.decode("utf8")
 
 
 # --------- String functions ----------
@@ -347,4 +390,7 @@ if __name__ == "__main__":
     print tl2Dict("{{Sema2|a={{citat|c=d|c1=d1}}|e=f}}")
     print tl2Dict("{{Sema3|a={{#if:citat|{{c}}<ref>{{d}}</ref>|e=f}}}}")
     print tl2Dict("{{Sema4|a={{#if:citat|c|d}}}}")
+    pywikibot.output(convertUrlToWikilink(u"//ro.wikipedia.org/w/index.php?title=Lista_monumentelor_istorice_din_jude%C8%9Bul_Alba&oldid=10256783"))
+    pywikibot.output(convertUrlToWikilink(u"//ro.wikipedia.org/wiki/Lista_monumentelor_istorice_din_jude%C8%9Bul_Alba"))
+    
     #print textlib.extract_templates_and_params("{{Sema2|a={{citat|c=d|c1=d1}}|e=f}}")
