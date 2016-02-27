@@ -163,6 +163,7 @@ public class PdfContentStreamProcessor {
                 hash.put(12, "Ș");
                 hash.put(13, "ț");
                 hash.put(14, "Ț");
+                hash.put(15, "ő");
                 //System.out.println(hash);
                 sbm.set(um.get(font), hash);
                 um.set(font, sbm);
