@@ -17,8 +17,8 @@ from pywikibot import config as user
 
 mistakes = {
 	u',\s,': u',',
-	u'(\| (?!Imagine))(.*)\( ': u'(',
-	u'(\| (?!Imagine))(.*)	 \)': u')',
+	u'(\| (?!Imagine))(.*)\s*\( ': u'\g<1>\g<2> (',
+	u'(\| (?!Imagine))(.*)\s*\)': u'\g<1>\g<2>)',
 	#u' {2,}': u' ',
 	u'([Cc])rucedepiatră': u'\g<1>ruce de piatră',
 	u' și\"(\s+)' : u' și\g<1>\"',
@@ -48,7 +48,7 @@ mistakes = {
 	u'([Ll])a\s?cca\.?(\s?)': u'\g<1>a cca.\g<2>',
 	u'(\| (?!Imagine))(.*),(([^0-9\s_]))': u'\g<1>\g<2>, \g<3>',
 	#u'(\| (?!Imagine))(.*)([^w])\.([a-zăîâșțA-ZĂÂÎȘȚ]{4,})': u'\g<1>\g<2>\g<3>. \g<4>',#high risk
-	u'(\| (?!Imagine|Commons))(.*)([^w])\.([a-gi-zăîâșțA-GI-ZĂÂÎȘȚ][a-zăîâșțA-ZĂÂÎȘȚ]{3,})': u'\g<1>\g<2>\g<3>. \g<4>',#high risk
+	u'(\| (?!Imagine|Commons))([a-zăîâșțA-ZĂÂÎȘȚ]*)([^w])\.([a-gi-zăîâșțA-GI-ZĂÂÎȘȚ][a-zăîâșțA-ZĂÂÎȘȚ]{3,})': u'\g<1>\g<2>\g<3>. \g<4>',#high risk
 	u'(\| (?!Imagine))(.*)sf\.sec': u'\g<1>\g<2>sf. sec',
 	u'(\| (?!Imagine))(.*)sec\.X': u'\g<1>\g<2>sec. X',
 	u'(\| (?!Imagine|Commons))(.*)\s*:([a-zăâîșț])': u'\g<1>\g<2>: \g<3>',#high risk
@@ -65,7 +65,7 @@ mistakes = {
 	u'D\s?N\s?([0-9]{1,3})\s([ABCDEFGH])([\s,\.])': u'DN\g<1>\g<2>\g<3>',
 	u'D\s?N\s?([0-9]{1,3})': u'DN\g<1>',
 	u'Ziddeincintă': u'Zid de incintă',
-	u'(\| (?!Imagine|CodRan|FostCod|NotăCod))(.*)([a-zăîâșț])([A-ZĂÂÎȘȚ])': u'\g<1>\g<2>\g<3> \g<4>',#high risk
+	u'(\| (?!Imagine|CodRan|FostCod|NotăCod|OsmL|RefCod))(.*)([a-zăîâșț])([A-ZĂÂÎȘȚ])': u'\g<1>\g<2>\g<3> \g<4>',#high risk
 	u' alui ': u' a lui ',
 	u'(I|V|X)a\.(\s?)Chr\.': u'\g<1> a. Chr.',
 	u'a\.Chr\.': u'a. Chr.',
@@ -96,11 +96,12 @@ mistakes = {
 	u'înfața': u'în fața',
 	u' azi([a-z]{2,})': u' azi \g<1>',
 	#u'(\| (?!Imagine|Commons|NotăCod|Cod92))(.*)([a-z])([0-9])': u'\g<1>\g<2>\g<3> \g<4>',
-	u'(\| Adresă)(.*)Str(.*[a-z])([0-9])': u'\g<1>\g<2>Str\g<3> \g<4>',
+	u'(\| Adresă)(.*)Str(.*?[a-z])([0-9])': u'\g<1>\g<2>Str\g<3> \g<4>',
 	u'(\| (?!Imagine|Commons|NotăCod|Cod92))(.*)([0-9])(ale|[dD]e|[Ii]anuarie|[Ff]ebruarie|[Mm]artie|[Aa]prilie|[Mm]ai|[iI]unie|[iI]ulie|[Aa]ugust|[Ss]eptembrie|[Oo]ctombrie|[Nn]oiembrie)': u'\g<1>\g<2>\g<3> \g<4>',
 	u'([Pp])eolungimede': u'\g<1>e o lungime de',
 	u'personalitățialeistorieiși': u'personalități ale istoriei și',
 	u'(\| (?!Imagine|Commons|NotăCod))(.*)([NSEV])(de|între|printre)': u'\g<1>\g<2>\g<3> \g<4>',
+	u'(\| (?!Imagine|Commons|NotăCod))(.*)([NSE])al ': u'\g<1>\g<2>\g<3> al ',
 	u'deunpâlcde': u'de un pâlc de',
 	u'deint': u'de int',
 	#u'(\| (?!Imagine|Commons|NotăCod))(.*)(DJ|DC|DN)([a-zA-Z])': u'\g<1>\g<2>\g<3> \g<4>',
@@ -119,10 +120,10 @@ mistakes = {
 	u'afost': u'a fost',
 	u'([0-9]-) ([0-9])': u'\g<1>\g<2>',
 	u'([0-9]) (-[0-9])': u'\g<1>\g<2>',
-	u'([a-z]{4,})a a ': u'\g<1>a',
-	u'([a-z]{4,})a a ([^I])': u'\g<1>ă a \g<2>',
+	#u'([a-z]{4,})a a ': u'\g<1>a',
+	#u'([a-z]{4,})a a ([^I])': u'\g<1>ă a \g<2>',
 	u' ([înqwtyuipdfghjlzxcvbn]) ': u'\g<1> ', 
-	u'(\| (?!Imagine|Commons|NotăCod|Creatori))(.*?)?"(.*?)"': u'\g<1>\g<2>„\g<3>”',
+	u'(\| (?!Imagine|Commons|NotăCod|Creatori))(.*?)?([^=])"(.*?)"([^\/\>])': u'\g<1>\g<2>\g<3>„\g<4>”\g<5>',
 	u'([^\s])„\s': u'\g<1> „',
 	u'([a-zA-ZăîâșțĂÂÎȘȚ])„([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1> „\g<2>',
 	u'([a-zA-ZăîâșțĂÂÎȘȚ])”([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1>” \g<2>',
@@ -130,6 +131,9 @@ mistakes = {
 	u'([A-Za-zîăâșț]) ”': u'\g<1>”',
 	u'([a-zA-ZăîâșțĂÂÎȘȚ])\(([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1> (\g<2>',
 	u'([a-zA-ZăîâșțĂÂÎȘȚ])\)([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1>) \g<2>',
+	u'CLUJ\s?-\s?NAPOCA': u'[[Cluj-Napoca]]',
+	u'chimbarea a grup': u'chimbarea grup',
+	u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*)([”„\.]) -([^\s])': u'\g<1>\g<2>\g<3> - \g<4>',
 }
 minormistakes = {
 	u'([Zz])iddeapărare': u'\g<1>id de apărare',
@@ -177,8 +181,10 @@ minormistakes = {
 	u'\[\[(.*)_(.*)\]\]': u'[[\g<1> \g<2>]]',
 	u'(\s?)-(\s?)catolică': u'-catolică',
 	u'o(\s?)-(\s?)(dac|roman)': u'o-\g<3>',
-	#u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*) -([^\s])': u'\g<1>\g<2>-\g<3>',
-	#u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*)([^\s])- ': u'\g<1>\g<2>\g<3>-',
+	u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*) -([^\s\"„\-])': u'\g<1>\g<2>-\g<3>',
+	u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*)([^\s\"”\-;,\.])- ': u'\g<1>\g<2>\g<3>-',
+	u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*) -([\"„\-])': u'\g<1>\g<2> - \g<3>',
+	u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*)([\"”\.])- ': u'\g<1>\g<2>\g<3> - ',
 	u'([Cc])as([aă])d': u'\g<1>as\g<2> d',
 	u'([a-z])înpartea': u'\g<1> în partea',
 	u'([a-z])depământ': u'\g<1> de pământ',
@@ -187,6 +193,12 @@ minormistakes = {
 	u'fața([^d\s\)])': u'fața \g<1>',
 	u'părți([^lt\s\),.])': u'părți \g<1>',
 	u'învi([ae])': u'în vi\g<1>',
+	u'dealta': u'de alta',
+	u'([XV]+)l ': u'\g<1>I ',
+	u'sec(\.?)(\s?)([XVI]+) ([XVI]+)': u'sec.\g<2>\g<3>\g<4>',
+	u'(\| .*)=  ': u'\g<1>= ',
+	u'(\| (?!Imagine|CodRan|FostCod|NotăCod|OsmL|RefCod))(.*)  ': u'\g<1>\g<2> ',
+	#u'(.+)\| (.*)\]\]': u'\g<1>|\g<2>]]',
 }
 
 deprecated = {
@@ -222,7 +234,7 @@ def checkAndUpload(page, text, newtext, comment):
 
 def processList(page):
 	pywikibot.output(u'Working on "%s"' % page.title(True))
-	#global mistakes
+	global mistakes
 	global minormistakes
 	#global authors
 	origtext = text = page.get()
@@ -235,13 +247,14 @@ def processList(page):
 	#	if text <> newtext:
 	#		changed = True
 	#		text = newtext
-	#for mistake in mistakes.keys():
-	#	newtext = re.sub(mistake, mistakes[mistake], text)
-	#	if newtext != text:
-	#		text = checkAndUpload(page, text, newtext, comment)
+	for mistake in mistakes.keys():
+		newtext = re.sub(mistake, mistakes[mistake], text)
+		if newtext != text:
+			print mistake
+			text = checkAndUpload(page, text, newtext, comment)
 	
 	for mistake in minormistakes.keys():
-		newtext = re.sub(mistake, minormistakes[mistake], text)
+		newtext = re.sub(mistake, minormistakes[mistake], text, count=1000)
 		if newtext != text:
 			print mistake
 			text = checkAndUpload(page, text, newtext, comment)
