@@ -24,13 +24,16 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
 
     /** perpendicular distance (in Vector units) of the end of the page */
     static final int pageSize = 520;
+    
+    public static final int ERROR_COLUMN_NOT_FOUND = -1;
+    public static final int ERROR_OFFSET_OUT_OF_BOUNDS = -2;
 
     /** a summary of all found text */
     private final List<TextChunk> locationalResult = new ArrayList<TextChunk>();
 
     private final String[] templateParams = {"\n| Cod = ", "\n| Denumire = ",
         "\n| Localitate = ", "\n| Adresă = ", "\n| Datare = ",
-        "\n| Creatori = "};
+        "\n| Creatori = "};//, "\n|1=", "\n|2="};
 
     /** a list of all found columns; it should differ from county to county */
     private ArrayList<Integer> columnsOffset = new ArrayList<Integer>();
@@ -80,6 +83,12 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
      */
     public void endTextBlock(){
     }
+    
+    private void debugPrint(Object s){
+        if (DUMP_STATE) {
+            System.out.println(s);
+        }
+    }
 
     /**
      *
@@ -99,7 +108,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                                             pageNumber * pageSize);
         if (location.text.trim().isEmpty())
             return;
-        //System.out.println(renderInfo.getText() + " font " + location.orientationMagnitude);
+        //debugPrint(renderInfo.getText() + " font " + location.orientationMagnitude);
         //non-vertical text, should be horizontal;
         if(location.orientationMagnitude >= Math.floor(1000 * Math.PI / 2))
             locationalResult.add(location);
@@ -114,10 +123,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         //Collections.sort(locationalResult);
         orderChunks();
 
-        if (DUMP_STATE) {
-            dumpState();
-        }
-
+        dumpState();
+        
         ArrayList<String[]> pageArray = new ArrayList<String[]>();
         int line = 0;
         StringBuffer sb = new StringBuffer();
@@ -178,19 +185,25 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
 
     /** Used for debugging only */
     private void dumpState(){
-        for (Iterator<TextChunk> iterator = locationalResult.iterator(); iterator.hasNext(); ) {
-            TextChunk location = (TextChunk) iterator.next();
-            System.out.println(columnsOffset);
-            location.printDiagnostics();
-            System.out.println();
+        
+        if (DUMP_STATE) {
+            for (Iterator<TextChunk> iterator = locationalResult.iterator(); iterator.hasNext(); ) {
+                TextChunk location = (TextChunk) iterator.next();
+                System.out.println(columnsOffset);
+                location.printDiagnostics();
+                System.out.println();
+            }
         }
 
     }
 
     private boolean chunksInDifferentColumns(TextChunk thisChunk, TextChunk nextChunk) {
+        //debugPrint(thisChunk.column);
+        //debugPrint(columnsOffset.size() - 1);
+        //debugPrint(locateOffsetValue(Math.round(nextChunk.distParallelStart)));
         if(Math.round(nextChunk.distanceFromEndOf(thisChunk)) > 5 &&
            (thisChunk.column >= (columnsOffset.size() - 1) ||
-           locateOffsetValue(Math.round(nextChunk.distParallelStart)) > -1))
+           locateOffsetValue(Math.round(nextChunk.distParallelStart)) > ERROR_OFFSET_OUT_OF_BOUNDS))
             return true;
         return false;
     }
@@ -209,40 +222,45 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
             {
                 TextChunk thisChunk = locationalResult.get(i);
                 TextChunk nextChunk = locationalResult.get(i+1);
-                //System.out.println(columnsOffset);
-                //thisChunk.printDiagnostics();
-                //nextChunk.printDiagnostics();
+                debugPrint(columnsOffset);
+                thisChunk.printDiagnostics();
+                nextChunk.printDiagnostics();
 
                 if (thisChunk.sameLine(nextChunk) &&
                         !chunksInDifferentColumns(thisChunk, nextChunk)) {
                     nextChunk.column = thisChunk.column;
-                    //System.out.println(thisChunk.column >= (columnsOffset.size() - 1));
-                    //System.out.println(locateOffsetValue(Math.round(nextChunk.distParallelStart)));
-                    //System.out.println("Next chunk (" + nextChunk.text + ") has the same column ("+nextChunk.column+")");
+                    //debugPrint(thisChunk.column >= (columnsOffset.size() - 1));
+                    //debugPrint(locateOffsetValue(Math.round(nextChunk.distParallelStart)));
+                    debugPrint("Next chunk (" + nextChunk.text + ") has the same column ("+nextChunk.column+")");
                 }
                 else if (thisChunk.sameLine(nextChunk)) {//new column
                     int index = locateOffsetValue(Math.round(nextChunk.distParallelStart));
-                    if(index > -1)
+                    if(index > ERROR_COLUMN_NOT_FOUND) {
                         nextChunk.column = index;
-                    else {
-                        System.out.println("Unknown column for offset " +
-                                nextChunk.distParallelStart + " chunk " + nextChunk.text);
-                        nextChunk.column = thisChunk.column + 1;
+                        debugPrint("Column " + nextChunk.column + " for chunk " + nextChunk.text);
                     }
-                    if(nextChunk.column < columnsOffset.size())
-                        columnsOffset.set(nextChunk.column,
-                                Math.round(nextChunk.distParallelStart));
-                    else
-                        columnsOffset.add(Math.round(nextChunk.distParallelStart));
+                    else {
+                        debugPrint("Unknown column for offset " +
+                                nextChunk.distParallelStart + " chunk " + nextChunk.text);
+                        if(thisChunk.column >= (columnsOffset.size() -1)) {
+                            columnsOffset.add(Math.round(nextChunk.distParallelStart));
+                            nextChunk.column = thisChunk.column + 1;
+                        }
+                        else
+                            nextChunk.column = thisChunk.column;
+                    }
                 }
                 else { //new line
                     int index = locateOffsetValue(Math.round(nextChunk.distParallelStart), false);
-                    if(index > -1)
+                    if(index > ERROR_COLUMN_NOT_FOUND)
                         nextChunk.column = index;
+                    else if (index == ERROR_OFFSET_OUT_OF_BOUNDS) {
+                        continue; //skip this chunk
+                    }
                     else {
                         nextChunk.column = 0;
                     }
-                    System.out.println("--New line-- Column " + nextChunk.column + " for offset " +
+                    debugPrint("--New line-- Column " + nextChunk.column + " for offset " +
                                 nextChunk.distParallelStart + " chunk " + nextChunk.text);
                 }
             }
@@ -290,6 +308,9 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         if  ((last == ')' || last == '”') &&
                 (Character.isLetterOrDigit(first)))
             return " ";
+        
+        if (first == '„')
+            return " ";
 
         //space before opening paranthesis
         if (first == '(')
@@ -308,6 +329,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         TextChunk lastChunk = null;
         int line = 0;
         for (TextChunk chunk : locationalResult) {
+            if (chunk.column < 0)
+                continue;
             if (lastChunk != null){
                 if (chunk.sameColumn(lastChunk) && chunk.sameLine(lastChunk)){
                     String temp = pageArray.get(line)[lastChunk.column] +
@@ -365,6 +388,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     }
 
     private String insertCityLinks(String value) {
+        //debugPrint(value);
         String[] administrations = {"sat", "localitatea", "localitate componentă", "municipiul", "oraș", "comuna"};
 
         if(value == null || value == "")
@@ -380,7 +404,9 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                         value.substring(index).contains("aparținător")) {//dirty hack?
                     index += " aparţinător".length();
                 }
-                endIndex = value.indexOf(';', index);
+                endIndex = value.indexOf(';', index) > -1 ? value.indexOf(';', index) : 
+                        (value.indexOf(',', index) > -1 ? value.indexOf(',', index) : 
+                        (value.indexOf(" și ", index) > -1 ? value.indexOf(" și ", index) : -1));
 
                 if(endIndex > -1){
                     ending = value.substring(endIndex);
@@ -389,6 +415,7 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                 else {
                     temp = value.substring(index);
                 }
+                //debugPrint(temp);
                 String capitalized = capitalize(temp);
                 String extra = "";
                 if(type != "municipiul" && type != "oraș") {
@@ -403,8 +430,10 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                 value = value.substring(0, index) + link;
                 if(endIndex > -1)
                     value = value + ending;
+                //debugPrint(value);
             }
         }
+        //debugPrint(value);
         return value;
     }
 
@@ -415,6 +444,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
     private int locateOffsetValue(int round, boolean precise) {
         int min = Integer.MAX_VALUE;
         int column = 0;
+        if (columnsOffset.size() > 0 && round < columnsOffset.get(0) - 1)
+            return -2;//if before the first column, it's probably an error
         for(int i = 0; i < columnsOffset.size(); i++)
         {
             int diff = Math.abs(columnsOffset.get(i) - round);
@@ -470,7 +501,8 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
                                 replace('\u000b', 'ș').
                                 replace('\u000c', 'Ș').
                                 replace('\r', 'ț').
-                                replace('\u000e', 'Ț');
+                                replace('\u000e', 'Ț').
+                                replace('\u000f', 'ő');
             this.startLocation = startLocation;
             this.endLocation = endLocation;
             this.charSpaceWidth = charSpaceWidth;
@@ -492,12 +524,14 @@ public class MyTextExtractionStrategy implements TextExtractionStrategy {
         }
 
         private void printDiagnostics(){
-            System.out.println("Text (@" + startLocation + " -> " + endLocation + "): " + text);
-            System.out.println("orientationMagnitude: " + orientationMagnitude);
-            System.out.println("distPerpendicular: " + distPerpendicular);
-            System.out.println("distParallelStart: " + distParallelStart);
-            System.out.println("distParallelEnd: " + distParallelEnd);
-            System.out.println("column: " + column);
+            if (DUMP_STATE) {
+                System.out.println("Text (@" + startLocation + " -> " + endLocation + "): " + text);
+                System.out.println("orientationMagnitude: " + orientationMagnitude);
+                System.out.println("distPerpendicular: " + distPerpendicular);
+                System.out.println("distParallelStart: " + distParallelStart);
+                System.out.println("distParallelEnd: " + distParallelEnd);
+                System.out.println("column: " + column);
+            }
         }
 
         /**
