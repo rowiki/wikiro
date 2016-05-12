@@ -591,28 +591,21 @@ if (u.match(/webcitation.org/)) {
 		while (datematches = dateregex.exec(d)) {
 			x = datematches[1];
 			x = x.replace(/<p>\s*(P|p)ublicat(a|ă)?\s*<\/p>/g, '');
-			x = x.replace(/<p>\s*\d{2}\:\d{2}\s*<\/p>/g, '');
+			x = x.replace(/<p>\s*\d{2}:\d{2}\s*<\/p>/g, '');
 			x = x.replace(/<\/?p\s*(.*?)>/g, ' ');
 			x = x.replace(/\s\s+/g, ' ');
 		};
 		var W_Date = x;
-		var x = d.replace(/<\/a>/g, '</a>\n');
-		if (x.match(/href=.*autor\/.*title/)) {
-			var x = x.match(/href=.*autor\/.*title.*/g);
-			for (i = 0; i < x.length; i++) {
-				var y = x[i].replace(/.*title=./, '');
-				var y = y.replace(new RegExp(dq + '.*'), '');
-				if (i > 0)
-					var W_Authors = W_Authors + ', ';
-				var W_Authors = W_Authors + y;
-			};
-		} else if (d.match(/class=.author-name./)) {
-			var x = d.match(/class=.author-name.*/)[0];
-			var x = x.replace(/<\/strong>.*/, '');
-			var W_Authors = x.replace(/.*<strong>/, '');
-		};
-		var W_Authors = W_Authors.replace(/class=.author-name.><\/span>/, '');
-		var W_Authors = W_Authors.replace(/class=.author-name.*>/, '');
+		var W_Authors = '';
+		var authorregex = /<p\s+class=.name.\s*>(de)?\s*<a\s+href\s*=\s*(.*?)\s+title\s*=\s*.*?>(.*?)\s*<\/a>\s*<\/p>/g
+		var authormatches;
+		while (authormatches = authorregex.exec(d)) {
+			x = authormatches[3];
+			if (W_Authors != '') {
+				W_Authors = W_Authors + ', '
+			}
+			W_Authors = W_Authors + x
+		}
 		var W_Newspaper = 'Gândul';
 		if (u.match(/ieseanul.gandul.info/))
 			var W_Newspaper = 'Ieşeanul';
