@@ -591,7 +591,7 @@ if (u.match(/webcitation.org/)) {
 		while (datematches = dateregex.exec(d)) {
 			x = datematches[1];
 			x = x.replace(/<p>\s*(P|p)ublicat(a|ă)?\s*<\/p>/g, '');
-			x = x.replace(/<p>\s*\d{2}:\d{2}\s*<\/p>/g, '');
+			x = x.replace(/<p\s*.*?>\s*\d{2}:\d{2}\s*<\/p>/g, '');
 			x = x.replace(/<\/?p\s*(.*?)>/g, ' ');
 			x = x.replace(/\s\s+/g, ' ');
 		};
