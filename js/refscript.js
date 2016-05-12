@@ -585,11 +585,14 @@ if (u.match(/webcitation.org/)) {
 		var x = x.replace(/ - Clujeanul/, '');
 		var x = x.replace(/ - Bihoreanul/, '');
 		var W_Title = x.replace(/ - Gandul/, '');
-		var x = d.match(/Publicat la:.*/)[0];
-		var x = x.replace(/.*Publicat la:/, '');
-		var x = x.replace(/<\/span>.*/, '');
-		var x = x.replace(/<.*>/, '');
-		var W_Date = x.replace(/ *<strong>.*/, '');
+		var dateregex = /<div\s+class=.datetime.>\s*(.*?)\s*<\/div>/g;
+		var datematches;
+		var x = '';
+		while (datematches = dateregex.exec(d)) {
+			x = datematches[1];
+			x = x.replace(/<\/?p\s*(.*?)>/g, '');
+		};
+		var W_Date = x;
 		var x = d.replace(/<\/a>/g, '</a>\n');
 		if (x.match(/href=.*autor\/.*title/)) {
 			var x = x.match(/href=.*autor\/.*title.*/g);
