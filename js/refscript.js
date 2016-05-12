@@ -584,13 +584,16 @@ if (u.match(/webcitation.org/)) {
 		var x = x.replace(/ - Banateanul/, '');
 		var x = x.replace(/ - Clujeanul/, '');
 		var x = x.replace(/ - Bihoreanul/, '');
-		var W_Title = x.replace(/ - Gandul/, '');
+		var W_Title = x.replace(/ - G(a|â)ndul/, '');
 		var dateregex = /<div\s+class=.datetime.>\s*(.*?)\s*<\/div>/g;
 		var datematches;
 		var x = '';
 		while (datematches = dateregex.exec(d)) {
 			x = datematches[1];
-			x = x.replace(/<\/?p\s*(.*?)>/g, '');
+			x = x.replace(/<p>\s*(P|p)ublicat(a|ă)?\s*<\/p>/g, '');
+			x = x.replace(/<p>\s*\d{2}\:\d{2}\s*<\/p>/g, '');
+			x = x.replace(/<\/?p\s*(.*?)>/g, ' ');
+			x = x.replace(/\s\s+/g, ' ');
 		};
 		var W_Date = x;
 		var x = d.replace(/<\/a>/g, '</a>\n');
