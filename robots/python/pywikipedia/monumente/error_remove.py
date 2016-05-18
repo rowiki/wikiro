@@ -17,8 +17,8 @@ from pywikibot import config as user
 
 mistakes = {
 	u',\s,': u',',
-	u'(\| (?!Imagine))(.*)\s*\( ': u'\g<1>\g<2> (',
-	u'(\| (?!Imagine))(.*)\s*\)': u'\g<1>\g<2>)',
+	u'(\| (?!Imagine|Plan))(.*)\s*\( ': u'\g<1>\g<2> (',
+	u'(\| (?!Imagine|Plan))(.*)\s*\)': u'\g<1>\g<2>)',
 	#u' {2,}': u' ',
 	u'([Cc])rucedepiatră': u'\g<1>ruce de piatră',
 	u' și\"(\s+)' : u' și\g<1>\"',
@@ -30,7 +30,7 @@ mistakes = {
 	u'([0-9])\.([0-9]+)\skm': u'\g<1>,\g<2> km',
 	u'([Kk])m([0-9])': u'\g<1>m \g<2>',
 	u'([Ll])a(SV|NV|SE|NE|nord|sud|est|vest|[NSEV])de': u'\g<1>a \g<2> de ',
-	u'(\| (?!Imagine))(.*)([Ll])a([0-9])': u'\g<3>a \g<4>',
+	u'(\| (?!Imagine|Plan))(.*)([Ll])a([0-9])': u'\g<1>\g<2>\g<3>a \g<4>',
 	u'([șȘ])i([0-9])': u'\g<1>i \g<2>',
 	u'([0-9])([Ll])a': u'\g<1> \g<2>a',
 	u'([0-9])([Șș])i': u'\g<1> \g<2>i',
@@ -41,17 +41,17 @@ mistakes = {
 	u'PiațaUnirii' : u'Piața Unirii',
 	u'S\s?f\s?\.' : u'Sf.',
 	u'([Pp])oddepiatră': u'\g<1>od de piatră',
-	u'(\| (?!Imagine|Commons))(.*)([Nn])r\.?([0-9])': u'\g<1>\g<2>\g<3>r. \g<4>',
-	u'(\| (?!Imagine|Commons))(.*)([Nn])r\s?([0-9])': u'\g<1>\g<2>\g<3>r. \g<4>',
-	u'(\| (?!Imagine|Commons))(.*)([^:])([sS])tr\.([^\s_])': u'\g<1>\g<2>\g<3>\g<4>tr. \g<5>',
+	u'(\| (?!Imagine|Plan|Commons))(.*)([Nn])r\.?([0-9])': u'\g<1>\g<2>\g<3>r. \g<4>',
+	u'(\| (?!Imagine|Plan|Commons))(.*)([Nn])r\s?([0-9])': u'\g<1>\g<2>\g<3>r. \g<4>',
+	u'(\| (?!Imagine|Plan|Commons))(.*)([^:])([sS])tr\.([^\s_])': u'\g<1>\g<2>\g<3>\g<4>tr. \g<5>',
 	u'cca\.?\s?([0-9])': u'cca. \g<1>',
 	u'([Ll])a\s?cca\.?(\s?)': u'\g<1>a cca.\g<2>',
-	u'(\| (?!Imagine))(.*),(([^0-9\s_]))': u'\g<1>\g<2>, \g<3>',
-	#u'(\| (?!Imagine))(.*)([^w])\.([a-zăîâșțA-ZĂÂÎȘȚ]{4,})': u'\g<1>\g<2>\g<3>. \g<4>',#high risk
-	u'(\| (?!Imagine|Commons))([a-zăîâșțA-ZĂÂÎȘȚ]*)([^w])\.([a-gi-zăîâșțA-GI-ZĂÂÎȘȚ][a-zăîâșțA-ZĂÂÎȘȚ]{3,})': u'\g<1>\g<2>\g<3>. \g<4>',#high risk
-	u'(\| (?!Imagine))(.*)sf\.sec': u'\g<1>\g<2>sf. sec',
-	u'(\| (?!Imagine))(.*)sec\.X': u'\g<1>\g<2>sec. X',
-	u'(\| (?!Imagine|Commons))(.*)\s*:([a-zăâîșț])': u'\g<1>\g<2>: \g<3>',#high risk
+	u'(\| (?!Imagine|Plan))(.*),(([^0-9\s_]))': u'\g<1>\g<2>, \g<3>',
+	#u'(\| (?!Imagine|Plan))(.*)([^w])\.([a-zăîâșțA-ZĂÂÎȘȚ]{4,})': u'\g<1>\g<2>\g<3>. \g<4>',#high risk
+	u'(\| (?!Imagine|Plan|Commons))([a-zăîâșțA-ZĂÂÎȘȚ]*)([^w])\.([a-gi-zăîâșțA-GI-ZĂÂÎȘȚ][a-zăîâșțA-ZĂÂÎȘȚ]{3,})': u'\g<1>\g<2>\g<3>. \g<4>',#high risk
+	u'(\| (?!Imagine|Plan))(.*)sf\.sec': u'\g<1>\g<2>sf. sec',
+	u'(\| (?!Imagine|Plan))(.*)sec\.X': u'\g<1>\g<2>sec. X',
+	u'(\| (?!Imagine|Plan|Commons))(.*)\s*:([a-zăâîșț])': u'\g<1>\g<2>: \g<3>',#high risk
 	u' *; *': u'; ',
 	u'(\| (?!Localitate))(.*)șila': u'\g<1>\g<2>și la',
 	u'șiîn': u'și în',
@@ -65,14 +65,14 @@ mistakes = {
 	u'D\s?N\s?([0-9]{1,3})\s([ABCDEFGH])([\s,\.])': u'DN\g<1>\g<2>\g<3>',
 	u'D\s?N\s?([0-9]{1,3})': u'DN\g<1>',
 	u'Ziddeincintă': u'Zid de incintă',
-	u'(\| (?!Imagine|CodRan|FostCod|NotăCod|OsmL|RefCod))(.*)([a-zăîâșț])([A-ZĂÂÎȘȚ])': u'\g<1>\g<2>\g<3> \g<4>',#high risk
+	u'(\| (?!Imagine|Plan|CodRan|FostCod|NotăCod|OsmL|RefCod))(.*)([a-zăîâșț])([A-ZĂÂÎȘȚ])': u'\g<1>\g<2>\g<3> \g<4>',#high risk
 	u' alui ': u' a lui ',
 	u'(I|V|X)a\.(\s?)Chr\.': u'\g<1> a. Chr.',
 	u'a\.Chr\.': u'a. Chr.',
 	u'(I|V|X)p\.(\s?)Chr\.': u'\g<1> p. Chr.',
 	u'p\.Chr\.': u'p. Chr.',
-	u'(\| (?!Imagine))(.*)sec\.(I|V|X)': u'\g<1>\g<2>sec. \g<3>',
-	u'(\| (?!Imagine|Commons))(.*):([0-9])': u'\g<1>\g<2>: \g<3>',
+	u'(\| (?!Imagine|Plan))(.*)sec\.(I|V|X)': u'\g<1>\g<2>sec. \g<3>',
+	u'(\| (?!Imagine|Plan|Commons))(.*):([0-9])': u'\g<1>\g<2>: \g<3>',
 	#specific to one or few file(s)
 	u'Cetate(a?)de([a-zăîâșțA-ZĂÂÎȘȚ])': u'Cetate\g<1> de \g<2>',
 	u'Moar([ăa])de([a-zăîâșțA-ZĂÂÎȘȚ])': u'Moar\g<1> de \g<2>',
@@ -95,16 +95,16 @@ mistakes = {
 	u'înc .sec': u"înc. sec",
 	u'înfața': u'în fața',
 	u' azi([a-z]{2,})': u' azi \g<1>',
-	#u'(\| (?!Imagine|Commons|NotăCod|Cod92))(.*)([a-z])([0-9])': u'\g<1>\g<2>\g<3> \g<4>',
+	#u'(\| (?!Imagine|Plan|Commons|NotăCod|Cod92))(.*)([a-z])([0-9])': u'\g<1>\g<2>\g<3> \g<4>',
 	u'(\| Adresă)(.*)Str(.*?[a-z])([0-9])': u'\g<1>\g<2>Str\g<3> \g<4>',
-	u'(\| (?!Imagine|Commons|NotăCod|Cod92))(.*)([0-9])(ale|[dD]e|[Ii]anuarie|[Ff]ebruarie|[Mm]artie|[Aa]prilie|[Mm]ai|[iI]unie|[iI]ulie|[Aa]ugust|[Ss]eptembrie|[Oo]ctombrie|[Nn]oiembrie)': u'\g<1>\g<2>\g<3> \g<4>',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod|Cod92))(.*)([0-9])(ale|[dD]e|[Ii]anuarie|[Ff]ebruarie|[Mm]artie|[Aa]prilie|[Mm]ai|[iI]unie|[iI]ulie|[Aa]ugust|[Ss]eptembrie|[Oo]ctombrie|[Nn]oiembrie)': u'\g<1>\g<2>\g<3> \g<4>',
 	u'([Pp])eolungimede': u'\g<1>e o lungime de',
 	u'personalitățialeistorieiși': u'personalități ale istoriei și',
-	u'(\| (?!Imagine|Commons|NotăCod))(.*)([NSEV])(de|între|printre)': u'\g<1>\g<2>\g<3> \g<4>',
-	u'(\| (?!Imagine|Commons|NotăCod))(.*)([NSE])al ': u'\g<1>\g<2>\g<3> al ',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod))(.*)([NSEV])(de|între|printre)': u'\g<1>\g<2>\g<3> \g<4>',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod))(.*)([NSE])al ': u'\g<1>\g<2>\g<3> al ',
 	u'deunpâlcde': u'de un pâlc de',
 	u'deint': u'de int',
-	#u'(\| (?!Imagine|Commons|NotăCod))(.*)(DJ|DC|DN)([a-zA-Z])': u'\g<1>\g<2>\g<3> \g<4>',
+	#u'(\| (?!Imagine|Plan|Commons|NotăCod))(.*)(DJ|DC|DN)([a-zA-Z])': u'\g<1>\g<2>\g<3> \g<4>',
 	u'înfost(ul|a)([a-z])': u'în fost\g<1> \g<2>',
 	u'deculmeaparalelă': u'de culmea paralelă',
 	u'(de?)s a t': u'\g<1> sat',
@@ -116,14 +116,14 @@ mistakes = {
 	u' platoul , Dogaru\"': u' platoul \"Dogaru\"',
 	u'(a|e|o|u|i)nr\.': u'\g<1> nr.',
 	u'(d|t)de': u'\g<1> de',
-	u'(\| (?!Imagine|Commons|NotăCod))(.*)([0-9])([a-zA-Z]{4,})': u'\g<1>\g<2>\g<3> \g<4>',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod))(.*)([0-9])([a-zA-Z]{4,})': u'\g<1>\g<2>\g<3> \g<4>',
 	u'afost': u'a fost',
 	u'([0-9]-) ([0-9])': u'\g<1>\g<2>',
 	u'([0-9]) (-[0-9])': u'\g<1>\g<2>',
 	#u'([a-z]{4,})a a ': u'\g<1>a',
 	#u'([a-z]{4,})a a ([^I])': u'\g<1>ă a \g<2>',
 	u' ([înqwtyuipdfghjlzxcvbn]) ': u'\g<1> ', 
-	u'(\| (?!Imagine|Commons|NotăCod|Creatori))(.*?)?([^=])"(.*?)"([^\/\>])': u'\g<1>\g<2>\g<3>„\g<4>”\g<5>',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod|Creatori))(.*?)?([^=])"(.*?)"([^\/\>])': u'\g<1>\g<2>\g<3>„\g<4>”\g<5>',
 	u'([^\s])„\s': u'\g<1> „',
 	u'([a-zA-ZăîâșțĂÂÎȘȚ])„([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1> „\g<2>',
 	u'([a-zA-ZăîâșțĂÂÎȘȚ])”([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1>” \g<2>',
@@ -133,16 +133,18 @@ mistakes = {
 	u'([a-zA-ZăîâșțĂÂÎȘȚ])\)([a-zA-ZăîâșțĂÂÎȘȚ])': u'\g<1>) \g<2>',
 	u'CLUJ\s?-\s?NAPOCA': u'[[Cluj-Napoca]]',
 	u'chimbarea a grup': u'chimbarea grup',
-	u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*)([”„\.]) -([^\s])': u'\g<1>\g<2>\g<3> - \g<4>',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod|Adresă))(.*)([”„\.]) -([^\s])': u'\g<1>\g<2>\g<3> - \g<4>',
+	u'Epoca([a-zA-Z]+)': u'Epoca \g<1>',
+	u'\{\{#tag:ref\|(.*)\|name=\"cimec\"\}\}': u'<ref name=\"cimec\">\g<1></ref>'
 }
 minormistakes = {
 	u'([Zz])iddeapărare': u'\g<1>id de apărare',
 	u'peun([a-zA-Z])': u'pe un \g<1>',
 	u'peo([a-zA-Z])': u'pe o \g<1>',
-	u'(\| (?!Imagine|Commons|NotăCod))(.*) ,(,?)(\s?)': u'\g<1>\g<2>, ',
-	u'(\| (?!Imagine|Commons|NotăCod))(.*) ;(\s?)': u'\g<1>\g<2>; ',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod))(.*) ,(,?)(\s?)': u'\g<1>\g<2>, ',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod))(.*) ;(\s?)': u'\g<1>\g<2>; ',
 	u';;': u'; ',
-	u'(\| (?!Imagine|Commons|NotăCod))(.*) \.(\.?)(\s?)': u'\g<1>\g<2>. ',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod))(.*) \.(\.?)(\s?)': u'\g<1>\g<2>. ',
 	u'([^a-z])(\s?)l a ': u'\g<1> la ',
 	u'(N|S) (E|V)(\s?)d(\s?)e(\s?)': u'\g<1>\g<2> de ',
 	u'troițadinfața': u'troița din fața',
@@ -154,7 +156,7 @@ minormistakes = {
 	u'([;,:/?!])([;,.:?!])': u'\g<1>',
 	u'cadastrala': u'cadastrală',
 	u' =(\s*)" ': u' = "',
-	u'(\| (?!Imagine|Commons|NotăCod))(.*)(\s+)" ([A-ZȘȚÂĂÎ])': u'\g<1>\g<2>\g<3>"\g<4>',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod))(.*)(\s+)" ([A-ZȘȚÂĂÎ])': u'\g<1>\g<2>\g<3>"\g<4>',
 	u'dealtaa(\s*)': u'de alta a ',
 	u'deoparte(\s*)': u'de o parte ',
 	u' și(de|a|pe)': u' și \g<1>',
@@ -181,10 +183,10 @@ minormistakes = {
 	u'\[\[(.*)_(.*)\]\]': u'[[\g<1> \g<2>]]',
 	u'(\s?)-(\s?)catolică': u'-catolică',
 	u'o(\s?)-(\s?)(dac|roman)': u'o-\g<3>',
-	u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*) -([^\s\"„\-])': u'\g<1>\g<2>-\g<3>',
-	u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*)([^\s\"”\-;,\.])- ': u'\g<1>\g<2>\g<3>-',
-	u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*) -([\"„\-])': u'\g<1>\g<2> - \g<3>',
-	u'(\| (?!Imagine|Commons|NotăCod|Adresă))(.*)([\"”\.])- ': u'\g<1>\g<2>\g<3> - ',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod|Adresă))(.*) -([^\s\"„\-])': u'\g<1>\g<2>-\g<3>',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod|Adresă))(.*)([^\s\"”\-;,\.])- ': u'\g<1>\g<2>\g<3>-',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod|Adresă))(.*) -([\"„\-])': u'\g<1>\g<2> - \g<3>',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod|Adresă))(.*)([\"”\.])- ': u'\g<1>\g<2>\g<3> - ',
 	u'([Cc])as([aă])d': u'\g<1>as\g<2> d',
 	u'([a-z])înpartea': u'\g<1> în partea',
 	u'([a-z])depământ': u'\g<1> de pământ',
@@ -197,8 +199,32 @@ minormistakes = {
 	u'([XV]+)l ': u'\g<1>I ',
 	u'sec(\.?)(\s?)([XVI]+) ([XVI]+)': u'sec.\g<2>\g<3>\g<4>',
 	u'(\| .*)=  ': u'\g<1>= ',
-	u'(\| (?!Imagine|CodRan|FostCod|NotăCod|OsmL|RefCod))(.*)  ': u'\g<1>\g<2> ',
+	u'(\| (?!Imagine|Plan|CodRan|FostCod|NotăCod|OsmL|RefCod))(.*)  ': u'\g<1>\g<2> ',
 	#u'(.+)\| (.*)\]\]': u'\g<1>|\g<2>]]',
+	u'cucota': u'cu cota',
+	u'arâului': u'a râului',
+	u', ,': u', ',
+	u';\s?,': u';',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod|Adresă))(.*)\.\.': u'\g<1>\g<2>.',
+	u'terenulactualei': u'terenul actualei',
+	u'lalimita': u'la limita',
+	u' lași': u' Iași',
+	u'șisec': u'și sec',
+	u'centrulsatului': u'centrul satului',
+	u'satdinspre': u'sat dinspre',
+	u'terasăjoasă': u'terasă joasă',
+	u'localitatedinspre': u'localitate dinspre',
+	u'fragmentedin': u'fragmente din',
+	u'\[\[\s': u'[[',
+	u'(\[\[(?!Categorie).*)\|\s': u'\g<1>|',
+	u'dispensaruluinr': u'dispensarului nr',
+	u'alpârăului': u'al pârâului',
+	u'aldealului': u'al dealului',
+	u'înluncă': u'în luncă',
+	u'parcelacadastrală': u'parcela cadastrală',
+	u'(a|ale)șoselei': u'\g<1> șoselei',
+	u'”\"': u'”',
+	u'deextremitate': u'de extremitate',
 }
 
 deprecated = {
@@ -236,8 +262,11 @@ def processList(page):
 	pywikibot.output(u'Working on "%s"' % page.title(True))
 	global mistakes
 	global minormistakes
+	marker = "@@"
+	Rref = re.compile(ur'(<ref.*?>[^<]+</ref>|<ref.*?/>)')
+	Rmarker = re.compile(ur'%s(\d+)%s' % (marker, marker))
 	#global authors
-	origtext = text = page.get()
+	origtext = newtext = text = page.get()
 	changed = False
 	#comment = u'Înlocuiesc spațiul cu non-breaking space (U+00A0) în unitățile de distranță din articolul [[%s]]' % page.title(True)
 	#comment = u'Scot câmpul învechite din {{ElementLMI}} în articolul [[%s]]' % page.title(True)
@@ -248,16 +277,49 @@ def processList(page):
 	#		changed = True
 	#		text = newtext
 	for mistake in mistakes.keys():
+		origtext = text
+		count = 0
+		intern = {}
+		for m in Rref.finditer(text):
+			count += 1
+			t = m.group()
+			text = text.replace(t, '%s%d%s' % (marker, count, marker))
+			intern[count] = t
+
 		newtext = re.sub(mistake, mistakes[mistake], text)
-		if newtext != text:
+
+		matches = Rmarker.findall(newtext)
+		for match in matches:
+
+			count = int(match)
+			newtext = newtext.replace(u'%s%d%s' % (marker, count, marker), intern[count])
+		if newtext != origtext:
 			print mistake
-			text = checkAndUpload(page, text, newtext, comment)
+			text = checkAndUpload(page, origtext, newtext, comment)
+		else:
+		    text = origtext
 	
 	for mistake in minormistakes.keys():
+		origtext = text
+		count = 0
+		intern = {}
+		for m in Rref.finditer(text):
+			count += 1
+			t = m.group()
+			text = text.replace(t, '%s%d%s' % (marker, count, marker))
+			intern[count] = t
+
 		newtext = re.sub(mistake, minormistakes[mistake], text, count=1000)
-		if newtext != text:
+
+		matches = Rmarker.findall(newtext)
+		for match in matches:
+			count = int(match)
+			newtext = newtext.replace(u'%s%d%s' % (marker, count, marker), intern[count])
+		if newtext != origtext:
 			print mistake
-			text = checkAndUpload(page, text, newtext, comment)
+			text = checkAndUpload(page, origtext, newtext, comment)
+		else:
+		    text = origtext
 	#for field in deprecated.keys():
 	#	newtext = re.sub(field, deprecated[field], text)
 	#	if text <> newtext:
