@@ -52,7 +52,9 @@ countries = {
 			u'Cod92',
 			u'CodRan',
 			u'Copyright',
+			u'RefCod',
 			],
+		'idField': u'Cod',
 		'pagePrefix': {
 			u'Lista monumentelor istorice din județul',
 			u'Lista monumentelor istorice din București',
@@ -88,6 +90,7 @@ countries = {
 			u'Stare': u'Stare',
 			u'TipCod': u'TipCod',
 			},
+		'idField': u'Cod',
 		'pagePrefix': {
 			u'Lista siturilor arheologice din județul',
 			u'Lista siturilor arheologice din București',
@@ -95,7 +98,53 @@ countries = {
 	},
 }
 
+counties = {
+u"București": { "coa": u"Fișier:Bucharest-Coat-of-Arms.png", "count": 0, "list": u"[[Lista monumentelor istorice din București]] (sector [[Lista monumentelor istorice din București, sector 1|1]], [[Lista monumentelor istorice din București, sector 2|2]], [[Lista monumentelor istorice din București, sector 3|3]], [[Lista monumentelor istorice din București, sector 4|4]], [[Lista monumentelor istorice din București, sector 5|5]], [[Lista monumentelor istorice din București, sector 6|6]], [[Lista monumentelor istorice din București cu sector necunoscut|necunoscut]])"},
+u"Alba": { "coa": u"Fișier:Actual Alba county CoA.png", "count": 0},
+u"Arad": { "coa": u"Fișier:Actual Arad county CoA.png", "count": 0},
+u"Argeș": { "coa": u"Fișier:Actual Arges county CoA.png", "count": 0},
+u"Bacău": { "coa": u"Fișier:Actual Bacau county CoA.png", "count": 0},
+u"Bihor": { "coa": u"Fișier:Actual Bihor county CoA.png", "count": 0},
+u"Bistrița-Năsăud": { "coa": u"Fișier:Actual Bistrita-Nasaud county CoA.png", "count": 0},
+u"Botoșani": { "coa": u"Fișier:Stema judetului Botosani.svg", "count": 0},
+u"Brașov": { "coa": u"Fișier:Actual Brasov county CoA.png", "count": 0},
+u"Brăila": { "coa": u"Fișier:Stema judetului Braila.svg", "count": 0},
+u"Buzău": { "coa": u"Fișier:Actual Buzau county CoA.png", "count": 0},
+u"Caraș-Severin": { "coa": u"Fișier:Actual Caras-Severin county CoA.png", "count": 0},
+u"Călărași": { "coa": u"Fișier:Actual Calarasi county CoA.png", "count": 0},
+u"Cluj": { "coa": u"Fișier:Actual Cluj county CoA.png", "count": 0},
+u"Constanța": { "coa": u"Fișier:Actual Constanta county CoA.png", "count": 0},
+u"Covasna": { "coa": u"Fișier:Coa Romania County Kovászna.svg", "count": 0},
+u"Dâmbovița": { "coa": u"Fișier:Actual Dambovita county CoA.png", "count": 0},
+u"Dolj": { "coa": u"Fișier:RO Dolj county COA.svg", "count": 0},
+u"Galați": { "coa": u"Fișier:Stema judetului Galati.svg", "count": 0},
+u"Giurgiu": { "coa": u"Fișier:Actual Giurgiu county CoA.png", "count": 0},
+u"Gorj": { "coa": u"Fișier:Stema jud Gorj.jpg", "count": 0},
+u"Harghita": { "coa": u"Fișier:Actual Harghita county CoA.png", "count": 0},
+u"Hunedoara": { "coa": u"Fișier:Actual Hunedoara county CoA.png", "count": 0},
+u"Ialomița": { "coa": u"Fișier:Actual Ialomita county CoA.png", "count": 0},
+u"Iași": { "coa": u"Fișier:Actual Iasi county CoA.svg", "count": 0},
+u"Ilfov": { "coa": u"Fișier:Actual Ilfov county CoA.png", "count": 0},
+u"Maramureș": { "coa": u"Fișier:Actual Maramures county CoA.png", "count": 0},
+u"Mehedinți": { "coa": u"Fișier:Actual Mehedinti county CoA.png", "count": 0},
+u"Mureș": { "coa": u"Fișier:Actual Mures county CoA.png", "count": 0},
+u"Neamț": { "coa": u"Fișier:Actual Neamt county CoA.png", "count": 0},
+u"Olt": { "coa": u"Fișier:Actual Olt county CoA.png", "count": 0},
+u"Prahova": { "coa": u"Fișier:Actual Prahova county CoA.png", "count": 0},
+u"Satu Mare": { "coa": u"Fișier:Actual Satu Mare county CoA.png", "count": 0},
+u"Sălaj": { "coa": u"Fișier:Actual Salaj county CoA.png", "count": 0},
+u"Sibiu": { "coa": u"Fișier:Actual Sibiu county CoA.png", "count": 0},
+u"Suceava": { "coa": u"Fișier:Actual Suceava county CoA.png", "count": 0},
+u"Teleorman": { "coa": u"Fișier:Actual Teleorman county CoA.png", "count": 0},
+u"Timiș": { "coa": u"Fișier:Actual Timis county CoA.svg", "count": 0},
+u"Tulcea": { "coa": u"Fișier:Actual Tulcea county CoA.png", "count": 0},
+u"Vaslui": { "coa": u"Fișier:Actual Vaslui county CoA.png", "count": 0},
+u"Vâlcea": { "coa": u"Fișier:Actual Valcea county CoA.png", "count": 0},
+u"Vrancea": { "coa": u"Fișier:Actual Vrancea county CoA.png", "count": 0},
+}
+
 monuments_db = []
+monuments_counts = {}
 
 def filterOne(contents):
 	'''
@@ -127,7 +176,7 @@ def processMonument(params, source, countryconfig, title, previous):
 			#Is it in the fields list?
 			if field in fields:
 				#Load it with Big fucking escape hack. Stupid mysql lib
-				if field == u"Cod":
+				if field == countryconfig.get('idField'):
 					contents[field] = re.sub(r'\s', '', value.encode("utf8")) # Do this somewhere else.replace("'", "\\'")
 				else:
 					contents[field] = value.encode("utf8") # Do this somewhere else.replace("'", "\\'")
@@ -138,7 +187,7 @@ def processMonument(params, source, countryconfig, title, previous):
 				pywikibot.output(u'Value: %s' % value)
 				pywikibot.output(u'Params: %s\n%s' % (params, param))
 				#time.sleep(5)
-	return filterOne(contents), contents[u"Cod"]
+	return filterOne(contents), contents[countryconfig.get('idField')]
 
 def processText(source, countryconfig, text, title):
 	'''
@@ -147,11 +196,14 @@ def processText(source, countryconfig, text, title):
 	templates = pywikibot.textlib.extract_templates_and_params(text)
 	pywikibot.output(u'Working on page "%s"' % title)
 	prevCode = None
+	count = 0
 	for (template, params) in templates:
 		if template==countryconfig.get('rowTemplate'):
 			ret, prevCode = processMonument(params, source, countryconfig, title, prevCode)
 			monuments_db.append(ret)
 			#time.sleep(5)
+			count += 1
+	return count
  
 def writeOutput(filename):
 	global monuments_db
@@ -168,11 +220,15 @@ def processDatabase(countryconfig, dbname="lmi"):
 	global monuments_db
 
 	site = pywikibot.Site(countryconfig.get('lang'), countryconfig.get('project'))
-	rowTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), countryconfig.get('rowTemplate')))
+	rowTemplate = countryconfig.get('rowTemplate')
+	if rowTemplate.find(':') == -1:
+		rowTemplate = u'%s:%s' % (site.namespace(10), countryconfig.get('rowTemplate'))
+	rowTemplate = pywikibot.Page(site, rowTemplate)
 
 	transGen = pagegenerators.ReferringPageGenerator(rowTemplate, onlyTemplateInclusion=True)
 	filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen, countryconfig.get('namespaces'))
 	pregenerator = pagegenerators.PreloadingGenerator(filteredGen)
+
 	for page in pregenerator:
 		prefixes = countryconfig.get('pagePrefix')
 		for prefix in prefixes:
@@ -183,10 +239,88 @@ def processDatabase(countryconfig, dbname="lmi"):
 			continue
 		if page.exists() and not page.isRedirectPage():
 			# Do some checking
-			processText(page.permalink(), countryconfig, page.get(), page.title(True))
+			monuments_counts[page.title()] = processText(page.permalink(), countryconfig, page.get(), page.title(True))
 
 	writeOutput("_".join([countryconfig.get('lang'), dbname, "db.json"]))
 
+def update(database):
+	if database:
+		lang = pywikibot.Site().language()
+		if not countries.get((lang, database)):
+			pywikibot.output(u'I have no config for database "%s" in language "%s"' % (database, lang))
+			return False
+		pywikibot.output(u'Working on database "%s" in language "%s"' % (database, lang))
+		processDatabase(countries.get((lang, database)), database)
+		updateCounts(database)
+	else:
+		for (lang, database), countryconfig in countries.iteritems():
+			pywikibot.output(u'Working on database "%s" in language "%s"' % (database, lang))
+			processDatabase(countryconfig, database)
+			updateCounts(database)
+
+def updateCounts(database):
+	if database != u"lmi":
+		return
+	global monuments_counts
+	section = u"""==Lista monumentelor pe județ==
+<!--lista totală e prea lungă pentru a fi păstrată într-o singură pagină. Editați listele pe fiecare județ-->
+Puteți căuta în lista de monumente folosind formularul de mai jos, sau puteți naviga prin paginile cu monumente aferente fiecărui județ.
+<inputbox>
+type=fulltext
+prefix=Lista monumentelor istorice din
+break=no
+width=30
+searchbuttonlabel=Căutare în liste
+</inputbox>
+{|class="wikitable sortable" width="100%"
+!Listă
+!Județ
+!Număr de monumente
+|-
+"""
+	prev_county = u""
+	total_count = 0
+	for county in sorted(monuments_counts.keys()):
+		if county.find(u"sector") > -1:
+			current_county = u"București"
+		else:
+			current_county = county.replace(u"Lista monumentelor istorice din județul ", u"")
+			if current_county.find(" - ") > -1:
+				current_county = current_county[:current_county.find("-") - 1]
+			if current_county not in counties:
+				continue
+		if current_county != prev_county:
+			if prev_county in counties:
+				if "list" in counties[prev_county]:
+					section += u"|" + counties[prev_county]["list"] + \
+						u"\n|[[" + counties[prev_county]["coa"] + \
+						u"|20px]][[județul " + prev_county + u"|" + \
+						prev_county + u"]]\n|{{subst:formatnum:" + \
+						str(counties[prev_county]["count"]) + u"}}\n|-\n"
+				else:
+					section += u"|[[Lista monumentelor istorice din județul " + prev_county + \
+						u"]]\n|[[" + counties[prev_county]["coa"] + \
+						u"|20px]][[județul " + prev_county + u"|" + \
+						prev_county + u"]]\n|{{subst:formatnum:" + \
+						str(counties[prev_county]["count"]) + u"}}\n|-\n"
+			prev_county = current_county
+
+		counties[current_county]["count"] += monuments_counts[county]
+		total_count += monuments_counts[county]
+	section += u"|[[Lista monumentelor istorice din județul " + prev_county + \
+		u"]]\n|[[" + counties[prev_county]["coa"] + \
+		u"|20px]][[județul " + prev_county + u"|" + \
+		prev_county + u"]]\n|{{subst:formatnum:" + \
+		str(counties[prev_county]["count"]) + u"}}\n|-\n"
+	section = section.replace(u"județul București", u"București")
+	section += "|}\n\n"
+	page = pywikibot.Page(pywikibot.getSite(), u"Lista_monumentelor_istorice_din_România#Lista_monumentelor_pe_jude.C8.9B")
+	page.get()
+	pywikibot.getSite().editpage(page,text=section, section=2)
+	pywikibot.output("Saved the monument counts per county")
+	monuments_counts = {}
+	print total_count
+	
 def main():
 	'''
 	The main loop
@@ -199,19 +333,8 @@ def main():
 	for arg in pywikibot.handleArgs():
 		if arg.startswith('-db:'):
 			database = arg [len('-db:'):]
-
-	if database:
-		lang = pywikibot.Site().language()
-		if not countries.get((lang, database)):
-			pywikibot.output(u'I have no config for database "%s" in language "%s"' % (database, lang))
-			return False
-		pywikibot.output(u'Working on database "%s" in language "%s"' % (database, lang))
-		processDatabase(countries.get((lang, database)), database)
-	else:
-		for (lang, database), countryconfig in countries.iteritems():
-			pywikibot.output(u'Working on database "%s" in language "%s"' % (database, lang))
-			processDatabase(countryconfig, database)
-	
+			
+	update(database)
 
 if __name__ == "__main__":
 	try:
