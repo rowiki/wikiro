@@ -11,6 +11,7 @@ Command line options:
 '''
 import sys, time, warnings, json, re, os, codecs
 import urlparse
+import md5
 
 import pywikibot
 from pywikibot import pagegenerators
@@ -207,7 +208,7 @@ def updateTableData(config, url, code, field, newvalue, upload = True, text = No
     :type text: string
     :param ask: Whether to ask the user before uploading
     :type ask: boolean
-    :return: The modified text of the page
+    :return: The user's answer
     :rtype: string
     """
     pywikibot.output("Uploading %s for %s; value \"%s\"" % (field, code, newvalue))
@@ -217,7 +218,10 @@ def updateTableData(config, url, code, field, newvalue, upload = True, text = No
     
     if text == None:
         pywikibot.output("Getting page contents")
-        text = page.get()
+	try:
+        	text = page.get()
+	except:
+		return u''
         
     oldtext = text
     codeFound = False
@@ -225,6 +229,7 @@ def updateTableData(config, url, code, field, newvalue, upload = True, text = No
     rawCode = None
     my_params = {}
     rowTemplate = config.get('rowTemplate')
+    answer = u""
     
     templates = pywikibot.textlib.extract_templates_and_params(text)
     for (template, params) in templates:
@@ -249,11 +254,17 @@ def updateTableData(config, url, code, field, newvalue, upload = True, text = No
         return None
     
     orig = rebuildTemplate(config, my_params)
+    oldvalue = my_params.get(field)
     my_params[field] = newvalue
     new = rebuildTemplate(config, my_params)
 
     try:
-        pywikibot.showDiff(orig, new, context = 3)
+	try:
+            pywikibot.showDiff(orig, new, context = 3)
+	except:
+            print oldvalue
+            print newvalue
+            return None
     
         if ask:
             answer = pywikibot.input(u"Upload change? ([y]es/[n]o)")
@@ -268,7 +279,7 @@ def updateTableData(config, url, code, field, newvalue, upload = True, text = No
             # if we cannot find another template after the current, we
             # are most likely the last template on the page
             if cliva < 0:
-                cliva = after.find(u"{{" + countries.get((_lang, _db)).get('footerTemplate'))
+                cliva = after.find(u"{{" + config.get('footerTemplate'))
             if cliva >= 0 and clivb >= 0:
                 after = after[cliva:]
                 before = before[:clivb]
@@ -280,16 +291,18 @@ def updateTableData(config, url, code, field, newvalue, upload = True, text = No
             after = new + after
             text = "".join((before, after))
         
-            if upload == True or upload == None:
+            if upload == True:
                 comment = u"Actualizez câmpul %s în lista de monumente conform LMI2015" % field
                 try:
                     page.put(text, comment)
-                    return None
+                    return answer
                 except pywikibot.exceptions.Error:
                     pywikibot.output("Some error occured at upload, let's move on and hope for the best!")
-    except:
-        pywikibot.output("Some error occured before upload, let's move on and hope for the best!")
-    return text
+    except Exception as e:
+        pywikibot.output("%s Some error occured before upload, let's move on and hope for the best!" % e)
+	import traceback
+	traceback.print_exc()
+    return answer
     
 def mergeMonuments(left, right, config):
     tempfile = u"merge_skip.json"
@@ -299,6 +312,8 @@ def mergeMonuments(left, right, config):
     pywikibot.output("...done")
     f.close()
     pattern = re.compile(u'(.*?)?"(.*?)"([^\/\>]?)')
+    uploaded = {}
+    refused = {}
     for cod in sorted(left.keys()):
         if cod not in right:
             continue
@@ -313,11 +328,12 @@ def mergeMonuments(left, right, config):
             if param in [u"Lat", u"Lon", u"OsmLat", u"OsmLon", \
                         u"Commons", u"Creatori", u"source", u"previous", \
                         u"Imagine", u"CodRan", u"RefCod", u"NotăCod", \
-                        u"Copyright", u"FostCod"]:
+                        u"Copyright", u"FostCod", u"Localitate"]:
                 continue
             leftText = left[cod][param].strip()
             rightText = right[cod][param].replace(u'„', u'"').replace(u'”', u'"').replace(u'“', u'"').replace(u'\'\'', u'"').replace(u',,', u'"').strip()
             rightText = pattern.sub(u'\\1„\\2”\\3', rightText)
+            rightText = rightText.replace(u"cca ", u"cca. ").replace(u"(*)", u"<ref name=\"notaplan\" />")
             if leftText == rightText:
                 continue
             if leftText.find(u'č') > -1:
@@ -334,12 +350,30 @@ def mergeMonuments(left, right, config):
             print rightTextNoSpaces
             if leftTextNoSpaces.lower() == rightTextNoSpaces.lower():
                 continue
+            ask = True
+            if leftTextNoSpaces.lower().replace(u",", u"") == rightTextNoSpaces.lower().replace(u",", u"").replace(u"–", u"-"):
+                ask = False
+            m = md5.new()
+            m.update(leftText.encode('utf8'))
+            m.update(rightText.encode('utf8'))
+            d = m.digest()
+            if d in refused:
+                continue
+            if d in uploaded:
+                ask = False
             print "\t=== " + param + " @ " + oldCode + " ===";
-            if updateTableData(config, oldSrc, oldCode, param, rightText) != None:
+            response = updateTableData(config, oldSrc, oldCode, param, rightText, ask=ask)
+            print response
+            if response == 'n':
                 db[oldCode] = 'y'
                 f = open(tempfile, "w+")
                 json.dump(db, f, indent = 2)
                 f.close();
+                refused[d] = 1
+            elif response == 'y':
+                uploaded[d] = 1
+            elif response != None:
+                refused[d] = 1
             
     
 def buildNewDb(path, prefix, config):
@@ -357,6 +391,7 @@ def theBigMergeFunction():
     prefix = u"LMI2015_"
     lang = pywikibot.Site().language()
     database = u"lmi"
+    dbs.update(database)
     #buildNewDb(path, prefix, countries.get((lang, database)))
     
     left = readDb("ro_lmi_db.json")
@@ -367,3 +402,23 @@ def theBigMergeFunction():
 
 if __name__ == "__main__":
     theBigMergeFunction()
+    
+#cucota
+#arâului
+#, ,
+#;,
+#..
+#terenulactualei
+#lalimita
+#lași/Iași
+#șisec
+#centrulsatului
+#satdinspre
+#terasăjoasă
+#localitatedinspre
+#fragmentedin
+#[[\s
+#dispensaruluinr
+#alpârăului
+#aldealului
+#înluncă
