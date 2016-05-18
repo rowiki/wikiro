@@ -388,13 +388,14 @@
   "CL-II-a-B-14609": [
     {
       "code": "CL-II-a-B-14609", 
-      "lastedit": "20140922195912", 
+      "lastedit": "20160105231947", 
       "name": "Fi\u0219ier:Ansamblu de locuin\u021be cu pr\u0103v\u0103lii.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -1238,6 +1239,21 @@
       "quality": false
     }
   ], 
+  "AG-II-m-B-13452": [
+    {
+      "code": "AG-II-m-B-13452", 
+      "lastedit": "20160430122547", 
+      "name": "Fi\u0219ier:BcatolicaPitInterior.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BR-II-m-B-02097": [
     {
       "code": "BR-II-m-B-02097", 
@@ -2064,6 +2080,21 @@
       "project": "ro", 
       "lmi": null, 
       "lat": 44.4369, 
+      "quality": false
+    }
+  ], 
+  "PH-II-m-B-16671": [
+    {
+      "code": "PH-II-m-B-16671", 
+      "lastedit": "20160222193500", 
+      "name": "Fi\u0219ier:Str. Cuza Vod\u0103 24.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -2934,18 +2965,6 @@
       "project": "ro", 
       "lmi": null, 
       "lat": 44.4299, 
-      "quality": false
-    }, 
-    {
-      "code": "B-II-a-A-18781", 
-      "lastedit": "20140930122732", 
-      "name": "Fi\u0219ier:Ansamblul Bisericii Curtea Veche 1.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
       "quality": false
     }
   ], 
@@ -4463,19 +4482,6 @@
       "code": "B-II-a-A-18802", 
       "lastedit": "20150619145040", 
       "name": "Fi\u0219ier:Iarna pe Aleea Artistilor din parcul herastrau.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 26.085, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 44.4678, 
-      "quality": false
-    }, 
-    {
-      "code": "B-II-a-A-18802", 
-      "lastedit": "20150619145014", 
-      "name": "Fi\u0219ier:Aleea artistilor din Herastrau.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -6206,8 +6212,47 @@
     }, 
     {
       "code": "IL-II-m-B-14089", 
-      "lastedit": "20150926132830", 
+      "lastedit": "20160105231912", 
       "name": "Fi\u0219ier:Alexandru Manolescu.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "IL-II-m-B-14089", 
+      "lastedit": "20160105232240", 
+      "name": "Fi\u0219ier:CASA Alexandru Manolescu.JPG", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "IL-II-m-B-14089", 
+      "lastedit": "20160105232244", 
+      "name": "Fi\u0219ier:Detaliu Casa Alexandru Manolescu Barcanesti.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "IL-II-m-B-14089", 
+      "lastedit": "20160105232247", 
+      "name": "Fi\u0219ier:Casa Alexandru Manolescu(1924) din sat Barcanesti, comuna Barcanesti, vedere lateral\u0103.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -6228,6 +6273,34 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "PH-II-m-B-16690": [
+    {
+      "code": "PH-II-m-B-16690", 
+      "lastedit": "20160222193927", 
+      "name": "Fi\u0219ier:Strada Mihail Kog\u0103lniceanu 68.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16690", 
+      "lastedit": "20160222193927", 
+      "name": "Fi\u0219ier:Strada Mihail Kog\u0103lniceanu 68 (2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -6424,13 +6497,14 @@
   "CL-II-m-B-14597": [
     {
       "code": "CL-II-m-B-14597", 
-      "lastedit": "20140919211136", 
+      "lastedit": "20160105231818", 
       "name": "Fi\u0219ier:AJOFM C\u0103l\u0103ra\u0219i.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -6527,34 +6601,6 @@
       "quality": false
     }
   ], 
-  "OT-II-m-B-08549": [
-    {
-      "code": "OT-II-m-B-08549", 
-      "lastedit": "20141111084720", 
-      "name": "Fi\u0219ier:Casa Zarinovici 2014.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
-  "MM-II-m-A-04635": [
-    {
-      "code": "MM-II-m-A-04635", 
-      "lastedit": "20131015112718", 
-      "name": "Fi\u0219ier:Salistea de Sus Buleni.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
   "CT-II-m-A-02796": [
     {
       "code": "CT-II-m-A-02796", 
@@ -6593,6 +6639,20 @@
       "project": "ro", 
       "lmi": null, 
       "lat": 44.1746, 
+      "quality": false
+    }
+  ], 
+  "MM-II-m-A-04635": [
+    {
+      "code": "MM-II-m-A-04635", 
+      "lastedit": "20131015112718", 
+      "name": "Fi\u0219ier:Salistea de Sus Buleni.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lat": 0, 
       "quality": false
     }
   ], 
@@ -7043,19 +7103,6 @@
       "project": "ro", 
       "lat": 0, 
       "quality": false
-    }, 
-    {
-      "code": "HR-II-m-B-12998", 
-      "lastedit": "20160103164028", 
-      "name": "Fi\u0219ier:Biserica de lemn din Uilac14.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
     }
   ], 
   "CL-II-m-B-14699": [
@@ -7346,6 +7393,19 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16638", 
+      "lastedit": "20160222192340", 
+      "name": "Fi\u0219ier:Strada Aosta 17.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -7721,21 +7781,6 @@
       "quality": false
     }
   ], 
-  "B-II-m-B-18105": [
-    {
-      "code": "B-II-m-B-18105", 
-      "lastedit": "20151106233717", 
-      "name": "Fi\u0219ier:Bucharest Day 5 - Balcescu (9457990059).jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 26.100627, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 44.439686, 
-      "quality": false
-    }
-  ], 
   "OT-II-m-B-21052": [
     {
       "code": "OT-II-m-B-21052", 
@@ -7802,6 +7847,19 @@
       "project": "ro", 
       "lat": 0, 
       "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16676", 
+      "lastedit": "20160222193714", 
+      "name": "Fi\u0219ier:Strada Furnica 5.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "PH-II-m-B-16677": [
@@ -7814,6 +7872,32 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16677", 
+      "lastedit": "20160222193742", 
+      "name": "Fi\u0219ier:Strada Furnica 18.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16677", 
+      "lastedit": "20160222193743", 
+      "name": "Fi\u0219ier:Strada Furnica 18 (2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -7980,6 +8064,19 @@
       "project": "ro", 
       "lat": 0, 
       "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16678", 
+      "lastedit": "20160222193815", 
+      "name": "Fi\u0219ier:Strada Furnica 20.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "BH-III-m-B-01233": [
@@ -8028,32 +8125,6 @@
       "code": "B-II-m-A-19682", 
       "lastedit": "20131019202501", 
       "name": "Fi\u0219ier:Biserica Domnita Balasa din Bucuresti - Altarul.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }
-  ], 
-  "VL-II-m-B-09642": [
-    {
-      "code": "VL-II-m-B-09642", 
-      "lastedit": "20150204223408", 
-      "name": "Fi\u0219ier:Biserica de lemn din B\u0103ia\u0219u01.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "VL-II-m-B-09642", 
-      "lastedit": "20150204223410", 
-      "name": "Fi\u0219ier:Biserica de lemn din B\u0103ia\u0219u02.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -8245,6 +8316,21 @@
       "code": "PH-II-m-A-16772", 
       "lastedit": "20151218140123", 
       "name": "Fi\u0219ier:Targsoru Nou, biserica Sf Voievozi.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-18574": [
+    {
+      "code": "B-II-m-B-18574", 
+      "lastedit": "20160303101843", 
+      "name": "Fi\u0219ier:Strada Zossima Demarat, nr. 6.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -8608,6 +8694,21 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "AR-II-m-B-00507": [
+    {
+      "code": "AR-II-m-B-00507", 
+      "lastedit": "20160120122855", 
+      "name": "Fi\u0219ier:Palatul Cultural AR.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -11194,6 +11295,21 @@
       "quality": false
     }
   ], 
+  "PH-II-m-B-16639": [
+    {
+      "code": "PH-II-m-B-16639", 
+      "lastedit": "20160222192458", 
+      "name": "Fi\u0219ier:Strada Aosta 27.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-II-a-A-19152": [
     {
       "code": "B-II-a-A-19152", 
@@ -11236,6 +11352,101 @@
       "lmi": null, 
       "lat": 0, 
       "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16633", 
+      "lastedit": "20160222191835", 
+      "name": "Fi\u0219ier:Strada Theodor Aman 7.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16633", 
+      "lastedit": "20160222191836", 
+      "name": "Fi\u0219ier:Strada Theodor Aman 7 (2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "PH-II-m-B-16634": [
+    {
+      "code": "PH-II-m-B-16634", 
+      "lastedit": "20160222192014", 
+      "name": "Fi\u0219ier:Strada Theodor Aman 8.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16634", 
+      "lastedit": "20160222192014", 
+      "name": "Fi\u0219ier:Strada Theodor Aman 8 (2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "PH-II-m-B-16635": [
+    {
+      "code": "PH-II-m-B-16635", 
+      "lastedit": "20160222192153", 
+      "name": "Fi\u0219ier:Strada Theodor Aman 11 (3).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16635", 
+      "lastedit": "20160222192153", 
+      "name": "Fi\u0219ier:Strada Theodor Aman 11 (2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16635", 
+      "lastedit": "20160222192154", 
+      "name": "Fi\u0219ier:Strada Theodor Aman 11.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "PH-II-m-B-16636": [
@@ -11248,6 +11459,47 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16636", 
+      "lastedit": "20160222192231", 
+      "name": "Fi\u0219ier:Strada Aosta 12.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16636", 
+      "lastedit": "20160222192231", 
+      "name": "Fi\u0219ier:Strada Aosta 12 (2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "PH-II-m-B-16637": [
+    {
+      "code": "PH-II-m-B-16637", 
+      "lastedit": "20160222192303", 
+      "name": "Fi\u0219ier:Strada Aosta 16.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -11645,61 +11897,66 @@
     }, 
     {
       "code": "SM-II-a-A-05220", 
-      "lastedit": "20140927201412", 
+      "lastedit": "20160105232742", 
       "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura nordica.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
     {
       "code": "SM-II-a-A-05220", 
-      "lastedit": "20141112135548", 
+      "lastedit": "20160105232703", 
       "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura nordica 1.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
     {
       "code": "SM-II-a-A-05220", 
-      "lastedit": "20140927201414", 
+      "lastedit": "20160105232801", 
       "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura vestica.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
     {
       "code": "SM-II-a-A-05220", 
-      "lastedit": "20140927201414", 
+      "lastedit": "20160105232754", 
       "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura sudica.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
     {
       "code": "SM-II-a-A-05220", 
-      "lastedit": "20140927201415", 
+      "lastedit": "20160105232749", 
       "name": "Fi\u0219ier:Ansamblul urban Piata Libertatii - latura sudica 1.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -12247,6 +12504,36 @@
       "quality": false
     }
   ], 
+  "PH-II-m-B-16687": [
+    {
+      "code": "PH-II-m-B-16687", 
+      "lastedit": "20160209202329", 
+      "name": "Fi\u0219ier:MK 22A.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "PH-II-m-B-16686": [
+    {
+      "code": "PH-II-m-B-16686", 
+      "lastedit": "20160209202341", 
+      "name": "Fi\u0219ier:MK 16.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "BZ-II-m-B-02472": [
     {
       "code": "BZ-II-m-B-02472", 
@@ -12577,15 +12864,15 @@
   "B-I-m-A-17884.01": [
     {
       "code": "B-I-m-A-17884.01", 
-      "lastedit": "20150611103345", 
+      "lastedit": "20160331011526", 
       "name": "Fi\u0219ier:Ruine Chiajna.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
-      "long": 25.9981, 
+      "long": 25.99807222, 
       "project": "ro", 
       "lmi": null, 
-      "lat": 44.4792, 
+      "lat": 44.47922778, 
       "quality": false
     }
   ], 
@@ -12832,7 +13119,7 @@
   "CT-II-m-B-02845": [
     {
       "code": "CT-II-m-B-02845", 
-      "lastedit": "20150915221959", 
+      "lastedit": "20160205124611", 
       "name": "Fi\u0219ier:Hotel-Intim-1.2.jpg", 
       "author": null, 
       "ran": null, 
@@ -13847,13 +14134,14 @@
   "HD-II-m-A-03443": [
     {
       "code": "HD-II-m-A-03443", 
-      "lastedit": "20140301084244", 
+      "lastedit": "20160229211536", 
       "name": "Fi\u0219ier:Salciva.bis lemn.interior naos E.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -14538,6 +14826,47 @@
       "quality": false
     }
   ], 
+  "PH-II-m-B-16641": [
+    {
+      "code": "PH-II-m-B-16641", 
+      "lastedit": "20160222192630", 
+      "name": "Fi\u0219ier:Aleea Arinilor 2A.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16641", 
+      "lastedit": "20160222192630", 
+      "name": "Fi\u0219ier:Aleea Arinilor 2A (3).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16641", 
+      "lastedit": "20160222192630", 
+      "name": "Fi\u0219ier:Aleea Arinilor 2A (2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "CT-II-m-A-02896": [
     {
       "code": "CT-II-m-A-02896", 
@@ -14576,60 +14905,6 @@
       "project": "ro", 
       "lmi": null, 
       "lat": 44.2384, 
-      "quality": false
-    }
-  ], 
-  "CT-III-m-B-02946": [
-    {
-      "code": "CT-III-m-B-02946", 
-      "lastedit": "20150930194004", 
-      "name": "Fi\u0219ier:Statuia \u201e\u00cen soare\u201d - sub terasa.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CT-III-m-B-02946", 
-      "lastedit": "20150930194004", 
-      "name": "Fi\u0219ier:Statuia \u201e\u00cen soare\u201d - detaliu.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CT-III-m-B-02946", 
-      "lastedit": "20150930194004", 
-      "name": "Fi\u0219ier:Statuia \u00cen Soare.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "CT-III-m-B-02946", 
-      "lastedit": "20150930194006", 
-      "name": "Fi\u0219ier:Statuia \u201e\u00cen soare\u201d - Semnatura.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lmi": null, 
-      "lat": 0, 
       "quality": false
     }
   ], 
@@ -15251,6 +15526,86 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CL-II-m-A-03443": [
+    {
+      "code": "CL-II-m-A-03443", 
+      "lastedit": "20160229211603", 
+      "name": "Fi\u0219ier:Salciva.bis lemn.pisanie 1811.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CL-II-m-A-03443", 
+      "lastedit": "20160229212148", 
+      "name": "Fi\u0219ier:Salciva.bis lemn.interior naos S.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CL-II-m-A-03443", 
+      "lastedit": "20160229212140", 
+      "name": "Fi\u0219ier:Salciva.bis lemn.altar int V.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CL-II-m-A-03443", 
+      "lastedit": "20160229212128", 
+      "name": "Fi\u0219ier:Salciva.bis lemn.pisanie 1811 in altar.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CL-II-m-A-03443", 
+      "lastedit": "20160229212117", 
+      "name": "Fi\u0219ier:Salciva.bis lemn.tinda V.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CL-II-m-A-03443", 
+      "lastedit": "20160229211553", 
+      "name": "Fi\u0219ier:Salciva.bis lemn.scene pe bolta.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -17433,11 +17788,50 @@
       "quality": false
     }
   ], 
-  "HD-II-m-B-03413": [
+  "CT-III-m-B-02946": [
     {
-      "code": "HD-II-m-B-03413", 
-      "lastedit": "20151229143406", 
-      "name": "Fi\u0219ier:PetrosaniLuncaJiuluiHD.JPG", 
+      "code": "CT-III-m-B-02946", 
+      "lastedit": "20150930194004", 
+      "name": "Fi\u0219ier:Statuia \u201e\u00cen soare\u201d - sub terasa.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-III-m-B-02946", 
+      "lastedit": "20150930194004", 
+      "name": "Fi\u0219ier:Statuia \u201e\u00cen soare\u201d - detaliu.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-III-m-B-02946", 
+      "lastedit": "20150930194004", 
+      "name": "Fi\u0219ier:Statuia \u00cen Soare.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "CT-III-m-B-02946", 
+      "lastedit": "20150930194006", 
+      "name": "Fi\u0219ier:Statuia \u201e\u00cen soare\u201d - Semnatura.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -18123,7 +18517,7 @@
   "B-II-m-B-18500": [
     {
       "code": "B-II-m-B-18500", 
-      "lastedit": "20150928114104", 
+      "lastedit": "20160105231535", 
       "name": "Fi\u0219ier:Academia Tehnic\u0103 Militar\u0103-1.JPG", 
       "author": null, 
       "ran": null, 
@@ -18136,7 +18530,7 @@
     }, 
     {
       "code": "B-II-m-B-18500", 
-      "lastedit": "20150928114104", 
+      "lastedit": "20160105231539", 
       "name": "Fi\u0219ier:Academia Tehnic\u0103 Militar\u0103-2.JPG", 
       "author": null, 
       "ran": null, 
@@ -18149,7 +18543,7 @@
     }, 
     {
       "code": "B-II-m-B-18500", 
-      "lastedit": "20150928114104", 
+      "lastedit": "20160105231542", 
       "name": "Fi\u0219ier:Academia Tehnic\u0103 Militar\u0103-3.JPG", 
       "author": null, 
       "ran": null, 
@@ -18162,7 +18556,7 @@
     }, 
     {
       "code": "B-II-m-B-18500", 
-      "lastedit": "20150928114105", 
+      "lastedit": "20160105231546", 
       "name": "Fi\u0219ier:Academia Tehnic\u0103 Militar\u0103-4.JPG", 
       "author": null, 
       "ran": null, 
@@ -18451,20 +18845,6 @@
       "long": 26.6691, 
       "project": "ro", 
       "lat": 47.7437, 
-      "quality": false
-    }
-  ], 
-  "CV-II-m-B-13252": [
-    {
-      "code": "CV-II-m-B-13252", 
-      "lastedit": "20131018184536", 
-      "name": "Fi\u0219ier:Biserica de lemn din Papauti01.JPG", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
       "quality": false
     }
   ], 
@@ -19137,6 +19517,19 @@
       "project": "ro", 
       "lat": 0, 
       "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16694", 
+      "lastedit": "20160222193640", 
+      "name": "Fi\u0219ier:Strada Furnica 1.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
     }
   ], 
   "CL-II-m-B-14653": [
@@ -19418,6 +19811,21 @@
       "code": "CT-II-m-A-02804", 
       "lastedit": "20151031185532", 
       "name": "Fi\u0219ier:Casa C\u0103n\u0103n\u0103u.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "B-II-m-B-18575": [
+    {
+      "code": "B-II-m-B-18575", 
+      "lastedit": "20160303100830", 
+      "name": "Fi\u0219ier:Institutului Na\u021bional al Patrimoniului, strada Zossima Demarat.jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -19956,6 +20364,21 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "CT-II-m-B-02911": [
+    {
+      "code": "CT-II-m-B-02911", 
+      "lastedit": "20160311072817", 
+      "name": "Fi\u0219ier:Casa Costica Golea.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
@@ -20744,25 +21167,27 @@
     }, 
     {
       "code": "SB-II-a-A-12352", 
-      "lastedit": "20140328230847", 
+      "lastedit": "20160124221537", 
       "name": "Fi\u0219ier:ChirparSB (9).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
     {
       "code": "SB-II-a-A-12352", 
-      "lastedit": "20140328230652", 
+      "lastedit": "20160124215730", 
       "name": "Fi\u0219ier:ChirparSB (10).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
@@ -20792,13 +21217,14 @@
     }, 
     {
       "code": "SB-II-a-A-12352", 
-      "lastedit": "20140328231010", 
+      "lastedit": "20160124220213", 
       "name": "Fi\u0219ier:ChirparSB (13).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
@@ -20816,25 +21242,27 @@
     }, 
     {
       "code": "SB-II-a-A-12352", 
-      "lastedit": "20140328231026", 
+      "lastedit": "20160124220514", 
       "name": "Fi\u0219ier:ChirparSB (15).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
     {
       "code": "SB-II-a-A-12352", 
-      "lastedit": "20140328231142", 
+      "lastedit": "20160124221817", 
       "name": "Fi\u0219ier:ChirparSB (24).JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }, 
@@ -21293,7 +21721,7 @@
     }, 
     {
       "code": "DB-III-m-B-17784", 
-      "lastedit": "20150619140553", 
+      "lastedit": "20160306145759", 
       "name": "Fi\u0219ier:Monumentul Eroilor, Potlogi, DB.JPG", 
       "author": null, 
       "ran": null, 
@@ -22164,6 +22592,34 @@
       "quality": false
     }
   ], 
+  "PH-II-m-A-16658": [
+    {
+      "code": "PH-II-m-A-16658", 
+      "lastedit": "20160222192728", 
+      "name": "Fi\u0219ier:Bulevardul Carol I 35 (2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-A-16658", 
+      "lastedit": "20160222192728", 
+      "name": "Fi\u0219ier:Bulevardul Carol I 35.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-II-m-A-18107": [
     {
       "code": "B-II-m-A-18107", 
@@ -22597,6 +23053,47 @@
       "quality": false
     }
   ], 
+  "PH-II-m-B-16665": [
+    {
+      "code": "PH-II-m-B-16665", 
+      "lastedit": "20160222193051", 
+      "name": "Fi\u0219ier:Str. Cuza Vod\u0103 1.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16665", 
+      "lastedit": "20160222193051", 
+      "name": "Fi\u0219ier:Str. Cuza Vod\u0103 1 (3).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16665", 
+      "lastedit": "20160222193051", 
+      "name": "Fi\u0219ier:Str. Cuza Vod\u0103 1 (2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
   "B-II-m-B-18321": [
     {
       "code": "B-II-m-B-18321", 
@@ -22873,397 +23370,26 @@
       "quality": false
     }
   ], 
-  "IS-II-m-B-04199.02": [
+  "B-II-m-B-18105": [
     {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144152", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni2.jpg", 
+      "code": "B-II-m-B-18105", 
+      "lastedit": "20151106233717", 
+      "name": "Fi\u0219ier:Bucharest Day 5 - Balcescu (9457990059).jpg", 
       "author": null, 
       "ran": null, 
       "image": null, 
-      "long": 0, 
+      "long": 26.100627, 
       "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144137", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni3.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144156", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni4.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144200", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni5.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144209", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni6.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144216", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni7.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144222", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni8.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144231", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni9.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144249", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni11.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144235", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni10.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144300", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni12.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302160425", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni13.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144138", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni14.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144330", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni15.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144331", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni16.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144327", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni19.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144351", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni20.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144502", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni21.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144140", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni22.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144456", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni23.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144135", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni24.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144517", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni29.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144418", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni30.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144410", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni31.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.02", 
-      "lastedit": "20140302144403", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni32.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
+      "lmi": null, 
+      "lat": 44.439686, 
       "quality": false
     }
   ], 
-  "IS-II-m-B-04199.03": [
+  "OT-II-m-B-08549": [
     {
-      "code": "IS-II-m-B-04199.03", 
-      "lastedit": "20140302160543", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni25.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.03", 
-      "lastedit": "20140302160545", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni26.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.03", 
-      "lastedit": "20140302160549", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni27.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.03", 
-      "lastedit": "20140302160551", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni28.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.03", 
-      "lastedit": "20140302160553", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni33.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.03", 
-      "lastedit": "20140302160556", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni34.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.03", 
-      "lastedit": "20140302160558", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni35.jpg", 
-      "author": null, 
-      "ran": null, 
-      "image": null, 
-      "long": 0, 
-      "project": "ro", 
-      "lat": 0, 
-      "quality": false
-    }, 
-    {
-      "code": "IS-II-m-B-04199.03", 
-      "lastedit": "20140302160600", 
-      "name": "Fi\u0219ier:Castelul Sturdza din Micl\u0103u\u015feni36.jpg", 
+      "code": "OT-II-m-B-08549", 
+      "lastedit": "20141111084720", 
+      "name": "Fi\u0219ier:Casa Zarinovici 2014.JPG", 
       "author": null, 
       "ran": null, 
       "image": null, 
@@ -25366,6 +25492,60 @@
       "image": null, 
       "long": 0, 
       "project": "ro", 
+      "lat": 0, 
+      "quality": false
+    }
+  ], 
+  "PH-II-m-B-16668": [
+    {
+      "code": "PH-II-m-B-16668", 
+      "lastedit": "20160209202357", 
+      "name": "Fi\u0219ier:Str. Cuza Voda 14.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16668", 
+      "lastedit": "20160222193239", 
+      "name": "Fi\u0219ier:Str. Cuza Vod\u0103 14 (2).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16668", 
+      "lastedit": "20160222193239", 
+      "name": "Fi\u0219ier:Str. Cuza Vod\u0103 14 (3).jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
+      "lat": 0, 
+      "quality": false
+    }, 
+    {
+      "code": "PH-II-m-B-16668", 
+      "lastedit": "20160222193239", 
+      "name": "Fi\u0219ier:Str. Cuza Vod\u0103 14.jpg", 
+      "author": null, 
+      "ran": null, 
+      "image": null, 
+      "long": 0, 
+      "project": "ro", 
+      "lmi": null, 
       "lat": 0, 
       "quality": false
     }
