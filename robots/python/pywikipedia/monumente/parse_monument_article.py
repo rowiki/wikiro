@@ -187,8 +187,8 @@ options = {
 	{
 		'lmi':
 		{
-			#'namespaces': [14, 6],
-			'namespaces': [6],
+			'namespaces': [14, 6],
+			#'namespaces': [14],
 			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'codeTemplate': ["Monument istoric", "Monumente istorice", "codLMI"],
@@ -280,6 +280,7 @@ _log = "pages.err.log"
 _flog = None
 _trace = False
 _db = "lmi"
+_coordVariance = 0.001 #decimal degrees
 
 class Trace:
 	def __init__(self, name):
@@ -496,6 +497,37 @@ def checkMultipleMonuments(codes, separator='.'):
 			return True
 	return False
 
+def getWikidataProperty(page, prop):
+	default_returns = {
+		u"P625": (0,0),
+		u"P1770": None,
+		u"P18": None,
+	}
+	#print prop
+	if page.namespace() != 0:
+		return default_returns.get(prop)
+	try:
+            item = page.data_item()
+        except:
+            print u"Could not obtain wikidata item for " + page.title()
+            return default_returns.get(prop)
+	#print item.claims
+	if prop in item.claims:
+		claim = item.claims[prop][0]
+		try:
+			target = claim.getTarget()
+			#print target
+			if isinstance(target, pywikibot.Coordinate):
+					if target.precision < _coordVariance:
+						return target.lat, target.lon
+					else:
+						return 0,0
+			else:
+				return target
+		except Exception as e:
+			print "Wikidata Exception " + repr(e)
+	return default_returns.get(prop)
+
 def processArticle(text, page, conf):
 	trace = Trace(sys._getframe().f_code.co_name)
 	title = page.title()
@@ -525,6 +557,8 @@ def processArticle(text, page, conf):
 		# if no or more than one code was found, we'll try extracting the correct one from the templates in the page
 	else:#exactly 1 code
 		code = codes[0][0]
+	if not code:
+		code = getWikidataProperty(page, u"P1770")
 
 	if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
 		quality = True
@@ -545,6 +579,11 @@ def processArticle(text, page, conf):
 	except Exception as e:
 		print "Exception " + repr(e)
 		lat = long = 0
+	if lat == 0:
+		try:
+			pass#lat,long = getWikidataProperty(page, u"P625")
+		except:
+			print "Coord exception"
 
 	dictElem = {'name': title,
 		    'project': user.mylang,
@@ -612,15 +651,18 @@ def processArticle(text, page, conf):
 	if dictElem['code'] == None:
 		invalidCount(len(codes), title, _db, [res[0] for res in codes])#count comes from the first search
 		return
-	if 'image' not in dictElem:
-	# if there are images in the article, use the first image
+
+	if dictElem.get('image') == None:
+	# if there are images in the article, try an image from Wikidata
+	# if not available, use the first image from the article
 	# I'm deliberately skipping images in templates (they have been treated
 	# above) and galleries, which usually contain non-selected images
 	#	for img in page.imagelinks(total=1):
-		for img in strainu.linkedImages(page):
-			#print img
-			dictElem['image'] = img.title()
-			break
+	
+		img = getWikidataProperty(page, u"P18")
+		if img == None:
+			img = strainu.linkedImages(page)[0]
+		dictElem['image'] = img.title()
 
 	#print dictElem
 
@@ -723,7 +765,6 @@ def main():
 		reworkedDict = {}
 		filename = "_".join(filter(None, [lang, _db, namespaceName, "pages.json"]))
 		tempfile = u"." + filename
-		print filename
 		if parse_type != PARSE_FULL:
 			try:
 				if incremental and os.path.exists(tempfile):
@@ -735,6 +776,9 @@ def main():
 				f.close();
 			except:
 				jsonFile = {}
+			if parse_type == PARSE_QUICK:
+				fullDict = jsonFile
+				pywikibot.output("Importing %d values from input file" % len(jsonFile))
 			#pre-calculate as much as possible of the information we'll need
 			vallist = jsonFile.values() # extract list of values
 			valCount = len(vallist)
@@ -751,9 +795,16 @@ def main():
 			try:
 				pageTitle = page.title()
 				if pageTitle in reworkedDict:
-					content = reworkedDict[pageTitle]
+					#on quick parse, we just use the previous values, even 
+					# if the page has changed 
+					if parse_type == PARSE_QUICK:
+						pywikibot.output(u'Skipping "%s"' % page.title())
+						continue #fullDict already contains the relevant information
+					else:
+						content = reworkedDict[pageTitle]
 				useCache = False
-				if content and parse_type != PARSE_FULL:
+				#on normal parse, we first check if the page has changed
+				if content and parse_type == PARSE_NORMAL:
 					if 'lastedit' in content:
 						lastedit = content['lastedit']
 					else:
@@ -762,16 +813,10 @@ def main():
 						code = content['code']
 					else:
 						code = 0
-					#on quick parse, we just use the previous values, even 
-					# if the page has changed 
-					#on normal parse, we first check if the page has changed
-					if parse_type == PARSE_QUICK:
+					# if we preloaded the page, we already have the time
+					pageEdit = page.editTime().totimestampformat()
+					if int(pageEdit) <= int(lastedit):
 						useCache = True
-					elif parse_type == PARSE_NORMAL:
-						# if we preloaded the page, we already have the time
-						pageEdit = page.editTime().totimestampformat()
-						if int(pageEdit) <= int(lastedit):
-							useCache = True
 				if useCache:
 					if code in fullDict:
 						fullDict[code].append(content)
