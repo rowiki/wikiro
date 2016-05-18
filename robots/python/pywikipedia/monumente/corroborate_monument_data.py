@@ -146,7 +146,7 @@ countries = {
 						(u'Imagine', {'code': Changes.image, 'blacklist': blacklist + plan}),
 						(u'Plan', {'code': Changes.image, 'blacklist': blacklist}),
 						(u'Commons', {'code': Changes.commons, }),
-						(u'Copyright', {'code': Changes.all, }),
+						(u'Copyright', {'code': Changes.creator, }),
 					]),
 		'geolimits': {
 			'north': 48.3,
@@ -541,7 +541,7 @@ def getYearsFromWikidata(page):
 
 def extractCopyrightField(creators):
 	last_death = 0
-	print creators
+	#print creators
 	post = creators
 	while post:
 		parsed = strainu.extractLinkAndSurroundingText(post)
@@ -552,11 +552,11 @@ def extractCopyrightField(creators):
 		page = pywikibot.Page(pywikibot.Site(), link)
 		if not page.exists():
 			continue
-		if page.isRedirectPage():
+		while page.isRedirectPage():
 			page = page.getRedirectTarget()
 		year = getYearsFromWikidata(page)
-		print page.title()
-		print year
+		#print page.title()
+		#print year
 		if year > last_death:
 			last_death = year
 	return last_death
@@ -689,7 +689,7 @@ def main():
 						if pic_author == None and author_list == "" and pic["author"] <> None:
 							pic_author = pic["author"]
 							author_list += u"[[:%s]], " % pic["name"]
-							print pic_author
+							print u"Pic Author: " + pic_author
 						elif pic["author"] <> None and pic_author <> pic["author"]:
 							#multiple authors, ignore and report error
 							author_list += u"[[:%s]], " % pic["name"]
@@ -736,11 +736,15 @@ def main():
 			else: # check if the 2 links are the same
 				link = strainu.extractLink(monument[articleField])
 				if link == None:
-					log(u"* [Listă] ''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire" % code)
+					log(u"* [Listă] ''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire - e posibil să existe o problemă de închidere a tagurilor" % code)
 				else:
 					page1 = pywikibot.Page(pywikibot.Link(link, pywikibot.Site()))
 					page2 = pywikibot.Page(pywikibot.Site(), article["name"])
-					if page1.title() <> page2.title() and \
+					if force and page1.title() <> page2.title():
+						field = strainu.stripLink(monument[articleField])
+						link = u"[[" + article["name"] + "|" + field + "]]"
+						articleText = updateTableData(monument["source"], code, articleField, link, text=articleText)
+					elif page1.title() <> page2.title() and \
 					(not page1.isRedirectPage() or page1.getRedirectTarget() <> page2) and \
 					(not page2.isRedirectPage() or page2.getRedirectTarget() <> page1):
 						log(u"* [WPListă]''W'': ''[%s]'' Câmpul Denumire are o legătură internă către %s, dar articolul despre monument este %s" % (code, page1, page2))
