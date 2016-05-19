@@ -78,7 +78,7 @@ def uploadNode(node_id, code):
 	node["tag"] = tags
 	print ("Ready to add postal_code (%s) to %s %s, %s" % (tags["addr:postcode"], tags["addr:street"], tags["addr:housenumber"], tags["addr:city"]))
 	print "Do you want to update the record? ([y]es/[n]o/[a]llways/[q]uit)"
-	line = sys.stdin.readline().strip()
+	#line = sys.stdin.readline().strip()
 	line = 'y'
 	if line == 'y':
 		api.ChangesetCreate({u"comment": "adding postal code to %s %s, %s" % (tags["addr:street"], tags["addr:housenumber"], tags["addr:city"])})
