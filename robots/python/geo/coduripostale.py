@@ -266,7 +266,7 @@ def atoi(s):
 	
 def splitNumberList(nrlist):
 	#print u"*" + unicode(nrlist, "utf8")
-	if not nrlist:
+	if not nrlist or nrlist == "":
 		return range(1,201)
 	elif nrlist.find(";") > -1 or nrlist.find(",") > -1:
 		if nrlist.find(";") > -1:
