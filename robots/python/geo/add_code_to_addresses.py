@@ -10,7 +10,8 @@ import json
 import sys
 
 import overpass
-import OsmApi
+import osmapi as OsmApi
+sys.path.append('wikiro/robots/python/pywikipedia')
 import strainu_functions as fun
 import coduripostale
 
@@ -48,7 +49,7 @@ filters_ro = {
 	},
 }
 
-api = OsmApi.OsmApi(api="api.openstreetmap.org", passwordfile = "../osmpasswd", debug = True)
+api = OsmApi.OsmApi(api="api.openstreetmap.org", passwordfile = "osmpasswd", debug = True)
 
 def readVillageFile():
 	villages = {}
@@ -77,7 +78,7 @@ def uploadNode(node_id, code):
 	node["tag"] = tags
 	print ("Ready to add postal_code (%s) to %s %s, %s" % (tags["addr:postcode"], tags["addr:street"], tags["addr:housenumber"], tags["addr:city"]))
 	print "Do you want to update the record? ([y]es/[n]o/[a]llways/[q]uit)"
-	#line = sys.stdin.readline().strip()
+	line = sys.stdin.readline().strip()
 	line = 'y'
 	if line == 'y':
 		api.ChangesetCreate({u"comment": "adding postal code to %s %s, %s" % (tags["addr:street"], tags["addr:housenumber"], tags["addr:city"])})
@@ -173,8 +174,12 @@ def check_Bucharest(isNode=True):
 		js = bot.fetchNode()
 	else:
 		js = bot.fetchWay()
-	obj = json.loads(js, "utf8")
-	obj = refactor_b(obj)
+	try:
+		obj = json.loads(js, "utf8")
+		obj = refactor_b(obj)
+	except:
+		print "No response received from the overpass API"
+		return
 	print json.dumps(obj, indent=2)
 	reader = fun.unicode_csv_reader(open("codp_B.csv", "r"))
 	for row in reader:
@@ -199,8 +204,12 @@ def check_cities(isNode=True):
 		js = bot.fetchNode()
 	else:
 		js = bot.fetchWay()
-	obj = json.loads(js, "utf8")
-	obj = refactor_ro(obj)
+	try:
+		obj = json.loads(js, "utf8")
+		obj = refactor_ro(obj)
+	except:
+		print "No response received from the overpass API"
+		return
 	#print json.dumps(obj, indent=2)
 	reader = fun.unicode_csv_reader(open("codp_50k.csv", "r"))
 	villages = readVillageFile()
@@ -229,6 +238,6 @@ def check_cities(isNode=True):
 
 if __name__ == "__main__":
 	#print obj
-	isNode = True
-	#check_Bucharest(isNode)
-	check_cities(isNode)
+	for isNode in [True,False]:
+		check_Bucharest(isNode)
+		check_cities(isNode)
