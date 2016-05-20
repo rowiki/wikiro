@@ -83,9 +83,11 @@ import sys, time, warnings, json, string, random, re
 import math, urlparse, os
 import codecs
 import collections
-sys.path.append(".")
+sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions as strainu
 import csvUtils
+
+import monumente
 
 import pywikibot
 from pywikibot import pagegenerators
@@ -102,7 +104,7 @@ class Changes:
 	all	= 0xFFF
 
 
-blacklist = [#all lowercase
+lmi_blacklist = [#all lowercase
 		u'detali',#detaliu, detalii
 		u'pisani',#pisanie, pisanii
 		u'interio',#interior, interioare
@@ -143,8 +145,8 @@ countries = {
 						(u'Lon', {'code': Changes.coord, }),
 						(u'OsmLat', {'code': Changes.coord, }),
 						(u'OsmLon', {'code': Changes.coord, }),
-						(u'Imagine', {'code': Changes.image, 'blacklist': blacklist + plan}),
-						(u'Plan', {'code': Changes.image, 'blacklist': blacklist}),
+						(u'Imagine', {'code': Changes.image, 'blacklist': lmi_blacklist + plan}),
+						(u'Plan', {'code': Changes.image, 'blacklist': lmi_blacklist}),
 						(u'Commons', {'code': Changes.commons, }),
 						(u'Copyright', {'code': Changes.creator, }),
 					]),
@@ -154,6 +156,8 @@ countries = {
 			'west':  20.27,
 			'east':  29.7,
 		},
+		'idField': u'Cod',
+		'keepEmptyFields': False,
 	},
 	('ro', 'ran') : {
 		'headerTemplate' : u'ÎnceputTabelRAN',
@@ -183,7 +187,7 @@ countries = {
 						(u'Lond', {'code': Changes.coord, }),
 						(u'Lonm', {'code': Changes.coord, }),
 						(u'Lons', {'code': Changes.coord, }),
-						(u'Imagine', {'code': Changes.image, 'blacklist': blacklist + plan}),
+						(u'Imagine', {'code': Changes.image, 'blacklist': lmi_blacklist + plan}),
 						(u'Commons', {'code': Changes.commons, }),
 						(u'Copyright', {'code': Changes.all, }),
 					]),
@@ -193,6 +197,38 @@ countries = {
 			'west':  20.27,
 			'east':  29.7,
 		},
+		'idField': u'Cod',
+		'keepEmptyFields': False,
+	},
+	('ro', 'wlemd') : {
+		'headerTemplate' : u'Wikipedia:Wiki Loves Earth/Moldova/start',
+		'rowTemplate' : u'Wikipedia:Wiki Loves Earth/Moldova/item',
+		'footerTemplate' : u'Wikipedia:Wiki Loves Earth/Moldova/end',
+		'codeRegexp' : "((MD)-([a-z]{1,2})-([a-z]{2,3}(\.[a-z]{1,2})?)-([0-9]+))",
+		'fields' : collections.OrderedDict([
+						(u'ID', {'code': Changes.all, }),
+						(u'denumire', {'code': Changes.article, }),
+						(u'proprietar', {'code': Changes.all, }),
+						(u'descriere', {'code': Changes.all, }),
+						(u'raion', {'code': Changes.all, }),
+						(u'ascunde_raion', {'code': Changes.all, }),
+						(u'amplasament', {'code': Changes.all, }),
+						(u'suprafata', {'code': Changes.all, }),
+						(u'latitudine', {'code': Changes.coord, }),
+						(u'longitudine', {'code': Changes.coord, }),
+						(u'tip', {'code': Changes.all, }),
+						(u'subtip', {'code': Changes.all, }),
+						(u'imagine', {'code': Changes.image, 'blacklist': []}),
+						(u'categorie', {'code': Changes.commons, }),
+					]),
+		'geolimits': {
+				'north': 48.5,
+				'south': 45.4,
+				'west':  26.6,
+				'east':  30.2,
+		},
+		'idField': u'ID',
+		'keepEmptyFields': True,
 	},
 }
 
@@ -216,13 +252,18 @@ def log(string):
 	pywikibot.output(string.encode("utf8"))
 	_flog.write(string.encode("utf8") + "\n")
 	
-def rebuildTemplate(params):
+def rebuildTemplate(params, skipEmpty=True):
 	my_template = u"{{" + countries.get((_lang, _db)).get('rowTemplate') + u"\n"
 	for name in countries.get((_lang, _db)).get('fields'):
-		if name in params and params[name] <> u"":
+		if skipEmpty and name in params and params[name] <> u"":
+			my_template += u"| " + name + u" = " + params[name] + u"\n"
+		elif not skipEmpty and name in params:
 			my_template += u"| " + name + u" = " + params[name] + u"\n"
 	my_template += u"}}\n"
 	return my_template
+
+def isNullorEmpty(s):
+	return bool(not s or s.strip() == u"")
 
 def updateTableData(url, code, field, newvalue, upload = True, text = None, ask = True, source = None):
 	"""
@@ -271,6 +312,8 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 	templates = pywikibot.textlib.extract_templates_and_params(text)
 	for (template, params) in templates:
 		if template == rowTemplate:
+			old_params = dict(params)
+			params = monumente.filterOne(params, countries.get((_lang, _db)))
 			for param in params:
 				val = params[param]
 				val = val.split("<ref")[0].strip()
@@ -278,12 +321,12 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 				
 				fld = param.strip()
 				
-				if fld == "Cod" and val2 == code:
+				if fld == countries.get((_lang, _db)).get('idField') and val2 == code:
 					codeFound = True
-					rawCode = val
+					rawCode = old_params[param]
 					my_params = params
 					break
-					
+			
 			if codeFound:
 				break
 	else: #for .. else
@@ -291,9 +334,9 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 		pywikibot.output(u"Code not found: %s" % code)
 		return None
 	
-	orig = rebuildTemplate(my_params)
+	orig = rebuildTemplate(my_params, not countries.get((_lang, _db)).get('keepEmptyFields')) 
 	my_params[field] = newvalue
-	new = rebuildTemplate(my_params)
+	new = rebuildTemplate(my_params, not countries.get((_lang, _db)).get('keepEmptyFields'))
 	
 	if orig.strip() == new.strip() and upload != None:
 		pywikibot.output("No change, nothing to upload!")
@@ -308,6 +351,9 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 	else:
 		answer = 'y'
 	if answer == 'y':
+		if code == u"MD-GL-rs-005":
+			import pdb
+			pdb.set_trace()
 		(before, code, after) = text.partition(rawCode)
 		
 		# we need to clean the whole template from both before and after
@@ -353,7 +399,7 @@ def readJson(filename, what):
 		pywikibot.output("Reading " + what + " file...")
 		db = json.load(f)
 		pywikibot.output("...done")
-		f.close();
+		f.close()
 		return db
 	except IOError:
 		pywikibot.output("Failed to read " + filename + ". Trying to do without it.")
@@ -523,7 +569,6 @@ def checkNewMonuments(other_data, db):
 		f.write(outText)
 	f.close()
 
-
 def getYearsFromWikidata(page):
 	try:
 		wdpage = page.data_item()
@@ -603,11 +648,11 @@ def main():
 		if answer != 'y':
 			return
 	
-	db_json =			readJson("_".join(filter(None, [_lang, _db, "db.json"])), "database")
+	db_json =				readJson("_".join(filter(None, [_lang, _db, "db.json"])), "database")
 	pages_local =			readJson("_".join(filter(None, [_lang, _db, "pages.json"])), _lang + ".wp pages")
 	authors_local =			readJson("_".join(filter(None, [_lang, _db, "authors.json"])), _lang + ".wp authors")
 	files_local =			readJson("_".join(filter(None, [_lang, _db,  pywikibot.Site().namespace(6), "pages.json"])), _lang + ".wp files")
-	categories_commons =		readJson("_".join(filter(None, ["commons", _db, "Category_pages.json"])), "commons categories")
+	categories_commons =	readJson("_".join(filter(None, ["commons", _db, "Category_pages.json"])), "commons categories")
 	pages_commons =			readJson("_".join(filter(None, ["commons", _db, "File_pages.json"])), "commons images")
 	
 	other_data = readOtherData(otherFile)
@@ -628,6 +673,21 @@ def main():
 		if countries.get((_lang, _db))["fields"][field]['code'] == Changes.creator:
 			creatorField = field
 			break
+	imageField = u"Imagine"
+	for field in countries.get((_lang, _db))["fields"]:
+		if countries.get((_lang, _db))["fields"][field]['code'] == Changes.image:
+			imageField = field
+			break
+	latField = None
+	lonField = None
+	for field in countries.get((_lang, _db))["fields"]:
+		if countries.get((_lang, _db))["fields"][field]['code'] == Changes.image:
+			#TODO: maybe use the first letters?
+			if not latField:
+				latField = field
+			if not lonField:
+				lonField = field
+			break
 
 	initLog()
 	lastSource = None
@@ -638,7 +698,7 @@ def main():
 			articleText = None
 			lastSource = monument["source"]
 
-		rawCode = monument["Cod"]
+		rawCode = monument[countries.get((_lang, _db)).get('idField')]
 		regexp = re.compile(countries.get((_lang, _db)).get('codeRegexp'), re.I)
 		result = re.findall(regexp, rawCode)
 		if len(result) > 0:
@@ -657,8 +717,8 @@ def main():
 		last_death = 0
 		
 		try:
-			if monument[creatorField] > "" and (monument[u"Copyright"].strip() == u"" or force):
-				last_death = extractCopyrightField(monument[creatorField])
+			if monument.get(creatorField) != "" and (monument.get(u"Copyright") == u"" or force):
+				last_death = extractCopyrightField(monument.get(creatorField))
 
 			if code in pages_local:
 				allPages.extend(pages_local[code])
@@ -677,9 +737,9 @@ def main():
 						pic_author = pages_commons[code][0]["author"]
 					if "lmi92" in pages_commons[code]:
 						lmi92 = pages_commons[code]["lmi92"]
-				elif monument["Imagine"].strip() == "" or \
-						monument[creatorField].strip() == "" or \
-						monument["Cod92"].strip() == "": 
+				elif isNullorEmpty(monument.get(imageField)) or \
+						isNullorEmpty(monument.get(creatorField)) or \
+						isNullorEmpty(monument.get(u"Cod92")): 
 					#multiple images available, we need to parse them
 					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
 					for pic in pages_commons[code]:
@@ -820,13 +880,13 @@ def main():
 		#we will only consider other types of image if no picture exists
 
 		#image from Commons, none in the list
-		if monument["Imagine"].strip() == "" or force:
+		if isNullorEmpty(monument.get(imageField)) or force:
 			if picture <> None:
 				pywikibot.output("We're uploading a selected picture from Commons: " + picture)
 				if picture.find(':') < 0:#no namespace
 					picture = "File:" + picture
 				picture, pictureType = chooseImagePicky([{"name": picture}])
-				articleText = updateTableData(monument["source"], code, pictureType, picture, text=articleText)
+				articleText = updateTableData(monument.get("source"), code, pictureType, picture, text=articleText)
 			elif force:
 				continue
 			#use image from article only if none is available (or was selected) 
@@ -865,10 +925,10 @@ def main():
 		# --- Commons category ---
 		if code in categories_commons:
 			cat = categories_commons[code][0]
-			if monument["Commons"] == "" or force:
+			if isNullorEmpty(monument.get("Commons")) or force:
 				articleText = updateTableData(monument["source"], code,
 										"Commons", "commons:" + cat["name"], text=articleText)
-			elif monument["Commons"].strip() <> ("commons:" + cat["name"].strip()):
+			elif monument.get("Commons") and monument.get("Commons").strip() <> ("commons:" + cat["name"].strip()):
 				log(u"* [COM] ''E'': ''[%s]'' Există mai multe categorii pentru acest cod: <span lang=\"x-sic\">[[:%s]] și [[:%s]]</span>" % (code, "commons:" + cat["name"], monument["Commons"]))
 		#next option: a category from the RAN database
 		elif code in ran_data:
@@ -881,11 +941,11 @@ def main():
 
 		# --- Coordinates ---
 		try:
-			lat = float(monument["Lat"])
+			lat = float(monument.get(latField))
 		except ValueError:
 			lat = 0
 		try:
-			long = float(monument["Lon"])
+			long = float(monument.get(lonField))
 		except ValueError:
 			long = 0
 			
