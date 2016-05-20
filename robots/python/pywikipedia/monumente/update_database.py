@@ -22,10 +22,12 @@ Command line options:
 
 '''
 import sys, time, warnings, json, re
-#sys.path.append("..")
+sys.path.append("wikiro/robots/python/pywikipedia")
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot import config
+
+import monumente
 
 countries = {
 	('ro', 'lmi') : {
@@ -96,6 +98,32 @@ countries = {
 			u'Lista siturilor arheologice din București',
 		}
 	},
+	('ro', 'wlemd') : {
+		'project' : u'wikipedia',
+		'lang' : u'ro',
+		'rowTemplate' : u'Wikipedia:Wiki Loves Earth/Moldova/item',
+		'namespaces' : [4],
+		'fields' : [
+			u'ID',
+			u'denumire',
+			u'proprietar',
+			u'descriere',
+			u'raion',
+			u'ascunde_raion',
+			u'amplasament',
+			u'suprafata',
+			u'latitudine',
+			u'longitudine',
+			u'tip',
+			u'subtip',
+			u'imagine',
+			u'categorie',
+			],
+		'idField': u'ID',
+		'pagePrefix': {
+			u'Wikipedia:Wiki Loves Earth/Moldova/Lista',
+		}
+	},
 }
 
 counties = {
@@ -146,12 +174,6 @@ u"Vrancea": { "coa": u"Fișier:Actual Vrancea county CoA.png", "count": 0},
 monuments_db = []
 monuments_counts = {}
 
-def filterOne(contents):
-	'''
-	Any kind of filtering of the data of a monument should happen in this functions
-	'''
-	return contents
-
 def processMonument(params, source, countryconfig, title, previous):
 	'''
 	Process a single instance of a monument row template
@@ -181,13 +203,13 @@ def processMonument(params, source, countryconfig, title, previous):
 				else:
 					contents[field] = value.encode("utf8") # Do this somewhere else.replace("'", "\\'")
 			else:
-				#FIXME: Include more information where it went wrong
+				#FIXME: Include more information on where it went wrong
 				pywikibot.output(u'Found unknown field: %s on page %s' % (field, title) )
 				pywikibot.output(u'Field: %s' % field)
 				pywikibot.output(u'Value: %s' % value)
 				pywikibot.output(u'Params: %s\n%s' % (params, param))
 				#time.sleep(5)
-	return filterOne(contents), contents[countryconfig.get('idField')]
+	return monumente.filterOne(contents, countryconfig), contents[countryconfig.get('idField')]
 
 def processText(source, countryconfig, text, title):
 	'''
