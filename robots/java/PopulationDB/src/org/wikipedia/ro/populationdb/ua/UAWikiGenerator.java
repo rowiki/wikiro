@@ -66,7 +66,7 @@ import org.wikipedia.ro.populationdb.ua.model.Raion;
 import org.wikipedia.ro.populationdb.ua.model.Region;
 import org.wikipedia.ro.populationdb.ua.model.Settlement;
 import org.wikipedia.ro.populationdb.util.Executor;
-import org.wikipedia.ro.populationdb.util.ParameterReader;
+import org.wikipedia.ro.populationdb.util.WikiTemplate;
 import org.wikipedia.ro.populationdb.util.UkrainianTransliterator;
 import org.wikipedia.ro.populationdb.util.Utilities;
 import org.wikipedia.ro.populationdb.util.WikiEditExecutor;
@@ -781,9 +781,8 @@ public class UAWikiGenerator {
         if (titleExistance[0]) {
             currentText.append(rowiki.getPageText(actualTitle));
         }
-        final ParameterReader ibParaReader = new ParameterReader(
+        final WikiTemplate ibParaReader = new WikiTemplate(
                 currentText.toString());
-        ibParaReader.run();
         final String raionIBText = generateRaionInfobox(raion, ibParaReader);
 
         String communeIntro = generateRaionIntro(raion, actualTitle);
@@ -949,7 +948,7 @@ public class UAWikiGenerator {
     }
 
     private String generateRaionInfobox(Raion raion,
-            ParameterReader ibParaReader) throws ConcurrentException {
+            WikiTemplate ibParaReader) throws ConcurrentException {
         final String raionRoName = defaultIfBlank(raion.getRomanianName(),
                 raion.getTransliteratedName());
         final StringBuilder sb = new StringBuilder("{{Infocaseta Așezare");
@@ -990,9 +989,8 @@ public class UAWikiGenerator {
             if (!isEmpty(uaText) && (contains(uaText, "{{Район"))) {
                 final int indexOfIB = indexOf(uaText, "{{Район");
                 final String textFromInfobox = uaText.substring(indexOfIB);
-                final ParameterReader ukIBPR = new ParameterReader(
+                final WikiTemplate ukIBPR = new WikiTemplate(
                         textFromInfobox);
-                ukIBPR.run();
                 final Map<String, String> ukIBParams = ukIBPR.getParams();
                 coordonate = ukIBParams.get("координати");
                 UAUtils.copyParameterFromTemplate(ukIBPR, sb, "густота",
@@ -1019,9 +1017,8 @@ public class UAWikiGenerator {
         }
 
         if (StringUtils.isNotBlank(coordonate)) {
-            final ParameterReader coordParaReader = new ParameterReader(
+            final WikiTemplate coordParaReader = new WikiTemplate(
                     coordonate);
-            coordParaReader.run();
             final Map<String, String> coordParams = coordParaReader.getParams();
             final List<String> coordArgNames = Arrays.asList("latd", "latm",
                     "lats", "latNS", "longd", "longm", "longs", "longEV");
@@ -1133,9 +1130,8 @@ public class UAWikiGenerator {
         if (0 < ibStart) {
             infoboxAnalysisText = infoboxAnalysisText.substring(ibStart);
         }
-        final ParameterReader ibParaReader = new ParameterReader(
+        final WikiTemplate ibParaReader = new WikiTemplate(
                 infoboxAnalysisText);
-        ibParaReader.run();
         final String villageIBText = generateCommuneInfobox(com, ibParaReader);
 
         String communeIntro = generateCommuneIntro(com, actualTitle);
@@ -1675,7 +1671,7 @@ public class UAWikiGenerator {
     }
 
     private String generateCommuneInfobox(final Commune com,
-            final ParameterReader ibParaReader) throws ConcurrentException {
+            final WikiTemplate ibParaReader) throws ConcurrentException {
         final String villageRoName = defaultIfBlank(com.getRomanianName(),
                 com.getTransliteratedName());
         final StringBuilder sb = new StringBuilder("{{Infocaseta Așezare");
@@ -1815,9 +1811,8 @@ public class UAWikiGenerator {
         }
 
         if (isNotBlank(coordonate)) {
-            final ParameterReader coordParaReader = new ParameterReader(
+            final WikiTemplate coordParaReader = new WikiTemplate(
                     coordonate);
-            coordParaReader.run();
             final Map<String, String> coordParams = coordParaReader.getParams();
             final List<String> coordArgNames = Arrays.asList("latd", "latm",
                     "lats", "latNS", "longd", "longm", "longs", "longEV");
@@ -1944,8 +1939,7 @@ public class UAWikiGenerator {
             final int indexOfIB = indexOfAny(uaText, "{{Село", "{{Смт",
                     "{{Місто", "{{Сільська рада");
             final String textFromInfobox = uaText.substring(indexOfIB);
-            final ParameterReader ukIBPR = new ParameterReader(textFromInfobox);
-            ukIBPR.run();
+            final WikiTemplate ukIBPR = new WikiTemplate(textFromInfobox);
             final Map<String, String> ukIBParams = ukIBPR.getParams();
             coordonate = ukIBParams.get("координати");
 
@@ -2247,9 +2241,8 @@ public class UAWikiGenerator {
         if (contains(currentText, "de Andrebot -->")) {
             return;
         }
-        final ParameterReader ibParaReader = new ParameterReader(
+        final WikiTemplate ibParaReader = new WikiTemplate(
                 currentText.toString());
-        ibParaReader.run();
         final String villageIBText = generateVillageInfobox(s, ibParaReader);
 
         String villageIntro = generateVillageIntro(s, actualTitle);
@@ -2505,7 +2498,7 @@ public class UAWikiGenerator {
     }
 
     private String generateVillageInfobox(final Settlement s,
-            final ParameterReader ibParaReader) throws ConcurrentException {
+            final WikiTemplate ibParaReader) throws ConcurrentException {
         final String villageRoName = defaultIfBlank(s.getRomanianName(),
                 s.getTransliteratedName());
         final StringBuilder sb = new StringBuilder("{{Infocaseta Așezare");
@@ -2574,9 +2567,8 @@ public class UAWikiGenerator {
         }
 
         if (isNotBlank(coordonate)) {
-            final ParameterReader coordParaReader = new ParameterReader(
+            final WikiTemplate coordParaReader = new WikiTemplate(
                     coordonate);
-            coordParaReader.run();
             final Map<String, String> coordParams = coordParaReader.getParams();
             final List<String> coordArgNames = Arrays.asList("latd", "latm",
                     "lats", "latNS", "longd", "longm", "longs", "longEV");
@@ -2673,8 +2665,7 @@ public class UAWikiGenerator {
         if (!isEmpty(uaText) && (contains(uaText, "{{Село"))) {
             final int indexOfIB = uaText.indexOf("{{Село");
             final String textFromInfobox = uaText.substring(indexOfIB);
-            final ParameterReader ukIBPR = new ParameterReader(textFromInfobox);
-            ukIBPR.run();
+            final WikiTemplate ukIBPR = new WikiTemplate(textFromInfobox);
             final Map<String, String> ukIBParams = ukIBPR.getParams();
             coordonate = ukIBParams.get("координати");
             UAUtils.copyParameterFromTemplate(ukIBPR, sb, "щільність",
@@ -2923,9 +2914,8 @@ public class UAWikiGenerator {
         } else {
             currentText.append(rowiki.getPageText(actualTitle));
         }
-        final ParameterReader ibParaReader = new ParameterReader(
+        final WikiTemplate ibParaReader = new WikiTemplate(
                 currentText.toString());
-        ibParaReader.run();
         int templateLength = ibParaReader.getTemplateLength();
         if (!equalsIgnoreCase(region.getRomanianName(), "Crimeea")) {
             final String regionInfobox = generateRegionInfobox(region,
@@ -3023,7 +3013,7 @@ public class UAWikiGenerator {
     }
 
     private String generateRegionInfobox(final Region region,
-            final ParameterReader ibParaReader) {
+            final WikiTemplate ibParaReader) {
         final StringBuilder sb = new StringBuilder("{{Infocaseta Regiune");
         sb.append("\n|nume = ");
         final String roRegName = defaultIfBlank(region.getRomanianName(),
