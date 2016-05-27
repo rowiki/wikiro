@@ -12,7 +12,7 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.Wiki;
-import org.wikipedia.ro.populationdb.util.ParameterReader;
+import org.wikipedia.ro.populationdb.util.WikiTemplate;
 
 public class BilingualIdentifier {
     private Wiki rowiki;
@@ -57,11 +57,10 @@ public class BilingualIdentifier {
                 if (!StringUtils.contains(articleText, "<div style=\"float:left\">{{Pie chart")) {
                     continue;
                 }
-                final ParameterReader pr = new ParameterReader(StringUtils.substring(
+                final WikiTemplate pr = new WikiTemplate(StringUtils.substring(
                     articleText,
                     StringUtils.indexOf(articleText, "<div style=\"float:left\">{{Pie chart")
                         + StringUtils.length("<div style=\"float:left\">")));
-                pr.run();
                 final Map<String, String> params = pr.getParams();
                 int i = 1;
                 boolean paramExists = true;
