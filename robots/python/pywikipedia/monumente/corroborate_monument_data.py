@@ -681,7 +681,7 @@ def main():
 	latField = None
 	lonField = None
 	for field in countries.get((_lang, _db))["fields"]:
-		if countries.get((_lang, _db))["fields"][field]['code'] == Changes.image:
+		if countries.get((_lang, _db))["fields"][field]['code'] == Changes.coord:
 			#TODO: maybe use the first letters?
 			if not latField:
 				latField = field
