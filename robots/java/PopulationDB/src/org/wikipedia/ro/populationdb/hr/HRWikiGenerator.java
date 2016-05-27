@@ -45,7 +45,7 @@ import org.wikipedia.ro.populationdb.hr.model.EthnicallyStructurable;
 import org.wikipedia.ro.populationdb.hr.model.Nationality;
 import org.wikipedia.ro.populationdb.hr.model.Religion;
 import org.wikipedia.ro.populationdb.util.Executor;
-import org.wikipedia.ro.populationdb.util.ParameterReader;
+import org.wikipedia.ro.populationdb.util.WikiTemplate;
 import org.wikipedia.ro.populationdb.util.Utilities;
 import org.wikipedia.ro.populationdb.util.WikiEditExecutor;
 
@@ -117,7 +117,7 @@ public class HRWikiGenerator {
     private void generateCountyCategory(final County county, final boolean town) throws Exception {
         final String type = town ? "Oraș" : "Comun";
         final String categoryName = "Categorie:" + type + "e în cantonul " + county.getName();
-        final HashMap pageInfo = rowiki.getPageInfo(categoryName);
+        final Map pageInfo = rowiki.getPageInfo(categoryName);
         if (!BooleanUtils.isTrue((Boolean) pageInfo.get("exists"))) {
             final StringBuilder catText = new StringBuilder("[[Categorie:");
             catText.append(town ? "Oraș" : "Comun");
@@ -137,7 +137,7 @@ public class HRWikiGenerator {
 
                     for (final String candidateName : candidateNames) {
                         try {
-                            final HashMap candidatePageInfo = rowiki.getPageInfo(candidateName);
+                            final Map candidatePageInfo = rowiki.getPageInfo(candidateName);
                             if (BooleanUtils.isTrue((Boolean) candidatePageInfo.get("exists"))) {
                                 final String actualCandidateTitle = StringUtils.defaultString(
                                     rowiki.resolveRedirects(new String[] { candidateName })[0], candidateName);
@@ -401,8 +401,7 @@ public class HRWikiGenerator {
             infoboxText.append(StringUtils.join(names, "<br />", 1, names.length));
         }
         infoboxText.append("}}");
-        final ParameterReader ibReader = new ParameterReader(infoboxText.toString());
-        ibReader.run();
+        final WikiTemplate ibReader = new WikiTemplate(infoboxText.toString());
         final Map<String, String> ibParams = ibReader.getParams();
 
         putBasicDataIntoParams(com, ibParams);
@@ -430,8 +429,7 @@ public class HRWikiGenerator {
             final Matcher hrwpInfoboxMatcher = hrWpTemplates1.matcher(hrPageText);
             if (hrwpInfoboxMatcher.find()) {
                 final String existingInfobox = hrwpInfoboxMatcher.group();
-                final ParameterReader ibparamreader = new ParameterReader(existingInfobox);
-                ibparamreader.run();
+                final WikiTemplate ibparamreader = new WikiTemplate(existingInfobox);
                 final Map<String, String> params = ibparamreader.getParams();
                 translateInfoboxParam(ibParams, "stemă", params, "grb");
                 translateInfoboxParam(ibParams, "suprafață_totală_km2", params, "površina");
@@ -532,11 +530,9 @@ public class HRWikiGenerator {
             sbuild
                 .replace(sbuild.indexOf(currentInfobox), sbuild.indexOf(currentInfobox) + currentInfobox.length(), infobox);
         } else if (null != currentInfobox) {
-            final ParameterReader crtIbReader = new ParameterReader(currentInfobox);
-            crtIbReader.run();
+            final WikiTemplate crtIbReader = new WikiTemplate(currentInfobox);
             final Map<String, String> crtIbParams = crtIbReader.getParams();
-            final ParameterReader updatedIbReader = new ParameterReader(infobox);
-            updatedIbReader.run();
+            final WikiTemplate updatedIbReader = new WikiTemplate(infobox);
             final Map<String, String> updatedParams = updatedIbReader.getParams();
             for (final String updatedParam : updatedParams.keySet()) {
                 crtIbParams.put(updatedParam, updatedParams.get(updatedParam));
@@ -1115,7 +1111,7 @@ public class HRWikiGenerator {
         final List<String> alternativeTitles = getRoWpCandidateNames(com);
 
         for (final String candidateTitle : alternativeTitles) {
-            final HashMap pageInfo = rowiki.getPageInfo(candidateTitle);
+            final Map pageInfo = rowiki.getPageInfo(candidateTitle);
             final Boolean exists = (Boolean) pageInfo.get("exists");
             if (!isTrue(exists)) {
                 continue;
