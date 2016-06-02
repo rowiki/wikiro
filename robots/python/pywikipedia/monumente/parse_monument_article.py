@@ -101,6 +101,22 @@ options = {
 				'east':  29.7,
 			},
 		},
+		'wlemd':#database we work on
+		{
+			'namespaces': [0],
+			'codeRegexp': re.compile("((MD)-([a-z]{1,2})-([a-z]{2,3}(\.[a-z]{1,2})?)-([0-9]+))", re.I),
+			'templateRegexp': re.compile("\{\{Monument natural MD\|((MD)-([a-z]{1,2})-([a-z]{2,3}(\.[a-z]{1,2})?)-([0-9]+))", re.I),
+			'codeTemplate': ["Monument natural MD"],
+			'codeTemplateParams': 
+			[
+			],
+			'geolimits': {
+				'north': 48.5,
+				'south': 45.4,
+				'west':  26.6,
+				'east':  30.2,
+			},
+		},
 		'infoboxes':
 		[
 		{
@@ -220,6 +236,22 @@ options = {
 				'south': 43.6,
 				'west':  20.27,
 				'east':  29.7,
+			},
+		},
+		'wlemd':#database we work on
+		{
+			'namespaces': [14, 6],
+			'codeRegexp': re.compile("((MD)-([a-z]{1,2})-([a-z]{2,3}(\.[a-z]{1,2})?)-([0-9]+))", re.I),
+			'templateRegexp': re.compile("\{\{Monument natural MD\|((MD)-([a-z]{1,2})-([a-z]{2,3}(\.[a-z]{1,2})?)-([0-9]+))", re.I),
+			'codeTemplate': ["Monument natural MD"],
+			'codeTemplateParams': 
+			[
+			],
+			'geolimits': {
+				'north': 48.5,
+				'south': 45.4,
+				'west':  26.6,
+				'east':  30.2,
 			},
 		},
 		'infoboxes': 
@@ -547,6 +579,7 @@ def processArticle(text, page, conf):
 
 	code = None
 	codes = re.findall(conf[_db]['codeRegexp'], text)
+
 	if len(codes) == 0: # no code was found
 		invalidCount(0, title, _db)
 		return
@@ -581,7 +614,7 @@ def processArticle(text, page, conf):
 		lat = long = 0
 	if lat == 0:
 		try:
-			pass#lat,long = getWikidataProperty(page, u"P625")
+			lat,long = getWikidataProperty(page, u"P625")
 		except:
 			print "Coord exception"
 
@@ -657,12 +690,11 @@ def processArticle(text, page, conf):
 	# if not available, use the first image from the article
 	# I'm deliberately skipping images in templates (they have been treated
 	# above) and galleries, which usually contain non-selected images
-	#	for img in page.imagelinks(total=1):
-	
 		img = getWikidataProperty(page, u"P18")
 		if img == None:
-			img = strainu.linkedImages(page)[0]
-		dictElem['image'] = img.title()
+			img = strainu.linkedImages(page)
+		if len(img):
+			dictElem['image'] = img[0].title()
 
 	#print dictElem
 
