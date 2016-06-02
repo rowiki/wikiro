@@ -57,7 +57,7 @@ import org.wikipedia.ro.populationdb.bg.model.Nationality;
 import org.wikipedia.ro.populationdb.bg.model.Obshtina;
 import org.wikipedia.ro.populationdb.bg.model.Region;
 import org.wikipedia.ro.populationdb.bg.model.Settlement;
-import org.wikipedia.ro.populationdb.util.ParameterReader;
+import org.wikipedia.ro.populationdb.util.WikiTemplate;
 import org.wikipedia.ro.populationdb.util.Utilities;
 
 public class WikiGenerator {
@@ -238,13 +238,12 @@ public class WikiGenerator {
             final Matcher infoboxMatcher = regexBgSettlementInfobox.matcher(bgText);
             boolean foundRegex = false;
             if ((foundRegex = infoboxMatcher.find()) || contains(bgText, "{{Селище в България")) {
-                ParameterReader params = null;
+                WikiTemplate params = null;
                 if (foundRegex) {
-                    params = new ParameterReader(infoboxMatcher.group());
+                    params = new WikiTemplate(infoboxMatcher.group());
                 } else {
-                    params = new ParameterReader(substring(bgText, indexOf(bgText, "{{Селище в България")));
+                    params = new WikiTemplate(substring(bgText, indexOf(bgText, "{{Селище в България")));
                 }
-                params.run();
                 final Map<String, String> bgparams = params.getParams();
                 final String img = bgparams.get("картинка");
                 if (!isEmpty(img)) {
@@ -314,7 +313,7 @@ public class WikiGenerator {
             + capitalize(lowerCase(stlmnt.getObshtina().getNumeBg())) + ")", capitalize(lowerCase(stlmnt.getNumeBg())));
 
         for (final String possibleName : possibleNames) {
-            final HashMap pageInfo = bgwiki.getPageInfo(possibleName);
+            final Map pageInfo = bgwiki.getPageInfo(possibleName);
             final Boolean exists = (Boolean) pageInfo.get("exists");
             if (isTrue(exists)) {
                 return defaultString(bgwiki.resolveRedirects(new String[] { possibleName })[0], possibleName);
@@ -867,8 +866,7 @@ public class WikiGenerator {
         infoboxParams.put("populație_note_subsol", "<ref name=\"varste2011\"/>");
 
         final String bgText = bgwiki.getPageText(findBgCounterpartForObshtina(obshtina));
-        final ParameterReader params = new ParameterReader(bgText);
-        params.run();
+        final WikiTemplate params = new WikiTemplate(bgText);
         final Map<String, String> bgparams = params.getParams();
         final String map = bgparams.get("карта");
         if (!isEmpty(map)) {
@@ -1070,7 +1068,7 @@ public class WikiGenerator {
         alternativeTitles.add("Obștina " + obshtina.getNumeRo());
 
         for (final String candidateTitle : alternativeTitles) {
-            final HashMap pageInfo = rowiki.getPageInfo(candidateTitle);
+            final Map pageInfo = rowiki.getPageInfo(candidateTitle);
             final Boolean exists = (Boolean) pageInfo.get("exists");
             if (!isTrue(exists)) {
                 continue;
@@ -1092,7 +1090,7 @@ public class WikiGenerator {
         alternativeTitles.add(settlement.getNumeRo());
 
         for (final String candidateTitle : alternativeTitles) {
-            final HashMap pageInfo = rowiki.getPageInfo(candidateTitle);
+            final Map pageInfo = rowiki.getPageInfo(candidateTitle);
             final Boolean exists = (Boolean) pageInfo.get("exists");
             if (!isTrue(exists)) {
                 continue;

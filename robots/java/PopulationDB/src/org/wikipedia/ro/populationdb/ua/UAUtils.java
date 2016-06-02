@@ -12,7 +12,7 @@ import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.ua.model.Commune;
 import org.wikipedia.ro.populationdb.ua.model.Raion;
 import org.wikipedia.ro.populationdb.ua.model.Settlement;
-import org.wikipedia.ro.populationdb.util.ParameterReader;
+import org.wikipedia.ro.populationdb.util.WikiTemplate;
 
 public class UAUtils {
     public static List<String> getPossibleRaionNames(final Raion raion,
@@ -403,13 +403,13 @@ public class UAUtils {
     }
 
     public static void copyParameterFromTemplate(
-            final ParameterReader ibParaReader, final StringBuilder sb,
+            final WikiTemplate ibParaReader, final StringBuilder sb,
             final String paramName) {
         copyParameterFromTemplate(ibParaReader, sb, paramName, paramName);
     }
 
     public static void copyParameterFromTemplate(
-            final ParameterReader ibParaReader, final StringBuilder sb,
+            final WikiTemplate ibParaReader, final StringBuilder sb,
             final String paramName, final String targetParamName) {
         if (!ibParaReader.getParams().containsKey(paramName)) {
             return;

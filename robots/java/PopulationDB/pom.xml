@@ -110,7 +110,13 @@
 		<dependency>
 			<groupId>org.wikipedia</groupId>
 			<artifactId>wiki-java</artifactId>
-			<version>0.31-SNAPSHOT</version>
+			<version>0.32-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
