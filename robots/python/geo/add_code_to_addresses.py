@@ -50,6 +50,10 @@ filters_ro = {
 }
 
 api = OsmApi.OsmApi(api="api.openstreetmap.org", passwordfile = "osmpasswd", debug = True)
+#oapi = "www.overpass-api.de"
+#obase="api",
+oapi = "overpass.osm.rambler.ru"
+obase= "cgi"
 
 def readVillageFile():
 	villages = {}
@@ -78,7 +82,7 @@ def uploadNode(node_id, code):
 	node["tag"] = tags
 	print ("Ready to add postal_code (%s) to %s %s, %s" % (tags["addr:postcode"], tags["addr:street"], tags["addr:housenumber"], tags["addr:city"]))
 	print "Do you want to update the record? ([y]es/[n]o/[a]llways/[q]uit)"
-	line = sys.stdin.readline().strip()
+	#line = sys.stdin.readline().strip()
 	line = 'y'
 	if line == 'y':
 		api.ChangesetCreate({u"comment": "adding postal code to %s %s, %s" % (tags["addr:street"], tags["addr:housenumber"], tags["addr:city"])})
@@ -169,7 +173,7 @@ def findId(tip, street, post_nr, city):
 	
 def check_Bucharest(isNode=True):
 	global obj
-	bot = overpass.OverpassRequest(poly=u"București", filters=filters_b, output="json")
+	bot = overpass.OverpassRequest(api = oapi, base = obase, poly=u"București", filters=filters_b, output="json")
 	if isNode:
 		js = bot.fetchNode()
 	else:
@@ -199,7 +203,7 @@ def check_Bucharest(isNode=True):
 	
 def check_cities(isNode=True):
 	global obj
-	bot = overpass.OverpassRequest(poly=u"România", filters=filters_ro, output="json")
+	bot = overpass.OverpassRequest(api = oapi, base = obase, poly=u"România", filters=filters_ro, output="json")
 	if isNode:
 		js = bot.fetchNode()
 	else:
