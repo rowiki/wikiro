@@ -20,6 +20,8 @@ public class WikiTemplate {
 
     private final Map<String, String> params = new LinkedHashMap<String, String>();
     private final Stack<String> automatonStack = new Stack<String>();
+    private String beforeText;
+
     private String templateTitle;
     private boolean singleLine = false;
     private String initialTemplateText;
@@ -43,9 +45,12 @@ public class WikiTemplate {
         int index = 0;
         StringBuilder templateTitleBuilder = new StringBuilder();
         StringBuilder templateTextBuilder = new StringBuilder("{{");
+        StringBuilder beforeTextBuilder = new StringBuilder();
         while (index < chars.length - 1 && (chars[index] != '{' || chars[index + 1] != '{')) { // skip pre-template stuff
+            beforeTextBuilder.append(chars[index]);
             index++;
         }
+        beforeText = beforeTextBuilder.toString();
         if (index >= chars.length - 1) {
             return;
         }
@@ -57,9 +62,10 @@ public class WikiTemplate {
         }
         if (chars[index] == '|') {
             templateTextBuilder.append('|');
+            index++;
         }
         templateTitle = trim(templateTitleBuilder.toString());
-        index++;
+
         String crtParamName = null;
         int crtParamIndex = 1;
         final StringBuilder crtBuilder = new StringBuilder();
@@ -177,6 +183,10 @@ public class WikiTemplate {
         return unmodifiableSet(new HashSet<String>(params.keySet()));
     }
 
+    public String getBeforeText() {
+        return beforeText;
+    }
+    
     public String toString() {
         if (isEmpty(templateTitle)) {
             return "";

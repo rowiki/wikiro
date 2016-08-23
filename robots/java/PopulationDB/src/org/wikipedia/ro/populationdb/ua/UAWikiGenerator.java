@@ -57,6 +57,7 @@ import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 import org.wikibase.Wikibase;
+import org.wikibase.WikibaseException;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.ua.dao.Hibernator;
 import org.wikipedia.ro.populationdb.ua.model.Commune;
@@ -66,10 +67,10 @@ import org.wikipedia.ro.populationdb.ua.model.Raion;
 import org.wikipedia.ro.populationdb.ua.model.Region;
 import org.wikipedia.ro.populationdb.ua.model.Settlement;
 import org.wikipedia.ro.populationdb.util.Executor;
-import org.wikipedia.ro.populationdb.util.WikiTemplate;
 import org.wikipedia.ro.populationdb.util.UkrainianTransliterator;
 import org.wikipedia.ro.populationdb.util.Utilities;
 import org.wikipedia.ro.populationdb.util.WikiEditExecutor;
+import org.wikipedia.ro.populationdb.util.WikiTemplate;
 
 public class UAWikiGenerator {
 
@@ -2992,7 +2993,7 @@ public class UAWikiGenerator {
     }
 
     private String generateRegionIntro(final Region region,
-            final String articleName) throws IOException {
+            final String articleName) throws WikibaseException, IOException {
         final STGroup stgroup = new STGroupFile("templates/ua/ucraina.stg");
         final ST introTmpl = stgroup.getInstanceOf("introReg");
         introTmpl.add(
@@ -3425,9 +3426,9 @@ public class UAWikiGenerator {
         String ukTitle = null;
         do {
             try {
-                ukTitle = dwiki.getTitleInLanguage("rowiki", articleName, "uk");
+                ukTitle = dwiki.getWikibaseItemBySiteAndTitle("rowiki", articleName).getLabels().get("uk");
                 operationSuccessful = true;
-            } catch (final IOException ex) {
+            } catch (final Exception ex) {
                 ex.printStackTrace();
             }
         } while (!operationSuccessful);
@@ -3439,9 +3440,8 @@ public class UAWikiGenerator {
     }
 
     public String getUkrainianRegionName(final String articleName)
-            throws IOException {
-        final String ukTitle = dwiki.getTitleInLanguage("rowiki", articleName,
-                "uk");
+            throws IOException, WikibaseException {
+        final String ukTitle = dwiki.getWikibaseItemBySiteAndTitle("rowiki", articleName).getLabels().get("uk");
 
         return ukTitle;
     }
