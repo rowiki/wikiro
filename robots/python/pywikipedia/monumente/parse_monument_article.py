@@ -59,9 +59,8 @@ import re
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot import config as user
-from pywikibot import catlib
 
-sys.path.append('.')
+sys.path.append('wikiro/robots/python/pywikipedia')
 import strainu_functions as strainu
 
 options = {
@@ -580,18 +579,19 @@ def processArticle(text, page, conf):
 	code = None
 	codes = re.findall(conf[_db]['codeRegexp'], text)
 
-	if len(codes) == 0: # no code was found
-		invalidCount(0, title, _db)
-		return
-	elif len(codes) > 1 and checkMultipleMonuments([res[0] for res in codes]): #more than one code, juse use the one that is marked with the template
+	if len(codes) > 1 and checkMultipleMonuments([res[0] for res in codes]): #more than one code, juse use the one that is marked with the template
 		tlCodes = re.findall(conf[_db]['templateRegexp'], text)
 		if len(tlCodes) == 1:
 			code = tlCodes[0][0]
+		codes = tlCodes
 		# if no or more than one code was found, we'll try extracting the correct one from the templates in the page
 	else:#exactly 1 code
 		code = codes[0][0]
 	if not code:
 		code = getWikidataProperty(page, u"P1770")
+	if not code:
+		invalidCount(len(codes), title, _db, list=codes)
+		return
 
 	if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
 		quality = True
@@ -784,7 +784,7 @@ def main():
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen,
 									[namespace], site)
 		if preload:
-			pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 50)
+			pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 500)
 		else:
 			pregenerator = filteredGen
 
