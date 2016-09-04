@@ -578,7 +578,6 @@ def processArticle(text, page, conf):
 
 	code = None
 	codes = re.findall(conf[_db]['codeRegexp'], text)
-
 	if len(codes) > 1 and checkMultipleMonuments([res[0] for res in codes]): #more than one code, juse use the one that is marked with the template
 		tlCodes = re.findall(conf[_db]['templateRegexp'], text)
 		if len(tlCodes) == 1:
@@ -693,8 +692,8 @@ def processArticle(text, page, conf):
 		img = getWikidataProperty(page, u"P18")
 		if img == None:
 			img = strainu.linkedImages(page)
-		if len(img):
-			dictElem['image'] = img[0].title()
+			if len(img):
+				dictElem['image'] = img[0].title()
 
 	#print dictElem
 
@@ -707,7 +706,7 @@ def processArticle(text, page, conf):
 			print "Cannot find any valid templates!"
 			return
 		(tlcont, tlparam) = strainu.tl2Dict(tl)
-							
+
 		for param in conf[_db]['codeTemplateParams']:
 			if param in tlcont:
 				dictElem[param] = tlcont[param]
@@ -776,10 +775,11 @@ def main():
 	qReg += ")(.*)\}\}"
 	#print qReg
 	qualityRegexp = re.compile(qReg, re.I)
+	site.login()
 
 	for namespace in langOpt.get(_db).get('namespaces'):
 		transGen = pagegenerators.ReferringPageGenerator(rowTemplate,
-									onlyTemplateInclusion=True, step=1000)
+									onlyTemplateInclusion=True, content=False)
 		#filteredGen = transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, u"Category:1690s churches in Romania"))
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen,
 									[namespace], site)
