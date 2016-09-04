@@ -351,14 +351,13 @@ def linkedImages(page):
 	if title == u"":
 		# empty link - problem in the page
 		continue
-        if page.namespace() in page.site.family.namespacesWithSubpage:
-            # convert relative link to absolute link
-            if title.startswith(".."):
-                parts = self.title().split('/')
-                parts.pop()
-                title = u'/'.join(parts) + title[2:]
-            elif title.startswith("/"):
-                title = u'%s/%s' % (page.title(), title[1:])
+        # convert relative link to absolute link
+        if title.startswith(".."):
+            parts = self.title().split('/')
+            parts.pop()
+            title = u'/'.join(parts) + title[2:]
+        elif title.startswith("/"):
+            title = u'%s/%s' % (page.title(), title[1:])
         if title.startswith("#"):
             # this is an internal section link
             continue
