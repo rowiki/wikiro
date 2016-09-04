@@ -7,8 +7,7 @@ Search for all the pages in a given wiki that contain a LMI code
 
 import sys, time, warnings, json, string, re
 import cProfile
-sys.path.append("..")
-#sys.path.append("..")
+sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions as strainu
 import pywikibot
 from pywikibot import pagegenerators
@@ -68,9 +67,10 @@ def main():
 	
 	global _log
 	initLog()
+	site.login()
 	
 	transGen = pagegenerators.AllpagesPageGenerator(start, includeredirects=False)
-	pregenerator = pagegenerators.PreloadingGenerator(transGen, 100)
+	pregenerator = pagegenerators.PreloadingGenerator(transGen, 500)
 		
 	#page = pywikibot.Page(site, "File:Biserica_Sf._Maria,_sat_Drumul_Carului,_'La_Cetate'-Gradistea._Moeciu,_jud._BRASOV.jpg")
 	count = 0
@@ -78,8 +78,8 @@ def main():
 		# Do some checking
 		processArticle(page)
 		count += 1
-		if count % 100 == 0:
-			pywikibot.output(page.title())
+		if count % 1000 == 0:
+			pywikibot.output(str(count) + ": " + page.title())
 			#time.sleep(3)
 	closeLog()
 
