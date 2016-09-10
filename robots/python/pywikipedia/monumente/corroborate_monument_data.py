@@ -116,6 +116,7 @@ lmi_blacklist = [#all lowercase
 
 plan = 	[#all lowercase
 		u'.svg',#svg files are definetely not pictures
+		u'schem',
 		u'plan',#plans are plans
 		u'v1',
 		u'v2',
@@ -888,7 +889,7 @@ def main():
 				picture, pictureType = chooseImagePicky([{"name": picture}])
 				articleText = updateTableData(monument.get("source"), code, pictureType, picture, text=articleText)
 			elif force:
-				continue
+				pass# when forced, only upload quality images
 			#use image from article only if none is available (or was selected) 
 			#from commons and we don't have a picture in the list
 			elif article <> None and article["image"] <> None and article["image"] <> "":
