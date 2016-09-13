@@ -34,10 +34,12 @@ translations/ We use this to separate between the picture creator (e.g. painter,
 photographer) and the monument creator.
 
 Command line options:
--nopreload	Do not preload pages, but retrieve them as we need them.
-                 Default: false; true when using -parse:quick
+-db		The database to work on; valid values can be found in the config
 -incremental	Save the output files after each processed page; skipped pages
                  do not count
+-nopreload	Do not preload pages, but retrieve them as we need them.
+                 Default: false; true when using -parse:quick
+-ns		Comma-separated list of namespaces to parse. Overrides the config
 -parse		There are three possible values:
 		* quick: All pages that are already in our database are skipped.
 			Only new pages are parsed.
@@ -45,7 +47,6 @@ Command line options:
 			since the last script run
 		* full: All pages are parsed
 		Default: normal
--db		The database to work on; valid values can be found in the config
 '''
 
 import sys, os
@@ -730,6 +731,7 @@ def main():
 	parse_type = PARSE_NORMAL
 	preload = True
 	incremental = False
+	namespaces = None
 
 	global _log
 	global fullDict
@@ -748,6 +750,8 @@ def main():
 			preload = False
 		if arg.startswith('-incremental'):
 			incremental = True
+		if arg.startswith('-ns'):
+			namespaces = [int(x) for x in arg[len('-ns:'):].split(',')]
 		if arg.startswith('-parse'):
 			if  arg [len('-parse:'):] == "full":
 				parse_type = PARSE_FULL
@@ -762,6 +766,8 @@ def main():
 		return False
 
 	langOpt = options.get(lang)
+	if not namespaces:
+		namespaces = langOpt.get(_db).get('namespaces')
 
 	rowTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), \
 								langOpt.get(_db).get('codeTemplate')[0]))
@@ -777,7 +783,7 @@ def main():
 	qualityRegexp = re.compile(qReg, re.I)
 	site.login()
 
-	for namespace in langOpt.get(_db).get('namespaces'):
+	for namespace in namespaces:
 		transGen = pagegenerators.ReferringPageGenerator(rowTemplate,
 									onlyTemplateInclusion=True, content=False)
 		#filteredGen = transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, u"Category:1690s churches in Romania"))
