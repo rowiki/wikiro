@@ -24,11 +24,9 @@ config = {
 			u'CodRan': ('P2845', False, 'external-id'),
 			u'Denumire': ('', None, 'label'),
 			u'Localitate': ('P131', False, 'wikibase-item'),
-			u'Creatori': ('P1770', True, 'external-id'),
-			u'Lat': ('P625', None, 'globe-coordinate'),
-			u'Lon': ('P625', None, 'globe-coordinate'),
-			u'OsmLat': ('P625', None, 'globe-coordinate'),
-			u'OsmLon': ('P625', None, 'globe-coordinate'),
+			u'Creatori': ('P1770', True, 'wikibase-item'),
+			u'Coord': ('P625', True, 'globe-coordinate'),
+			u'OsmCoord': ('P625', False, 'globe-coordinate'),
 			u'Imagine': ('P18', True, 'commonsMedia'),
 			u'Plan': ('P18', False, 'commonsMedia'),
 			u'Commons': ('P373', False, 'string'),
@@ -45,7 +43,8 @@ class MonumentsData(robot.WorkItem):
             name = sf.extractLink(monument["Denumire"])
             monument["Commons"] = monument["Commons"].replace("commons:Category:", "")
             monument["Localitate"] = sf.extractLink(monument["Localitate"])
-            self.db[name] = monument	
+            if name not in self.db:
+                self.db[name] = monument
         self.always = False
         self.config = config
 
@@ -62,10 +61,10 @@ class MonumentsData(robot.WorkItem):
 
         if choice == 'n':
             return False
-            
+
         if choice == 'a':
             self.always = True
-            
+
         return True
 
     def updateProperty(self, item, key, data):
@@ -73,7 +72,7 @@ class MonumentsData(robot.WorkItem):
             prop, pref, datatype = self.config["properties"][key]
             if prop in item.claims:
                 #don't bother about those yet
-                print item.claims[prop][0].getTarget()
+                pywikibot.output(u"Wikidata already has %s: %s" % (key, item.claims[prop][0].getTarget()))
             else:
                 if datatype == 'wikibase-item':
                     page = pywikibot.Page(pywikibot.Site(), data[key])
@@ -81,6 +80,9 @@ class MonumentsData(robot.WorkItem):
                     desc = page.title()
                 elif datatype == 'globe-coordinate':
                     val = desc = data[key]
+                elif datatype == 'commonsMedia':
+                    val = pywikibot.FilePage(pywikibot.Site('commons', 'commons'), u"File:" + sf.stripNamespace(data[key]))
+                    desc = val.title()
                 else:
                     val = desc = data[key]
                 claim = pywikibot.Claim(item.repo, prop, datatype=datatype)
@@ -95,7 +97,8 @@ class MonumentsData(robot.WorkItem):
             pywikibot.output(u"Could not update " + item.labels['ro'])
 
     def updateWikidata(self, item, data):
-        for key in [u"Cod", u"FostCod", u"Localitate", u"Commons"]:
+        for key in [u"Cod", u"FostCod", u"Localitate", u"Commons", u"Imagine", u"Plan"]:
+        #for key in [u"Imagine", u"Plan"]:
             if key in data and data[key] != u"":
                 self.updateProperty(item, key, data)
 
