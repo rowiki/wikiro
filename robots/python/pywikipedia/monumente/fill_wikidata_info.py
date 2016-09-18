@@ -16,16 +16,38 @@ sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions as sf
 from wikidata import robot_romania as robot
 
+config = {
+'lmi': 	{
+	'properties':	{
+			u'Cod': ('P1770', True, 'external-id'),
+			u'FostCod': ('P1770', False, 'external-id'),
+			u'CodRan': ('P2845', False, 'external-id'),
+			u'Denumire': ('', None, 'label'),
+			u'Localitate': ('P131', False, 'wikibase-item'),
+			u'Creatori': ('P1770', True, 'external-id'),
+			u'Lat': ('P625', None, 'globe-coordinate'),
+			u'Lon': ('P625', None, 'globe-coordinate'),
+			u'OsmLat': ('P625', None, 'globe-coordinate'),
+			u'OsmLon': ('P625', None, 'globe-coordinate'),
+			u'Imagine': ('P18', True, 'commonsMedia'),
+			u'Plan': ('P18', False, 'commonsMedia'),
+			u'Commons': ('P373', False, 'string'),
+			}
+	}
+}
     
 class MonumentsData(robot.WorkItem):
-    def __init__(self, db):
+    def __init__(self, db, config):
         self.db = {}
 	for monument in db:
 	    if monument["Denumire"].find("[[") < 0:
 	        continue
             name = sf.extractLink(monument["Denumire"])
+            monument["Commons"] = monument["Commons"].replace("commons:Category:", "")
+            monument["Localitate"] = sf.extractLink(monument["Localitate"])
             self.db[name] = monument	
         self.always = False
+        self.config = config
 
     def userConfirm(self, question):
         """Obtain user response."""
@@ -46,30 +68,45 @@ class MonumentsData(robot.WorkItem):
             
         return True
 
-    def updateWikidata(self, item, data):
+    def updateProperty(self, item, key, data):
         try:
-            if "P1770" in item.claims:
-                if str(item.claims["P1770"][0].getTarget()) != str(data["Cod"]):
-                    print item.claims["P1770"][0].getTarget()
-                    print data["Cod"]
+            prop, pref, datatype = self.config["properties"][key]
+            if prop in item.claims:
+                #don't bother about those yet
+                print item.claims[prop][0].getTarget()
             else:
-                lmi = pywikibot.Claim(item.repo, u'P1770', datatype='external-id')#LMI
-                lmi.setTarget(data["Cod"])
-                answer = self.userConfirm("Update element %s with LMI code %s?" % (item.labels['ro'], data["Cod"]))
+                if datatype == 'wikibase-item':
+                    page = pywikibot.Page(pywikibot.Site(), data[key])
+                    val = page.data_item()
+                    desc = page.title()
+                elif datatype == 'globe-coordinate':
+                    val = desc = data[key]
+                else:
+                    val = desc = data[key]
+                claim = pywikibot.Claim(item.repo, prop, datatype=datatype)
+                claim.setTarget(val)
+                answer = self.userConfirm("Update element %s with %s \"%s\"?" % (item.labels['ro'], key, desc))
                 if answer:
-                    item.addClaim(lmi)
+                    item.addClaim(claim)
+                    if pref:
+                        claim.changeRank('preferred')
         except Exception as e:
-            print e
-            print u"Could not update " + item.labels['ro']
+            pywikibot.output(e)
+            pywikibot.output(u"Could not update " + item.labels['ro'])
+
+    def updateWikidata(self, item, data):
+        for key in [u"Cod", u"FostCod", u"Localitate", u"Commons"]:
+            if key in data and data[key] != u"":
+                self.updateProperty(item, key, data)
 
     def doWork(self, page, item):
         try:
             if page.title() not in self.db:
-                print u"Could not find article" + page.title()
+                pywikibot.output(u"Could not find article " + page.title())
             self.updateWikidata(item, self.db[page.title()])
         except Exception as e:
-            print e
-            print u"Failed to update monument data to Wikidata, skipping..."
+            pywikibot.output(e)
+            pywikibot.output(u"Failed to update monument data to Wikidata, skipping...")
         
     def description(self):
         return u"Updating monument data to wikidata"
@@ -94,5 +131,5 @@ if __name__ == "__main__":
     generator = pagegenerators.ReferringPageGenerator(page, onlyTemplateInclusion=True)
     bot = robot.WikidataBot(site=True, generator = generator)
 
-    bot.workers.append(MonumentsData(db_json))
+    bot.workers.append(MonumentsData(db_json, config[_db]))
     bot.run()
