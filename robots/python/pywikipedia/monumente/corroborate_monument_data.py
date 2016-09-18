@@ -802,7 +802,7 @@ def main():
 					page1 = pywikibot.Page(pywikibot.Link(link, pywikibot.Site()))
 					page2 = pywikibot.Page(pywikibot.Site(), article["name"])
 					if force and page1.title() <> page2.title():
-						field = strainu.stripLink(monument[articleField])
+						field = "".join(strainu.stripLinkWithSurroundingText(monument[articleField]))
 						link = u"[[" + article["name"] + "|" + field + "]]"
 						articleText = updateTableData(monument["source"], code, articleField, link, text=articleText)
 					elif page1.title() <> page2.title() and \
