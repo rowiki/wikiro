@@ -116,12 +116,17 @@ lmi_blacklist = [#all lowercase
 
 plan = 	[#all lowercase
 		u'.svg',#svg files are definetely not pictures
+		u'schem',
 		u'plan',#plans are plans
 		u'v1',
 		u'v2',
 		u'reconstituire',
 		u'3d',
 		u'localizare',
+		u'map'
+		u'layout',
+		u'grundriss',
+		u'schi',#scita, schi?a - TODO: is it large enough?
 	]
 
 countries = {
@@ -801,7 +806,7 @@ def main():
 					page1 = pywikibot.Page(pywikibot.Link(link, pywikibot.Site()))
 					page2 = pywikibot.Page(pywikibot.Site(), article["name"])
 					if force and page1.title() <> page2.title():
-						field = strainu.stripLink(monument[articleField])
+						field = "".join(strainu.stripLinkWithSurroundingText(monument[articleField]))
 						link = u"[[" + article["name"] + "|" + field + "]]"
 						articleText = updateTableData(monument["source"], code, articleField, link, text=articleText)
 					elif page1.title() <> page2.title() and \
@@ -888,7 +893,7 @@ def main():
 				picture, pictureType = chooseImagePicky([{"name": picture}])
 				articleText = updateTableData(monument.get("source"), code, pictureType, picture, text=articleText)
 			elif force:
-				continue
+				pass# when forced, only upload quality images
 			#use image from article only if none is available (or was selected) 
 			#from commons and we don't have a picture in the list
 			elif article <> None and article["image"] <> None and article["image"] <> "":
