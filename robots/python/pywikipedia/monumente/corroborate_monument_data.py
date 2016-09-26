@@ -123,6 +123,10 @@ plan = 	[#all lowercase
 		u'reconstituire',
 		u'3d',
 		u'localizare',
+		u'map'
+		u'layout',
+		u'grundriss',
+		u'schi',#scita, schi?a - TODO: is it large enough?
 	]
 
 countries = {
