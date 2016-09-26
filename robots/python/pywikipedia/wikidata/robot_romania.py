@@ -53,7 +53,7 @@ class WikidataBot(SingleSiteBot):
                     return False
         if "P843" in item.claims:
             return True
-        print item.labels['ro'] + u" is not in the right country."
+        pywikibot.output(unicode(item.labels.get('ro')) + u" is not in the right country.")
         return False
 
     def getItem(self, page):

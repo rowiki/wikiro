@@ -9,12 +9,11 @@
 import pywikibot
 from pywikibot import i18n, config, pagegenerators, textlib, weblib
 
-import robot_localitati as robot
-
 import sys
 import csv 
-sys.path.append(".")
+sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions as sf
+from wikidata import robot_romania as robot
 
     
 class PopulationDataCSV(robot.WorkItem):

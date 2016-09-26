@@ -34,10 +34,12 @@ translations/ We use this to separate between the picture creator (e.g. painter,
 photographer) and the monument creator.
 
 Command line options:
--nopreload	Do not preload pages, but retrieve them as we need them.
-                 Default: false; true when using -parse:quick
+-db		The database to work on; valid values can be found in the config
 -incremental	Save the output files after each processed page; skipped pages
                  do not count
+-nopreload	Do not preload pages, but retrieve them as we need them.
+                 Default: false; true when using -parse:quick
+-ns		Comma-separated list of namespaces to parse. Overrides the config
 -parse		There are three possible values:
 		* quick: All pages that are already in our database are skipped.
 			Only new pages are parsed.
@@ -45,7 +47,6 @@ Command line options:
 			since the last script run
 		* full: All pages are parsed
 		Default: normal
--db		The database to work on; valid values can be found in the config
 '''
 
 import sys, os
@@ -59,9 +60,8 @@ import re
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot import config as user
-from pywikibot import catlib
 
-sys.path.append('.')
+sys.path.append('wikiro/robots/python/pywikipedia')
 import strainu_functions as strainu
 
 options = {
@@ -579,19 +579,19 @@ def processArticle(text, page, conf):
 
 	code = None
 	codes = re.findall(conf[_db]['codeRegexp'], text)
-
-	if len(codes) == 0: # no code was found
-		invalidCount(0, title, _db)
-		return
-	elif len(codes) > 1 and checkMultipleMonuments([res[0] for res in codes]): #more than one code, juse use the one that is marked with the template
+	if len(codes) > 1 and checkMultipleMonuments([res[0] for res in codes]): #more than one code, juse use the one that is marked with the template
 		tlCodes = re.findall(conf[_db]['templateRegexp'], text)
 		if len(tlCodes) == 1:
 			code = tlCodes[0][0]
+		codes = tlCodes
 		# if no or more than one code was found, we'll try extracting the correct one from the templates in the page
 	else:#exactly 1 code
 		code = codes[0][0]
 	if not code:
 		code = getWikidataProperty(page, u"P1770")
+	if not code:
+		invalidCount(len(codes), title, _db, list=codes)
+		return
 
 	if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
 		quality = True
@@ -693,8 +693,8 @@ def processArticle(text, page, conf):
 		img = getWikidataProperty(page, u"P18")
 		if img == None:
 			img = strainu.linkedImages(page)
-		if len(img):
-			dictElem['image'] = img[0].title()
+			if len(img):
+				dictElem['image'] = img[0].title()
 
 	#print dictElem
 
@@ -707,7 +707,7 @@ def processArticle(text, page, conf):
 			print "Cannot find any valid templates!"
 			return
 		(tlcont, tlparam) = strainu.tl2Dict(tl)
-							
+
 		for param in conf[_db]['codeTemplateParams']:
 			if param in tlcont:
 				dictElem[param] = tlcont[param]
@@ -731,6 +731,7 @@ def main():
 	parse_type = PARSE_NORMAL
 	preload = True
 	incremental = False
+	namespaces = None
 
 	global _log
 	global fullDict
@@ -749,6 +750,8 @@ def main():
 			preload = False
 		if arg.startswith('-incremental'):
 			incremental = True
+		if arg.startswith('-ns'):
+			namespaces = [int(x) for x in arg[len('-ns:'):].split(',')]
 		if arg.startswith('-parse'):
 			if  arg [len('-parse:'):] == "full":
 				parse_type = PARSE_FULL
@@ -763,6 +766,8 @@ def main():
 		return False
 
 	langOpt = options.get(lang)
+	if not namespaces:
+		namespaces = langOpt.get(_db).get('namespaces')
 
 	rowTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), \
 								langOpt.get(_db).get('codeTemplate')[0]))
@@ -776,15 +781,16 @@ def main():
 	qReg += ")(.*)\}\}"
 	#print qReg
 	qualityRegexp = re.compile(qReg, re.I)
+	site.login()
 
-	for namespace in langOpt.get(_db).get('namespaces'):
+	for namespace in namespaces:
 		transGen = pagegenerators.ReferringPageGenerator(rowTemplate,
-									onlyTemplateInclusion=True, step=1000)
+									onlyTemplateInclusion=True, content=False)
 		#filteredGen = transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, u"Category:1690s churches in Romania"))
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen,
 									[namespace], site)
 		if preload:
-			pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 50)
+			pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 500)
 		else:
 			pregenerator = filteredGen
 

@@ -9,7 +9,7 @@ import json
 import re
 import sys
 
-sys.path.append('.')
+sys.path.append('wikiro/robots/python/pywikipedia')
 import strainu_functions
 import csvUtils
 
@@ -172,7 +172,7 @@ def buildArticle(monument):
 {Artist}
 }}}}
 
-'''{{{{subst:PAGENAME}}}}''' este un {Tip} aflat pe teritoriul {Localitate2}{Artist2}.<ref>[http://arhiva.cultura.ro/Files/GenericFiles/LMI-2010.pdf Ministerul Culturii - Lista Monumentelor Istorice]</ref>{Ran2}
+'''{{{{subst:PAGENAME}}}}''' este un {Tip} aflat pe teritoriul {Localitate2}{Artist2}.<ref>[http://patrimoniu.gov.ro/ro/monumente-istorice/lista-monumentelor-istorice Institutul Național al Patrimoniului - Lista Monumentelor Istorice]</ref>{Ran2}
 
 """
     tip = splitCode(monument[u"Cod"])[2]
@@ -232,31 +232,40 @@ def addExternalData(data, source="europeana"):
         added_text = descr + u"<ref name=\"ran" + data["cod"] + u"\" />\n\n"
     return added_text
 
-def addVillageToTitle(title, village):
-    if title.find(u" din ") == -1 and (not village or title.find(village) == -1):
-	title = title.strip()
-        title = re.sub(ur'Ansamblul (.*)', ur'Ansamblul \1 din %s' % village, title)
-        title = re.sub(ur'Biseric(ă|a) (.*)', ur'Biserica \2 din %s' % village, title)
-        title = re.sub(ur'Capela (.*)', ur'Capela \1 din %s' % village, title)
-        title = re.sub(ur'Basilica (.*)', ur'Basilica \1 din %s' % village, title)
-        title = re.sub(ur'Statuia (.*)', ur'Statuia \1 din %s' % village, title)
-        title = re.sub(ur'Centrul (.*)', ur'Centrul \1 din %s' % village, title)
-        title = re.sub(ur'Bustul (.*)', ur'Bustul \1 din %s' % village, title)
-        title = re.sub(ur'Monumentul (.*)', ur'Monumentul \1 din %s' % village, title)
-        title = re.sub(ur'Palatul (.*)', ur'Palatul \1 din %s' % village, title)
-        title = re.sub(ur'Conacul (.*)', ur'Conacul \1 din %s' % village, title)
-        title = re.sub(ur'Podul (.*)', ur'Podul \1 din %s' % village, title)
-        title = re.sub(ur'Cazinou(.*)', ur'Cazinoul\1 din %s' % village, title)
-        title = re.sub(ur'Hotel(.*)', ur'Hotelul\1 din %s' % village, title)
+def addVillageToTitles(titles, village):
+    ret = set(titles)
+    for title in titles:
+	    if title.find(u" din ") == -1 and (not village or title.find(village) == -1):
+		title = title.strip()
+		title = re.sub(ur'Ansamblul (.*)', ur'Ansamblul \1 din %s' % village, title)
+		title = re.sub(ur'Biseric(ă|a) (.*)', ur'Biserica \2 din %s' % village, title)
+		title = re.sub(ur'Capela (.*)', ur'Capela \1 din %s' % village, title)
+		title = re.sub(ur'Basilica (.*)', ur'Basilica \1 din %s' % village, title)
+		title = re.sub(ur'Statuia (.*)', ur'Statuia \1 din %s' % village, title)
+		title = re.sub(ur'Centrul (.*)', ur'Centrul \1 din %s' % village, title)
+		title = re.sub(ur'Bustul (.*)', ur'Bustul \1 din %s' % village, title)
+		title = re.sub(ur'Monumentul (.*)', ur'Monumentul \1 din %s' % village, title)
+		title = re.sub(ur'Palatul (.*)', ur'Palatul \1 din %s' % village, title)
+		title = re.sub(ur'Conacul (.*)', ur'Conacul \1 din %s' % village, title)
+		title = re.sub(ur'Podul (.*)', ur'Podul \1 din %s' % village, title)
+		title = re.sub(ur'Cazinou(.*)', ur'Cazinoul\1 din %s' % village, title)
+		title = re.sub(ur'Hotel(.*)', ur'Hotelul\1 din %s' % village, title)
 
-    if title.find(u" din ") == -1 and (not village or title.find(village) == -1):
-        title = title + (" din %s" % village)
-    return title
+	    if title.find(u" din ") == -1 and (not village or title.find(village) == -1):
+		title = title + (" din %s" % village)
+            ret.add(title)
+    return ret
 
 def generateList(seq):
     seen = set()
     seen_add = seen.add
-    return [ x.strip() for x in seq if not (x in seen or seen_add(x))]
+    return sorted([ x.strip() for x in seq if not (x in seen or seen_add(x))])
+
+def expandSaints(ret):
+    ret.update([x.replace(u"Sf.", u"Sfântul") for x in ret])
+    ret.update([x.replace(u"Sf.", u"Sfânta") for x in ret])
+    ret.update([x.replace(u"Sf.", u"Sfinții") for x in ret])
+    return ret
     
 def cleanupTitle(monument):
     ret = set()
@@ -276,26 +285,16 @@ def cleanupTitle(monument):
         #print title[title.find(u"„")+1:title.find(u"”")]
         ret.add(title[title.find(u"„")+1:title.find(u"”")])
 
-    title2 = title.replace(u'Ansamblul bisericii', u'Biserica').\
-		replace(u'Ansamblul conacului', u'Conacul').\
+    title2 = title.replace(u'Ansamblul conacului', u'Conacul').\
 		replace(u'Ansamblul castelului', u'Castelul').\
 		replace(u'Ansamblul cetății', u'Cetatea').\
 		replace(u'Ansamblul capelei', u'Capela')
+    title2 = re.sub(ur'Ansamblul bisericii ([\w\-]*)e', ur'Biserica \1ă', title)
+    title2 = re.sub(ur'Ansamblul bisericii', ur'Biserica', title)
     if title2 != title:
         #print title2
         ret.add(title2)
-        ret.add(title2.strip(u"„”"))
-
-    title3 = addVillageToTitle(title, village)
-    if title3 != title:
-        #print title3
-	ret.add(title3)
-        ret.add(title3.replace(u"„", u"").replace(u"”", u""))
-    title3 = addVillageToTitle(title2, village)
-    if title3 != title2:
-        #print title3
-	ret.add(title3)
-        ret.add(title3.replace(u"„", u"").replace(u"”", u""))
+    ret.add(title2.replace(u"„", u"").replace(u"”", u""))
         
     if title == u'Casă':
         title = u'Casă din %s (%s)' % (village, address)
@@ -310,29 +309,14 @@ def cleanupTitle(monument):
         title2 = title[:title.find(u"(")]
         #print title2
         ret.add(title2)
-        title3 = addVillageToTitle(title2, village)
-        if title3 != title2:
-            #print title3
-	    ret.add(title3)
-            ret.add(title3.replace(u"„", u"").replace(u"”", u""))
     if title.find(u",") > -1:
         title2 = title[:title.find(u",")]
         #print title2
         ret.add(title2)
-        title3 = addVillageToTitle(title2, village)
-        if title3 != title2:
-            #print title3
-	    ret.add(title3)
-            ret.add(title3.replace(u"„", u"").replace(u"”", u""))
     if title.find(u";") > -1:
         title2 = title[:title.find(u";")]
         #print title2
         ret.add(title2)
-        title3 = addVillageToTitle(title2, village)
-        if title3 != title2:
-            #print title3
-	    ret.add(title3)
-            ret.add(title3.replace(u"„", u"").replace(u"”", u""))
 
     if title.find(u"azi ") > -1:
         title2 = title[:title.find(u"azi ")]
@@ -340,15 +324,13 @@ def cleanupTitle(monument):
             title2 = title2[:-2]
         #print title2
         ret.add(title2)
-        title2 = addVillageToTitle(title2, village)
-        #print title2
-        ret.add(title2)
         title3 = title[title.find(u"azi ")+len(u"azi"):]
         #print title3
         ret.add(title3)
-        title3 = addVillageToTitle(title3, village)
-        #print title3
-        ret.add(title3)
+    #print ret
+    ret = expandSaints(ret)
+    #print ret
+    ret = addVillageToTitles(ret, village)
     #print ret
     return generateList(ret)
     
