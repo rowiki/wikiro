@@ -1088,6 +1088,9 @@ public class FixVillages {
         for (int i = 0; i < numbersIdenfifiedList.size(); i++) {
             alt[i] = Double.parseDouble(trim(numbersIdenfifiedList.get(i)));
         }
+        if (alt.length == 0) {
+            return null;
+        }
         double avgAlt = 0.0d;
         avgAlt = (alt.length > 1) ? ((alt[0] + alt[1]) / 2.0d) : alt[0];
         altQty.setAmount(avgAlt);
