@@ -152,7 +152,7 @@ public class FixVillages {
         try {
             final Properties credentials = new Properties();
 
-            credentials.load(WikiTextGenerator2011.class.getClassLoader().getResourceAsStream("credentials.properties"));
+            credentials.load(FixVillages.class.getClassLoader().getResourceAsStream("credentials.properties"));
 
             final String rowpusername = credentials.getProperty("rowiki.user");
             final String rowppassword = credentials.getProperty("rowiki.password");
