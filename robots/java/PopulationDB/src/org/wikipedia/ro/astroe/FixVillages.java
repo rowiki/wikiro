@@ -77,8 +77,8 @@ public class FixVillages {
     private static RuleBasedCollator collator = null;
     private static Exception exception;
 
-    private static String countyStart = "Botoșani";
-    private static String communeStart = "Dobârceni";
+    private static String countyStart = "Cluj";
+    private static String communeStart = "Pălatca";
 
     // Pattern sentencePattern = Pattern.compile("((.*(\\(.*?\\)))*.*?)(\\.|$)\\s*");
     // Pattern sentencePattern = Pattern.compile(
