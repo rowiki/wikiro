@@ -40,8 +40,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,7 +64,6 @@ import org.wikibase.data.Quantity;
 import org.wikibase.data.Snak;
 import org.wikibase.data.WikibaseData;
 import org.wikipedia.Wiki;
-import org.wikipedia.ro.populationdb.ro.WikiTextGenerator2011;
 import org.wikipedia.ro.populationdb.util.WikiTemplate;
 
 public class FixVillages {
@@ -77,8 +76,8 @@ public class FixVillages {
     private static RuleBasedCollator collator = null;
     private static Exception exception;
 
-    private static String countyStart = "Cluj";
-    private static String communeStart = "Pălatca";
+    private static String countyStart = "Galați";
+    private static String communeStart = "Cuza Vodă";
 
     // Pattern sentencePattern = Pattern.compile("((.*(\\(.*?\\)))*.*?)(\\.|$)\\s*");
     // Pattern sentencePattern = Pattern.compile(
@@ -94,7 +93,7 @@ public class FixVillages {
         Pattern.compile("(\\[\\[)?(((Fișier)|(File)|(Imagine)|(Image))\\:)?([^\\|\\]]*)((\\|.*?)*\\]\\])?");
     private static Pattern roFormattedNumberStringRegex = Pattern.compile("\\d+(?:\\.\\d+)*,\\d+");
     private static Pattern simpleRefPattern = Pattern.compile("\\<ref[^\\/\\>]*\\>([^\\<]+)\\</ref\\>");
-    private static Pattern numberRangePattern = Pattern.compile("(\\d+)(?:\\-|(?:&nbsp;)(\\d+))?");
+    private static Pattern numberRangePattern = Pattern.compile("(\\d+)((?:[–\\-]|(?:&ndash;))(\\d+))?");
 
     public static void main(String[] args) throws IOException {
         Wiki rowiki = new Wiki("ro.wikipedia.org");
