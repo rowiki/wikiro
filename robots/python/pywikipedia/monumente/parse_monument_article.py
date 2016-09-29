@@ -695,6 +695,8 @@ def processArticle(text, page, conf):
 			img = strainu.linkedImages(page)
 			if len(img):
 				dictElem['image'] = img[0].title()
+		else:
+			dictElem['image'] = img.title()
 
 	#print dictElem
 
