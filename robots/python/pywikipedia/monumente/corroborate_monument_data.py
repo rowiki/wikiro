@@ -687,12 +687,11 @@ def main():
 	lonField = None
 	for field in countries.get((_lang, _db))["fields"]:
 		if countries.get((_lang, _db))["fields"][field]['code'] == Changes.coord:
-			#TODO: maybe use the first letters?
+			#TODO: maybe use the first letters? We currently hardcode the order
 			if not latField:
 				latField = field
-			if not lonField:
+			elif not lonField:
 				lonField = field
-			break
 
 	initLog()
 	lastSource = None
@@ -978,7 +977,7 @@ def main():
 				otherLong > countries.get((_lang, _db)).get('geolimits').get('east') or \
 				otherLong < countries.get((_lang, _db)).get('geolimits').get('west')) :
 				log(u"* [%s] ''W'': ''[%s]'' Coordonatele (%f,%f) au nevoie de o verificare - nu par " \
-						u"a fi din România" %	(otherSrc[:3], code, otherLat, otherLong))
+						u"a fi din regiunea căutată" %	(otherSrc[:3], code, otherLat, otherLong))
 				otherValid = False
 				continue
 			if lat <> 0 and \
