@@ -525,6 +525,7 @@ def checkMultipleMonuments(codes, separator='.'):
 	for code in codes:
 		code = code[strainu.findDigit(code):strainu.rfindOrLen(code, separator)]
 		#print code
+		#print last
 		if code != last:
 			return True
 	return False
@@ -585,14 +586,12 @@ def processArticle(text, page, conf):
 			code = tlCodes[0][0]
 		codes = tlCodes
 		# if no or more than one code was found, we'll try extracting the correct one from the templates in the page
-	else:#exactly 1 code
+	elif len(codes) == 0:
+		pass
+	else:#exactly 1 code or several codes of the same monument
 		code = codes[0][0]
 	if not code:
 		code = getWikidataProperty(page, u"P1770")
-	if not code:
-		invalidCount(len(codes), title, _db, list=codes)
-		return
-
 	if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
 		quality = True
 	else:
