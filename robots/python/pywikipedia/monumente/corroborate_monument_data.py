@@ -296,15 +296,13 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 	"""
 	if (field not in countries.get((_lang, _db)).get('fields') or \
 	countries.get((_lang, _db)).get('fields')[field]['code'] & _changes) == Changes.none:
-		pywikibot.output("Skipping %s for %s" % (field, code))
+		pywikibot.output("Skipping updating %s for %s" % (field, code))
 		return
-	pywikibot.output("Uploading %s for %s; value \"%s\"" % (field, code, newvalue))
 	site = pywikibot.Site()
 	title = urlparse.parse_qs(urlparse.urlparse(str(url)).query)['title'][0].decode('utf8')
 	page = pywikibot.Page(site, title)
 	
 	if text == None:
-		pywikibot.output("Getting page contents")
 		text = page.get()
 		
 	oldtext = text
@@ -336,7 +334,7 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 				break
 	else: #for .. else
 		log(u"* [Listă] ''E'': ''[%s]'' Codul nu este prezent în [[%s|listă]]" % (rawCode, title))
-		pywikibot.output(u"Code not found: %s" % code)
+		pywikibot.output(u"updateTableData: Code %s not found, giving up" % code)
 		return None
 	
 	orig = rebuildTemplate(my_params, not countries.get((_lang, _db)).get('keepEmptyFields')) 
@@ -344,8 +342,10 @@ def updateTableData(url, code, field, newvalue, upload = True, text = None, ask 
 	new = rebuildTemplate(my_params, not countries.get((_lang, _db)).get('keepEmptyFields'))
 	
 	if orig.strip() == new.strip() and upload != None:
-		pywikibot.output("No change, nothing to upload!")
+		#pywikibot.output("No change, nothing to upload!")
 		return text
+
+	pywikibot.output("Updating %s for %s to value \"%s\"" % (field, code, newvalue))
 	
 	pywikibot.output(orig)
 	pywikibot.output(new)
@@ -755,12 +755,12 @@ def main():
 						if pic_author == None and author_list == "" and pic["author"] <> None:
 							pic_author = pic["author"]
 							author_list += u"[[:%s]], " % pic["name"]
-							print u"Pic Author: " + pic_author
+							#print u"Pic Author: " + pic_author
 						elif pic["author"] <> None and pic_author <> pic["author"]:
 							#multiple authors, ignore and report error
 							author_list += u"[[:%s]], " % pic["name"]
 							pic_author = None
-							print "pic_author removed"
+							#print "pic_author removed"
 						msg += u"[[:%s]], " % pic["name"]
 						if pic["quality"] == True: #choose the first quality picture
 							picture = pic["name"]
@@ -817,7 +817,7 @@ def main():
 
 		#author from article
 		if article <> None and article["author"] <> None and article["author"].strip() <> "":
-			print "Author from article"
+			#print "Author from article"
 			#author = strainu.stripLink(article["author"]).strip()
 			author = article["author"].strip()
 			if author == None or author == "":
@@ -834,7 +834,7 @@ def main():
 
 		#add the author(s) extracted from author pages
 		elif code in authors_local:
-			print "Author from author pages"
+			#print "Author from author pages"
 			authors = monument[creatorField].strip()
 			for author in authors_local[code]:
 				if authors.find(author["name"]) == -1: #we don't already know the author
@@ -850,18 +850,16 @@ def main():
 				if force or a2 == u"":
 					pywikibot.output(authors)
 					articleText = updateTableData(monument["source"], code, creatorField, authors, text=articleText)
-			else:
-				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
 
 		elif pic_author <> None and pic_author.strip() <> "":
-			print "Author from commons"
+			#print "Author from commons"
 			if strainu.stripLink(pic_author) <> strainu.stripLink(monument[creatorField]).strip():
 				if force or monument[creatorField].strip() == u"":
 					articleText = updateTableData(monument["source"], code, creatorField, pic_author, text=articleText)
 
 		#try to find the author in external data
 		elif code in other_data and creatorField in other_data[code]:
-			print "Author from other data"
+			#print "Author from other data"
 			authors = monument[creatorField].strip()
 			author = other_data[code][creatorField]
 			if authors <> u"" and authors.find(author) == -1: #we don't already know the author
@@ -875,8 +873,6 @@ def main():
 				if force:
 					pywikibot.output(authors)
 					articleText = updateTableData(monument["source"], code, creatorField, authors, text=articleText)
-			else:
-				pywikibot.output("The authors list is unchanged for %s: %s" % (code, authors))
 
 		# --- Copyright ---
 		if last_death > 0:
@@ -888,7 +884,7 @@ def main():
 		#image from Commons, none in the list
 		if isNullorEmpty(monument.get(imageField)) or force:
 			if picture <> None:
-				pywikibot.output("We're uploading a selected picture from Commons: " + picture)
+				#pywikibot.output("We're uploading a selected picture from Commons: " + picture)
 				if picture.find(':') < 0:#no namespace
 					picture = "File:" + picture
 				picture, pictureType = chooseImagePicky([{"name": picture}])
@@ -898,7 +894,7 @@ def main():
 			#use image from article only if none is available (or was selected) 
 			#from commons and we don't have a picture in the list
 			elif article <> None and article["image"] <> None and article["image"] <> "":
-				pywikibot.output("We're uploading image " + article["image"] + " from the article")
+				#pywikibot.output("We're uploading image " + article["image"] + " from the article")
 				artimage = strainu.extractImageLink(article["image"]).strip()
 				if artimage == None or artimage == "":
 					pywikibot.output("Wrong article image link: \"%s\"@%s" % (article["image"], article["name"]))
