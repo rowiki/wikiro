@@ -621,7 +621,7 @@ def processArticle(text, page, conf):
 		    'project': user.mylang,
 		    'lat': lat, 'long': long,
 		    'quality': quality,
-		    'lastedit': page.editTime().totimestampformat(),
+		    'lastedit': pywikibot.Timestamp.fromISOformat(page._timestamp).totimestampformat(),
 		    'code': code,
 		}
 	#print dictElem
@@ -728,10 +728,11 @@ def main():
 	trace = Trace(sys._getframe().f_code.co_name)
 	PARSE_QUICK = 0
 	PARSE_NORMAL = 1
-	PARSE_FULL = 2
+	PARSE_EXTENDED = 2
+	PARSE_FULL = 3
 	lang = u'ro'
 	textfile = u''
-	parse_type = PARSE_NORMAL
+	parse_type = PARSE_EXTENDED
 	preload = True
 	incremental = False
 	namespaces = None
@@ -761,6 +762,8 @@ def main():
 			elif arg [len('-parse:'):] == "quick":
 				parse_type = PARSE_QUICK
 				preload = False
+			elif arg [len('-parse:'):] == "extended":
+				parse_TYPE = PARSE_EXTENDED
 
 	site = pywikibot.Site()
 	lang = user.mylang
@@ -845,7 +848,7 @@ def main():
 						content = reworkedDict[pageTitle]
 				useCache = False
 				#on normal parse, we first check if the page has changed
-				if content and parse_type == PARSE_NORMAL:
+				if content and parse_type == PARSE_NORMAL or parse_type == PARSE_EXTENDED:
 					if 'lastedit' in content:
 						lastedit = content['lastedit']
 					else:
@@ -855,7 +858,10 @@ def main():
 					else:
 						code = 0
 					# if we preloaded the page, we already have the time
-					pageEdit = page.editTime().totimestampformat()
+					if parse_type == PARSE_NORMAL:
+						pageEdit = page.editTime().totimestampformat()
+					elif parse_type == PARSE_EXTENDED:
+						pageEdit = pywikibot.Timestamp.fromISOformat(page._timestamp).totimestampformat()
 					if int(pageEdit) <= int(lastedit):
 						useCache = True
 				if useCache:
