@@ -112,6 +112,7 @@ lmi_blacklist = [#all lowercase
 		u'usa',
 		u'fereastr',
 		u'logo',#logo
+		u'icon',
 	    ]
 
 plan = 	[#all lowercase
@@ -126,7 +127,7 @@ plan = 	[#all lowercase
 		u'map'
 		u'layout',
 		u'grundriss',
-		u'schi',#scita, schi?a - TODO: is it large enough?
+		u'schi',#scita, schiță - TODO: is it large enough?
 	]
 
 countries = {
