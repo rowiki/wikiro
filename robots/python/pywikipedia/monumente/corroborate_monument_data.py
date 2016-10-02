@@ -723,6 +723,8 @@ def main():
 		try:
 			if monument.get(creatorField) != "" and (monument.get(u"Copyright") == u"" or force):
 				last_death = extractCopyrightField(monument.get(creatorField))
+			elif len(monument.get(u"Copyright")) == 4:#hack based on the valid values of Copyright
+				last_death = int(monument.get(u"Copyright"))
 
 			if code in pages_local:
 				allPages.extend(pages_local[code])
