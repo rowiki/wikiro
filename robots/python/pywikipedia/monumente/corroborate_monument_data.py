@@ -140,8 +140,8 @@ countries = {
 						(u'Cod', {'code': Changes.all, }),
 						(u'NotăCod', {'code': Changes.all, }),
 						(u'FostCod', {'code': Changes.other, }),
-						(u'CodRan', {'code': Changes.other, }),
-						(u'Cod92', {'code': Changes.other, }),
+						(u'CodRan', {'code': Changes.other, 'alias': 'ran', }),
+						(u'Cod92', {'code': Changes.other, 'alias': 'lmi92', }),
 						(u'Denumire', {'code': Changes.article, }),
 						(u'Localitate', {'code': Changes.all, }),
 						(u'Adresă', {'code': Changes.all, }),
@@ -349,7 +349,7 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 	new = rebuildTemplate(my_params, not countries.get((_lang, _db)).get('keepEmptyFields'))
 	
 	if orig.strip() == new.strip() and upload != None:
-		#pywikibot.output("No change, nothing to upload!")
+		#pywikibot.output("No change in field %s for %s, nothing to upload!" % (field, code))
 		return text
 
 	pywikibot.output("Updating %s for %s to value \"%s\"" % (field, code, newvalue))
@@ -636,6 +636,18 @@ def hasDependencyCycles(field, value, type, monument):
 			return True
 	return False
 
+def getFieldsWithAliases():
+	fields = countries.get((_lang, _db)).get('fields')
+	return {field: fields[field]['alias'] for field in fields if fields[field].get('alias')}
+
+def getMiscDataFromPages(dataSource):
+	data = {}
+	fields = getFieldsWithAliases()
+        for field in fields:
+		alias = fields[field]
+		if alias in dataSource:
+			data[field] = dataSource[alias]
+	return data
 
 def main():
 	otherFile = "other_monument_data.csv"
@@ -740,7 +752,7 @@ def main():
 		article = None
 		picture = None
 		pic_author = None
-		lmi92 = None
+		otherData = []
 		ran = None
 		_differentCoords = {}
 		last_death = 0
@@ -766,16 +778,14 @@ def main():
 					#picture = pages_commons[code][0]["name"]
 					if pic_author == None:
 						pic_author = pages_commons[code][0]["author"]
-					if "lmi92" in pages_commons[code]:
-						lmi92 = pages_commons[code]["lmi92"]
+					otherData.append(getMiscDataFromPages(pages_commons[code][0]))
 				elif isNullorEmpty(monument.get(imageField)) or \
 						isNullorEmpty(monument.get(creatorField)) or \
-						isNullorEmpty(monument.get(u"Cod92")): 
+						any([isNullorEmpty(monument.get(field)) for field in getFieldsWithAliases()]):
 					#multiple images available, we need to parse them
 					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
 					for pic in pages_commons[code]:
-						if "lmi92" in pic:
-							lmi92 = pic["lmi92"]
+						otherData.append(getMiscDataFromPages(pic))
 						author_list = ""
 						if pic_author == None and author_list == "" and pic["author"] <> None:
 							pic_author = pic["author"]
@@ -1038,9 +1048,12 @@ def main():
 				text += u"<br/>[[:%s]] (%f, %f), " % (src, _differentCoords[src][0], _differentCoords[src][1])
 			log(text)
 	
-		#Codes from 1992
-		if lmi92 <> None:
-			articleText = updateTableData(monument["source"], code, "Cod92", lmi92, monument, upload = True, text = articleText)
+		#Other data
+		for entry in otherData:
+			for field in entry:
+				#print entry[field]
+				if not isNullorEmpty(entry[field]):
+					articleText = updateTableData(monument["source"], code, field, entry[field], monument, text = articleText)
 	
 	closeLog()
 
