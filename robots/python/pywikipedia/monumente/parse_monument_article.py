@@ -762,8 +762,8 @@ def main():
 			elif arg [len('-parse:'):] == "quick":
 				parse_type = PARSE_QUICK
 				preload = False
-			elif arg [len('-parse:'):] == "extended":
-				parse_TYPE = PARSE_EXTENDED
+			elif arg [len('-parse:'):] == "normal":
+				parse_type = PARSE_NORMAL
 
 	site = pywikibot.Site()
 	lang = user.mylang
