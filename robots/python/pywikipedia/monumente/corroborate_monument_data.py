@@ -1052,7 +1052,7 @@ def main():
 		for entry in otherData:
 			for field in entry:
 				#print entry[field]
-				if not isNullorEmpty(entry[field]):
+				if not isNullorEmpty(entry[field]) and (isNullorEmpty(monument[field]) or force):
 					articleText = updateTableData(monument["source"], code, field, entry[field], monument, text = articleText)
 	
 	closeLog()
