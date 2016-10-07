@@ -195,7 +195,6 @@ countries = {
 						(u'Lons', {'code': Changes.coord, }),
 						(u'Imagine', {'code': Changes.image, 'blacklist': lmi_blacklist + plan}),
 						(u'Commons', {'code': Changes.commons, }),
-						(u'Copyright', {'code': Changes.all, }),
 					]),
 		'geolimits': {
 			'north': 48.3,
@@ -631,7 +630,7 @@ def hasDependencyCycles(field, value, type, monument):
                 #print "*" + field
                 if fields[otherField]['code'] & type and \
 			field != otherField and \
-			monument[otherField] == value:
+			monument.get(otherField) == value:
 			pywikibot.output(u"Dependency cycle detected:\nmonument[%s]=%s\nmonument[%s]=%s" % (field, value, otherField, monument[otherField]))
 			return True
 	return False
@@ -758,10 +757,11 @@ def main():
 		last_death = 0
 		
 		try:
-			if monument.get(creatorField) != "" and (monument.get(u"Copyright") == u"" or force):
+			copyright = monument.get(u"Copyright") or u"yes"
+			if monument.get(creatorField) != "" and (copyright == u"" or force):
 				last_death = extractCopyrightField(monument.get(creatorField))
-			elif len(monument.get(u"Copyright")) == 4:#hack based on the valid values of Copyright
-				last_death = int(monument.get(u"Copyright"))
+			elif len(copyright) == 4:#hack based on the valid values of Copyright
+				last_death = int(copyright)
 
 			if code in pages_local:
 				allPages.extend(pages_local[code])
