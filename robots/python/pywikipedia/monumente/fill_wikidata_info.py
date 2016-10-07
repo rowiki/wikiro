@@ -113,7 +113,7 @@ class MonumentsData(robot.WorkItem):
             pywikibot.output(u"Could not update " + item.labels['ro'])
 
     def updateWikidata(self, item, data):
-        for key in [u"Cod", u"FostCod", u"Localitate", u"Commons", u"Imagine", u"Plan", u"OsmCoord"]:
+        for key in [u"Cod", u"FostCod", u"Localitate", u"Commons", u"Imagine", u"OsmCoord"]:
         #for key in [u"Imagine", u"Plan"]:
             if key in data and data[key] != u"":
                 self.updateProperty(item, key, data)
@@ -122,6 +122,7 @@ class MonumentsData(robot.WorkItem):
         try:
             if page.title() not in self.db:
                 pywikibot.output(u"Could not find article " + page.title())
+        	return
             self.updateWikidata(item, self.db[page.title()])
         except Exception as e:
             pywikibot.output(e)
