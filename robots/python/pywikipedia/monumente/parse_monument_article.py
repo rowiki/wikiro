@@ -65,6 +65,11 @@ sys.path.append('wikiro/robots/python/pywikipedia')
 import strainu_functions as strainu
 
 options = {
+	'wikidata':
+	{
+		'lmi': 'P1770',
+		'ran': 'P2845',
+	},
 	'ro':
 	{
 		'lmi':#database we work on
@@ -591,7 +596,8 @@ def processArticle(text, page, conf):
 	else:#exactly 1 code or several codes of the same monument
 		code = codes[0][0]
 	if not code:
-		code = getWikidataProperty(page, u"P1770")
+		code = getWikidataProperty(page, options.get('wikidata'))
+	print code
 	if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
 		quality = True
 	else:
@@ -764,7 +770,7 @@ def main():
 				preload = False
 			elif arg [len('-parse:'):] == "normal":
 				parse_type = PARSE_NORMAL
-
+	
 	site = pywikibot.Site()
 	lang = user.mylang
 	if not options.get(lang):
@@ -848,7 +854,7 @@ def main():
 						content = reworkedDict[pageTitle]
 				useCache = False
 				#on normal parse, we first check if the page has changed
-				if content and parse_type == PARSE_NORMAL or parse_type == PARSE_EXTENDED:
+				if content and (parse_type == PARSE_NORMAL or parse_type == PARSE_EXTENDED):
 					if 'lastedit' in content:
 						lastedit = content['lastedit']
 					else:
