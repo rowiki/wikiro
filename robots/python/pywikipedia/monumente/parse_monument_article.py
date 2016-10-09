@@ -352,8 +352,6 @@ def isCoor( ns, ew ):
 
 def parseGeohackLinks(page, conf):
 	trace = Trace(sys._getframe().f_code.co_name)
-	#pywikibot.output("=> Trying to retrieve: " + page.site.base_url("/w/api.php?action=parse&format=json&page=" +
-        #                page.title(asUrl=True) + "&prop=externallinks&uselang=ro"))
 	output = pywikibot.comms.http.request(page.site, "/w/api.php?action=parse&format=json&page=" +
 			page.title(asUrl=True) + "&prop=externallinks&uselang=ro")
 	#pywikibot.output("<= Retrieved external links")
@@ -596,8 +594,8 @@ def processArticle(text, page, conf):
 	else:#exactly 1 code or several codes of the same monument
 		code = codes[0][0]
 	if not code:
-		code = getWikidataProperty(page, options.get('wikidata'))
-	print code
+		code = getWikidataProperty(page, options.get('wikidata').get(_db))
+	#print code
 	if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
 		quality = True
 	else:
@@ -702,8 +700,8 @@ def processArticle(text, page, conf):
 				dictElem['image'] = img[0].title()
 		else:
 			dictElem['image'] = img.title()
-	elif dictElem.get('image').find(':') < 0: #no namespace
-		dictElem['image'] = site.namespace(6) + u":" + dictElem['image']
+	if dictElem.get('image') and dictElem.get('image').find(':') < 0: #no namespace
+		dictElem['image'] = page.site.namespace(6) + u":" + dictElem['image']
 
 	#print dictElem
 
@@ -885,7 +883,10 @@ def main():
 						f = open(tempfile, "w+")
 						json.dump(fullDict, f, indent = 2)
 						f.close();
-			except:
+			except Exception as e:
+				pywikibot.output(u"Exception: " + repr(e))
+				import traceback
+				traceback.print_exc()
 				#this sucks, but we shouldn't stop
 				#keep the data we have and carry on
 				if content:
