@@ -6,6 +6,7 @@ import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.endsWith;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -76,13 +77,14 @@ public class FixVillages {
     private static RuleBasedCollator collator = null;
     private static Exception exception;
 
-    private static String countyStart = "Harghita";
-    private static String communeStart = "Miercurea Ciuc";
+    private static String countyStart = "Călărași";
+    private static String communeStart = "Grădiștea";
 
     // Pattern sentencePattern = Pattern.compile("((.*(\\(.*?\\)))*.*?)(\\.|$)\\s*");
     // Pattern sentencePattern = Pattern.compile(
     // "(([^\\.]*(\\(.*?\\)))*.*?)(((\\.|$)\\s*((\\<ref[^\\/]*?\\>.*?\\<\\/ref\\>)|(\\<ref[^>]*\\/\\>))*)|((\\<ref[^\\/]*?\\>.*?\\<\\/ref\\>)|(\\<ref[^>]*\\/\\>))*\\s*(\\.|$))\\s*");
-    private static Pattern manuallyFormatedNumberPattern = Pattern.compile("\\d+(?:\\.\\s*\\d+)+");
+    private static Pattern manuallyFormatedNumberPattern =
+        Pattern.compile("(?<!(?:ormatnum\\:\\d{0,9}))\\d+(?:\\.\\s*\\d+)+");
     private static Pattern sentencePattern = Pattern.compile(
         "((?:'''.*?''')?(?:(?:\\[\\[.*?\\]\\])|(\\(.*?\\))|(?:\\<ref[^\\>]*(?:(?:\\/\\>)|(?:\\>.*?\\<\\/ref\\>)))|[^\\[\\]\\.])*+(?:(?:\\<ref[^\\>]*+\\>(?:.*?\\</ref\\>)?)|(?:\\[\\[.*?\\]\\])|[^\\[\\]\\.])*?)(((\\.|$)\\s*((\\<ref[^\\/]*?\\>.*?\\<\\/ref\\>)|(\\<ref[^>]*\\/\\>))*)|((\\<ref[^\\/]*?\\>.*?\\<\\/ref\\>)|(\\<ref[^>]*\\/\\>))*+\\s*(\\.|$))\\s*");
     private static Pattern fullLocationPattern =
@@ -94,6 +96,7 @@ public class FixVillages {
     private static Pattern roFormattedNumberStringRegex = Pattern.compile("\\d+(?:\\.\\d+)*,\\d+");
     private static Pattern simpleRefPattern = Pattern.compile("\\<ref[^\\/\\>]*\\>([^\\<]+)\\</ref\\>");
     private static Pattern numberRangePattern = Pattern.compile("(\\d+)((?:[–\\-]|(?:&ndash;))(\\d+))?");
+    private static Pattern ifPattern = Pattern.compile("\\{\\{\\s*#if");
 
     public static void main(String[] args) throws IOException {
         Wiki rowiki = new Wiki("ro.wikipedia.org");
@@ -338,15 +341,24 @@ public class FixVillages {
                                 for (String eachParam : initialTemplate.getParamNames()) {
                                     String paramValue = initialTemplate.getParams().get(eachParam);
                                     if (startsWithAny(eachParam, "comună", "oraș", "tip_subdiviziune", "nume_subdiviziune")
-                                        || eachParam.matches("p?\\d+")
-                                        || isBlank(paramValue)) {
+                                        || eachParam.matches("p?\\d+") || isBlank(paramValue)) {
                                         initialTemplate.removeParam(eachParam);
+                                    } else if (equalsIgnoreCase("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
+                                        Matcher ifMatcher = ifPattern.matcher(paramValue);
+                                        StringBuffer sbuf = new StringBuffer();
+                                        while (ifMatcher.find()) {
+                                            ifMatcher.appendReplacement(sbuf, "{{subst:#if");
+                                        }
+                                        ifMatcher.appendTail(sbuf);
+                                        if (isNotBlank(sbuf)) {
+                                            initialTemplate.setParam(eachParam, sbuf.toString());
+                                        }
                                     }
                                     if (startsWith(eachParam, "suprafață_totală_km2")) {
                                         if (isNotBlank(paramValue) && (!villageEntity.getClaims().containsKey(areaProp)
                                             || null == villageEntity.getClaims().get(areaProp))) {
-                                            Claim areaClaim = extractWdAreaDataFromParam(areaProp, squareKmEnt,
-                                                paramValue, roWpReference);
+                                            Claim areaClaim =
+                                                extractWdAreaDataFromParam(areaProp, squareKmEnt, paramValue, roWpReference);
                                             String claimId = dwiki.addClaim(villageEntity.getId(), areaClaim);
                                             if (null != claimId) {
                                                 for (Set<Snak> eachRef : areaClaim.getReferences()) {
@@ -359,8 +371,8 @@ public class FixVillages {
                                     if (StringUtils.equals(eachParam, "altitudine")) {
                                         if (isNotBlank(paramValue) && (!villageEntity.getClaims().containsKey(altProp)
                                             || null == villageEntity.getClaims().get(altProp))) {
-                                            Claim altClaim = extractWdAltitudeDataFromParam(altProp, meterEnt,
-                                                paramValue, roWpReference);
+                                            Claim altClaim =
+                                                extractWdAltitudeDataFromParam(altProp, meterEnt, paramValue, roWpReference);
                                             String claimId = dwiki.addClaim(villageEntity.getId(), altClaim);
                                             if (null != claimId) {
                                                 for (Set<Snak> eachRef : altClaim.getReferences()) {
@@ -370,6 +382,7 @@ public class FixVillages {
                                         }
                                         initialTemplate.removeParam(eachParam);
                                     }
+
                                 }
                             } else {
                                 pageText = "{{Infocaseta Așezare}}" + pageText;
@@ -521,7 +534,9 @@ public class FixVillages {
                             List<String> firstParagraphRefs = new ArrayList<String>();
                             while (sentenceMatcher.find()) {
                                 firstParagraphSentences.add(sentenceMatcher.group(1));
-                                firstParagraphRefs.add(defaultIfBlank(defaultIfBlank(sentenceMatcher.group(8), sentenceMatcher.group(10)), sentenceMatcher.group(6)));
+                                firstParagraphRefs
+                                    .add(defaultIfBlank(defaultIfBlank(sentenceMatcher.group(8), sentenceMatcher.group(10)),
+                                        sentenceMatcher.group(6)));
                             }
 
                             String qualifier = "";
@@ -661,12 +676,22 @@ public class FixVillages {
                             if (startsWithAny(eachParam, "comună", "oraș", "tip_subdiviziune", "nume_subdiviziune")
                                 || eachParam.matches("p?\\d+") || isBlank(paramValue)) {
                                 initialTemplate.removeParam(eachParam);
+                            } else if (equalsIgnoreCase("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
+                                Matcher ifMatcher = ifPattern.matcher(paramValue);
+                                StringBuffer sbuf = new StringBuffer();
+                                while (ifMatcher.find()) {
+                                    ifMatcher.appendReplacement(sbuf, "{{subst:#if");
+                                }
+                                ifMatcher.appendTail(sbuf);
+                                if (isNotBlank(sbuf)) {
+                                    initialTemplate.setParam(eachParam, sbuf.toString());
+                                }
                             }
                             if (startsWith(eachParam, "suprafață_totală_km2")) {
                                 if (isNotBlank(paramValue) && (!communeWikibaseItem.getClaims().containsKey(areaProp)
                                     || null == communeWikibaseItem.getClaims().get(areaProp))) {
-                                    Claim areaClaim = extractWdAreaDataFromParam(areaProp, squareKmEnt,
-                                        paramValue, roWpReference);
+                                    Claim areaClaim =
+                                        extractWdAreaDataFromParam(areaProp, squareKmEnt, paramValue, roWpReference);
                                     String claimId = dwiki.addClaim(communeWikibaseItem.getId(), areaClaim);
                                     if (null != claimId) {
                                         for (Set<Snak> eachRef : areaClaim.getReferences()) {
@@ -679,8 +704,8 @@ public class FixVillages {
                             if (StringUtils.equals(eachParam, "altitudine")) {
                                 if (isNotBlank(paramValue) && (!communeWikibaseItem.getClaims().containsKey(altProp)
                                     || null == communeWikibaseItem.getClaims().get(altProp))) {
-                                    Claim altClaim = extractWdAltitudeDataFromParam(altProp, meterEnt,
-                                        paramValue, roWpReference);
+                                    Claim altClaim =
+                                        extractWdAltitudeDataFromParam(altProp, meterEnt, paramValue, roWpReference);
                                     String claimId = dwiki.addClaim(communeWikibaseItem.getId(), altClaim);
                                     if (null != claimId) {
                                         for (Set<Snak> eachRef : altClaim.getReferences()) {
@@ -696,6 +721,7 @@ public class FixVillages {
                                     initialTemplate.removeParam(eachParam);
                                 }
                             }
+
                         }
                     } else {
                         pageText = "{{Infocaseta Așezare}}" + pageText;
@@ -837,7 +863,8 @@ public class FixVillages {
                     List<String> firstParagraphRefs = new ArrayList<String>();
                     while (sentenceMatcher.find()) {
                         firstParagraphSentences.add(sentenceMatcher.group(1));
-                        firstParagraphRefs.add(defaultIfBlank(defaultIfBlank(sentenceMatcher.group(8), sentenceMatcher.group(10)), sentenceMatcher.group(6)));
+                        firstParagraphRefs.add(defaultIfBlank(
+                            defaultIfBlank(sentenceMatcher.group(8), sentenceMatcher.group(10)), sentenceMatcher.group(6)));
                     }
 
                     String qualifier = "";
@@ -1074,7 +1101,7 @@ public class FixVillages {
                 numbersIdenfifiedList.add(rangeMatcher.group(3));
             }
         }
-        
+
         String ref = null;
         Matcher simpleRefMatcher = simpleRefPattern.matcher(data);
         if (simpleRefMatcher.find()) {
@@ -1122,10 +1149,11 @@ public class FixVillages {
                                                     Set<Snak> baseReferences)
         throws ParseException {
         Quantity areaQty = new Quantity();
-        String areaString = trim(removeStart(removeEnd(trim(data), "}}"), "{{formatnum:"));
+        String areaString = trim(removeStart(removeEnd(trim(lowerCase(data)), "}}"), "{{formatnum:"));
         double area = 0d;
         Matcher roFormatedNumberMatcher = roFormattedNumberStringRegex.matcher(areaString);
         Matcher simpleRefMatcher = simpleRefPattern.matcher(areaString);
+        Matcher numberRangeMatcher = numberRangePattern.matcher(areaString);
         String ref = null;
         if (roFormatedNumberMatcher.find()) {
             NumberFormat nf = NumberFormat.getNumberInstance(new Locale("ro"));
@@ -1134,6 +1162,8 @@ public class FixVillages {
             ref = simpleRefMatcher.group(1);
             areaString = replace(areaString, simpleRefMatcher.group(0), "");
             area = Double.parseDouble(areaString);
+        } else if (numberRangeMatcher.find()) {
+            area = Double.parseDouble(numberRangeMatcher.group(1));
         } else {
             area = Double.parseDouble(areaString);
         }
@@ -1143,7 +1173,7 @@ public class FixVillages {
         areaQty.setUnit(new Item(squareKmEnt));
         Claim areaClaim = new Claim(areaProp, areaQty);
         areaClaim.getMainsnak().setDatatype("quantity");
-        
+
         Set<Set<Snak>> refs = new HashSet<Set<Snak>>();
         refs.add(baseReferences);
         if (null != ref) {
@@ -1326,7 +1356,7 @@ public class FixVillages {
             if (Arrays.asList("Adâncata", "Baia", "Bogdănești", "Boroaia", "Broșteni", "Crucea", "Dolhești", "Drăgușeni",
                 "Dumbrăveni", "Fântâna Mare", "Fântânele", "Forăști", "Grămești", "Hănțești", "Hârtop", "Horodniceni",
                 "Mălini", "Panaci", "Preutești", "Rădășeni", "Râșca", "Simimicea", "Slatina", "Vadu Moldovei", "Verești",
-                "Vulturești", "Zamostea", "Zvoriștea", "Dolhasca", "Fălticeni").contains(trim(commune))) {
+                "Vulturești", "Zamostea", "Zvoriștea", "Dolhasca", "Fălticeni", "Liteni").contains(trim(commune))) {
                 return MOLDOVA_LINK;
             }
 
