@@ -1362,7 +1362,7 @@ public class FixVillages {
             if (Arrays.asList("Adâncata", "Baia", "Bogdănești", "Boroaia", "Broșteni", "Crucea", "Dolhești", "Drăgușeni",
                 "Dumbrăveni", "Fântâna Mare", "Fântânele", "Forăști", "Grămești", "Hănțești", "Hârtop", "Horodniceni",
                 "Mălini", "Panaci", "Preutești", "Rădășeni", "Râșca", "Simimicea", "Slatina", "Vadu Moldovei", "Verești",
-                "Vulturești", "Zamostea", "Zvoriștea", "Dolhasca", "Fălticeni", "Liteni").contains(trim(commune))) {
+                "Vulturești", "Zamostea", "Zvoriștea", "Dolhasca", "Fălticeni", "Liteni", "Salcea").contains(trim(commune))) {
                 return MOLDOVA_LINK;
             }
 
