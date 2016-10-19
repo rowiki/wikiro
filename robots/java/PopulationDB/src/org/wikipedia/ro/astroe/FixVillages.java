@@ -77,8 +77,8 @@ public class FixVillages {
     private static RuleBasedCollator collator = null;
     private static Exception exception;
 
-    private static String countyStart = "Călărași";
-    private static String communeStart = "Grădiștea";
+    private static String countyStart = "Alba";
+    private static String communeStart = "Abrud";
 
     // Pattern sentencePattern = Pattern.compile("((.*(\\(.*?\\)))*.*?)(\\.|$)\\s*");
     // Pattern sentencePattern = Pattern.compile(
@@ -337,6 +337,9 @@ public class FixVillages {
                                         initialTemplate.setParam("nume_nativ", initialTemplate.getParams().get("alt_nume"));
                                         initialTemplate.removeParam("alt_nume");
                                     }
+                                }
+                                if (initialTemplate.getParamNames().contains("infodoc")) {
+                                    initialTemplate.setParam("infodoc", initialTemplate.getTemplateTitle());
                                 }
                                 for (String eachParam : initialTemplate.getParamNames()) {
                                     String paramValue = initialTemplate.getParams().get(eachParam);
@@ -670,6 +673,9 @@ public class FixVillages {
                                 initialTemplate.setParam("nume_nativ", initialTemplate.getParams().get("alt_nume"));
                                 initialTemplate.removeParam("alt_nume");
                             }
+                        }
+                        if (initialTemplate.getParamNames().contains("infodoc")) {
+                            initialTemplate.setParam("infodoc", initialTemplate.getTemplateTitle());
                         }
                         for (String eachParam : initialTemplate.getParamNames()) {
                             String paramValue = initialTemplate.getParams().get(eachParam);
