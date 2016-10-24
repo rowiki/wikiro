@@ -100,6 +100,7 @@ public class CategoriesImporter {
             final String rowppassword = credentials.getProperty("rowiki.password");
 
             rowiki.login(rowpusername, rowppassword);
+            rowiki.setMarkBot(true);
 
             CategoriesImporter importer = new CategoriesImporter(rowiki, enwiki, dwiki, article);
             importer.importCategories();
