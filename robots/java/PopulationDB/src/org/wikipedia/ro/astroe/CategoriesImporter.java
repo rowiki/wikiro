@@ -77,7 +77,9 @@ public class CategoriesImporter {
             } else {
                 articleBuilder.append(catBuilder.toString());
             }
-            targetWiki.edit(article, articleBuilder.toString(), "Robot: importat categorii de la " + sourceWikiCode);
+            String newArticleText = articleBuilder.toString();
+            newArticleText = newArticleText.replaceAll("\\{\\{\\s*(N|n)ecat(egorizate)?(\\|[^\\}]*)?\\}\\}", "");
+            targetWiki.edit(article, newArticleText, "Robot: importat categorii de la " + sourceWikiCode);
         }
     }
 
