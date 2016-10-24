@@ -25,11 +25,12 @@ config = {
 			u'Denumire': ('', None, 'label'),
 			u'Localitate': ('P131', False, 'wikibase-item'),
 			u'Creatori': ('P1770', True, 'wikibase-item'),
-			u'Coord': ('P625', True, 'globe-coordinate'),
-			u'OsmCoord': ('P625', False, 'globe-coordinate'),
+			u'Coord': ('P625', False, 'globe-coordinate'),
+			u'OsmCoord': ('P625', True, 'globe-coordinate'),
 			u'Imagine': ('P18', True, 'commonsMedia'),
 			u'Plan': ('P18', False, 'commonsMedia'),
 			u'Commons': ('P373', False, 'string'),
+                        u'Țară': ('P17', False, 'wikibase-item'),
 			}
 	}
 }
@@ -43,6 +44,10 @@ class MonumentsData(robot.WorkItem):
             name = sf.extractLink(monument["Denumire"])
             monument["Commons"] = monument["Commons"].replace("commons:Category:", "")
             monument["Localitate"] = sf.extractLink(monument["Localitate"])
+            if monument["Lat"] != '':
+                monument["Coord"] = (monument["Lat"], monument["Lon"])
+            if monument["OsmLat"] != '':
+                monument["OsmCoord"] = (monument["OsmLat"], monument["OsmLon"])
             if name not in self.db:
                 self.db[name] = monument
         self.always = False
@@ -76,13 +81,24 @@ class MonumentsData(robot.WorkItem):
             else:
                 if datatype == 'wikibase-item':
                     page = pywikibot.Page(pywikibot.Site(), data[key])
+                    while page.isRedirectPage():
+                        page = page.getRedirectTarget()
                     val = page.data_item()
                     desc = page.title()
                 elif datatype == 'globe-coordinate':
-                    val = desc = data[key]
+                    val = pywikibot.Coordinate(lat=float(data[key][0]),
+                                         lon=float(data[key][1]),
+                                         globe='earth',
+                                         precision=0.001
+                                         )
+                    desc = data[key]
                 elif datatype == 'commonsMedia':
                     val = pywikibot.FilePage(pywikibot.Site('commons', 'commons'), u"File:" + sf.stripNamespace(data[key]))
+                    while val.isRedirectPage():
+                        val = val.getRedirectTarget()
                     desc = val.title()
+                    if not val.exists():
+                        raise ValueError("Local image given")
                 else:
                     val = desc = data[key]
                 claim = pywikibot.Claim(item.repo, prop, datatype=datatype)
@@ -97,7 +113,7 @@ class MonumentsData(robot.WorkItem):
             pywikibot.output(u"Could not update " + item.labels['ro'])
 
     def updateWikidata(self, item, data):
-        for key in [u"Cod", u"FostCod", u"Localitate", u"Commons", u"Imagine", u"Plan"]:
+        for key in [u"Cod", u"FostCod", u"Localitate", u"Commons", u"Imagine", u"OsmCoord"]:
         #for key in [u"Imagine", u"Plan"]:
             if key in data and data[key] != u"":
                 self.updateProperty(item, key, data)
@@ -106,10 +122,15 @@ class MonumentsData(robot.WorkItem):
         try:
             if page.title() not in self.db:
                 pywikibot.output(u"Could not find article " + page.title())
+        	return
             self.updateWikidata(item, self.db[page.title()])
         except Exception as e:
             pywikibot.output(e)
             pywikibot.output(u"Failed to update monument data to Wikidata, skipping...")
+
+    def invalidArea(self, item):
+        pywikibot.output(u"Country not set, setting...")
+        self.updateProperty(item, u"Țară", {u"Țară": u"România"})
         
     def description(self):
         return u"Updating monument data to wikidata"

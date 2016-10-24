@@ -65,6 +65,11 @@ sys.path.append('wikiro/robots/python/pywikipedia')
 import strainu_functions as strainu
 
 options = {
+	'wikidata':
+	{
+		'lmi': 'P1770',
+		'ran': 'P2845',
+	},
 	'ro':
 	{
 		'lmi':#database we work on
@@ -347,8 +352,6 @@ def isCoor( ns, ew ):
 
 def parseGeohackLinks(page, conf):
 	trace = Trace(sys._getframe().f_code.co_name)
-	#pywikibot.output("=> Trying to retrieve: " + page.site.base_url("/w/api.php?action=parse&format=json&page=" +
-        #                page.title(asUrl=True) + "&prop=externallinks&uselang=ro"))
 	output = pywikibot.comms.http.request(page.site, "/w/api.php?action=parse&format=json&page=" +
 			page.title(asUrl=True) + "&prop=externallinks&uselang=ro")
 	#pywikibot.output("<= Retrieved external links")
@@ -525,6 +528,7 @@ def checkMultipleMonuments(codes, separator='.'):
 	for code in codes:
 		code = code[strainu.findDigit(code):strainu.rfindOrLen(code, separator)]
 		#print code
+		#print last
 		if code != last:
 			return True
 	return False
@@ -585,14 +589,13 @@ def processArticle(text, page, conf):
 			code = tlCodes[0][0]
 		codes = tlCodes
 		# if no or more than one code was found, we'll try extracting the correct one from the templates in the page
-	else:#exactly 1 code
+	elif len(codes) == 0:
+		pass
+	else:#exactly 1 code or several codes of the same monument
 		code = codes[0][0]
 	if not code:
-		code = getWikidataProperty(page, u"P1770")
-	if not code:
-		invalidCount(len(codes), title, _db, list=codes)
-		return
-
+		code = getWikidataProperty(page, options.get('wikidata').get(_db))
+	#print code
 	if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
 		quality = True
 	else:
@@ -622,7 +625,7 @@ def processArticle(text, page, conf):
 		    'project': user.mylang,
 		    'lat': lat, 'long': long,
 		    'quality': quality,
-		    'lastedit': page.editTime().totimestampformat(),
+		    'lastedit': pywikibot.Timestamp.fromISOformat(page._timestamp).totimestampformat(),
 		    'code': code,
 		}
 	#print dictElem
@@ -695,6 +698,10 @@ def processArticle(text, page, conf):
 			img = strainu.linkedImages(page)
 			if len(img):
 				dictElem['image'] = img[0].title()
+		else:
+			dictElem['image'] = img.title()
+	if dictElem.get('image') and dictElem.get('image').find(':') < 0: #no namespace
+		dictElem['image'] = page.site.namespace(6) + u":" + dictElem['image']
 
 	#print dictElem
 
@@ -725,10 +732,11 @@ def main():
 	trace = Trace(sys._getframe().f_code.co_name)
 	PARSE_QUICK = 0
 	PARSE_NORMAL = 1
-	PARSE_FULL = 2
+	PARSE_EXTENDED = 2
+	PARSE_FULL = 3
 	lang = u'ro'
 	textfile = u''
-	parse_type = PARSE_NORMAL
+	parse_type = PARSE_EXTENDED
 	preload = True
 	incremental = False
 	namespaces = None
@@ -758,7 +766,9 @@ def main():
 			elif arg [len('-parse:'):] == "quick":
 				parse_type = PARSE_QUICK
 				preload = False
-
+			elif arg [len('-parse:'):] == "normal":
+				parse_type = PARSE_NORMAL
+	
 	site = pywikibot.Site()
 	lang = user.mylang
 	if not options.get(lang):
@@ -842,7 +852,7 @@ def main():
 						content = reworkedDict[pageTitle]
 				useCache = False
 				#on normal parse, we first check if the page has changed
-				if content and parse_type == PARSE_NORMAL:
+				if content and (parse_type == PARSE_NORMAL or parse_type == PARSE_EXTENDED):
 					if 'lastedit' in content:
 						lastedit = content['lastedit']
 					else:
@@ -852,7 +862,10 @@ def main():
 					else:
 						code = 0
 					# if we preloaded the page, we already have the time
-					pageEdit = page.editTime().totimestampformat()
+					if parse_type == PARSE_NORMAL:
+						pageEdit = page.editTime().totimestampformat()
+					elif parse_type == PARSE_EXTENDED:
+						pageEdit = pywikibot.Timestamp.fromISOformat(page._timestamp).totimestampformat()
 					if int(pageEdit) <= int(lastedit):
 						useCache = True
 				if useCache:
@@ -870,7 +883,10 @@ def main():
 						f = open(tempfile, "w+")
 						json.dump(fullDict, f, indent = 2)
 						f.close();
-			except:
+			except Exception as e:
+				pywikibot.output(u"Exception: " + repr(e))
+				import traceback
+				traceback.print_exc()
 				#this sucks, but we shouldn't stop
 				#keep the data we have and carry on
 				if content:

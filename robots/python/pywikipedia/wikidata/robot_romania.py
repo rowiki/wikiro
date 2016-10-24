@@ -21,6 +21,9 @@ class WorkItem(object):
     def __init__(self):
         pass
 
+    def invalidArea(self, item):
+        pywikibot.output(unicode(item.labels.get('ro')) + u" is not in the right country.")
+
     def doWork(self, page, item):
         raise NotImplementedError
         
@@ -50,10 +53,11 @@ class WikidataBot(SingleSiteBot):
                     if claim.getTarget().title() == "Q218":
                         return True
                 else:
+                    for work in self.workers:
+                        work.invalidArea(item)
                     return False
         if "P843" in item.claims:
             return True
-        pywikibot.output(unicode(item.labels.get('ro')) + u" is not in the right country.")
         return False
 
     def getItem(self, page):
