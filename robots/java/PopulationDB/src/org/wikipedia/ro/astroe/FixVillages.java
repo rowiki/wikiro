@@ -77,8 +77,8 @@ public class FixVillages {
     private static RuleBasedCollator collator = null;
     private static Exception exception;
 
-    private static String countyStart = "Alba";
-    private static String communeStart = "Abrud";
+    private static String countyStart = "Arad";
+    private static String communeStart = "Bârzava";
 
     // Pattern sentencePattern = Pattern.compile("((.*(\\(.*?\\)))*.*?)(\\.|$)\\s*");
     // Pattern sentencePattern = Pattern.compile(
@@ -431,19 +431,20 @@ public class FixVillages {
                                             imageClaimId = dwiki.addClaim(villageEntity.getId(),
                                                 new Claim(imageWikidataProperty, new CommonsMedia(imageName)));
                                             initialTemplate.removeParam("imagine");
-                                        } else if (StringUtils.equals(
-                                            replace(((CommonsMedia) villageEntity.getClaims().get(imageWikidataProperty)
-                                                .iterator().next().getValue()).getFileName(), " ", "_"),
-                                            replace(imageName, " ", "_"))) {
-                                            initialTemplate.removeParam("imagine");
-                                            Claim imageClaim =
-                                                villageEntity.getClaims().get(imageWikidataProperty).iterator().next();
-                                            imageClaimId = imageClaim.getId();
-                                            Set<Snak> captions = imageClaim.getQualifiers().get(captionProp);
-                                            if (null != captions) {
-                                                captionQualifierFound = true;
+                                        } else {
+                                            if (StringUtils.equals(
+                                                replace(((CommonsMedia) villageEntity.getClaims().get(imageWikidataProperty)
+                                                    .iterator().next().getValue()).getFileName(), " ", "_"),
+                                                replace(imageName, " ", "_"))) {
+                                                Claim imageClaim =
+                                                    villageEntity.getClaims().get(imageWikidataProperty).iterator().next();
+                                                imageClaimId = imageClaim.getId();
+                                                Set<Snak> captions = imageClaim.getQualifiers().get(captionProp);
+                                                if (null != captions) {
+                                                    captionQualifierFound = true;
+                                                }
                                             }
-
+                                            initialTemplate.removeParam("imagine");
                                         }
                                         String villageImageCaption =
                                             defaultIfEmpty(initialTemplate.getParams().get("imagine_descriere"),
@@ -1359,10 +1360,12 @@ public class FixVillages {
             return MOLDOVA_LINK;
         }
         if ("Suceava".equalsIgnoreCase(trim(county))) {
-            if (Arrays.asList("Adâncata", "Baia", "Bogdănești", "Boroaia", "Broșteni", "Crucea", "Dolhești", "Drăgușeni",
-                "Dumbrăveni", "Fântâna Mare", "Fântânele", "Forăști", "Grămești", "Hănțești", "Hârtop", "Horodniceni",
-                "Mălini", "Panaci", "Preutești", "Rădășeni", "Râșca", "Simimicea", "Slatina", "Vadu Moldovei", "Verești",
-                "Vulturești", "Zamostea", "Zvoriștea", "Dolhasca", "Fălticeni", "Liteni", "Salcea").contains(trim(commune))) {
+            if (Arrays
+                .asList("Adâncata", "Baia", "Bogdănești", "Boroaia", "Broșteni", "Crucea", "Dolhești", "Drăgușeni",
+                    "Dumbrăveni", "Fântâna Mare", "Fântânele", "Forăști", "Grămești", "Hănțești", "Hârtop", "Horodniceni",
+                    "Mălini", "Panaci", "Preutești", "Rădășeni", "Râșca", "Simimicea", "Slatina", "Vadu Moldovei", "Verești",
+                    "Vulturești", "Zamostea", "Zvoriștea", "Dolhasca", "Fălticeni", "Liteni", "Salcea")
+                .contains(trim(commune))) {
                 return MOLDOVA_LINK;
             }
 
