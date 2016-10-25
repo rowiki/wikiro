@@ -17,6 +17,10 @@ public class TransclusionGenerator implements Generator {
         this.template = template;
     }
 
+    public TransclusionGenerator(Wiki wiki) {
+        this.wiki = wiki;
+    }
+
     @Override
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
@@ -26,4 +30,28 @@ public class TransclusionGenerator implements Generator {
         }
         return pagesList;
     }
+
+    @Override
+    public String getDescriptionKey() {
+        return "generator.transclusion.description";
+    }
+
+    @Override
+    public int getNumberOfTextFields() {
+        return 1;
+    }
+
+    @Override
+    public String[] getTextFieldsLabelKeys() {
+        return new String[] { "generator.transclusion.template" };
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
 }

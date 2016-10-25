@@ -17,6 +17,10 @@ public class LinkedFromPageGenerator implements Generator {
         this.page = page;
     }
     
+    public LinkedFromPageGenerator(Wiki wiki) {
+        this.wiki = wiki;
+    }
+    
     @Override
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
@@ -24,5 +28,28 @@ public class LinkedFromPageGenerator implements Generator {
             pagesList = Arrays.asList(pagesArray);
         }
         return pagesList;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+
+    @Override
+    public String getDescriptionKey() {
+        return "generator.linkedFromPage.description";
+    }
+
+    @Override
+    public int getNumberOfTextFields() {
+        return 1;
+    }
+
+    @Override
+    public String[] getTextFieldsLabelKeys() {
+        return new String[]{"generator.linkedFromPage.page"};
     }
 }
