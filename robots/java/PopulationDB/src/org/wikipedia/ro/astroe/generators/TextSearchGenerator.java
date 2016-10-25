@@ -15,16 +15,41 @@ public class TextSearchGenerator implements Generator {
         this.wiki = wiki;
         this.text = text;
     }
+    public TextSearchGenerator(Wiki wiki) {
+        this.wiki = wiki;
+    }
 
     @Override
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
             String[][] searchResultsArray = wiki.search(text);
             pagesList = new ArrayList<String>();
-            for (String[] eachArray: searchResultsArray) {
+            for (String[] eachArray : searchResultsArray) {
                 pagesList.add(eachArray[0]);
             }
         }
         return pagesList;
     }
+
+    @Override
+    public String getDescriptionKey() {
+        return "generator.search.description";
+    }
+
+    @Override
+    public int getNumberOfTextFields() {
+        return 1;
+    }
+
+    @Override
+    public String[] getTextFieldsLabelKeys() {
+        return new String[] { "generator.search.searchText" };
+    }
+    public String getText() {
+        return text;
+    }
+    public void setText(String text) {
+        this.text = text;
+    }
+
 }
