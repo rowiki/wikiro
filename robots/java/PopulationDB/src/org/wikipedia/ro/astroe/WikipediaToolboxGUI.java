@@ -4,14 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import javax.security.auth.login.FailedLoginException;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.ParallelGroup;
@@ -20,10 +24,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.astroe.generators.Generator;
@@ -36,11 +42,12 @@ public class WikipediaToolboxGUI {
     private static Wiki sourceWiki = null;
     private static Wiki targetWiki = null;
     private static Map<String, Component> dataComponentsMap = new HashMap<String, Component>();
+    private static JFrame frame;
 
     public static void main(String[] args) {
         bundle = ResourceBundle.getBundle("uitexts.uitexts", new Locale("ro"));
         // TODO Auto-generated method stub
-        JFrame frame = new JFrame();
+        frame = new JFrame();
 
         frame.setTitle(bundle.getString("frame.title"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -64,7 +71,7 @@ public class WikipediaToolboxGUI {
 
         JPanel generatorConfigPanel = createGeneratorConfigPanel();
         panel.add(generatorConfigPanel, BorderLayout.CENTER);
-        
+
         JPanel actionConfigPanel = createActionConfigPanel();
         panel.add(actionConfigPanel, BorderLayout.SOUTH);
 
@@ -78,7 +85,7 @@ public class WikipediaToolboxGUI {
         BorderLayout actionConfigLayout = new BorderLayout();
         actionConfigLayout.setVgap(4);
         JPanel actionConfigPanel = new JPanel(actionConfigLayout);
-        
+
         JPanel actionChoicePanel = new JPanel();
         GroupLayout actionChoiceLayout = new GroupLayout(actionChoicePanel);
         actionChoiceLayout.setAutoCreateGaps(true);
@@ -93,7 +100,7 @@ public class WikipediaToolboxGUI {
         hGroup.addGroup(actionChoiceLayout.createParallelGroup().addComponent(actionLabel));
         hGroup.addGroup(actionChoiceLayout.createParallelGroup().addComponent(actionDropDown));
         actionChoiceLayout.setHorizontalGroup(hGroup);
-        
+
         Reflections refl = new Reflections("org.wikipedia.ro.astroe.operations");
         Set<Class<?>> operationClasses = refl.getTypesAnnotatedWith(Operation.class);
         for (Class<?> eachOperationClass : operationClasses) {
@@ -104,7 +111,7 @@ public class WikipediaToolboxGUI {
             actionDropDown.addItem(el);
         }
         actionConfigPanel.add(actionChoicePanel, BorderLayout.NORTH);
-        
+
         JPanel configurationPanel = new JPanel();
         JButton goButton = new JButton(bundle.getString("go"));
         configurationPanel.add(goButton);
@@ -116,7 +123,7 @@ public class WikipediaToolboxGUI {
         BorderLayout generatorConfigLayout = new BorderLayout();
         generatorConfigLayout.setVgap(4);
         JPanel generatorConfigPanel = new JPanel(generatorConfigLayout);
-        
+
         JPanel generatorChoicePanel = new JPanel();
         GroupLayout generatorChoiceLayout = new GroupLayout(generatorChoicePanel);
         generatorChoiceLayout.setAutoCreateGaps(true);
@@ -149,9 +156,8 @@ public class WikipediaToolboxGUI {
                     generatorOptionsPanel.setLayout(generatorOptionsLayout);
                     SequentialGroup vGroup = generatorOptionsLayout.createSequentialGroup();
                     SequentialGroup hGroup = generatorOptionsLayout.createSequentialGroup();
-                    ParallelGroup[] pvGroups =
-                        new ParallelGroup[] { generatorOptionsLayout.createParallelGroup(),
-                            generatorOptionsLayout.createParallelGroup() };
+                    ParallelGroup[] pvGroups = new ParallelGroup[] { generatorOptionsLayout.createParallelGroup(),
+                        generatorOptionsLayout.createParallelGroup() };
                     for (int i = 0; i < noOfConfigs; i++) {
                         JLabel crtLabel = new JLabel(bundle.getString(configKeys[i]));
                         JTextField crtTF = new JTextField();
@@ -159,8 +165,8 @@ public class WikipediaToolboxGUI {
                         dataComponentsMap.put(configKeys[i], crtTF);
                         pvGroups[0].addComponent(crtLabel);
                         pvGroups[1].addComponent(crtTF);
-                        vGroup.addGroup(
-                            generatorOptionsLayout.createParallelGroup(Alignment.BASELINE).addComponent(crtLabel).addComponent(crtTF));
+                        vGroup.addGroup(generatorOptionsLayout.createParallelGroup(Alignment.BASELINE).addComponent(crtLabel)
+                            .addComponent(crtTF));
                     }
                     hGroup.addGroup(pvGroups[0]).addGroup(pvGroups[1]);
                     generatorOptionsLayout.setHorizontalGroup(hGroup);
@@ -189,8 +195,10 @@ public class WikipediaToolboxGUI {
         JLabel targetWikiLabel = new JLabel(bundle.getString("targetwiki.label"));
         final JTextField sourceWikiTextField = new JTextField();
         sourceWikiTextField.setPreferredSize(new Dimension(50, 20));
+        dataComponentsMap.put("sourcewiki", sourceWikiTextField);
         final JTextField targetWikiTextField = new JTextField();
         targetWikiTextField.setPreferredSize(new Dimension(50, 20));
+        dataComponentsMap.put("targetwiki", targetWikiTextField);
         sourceTargetConfigPanel.setLayout(sourceTargetConfigLayout);
         sourceTargetConfigLayout.setAutoCreateGaps(true);
         SequentialGroup hGroup = sourceTargetConfigLayout.createSequentialGroup();
@@ -215,9 +223,40 @@ public class WikipediaToolboxGUI {
         JLabel passwordLabel = new JLabel(bundle.getString("password"));
         JTextField usernameTextField = new JTextField();
         usernameTextField.setPreferredSize(new Dimension(150, 20));
+        dataComponentsMap.put("username", usernameTextField);
         JTextField passwordTextField = new JPasswordField();
+        dataComponentsMap.put("password", passwordTextField);
         passwordTextField.setPreferredSize(new Dimension(150, 20));
         JButton loginButton = new JButton(bundle.getString("login.button"));
+
+        loginButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTextField unameTF = (JTextField) dataComponentsMap.get("username");
+                JPasswordField pwdTF = (JPasswordField) dataComponentsMap.get("password");
+                JTextField twTF = (JTextField) dataComponentsMap.get("targetwiki");
+
+                String uname = unameTF.getText();
+                char[] pwd = pwdTF.getPassword();
+                String tw = StringUtils.appendIfMissing(twTF.getText(), "wiki");
+                if (StringUtils.isNoneEmpty(uname, tw)) {
+                    String twLang = StringUtils.removeEnd(tw, "wiki");
+                    targetWiki = new Wiki(twLang + ".wikipedia.org");
+                    try {
+                        targetWiki.login(uname, pwd);
+                        JOptionPane.showMessageDialog(frame, bundle.getString("auth.successful"));
+                    } catch (FailedLoginException | IOException e1) {
+                        JOptionPane.showMessageDialog(frame, e1.getMessage(), bundle.getString("error.autherror"),
+                            JOptionPane.ERROR_MESSAGE);
+                        e1.printStackTrace();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, bundle.getString("error.specify.targetwiki.credentials"),
+                        bundle.getString("error.autherror"), JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
         loginConfigPanel.setLayout(loginConfigLayout);
         loginConfigLayout.setAutoCreateGaps(true);
         SequentialGroup loginHGroup = loginConfigLayout.createSequentialGroup();
