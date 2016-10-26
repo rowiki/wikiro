@@ -28,6 +28,7 @@ import org.reflections.Reflections;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.astroe.generators.Generator;
 import org.wikipedia.ro.astroe.generators.PageGenerator;
+import org.wikipedia.ro.astroe.operations.Operation;
 
 public class WikipediaToolboxGUI {
 
@@ -63,6 +64,9 @@ public class WikipediaToolboxGUI {
 
         JPanel generatorConfigPanel = createGeneratorConfigPanel();
         panel.add(generatorConfigPanel, BorderLayout.CENTER);
+        
+        JPanel actionConfigPanel = createActionConfigPanel();
+        panel.add(actionConfigPanel, BorderLayout.SOUTH);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation((int) (screenSize.getWidth() - 400) / 2, (int) (screenSize.getHeight() - 400) / 2);
@@ -70,15 +74,55 @@ public class WikipediaToolboxGUI {
         frame.setVisible(true);
     }
 
+    private static JPanel createActionConfigPanel() {
+        BorderLayout actionConfigLayout = new BorderLayout();
+        actionConfigLayout.setVgap(4);
+        JPanel actionConfigPanel = new JPanel(actionConfigLayout);
+        
+        JPanel actionChoicePanel = new JPanel();
+        GroupLayout actionChoiceLayout = new GroupLayout(actionChoicePanel);
+        actionChoiceLayout.setAutoCreateGaps(true);
+        actionChoicePanel.setLayout(actionChoiceLayout);
+        JLabel actionLabel = new JLabel(bundle.getString("generator"));
+        JComboBox<ChoiceElement> actionDropDown = new JComboBox<ChoiceElement>();
+        SequentialGroup vGroup = actionChoiceLayout.createSequentialGroup();
+        vGroup.addGroup(actionChoiceLayout.createParallelGroup(Alignment.BASELINE).addComponent(actionLabel)
+            .addComponent(actionDropDown));
+        actionChoiceLayout.setVerticalGroup(vGroup);
+        SequentialGroup hGroup = actionChoiceLayout.createSequentialGroup();
+        hGroup.addGroup(actionChoiceLayout.createParallelGroup().addComponent(actionLabel));
+        hGroup.addGroup(actionChoiceLayout.createParallelGroup().addComponent(actionDropDown));
+        actionChoiceLayout.setHorizontalGroup(hGroup);
+        
+        Reflections refl = new Reflections("org.wikipedia.ro.astroe.operations");
+        Set<Class<?>> operationClasses = refl.getTypesAnnotatedWith(Operation.class);
+        for (Class<?> eachOperationClass : operationClasses) {
+            Operation annotation = eachOperationClass.getAnnotation(Operation.class);
+            ChoiceElement el = new ChoiceElement();
+            el.clazz = (Class<Generator>) eachOperationClass;
+            el.label = bundle.getString(annotation.labelKey());
+            actionDropDown.addItem(el);
+        }
+        actionConfigPanel.add(actionChoicePanel, BorderLayout.NORTH);
+        
+        JPanel configurationPanel = new JPanel();
+        JButton goButton = new JButton(bundle.getString("go"));
+        configurationPanel.add(goButton);
+        actionConfigPanel.add(configurationPanel, BorderLayout.SOUTH);
+        return actionConfigPanel;
+    }
+
     private static JPanel createGeneratorConfigPanel() {
-        JPanel generatorConfigPanel = new JPanel(new BorderLayout());
+        BorderLayout generatorConfigLayout = new BorderLayout();
+        generatorConfigLayout.setVgap(4);
+        JPanel generatorConfigPanel = new JPanel(generatorConfigLayout);
 
         JPanel generatorChoicePanel = new JPanel();
         GroupLayout generatorChoiceLayout = new GroupLayout(generatorChoicePanel);
         generatorChoiceLayout.setAutoCreateGaps(true);
         generatorChoicePanel.setLayout(generatorChoiceLayout);
         JLabel generatorLabel = new JLabel(bundle.getString("generator"));
-        JComboBox<GeneratorChoiceElement> generatorDropDown = new JComboBox<GeneratorChoiceElement>();
+        JComboBox<ChoiceElement> generatorDropDown = new JComboBox<ChoiceElement>();
         SequentialGroup vGroup = generatorChoiceLayout.createSequentialGroup();
         vGroup.addGroup(generatorChoiceLayout.createParallelGroup(Alignment.BASELINE).addComponent(generatorLabel)
             .addComponent(generatorDropDown));
@@ -95,7 +139,7 @@ public class WikipediaToolboxGUI {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    GeneratorChoiceElement item = (GeneratorChoiceElement) e.getItem();
+                    ChoiceElement item = (ChoiceElement) e.getItem();
                     PageGenerator annotation = item.clazz.getAnnotation(PageGenerator.class);
                     int noOfConfigs = annotation.stringsConfigNumber();
                     String[] configKeys = annotation.stringsConfigLabelKeys();
@@ -129,7 +173,7 @@ public class WikipediaToolboxGUI {
         Set<Class<?>> generatorClasses = refl.getTypesAnnotatedWith(PageGenerator.class);
         for (Class<?> eachGeneratorClass : generatorClasses) {
             PageGenerator annotation = eachGeneratorClass.getAnnotation(PageGenerator.class);
-            GeneratorChoiceElement el = new GeneratorChoiceElement();
+            ChoiceElement el = new ChoiceElement();
             el.clazz = (Class<Generator>) eachGeneratorClass;
             el.label = bundle.getString(annotation.labelKey());
             generatorDropDown.addItem(el);
@@ -192,7 +236,7 @@ public class WikipediaToolboxGUI {
         return loginConfigPanel;
     }
 
-    private static class GeneratorChoiceElement {
+    private static class ChoiceElement {
         public String label;
         public Class<Generator> clazz;
 
