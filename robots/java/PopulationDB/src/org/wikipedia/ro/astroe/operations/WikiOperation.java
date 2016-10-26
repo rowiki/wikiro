@@ -8,4 +8,5 @@ import org.wikibase.WikibaseException;
 
 public interface WikiOperation {
     String execute() throws IOException, WikibaseException, LoginException;
+    String[] getStatus();
 }

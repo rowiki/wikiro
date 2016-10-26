@@ -66,6 +66,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
     private String article;
     private String sourceWikiCode;
     private String targetWikiCode;
+    private String[] status = new String[] { "status.not.inited" };
 
     public ReplaceCrossLinkWithIll(Wiki targetWiki, Wiki sourceWiki, Wikibase dataWiki, String article) {
         this.targetWiki = targetWiki;
@@ -77,8 +78,10 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
     }
 
     public String execute() throws IOException, LoginException, WikibaseException {
+        status = new String[] { "status.reading.text", article, targetWikiCode };
         String text = targetWiki.getPageText(article);
 
+        status = new String[] { "status.identifying.links" };
         String extLinkRegEx = "\\[\\[\\:(?<lang>.*?)\\:(?<foreigntitle>.*?)(\\|(?<locallabel>.*?))?\\]]";
         Pattern extLinkPattern = Pattern.compile(extLinkRegEx, Pattern.DOTALL);
         Matcher extLinkMatcher = extLinkPattern.matcher(text);
@@ -93,11 +96,14 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             String foreignTitle = replace(extLinkMatcher.group("foreigntitle"), "_", " ");
             String localLabel = extLinkMatcher.group("locallabel");
 
+            status = new String[] { "status.analyzing.link", foreignTitle };
+
             String roLabel = null;
             Entity wbEntity = null;
             try {
                 if ("d".equals(lang)) {
-                    wbEntity = dataWiki.getWikibaseItemById(defaultString(dataWiki.resolveRedirect(foreignTitle), foreignTitle));
+                    wbEntity =
+                        dataWiki.getWikibaseItemById(defaultString(dataWiki.resolveRedirect(foreignTitle), foreignTitle));
                 } else {
                     Wiki sourceWiki = new Wiki(lang + ".wikipedia.org");
                     String target = defaultString(sourceWiki.resolveRedirect(foreignTitle), foreignTitle);
@@ -133,6 +139,8 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             String lang = wlAsExtLinkMatcher.group(2);
             String articleTitle = wlAsExtLinkMatcher.group(3);
             String linkTitle = wlAsExtLinkMatcher.group(4);
+
+            status = new String[] { "status.analyzing.link", articleTitle };
 
             Wiki sourceWiki = new Wiki(lang + ".wikipedia.org");
             String target = defaultString(sourceWiki.resolveRedirect(articleTitle), articleTitle);
@@ -190,7 +198,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                 continue;
             }
             articleTitle = defaultString(targetWiki.resolveRedirect(articleTitle), articleTitle);
-            System.out.println("Link to article: " + articleTitle);
+            status = new String[] { "status.analyzing.link", articleTitle};
 
             if (targetWiki.exists(new String[] { articleTitle })[0]) {
                 continue;
@@ -223,6 +231,10 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         innerLinkMatcher.appendTail(anotherNewText);
 
         return anotherNewText.toString();
+    }
+
+    public String[] getStatus() {
+        return status;
     }
 
 }

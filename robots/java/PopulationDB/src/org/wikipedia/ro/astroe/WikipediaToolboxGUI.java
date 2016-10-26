@@ -116,7 +116,7 @@ public class WikipediaToolboxGUI {
         BorderLayout generatorConfigLayout = new BorderLayout();
         generatorConfigLayout.setVgap(4);
         JPanel generatorConfigPanel = new JPanel(generatorConfigLayout);
-
+        
         JPanel generatorChoicePanel = new JPanel();
         GroupLayout generatorChoiceLayout = new GroupLayout(generatorChoicePanel);
         generatorChoiceLayout.setAutoCreateGaps(true);

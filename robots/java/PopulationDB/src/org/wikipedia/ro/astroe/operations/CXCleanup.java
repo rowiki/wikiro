@@ -53,6 +53,7 @@ public class CXCleanup implements WikiOperation {
     private String article;
     private String sourceWikiCode;
     private String targetWikiCode;
+    private String[] status = new String[] { "status.not.inited" };
 
     public CXCleanup(Wiki targetWiki, Wiki sourceWiki, Wikibase dataWiki, String article) {
         this.targetWiki = targetWiki;
@@ -62,7 +63,7 @@ public class CXCleanup implements WikiOperation {
         this.sourceWikiCode = substringBefore(sourceWiki.getDomain(), ".") + "wiki";
         this.targetWikiCode = substringBefore(targetWiki.getDomain(), ".") + "wiki";
     }
-    
+
     private static Pattern spanContentEditablePattern = Pattern.compile(
         "<span(\\s+([a-z]|\\-)+=\"[^>]*\")*\\s+((contenteditable=\"false\")|(abp=\"\\d+\"))(\\s+([a-z]|\\-)+=\"[^>]*\")*\\s*>(.*?)</span>",
         Pattern.DOTALL);
@@ -80,15 +81,16 @@ public class CXCleanup implements WikiOperation {
     private static String mathSpanRegEx = "\\<span\\s+class=\"texhtml\"\\s*\\>(.*?)\\</span\\s*\\>";
 
     public String execute() throws IOException, LoginException, WikibaseException {
-
+        status = new String[] { "status.searching.wikibase.item.by.article", targetWikiCode, article };
         Entity ent = dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, article);
-        String translation =
-            removeEnd(sourceWikiCode, "wiki") + ":" + ent.getSitelinks().get(sourceWikiCode).getPageName();
+        String translation = removeEnd(sourceWikiCode, "wiki") + ":" + ent.getSitelinks().get(sourceWikiCode).getPageName();
+        status = new String[] { "status.reading.text", article, targetWikiCode };
         String text = targetWiki.getPageText(article);
 
         text = replace(text, "Wikipedia:WikiProject_Medicine/Translation_task_force/RTT/Simple_", "");
         text = replace(text, "&#x20;", " ");
 
+        status = new String[] { "status.removing.contenteditable" };
         Matcher spanContentEditableMatcher = spanContentEditablePattern.matcher(text);
 
         StringBuffer newText = new StringBuffer();
@@ -97,6 +99,7 @@ public class CXCleanup implements WikiOperation {
         }
         spanContentEditableMatcher.appendTail(newText);
 
+        status = new String[] { "status.removing.coloredfont" };
         Matcher coloredFontEditableMatcher = coloredFontEditablePattern.matcher(newText.toString());
         newText = new StringBuffer();
         while (coloredFontEditableMatcher.find()) {
@@ -104,6 +107,7 @@ public class CXCleanup implements WikiOperation {
         }
         coloredFontEditableMatcher.appendTail(newText);
 
+        status = new String[] { "status.removing.strong" };
         Matcher strongMatcher = strongPattern.matcher(newText.toString());
         newText = new StringBuffer();
         while (strongMatcher.find()) {
@@ -111,6 +115,7 @@ public class CXCleanup implements WikiOperation {
         }
         strongMatcher.appendTail(newText);
 
+        status = new String[] { "status.removing.u" };
         Matcher uMatcher = uPattern.matcher(newText.toString());
         newText = new StringBuffer();
         while (uMatcher.find()) {
@@ -118,6 +123,7 @@ public class CXCleanup implements WikiOperation {
         }
         uMatcher.appendTail(newText);
 
+        status = new String[] { "status.removing.plainspans" };
         Matcher spanMatcher = spanPattern.matcher(newText.toString());
         newText = new StringBuffer();
         while (spanMatcher.find()) {
@@ -125,6 +131,7 @@ public class CXCleanup implements WikiOperation {
         }
         spanMatcher.appendTail(newText);
 
+        status = new String[] { "status.removing.emptycites" };
         Matcher emptyCitesMatcher = emptyCitesPattern.matcher(newText.toString());
         newText = new StringBuffer();
         while (emptyCitesMatcher.find()) {
@@ -132,6 +139,7 @@ public class CXCleanup implements WikiOperation {
         }
         emptyCitesMatcher.appendTail(newText);
 
+        status = new String[] { "status.removing.fontchangingspans" };
         Matcher fontChangingSpanMatcher = fontChangingSpanPattern.matcher(newText.toString());
         newText = new StringBuffer();
         while (fontChangingSpanMatcher.find()) {
@@ -139,6 +147,7 @@ public class CXCleanup implements WikiOperation {
         }
         fontChangingSpanMatcher.appendTail(newText);
 
+        status = new String[] { "status.removing.applejunk" };
         Matcher msoHyperlinkSpanMatcher = msoHyperlinkSpanPattern.matcher(newText.toString());
         newText = new StringBuffer();
         while (msoHyperlinkSpanMatcher.find()) {
@@ -146,6 +155,7 @@ public class CXCleanup implements WikiOperation {
         }
         msoHyperlinkSpanMatcher.appendTail(newText);
 
+        status = new String[] { "status.replacing.cn" };
         String citationNeededRegEx =
             "\\<sup\\s*class=\"noprint Inline-Template Template-Fact\"[^>]*?\\>.*?citation needed.*?\\</sup\\>";
         Pattern citationNeededPattern = Pattern.compile(citationNeededRegEx);
@@ -156,6 +166,7 @@ public class CXCleanup implements WikiOperation {
         }
         citationNeededMatcher.appendTail(newText);
 
+        status = new String[] { "status.removing.mathspan" };
         Pattern mathSpanPattern = Pattern.compile(mathSpanRegEx);
         Matcher mathSpanMatcher = mathSpanPattern.matcher(newText.toString());
         newText = new StringBuffer();
@@ -166,6 +177,7 @@ public class CXCleanup implements WikiOperation {
         }
         mathSpanMatcher.appendTail(newText);
 
+        status = new String[] { "status.replacing.selflinks" };
         String selfLinkRegEx = replace(translation, "(", "\\(");
         selfLinkRegEx = replace(selfLinkRegEx, ")", "\\)");
         selfLinkRegEx = replace(selfLinkRegEx, ":", "\\:");
@@ -187,6 +199,7 @@ public class CXCleanup implements WikiOperation {
         }
         selfLinkMatcher.appendTail(newText);
 
+        status = new String[] { "status.removing.supfootnotes" };
         Pattern footnoteBySupPattern = Pattern.compile(
             "\\[\\[#cite_note\\-.*?\\|<sup>(<span(\\s+lang=\".*?\")?\\s+style=\".*?\"\\s*?>\\s*?)?\\[\\d+\\](\\s*</span>\\s*)?</sup>\\]\\]",
             Pattern.DOTALL);
@@ -208,10 +221,12 @@ public class CXCleanup implements WikiOperation {
         String newTextStr = newText.toString();
         newTextStr = replace(newTextStr, "''''''", "'''");
         newTextStr = replace(newTextStr, "''''", "''");
-        System.out.println(matchesCount + " matches found.");
 
-        // System.out.println(newText);
         return newText.toString();
+    }
+
+    public String[] getStatus() {
+        return status;
     }
 
 }
