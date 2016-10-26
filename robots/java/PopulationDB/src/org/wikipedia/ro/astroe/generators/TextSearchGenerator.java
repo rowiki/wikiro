@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.wikipedia.Wiki;
 
+@PageGenerator(labelKey = "generator.search.description", stringsConfigNumber = 1, stringsConfigLabelKeys = {
+"generator.search.searchText" })
 public class TextSearchGenerator implements Generator {
     private String text;
     private Wiki wiki;

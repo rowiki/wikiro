@@ -1,4 +1,4 @@
-package org.wikipedia.ro.astroe;
+package org.wikipedia.ro.astroe.operations;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ import org.wikibase.WikibaseException;
 import org.wikibase.data.Entity;
 import org.wikibase.data.Sitelink;
 import org.wikipedia.Wiki;
+import org.wikipedia.ro.astroe.FixVillages;
 
 public class CategoriesImporter {
 

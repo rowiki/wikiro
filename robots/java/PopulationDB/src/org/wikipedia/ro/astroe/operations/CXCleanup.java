@@ -1,4 +1,4 @@
-package org.wikipedia.ro.astroe;
+package org.wikipedia.ro.astroe.operations;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -12,8 +12,9 @@ import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikibase.data.Entity;
 import org.wikipedia.Wiki;
+import org.wikipedia.ro.astroe.FixVillages;
 
-public class ContentEditableSpanCleaner {
+public class CXCleanup {
 
     private static Wiki wiki = new Wiki("ro.wikipedia.org");
     private static Wikibase dwiki = new Wikibase();
