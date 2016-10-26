@@ -23,6 +23,7 @@ public class CategoriesImporter implements WikiOperation {
     private Wiki sourceWiki, targetWiki;
     private Wikibase dataWiki;
     private String article, sourceWikiCode, targetWikiCode;
+    private String[] status = new String[] { "status.not.inited" };
 
     public CategoriesImporter(Wiki targetWiki, Wiki sourceWiki, Wikibase dataWiki, String article) {
         this.targetWiki = targetWiki;
@@ -34,13 +35,16 @@ public class CategoriesImporter implements WikiOperation {
     }
 
     public String execute() throws IOException, WikibaseException, LoginException {
+        status = new String[] { "status.searching.wikibase.item.by.article", article, targetWikiCode };
         Entity articleItem = dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, article);
         Sitelink sitelink = articleItem.getSitelinks().get(sourceWikiCode);
         if (null == sitelink) {
             throw new WikibaseException("Article in source wiki not found");
         }
         String sourceWikiArticle = sitelink.getPageName();
+        status = new String[] { "status.reading.categories", sourceWikiArticle, sourceWikiCode };
         String[] sourceCategories = sourceWiki.getCategories(sourceWikiArticle);
+        status = new String[] { "status.reading.categories", article, targetWikiCode };
         String[] targetCategories = targetWiki.getCategories(article);
         List<String> targetCategoriesList = Arrays.asList(targetCategories);
         List<String> categoriesToAdd = new ArrayList<String>();
@@ -48,6 +52,10 @@ public class CategoriesImporter implements WikiOperation {
             String sourceCatFullPageName =
                 StringUtils.prependIfMissing(eachSourceCat, sourceWiki.namespaceIdentifier(Wiki.CATEGORY_NAMESPACE));
             Entity eachCatItem = null;
+
+            status = new String[] { "status.searching.corresponding.category",
+                StringUtils.removeStart(sourceCatFullPageName, sourceWiki.namespaceIdentifier(Wiki.CATEGORY_NAMESPACE)),
+                sourceWikiCode };
             try {
                 eachCatItem = dataWiki.getWikibaseItemBySiteAndTitle(sourceWikiCode, sourceCatFullPageName);
             } catch (WikibaseException wbe) {
@@ -63,6 +71,7 @@ public class CategoriesImporter implements WikiOperation {
             }
         }
 
+        status = new String[] { "status.inserting.categories" };
         StringBuilder catBuilder = new StringBuilder();
         for (String eachCatToAdd : categoriesToAdd) {
             catBuilder.append("[[");
@@ -125,6 +134,11 @@ public class CategoriesImporter implements WikiOperation {
         } finally {
             rowiki.logout();
         }
+    }
+
+    @Override
+    public String[] getStatus() {
+        return status;
     }
 
 }
