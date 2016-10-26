@@ -31,20 +31,6 @@ public class PagesThatLinkToGenerator implements Generator {
         return pagesList;
     }
 
-    @Override
-    public String getDescriptionKey() {
-        return "generator.linksToPage.description";
-    }
-
-    @Override
-    public int getNumberOfTextFields() {
-        return 1;
-    }
-
-    @Override
-    public String[] getTextFieldsLabelKeys() {
-        return new String[] { "generator.linksToPage.page" };
-    }
 
     public String getPage() {
         return page;

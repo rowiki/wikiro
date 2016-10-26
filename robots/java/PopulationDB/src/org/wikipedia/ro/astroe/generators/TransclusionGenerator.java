@@ -33,20 +33,6 @@ public class TransclusionGenerator implements Generator {
         return pagesList;
     }
 
-    @Override
-    public String getDescriptionKey() {
-        return "generator.transclusion.description";
-    }
-
-    @Override
-    public int getNumberOfTextFields() {
-        return 1;
-    }
-
-    @Override
-    public String[] getTextFieldsLabelKeys() {
-        return new String[] { "generator.transclusion.template" };
-    }
 
     public String getTemplate() {
         return template;
