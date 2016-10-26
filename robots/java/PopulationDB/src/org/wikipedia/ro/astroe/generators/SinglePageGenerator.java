@@ -24,21 +24,6 @@ public class SinglePageGenerator implements Generator {
         return pagesList;
     }
 
-    @Override
-    public String getDescriptionKey() {
-        return "generator.singlePage.description";
-    }
-
-    @Override
-    public int getNumberOfTextFields() {
-        return 1;
-    }
-
-    @Override
-    public String[] getTextFieldsLabelKeys() {
-        return new String[] { "generator.singlePage.page" };
-    }
-
     public String getPage() {
         return page;
     }

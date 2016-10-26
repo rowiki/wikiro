@@ -40,18 +40,4 @@ public class LinkedFromPageGenerator implements Generator {
         this.page = page;
     }
 
-    @Override
-    public String getDescriptionKey() {
-        return "generator.linkedFromPage.description";
-    }
-
-    @Override
-    public int getNumberOfTextFields() {
-        return 1;
-    }
-
-    @Override
-    public String[] getTextFieldsLabelKeys() {
-        return new String[] { "generator.linkedFromPage.page" };
-    }
 }

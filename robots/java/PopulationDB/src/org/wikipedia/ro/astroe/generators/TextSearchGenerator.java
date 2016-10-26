@@ -33,20 +33,6 @@ public class TextSearchGenerator implements Generator {
         return pagesList;
     }
 
-    @Override
-    public String getDescriptionKey() {
-        return "generator.search.description";
-    }
-
-    @Override
-    public int getNumberOfTextFields() {
-        return 1;
-    }
-
-    @Override
-    public String[] getTextFieldsLabelKeys() {
-        return new String[] { "generator.search.searchText" };
-    }
     public String getText() {
         return text;
     }
