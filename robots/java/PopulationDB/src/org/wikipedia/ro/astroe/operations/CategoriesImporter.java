@@ -17,7 +17,8 @@ import org.wikibase.data.Sitelink;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.astroe.FixVillages;
 
-public class CategoriesImporter {
+@Operation(useWikibase = true, labelKey = "operation.catimport.label")
+public class CategoriesImporter implements WikiOperation {
 
     private Wiki sourceWiki, targetWiki;
     private Wikibase dataWiki;
@@ -32,7 +33,7 @@ public class CategoriesImporter {
         this.targetWikiCode = StringUtils.substringBefore(targetWiki.getDomain(), ".") + "wiki";
     }
 
-    public void importCategories() throws IOException, WikibaseException, LoginException {
+    public String execute() throws IOException, WikibaseException, LoginException {
         Entity articleItem = dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, article);
         Sitelink sitelink = articleItem.getSitelinks().get(sourceWikiCode);
         if (null == sitelink) {
@@ -80,8 +81,9 @@ public class CategoriesImporter {
             }
             String newArticleText = articleBuilder.toString();
             newArticleText = newArticleText.replaceAll("\\{\\{\\s*(N|n)ecat(egorizate)?(\\|[^\\}]*)?\\}\\}", "");
-            targetWiki.edit(article, newArticleText, "Robot: importat categorii de la " + sourceWikiCode);
+            return newArticleText;
         }
+        return null;
     }
 
     public static void main(String[] args) {
@@ -106,7 +108,8 @@ public class CategoriesImporter {
             rowiki.setMarkBot(true);
 
             CategoriesImporter importer = new CategoriesImporter(rowiki, enwiki, dwiki, article);
-            importer.importCategories();
+            String s = importer.execute();
+            rowiki.edit(article, s, "Importat categorii de la en.wp");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
