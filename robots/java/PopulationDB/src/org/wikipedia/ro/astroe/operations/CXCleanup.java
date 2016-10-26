@@ -17,6 +17,7 @@ import org.wikibase.data.Entity;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.astroe.FixVillages;
 
+@Operation(useWikibase = true, labelKey = "operation.cxcleanup.label")
 public class CXCleanup implements WikiOperation {
 
     public static void main(String[] args) {
