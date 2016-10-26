@@ -1,4 +1,4 @@
-package org.wikipedia.ro.astroe;
+package org.wikipedia.ro.astroe.operations;
 
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.defaultString;
@@ -24,6 +24,7 @@ import org.wikibase.WikibaseException;
 import org.wikibase.data.Entity;
 import org.wikibase.data.Sitelink;
 import org.wikipedia.Wiki;
+import org.wikipedia.ro.astroe.FixVillages;
 
 public class ReplaceCrossLinkWithIll {
 

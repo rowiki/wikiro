@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+
+@PageGenerator(labelKey = "generator.singlePage.description", stringsConfigNumber = 1, stringsConfigLabelKeys = {
+    "generator.singlePage.page" })
 public class SinglePageGenerator implements Generator {
 
     private String page;
@@ -20,6 +23,7 @@ public class SinglePageGenerator implements Generator {
         }
         return pagesList;
     }
+
     @Override
     public String getDescriptionKey() {
         return "generator.singlePage.description";
@@ -32,7 +36,7 @@ public class SinglePageGenerator implements Generator {
 
     @Override
     public String[] getTextFieldsLabelKeys() {
-        return new String[]{"generator.singlePage.page"};
+        return new String[] { "generator.singlePage.page" };
     }
 
     public String getPage() {

@@ -7,6 +7,8 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.Wiki;
 
+@PageGenerator(labelKey = "generator.pagesInCat.description", stringsConfigNumber = 1, stringsConfigLabelKeys = {
+    "generator.pagesInCat.cat" })
 public class PagesInCategoryGenerator implements Generator {
     private String page;
     private Wiki wiki;
@@ -30,6 +32,7 @@ public class PagesInCategoryGenerator implements Generator {
         }
         return pagesList;
     }
+
     @Override
     public String getDescriptionKey() {
         return "generator.pagesInCat.description";
@@ -42,7 +45,7 @@ public class PagesInCategoryGenerator implements Generator {
 
     @Override
     public String[] getTextFieldsLabelKeys() {
-        return new String[]{"generator.pagesInCat.cat"};
+        return new String[] { "generator.pagesInCat.cat" };
     }
 
     public String getPage() {

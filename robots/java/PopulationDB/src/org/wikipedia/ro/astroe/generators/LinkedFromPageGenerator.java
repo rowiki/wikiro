@@ -6,21 +6,23 @@ import java.util.List;
 
 import org.wikipedia.Wiki;
 
+@PageGenerator(labelKey = "generator.linkedFromPage.description", stringsConfigNumber = 1, stringsConfigLabelKeys = {
+    "generator.linkedFromPage.page" })
 public class LinkedFromPageGenerator implements Generator {
 
     private String page;
     private Wiki wiki;
     private List<String> pagesList = null;
-    
+
     public LinkedFromPageGenerator(Wiki wiki, String page) {
         this.wiki = wiki;
         this.page = page;
     }
-    
+
     public LinkedFromPageGenerator(Wiki wiki) {
         this.wiki = wiki;
     }
-    
+
     @Override
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
@@ -50,6 +52,6 @@ public class LinkedFromPageGenerator implements Generator {
 
     @Override
     public String[] getTextFieldsLabelKeys() {
-        return new String[]{"generator.linkedFromPage.page"};
+        return new String[] { "generator.linkedFromPage.page" };
     }
 }

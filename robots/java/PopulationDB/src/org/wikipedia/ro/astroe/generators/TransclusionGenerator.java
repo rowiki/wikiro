@@ -7,6 +7,8 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.Wiki;
 
+@PageGenerator(labelKey = "generator.transclusion.description", stringsConfigNumber = 1, stringsConfigLabelKeys = {
+    "generator.transclusion.template" })
 public class TransclusionGenerator implements Generator {
     private String template;
     private Wiki wiki;
