@@ -161,7 +161,7 @@ public class FixVillages {
             dwiki.login(datausername, datapassword.toCharArray());
             rowiki.login(rowpusername, rowppassword.toCharArray());
             rowiki.setMarkBot(true);
-            
+
             String countyStart = null;
             boolean countyTouched = args.length < 1;
             if (args.length > 0) {
@@ -787,13 +787,16 @@ public class FixVillages {
                                     imageClaimId = dwiki.addClaim(communeWikibaseItem.getId(),
                                         new Claim(imageWikidataProperty, new CommonsMedia(imageName)));
                                     initialTemplate.removeParam("imagine");
-                                } else if (StringUtils.equals(replace(
-                                    ((CommonsMedia) communeClaims.get(imageWikidataProperty).iterator().next().getValue())
-                                        .getFileName(),
-                                    " ", "_"), replace(imageName, " ", "_"))) {
-                                    Claim imageClaim = communeClaims.get(imageWikidataProperty).iterator().next();
-                                    imageClaimId = imageClaim.getId();
-                                    captionQualifierFound = (null != imageClaim.getQualifiers().get(captionProp));
+                                } else {
+                                    if (StringUtils
+                                        .equals(
+                                            replace(((CommonsMedia) communeClaims.get(imageWikidataProperty).iterator()
+                                                .next().getValue()).getFileName(), " ", "_"),
+                                            replace(imageName, " ", "_"))) {
+                                        Claim imageClaim = communeClaims.get(imageWikidataProperty).iterator().next();
+                                        imageClaimId = imageClaim.getId();
+                                        captionQualifierFound = (null != imageClaim.getQualifiers().get(captionProp));
+                                    }
                                     initialTemplate.removeParam("imagine");
                                 }
                                 String communeImageCaption =
