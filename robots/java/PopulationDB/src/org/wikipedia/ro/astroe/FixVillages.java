@@ -77,9 +77,6 @@ public class FixVillages {
     private static RuleBasedCollator collator = null;
     private static Exception exception;
 
-    private static String countyStart = "Arad";
-    private static String communeStart = "Bârzava";
-
     // Pattern sentencePattern = Pattern.compile("((.*(\\(.*?\\)))*.*?)(\\.|$)\\s*");
     // Pattern sentencePattern = Pattern.compile(
     // "(([^\\.]*(\\(.*?\\)))*.*?)(((\\.|$)\\s*((\\<ref[^\\/]*?\\>.*?\\<\\/ref\\>)|(\\<ref[^>]*\\/\\>))*)|((\\<ref[^\\/]*?\\>.*?\\<\\/ref\\>)|(\\<ref[^>]*\\/\\>))*\\s*(\\.|$))\\s*");
@@ -164,7 +161,12 @@ public class FixVillages {
             dwiki.login(datausername, datapassword.toCharArray());
             rowiki.login(rowpusername, rowppassword.toCharArray());
             rowiki.setMarkBot(true);
-            boolean countyTouched = false;
+            
+            String countyStart = null;
+            boolean countyTouched = args.length < 1;
+            if (args.length > 0) {
+                countyStart = args[0];
+            }
             for (String eachCounty : countyNames) {
                 if (!countyTouched && !eachCounty.equals(countyStart)) {
                     continue;
@@ -199,7 +201,11 @@ public class FixVillages {
 
                 Collections.sort(categoryMembersList, roComp.init("Comuna "));
                 Pattern countyLinkPattern = Pattern.compile("\\[\\[\\s*(J|j)udețul\\s" + eachCounty + "\\s*(\\||\\])");
-                boolean communeTouched = false;
+                boolean communeTouched = args.length < 2;
+                String communeStart = null;
+                if (args.length > 1) {
+                    communeStart = args[1];
+                }
                 for (String eachCommuneArticle : new LinkedHashSet<String>(categoryMembersList)) {
                     Entity communeWikibaseItem = dwiki.getWikibaseItemBySiteAndTitle("rowiki", eachCommuneArticle);
 
