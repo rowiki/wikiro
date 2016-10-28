@@ -1373,12 +1373,13 @@ public class FixVillages {
                     return "la limita între regiunile istorice " + join(Arrays.asList(MOLDOVA_LINK, BUCOVINA_LINK), " și ");
                 }
             }
-            if ("Cândești".equalsIgnoreCase(trim(commune))
-                && "Cândești".equalsIgnoreCase(trim(settlement))) {
+            if ("Cândești".equalsIgnoreCase(trim(commune))) {
+                if ("Cândești".equalsIgnoreCase(trim(settlement))) {
+                    return BUCOVINA_LINK;
+                }
                 if (null == settlement) {
                     return "la limita între regiunile istorice " + join(Arrays.asList(MOLDOVA_LINK, BUCOVINA_LINK), " și ");
                 }
-                return BUCOVINA_LINK;
             }
             return MOLDOVA_LINK;
         }
