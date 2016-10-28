@@ -68,6 +68,10 @@ import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.util.WikiTemplate;
 
 public class FixVillages {
+    private static final String CRISANA_LINK = "[[Crișana]]";
+    private static final String BANAT_LINK = "[[Banat]]";
+    private static final String TRANSYLVANIA_LINK = "[[Transilvania]]";
+    private static final String MUNTENIA_LINK = "[[Muntenia]]";
     private static final String MOLDOVA_LINK = "[[Moldova Occidentală|Moldova]]";
     private static final String BUCOVINA_LINK = "[[Bucovina]]";
     private static String collationDescription = "<  0 < 1 < 2 < 3 < 4 < 5 < 6 < 7 < 8 < 9 "
@@ -1217,27 +1221,27 @@ public class FixVillages {
         }
         if (Arrays.asList("Brăila", "Buzău", "Ialomița", "Călărași", "Prahova", "Ilfov", "Giurgiu", "Dâmbovița", "Argeș")
             .contains(trim(county))) {
-            return "[[Muntenia]]";
+            return MUNTENIA_LINK;
         }
         if (Arrays.asList("Dolj", "Gorj").contains(trim(county))) {
             return "[[Oltenia]]";
         }
         if (Arrays.asList("Timiș").contains(trim(county))) {
-            return "[[Banat]]";
+            return BANAT_LINK;
         }
         if (Arrays.asList("Covasna", "Harghita", "Mureș", "Bistrița-Năsăud", "Sibiu", "Alba", "Cluj")
             .contains(trim(county))) {
-            return "[[Transilvania]]";
+            return TRANSYLVANIA_LINK;
         }
         if ("Bihor".equalsIgnoreCase(trim(county))) {
-            return "[[Crișana]]";
+            return CRISANA_LINK;
         }
 
         // counties broken between regions:
         // Moldova-Transilvania
         if ("Neamț".equalsIgnoreCase(trim(county))) {
             if (Arrays.asList("Bicazu Ardelean", "Bicaz-Chei", "Dămuc").contains(commune)) {
-                return "[[Transilvania]]";
+                return TRANSYLVANIA_LINK;
             } else {
                 return MOLDOVA_LINK;
             }
@@ -1245,7 +1249,7 @@ public class FixVillages {
 
         if ("Bacău".equalsIgnoreCase(trim(county))) {
             if (Arrays.asList("Ghimeș-Făget").contains(commune) || Arrays.asList("Poiana Sărată").contains(settlement)) {
-                return "[[Transilvania]]";
+                return TRANSYLVANIA_LINK;
             } else {
                 return MOLDOVA_LINK;
             }
@@ -1257,14 +1261,16 @@ public class FixVillages {
                 "Măicănești", "Milcovul", "Obrejița", "Poiana Cristei", "Popești", "Sihlea", "Slobozia Bradului",
                 "Slobozia Ciorăști", "Tâmboești", "Tătăranu", "Urechești", "Vârteșcoiu", "Vintileasca")
                 .contains(trim(commune))) {
-                return "[[Muntenia]]";
+                return MUNTENIA_LINK;
             } else if (Arrays.asList("Mera", "Vulturu").contains(trim(commune))) {
                 if (Arrays.asList("Vulcăneasa").contains(trim(settlement))) {
-                    return "[[Muntenia]]";
+                    return MUNTENIA_LINK;
                 }
                 if (Arrays.asList("Hângulești", "Maluri").contains(trim(settlement))) {
-                    return "[[Muntenia]]";
+                    return MUNTENIA_LINK;
                 }
+            } else if ("Focșani".equals(trim(commune))) {
+                return "la limita între regiunile istorice " + join(Arrays.asList(MOLDOVA_LINK, MUNTENIA_LINK), " și ");
             }
             return MOLDOVA_LINK;
         }
@@ -1273,16 +1279,16 @@ public class FixVillages {
             if ("Islaz".equalsIgnoreCase(commune)) {
                 return "[[Oltenia]]";
             }
-            return "[[Muntenia]]";
+            return MUNTENIA_LINK;
         }
         if ("Vâlcea".equalsIgnoreCase(trim(county))) {
             if (Arrays.asList("Berislăvești", "Boișoara", "Budești", "Dăești", "Dănicei", "Drăgoești", "Galicea", "Golești",
                 "Milcoiu", "Nicolae Bălcescu", "Olanu", "Perișani", "Racovița", "Runcu", "Sălătrucel", "Stoilești",
                 "Titești").contains(trim(commune))) {
-                return "[[Muntenia]]";
+                return MUNTENIA_LINK;
             } else if (Arrays.asList("Câineni").contains(trim(commune))) {
                 if (Arrays.asList("Câinenii Mici", "Greblești", "Priloage").contains(trim(settlement))) {
-                    return "[[Muntenia]]";
+                    return MUNTENIA_LINK;
                 }
             }
             return "[[Oltenia]]";
@@ -1296,74 +1302,82 @@ public class FixVillages {
                     "Seaca", "Spineni", "Sprâncenata", "Stoicănești", "Șerbănești", "Tătulești", "Teslui", "Topana",
                     "Tufeni", "Vâlcele", "Valea Mare", "Văleni", "Verguleasa", "Vitomirești", "Vulturești")
                 .contains(trim(commune))) {
-                return "[[Muntenia]]";
+                return MUNTENIA_LINK;
             } else if (Arrays.asList("Câineni").contains(trim(commune))) {
                 if (Arrays.asList("Câinenii Mici", "Greblești", "Priloage").contains(trim(settlement))) {
-                    return "[[Muntenia]]";
+                    return MUNTENIA_LINK;
                 }
             }
             return "[[Oltenia]]";
         }
         // Oltenia-Banat
         if ("Mehedinți".equalsIgnoreCase(trim(county))) {
-            if (Arrays.asList("Dubova", "Eșelnița", "Svinița").contains(trim(commune))) {
-                return "[[Banat]]";
+            if (Arrays.asList("Dubova", "Eșelnița", "Svinița", "Orșova").contains(trim(commune))) {
+                return BANAT_LINK;
             }
             return "[[Oltenia]]";
         }
         // Banat-Transilvania
         if ("Caraș-Severin".equalsIgnoreCase(trim(county))) {
             if (Arrays.asList("Băuțar").contains(trim(commune))) {
-                return "[[Transilvania]]";
+                return TRANSYLVANIA_LINK;
             }
-            return "[[Banat]]";
+            return BANAT_LINK;
         }
         if ("Hunedoara".equalsIgnoreCase(trim(county))) {
             if ("Zam".equalsIgnoreCase(trim(commune))) {
                 if (Arrays.asList("Sălciva", "Pojoga").contains(settlement)) {
-                    return "[[Banat]]";
+                    return BANAT_LINK;
                 }
             }
-            return "[[Transilvania]]";
+            return TRANSYLVANIA_LINK;
         }
         // Banat-Crișana
         if ("Arad".equalsIgnoreCase(trim(county))) {
             if (Arrays.asList("Bata", "Birchiș", "Fântânele", "Felnac", "Frumușeni", "Șagu", "Secusigiu", "Șiștarovăț",
                 "Ususău", "Vinga", "Zăbrani", "Zădăreni").contains(trim(commune))) {
-                return "[[Banat]]";
+                return BANAT_LINK;
             } else if (Arrays.asList("Bârzava", "Conop", "Săvârșin").contains(trim(commune))) {
                 if (Arrays.asList("Lalașinț", "Belotinț", "Căprioara", "Chelmac", "Valea Mare").contains(settlement)) {
-                    return "[[Banat]]";
+                    return BANAT_LINK;
                 }
+            } else if ("Arad".equalsIgnoreCase(trim(commune))) {
+                return "la limita între regiunile istorice " + join(Arrays.asList(BANAT_LINK, CRISANA_LINK), " și ");
             }
-            return "[[Crișana]]";
+            return CRISANA_LINK;
         }
         // Crișana-Sătmar/Maramureș
         if ("Satu Mare".equalsIgnoreCase(trim(county))) {
-            return "[[Transilvania]]";
+            return TRANSYLVANIA_LINK;
         }
         if ("Maramureș".equalsIgnoreCase(trim(county))) {
-            return "[[Transilvania]]";
+            return TRANSYLVANIA_LINK;
         }
         if ("Sălaj".equalsIgnoreCase(trim(county))) {
-            return "[[Transilvania]]";
+            return TRANSYLVANIA_LINK;
         }
         // Transilvania-Muntenia
         if ("Brașov".equalsIgnoreCase(trim(county))) {
             if (null == settlement && "Predeal".equalsIgnoreCase(commune)) {
-                return "[[Muntenia]]";
+                return "la limita între regiunile istorice " + join(Arrays.asList(MUNTENIA_LINK, TRANSYLVANIA_LINK), " și ");
             }
-            return "[[Transilvania]]";
+            return TRANSYLVANIA_LINK;
         }
         // Bucovina - Moldova
         if ("Botoșani".equalsIgnoreCase(trim(county))) {
             if ("Mihăileni".equalsIgnoreCase(trim(commune))) {
-                if (Arrays.asList("Rogojești").contains(trim(settlement)) || null == settlement) {
+                if (Arrays.asList("Rogojești").contains(trim(settlement))) {
                     return BUCOVINA_LINK;
+                }
+                if (null == settlement) {
+                    return "la limita între regiunile istorice " + join(Arrays.asList(MOLDOVA_LINK, BUCOVINA_LINK), " și ");
                 }
             }
             if ("Cândești".equalsIgnoreCase(trim(commune))
-                && (null == settlement || "Cândești".equalsIgnoreCase(trim(settlement)))) {
+                && "Cândești".equalsIgnoreCase(trim(settlement))) {
+                if (null == settlement) {
+                    return "la limita între regiunile istorice " + join(Arrays.asList(MOLDOVA_LINK, BUCOVINA_LINK), " și ");
+                }
                 return BUCOVINA_LINK;
             }
             return MOLDOVA_LINK;
