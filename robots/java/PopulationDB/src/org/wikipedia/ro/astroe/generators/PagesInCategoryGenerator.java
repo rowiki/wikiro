@@ -27,7 +27,7 @@ public class PagesInCategoryGenerator implements Generator {
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
             String[] pagesArray = wiki
-                .getCategoryMembers(StringUtils.prependIfMissing(page, wiki.namespaceIdentifier(Wiki.CATEGORY_NAMESPACE)));
+                .getCategoryMembers(StringUtils.prependIfMissing(page, wiki.namespaceIdentifier(Wiki.CATEGORY_NAMESPACE) + ":"));
             pagesList = Arrays.asList(pagesArray);
         }
         return pagesList;
