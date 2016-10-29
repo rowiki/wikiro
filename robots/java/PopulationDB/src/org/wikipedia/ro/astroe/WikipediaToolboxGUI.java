@@ -2,6 +2,7 @@ package org.wikipedia.ro.astroe;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -9,38 +10,52 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import javax.security.auth.login.FailedLoginException;
+import javax.security.auth.login.LoginException;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
+import org.wikibase.Wikibase;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.astroe.generators.Generator;
 import org.wikipedia.ro.astroe.generators.PageGenerator;
 import org.wikipedia.ro.astroe.operations.Operation;
+import org.wikipedia.ro.astroe.operations.WikiOperation;
 
 public class WikipediaToolboxGUI {
 
     private static ResourceBundle bundle;
     private static Wiki sourceWiki = null;
     private static Wiki targetWiki = null;
+    private static Wikibase dataWiki = new Wikibase("www.wikidata.org");
     private static Map<String, Component> dataComponentsMap = new HashMap<String, Component>();
     private static JFrame frame;
 
@@ -90,15 +105,22 @@ public class WikipediaToolboxGUI {
         GroupLayout actionChoiceLayout = new GroupLayout(actionChoicePanel);
         actionChoiceLayout.setAutoCreateGaps(true);
         actionChoicePanel.setLayout(actionChoiceLayout);
-        JLabel actionLabel = new JLabel(bundle.getString("generator"));
+        JLabel actionLabel = new JLabel(bundle.getString("operation"));
         JComboBox<ChoiceElement> actionDropDown = new JComboBox<ChoiceElement>();
+        dataComponentsMap.put("action", actionDropDown);
+        JLabel summaryLabel = new JLabel(bundle.getString("edit.summary"));
+        JTextField summaryTF = new JTextField();
+        dataComponentsMap.put("summary", summaryTF);
+
         SequentialGroup vGroup = actionChoiceLayout.createSequentialGroup();
         vGroup.addGroup(actionChoiceLayout.createParallelGroup(Alignment.BASELINE).addComponent(actionLabel)
             .addComponent(actionDropDown));
+        vGroup.addGroup(
+            actionChoiceLayout.createParallelGroup(Alignment.BASELINE).addComponent(summaryLabel).addComponent(summaryTF));
         actionChoiceLayout.setVerticalGroup(vGroup);
         SequentialGroup hGroup = actionChoiceLayout.createSequentialGroup();
-        hGroup.addGroup(actionChoiceLayout.createParallelGroup().addComponent(actionLabel));
-        hGroup.addGroup(actionChoiceLayout.createParallelGroup().addComponent(actionDropDown));
+        hGroup.addGroup(actionChoiceLayout.createParallelGroup().addComponent(actionLabel).addComponent(summaryLabel));
+        hGroup.addGroup(actionChoiceLayout.createParallelGroup().addComponent(actionDropDown).addComponent(summaryTF));
         actionChoiceLayout.setHorizontalGroup(hGroup);
 
         Reflections refl = new Reflections("org.wikipedia.ro.astroe.operations");
@@ -114,9 +136,117 @@ public class WikipediaToolboxGUI {
 
         JPanel configurationPanel = new JPanel();
         JButton goButton = new JButton(bundle.getString("go"));
+        goButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                executeSelectedAction();
+            }
+        });
         configurationPanel.add(goButton);
         actionConfigPanel.add(configurationPanel, BorderLayout.SOUTH);
         return actionConfigPanel;
+    }
+
+    private static void executeSelectedAction() {
+        if (null == targetWiki) {
+            JOptionPane.showMessageDialog(frame, bundle.getString("error.not.logged.in"),
+                bundle.getString("error.operation.cannot.run"), JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        boolean markBot = ((JCheckBox) dataComponentsMap.get("bot")).isSelected();
+        int throttle = 10;
+        String throttleString = ((JTextField) dataComponentsMap.get("throttle")).getText();
+        if (StringUtils.isNotBlank(throttleString)) {
+            try {
+                throttle = Integer.parseInt(throttleString);
+            } catch (NumberFormatException e2) {
+            }
+        }
+        Class<Generator> generatorClass =
+            ((ChoiceElement) ((JComboBox<ChoiceElement>) dataComponentsMap.get("generator")).getSelectedItem()).clazz;
+        Class<WikiOperation> actionClass =
+            ((ChoiceElement) ((JComboBox<ChoiceElement>) dataComponentsMap.get("action")).getSelectedItem()).clazz;
+
+        String srcwikilang = ((JTextField) dataComponentsMap.get("sourcewiki")).getText();
+        if (StringUtils.isEmpty(srcwikilang)) {
+            JOptionPane.showMessageDialog(frame, bundle.getString("error.srcwiki.not.specified"),
+                bundle.getString("error.operation.cannot.run"), JOptionPane.ERROR_MESSAGE);
+        }
+        sourceWiki = new Wiki(StringUtils.removeEnd(srcwikilang, "wiki") + ".wikipedia.org");
+        final String commitMessage = StringUtils.defaultIfBlank(((JTextField) dataComponentsMap.get("summary")).getText(),
+            bundle.getString(actionClass.getAnnotation(Operation.class).labelKey()));
+
+        String generatorParam = ((JTextField) dataComponentsMap
+            .get(generatorClass.getAnnotation(PageGenerator.class).stringsConfigLabelKeys()[0])).getText();
+
+        final JDialog pBarDialog = new JDialog(frame, bundle.getString("progress.generating"), true);
+        JProgressBar generationProgressBar = new JProgressBar();
+        generationProgressBar.setPreferredSize(new Dimension(400, 30));
+        generationProgressBar.setStringPainted(true);
+        generationProgressBar.setString(bundle.getString("progress.generating"));
+        pBarDialog.add(generationProgressBar);
+
+        GeneratorWorker genWorker = new GeneratorWorker(generatorClass, generatorParam, pBarDialog);
+        genWorker.execute();
+        pBarDialog.pack();
+        pBarDialog.setLocationRelativeTo(frame);
+        pBarDialog.setVisible(true);
+
+        List<String> articleList;
+        try {
+            articleList = genWorker.get();
+        } catch (InterruptedException | ExecutionException e) {
+            JOptionPane.showMessageDialog(frame, e.getMessage(), bundle.getString("error.processing"),
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return;
+        }
+        frame.setCursor(null);
+        pBarDialog.setVisible(false);
+
+        // String actionParam =
+        // ((JTextField) dataComponentsMap.get(actionClass.getAnnotation(Operation.class).labelKey())).getText();
+        pBarDialog.removeAll();
+        final JProgressBar actionProgressBar = new JProgressBar();
+        actionProgressBar.setPreferredSize(new Dimension(400, 30));
+        actionProgressBar.setStringPainted(true);
+        actionProgressBar.setMinimum(0);
+        actionProgressBar.setMaximum(articleList.size());
+        pBarDialog.add(actionProgressBar);
+        pBarDialog.pack();
+        pBarDialog.setLocationRelativeTo(frame);
+        final long throttleCopy = throttle;
+
+        Thread actionThread = new Thread() {
+            public void run() {
+                long lastOperationEnd = System.currentTimeMillis();
+                int i = 0;
+                for (String eachArticle : articleList) {
+                    actionProgressBar.setValue(++i);
+                    ActionWorker actWorker =
+                        new ActionWorker(actionClass, eachArticle, actionProgressBar, lastOperationEnd + throttleCopy);
+                    actWorker.execute();
+
+                    String articleText = null;
+                    try {
+                        articleText = actWorker.get();
+                        targetWiki.edit(eachArticle, articleText, commitMessage);
+                        lastOperationEnd = System.currentTimeMillis();
+                    } catch (InterruptedException | ExecutionException | LoginException | IOException e) {
+                        JOptionPane.showOptionDialog(frame, e.getMessage(), bundle.getString("error.processing"),
+                            JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.ERROR_MESSAGE, null, new String[] { bundle.getString("error.abort"),
+                                bundle.getString("error.retry"), bundle.getString("error.ignore") },
+                            bundle.getString("error.retry"));
+                        e.printStackTrace();
+                    }
+                }
+                pBarDialog.setVisible(false);
+            }
+        };
+        SwingUtilities.invokeLater(actionThread);
+        pBarDialog.setVisible(true);
     }
 
     private static JPanel createGeneratorConfigPanel() {
@@ -130,6 +260,7 @@ public class WikipediaToolboxGUI {
         generatorChoicePanel.setLayout(generatorChoiceLayout);
         JLabel generatorLabel = new JLabel(bundle.getString("generator"));
         JComboBox<ChoiceElement> generatorDropDown = new JComboBox<ChoiceElement>();
+        dataComponentsMap.put("generator", generatorDropDown);
         SequentialGroup vGroup = generatorChoiceLayout.createSequentialGroup();
         vGroup.addGroup(generatorChoiceLayout.createParallelGroup(Alignment.BASELINE).addComponent(generatorLabel)
             .addComponent(generatorDropDown));
@@ -146,7 +277,7 @@ public class WikipediaToolboxGUI {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    ChoiceElement item = (ChoiceElement) e.getItem();
+                    ChoiceElement<Generator> item = (ChoiceElement<Generator>) e.getItem();
                     PageGenerator annotation = item.clazz.getAnnotation(PageGenerator.class);
                     int noOfConfigs = annotation.stringsConfigNumber();
                     String[] configKeys = annotation.stringsConfigLabelKeys();
@@ -193,25 +324,32 @@ public class WikipediaToolboxGUI {
         GroupLayout sourceTargetConfigLayout = new GroupLayout(sourceTargetConfigPanel);
         JLabel sourceWikiLabel = new JLabel(bundle.getString("sourcewiki.label"));
         JLabel targetWikiLabel = new JLabel(bundle.getString("targetwiki.label"));
-        final JTextField sourceWikiTextField = new JTextField();
+        JLabel throttleLabel = new JLabel(bundle.getString("throttle.label"));
+        final JTextField sourceWikiTextField = new JTextField("en");
         sourceWikiTextField.setPreferredSize(new Dimension(50, 20));
         dataComponentsMap.put("sourcewiki", sourceWikiTextField);
-        final JTextField targetWikiTextField = new JTextField();
+        final JTextField targetWikiTextField = new JTextField("ro");
         targetWikiTextField.setPreferredSize(new Dimension(50, 20));
         dataComponentsMap.put("targetwiki", targetWikiTextField);
+        final JTextField throttleTextField = new JTextField(String.valueOf(10));
+        throttleTextField.setPreferredSize(new Dimension(50, 20));
+        dataComponentsMap.put("throttle", throttleTextField);
+
         sourceTargetConfigPanel.setLayout(sourceTargetConfigLayout);
         sourceTargetConfigLayout.setAutoCreateGaps(true);
         SequentialGroup hGroup = sourceTargetConfigLayout.createSequentialGroup();
-        hGroup.addGroup(
-            sourceTargetConfigLayout.createParallelGroup().addComponent(sourceWikiLabel).addComponent(targetWikiLabel));
+        hGroup.addGroup(sourceTargetConfigLayout.createParallelGroup().addComponent(sourceWikiLabel)
+            .addComponent(targetWikiLabel).addComponent(throttleLabel));
         hGroup.addGroup(sourceTargetConfigLayout.createParallelGroup().addComponent(sourceWikiTextField)
-            .addComponent(targetWikiTextField));
+            .addComponent(targetWikiTextField).addComponent(throttleTextField));
         sourceTargetConfigLayout.setHorizontalGroup(hGroup);
         SequentialGroup vGroup = sourceTargetConfigLayout.createSequentialGroup();
         vGroup.addGroup(sourceTargetConfigLayout.createParallelGroup(Alignment.BASELINE).addComponent(sourceWikiLabel)
             .addComponent(sourceWikiTextField));
         vGroup.addGroup(sourceTargetConfigLayout.createParallelGroup(Alignment.BASELINE).addComponent(targetWikiLabel)
             .addComponent(targetWikiTextField));
+        vGroup.addGroup(sourceTargetConfigLayout.createParallelGroup(Alignment.BASELINE).addComponent(throttleLabel)
+            .addComponent(throttleTextField));
         sourceTargetConfigLayout.setVerticalGroup(vGroup);
         return sourceTargetConfigPanel;
     }
@@ -225,8 +363,10 @@ public class WikipediaToolboxGUI {
         usernameTextField.setPreferredSize(new Dimension(150, 20));
         dataComponentsMap.put("username", usernameTextField);
         JTextField passwordTextField = new JPasswordField();
-        dataComponentsMap.put("password", passwordTextField);
         passwordTextField.setPreferredSize(new Dimension(150, 20));
+        dataComponentsMap.put("password", passwordTextField);
+        JCheckBox botCB = new JCheckBox(bundle.getString("auth.bot"));
+        dataComponentsMap.put("bot", botCB);
         JButton loginButton = new JButton(bundle.getString("login.button"));
 
         loginButton.addActionListener(new ActionListener() {
@@ -263,21 +403,22 @@ public class WikipediaToolboxGUI {
         loginHGroup
             .addGroup(loginConfigLayout.createParallelGroup().addComponent(usernameLabel).addComponent(passwordLabel));
         loginHGroup.addGroup(loginConfigLayout.createParallelGroup().addComponent(usernameTextField)
-            .addComponent(passwordTextField).addComponent(loginButton));
+            .addComponent(passwordTextField).addComponent(botCB).addComponent(loginButton));
         loginConfigLayout.setHorizontalGroup(loginHGroup);
         SequentialGroup loginVGroup = loginConfigLayout.createSequentialGroup();
         loginVGroup.addGroup(loginConfigLayout.createParallelGroup(Alignment.BASELINE).addComponent(usernameLabel)
             .addComponent(usernameTextField));
         loginVGroup.addGroup(loginConfigLayout.createParallelGroup(Alignment.BASELINE).addComponent(passwordLabel)
             .addComponent(passwordTextField));
+        loginVGroup.addGroup(loginConfigLayout.createParallelGroup(Alignment.BASELINE).addComponent(botCB));
         loginVGroup.addGroup(loginConfigLayout.createParallelGroup().addComponent(loginButton));
         loginConfigLayout.setVerticalGroup(loginVGroup);
         return loginConfigPanel;
     }
 
-    private static class ChoiceElement {
+    private static class ChoiceElement<T> {
         public String label;
-        public Class<Generator> clazz;
+        public Class<T> clazz;
 
         @Override
         public String toString() {
@@ -285,4 +426,121 @@ public class WikipediaToolboxGUI {
         }
 
     }
+
+    private static class GeneratorWorker extends SwingWorker<List<String>, String> {
+
+        private Class<Generator> generatorClass;
+        private String generatorParam;
+        private JDialog dialog;
+
+        public GeneratorWorker(Class<Generator> generatorClass, String generatorParam, JDialog dialog) {
+            super();
+            this.generatorClass = generatorClass;
+            this.generatorParam = generatorParam;
+            this.dialog = dialog;
+        }
+
+        @Override
+        protected List<String> doInBackground() throws Exception {
+            frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            Constructor<Generator> generatorConstr = generatorClass.getConstructor(Wiki.class, String.class);
+            Generator generator = generatorConstr.newInstance(targetWiki, generatorParam);
+
+            return generator.getGeneratedTitles();
+        }
+
+    }
+
+    private static class ActionWorker extends SwingWorker<String, String> {
+
+        private Class<WikiOperation> actionClass;
+        private String actionParam;
+        private JProgressBar pBar;
+        private Thread operationWatcher = null;
+        private boolean finished = false;
+        private long timeToStart;
+
+        public ActionWorker(Class<WikiOperation> actionClass, String param, JProgressBar pBar, long timeToStart) {
+            super();
+            this.actionClass = actionClass;
+            this.actionParam = param;
+            this.pBar = pBar;
+        }
+
+        @Override
+        protected String doInBackground() throws Exception {
+            try {
+                frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Constructor<WikiOperation> generatorConstr =
+                    actionClass.getConstructor(Wiki.class, Wiki.class, Wikibase.class, String.class);
+                final WikiOperation generator = generatorConstr.newInstance(targetWiki, sourceWiki, dataWiki, actionParam);
+
+                long crtTime = System.currentTimeMillis();
+                while (crtTime < timeToStart) {
+                    crtTime = System.currentTimeMillis();
+                    publish(MessageFormat.format(bundle.getString("waiting"), (crtTime / 100) / 10.0d));
+                    Thread.sleep(500l);
+                }
+
+                operationWatcher = new Thread() {
+
+                    @Override
+                    public void run() {
+                        while (!finished) {
+                            String[] status = generator.getStatus();
+                            if (null != status && 0 < status.length) {
+                                String statusKey = status[0];
+                                if (1 < status.length) {
+                                    String[] statusParams = new String[status.length - 1];
+                                    System.arraycopy(status, 1, statusParams, 0, status.length - 1);
+                                    publish(MessageFormat.format(bundle.getString(statusKey), (Object[]) statusParams));
+                                } else {
+                                    publish(bundle.getString(statusKey));
+                                }
+                            }
+                            try {
+                                Thread.sleep(1000l);
+                            } catch (InterruptedException e) {
+                            }
+                        }
+                    }
+
+                };
+                operationWatcher.start();
+
+                String result = generator.execute();
+                return result;
+            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+                | IllegalArgumentException | InvocationTargetException e1) {
+                // TODO Auto-generated catch block
+                JOptionPane.showMessageDialog(frame, e1.getMessage(), bundle.getString("error.processing"),
+                    JOptionPane.ERROR_MESSAGE);
+                e1.printStackTrace();
+            }
+            return null;
+        }
+
+        
+        @Override
+        protected void process(List<String> chunks) {
+            if (chunks.size() == 0) {
+                return;
+            }
+            String lastMessage = chunks.get(chunks.size() - 1);
+            pBar.setString(lastMessage);
+        }
+
+        @Override
+        protected void done() {
+            finished = true;
+            if (null != operationWatcher) {
+                try {
+                    operationWatcher.join();
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+
+    }
+
 }
