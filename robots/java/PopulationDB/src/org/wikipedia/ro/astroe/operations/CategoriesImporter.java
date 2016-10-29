@@ -1,10 +1,14 @@
 package org.wikipedia.ro.astroe.operations;
 
+import static org.apache.commons.lang3.StringUtils.defaultString;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
@@ -24,6 +28,7 @@ public class CategoriesImporter implements WikiOperation {
     private Wikibase dataWiki;
     private String article, sourceWikiCode, targetWikiCode;
     private String[] status = new String[] { "status.not.inited" };
+    private Pattern problemePattern = Pattern.compile("(\\{\\{\\s*(?:P|p)robleme(?:articol)?(?:\\s*\\|[^\\|\\}]*)*)(\\s*\\|\\s*necat(?:egorizate)?\\s*=[^\\|\\}]*)(\\s*\\|[^\\|\\}]*)*\\}\\}");
 
     public CategoriesImporter(Wiki targetWiki, Wiki sourceWiki, Wikibase dataWiki, String article) {
         this.targetWiki = targetWiki;
@@ -90,6 +95,13 @@ public class CategoriesImporter implements WikiOperation {
             }
             String newArticleText = articleBuilder.toString();
             newArticleText = newArticleText.replaceAll("\\{\\{\\s*(N|n)ecat(egorizate)?(\\|[^\\}]*)?\\}\\}", "");
+            
+            StringBuffer sbuf = new StringBuffer();
+            Matcher problemeMatcher = problemePattern.matcher(newArticleText);
+            while (problemeMatcher.find()) {
+                problemeMatcher.appendReplacement(sbuf, problemeMatcher.group(1) + defaultString(problemeMatcher.group(3)) + "}}");
+            }
+            problemeMatcher.appendTail(sbuf);
             return newArticleText;
         }
         return null;
