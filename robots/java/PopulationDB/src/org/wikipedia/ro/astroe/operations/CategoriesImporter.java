@@ -28,7 +28,7 @@ public class CategoriesImporter implements WikiOperation {
     private Wikibase dataWiki;
     private String article, sourceWikiCode, targetWikiCode;
     private String[] status = new String[] { "status.not.inited" };
-    private Pattern problemePattern = Pattern.compile("(\\{\\{\\s*(?:P|p)robleme(?:articol)?(?:\\s*\\|[^\\|\\}]*)*)(\\s*\\|\\s*necat(?:egorizate)?\\s*=[^\\|\\}]*)(\\s*\\|[^\\|\\}]*)*\\}\\}");
+    private Pattern problemePattern = Pattern.compile("(\\{\\{\\s*(?:P|p)robleme(?:articol)?(?:\\s*\\|[^\\|\\}]*)*)(\\s*\\|\\s*necat(?:egorizate)?\\s*=[^\\|\\}]*?)((?:\\s*\\|[^\\|\\}]*)*)\\}\\}");
 
     public CategoriesImporter(Wiki targetWiki, Wiki sourceWiki, Wikibase dataWiki, String article) {
         this.targetWiki = targetWiki;
@@ -39,12 +39,21 @@ public class CategoriesImporter implements WikiOperation {
         this.targetWikiCode = StringUtils.substringBefore(targetWiki.getDomain(), ".") + "wiki";
     }
 
-    public String execute() throws IOException, WikibaseException, LoginException {
+    public String execute() throws IOException, LoginException {
         status = new String[] { "status.searching.wikibase.item.by.article", article, targetWikiCode };
-        Entity articleItem = dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, article);
+        StringBuffer articleBuilder = new StringBuffer(targetWiki.getPageText(article));
+        Entity articleItem = null;
+        try {
+            articleItem = dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, article);
+        } catch (WikibaseException e) {
+            return articleBuilder.toString();
+        }
+        if (null == articleItem) {
+            return articleBuilder.toString();
+        }
         Sitelink sitelink = articleItem.getSitelinks().get(sourceWikiCode);
         if (null == sitelink) {
-            throw new WikibaseException("Article in source wiki not found");
+            return articleBuilder.toString();
         }
         String sourceWikiArticle = sitelink.getPageName();
         status = new String[] { "status.reading.categories", sourceWikiArticle, sourceWikiCode };
@@ -86,7 +95,6 @@ public class CategoriesImporter implements WikiOperation {
         }
 
         if (0 < catBuilder.length()) {
-            StringBuilder articleBuilder = new StringBuilder(targetWiki.getPageText(article));
             int locationOfCats = articleBuilder.indexOf("[[" + targetWiki.namespaceIdentifier(Wiki.CATEGORY_NAMESPACE));
             if (0 <= locationOfCats) {
                 articleBuilder.insert(locationOfCats, catBuilder.toString());
@@ -96,15 +104,14 @@ public class CategoriesImporter implements WikiOperation {
             String newArticleText = articleBuilder.toString();
             newArticleText = newArticleText.replaceAll("\\{\\{\\s*(N|n)ecat(egorizate)?(\\|[^\\}]*)?\\}\\}", "");
             
-            StringBuffer sbuf = new StringBuffer();
+            articleBuilder = new StringBuffer();
             Matcher problemeMatcher = problemePattern.matcher(newArticleText);
             while (problemeMatcher.find()) {
-                problemeMatcher.appendReplacement(sbuf, problemeMatcher.group(1) + defaultString(problemeMatcher.group(3)) + "}}");
+                problemeMatcher.appendReplacement(articleBuilder, problemeMatcher.group(1) + defaultString(problemeMatcher.group(3)) + "}}");
             }
-            problemeMatcher.appendTail(sbuf);
-            return newArticleText;
+            problemeMatcher.appendTail(articleBuilder);
         }
-        return null;
+        return articleBuilder.toString();
     }
 
     public static void main(String[] args) {
@@ -135,9 +142,6 @@ public class CategoriesImporter implements WikiOperation {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (FailedLoginException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (WikibaseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (LoginException e) {

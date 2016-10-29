@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
+import javax.swing.ActionMap;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.ParallelGroup;
@@ -154,7 +157,7 @@ public class WikipediaToolboxGUI {
                 bundle.getString("error.operation.cannot.run"), JOptionPane.ERROR_MESSAGE);
             return;
         }
-        boolean markBot = ((JCheckBox) dataComponentsMap.get("bot")).isSelected();
+        final boolean markBot = ((JCheckBox) dataComponentsMap.get("bot")).isSelected();
         int throttle = 10;
         String throttleString = ((JTextField) dataComponentsMap.get("throttle")).getText();
         if (StringUtils.isNotBlank(throttleString)) {
@@ -164,9 +167,11 @@ public class WikipediaToolboxGUI {
             }
         }
         Class<Generator> generatorClass =
-            ((ChoiceElement) ((JComboBox<ChoiceElement>) dataComponentsMap.get("generator")).getSelectedItem()).clazz;
+            ((ChoiceElement<Generator>) ((JComboBox<ChoiceElement<Generator>>) dataComponentsMap.get("generator"))
+                .getSelectedItem()).clazz;
         Class<WikiOperation> actionClass =
-            ((ChoiceElement) ((JComboBox<ChoiceElement>) dataComponentsMap.get("action")).getSelectedItem()).clazz;
+            ((ChoiceElement<WikiOperation>) ((JComboBox<ChoiceElement<WikiOperation>>) dataComponentsMap.get("action"))
+                .getSelectedItem()).clazz;
 
         String srcwikilang = ((JTextField) dataComponentsMap.get("sourcewiki")).getText();
         if (StringUtils.isEmpty(srcwikilang)) {
@@ -193,6 +198,7 @@ public class WikipediaToolboxGUI {
         pBarDialog.setLocationRelativeTo(frame);
         pBarDialog.setVisible(true);
 
+        final JDialog actionDialog = new JDialog(frame, bundle.getString("progress.working"), true);
         List<String> articleList;
         try {
             articleList = genWorker.get();
@@ -202,51 +208,34 @@ public class WikipediaToolboxGUI {
             e.printStackTrace();
             return;
         }
-        frame.setCursor(null);
-        pBarDialog.setVisible(false);
 
         // String actionParam =
         // ((JTextField) dataComponentsMap.get(actionClass.getAnnotation(Operation.class).labelKey())).getText();
-        pBarDialog.removeAll();
         final JProgressBar actionProgressBar = new JProgressBar();
         actionProgressBar.setPreferredSize(new Dimension(400, 30));
         actionProgressBar.setStringPainted(true);
         actionProgressBar.setMinimum(0);
+        actionProgressBar.setValue(0);
         actionProgressBar.setMaximum(articleList.size());
-        pBarDialog.add(actionProgressBar);
-        pBarDialog.pack();
-        pBarDialog.setLocationRelativeTo(frame);
+        actionDialog.add(actionProgressBar);
+        actionDialog.pack();
+        actionDialog.setLocationRelativeTo(frame);
         final long throttleCopy = throttle;
 
-        Thread actionThread = new Thread() {
-            public void run() {
-                long lastOperationEnd = System.currentTimeMillis();
-                int i = 0;
-                for (String eachArticle : articleList) {
-                    actionProgressBar.setValue(++i);
-                    ActionWorker actWorker =
-                        new ActionWorker(actionClass, eachArticle, actionProgressBar, lastOperationEnd + throttleCopy);
-                    actWorker.execute();
+        ActionWorker actWorker = new ActionWorker(actionClass, articleList.toArray(new String[articleList.size()]),
+            actionProgressBar, throttleCopy, commitMessage, markBot);
+        actWorker.addPropertyChangeListener(new PropertyChangeListener() {
 
-                    String articleText = null;
-                    try {
-                        articleText = actWorker.get();
-                        targetWiki.edit(eachArticle, articleText, commitMessage);
-                        lastOperationEnd = System.currentTimeMillis();
-                    } catch (InterruptedException | ExecutionException | LoginException | IOException e) {
-                        JOptionPane.showOptionDialog(frame, e.getMessage(), bundle.getString("error.processing"),
-                            JOptionPane.YES_NO_CANCEL_OPTION,
-                            JOptionPane.ERROR_MESSAGE, null, new String[] { bundle.getString("error.abort"),
-                                bundle.getString("error.retry"), bundle.getString("error.ignore") },
-                            bundle.getString("error.retry"));
-                        e.printStackTrace();
-                    }
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if ("progress".equals(evt.getPropertyName())) {
+                    int progress = (Integer) evt.getNewValue();
+                    actionProgressBar.setValue(progress);
                 }
-                pBarDialog.setVisible(false);
             }
-        };
-        SwingUtilities.invokeLater(actionThread);
-        pBarDialog.setVisible(true);
+        });
+        actWorker.execute();
+        actionDialog.setVisible(true);
     }
 
     private static JPanel createGeneratorConfigPanel() {
@@ -449,45 +438,50 @@ public class WikipediaToolboxGUI {
             return generator.getGeneratedTitles();
         }
 
+        @Override
+        protected void done() {
+            frame.setCursor(null);
+            dialog.setVisible(false);
+        }
+
     }
 
     private static class ActionWorker extends SwingWorker<String, String> {
 
         private Class<WikiOperation> actionClass;
-        private String actionParam;
+        private String[] actionParams;
         private JProgressBar pBar;
         private Thread operationWatcher = null;
         private boolean finished = false;
-        private long timeToStart;
+        private long throttle = 10000l;
+        private String commitMessage;
+        private boolean bot;
+        private WikiOperation action;
 
-        public ActionWorker(Class<WikiOperation> actionClass, String param, JProgressBar pBar, long timeToStart) {
+        public ActionWorker(Class<WikiOperation> actionClass, String[] params, JProgressBar pBar, long throttle,
+            String commitMessage, boolean bot) {
             super();
             this.actionClass = actionClass;
-            this.actionParam = param;
+            this.actionParams = params;
             this.pBar = pBar;
+            this.throttle = throttle;
+            this.commitMessage = commitMessage;
         }
 
         @Override
         protected String doInBackground() throws Exception {
-            try {
-                frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                Constructor<WikiOperation> generatorConstr =
-                    actionClass.getConstructor(Wiki.class, Wiki.class, Wikibase.class, String.class);
-                final WikiOperation generator = generatorConstr.newInstance(targetWiki, sourceWiki, dataWiki, actionParam);
+            long timeToStart = System.currentTimeMillis();
+            frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            Constructor<WikiOperation> actionConstr =
+                actionClass.getConstructor(Wiki.class, Wiki.class, Wikibase.class, String.class);
+            targetWiki.setMarkBot(bot);
+            operationWatcher = new Thread() {
 
-                long crtTime = System.currentTimeMillis();
-                while (crtTime < timeToStart) {
-                    crtTime = System.currentTimeMillis();
-                    publish(MessageFormat.format(bundle.getString("waiting"), (crtTime / 100) / 10.0d));
-                    Thread.sleep(500l);
-                }
-
-                operationWatcher = new Thread() {
-
-                    @Override
-                    public void run() {
-                        while (!finished) {
-                            String[] status = generator.getStatus();
+                @Override
+                public void run() {
+                    while (!finished) {
+                        if (null != action) {
+                            String[] status = action.getStatus();
                             if (null != status && 0 < status.length) {
                                 String statusKey = status[0];
                                 if (1 < status.length) {
@@ -498,29 +492,54 @@ public class WikipediaToolboxGUI {
                                     publish(bundle.getString(statusKey));
                                 }
                             }
-                            try {
-                                Thread.sleep(1000l);
-                            } catch (InterruptedException e) {
-                            }
+                        }
+                        try {
+                            Thread.sleep(1000l);
+                        } catch (InterruptedException e) {
                         }
                     }
+                }
 
-                };
-                operationWatcher.start();
+            };
+            operationWatcher.start();
+            for (int i = 0; i < actionParams.length; i++) {
+                try {
+                    action = actionConstr.newInstance(targetWiki, sourceWiki, dataWiki, actionParams[i]);
+                    setProgress(i);
+                    long crtTime = System.currentTimeMillis();
+                    while (crtTime < timeToStart) {
+                        crtTime = System.currentTimeMillis();
+                        publish(MessageFormat.format(bundle.getString("waiting"), ((crtTime - timeToStart) / 100) / 10.0d));
+                        Thread.sleep(500l);
+                    }
 
-                String result = generator.execute();
-                return result;
-            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException e1) {
-                // TODO Auto-generated catch block
-                JOptionPane.showMessageDialog(frame, e1.getMessage(), bundle.getString("error.processing"),
-                    JOptionPane.ERROR_MESSAGE);
-                e1.printStackTrace();
+                    String result = action.execute();
+
+                    targetWiki.edit(actionParams[i], result, commitMessage);
+                    timeToStart = System.currentTimeMillis() + throttle;
+                } catch (SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
+                    | InvocationTargetException e1) {
+                    int userOption = JOptionPane.showOptionDialog(frame, e1.getMessage(),
+                        bundle.getString("error.processing"), JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.ERROR_MESSAGE, null, new String[] { bundle.getString("error.abort"),
+                            bundle.getString("error.retry"), bundle.getString("error.ignore") },
+                        bundle.getString("error.retry"));
+                    if (userOption == 0 || userOption == JOptionPane.CLOSED_OPTION) {
+                        break;
+                    }
+                    if (userOption == 1) {
+                        i--;
+                        continue;
+                    }
+                    if (userOption == 2) {
+                        continue;
+                    }
+                    e1.printStackTrace();
+                }
             }
-            return null;
+            return "Success";
         }
 
-        
         @Override
         protected void process(List<String> chunks) {
             if (chunks.size() == 0) {
@@ -533,12 +552,13 @@ public class WikipediaToolboxGUI {
         @Override
         protected void done() {
             finished = true;
-            if (null != operationWatcher) {
+            if (null != operationWatcher)
                 try {
                     operationWatcher.join();
                 } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
-            }
         }
 
     }
