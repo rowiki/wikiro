@@ -28,9 +28,10 @@ config = {
 			u'Coord': ('P625', False, 'globe-coordinate'),
 			u'OsmCoord': ('P625', True, 'globe-coordinate'),
 			u'Imagine': ('P18', True, 'commonsMedia'),
-			u'Plan': ('P18', False, 'commonsMedia'),
+			u'Plan': ('P3311', False, 'commonsMedia'),
 			u'Commons': ('P373', False, 'string'),
                         u'Țară': ('P17', False, 'wikibase-item'),
+			u'Monument': ('P1435', False, 'wikibase-item'),
 			}
 	}
 }
@@ -78,6 +79,7 @@ class MonumentsData(robot.WorkItem):
             if prop in item.claims:
                 #don't bother about those yet
                 pywikibot.output(u"Wikidata already has %s: %s" % (key, item.claims[prop][0].getTarget()))
+                pass
             else:
                 if datatype == 'wikibase-item':
                     page = pywikibot.Page(pywikibot.Site(), data[key])
@@ -110,13 +112,16 @@ class MonumentsData(robot.WorkItem):
                         claim.changeRank('preferred')
         except Exception as e:
             pywikibot.output(e)
-            pywikibot.output(u"Could not update " + item.labels['ro'])
+            import traceback
+            traceback.print_exc()
+            pywikibot.output(u"Could not update " + item.labels.get('ro'))
 
     def updateWikidata(self, item, data):
-        for key in [u"Cod", u"FostCod", u"Localitate", u"Commons", u"Imagine", u"OsmCoord"]:
+        for key in [u"Cod", u"FostCod", u"Localitate", u"Commons", u"Imagine", u"OsmCoord", u"Plan"]:
         #for key in [u"Imagine", u"Plan"]:
             if key in data and data[key] != u"":
                 self.updateProperty(item, key, data)
+        self.updateProperty(item, u"Monument", {u"Monument": "Monument istoric"})
 
     def doWork(self, page, item):
         try:
@@ -126,6 +131,8 @@ class MonumentsData(robot.WorkItem):
             self.updateWikidata(item, self.db[page.title()])
         except Exception as e:
             pywikibot.output(e)
+            import traceback
+            traceback.print_exc()
             pywikibot.output(u"Failed to update monument data to Wikidata, skipping...")
 
     def invalidArea(self, item):
