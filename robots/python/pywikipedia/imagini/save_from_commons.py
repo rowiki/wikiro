@@ -21,13 +21,15 @@ from pywikibot import config as user
 config = {
 	'lmiro': {
 		'file': u"rofiles.txt",
-		'dir': u"/mnt/jacob/filme/dir_rofiles.txt/",
+		#'dir': u"/mnt/jacob/filme/dir_rofiles.txt/",
+		'dir': u"/mnt/files/monumenterowp/",
 		'lang': u"ro",
 		'family': u"wikipedia",
 	},
 	'lmicommons': {
 		'file': u"monumentfiles.txt",
-		'dir': u"/mnt/jacob/filme/monumentimages/",
+		#'dir': u"/mnt/jacob/filme/monumentimages/",
+		'dir': u"/mnt/files/monumentimages/",
 		'lang': u"commons",
 		'family': u"commons",
 	},
