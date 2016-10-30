@@ -62,6 +62,10 @@ class WikidataBot(SingleSiteBot):
 
     def getItem(self, page):
         try:
+            if self.site == pywikibot.Site("wikidata", "wikidata"):
+                item = pywikibot.ItemPage(self.site,page.title())
+                item.get(get_redirect=True)
+                return item
             return page.data_item()
         except:
             print u"Could not obtain wikidata item for " + page.title()
@@ -86,6 +90,7 @@ class WikidataBot(SingleSiteBot):
             work.doWork(page, item)
             
 if __name__ == "__main__":
+    print pywikibot.handle_args()
     generator = pagegenerators.AllpagesPageGenerator()
     bot = WikidataBot(site=True, generator = generator)
 
