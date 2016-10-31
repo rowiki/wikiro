@@ -24,8 +24,11 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javax.security.auth.login.FailedLoginException;
+<<<<<<< HEAD
 import javax.security.auth.login.LoginException;
 import javax.swing.ActionMap;
+=======
+>>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.ParallelGroup;
@@ -41,7 +44,10 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
+<<<<<<< HEAD
 import javax.swing.SwingUtilities;
+=======
+>>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
 import javax.swing.SwingWorker;
 
 import org.apache.commons.lang3.StringUtils;
@@ -455,7 +461,11 @@ public class WikipediaToolboxGUI {
         private boolean finished = false;
         private long throttle = 10000l;
         private String commitMessage;
+<<<<<<< HEAD
         private boolean bot;
+=======
+        private boolean bot = true;
+>>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
         private WikiOperation action;
 
         public ActionWorker(Class<WikiOperation> actionClass, String[] params, JProgressBar pBar, long throttle,
@@ -466,6 +476,10 @@ public class WikipediaToolboxGUI {
             this.pBar = pBar;
             this.throttle = throttle;
             this.commitMessage = commitMessage;
+<<<<<<< HEAD
+=======
+            this.bot = bot;
+>>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
         }
 
         @Override
