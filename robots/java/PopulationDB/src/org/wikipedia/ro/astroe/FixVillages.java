@@ -1270,7 +1270,11 @@ public class FixVillages {
                     return MUNTENIA_LINK;
                 }
             } else if ("Focșani".equals(trim(commune))) {
-                return "la limita între regiunile istorice " + join(Arrays.asList(MOLDOVA_LINK, MUNTENIA_LINK), " și ");
+                if (null == settlement) {
+                    return "la limita între regiunile istorice " + join(Arrays.asList(MOLDOVA_LINK, MUNTENIA_LINK), " și ");
+                } else if (settlement.contains("Munteni")) {
+                    return MUNTENIA_LINK;
+                }
             }
             return MOLDOVA_LINK;
         }
@@ -1342,7 +1346,8 @@ public class FixVillages {
                     return BANAT_LINK;
                 }
             } else if ("Arad".equalsIgnoreCase(trim(commune))) {
-                return "la limita între regiunile istorice " + join(Arrays.asList(BANAT_LINK, CRISANA_LINK), " și ");
+//                return "la limita între regiunile istorice " + join(Arrays.asList(BANAT_LINK, CRISANA_LINK), " și ");
+                return BANAT_LINK;
             }
             return CRISANA_LINK;
         }

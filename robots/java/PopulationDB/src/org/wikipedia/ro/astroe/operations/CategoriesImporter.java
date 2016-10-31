@@ -41,8 +41,9 @@ public class CategoriesImporter implements WikiOperation {
         {
             put("rowiki", new HashSet<String>() {
                 {
-                    add("Articole");
-                    add("Pagini");
+                    add("Articole ");
+                    add("Pagini ");
+                    add("Pages ");
                 }
             });
         }
