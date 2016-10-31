@@ -44,6 +44,8 @@ public class CategoriesImporter implements WikiOperation {
                     add("Articole ");
                     add("Pagini ");
                     add("Pages ");
+                    add("1911 Britannica");
+                    add("Cioturi");
                 }
             });
         }
