@@ -452,7 +452,7 @@ public class WikipediaToolboxGUI {
         private boolean finished = false;
         private long throttle = 10000l;
         private String commitMessage;
-        private boolean bot;
+        private boolean bot = true;
         private WikiOperation action;
 
         public ActionWorker(Class<WikiOperation> actionClass, String[] params, JProgressBar pBar, long throttle,
@@ -463,6 +463,7 @@ public class WikipediaToolboxGUI {
             this.pBar = pBar;
             this.throttle = throttle;
             this.commitMessage = commitMessage;
+            this.bot = bot;
         }
 
         @Override
