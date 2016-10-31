@@ -24,8 +24,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javax.security.auth.login.FailedLoginException;
-import javax.security.auth.login.LoginException;
-import javax.swing.ActionMap;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.ParallelGroup;
@@ -41,7 +39,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import org.apache.commons.lang3.StringUtils;
