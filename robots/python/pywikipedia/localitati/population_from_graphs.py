@@ -30,7 +30,7 @@ class PopulationDataCSV(robot.WorkItem):
             1966: {"q": "Q22704111", "name": u"Recensământul populației și locuințelor din martie 1966", "month": 3},
             1977: {"q": "Q22704114", "name": u"Recensământul populației și locuințelor din anul 1977", "month": 1},
             1992: {"q": "Q22704118", "name": u"Recensământul populației și locuințelor din anul 1992", "month": 1},
-            #2002: {"q": "Q4350762", "name": u"Recensământul populației și locuințelor din anul 2002", "month": 3},
+            2002: {"q": "Q4350762", "name": u"Recensământul populației și locuințelor din anul 2002", "month": 3},
             #2011: {"q": "Q12181933", "name": u"Recensământul populației din 1859-1860", "month": 10},
         }
         self.template = template
