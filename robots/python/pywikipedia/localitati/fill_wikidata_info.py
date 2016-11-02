@@ -12,6 +12,7 @@ from pywikibot import i18n, config, pagegenerators, textlib, weblib
 import sys
 import csv
 import json
+import sirutalib
 sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions as sf
 from wikidata import robot_romania as robot
@@ -24,6 +25,17 @@ config = {
                         u'Țară': ('P17', False, 'wikibase-item'),
 			u'Commons': ('P373', False, 'string'),
 			u'SIRUTA': ('P843', False, 'string'),
+			u'situat în': ('P131', False, 'wikibase-item'),
+			u'este un/o': ('P31', False, 'wikibase-item'),
+			u'subdiviziuni': ('P150', False, 'wikibase-item'),
+			u'localități componente': ('P1383', False, 'wikibase-item'),
+			u'fus orar': ('P421', False, 'wikibase-item'),
+			u'primar': ('P6', False, 'wikibase-item'),
+			u'codp': ('P281', False, 'string'),
+			u'SIRUTASUP': ('P131', False, 'wikibase-item'),
+			u'ISO3166-2': ('P300', False, 'string'),
+			u'populație': ('P1082', False, 'quantity'),
+			u'reședință pentru': ('P1376', False, 'wikibase-item'),
 			}
 }
     
@@ -145,20 +157,20 @@ class CityData(robot.WorkItem):
                 page.put(text, u"Creating new subcategory for a Romanian County")
             
 
+    def getUniqueClaim(self, item, name, canBeNull=False):
+        sProp,_,_ = self.config["properties"][name]
+        if sProp not in item.claims:
+            if not canBeNull:
+                pywikibot.error(u"%s does not have a %s claim" % (item.labels.get('ro'), name))
+            return None
+        elif len(item.claims[sProp]) > 1:
+            pywikibot.error(u"%s has several %s claims" % (item.labels.get('ro'), name))
+            return None
+        return item.claims[sProp][0].getTarget()
 
     def updateCommons(self, item):
         cProp, cPref, cDatatype = self.config["properties"][u"Commons"]
         sProp, sPref, sDatatype = self.config["properties"][u"SIRUTA"]
-        if sProp not in item.claims:
-            pywikibot.error(u"%s does not have a SIRUTA code" % item.labels.get('ro'))
-            return
-        elif len(item.claims[sProp]) > 1:
-            pywikibot.error(u"%s has several SIRUTA codes" % item.labels.get('ro'))
-            return
-
-        if self.isCounty(item) and 'ro' in item.labels and item.labels.get('ro') != u"București":
-            self.createCountySubcategories(item.labels.get('ro'))
-
         if cProp not in item.claims:
             self.createCommonsProperty(item, item.claims[sProp][0].getTarget())
         elif len(item.claims[cProp]) > 1:
@@ -187,9 +199,30 @@ class CityData(robot.WorkItem):
             if answer:
                 page.put(newText, u"Adding SIRUTA code")
 
+    def checkISOCodes(self, item):
+        prop,_,_ = self.config['properties'].get(u"ISO3166-2")
+        if prop not in item.claims:
+            pywikibot.error("County %s does not have an ISO 3166-2 code" % item.labels.get('ro'))
+
+    def addPostalCode(self, item):
+        sirutaWD = self.getUniqueClaim(item, u"SIRUTA")
+	codpWD = self.getUniqueClaim(item, u"codp", canBeNull=True)
+        sirutaDb = sirutalib.SirutaDatabase()
+        codp = sirutaDb.get_postal_code(int(sirutaWD))
+        if not codp:
+            return
+        if codpWD and codp != codpWD:
+            pywikibot.error("Mismatch for postal code: SIRUTA has %s, WD has %s" % (codp, codpWD))
+        if not codpWD:
+            self.updateProperty(item, u"codp", {u"codp": str(codp)})
 
     def doWork(self, page, item):
         try:
+            if self.isCounty(item):
+                if 'ro' in item.labels and item.labels.get('ro') != u"București":
+                    self.createCountySubcategories(item.labels.get('ro'))
+                self.checkISOCodes(item)
+            self.addPostalCode(item)
             self.updateCommons(item)
         except Exception as e:
             pywikibot.output(e)
@@ -206,8 +239,8 @@ class CityData(robot.WorkItem):
 
 if __name__ == "__main__":
     pywikibot.handle_args()
-    #page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
-    page = pywikibot.Page(pywikibot.Site(), "Q1776764", ns=0)#counties
+    page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
+    #page = pywikibot.Page(pywikibot.Site(), "Q1776764", ns=0)#counties
     generator = pagegenerators.ReferringPageGenerator(page)
     bot = robot.WikidataBot(site=True, generator = generator)
 
