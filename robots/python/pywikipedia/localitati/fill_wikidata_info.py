@@ -215,10 +215,10 @@ class ItemProcessing:
         codp = sirutaDb.get_postal_code(int(sirutaWD))
         if not codp:
             return
-        if codpWD and codp != codpWD:
+        if codpWD and unicode(codp) != codpWD:
             pywikibot.error("Mismatch for postal code: SIRUTA has %s, WD has %s" % (codp, codpWD))
         if not codpWD:
-            self.updateProperty(u"codp", {u"codp": str(codp)})
+            self.updateProperty(u"codp", {u"codp": unicode(codp)})
 
 
 class CityData(robot.WorkItem):
