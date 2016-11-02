@@ -1,5 +1,12 @@
 package org.wikipedia.ro.astroe;
 
+import static org.apache.commons.lang3.StringUtils.appendIfMissing;
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isNoneEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.removeEnd;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -24,11 +31,6 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import javax.security.auth.login.FailedLoginException;
-<<<<<<< HEAD
-import javax.security.auth.login.LoginException;
-import javax.swing.ActionMap;
-=======
->>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.ParallelGroup;
@@ -44,13 +46,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
-<<<<<<< HEAD
-import javax.swing.SwingUtilities;
-=======
->>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
 import javax.swing.SwingWorker;
 
-import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.wikibase.Wikibase;
 import org.wikipedia.Wiki;
@@ -166,7 +163,7 @@ public class WikipediaToolboxGUI {
         final boolean markBot = ((JCheckBox) dataComponentsMap.get("bot")).isSelected();
         int throttle = 10;
         String throttleString = ((JTextField) dataComponentsMap.get("throttle")).getText();
-        if (StringUtils.isNotBlank(throttleString)) {
+        if (isNotBlank(throttleString)) {
             try {
                 throttle = Integer.parseInt(throttleString);
             } catch (NumberFormatException e2) {
@@ -180,12 +177,12 @@ public class WikipediaToolboxGUI {
                 .getSelectedItem()).clazz;
 
         String srcwikilang = ((JTextField) dataComponentsMap.get("sourcewiki")).getText();
-        if (StringUtils.isEmpty(srcwikilang)) {
+        if (isEmpty(srcwikilang)) {
             JOptionPane.showMessageDialog(frame, bundle.getString("error.srcwiki.not.specified"),
                 bundle.getString("error.operation.cannot.run"), JOptionPane.ERROR_MESSAGE);
         }
-        sourceWiki = new Wiki(StringUtils.removeEnd(srcwikilang, "wiki") + ".wikipedia.org");
-        final String commitMessage = StringUtils.defaultIfBlank(((JTextField) dataComponentsMap.get("summary")).getText(),
+        sourceWiki = new Wiki(removeEnd(srcwikilang, "wiki") + ".wikipedia.org");
+        final String commitMessage = defaultIfBlank(((JTextField) dataComponentsMap.get("summary")).getText(),
             bundle.getString(actionClass.getAnnotation(Operation.class).labelKey()));
 
         String generatorParam = ((JTextField) dataComponentsMap
@@ -388,9 +385,9 @@ public class WikipediaToolboxGUI {
                     protected Void doInBackground() throws Exception {
                         String uname = unameTF.getText();
                         char[] pwd = pwdTF.getPassword();
-                        String tw = StringUtils.appendIfMissing(twTF.getText(), "wiki");
-                        if (StringUtils.isNoneEmpty(uname, tw)) {
-                            String twLang = StringUtils.removeEnd(tw, "wiki");
+                        String tw = appendIfMissing(twTF.getText(), "wiki");
+                        if (isNoneEmpty(uname, tw)) {
+                            String twLang = removeEnd(tw, "wiki");
                             targetWiki = new Wiki(twLang + ".wikipedia.org");
                             targetWiki.login(uname, pwd);
                         } else {
@@ -488,11 +485,7 @@ public class WikipediaToolboxGUI {
         private boolean finished = false;
         private long throttle = 10000l;
         private String commitMessage;
-<<<<<<< HEAD
-        private boolean bot;
-=======
         private boolean bot = true;
->>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
         private WikiOperation action;
 
         public ActionWorker(Class<WikiOperation> actionClass, String[] params, JProgressBar pBar, long throttle,
@@ -503,10 +496,7 @@ public class WikipediaToolboxGUI {
             this.pBar = pBar;
             this.throttle = throttle;
             this.commitMessage = commitMessage;
-<<<<<<< HEAD
-=======
             this.bot = bot;
->>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
         }
 
         @Override
