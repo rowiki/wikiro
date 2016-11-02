@@ -1,38 +1,26 @@
 package org.wikipedia.ro.astroe.operations;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
-<<<<<<< HEAD
-=======
 import static org.apache.commons.lang3.StringUtils.prependIfMissing;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 import static org.apache.commons.lang3.StringUtils.startsWith;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
->>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-<<<<<<< HEAD
-import java.util.List;
-import java.util.Properties;
-=======
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
->>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
-<<<<<<< HEAD
-import org.apache.commons.lang3.StringUtils;
-=======
->>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikibase.data.Entity;
@@ -47,9 +35,6 @@ public class CategoriesImporter implements WikiOperation {
     private Wikibase dataWiki;
     private String article, sourceWikiCode, targetWikiCode;
     private String[] status = new String[] { "status.not.inited" };
-<<<<<<< HEAD
-    private Pattern problemePattern = Pattern.compile("(\\{\\{\\s*(?:P|p)robleme(?:articol)?(?:\\s*\\|[^\\|\\}]*)*)(\\s*\\|\\s*necat(?:egorizate)?\\s*=[^\\|\\}]*?)((?:\\s*\\|[^\\|\\}]*)*)\\}\\}");
-=======
     private Pattern problemePattern = Pattern.compile(
         "(\\{\\{\\s*(?:P|p)robleme(?:articol)?(?:\\s*\\|[^\\|\\}]*)*)(\\s*\\|\\s*necat(?:egorizate)?\\s*=[^\\|\\}]*?)((?:\\s*\\|[^\\|\\}]*)*)\\}\\}");
     private static final Map<String, Set<String>> MAINTENANCE_CATEGORIES = new HashMap<String, Set<String>>() {
@@ -65,20 +50,14 @@ public class CategoriesImporter implements WikiOperation {
             });
         }
     };
->>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
 
     public CategoriesImporter(Wiki targetWiki, Wiki sourceWiki, Wikibase dataWiki, String article) {
         this.targetWiki = targetWiki;
         this.sourceWiki = sourceWiki;
         this.dataWiki = dataWiki;
         this.article = article;
-<<<<<<< HEAD
-        this.sourceWikiCode = StringUtils.substringBefore(sourceWiki.getDomain(), ".") + "wiki";
-        this.targetWikiCode = StringUtils.substringBefore(targetWiki.getDomain(), ".") + "wiki";
-=======
         this.sourceWikiCode = substringBefore(sourceWiki.getDomain(), ".") + "wiki";
         this.targetWikiCode = substringBefore(targetWiki.getDomain(), ".") + "wiki";
->>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
     }
 
     public String execute() throws IOException, LoginException {
@@ -106,19 +85,11 @@ public class CategoriesImporter implements WikiOperation {
         List<String> categoriesToAdd = new ArrayList<String>();
         for (String eachSourceCat : sourceCategories) {
             String sourceCatFullPageName =
-<<<<<<< HEAD
-                StringUtils.prependIfMissing(eachSourceCat, sourceWiki.namespaceIdentifier(Wiki.CATEGORY_NAMESPACE));
-            Entity eachCatItem = null;
-
-            status = new String[] { "status.searching.corresponding.category",
-                StringUtils.removeStart(sourceCatFullPageName, sourceWiki.namespaceIdentifier(Wiki.CATEGORY_NAMESPACE)),
-=======
                 prependIfMissing(eachSourceCat, sourceWiki.namespaceIdentifier(Wiki.CATEGORY_NAMESPACE));
             Entity eachCatItem = null;
 
             status = new String[] { "status.searching.corresponding.category",
                 removeStart(sourceCatFullPageName, sourceWiki.namespaceIdentifier(Wiki.CATEGORY_NAMESPACE)),
->>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
                 sourceWikiCode };
             try {
                 eachCatItem = dataWiki.getWikibaseItemBySiteAndTitle(sourceWikiCode, sourceCatFullPageName);
@@ -129,9 +100,6 @@ public class CategoriesImporter implements WikiOperation {
                 if (null != catTargetSitelink) {
                     String catTargetPage = catTargetSitelink.getPageName();
                     if (!targetCategoriesList.contains(catTargetPage)) {
-<<<<<<< HEAD
-                        categoriesToAdd.add(catTargetPage);
-=======
                         boolean maintCat = false;
                         if (MAINTENANCE_CATEGORIES.containsKey(targetWikiCode)) {
                             for (String eachMainPrefix : MAINTENANCE_CATEGORIES.get(targetWikiCode)) {
@@ -145,7 +113,6 @@ public class CategoriesImporter implements WikiOperation {
                         if (!maintCat) {
                             categoriesToAdd.add(catTargetPage);
                         }
->>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
                     }
                 }
             }
@@ -169,20 +136,12 @@ public class CategoriesImporter implements WikiOperation {
             }
             String newArticleText = articleBuilder.toString();
             newArticleText = newArticleText.replaceAll("\\{\\{\\s*(N|n)ecat(egorizate)?(\\|[^\\}]*)?\\}\\}", "");
-<<<<<<< HEAD
-            
-            articleBuilder = new StringBuffer();
-            Matcher problemeMatcher = problemePattern.matcher(newArticleText);
-            while (problemeMatcher.find()) {
-                problemeMatcher.appendReplacement(articleBuilder, problemeMatcher.group(1) + defaultString(problemeMatcher.group(3)) + "}}");
-=======
 
             articleBuilder = new StringBuffer();
             Matcher problemeMatcher = problemePattern.matcher(newArticleText);
             while (problemeMatcher.find()) {
                 problemeMatcher.appendReplacement(articleBuilder,
                     problemeMatcher.group(1) + defaultString(problemeMatcher.group(3)) + "}}");
->>>>>>> 20077671e9c4236933565ebfae5375cde74f4ad7
             }
             problemeMatcher.appendTail(articleBuilder);
         }
