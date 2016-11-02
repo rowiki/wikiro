@@ -38,12 +38,15 @@ config = {
 			u'reședință pentru': ('P1376', False, 'wikibase-item'),
 			}
 }
-    
-class CityData(robot.WorkItem):
-    def __init__(self, config):
-        self.db = {}
+
+def sortFromName(self, name):
+    return name.replace(u"ș", u"sș").replace(u"ț", u"tț").replace(u"Ș", u"SȘ").replace(u"Ț", u"TȚ").replace(u"ă", u"aă").replace(u"Ă", u"AĂ").replace(u"â", u"aâ").replace(u"Â", u"AÂ").replace(u"î", u"iî").replace(u"Î", u"IÎ")
+
+class ItemProcessing:
+    def __init__(self, config, item):
         self.always = False
         self.config = config
+        self.item = item
 
     def userConfirm(self, question):
         """Obtain user response."""
@@ -64,12 +67,12 @@ class CityData(robot.WorkItem):
 
         return True
 
-    def updateProperty(self, item, key, data):
+    def updateProperty(self, key, data):
         try:
             prop, pref, datatype = self.config["properties"][key]
-            if prop in item.claims:
+            if prop in self.item.claims:
                 #don't bother about those yet
-                pywikibot.output(u"Wikidata already has %s: %s" % (key, item.claims[prop][0].getTarget()))
+                pywikibot.output(u"Wikidata already has %s: %s" % (key, self.item.claims[prop][0].getTarget()))
                 pass
             else:
                 if datatype == 'wikibase-item':
@@ -94,94 +97,65 @@ class CityData(robot.WorkItem):
                         raise ValueError("Local image given")
                 else:
                     val = desc = data[key]
-                claim = pywikibot.Claim(item.repo, prop, datatype=datatype)
+                claim = pywikibot.Claim(self.item.repo, prop, datatype=datatype)
                 claim.setTarget(val)
-                answer = self.userConfirm("Update element %s with %s \"%s\"?" % (item.labels['ro'], key, desc))
+                answer = self.userConfirm("Update element %s with %s \"%s\"?" % (self.item.labels['ro'], key, desc))
                 if answer:
-                    item.addClaim(claim)
+                    self.item.addClaim(claim)
                     if pref:
                         claim.changeRank('preferred')
         except Exception as e:
             pywikibot.output(e)
             import traceback
             traceback.print_exc()
-            pywikibot.output(u"Could not update " + item.labels.get('ro'))
+            pywikibot.output(u"Could not update " + self.item.labels.get('ro'))
 
-    def updateWikidata(self, item, data):
-        #self.updateProperty(item, key, data)
-        pass
-
-    def isOfType(self, item, typeName):
-        for claim in (item.claims.get(u"P31") or []):
+    def isOfType(self, typeName):
+        for claim in (self.item.claims.get(u"P31") or []):
             if claim.getTarget().title() == typeName:
                 return True
         return False
 
-    def isCounty(self, item):
-        return self.isOfType(item, u"Q1776764")
+    def isCounty(self):
+        return self.isOfType(u"Q1776764")
 
-    def isMunicipality(self, item):
-        return self.isOfType(item, u"Q640364")
+    def isMunicipality(self):
+        return self.isOfType(u"Q640364")
 
-    def isCity(self, item):
-        return self.isOfType(item, u"Q16858213")
+    def isCity(self):
+        return self.isOfType(u"Q16858213")
 
-    def createCommonsProperty(self, item, siruta):
-        if self.isCounty(item) and 'ro' in item.labels and item.labels.get('ro') != u"București":
-             self.updateProperty(item, u"Commons", {u"Commons": item.labels.get('ro') + u" County"})
+    def createCommonsProperty(self, siruta):
+        if self.isCounty() and 'ro' in self.item.labels and self.item.labels.get('ro') != u"București":
+             self.updateProperty(item, u"Commons", {u"Commons": self.item.labels.get('ro') + u" County"})
         #TODO: search for it first
         pass
 
-    def sortFromName(self, name):
-        return name.replace(u"ș", u"sș").replace(u"ț", u"tț").replace(u"Ș", u"SȘ").replace(u"Ț", u"TȚ").replace(u"ă", u"aă").replace(u"Ă", u"AĂ").replace(u"â", u"aâ").replace(u"Â", u"AÂ").replace(u"î", u"iî").replace(u"Î", u"IÎ")
-
-    def createCountySubcategories(self, county):
-        cats = {
-            u"Administrative divisions of %s County": [u"Category:Administrative divisions of Romania by county", ], 
-            u"Cities and towns in %s County": [u"Category:Cities in Romania by county"], 
-            u"Communes in %s County": [u"Category:Communes in Romania"], 
-            u"Villages in %s County": [u"Category:Villages in Romania by county"],
-        }
-        for template in cats:
-            cat = template % county
-            site = pywikibot.Site("commons", "commons")
-            page = pywikibot.Page(site, cat, ns=14)
-            if page.exists():
-                continue
-            text = u"[[Category:%s County]]\n" % county
-            for newcat in cats[template]:
-                text += u"[[%s|%s]]" % (newcat, self.sortFromName(county))
-            print text
-            answer = self.userConfirm("Create category %s?" % page.title())
-            if answer:
-                page.put(text, u"Creating new subcategory for a Romanian County")
-            
-
-    def getUniqueClaim(self, item, name, canBeNull=False):
+    def getUniqueClaim(self, name, canBeNull=False):
         sProp,_,_ = self.config["properties"][name]
-        if sProp not in item.claims:
+        if sProp not in self.item.claims:
             if not canBeNull:
-                pywikibot.error(u"%s does not have a %s claim" % (item.labels.get('ro'), name))
+                pywikibot.error(u"%s does not have a %s claim" % (self.item.labels.get('ro'), name))
             return None
-        elif len(item.claims[sProp]) > 1:
-            pywikibot.error(u"%s has several %s claims" % (item.labels.get('ro'), name))
+        elif len(self.item.claims[sProp]) > 1:
+            pywikibot.error(u"%s has several %s claims" % (self.item.labels.get('ro'), name))
             return None
-        return item.claims[sProp][0].getTarget()
+        return self.item.claims[sProp][0].getTarget()
 
-    def updateCommons(self, item):
+    def updateCommons(self):
         cProp, cPref, cDatatype = self.config["properties"][u"Commons"]
         sProp, sPref, sDatatype = self.config["properties"][u"SIRUTA"]
-        if cProp not in item.claims:
-            self.createCommonsProperty(item, item.claims[sProp][0].getTarget())
-        elif len(item.claims[cProp]) > 1:
-            pywikibot.error(u"%s has several Commons categories" % item.labels.get('ro'))
-	else:
-            self.updateCommonsCat(item, cProp, sProp)
+        if cProp not in self.item.claims:
+            self.createCommonsProperty(self.item.claims[sProp][0].getTarget())
+        elif len(self.item.claims[cProp]) > 1:
+            pywikibot.error(u"%s has several Commons categories" % self.item.labels.get('ro'))
+        else:
+            self.updateCommonsCat(cProp, sProp)
             pass
 
-    def updateCommonsCat(self, item, cProp, sProp):
-        cat = item.claims[cProp][0].getTarget()
-        siruta = item.claims[sProp][0].getTarget()
+    def updateCommonsCat(self, cProp, sProp):
+        cat = self.item.claims[cProp][0].getTarget()
+        siruta = self.item.claims[sProp][0].getTarget()
         site = pywikibot.Site("commons", "commons")
         page = pywikibot.Page(site, cat, ns=14)
         sirutaTl = pywikibot.Page(site, "SIRUTA", ns=10)
@@ -199,14 +173,38 @@ class CityData(robot.WorkItem):
             if answer:
                 page.put(newText, u"Adding SIRUTA code")
 
-    def checkISOCodes(self, item):
-        prop,_,_ = self.config['properties'].get(u"ISO3166-2")
-        if prop not in item.claims:
-            pywikibot.error("County %s does not have an ISO 3166-2 code" % item.labels.get('ro'))
+    def createCountySubcategories(self):
+        if 'ro' not in self.item.labels or self.item.labels.get('ro') == u"București":
+            return
+        county = item.labels.get('ro')
+        cats = {
+            u"Administrative divisions of %s County": [u"Category:Administrative divisions of Romania by county", ], 
+            u"Cities and towns in %s County": [u"Category:Cities in Romania by county"], 
+            u"Communes in %s County": [u"Category:Communes in Romania"], 
+            u"Villages in %s County": [u"Category:Villages in Romania by county"],
+        }
+        for template in cats:
+            cat = template % county
+            site = pywikibot.Site("commons", "commons")
+            page = pywikibot.Page(site, cat, ns=14)
+            if page.exists():
+                continue
+            text = u"[[Category:%s County]]\n" % county
+            for newcat in cats[template]:
+                text += u"[[%s|%s]]" % (newcat, sortFromName(county))
+            print text
+            answer = self.userConfirm("Create category %s?" % page.title())
+            if answer:
+                page.put(text, u"Creating new subcategory for a Romanian County")
 
-    def addPostalCode(self, item):
-        sirutaWD = self.getUniqueClaim(item, u"SIRUTA")
-	codpWD = self.getUniqueClaim(item, u"codp", canBeNull=True)
+    def checkISOCodes(self):
+        prop,_,_ = self.config['properties'].get(u"ISO3166-2")
+        if prop not in self.item.claims:
+            pywikibot.error("County %s does not have an ISO 3166-2 code" % self.item.labels.get('ro'))
+
+    def addPostalCode(self):
+        sirutaWD = self.getUniqueClaim(u"SIRUTA")
+        codpWD = self.getUniqueClaim(u"codp", canBeNull=True)
         sirutaDb = sirutalib.SirutaDatabase()
         codp = sirutaDb.get_postal_code(int(sirutaWD))
         if not codp:
@@ -214,16 +212,23 @@ class CityData(robot.WorkItem):
         if codpWD and codp != codpWD:
             pywikibot.error("Mismatch for postal code: SIRUTA has %s, WD has %s" % (codp, codpWD))
         if not codpWD:
-            self.updateProperty(item, u"codp", {u"codp": str(codp)})
+            self.updateProperty(u"codp", {u"codp": str(codp)})
+
+
+class CityData(robot.WorkItem):
+    def __init__(self, config):
+        self.db = {}
+        self.always = False
+        self.config = config
 
     def doWork(self, page, item):
         try:
-            if self.isCounty(item):
-                if 'ro' in item.labels and item.labels.get('ro') != u"București":
-                    self.createCountySubcategories(item.labels.get('ro'))
-                self.checkISOCodes(item)
-            self.addPostalCode(item)
-            self.updateCommons(item)
+            i = ItemProcessing(self.config, item)
+            if i.isCounty():
+                i.createCountySubcategories()
+                i.checkISOCodes()
+            i.addPostalCode()
+            i.updateCommons()
         except Exception as e:
             pywikibot.output(e)
             import traceback
