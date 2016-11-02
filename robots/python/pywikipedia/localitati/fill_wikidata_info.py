@@ -8,11 +8,14 @@
 #
 import pywikibot
 from pywikibot import i18n, config, pagegenerators, textlib, weblib
+from pywikibot.data import sparql
 
 import sys
 import csv
 import json
+
 import sirutalib
+
 sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions as sf
 from wikidata import robot_romania as robot
@@ -48,6 +51,7 @@ class ItemProcessing:
         self.config = config
         self.item = item
         self.label = self.extractLabel()
+        self.sirutaDb = sirutalib.SirutaDatabase()
 
     def extractLabel(self):
         if 'ro' in self.item.labels:
@@ -211,14 +215,29 @@ class ItemProcessing:
     def addPostalCode(self):
         sirutaWD = self.getUniqueClaim(u"SIRUTA")
         codpWD = self.getUniqueClaim(u"codp", canBeNull=True)
-        sirutaDb = sirutalib.SirutaDatabase()
-        codp = sirutaDb.get_postal_code(int(sirutaWD))
+        codp = self.sirutaDb.get_postal_code(int(sirutaWD))
         if not codp:
             return
         if codpWD and unicode(codp) != codpWD:
             pywikibot.error("Mismatch for postal code: SIRUTA has %s, WD has %s" % (codp, codpWD))
         if not codpWD:
             self.updateProperty(u"codp", {u"codp": unicode(codp)})
+
+    def addSirutaSup(self):
+        sirutaWD = int(self.getUniqueClaim(u"SIRUTA"))
+        sirutasup = self.sirutaDb.get_sup_code(sirutaWD)
+        query = "SELECT ?item WHERE { ?item wdt:P843 \"%d\" . 	SERVICE wikibase:label { bd:serviceParam wikibase:language \"ro\" }}" % sirutasup
+        query_object = sparql.SparqlQuery()
+        data = query_object.get_items(query, result_type=list)
+        if len(data) != 1:
+            pywikibot.error("There are %d items with siruta %d" % (len(data), sirutasup))
+            return
+        sirutasupWD = self.getUniqueClaim(u"SIRUTASUP")
+        if sirutasupWD and data[0] != sirutasupWD.title():
+            pywikibot.error("Mismatch for SIRUTASUP: SIRUTA has %s, WD has %s" % (data[0], sirutasupWD.title()))
+            return
+        if not sirutasupWD:
+            self.updateProperty(u"SIRUTASUP", {u"SIRUTASUP": data[0]})
 
 
 class CityData(robot.WorkItem):
@@ -234,6 +253,7 @@ class CityData(robot.WorkItem):
                 i.createCountySubcategories()
                 i.checkISOCodes()
             i.addPostalCode()
+            i.addSirutaSup()
             i.updateCommons()
         except Exception as e:
             pywikibot.output(e)
