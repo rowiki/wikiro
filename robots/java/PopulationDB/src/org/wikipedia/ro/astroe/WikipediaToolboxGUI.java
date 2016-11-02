@@ -2,6 +2,7 @@ package org.wikipedia.ro.astroe;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -11,7 +12,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
@@ -224,8 +224,8 @@ public class WikipediaToolboxGUI {
         actionProgressBar.setValue(0);
         actionProgressBar.setMaximum(articleList.size());
         actionDialog.add(actionProgressBar);
-        actionDialog.pack();
         actionDialog.setLocationRelativeTo(frame);
+        actionDialog.pack();
         final long throttleCopy = throttle;
 
         ActionWorker actWorker = new ActionWorker(actionClass, articleList.toArray(new String[articleList.size()]),
@@ -368,28 +368,55 @@ public class WikipediaToolboxGUI {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                JTextField unameTF = (JTextField) dataComponentsMap.get("username");
-                JPasswordField pwdTF = (JPasswordField) dataComponentsMap.get("password");
-                JTextField twTF = (JTextField) dataComponentsMap.get("targetwiki");
+                final JTextField unameTF = (JTextField) dataComponentsMap.get("username");
+                final JPasswordField pwdTF = (JPasswordField) dataComponentsMap.get("password");
+                final JTextField twTF = (JTextField) dataComponentsMap.get("targetwiki");
 
-                String uname = unameTF.getText();
-                char[] pwd = pwdTF.getPassword();
-                String tw = StringUtils.appendIfMissing(twTF.getText(), "wiki");
-                if (StringUtils.isNoneEmpty(uname, tw)) {
-                    String twLang = StringUtils.removeEnd(tw, "wiki");
-                    targetWiki = new Wiki(twLang + ".wikipedia.org");
-                    try {
-                        targetWiki.login(uname, pwd);
-                        JOptionPane.showMessageDialog(frame, bundle.getString("auth.successful"));
-                    } catch (FailedLoginException | IOException e1) {
-                        JOptionPane.showMessageDialog(frame, e1.getMessage(), bundle.getString("error.autherror"),
-                            JOptionPane.ERROR_MESSAGE);
-                        e1.printStackTrace();
+                final JProgressBar pbar = new JProgressBar();
+                pbar.setStringPainted(true);
+                pbar.setString(bundle.getString("auth.processing"));
+                pbar.setPreferredSize(new Dimension(300, 10));
+                pbar.setIndeterminate(true);
+                final JDialog dialog = new JDialog(frame, bundle.getString("auth.authentication"), true);
+                dialog.add(pbar);
+                dialog.pack();
+                dialog.setLocationRelativeTo(frame);
+
+                SwingWorker<Void, Void> loginWorker = new SwingWorker<Void, Void>() {
+
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        String uname = unameTF.getText();
+                        char[] pwd = pwdTF.getPassword();
+                        String tw = StringUtils.appendIfMissing(twTF.getText(), "wiki");
+                        if (StringUtils.isNoneEmpty(uname, tw)) {
+                            String twLang = StringUtils.removeEnd(tw, "wiki");
+                            targetWiki = new Wiki(twLang + ".wikipedia.org");
+                            targetWiki.login(uname, pwd);
+                        } else {
+                            throw new FailedLoginException(bundle.getString("error.specify.targetwiki.credentials"));
+                        }
+                        return null;
                     }
-                } else {
-                    JOptionPane.showMessageDialog(frame, bundle.getString("error.specify.targetwiki.credentials"),
-                        bundle.getString("error.autherror"), JOptionPane.ERROR_MESSAGE);
+
+                    @Override
+                    protected void done() {
+                        dialog.setVisible(false);
+                    }
+                    
+                };
+                
+                loginWorker.execute();
+                dialog.setVisible(true);
+                try {
+                    loginWorker.get();
+                    JOptionPane.showMessageDialog(frame, bundle.getString("auth.successful"));
+                } catch (InterruptedException | ExecutionException e1) {
+                    JOptionPane.showMessageDialog(frame, e1.getMessage(), bundle.getString("error.autherror"),
+                        JOptionPane.ERROR_MESSAGE);
+                    e1.printStackTrace();
                 }
+                
             }
         });
         loginConfigPanel.setLayout(loginConfigLayout);
@@ -565,14 +592,23 @@ public class WikipediaToolboxGUI {
 
         @Override
         protected void done() {
+            frame.setCursor(null);
             finished = true;
-            if (null != operationWatcher)
+            if (null != operationWatcher) {
                 try {
                     operationWatcher.join();
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
+            }
+            Container parentDialog = pBar.getParent();
+            while (null != parentDialog && (!(parentDialog instanceof JDialog))) {
+                parentDialog = parentDialog.getParent();
+            }
+            if (null != parentDialog) {
+                parentDialog.setVisible(false);
+            }
         }
 
     }
