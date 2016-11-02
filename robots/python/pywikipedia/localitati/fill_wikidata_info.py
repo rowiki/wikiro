@@ -47,6 +47,13 @@ class ItemProcessing:
         self.always = False
         self.config = config
         self.item = item
+        self.label = self.extractLabel()
+
+    def extractLabel(self):
+        if 'ro' in self.item.labels:
+            return self.item.labels['ro']
+        if 'en' in self.item.labels:
+            return self.item.labels['en']
 
     def userConfirm(self, question):
         """Obtain user response."""
@@ -99,7 +106,7 @@ class ItemProcessing:
                     val = desc = data[key]
                 claim = pywikibot.Claim(self.item.repo, prop, datatype=datatype)
                 claim.setTarget(val)
-                answer = self.userConfirm("Update element %s with %s \"%s\"?" % (self.item.labels['ro'], key, desc))
+                answer = self.userConfirm("Update element %s with %s \"%s\"?" % (self.label, key, desc))
                 if answer:
                     self.item.addClaim(claim)
                     if pref:
@@ -108,7 +115,7 @@ class ItemProcessing:
             pywikibot.output(e)
             import traceback
             traceback.print_exc()
-            pywikibot.output(u"Could not update " + self.item.labels.get('ro'))
+            pywikibot.output(u"Could not update " + self.label)
 
     def isOfType(self, typeName):
         for claim in (self.item.claims.get(u"P31") or []):
@@ -126,7 +133,7 @@ class ItemProcessing:
         return self.isOfType(u"Q16858213")
 
     def createCommonsProperty(self, siruta):
-        if self.isCounty() and 'ro' in self.item.labels and self.item.labels.get('ro') != u"București":
+        if self.isCounty() and self.label != u"București":
              self.updateProperty(item, u"Commons", {u"Commons": self.item.labels.get('ro') + u" County"})
         #TODO: search for it first
         pass
@@ -135,10 +142,10 @@ class ItemProcessing:
         sProp,_,_ = self.config["properties"][name]
         if sProp not in self.item.claims:
             if not canBeNull:
-                pywikibot.error(u"%s does not have a %s claim" % (self.item.labels.get('ro'), name))
+                pywikibot.error(u"%s does not have a %s claim" % (self.label, name))
             return None
         elif len(self.item.claims[sProp]) > 1:
-            pywikibot.error(u"%s has several %s claims" % (self.item.labels.get('ro'), name))
+            pywikibot.error(u"%s has several %s claims" % (self.label, name))
             return None
         return self.item.claims[sProp][0].getTarget()
 
@@ -148,7 +155,7 @@ class ItemProcessing:
         if cProp not in self.item.claims:
             self.createCommonsProperty(self.item.claims[sProp][0].getTarget())
         elif len(self.item.claims[cProp]) > 1:
-            pywikibot.error(u"%s has several Commons categories" % self.item.labels.get('ro'))
+            pywikibot.error(u"%s has several Commons categories" % self.label)
         else:
             self.updateCommonsCat(cProp, sProp)
             pass
@@ -174,9 +181,8 @@ class ItemProcessing:
                 page.put(newText, u"Adding SIRUTA code")
 
     def createCountySubcategories(self):
-        if 'ro' not in self.item.labels or self.item.labels.get('ro') == u"București":
+        if self.label == u"București":
             return
-        county = item.labels.get('ro')
         cats = {
             u"Administrative divisions of %s County": [u"Category:Administrative divisions of Romania by county", ], 
             u"Cities and towns in %s County": [u"Category:Cities in Romania by county"], 
@@ -184,14 +190,14 @@ class ItemProcessing:
             u"Villages in %s County": [u"Category:Villages in Romania by county"],
         }
         for template in cats:
-            cat = template % county
+            cat = template % self.label
             site = pywikibot.Site("commons", "commons")
             page = pywikibot.Page(site, cat, ns=14)
             if page.exists():
                 continue
-            text = u"[[Category:%s County]]\n" % county
+            text = u"[[Category:%s County]]\n" % self.label
             for newcat in cats[template]:
-                text += u"[[%s|%s]]" % (newcat, sortFromName(county))
+                text += u"[[%s|%s]]" % (newcat, sortFromName(self.label))
             print text
             answer = self.userConfirm("Create category %s?" % page.title())
             if answer:
