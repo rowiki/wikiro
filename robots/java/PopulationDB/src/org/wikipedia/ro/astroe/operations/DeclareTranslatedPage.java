@@ -42,7 +42,7 @@ public class DeclareTranslatedPage implements WikiOperation {
         status = new String[] { "status.reading.talkpage" };
         String talkPageText = "";
         try {
-            talkPageText = trim(targetWiki.getPageText(article));
+            talkPageText = trim(defaultString(targetWiki.getPageText(article)));
         } catch (FileNotFoundException e) {
         }
         boolean small = false;
@@ -64,7 +64,7 @@ public class DeclareTranslatedPage implements WikiOperation {
         status = new String[] { "status.last.revision.target" };
         String targetLastRevId = targetWiki.getPageInfo(articlePage).get("lastrevid").toString();
         StringBuilder template = new StringBuilder("{{Pagină tradusă|");
-        template.append(sourceWiki.getDomain());
+        template.append(substringBefore(sourceWiki.getDomain(), "."));
         template.append('|');
         template.append(sourceArticle);
         if (!small) {
