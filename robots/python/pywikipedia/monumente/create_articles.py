@@ -437,7 +437,7 @@ if __name__ == "__main__":
 
         #generate articles for A-grade monuments with pics or 
         #for monuments with external data
-        if monument["Cod"] not in j and (monument[u"Imagine"] == "" or splitCode(monument[u"Cod"])[3] == "B"):
+        if monument["Cod"] not in j and (monument[u"Imagine"] == ""):# or splitCode(monument[u"Cod"])[3] == "B"):
             continue
         if monument["Denumire"].find("[[") > -1:
             continue
