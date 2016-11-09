@@ -701,7 +701,7 @@ def processArticle(text, page, conf):
 		else:
 			dictElem['image'] = img.title()
 	if dictElem.get('image') and dictElem.get('image').find(':') < 0: #no namespace
-		dictElem['image'] = page.site.namespace(6) + u":" + dictElem['image']
+		dictElem['image'] = page.site.namespace(6) + u":" + dictElem['image'].strip()
 
 	#print dictElem
 
