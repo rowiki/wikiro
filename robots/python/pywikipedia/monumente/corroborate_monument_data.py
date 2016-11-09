@@ -57,26 +57,32 @@ Example: "python corroborate_monument_data.py -lang:ro -db:lmi -updateArticle"
 
 Command-line arguments:
 
--import         Name of the file containing additional data; this can be either
-                a JSON or a CSV file. The JSON keys or CSV columns must match
-                the fields from the config
+-addRan         [ro specific] Add RAN codes and use RAN db to update monuments
 
 -db             Together with "-lang" specifies the config to be used.
                 Default is "lmi"
 
--addRan         [ro specific] Add RAN codes and use RAN db to update monuments
+-county         The 2-letter code of the county (the same as the second part of
+                the ISO 3166-2 code). Limits the monuments we work on to the
+                ones from the specified county
 
--force		Force the update of the fields even if we already have a value
+-code           The LMI code we want to work on. Can also be a code prefix.
+
+-import         Name of the file containing additional data; this can be either
+                a JSON or a CSV file. The JSON keys or CSV columns must match
+                the fields from the config
+
+-force          Force the update of the fields even if we already have a value
 
 -updateArticle  Update the link to the article if available
-
--updateImage    Update the image if available
 
 -updateCoord    Update the coords if available
 
 -updateCreator  Update the creator(s) if available
 
 -updateCommons  Update the link to Wikimedia Commons if available
+
+-updateImage    Update the image if available
 '''
 
 import sys, time, warnings, json, string, random, re
@@ -652,6 +658,7 @@ def main():
 	otherFile = "other_monument_data.csv"
 	addRan = False
 	force = False
+	codePrefix = None
 	global _changes, _db, _differentCoords
 	
 	for arg in pywikibot.handleArgs():
@@ -673,6 +680,9 @@ def main():
 			_changes = _changes | Changes.creator
 		if arg.startswith('-updateCommons'):
 			_changes = _changes | Changes.commons
+		for prefixParam in ['-code:', '-county:']:
+			if arg.startswith(prefixParam):
+				codePrefix = arg [len(prefixParam):]
 
 	if _changes == Changes.none:
 		_changes = Changes.all
@@ -745,8 +755,10 @@ def main():
 			code = result[0][0]
 		else:
 			code = rawCode
+		if codePrefix and not code.startswith(codePrefix):
+			continue
 		pywikibot.output(code)
-		
+
 		allPages = list()
 		article = None
 		picture = None
