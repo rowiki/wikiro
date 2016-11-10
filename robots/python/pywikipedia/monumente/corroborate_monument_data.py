@@ -743,7 +743,7 @@ def main():
 	lastSource = None
 
 	#this is the big loop that must only happen once
-	for monument in db_json:
+	for index, monument in enumerate(db_json):
 		if monument["source"] <> lastSource:
 			articleText = None
 			lastSource = monument["source"]
@@ -926,10 +926,10 @@ def main():
 			articleText = updateTableData(monument["source"], code, u'Copyright', str(last_death), monument, text=articleText)
 	
 		# --- Choose an image ---
-		#we will only consider other types of image if no picture exists
 
-		#image from Commons, none in the list
+		#we will only consider other types of image if no picture exists
 		if isNullorEmpty(monument.get(imageField)) or force:
+			#image from Commons, none in the list
 			if picture <> None:
 				#pywikibot.output("We're uploading a selected picture from Commons: " + picture)
 				if picture.find(':') < 0:#no namespace
@@ -971,6 +971,14 @@ def main():
 				if localimage.find(':') < 0:#nonamespace
 					localimage = "File:" + localimage
 				articleText = updateTableData(monument["source"], code, localimageType, localimage, monument, text=articleText)
+			#bonus option for ensembles: try to get images from the first submonument
+			else:
+				newcode = code.replace(u"-a-", u"-m-") + u".01"
+				if code.find(u"-a-") > -1 and \
+					db_json[index+1][countries.get((_lang, _db)).get('idField')] == newcode and \
+					not isNullorEmpty(db_json[index+1].get(imageField)):
+					pywikibot.output(u"Importing image from submonument %s" % newcode)
+					articleText = updateTableData(monument["source"], code, imageField, db_json[index+1].get(imageField), monument, text=articleText)
 
 		# --- Commons category ---
 		if code in categories_commons:
