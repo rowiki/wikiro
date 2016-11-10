@@ -6,7 +6,8 @@ but don't have the template in commons.
 '''
 
 import sys, time, warnings, json, string, re
-sys.path.append("..")
+sys.path.append("wikiro/robots/python/pywikipedia")
+import strainu_functions as sf
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot import config as user
@@ -15,6 +16,7 @@ from pywikibot import catlib as catlib
 
 _log = "link2.err.log"
 _flog = None
+always = False
 
 def initLog():
 	global _flog, _log;
@@ -30,7 +32,7 @@ def log(string):
 
 def commonsImage(image):
 	site = pywikibot.Site('commons', 'commons')
-	print image
+	#print image
         try:
                 page = pywikibot.Page(site, image)
 		if not page.exists():
@@ -65,6 +67,17 @@ def checkForCode(page):
 	else:
 		return ret[0][0]
 
+def put(page, text, comment):
+	global always
+	if always:
+		answer = 'a'
+	else:
+		answer = pywikibot.inputChoice("Are you sure you want to add the code to %s?" % page.title(), ["Yes", "No", "Always"], ["y", "n", "a"])
+	if answer == 'a':
+		always = True
+	if answer != 'n':
+		page.put(text, comment=comment)
+
 def addCodeToTemplate(page, code):
 	if code == None:
 		return
@@ -83,7 +96,7 @@ def addCodeToTemplate(page, code):
         if info_params == None:
                 text = addedText + "\n" + text
                 #print text
-                page.put(text, comment="Adding {{tl|Monument istoric}}")
+		put(page, text, u"Adding {{tl|Monument istoric}}")
         else:
                 description = None
                 for param in info_params:
@@ -97,7 +110,7 @@ def addCodeToTemplate(page, code):
                         #print new
                         text = text.replace(description, new)
                         #print text
-                        page.put(text, comment="Adding {{tl|Monument istoric}}")
+			put(page, text, u"Adding {{tl|Monument istoric}}")
                 else:
                         log(u"E: Imaginea pentru %s are formatul {{f|information}} dar nu și o descriere" % code)
 
@@ -235,16 +248,25 @@ def article2commons(article):
 	if article == None:
 		return
 	art = pywikibot.Page(site, title=article)
+	text = art.get() 
 	code = checkForCode(art)
+	log(u"Working on code %s" % code)
 	for image in pagegenerators.ImagesPageGenerator(art):
-		title = image.title().replace(u'Fișier', u'File').replace(u'Imagine', u'File')
+		title = image.title(withNamespace=False)
 		if title.find("logo")>-1 or \
 			title.find("coa")>-1 or\
 			title.find("Coa")>-1:
 			continue
-		page = commonsImage(title)
-		if page == None:
+		if text.find(title) == -1 and text.find(title.replace(u' ', u'_')) == -1:
+			log(u"Image File:%s not found in the text, skipping" % title)
+			continue
+		if image.fileIsShared():
+			page = commonsImage(u"File:" + title)
+		else:
 			page = image
+		while page.isRedirectPage():
+			page = page.getRedirectTarget()
+		pywikibot.output(u"Working on file %s" % page.title())
 		imagecode = checkForCode(page)
 		if imagecode == None:
 			print code
