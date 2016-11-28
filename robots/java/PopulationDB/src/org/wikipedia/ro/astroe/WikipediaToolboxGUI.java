@@ -73,8 +73,6 @@ public class WikipediaToolboxGUI {
         frame.setTitle(bundle.getString("frame.title"));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Dimension paneSize = new Dimension(650, 500);
-
         JPanel panel = new JPanel();
         frame.setContentPane(panel);
         BorderLayout mainLayout = new BorderLayout();
@@ -322,6 +320,7 @@ public class WikipediaToolboxGUI {
         dataComponentsMap.put("sourcewiki", sourceWikiTextField);
         final JTextField targetWikiTextField = new JTextField("ro");
         targetWikiTextField.setPreferredSize(new Dimension(50, 20));
+        targetWikiTextField.setEditable(false);
         dataComponentsMap.put("targetwiki", targetWikiTextField);
         final JTextField throttleTextField = new JTextField(String.valueOf(10));
         throttleTextField.setPreferredSize(new Dimension(50, 20));

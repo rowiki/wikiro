@@ -179,7 +179,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         System.out.println(countMatches + " found");
         wlAsExtLinkMatcher.appendTail(anotherNewText);
 
-        String innerLinkRegEx = "\\[\\[([^:][^|\\]]+?)(\\|(.*?))?\\]\\]";
+        String innerLinkRegEx = "\\[\\[([^:][^\\|\\]\\[]+?)(\\|([^\\|\\]\\[]*?))?\\]\\]";
         Pattern innerLinkPattern = Pattern.compile(innerLinkRegEx);
         Matcher innerLinkMatcher = innerLinkPattern.matcher(anotherNewText.toString());
         anotherNewText = new StringBuffer();
@@ -194,7 +194,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             }
             if (startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:",
                 "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", "imdbname:", "c:file:", "doi:",
-                "bibcode:", "imdbtitle:")) {
+                "bibcode:", "imdbtitle:", "foldoc:")) {
                 continue;
             }
             articleTitle = defaultString(targetWiki.resolveRedirect(articleTitle), articleTitle);
