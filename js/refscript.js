@@ -623,7 +623,7 @@ if (u.match(/webcitation.org/)) {
 		var W_Authors, W_Date;
 		if (authorElements != null && authorElements.length > 0) {
 			var authorLis = authorElements[0].getElementsByTagName('li')
-			if authorLis != null && authorLis.length > 0) {
+			if (authorLis != null && authorLis.length > 0) {
 				for (var authorLiIdx = 0; authorLiIdx < authorLis.length; authorLiIdx++) {
 					if (authorLis[authorLiIdx].class.indexOf('pull-right') >= 0) {
 						continue;
