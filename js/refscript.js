@@ -631,7 +631,7 @@ if (u.match(/webcitation.org/)) {
 					if (authorLis[authorLiIdx].textContent.startsWith('Autor')) {
 						var authorLiAs = authorLis[authorLiIdx].getElementsByTagName('a')
 						if (authorLiAs != null && authorLiAs.length > 0) {
-							var authorList = {}
+							var authorList = new Array();
 							for (var authorIdx = 0; authorIdx < authorLiAs.length; authorIdx++) {
 								authorList[authorIdx] = authorLiAs[authorIdx].textContent;
 							}
