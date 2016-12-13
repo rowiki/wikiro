@@ -633,12 +633,12 @@ if (u.match(/webcitation.org/)) {
 						if (authorLiAs != null && authorLiAs.length > 0) {
 							var authorList = {}
 							for (var authorIdx = 0; authorIdx < authorLiAs.length; authorIdx++) {
-								authorList[authorIdx] = authorLiAs[authorIdx].nodeValue.text;
+								authorList[authorIdx] = authorLiAs[authorIdx].textContent;
 							}
 							W_Authors = authorList.join(', ');
 						}
 					} else {
-						W_Date = authorLis[authorLiIdx].nodeValue.text;
+						W_Date = authorLis[authorLiIdx].textContent;
 					}
 				}
 			}
