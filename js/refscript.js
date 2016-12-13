@@ -628,7 +628,7 @@ if (u.match(/webcitation.org/)) {
 					if (authorLis[authorLiIdx].className != null && authorLis[authorLiIdx].className.indexOf('pull-right') >= 0) {
 						continue;
 					}
-					if (authorLis[authorLiIdx].nodeValue.text.startsWith('Autor')) {
+					if (authorLis[authorLiIdx].textContent.startsWith('Autor')) {
 						var authorLiAs = authorLis[authorLiIdx].getElementsByTagName('a')
 						if (authorLiAs != null && authorLiAs.length > 0) {
 							var authorList = {}
