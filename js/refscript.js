@@ -628,17 +628,17 @@ if (u.match(/webcitation.org/)) {
 					if (authorLis[authorLiIdx].className != null && authorLis[authorLiIdx].className.indexOf('pull-right') >= 0) {
 						continue;
 					}
-					if (authorLis[authorLiIdx].textContent().startsWith('Autor')) {
+					if (authorLis[authorLiIdx].nodeValue.text.startsWith('Autor')) {
 						var authorLiAs = authorLis[authorLiIdx].getElementsByTagName('a')
 						if (authorLiAs != null && authorLiAs.length > 0) {
 							var authorList = {}
 							for (var authorIdx = 0; authorIdx < authorLiAs.length; authorIdx++) {
-								authorList[authorIdx] = authorLiAs[authorIdx].textContent();
+								authorList[authorIdx] = authorLiAs[authorIdx].nodeValue.text;
 							}
 							W_Authors = authorList.join(', ');
 						}
 					} else {
-						W_Date = authorLis[authorLiIdx].textContent();
+						W_Date = authorLis[authorLiIdx].nodeValue.text;
 					}
 				}
 			}
