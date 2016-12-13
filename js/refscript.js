@@ -667,7 +667,7 @@ if (u.match(/webcitation.org/)) {
 		var W_Date = x;
 		var authorregexes = [];
 		var authorregexesfunctionextractors = [];
-		authorregexes.push(/<a href=.autor\.php\?s=.*?.> <span style=.color:#970606; font-family: 'Roboto', Arial, sans-serif; font-weight: 400; font-size:18px; letter-spacing: -1px;.> (.*?)<\/span><span style=.color:#970606; font-family: 'Roboto', Arial, sans-serif; font-weight: 900; font-size:18px; letter-spacing: -1px;.> (.*?) <\/span> <\/a>/g);
+		authorregexes.push(/<a href=.autor\.php\?s=.*?.\s*>\s*<span[^>]*>\s*(.*?)\s*<\/span\s*><span[^>]*>\s*([^<]*?)\s*<\/span\s*>.*<\/a\s*>/g);
 		authorregexesfunctionextractors.push(function(found_matches) { return found_matches[1] + ' ' + found_matches[2]});
 		authorregexes.push(/<div class=.post_title.>(.*?)<\/div>\s*<div class=.date-category-comment. style=.padding:10px 0px;.>\s* <div class=.category.>(.*?)<b> <\/b><\/div>/g)
 		authorregexesfunctionextractors.push(function(found_matches) { return found_matches[2]});
