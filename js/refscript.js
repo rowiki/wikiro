@@ -631,7 +631,11 @@ if (u.match(/webcitation.org/)) {
 					if (authorLis[authorLiIdx].textContent().startsWith('Autor')) {
 						var authorLiAs = authorLis[authorLiIdx].getElementsByTagName('a')
 						if (authorLiAs != null && authorLiAs.length > 0) {
-							W_Authors = authorLiAs[0].textContent();
+							var authorList = {}
+							for (var authorIdx = 0; authorIdx < authorLiAs.length; authorIdx++) {
+								authorList[authorIdx] = authorLiAs[authorIdx].textContent();
+							}
+							W_Authors = authorList.join(', ');
 						}
 					} else {
 						W_Date = authorLis[authorLiIdx].textContent();
