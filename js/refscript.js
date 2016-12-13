@@ -619,20 +619,26 @@ if (u.match(/webcitation.org/)) {
 	if (u.match(/zf.ro/)) {
 		var x = document.title;
 		var W_Title = x.replace(/ \| Ziarul Financiar/, '');
-		var x = d.match(/p class=.info.>[^]*<span class=.author.*/)[0];
-		var x = x.replace(/.*>/, '');
-		var x = x.replace(/,.*/, '');
-		var W_Date = x.replace(/<.*/, '');
-		if (d.match(/href=.*autor\/.*title=/)) {
-			var x = d.match(/href=.*autor\/.*title=.*/g);
-			for (i = 0; i < x.length; i++) {
-				var y = x[i].replace(/.*title=./, '');
-				var y = y.replace(/.>.*/, '');
-				if (i > 0)
-					var W_Authors = W_Authors + ', ';
-				var W_Authors = W_Authors + y;
-			};
-		};
+		var authorElements = document.getElementsByClassName('articleMeta');
+		var W_Authors, W_Date;
+		if (authorElements != null && authorElements.length > 0) {
+			var authorLis = authorElements[0].getElementsByTagName('li')
+			if authorLis != null && authorLis.length > 0) {
+				for (var authorLiIdx = 0; authorLiIdx < authorLis.length; authorLiIdx++) {
+					if (authorLis[authorLiIdx].class.indexOf('pull-right') >= 0) {
+						continue;
+					}
+					if (authorLis[authorLiIdx].textContent().startsWith('Autor')) {
+						var authorLiAs = authorLis[authorLiIdx].getElementsByTagName('a')
+						if (authorLiAs != null && authorLiAs.length > 0) {
+							W_Authors = authorLiAs[0].textContent();
+						}
+					} else {
+						W_Date = authorLis[authorLiIdx].textContent();
+					}
+				}
+			}
+		}
 		var W_Newspaper = 'Ziarul financiar';
 	};
 	if (u.match(/zf.ro\/ziarul-de-duminica/)) {
