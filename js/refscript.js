@@ -674,6 +674,11 @@ if (u.match(/webcitation.org/)) {
 			var dateMatches = dateRegex.exec(dateText);
 			if (dateMatches) {
 				W_Date = dateMatches[1];
+				var yearRegex = /\b\d{4}\b/g;
+				var yearFinder = yearRegex.exec(W_Date);
+				if (!yearFinder) {
+					W_Date = [W_Date, new Date().getFullYear()].join(' ');
+				}
 			}
 		}
 	}
