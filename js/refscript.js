@@ -660,8 +660,7 @@ if (u.match(/webcitation.org/)) {
 		var dateHolders = document.getElementsByClassName('ic20-date');
 		if (dateHolders.length > 0) {
 			var dateText = dateHolders[0].textContent;
-			console.log('Date holder text:' + dateText);
-			var dateRegex = /(.+?)(,.*)?$/g;
+				var dateRegex = /(.+?)(,.*)?$/g;
 			var dateMatches = dateRegex.exec(dateText);
 			if (dateMatches) {
 				W_Date = dateMatches[1];
@@ -678,7 +677,7 @@ if (u.match(/webcitation.org/)) {
 				}
 				articleDate.setDate(articleDate.getDate() - dayOffset);
 			
-				W_Date = [articleDate.getDate(), (articleDate.getMonth() < 10 ? '0' : '') + articleDate.getMonth(), articleDate.getYear()].join('.');
+				W_Date = [articleDate.getDate(), (articleDate.getMonth() < 9 ? '0' : '') + (1 + articleDate.getMonth()), articleDate.getFullYear()].join('.');
 			}
 		}
 		var authorHolders = document.getElementsByClassName('author');
