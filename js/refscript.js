@@ -665,7 +665,7 @@ if (u.match(/webcitation.org/)) {
 			if (dateMatches) {
 				W_Date = dateMatches[1];
 			}
-			if (W_Date && (W_Date.matches(/^\w+$/g)) {
+			if (W_Date && (W_Date.matches(/^\w+$/g))) {
 				var articleDate = new Date();
 				var dayOfWeekMap = {'luni': 0, 'marți': 1, 'miercuri': 2, 'joi': 3, 'vineri': 4, 'sâmbătă': 5, 'duminică': 6, 'sîmbătă': 5};
 				var dayOffset = 0;
