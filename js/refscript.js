@@ -659,7 +659,7 @@ if (u.match(/webcitation.org/)) {
 		}
 		var dateHolders = document.getElementsByClassName('ic20-date');
 		if (dateHolders.length > 0) {
-			var dateText = dateHolders[0].textContent();
+			var dateText = dateHolders[0].textContent;
 			var dateRegex = /(.*?)(,.*)?/g;
 			var dateMatches = dateRegex.exec(dateText);
 			if (dateMatches) {
@@ -687,7 +687,7 @@ if (u.match(/webcitation.org/)) {
 			for (var authorLiIdx = 0; authorLiIdx < authorLis.length; authorLiIdx++) {
 				var authorAnchors = authorLis[authorLiIdx].getElementsByTagName('a');
 				if (authorAnchors.length > 0) {
-					authorList[authorList.length] = authorAnchors[0].textContent();
+					authorList[authorList.length] = authorAnchors[0].textContent;
 				}
 			}
 			if (authorList.length > 0) {
