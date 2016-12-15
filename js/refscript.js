@@ -660,7 +660,8 @@ if (u.match(/webcitation.org/)) {
 		var dateHolders = document.getElementsByClassName('ic20-date');
 		if (dateHolders.length > 0) {
 			var dateText = dateHolders[0].textContent;
-			var dateRegex = /(.*?)(,.*)?/g;
+			console.log('Date holder text:' + dateText);
+			var dateRegex = /(.+?)(,.*)?$/g;
 			var dateMatches = dateRegex.exec(dateText);
 			if (dateMatches) {
 				W_Date = dateMatches[1];
