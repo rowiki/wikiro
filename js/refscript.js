@@ -648,13 +648,13 @@ if (u.match(/webcitation.org/)) {
 	if (u.match(/gsp.ro/)) {
 		var W_Date, W_Newspaper, W_Title, W_Authors;
 		var gspMeta = document.getElementsByTagName('meta');
-		for (var metaIdx = 0; metaIdx < prosportMeta.length; metaIdx++) {
-			if (prosportMeta[metaIdx].getAttribute('property') === 'og:site_name') {
-				W_Newspaper = prosportMeta[metaIdx].getAttribute('content');
+		for (var metaIdx = 0; metaIdx < gspMeta.length; metaIdx++) {
+			if (gspMeta[metaIdx].getAttribute('property') === 'og:site_name') {
+				W_Newspaper = gspMeta[metaIdx].getAttribute('content');
 				continue;
 			}
-			if (prosportMeta[metaIdx].getAttribute('property') === 'og:title') {
-				W_Title = prosportMeta[metaIdx].getAttribute('content');
+			if (gspMeta[metaIdx].getAttribute('property') === 'og:title') {
+				W_Title = gspMeta[metaIdx].getAttribute('content');
 			}
 		}
 		var dateAuthorHolders = document.getElementsByClassName('data-autor');
