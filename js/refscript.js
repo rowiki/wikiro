@@ -645,6 +645,57 @@ if (u.match(/webcitation.org/)) {
 		}
 		var W_Newspaper = 'Ziarul financiar';
 	};
+	if (u.match(/prosport.ro/)) {
+		var W_Date, W_Newspaper, W_Title, W_Authors;
+		var prosportMeta = document.getElementsByTagName('meta')
+		for (var metaIdx = 0; metaIdx < prosportMeta.length; metaIdx++) {
+			if (prosportMeta[metaIdx].getAttribute('property') === 'og:site_name') {
+				W_Newspaper = prosportMeta[metaIdx].getAttribute('content');
+				continue;
+			}
+			if (prosportMeta[metaIdx].getAttribute('property') === 'og:title') {
+				W_Title = prosportMeta[metaIdx].getAttribute('content');
+			}
+		}
+		var dateHolders = document.getElementsByClassName('ic20-date');
+		if (dateHolders.length > 0) {
+			var dateText = dateHolders[0].textContent();
+			var dateRegex = /(.*?)(,.*)?/g;
+			var dateMatches = dateRegex.exec(dateText);
+			if (dateMatches) {
+				W_Date = dateMatches[1];
+			}
+			if (W_Date && (W_Date.matches(/^\w+$/g)) {
+				var articleDate = new Date();
+				var dayOfWeekMap = {'luni': 0, 'marți': 1, 'miercuri': 2, 'joi': 3, 'vineri': 4, 'sâmbătă': 5, 'duminică': 6, 'sîmbătă': 5};
+				var dayOffset = 0;
+				if (W_Date.toLowerCase() === 'ieri') {
+					dayOffset = 1;
+				}
+				if (dayOfWeekMap[W_Date.toLowerCase()] != null && dayOfWeekMap[W_Date.toLowerCase()] != undefined) {
+					dayOffset = (articleDate.getDay() - dayOfWeekMap[W_Date.toLowerCase()]) % 7 - 7;
+				}
+				articleDate.setDate(articleDate.getDate() - dayOffset);
+			
+				W_Date = [articleDate.getDate(), (articleDate.getMonth() < 10 ? '0' : '') + articleDate.getMonth(), articleDate.getYear()].join('.');
+			}
+		}
+		var authorHolders = document.getElementsByClassName('author');
+		if (authorHolders.length > 0) {
+			var authorLis = authorHolders[0].getElementsByTagName('li');
+			var authorList = new Array();
+			for (var authorLiIdx = 0; authorLiIdx < authorLis.length; authorLiIdx++) {
+				var authorAnchors = authorLis[authorLiIdx].getElementsByTagName('a');
+				if (authorAnchors.length > 0) {
+					authorList[authorList.length] = authorAnchors[0].textContent();
+				}
+			}
+			if (authorList.length > 0) {
+				W_Authors = authorList.join(', ');
+			}
+		}
+	
+	}
 	if (u.match(/zf.ro\/ziarul-de-duminica/)) {
 		var W_Newspaper = 'Ziarul de Duminică';
 		var W_Title = W_Title.replace(/ *\/ de .*/, '');
