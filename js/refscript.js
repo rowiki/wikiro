@@ -645,9 +645,41 @@ if (u.match(/webcitation.org/)) {
 		}
 		var W_Newspaper = 'Ziarul financiar';
 	};
+	if (u.match(/gsp.ro/)) {
+		var W_Date, W_Newspaper, W_Title, W_Authors;
+		var gspMeta = document.getElementsByTagName('meta');
+		for (var metaIdx = 0; metaIdx < prosportMeta.length; metaIdx++) {
+			if (prosportMeta[metaIdx].getAttribute('property') === 'og:site_name') {
+				W_Newspaper = prosportMeta[metaIdx].getAttribute('content');
+				continue;
+			}
+			if (prosportMeta[metaIdx].getAttribute('property') === 'og:title') {
+				W_Title = prosportMeta[metaIdx].getAttribute('content');
+			}
+		}
+		var dateAuthorHolders = document.getElementsByClassName('data-autor');
+		if (dateAuthorHolders.length > 0) {
+			var authorAnchors = dateAuthorHolders[0].getElementsByTagName('a');
+			var authorList = new Array();
+			var dateAuthorText = dateAuthorHolders[0].textContent
+			var dateStartIndex = 0;
+			for (var authorIdx = 0; authorIdx < authorAnchors.length; authorIdx++) {
+				authorList[authorIdx] = authorAnchors[authorIdx].textContent;
+				dateStartIndex = 4 + dateAuthorText.indexOf('</a>', dateStartIndex);
+			}
+			W_Authors = authorList.join(', ');
+			var dateStartIndex = 0;
+			var dateText = dateAuthorText.substring(dateStartIndex);
+			var dateRegex = /\b\w+\,(.+?)(,.*)?$/g;
+			var dateMatches = dateRegex.exec(dateText);
+			if (dateMatches) {
+				W_Date = dateMatches[1];
+			}
+		}
+	}
 	if (u.match(/prosport.ro/)) {
 		var W_Date, W_Newspaper, W_Title, W_Authors;
-		var prosportMeta = document.getElementsByTagName('meta')
+		var prosportMeta = document.getElementsByTagName('meta');
 		for (var metaIdx = 0; metaIdx < prosportMeta.length; metaIdx++) {
 			if (prosportMeta[metaIdx].getAttribute('property') === 'og:site_name') {
 				W_Newspaper = prosportMeta[metaIdx].getAttribute('content');
@@ -660,7 +692,7 @@ if (u.match(/webcitation.org/)) {
 		var dateHolders = document.getElementsByClassName('ic20-date');
 		if (dateHolders.length > 0) {
 			var dateText = dateHolders[0].textContent;
-				var dateRegex = /(.+?)(,.*)?$/g;
+			var dateRegex = /(.+?)(,.*)?$/g;
 			var dateMatches = dateRegex.exec(dateText);
 			if (dateMatches) {
 				W_Date = dateMatches[1];
