@@ -162,8 +162,8 @@ public class FixVillages {
             final String datausername = credentials.getProperty("wd.user");
             final String datapassword = credentials.getProperty("wd.password");
 
-            dwiki.login(datausername, datapassword.toCharArray());
             rowiki.login(rowpusername, rowppassword.toCharArray());
+            dwiki.login(datausername, datapassword.toCharArray());
             rowiki.setMarkBot(true);
 
             String countyStart = null;
@@ -1300,11 +1300,11 @@ public class FixVillages {
         if ("Olt".equalsIgnoreCase(trim(county))) {
             if (Arrays
                 .asList("Bălteni", "Bărăști", "Brebeni", "Colonești", "Corbu", "Coteana", "Crâmpoia", "Cungrea",
-                    "Curtișoara", "Dăneasa", "Dobroteasa", "Făgețelu", "Ghimpețeni", "Icoana", "Ipotești", "Izbiceni",
+                    "Curtișoara", "Dăneasa", "Dobroteasa", "Făgețelu", "Ghimpețeni", "Icoana", "Ipotești",
                     "Izvoarele", "Leleasca", "Mărunței", "Mihăești", "Milcov", "Movileni", "Nicolae Titulescu", "Oporelu",
                     "Optași-Măgura", "Perieți", "Poboru", "Priseaca", "Radomirești", "Sâmburești", "Sârbii-Măgura", "Schitu",
                     "Seaca", "Spineni", "Sprâncenata", "Stoicănești", "Șerbănești", "Tătulești", "Teslui", "Topana",
-                    "Tufeni", "Vâlcele", "Valea Mare", "Văleni", "Verguleasa", "Vitomirești", "Vulturești")
+                    "Tufeni", "Vâlcele", "Valea Mare", "Văleni", "Verguleasa", "Vitomirești", "Vulturești", "Drăgănești-Olt")
                 .contains(trim(commune))) {
                 return MUNTENIA_LINK;
             } else if (Arrays.asList("Câineni").contains(trim(commune))) {
