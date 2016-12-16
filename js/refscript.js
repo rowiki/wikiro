@@ -8,6 +8,20 @@ function toTitleCase(str) {
 		});
 	});
 };
+function resolveRelativeDay(rawdate) {
+    if (rawdate == null) { return null; }
+    var articleDate = new Date();
+    var dayOfWeekMap = {'luni': 0, 'marți': 1, 'miercuri': 2, 'joi': 3, 'vineri': 4, 'sâmbătă': 5, 'duminică': 6, 'sîmbătă': 5};
+    var dayOffset = 0;
+    if (rawdate.toLowerCase() === 'ieri') {
+        dayOffset = 1;
+    }
+    if (dayOfWeekMap[rawdate.toLowerCase()] != null && dayOfWeekMap[rawdate.toLowerCase()] != undefined) {
+        dayOffset = (articleDate.getDay() - dayOfWeekMap[rawdate.toLowerCase()]) % 7 - 7;
+    }
+    articleDate.setDate(articleDate.getDate() - dayOffset);
+    return articleDate;
+}
 function f_process_Authors(P_Authors) {
 	var P_Authors = P_Authors.replace(/\./g, '. ');
 	var P_Authors = P_Authors.replace(/\n/g, '');
@@ -643,29 +657,25 @@ if (u.match(/webcitation.org/)) {
 	if (u.match(/zf.ro/)) {
 		var x = document.title;
 		var W_Title = x.replace(/ \| Ziarul Financiar/, '');
-		var authorElements = document.getElementsByClassName('articleMeta');
 		var W_Authors, W_Date;
-		if (authorElements != null && authorElements.length > 0) {
-			var authorLis = authorElements[0].getElementsByTagName('li')
-			if (authorLis != null && authorLis.length > 0) {
-				for (var authorLiIdx = 0; authorLiIdx < authorLis.length; authorLiIdx++) {
-					if (authorLis[authorLiIdx].className != null && authorLis[authorLiIdx].className.indexOf('pull-right') >= 0) {
-						continue;
-					}
-					if (authorLis[authorLiIdx].textContent.startsWith('Autor')) {
-						var authorLiAs = authorLis[authorLiIdx].getElementsByTagName('a')
-						if (authorLiAs != null && authorLiAs.length > 0) {
+		var authorDateElements = document.getElementsByClassName('info');
+		if (authorDateElements != null && authorDateElements.length > 0) {
+			var authorSpans = authorElements[0].getElementsByClassName('author');
+			if (authorSpans != null && authorSpans.length > 0) {
+				for (var authorSpanIdx = 0; authorSpanIdx < authorSpans.length; authorSpanIdx++) {
+					if (authorSpans[authorSpanIdx].textContent.trim().startsWith('Autor')) {
+						var authorSpanAs = authorSpans[authorSpanIdx].getElementsByTagName('a')
+						if (authorSpanAs != null && authorSpanAs.length > 0) {
 							var authorList = new Array();
-							for (var authorIdx = 0; authorIdx < authorLiAs.length; authorIdx++) {
-								authorList[authorIdx] = authorLiAs[authorIdx].textContent;
+							for (var authorIdx = 0; authorIdx < authorSpanAs.length; authorIdx++) {
+								authorList[authorIdx] = authorSpanAs[authorIdx].textContent;
 							}
 							W_Authors = authorList.join(', ');
 						}
-					} else {
-						W_Date = authorLis[authorLiIdx].textContent;
 					}
 				}
 			}
+            var W_Date = resolveRelativeDay(authorDateElements[0].textContent.substring(0, authorDateElements[0].textContent.indexOf(',')).trim());
 		}
 		var W_Newspaper = 'Ziarul financiar';
 	};
@@ -770,17 +780,7 @@ if (u.match(/webcitation.org/)) {
 				W_Date = dateMatches[1];
 			}
 			if (W_Date && (W_Date.match(/^\w+$/g))) {
-				var articleDate = new Date();
-				var dayOfWeekMap = {'luni': 0, 'marți': 1, 'miercuri': 2, 'joi': 3, 'vineri': 4, 'sâmbătă': 5, 'duminică': 6, 'sîmbătă': 5};
-				var dayOffset = 0;
-				if (W_Date.toLowerCase() === 'ieri') {
-					dayOffset = 1;
-				}
-				if (dayOfWeekMap[W_Date.toLowerCase()] != null && dayOfWeekMap[W_Date.toLowerCase()] != undefined) {
-					dayOffset = (articleDate.getDay() - dayOfWeekMap[W_Date.toLowerCase()]) % 7 - 7;
-				}
-				articleDate.setDate(articleDate.getDate() - dayOffset);
-			
+				var articleDate = resolveRelativeDay(W_Date);
 				W_Date = [articleDate.getDate(), (articleDate.getMonth() < 9 ? '0' : '') + (1 + articleDate.getMonth()), articleDate.getFullYear()].join('.');
 			}
 		}
