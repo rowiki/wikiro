@@ -627,10 +627,10 @@ if (u.match(/webcitation.org/)) {
 	                tmpDiv.innerHTML = scriptData.headline;
 	                W_Title = tmpDiv.nodeValue;
 
-                    var dateRegex = /\(d{4})\-(\d{2})\-(\d{2})T
+                    var dateRegex = /\(d{4})\-(\d{2})\-(\d{2})T/;
 	                var dateMatcher = dateRegex.exec(scriptData.dateCreated);
 	                if (dateMatcher) {
-	                    W_Date = [dateMatcher[3], dateMatcher[2], dateMatcher[1]].join();
+	                    W_Date = [dateMatcher[3], dateMatcher[2], dateMatcher[1]].join('.');
 	                }
 	                continue;
 	            }
