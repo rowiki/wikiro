@@ -17,7 +17,7 @@ function resolveRelativeDay(rawdate) {
         dayOffset = 1;
     }
     if (dayOfWeekMap[rawdate.toLowerCase()] != null && dayOfWeekMap[rawdate.toLowerCase()] != undefined) {
-        dayOffset = (articleDate.getDate() - dayOfWeekMap[rawdate.toLowerCase()]) % 7 - 7;
+        dayOffset = (7 + articleDate.getDay() - dayOfWeekMap[rawdate.toLowerCase()]) % 7;
     }
     articleDate.setDate(articleDate.getDate() - dayOffset);
     return articleDate;
