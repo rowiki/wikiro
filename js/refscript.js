@@ -639,7 +639,7 @@ if (u.match(/webcitation.org/)) {
 	            if (scriptData && scriptData['@type'] === 'NewsArticle') {
 	                var tmpDiv = document.createElement('div');
 	                tmpDiv.innerHTML = scriptData.headline;
-	                W_Title = tmpDiv.nodeValue;
+	                W_Title = tmpDiv.childNodes[0].nodeValue;
 
                     var dateRegex = /(\d{4})\-(\d{2})\-(\d{2})T/;
 	                var dateMatcher = dateRegex.exec(scriptData.dateCreated);
