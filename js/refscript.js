@@ -11,7 +11,7 @@ function toTitleCase(str) {
 function resolveRelativeDay(rawdate) {
     if (rawdate == null) { return null; }
     var articleDate = new Date();
-    var dayOfWeekMap = {'luni': 0, 'marți': 1, 'miercuri': 2, 'joi': 3, 'vineri': 4, 'sâmbătă': 5, 'duminică': 6, 'sîmbătă': 5};
+    var dayOfWeekMap = {'luni': 1, 'marți': 2, 'miercuri': 3, 'joi': 4, 'vineri': 5, 'sâmbătă': 6, 'duminică': 0, 'sîmbătă': 6};
     var dayOffset = 0;
     if (rawdate.toLowerCase() === 'ieri') {
         dayOffset = 1;
@@ -676,7 +676,7 @@ if (u.match(/webcitation.org/)) {
 				}
 			}
             var articleDate = resolveRelativeDay(authorDateElements[0].textContent.substring(0, authorDateElements[0].textContent.indexOf(',')).trim());
-            W_Date = [articleDate.getDay(), [articleDate.getMonth() < 9 ? '0' : '', 1 + articleDate.getMonth()].join(''), articleDate.getFullYear()].join('.');
+            W_Date = [articleDate.getDate(), [articleDate.getMonth() < 9 ? '0' : '', 1 + articleDate.getMonth()].join(''), articleDate.getFullYear()].join('.');
 		}
 		var W_Newspaper = 'Ziarul financiar';
 	};
