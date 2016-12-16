@@ -675,8 +675,8 @@ if (u.match(/webcitation.org/)) {
 					}
 				}
 			}
-			console.log(authorDateElements[0].textContent)
-            var W_Date = resolveRelativeDay(authorDateElements[0].textContent.substring(0, authorDateElements[0].textContent.indexOf(',')).trim());
+            var articleDate = resolveRelativeDay(authorDateElements[0].textContent.substring(0, authorDateElements[0].textContent.indexOf(',')).trim());
+            W_Date = [articleDate.getDay(), [(articleDate.getMonth() < 9 ? '0' : ''), 1 + articleDate.getMonth].join(''), articleDate.getFullYear()].join('.');
 		}
 		var W_Newspaper = 'Ziarul financiar';
 	};
