@@ -616,6 +616,30 @@ if (u.match(/webcitation.org/)) {
 		if (u.match(/clujeanul.gandul.info/))
 			var W_Newspaper = 'Clujeanul';
 	};
+	if (u.match(/digi24.ro/)) {
+	    var W_Authors, W_Newspaper, W_Date, W_Title;
+	    var scriptTags = document.getElementsByTagName('script');
+	    for (var scriptIdx = 0; scriptIdx < scriptTags.length; scriptIdx++) {
+	        if (scriptTags[scriptIdx].getAttribute('type') === 'application/ld+json') {
+	            var scriptData = JSON.parse(scriptTags[scriptIdx].textContent);
+	            if (scriptData && scriptData['@type'] === 'NewsArticle') {
+	                var tmpDiv = document.createElement('div');
+	                tmpDiv.innerHTML = scriptData.headline;
+	                W_Title = tmpDiv.nodeValue;
+
+                    var dateRegex = /\(d{4})\-(\d{2})\-(\d{2})T
+	                var dateMatcher = dateRegex.exec(scriptData.dateCreated);
+	                if (dateMatcher) {
+	                    W_Date = [dateMatcher[3], dateMatcher[2], dateMatcher[1]].join();
+	                }
+	                continue;
+	            }
+	            if (scriptData && scriptData['@type'] === 'Organization') {
+	                W_Newspaper = scriptData.name;
+	            }
+	        }
+	    }
+	}
 	if (u.match(/zf.ro/)) {
 		var x = document.title;
 		var W_Title = x.replace(/ \| Ziarul Financiar/, '');
@@ -645,6 +669,49 @@ if (u.match(/webcitation.org/)) {
 		}
 		var W_Newspaper = 'Ziarul financiar';
 	};
+
+    if (u.match(/digisport.ro/)) {
+        var W_Date, W_Newspaper, W_Title, W_Authors;
+		var digisportMeta = document.getElementsByTagName('meta');
+		for (var metaIdx = 0; metaIdx < digisportMeta.length; metaIdx++) {
+			if (digisportMeta[metaIdx].getAttribute('property') === 'og:site_name') {
+				W_Newspaper = digisportMeta[metaIdx].getAttribute('content');
+				continue;
+			}
+			if (digisportMeta[metaIdx].getAttribute('property') === 'og:title') {
+				W_Title = digisportMeta[metaIdx].getAttribute('content');
+			}
+		}
+        var metadataDivs = document.getElementsByClassName('article-heading');
+        if (metadataDivs.length > 0) {
+            var metadataDiv = metadataDivs[0];
+            var articleMetas = metadataDiv.getElementsByTagName('meta');
+            for (var metaIdx = 0; metaIdx < articleMetas.length; metaIdx++) {
+                 if (articleMetas[metaIdx].getAttribute('itemprop') === 'datePublished') {
+                    var dateRegex = /(\d{4})\-(\d{2})\-(\d{2})T[\d\:\+\-]+/g;
+                    var dateMatcher = dateRegex.exec(articleMetas[metaIdx].getAttribute('content'));
+                    if (dateMatcher) {
+                        W_Date = [dateMatcher[3], dateMatcher[2], dateMatcher[1]].join('.');
+                    }
+                 }
+            }
+        }
+    }
+
+    if (u.match(/dolcesport.ro/)) {
+        var W_Date, W_Newspaper, W_Title, W_Authors;
+        var dolcesportMeta = document.getElementsByTagName('meta');
+        for (var metaIdx = 0; metaIdx < dolcesportMeta.length; metaIdx++) {
+            if (dolcesportMeta[metaIdx].getAttribute('property') === 'og:title') {
+                W_Title = dolcesportMeta[metaIdx].getAttribute('content');
+            }
+        }
+        W_Newspaper = 'DolceSport';
+        var dateSpan = document.getElementsByClassName('article-date');
+        if (dateSpan.length > 0) {
+            W_Date = dateSpan[0].textContent.trim();
+        }
+    }
 	if (u.match(/gsp.ro/)) {
 		var W_Date, W_Newspaper, W_Title, W_Authors;
 		var gspMeta = document.getElementsByTagName('meta');
