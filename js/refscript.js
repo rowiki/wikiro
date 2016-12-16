@@ -660,7 +660,7 @@ if (u.match(/webcitation.org/)) {
 		var W_Authors, W_Date;
 		var authorDateElements = document.getElementsByClassName('info');
 		if (authorDateElements != null && authorDateElements.length > 0) {
-			var authorSpans = authorElements[0].getElementsByClassName('author');
+			var authorSpans = authorDateElements[0].getElementsByClassName('author');
 			if (authorSpans != null && authorSpans.length > 0) {
 				for (var authorSpanIdx = 0; authorSpanIdx < authorSpans.length; authorSpanIdx++) {
 					if (authorSpans[authorSpanIdx].textContent.trim().startsWith('Autor')) {
