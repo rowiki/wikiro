@@ -708,7 +708,7 @@ if (u.match(/webcitation.org/)) {
         }
     }
 
-    if (u.match(/dolcesport.ro/)) {
+    if (u.match(/dolce\-?sport.ro/)) {
         var W_Date, W_Newspaper, W_Title, W_Authors;
         var dolcesportMeta = document.getElementsByTagName('meta');
         for (var metaIdx = 0; metaIdx < dolcesportMeta.length; metaIdx++) {
