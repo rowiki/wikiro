@@ -831,12 +831,10 @@ if (u.match(/webcitation.org/)) {
 		var authorregexindex = 0;
 		while (W_Authors.length == 0 && authorregexindex < authorregexes.length) {
 			var authormatches;
-			console.log(d);
 			while (authormatches = authorregexes[authorregexindex].exec(d)) {
 				W_Authors = authorregexesfunctionextractors[authorregexindex](authormatches);
 			};
 			authorregexindex = authorregexindex + 1;
-			console.log('authors=' + W_Authors)
 		};
 		var W_Newspaper = 'Revista 22';
 	};
