@@ -419,14 +419,12 @@ if (u.match(/webcitation.org/)) {
         			for (var spanIdx = 0; spanIdx < authorSpans.length; spanIdx++) {
         				if (authorSpans[spanIdx].getAttribute('itemprop') === 'name') {
         					W_Authors = authorSpans[spanIdx].textContent;
+                            break;
 						}
-						break;
 					}
-        			break;
 				}
 				break;
         	}
-        	break;
 		}
 	};
 	if (u.match(/adevarul.ro/)) {
