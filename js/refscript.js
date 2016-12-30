@@ -384,30 +384,50 @@ if (u.match(/webcitation.org/)) {
 		var W_Authors = x.replace(/.*>/, '');
 		var W_Newspaper = 'coloramromania.evz.ro';
 	} else if (u.match(/evz.ro/)) {
-		var x = d.match(/<h3.*>/)[0];
-		var x = x.replace(/<h3>/, '');
-		var x = x.replace(/\\/g, '');
-		var W_Title = x.replace(/<\/h3>/, '');
-		var dd = d.replace(/[\r\n]/g, '');
-		var dd = dd.replace(/<\/div>/g, '<\/div>\n');
-		var dd = dd.replace(/<div>/g, '\n<div>');
-		if (dd.match(/<div class=.article-details./)) {
-			var x = dd.match(/<div class=.article-details.*/)[0];
-			var x = x.replace(/<\/a>/g, '<\/a>\n');
-			var xa = x.match(/<a href=.*/g);
-			for (i = 0; i < xa.length; i++) {
-				var x = xa[i].replace(/\s*<\/a>.*/, '');
-				if (i > 0)
-					var W_Authors = W_Authors + ',';
-				var W_Authors = W_Authors + x.replace(/.*>/, '');
-			};
-			var x = dd.match(/<div class=.article-details.*/)[0];
-			var x = x.replace(/.*<\/a>\s*\| */, '');
-			var x = x.replace(/\s*\|.*/, '');
-			var W_Date = x.replace(/.*, */, '');
-		};
-		var W_Newspaper = 'Evenimentul zilei';
-		var W_URL = W_URL.replace(/html#.*/, 'html');
+        var evzMeta = document.getElementsByTagName('meta');
+        for (var metaIdx = 0; metaIdx < evzMeta.length; metaIdx++) {
+            if (evzMeta[metaIdx].getAttribute('property') === 'og:site_name') {
+                W_Newspaper = evzMeta[metaIdx].getAttribute('content');
+                continue;
+            }
+            if (evzMeta[metaIdx].getAttribute('property') === 'og:title') {
+                W_Title = evzMeta[metaIdx].getAttribute('content');
+                continue;
+            }
+            if (evzMeta[metaIdx].getAttribute('property') === 'article:published_time') {
+
+                var dateRegex = /(\d{4})\-(\d{2})\-(\d{2})T[\d\:\+\-]+/g;
+                var dateMatcher = dateRegex.exec(evzMeta[metaIdx].getAttribute('content'));
+                if (dateMatcher) {
+                    W_Date = [dateMatcher[3], dateMatcher[2], dateMatcher[1]].join('.');
+                }
+                continue;
+            }
+            if (evzMeta[metaIdx].getAttribute('property') === 'og:url') {
+                W_URL = evzMeta[metaIdx].getAttribute('content');
+                continue;
+            }
+
+        }
+
+        var divs = document.getElementsByTagName('div');
+        for (var divIdx = 0; divIdx < divs.length; divIdx++) {
+        	if (divs[divIdx].getAttribute('itemprop') === 'articleBody') {
+        		var artDetailsDivs = divs[divIdx].getElementsByClassName('article-details');
+        		for (var artDetDivIdx = 0; artDetDivIdx < artDetailsDivs.length; artDetDivIdx++) {
+        			var authorSpans = artDetailsDivs[artDetDivIdx].getElementsByTagName('span');
+        			for (var spanIdx = 0; spanIdx < authorSpans.length; spanIdx++) {
+        				if (authorSpans[spanIdx].getAttribute('itemprop') === 'name') {
+        					W_Authors = authorSpans[spanIdx].textContent;
+						}
+						break;
+					}
+        			break;
+				}
+				break;
+        	}
+        	break;
+		}
 	};
 	if (u.match(/adevarul.ro/)) {
 		var x = document.title;
