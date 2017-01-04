@@ -372,6 +372,41 @@ if (u.match(/webcitation.org/)) {
 		var W_URL = x.replace(/.*>/, '');
 	};
 } else {
+    if (u.match(/dcnews.ro/)) {
+    	var W_Newspaper = 'DC News';
+        var dcnewsMeta = document.getElementsByTagName('meta');
+        for (var metaIdx = 0; metaIdx < dcnewsMeta.length; metaIdx++) {
+        	if (dcnewsMeta[metaIdx].getAttribute('property') === 'og:title') {
+        		var dcnewsTitle = dcnewsMeta[metaIdx].getAttribute('content');
+                var tmpDiv = document.createElement('div');
+                tmpDiv.innerHTML = dcnewsTitle;
+                var W_Title = tmpDiv.childNodes[0].nodeValue;
+                continue;
+			}
+			if (dcnewsMeta[metaIdx].getAttribute('property') === 'og:url') {
+        		var W_URL = dcnewsMeta[metaIdx].getAttribute('content');
+			}
+		}
+
+		var dcNewsArtInfoDivs = document.getElementsByClassName('articol_info');
+        for (var dcNewsArtInfoDivIdx = 0; dcNewsArtInfoDivIdx < dcNewsArtInfoDivs.length; dcNewsArtInfoDivIdx++) {
+        	var dcNewsArtInfoDiv = dcNewsArtInfoDivs[dcNewsArtInfoDivIdx];
+        	var dcNewsArtInfoDivSpans = dcNewsArtInfoDiv.getElementsByTagName('span');
+            for (var dcNewsArtInfoDivSpanIdx = 0; dcNewsArtInfoDivSpanIdx < dcNewsArtInfoDivSpans.length; dcNewsArtInfoDivSpanIdx++) {
+                var dcNewsArtInfoDivSpan = dcNewsArtInfoDivSpans[dcNewsArtInfoDivSpanIdx];
+                var dcNewsArtInfoDivSpanAs = dcNewsArtInfoDivSpan.getElementsByTagName('a');
+                if (dcNewsArtInfoDivSpanAs.length > 0 && dcNewsArtInfoDivSpanAs[0].getAttribute('href').indexOf('/autori/') >= 0) {
+                    var W_Author = dcNewsArtInfoDivSpanAs[0].textContent;
+                    var dateRegex = /\d+\s*[a-z]+\s*\d+/
+                    var dateMatches = dateRegex.exec(dcNewsArtInfoDivSpan.textContent);
+                    if (dateMatches) {
+                        var W_Date = dateMatches[0];
+                    }
+                }
+            }
+		}
+
+    }
 	if (u.match(/coloramromania.evz.ro/)) {
 		var x = document.title;
 		var W_Title = x.replace(/ \| Colorăm România/, '');
