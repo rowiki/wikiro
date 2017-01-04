@@ -396,7 +396,7 @@ if (u.match(/webcitation.org/)) {
                 var dcNewsArtInfoDivSpan = dcNewsArtInfoDivSpans[dcNewsArtInfoDivSpanIdx];
                 var dcNewsArtInfoDivSpanAs = dcNewsArtInfoDivSpan.getElementsByTagName('a');
                 if (dcNewsArtInfoDivSpanAs.length > 0 && dcNewsArtInfoDivSpanAs[0].getAttribute('href').indexOf('/autori/') >= 0) {
-                    var W_Author = dcNewsArtInfoDivSpanAs[0].textContent;
+                    var W_Authors = dcNewsArtInfoDivSpanAs[0].textContent;
                     var dateRegex = /\d+\s*[a-z]+\s*\d+/
                     var dateMatches = dateRegex.exec(dcNewsArtInfoDivSpan.textContent);
                     if (dateMatches) {
