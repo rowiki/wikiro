@@ -893,22 +893,26 @@ if (u.match(/webcitation.org/)) {
 	};
 	if (u.match(/capital.ro/)) {
 		var W_Title = document.title;
-		if (d.match(/<h3>/)) {
-			var x = d.match(/<h3>.*/)[0];
-			var x = x.replace(/<\/h3>.*/, '');
+		if (d.match(/<h1>/)) {
+			var x = d.match(/<h1>.*/)[0];
+			var x = x.replace(/<\/h1>.*/, '');
 			var W_Title = x.replace(/.*>/, '');
 		};
 		var dd = d.replace(/[\r\n]/g, '');
 		var dd = dd.replace(/<\/div>/g, '<\/div>\n');
 		var dd = dd.replace(/<div>/g, '\n<div>');
-		if (dd.match(/<div class=.article-details./)) {
-			var x = dd.match(/<div class=.article-details.*/)[0];
-			var x = x.replace(/<\/a>.*/, '');
+		if (dd.match(/<span itemprop=.author./)) {
+			var x = dd.match(/<span itemprop=.author.*/)[0];
+			alert(x);
+			var x = x.replace(/<\/span>.*/, '');
+			alert(x);
 			var W_Authors = x.replace(/.*>/, '');
-			var x = dd.match(/<div class=.article-details.*/)[0];
-			var x = x.replace(/.*<\/a>\s*\| */, '');
-			var x = x.replace(/\s*\|.*/, '');
-			var W_Date = x.replace(/.*, */, '');
+			alert(W_Authors);
+		};
+		if (dd.match(/<span itemprop=.datePublished./)) {
+			var x = dd.match(/<span itemprop=.datePublished.*/)[0];
+			x = x.replace(/\|.*/, '');
+			var W_Date = x.replace(/.*>/, '');
 		};
 		var W_Newspaper = 'Capital';
 	};
