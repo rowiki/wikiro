@@ -17,8 +17,8 @@ chambers = {
 }
 
 chamber_link = {
-	1: u"[[Legislatura 2012-2016 (Senat)]]",
-	2: u"[[Legislatura 2012-2016 (Camera Deputaților)]]",
+	1: u"[[Legislatura 2016-2020 (Senat)]]",
+	2: u"[[Legislatura 2016-2020 (Camera Deputaților)]]",
 }
 
 category = {
@@ -46,7 +46,7 @@ class ElectedPerson(object):
 		self.groups[-1].end = endDate
 
 	def generateInfobox(self):
-		elections = [u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
+		elections = [u"2016", u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
 		text = u"""{{Infocaseta Om politic
 | nume = %s
 | functia = %s
@@ -58,8 +58,8 @@ class ElectedPerson(object):
 """
 		function = u""
 		if self.chamber in chambers:
-			function = chambers[self.chamber]
-		begin = u"2012-12-19"
+			function = chambers[self.chamber].replace(u'|d', u'|D').replace(u'|s', u'|S')
+		begin = u"2016-12-21"
 		if len(self.groups) > 0:
 			begin = self.groups[0].start
 		for y in range(1, len(elections)):
@@ -97,7 +97,7 @@ class ElectedPerson(object):
 				t = u"""| functia%d = %s
 | început%d = %s
 | sfârșit%d = %s
-""" % (index, chambers[self.legislatures[year]], index, parliament.niceDate(year), index, parliament.niceDate(elections[y-1]))
+""" % (index, chambers[self.legislatures[year]].replace(u'|d', u'|D').replace(u'|s', u'|S'), index, parliament.niceDate(year), index, parliament.niceDate(elections[y-1]))
 				index += 1
 			last_chamber = self.legislatures[year]
 		text += t
@@ -105,10 +105,10 @@ class ElectedPerson(object):
 		return text
 	
 	def generateCategoriesList(self):
-		elections = [u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
+		elections = [u"2016", u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
 		cat = [u"Categorie:Politicieni români în viață"]
 		if self.chamber in category:
-			cat.append(category[self.chamber] % (u"2012", u"2016"))
+			cat.append(category[self.chamber] % (u"2016", u"2020"))
 		for y in range (1, len(elections)):
 			year = elections[y]
 			if year in self.legislatures:	
@@ -120,7 +120,7 @@ class ElectedPerson(object):
 		catl = self.generateCategoriesList()
 		cats = u""
 		for cat in catl:
-			cats += cat + "\n"
+			cats += u"[[" + cat + u"]]\n"
 		return cats
 
 	def generateArticle(self):
@@ -133,14 +133,14 @@ class ElectedPerson(object):
 * [[Parlamentul României]]
 
 == Legături externe ==
-* [http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%s&leg=2012&cam=%s&idl=1 Activitatea parlamentară]
+* [http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%s&leg=2016&cam=%s&idl=1 Activitatea parlamentară]
 
 """
 		text = self.generateInfobox()
 		function = u""
 		if self.chamber in chambers:
 			function = chambers[self.chamber]
-		begin = 2012
+		begin = 2016
 		group = u""
 		groupprefix = u""
 		if len(self.groups) > 0:

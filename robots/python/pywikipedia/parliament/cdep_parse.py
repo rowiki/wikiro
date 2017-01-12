@@ -9,7 +9,7 @@ import csv
 import sys
 import json
 
-sys.path.append(".")
+sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions
 import parliament
 from parliament import group, person
@@ -125,10 +125,10 @@ def DemisionsCsv(csvName):
 
 def scrollThroughPages():
 	count = [0,0,0]
-	f = codecs.open("parliament/parliament.csv", "w+", "utf8")
+	f = codecs.open("parliament/parliament_2016.csv", "w+", "utf8")
 	for camera in [1,2]:
 		for om in range(1,500):
-			url = 'http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%d&leg=2012&cam=%d&idl=1' % (om, camera)
+			url = 'http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%d&leg=2016&cam=%d&idl=1' % (om, camera)
 			print url
 			try:
 				r = requests.get(url)
@@ -151,15 +151,18 @@ def scrollThroughPages():
 			name = parsed_html.find('div', attrs={'class':'boxTitle'}).h1.next.title()
 			name = parliament.allCommas(name)
 			page = pywikibot.Page(pywikibot.getSite(), name)
-			if page.exists():
-				print u"ro.wp are deja articol"
-				wiki = page.title()
-			print name
-			print extractBirthdate(parsed_html)
-			text = name + u";" + extractBirthdate(parsed_html) + u";" + str(camera) + u";\'" + extractElectoralDistrict(parsed_html) + u"\';\'" + wiki + \
+			try:
+				if page.exists():
+					print u"ro.wp are deja articol"
+					wiki = page.title()
+				print name
+				print extractBirthdate(parsed_html)
+				text = name + u";" + extractBirthdate(parsed_html) + u";" + str(camera) + u";\'" + extractElectoralDistrict(parsed_html) + u"\';\'" + wiki + \
 				u"\';\'" + str(om) + "\';\'" + json.dumps(prev_legislatures) + "\'\n"
-			print text
-			f.write(text)
+				print text
+				f.write(text)
+			except:
+				continue
 			count[camera] += 1
 	f.close()
 
@@ -168,7 +171,7 @@ def scrollThroughPages():
 
 if __name__ == "__main__":
 	#scrollThroughPages()
-	ParliamentCsv("parliament/parliament.csv")
+	ParliamentCsv("parliament/parliament_2016.csv")
 	ElectionsCsv("parliament/alegeri.csv")
 	MovesCsv("parliament/migrari.csv")
 	DemisionsCsv("parliament/demisii.csv")
@@ -207,9 +210,20 @@ if __name__ == "__main__":
 
 		print art
 		
-		answer = pywikibot.inputChoice(u"Upload page %s" % people[person].name, ['Yes', 'No'], ['y', 'n'], 'n')
+		answer = pywikibot.inputChoice(u"Upload page %s" % people[person].name, ['Yes', 'No', 'Rename'], ['y', 'n', 'r'], 'n')
 		if answer == 'y':
 			try:
+				page.put(art, "Completez articolul despre un parlamentar")
+			except pywikibot.exceptions.PageSaveRelatedError as e:
+				print "Eroare la salvarea paginii" + str(e)
+				pass
+		elif answer == 'r':
+			newname = pywikibot.input(u"Insert new article name")
+			page = pywikibot.Page(pywikibot.getSite(), newname)
+			try:
+				if page.exists():
+					print u"Există deja articolul %s" % page.title()
+					continue
 				page.put(art, "Completez articolul despre un parlamentar")
 			except pywikibot.exceptions.PageSaveRelatedError as e:
 				print "Eroare la salvarea paginii" + str(e)
