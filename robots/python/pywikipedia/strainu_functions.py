@@ -287,6 +287,12 @@ def rfindOrLen(s, f):
     else:
         return len(s)
 
+def none2empty(text):
+	if text:
+		return text
+	else:
+		return u""
+
 # --------- Geo functions ------------
 def getDeg(decimal):
     if decimal < 0:
