@@ -21,12 +21,14 @@ from pywikibot import catlib
 
 sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions as sf
+import csvUtils
 
 
 
 class Article:
-	def __init__(self, cinemagia_url, aarc_url):
+	def __init__(self, title, cinemagia_url, aarc_url):
 		self._text  = u""
+		self._title = title
 		self._cinemagia = cinemagia_url
 		self._aarc = aarc_url
 		self._year = 0
@@ -34,6 +36,7 @@ class Article:
 		self._cmRating = 0
 		self._imdbId = None
 		self._imdbRating = 0
+		self._types = []
 
 	def fetchAarc(self):
 		r = requests.get(self._aarc)
@@ -52,7 +55,7 @@ class Article:
 
 	def fetchAarcData(self, text):
 		index1 = text.find("<div class=\"mainfilminfo\">")
-		index2 = text.find("</div>", index1)
+		index2 = text.find("main film info", index1)
 		text = text[index1:index2+6]
 		return text
 
@@ -89,13 +92,26 @@ class Article:
 		if m:
 			self._cmId = m.group(1)
 		else:
+			print "CM not found"
 			return # no need to parse if we cannot match the URL
 		r = requests.get(self._cinemagia)
 		text = r.text
 		self._cmRating = self.fetchCmRating(r.text)
 		self._imdbId = self.fetchImdbId(r.text)
 		self._imdbRating = self.fetchImdbRating(r.text)
-		self._year= self.fetchCmYear(r.text)
+		self._year = self.fetchCmYear(r.text)
+		self._types = self.fetchCmTypes(r.text)
+
+	def fetchCmTypes(self, text):
+		r = text.find("movieGenreUserChoiceResults")
+		types = []
+		if r > -1:
+			text = text[r:]
+			text = text[:text.find("</div>")]
+			m = re.finditer(ur"<span>(.*?)</span>", text)
+                        for t in m:
+                                types.append(t.group(1))
+		return types
 
 	def fetchCmRating(self, text):
 		r = text.find("ratingGlobalInfo")
@@ -140,6 +156,7 @@ class Article:
 		self._text = u""
 		self.addInfobox()
 		self.addMainArticle()
+		self.addReception()
 		self.addCommonSections()
 		self.addCats()
 		print self._text
@@ -152,7 +169,7 @@ class Article:
   | imagine             = 
   | descriere_imagine   = Afișul filmului  
   | rating              =  
-  | gen                 = 
+  | gen                 = %s
   | regizor             = %s
   | producător          = 
   | scenarist           = %s
@@ -188,24 +205,41 @@ class Article:
   | id_rotten-tomatoes  =
   | id_allrovi          =
 }}
-""" % (self._director, self._scenario, actors, sf.none2empty(self._cmId), sf.none2empty(self._imdbId))
+""" % (u", ".join(self._types), self._director, self._scenario, actors, sf.none2empty(self._cmId), sf.none2empty(self._imdbId))
 		self._text += text
 		
 	def addMainArticle(self):
 		actors_list = u""
 		for actor in self._distribution:
-			actors_list += u"* [[%s]] ca %s\n" % (self._distribution[actor], actor)
-		text = u"""
+			if len(actor):
+				actors_list += u"* [[%s]] &mdash; %s\n" % (self._distribution[actor], actor)
+			else:
+				actors_list += u"* [[%s]]\n" % self._distribution[actor]
+		self._text += u"""
 '''''{{PAGENAME}}''''' este un film românesc din [[%d]] regizat de %s. Rolurile principale au fost interpretate de actorii %s.
 
 ==Prezentare==
 {{sinopsis}}
+
 ==Distribuție==
 {{coloane-listă|2|
 %s
  }}
 """ % (self._year, self._director, self._mainActors, actors_list)
-		self._text += text
+
+	def addReception(self):
+		spectators = 0
+		out = csvUtils.csvToJson("filme.csv", field=u"film")
+		title = self._title.upper().replace(u"Â", u"A").replace(u"Ă", u"A").replace(u"Ș", u"S").replace(u"Ț", u"T").replace(u"Î", u"I")
+		if title in out:
+			spectators += int(out[title][u"spectatori"])
+		if spectators == 0:
+			return
+		self._text += u"""
+
+==Primire==
+Filmul a fost vizionat de {{subst:plural|%d|spectator}} de spectatori în cinematografele din România, după cum atestă o situație a numărului de spectatori înregistrat de filmele românești de la data premierei și până la data de 31 decembrie 2014 alcătuită de [[Centrul Național al Cinematografiei]].<ref>{{cite web|url=http://cnc.gov.ro/wp-content/uploads/2015/10/6_Spectatori-film-romanesc-la-31.12.2014.pdf |title=Situația numărului de spectatori înregistrat de filmele românești ieșite în premieră până la 31.12.2014|date=2014-12-31|format=PDF|publisher=Centrul Național al Cinematografiei|accessdate=2017-01-29}}</ref>
+""" % spectators
 
 	def imdbWikiText(self):
 		if self._imdbId:
@@ -244,11 +278,20 @@ class Article:
 			directors = self._director.split(",")
 			for director in directors:
 				text += u"[[Categorie:Filme regizate de %s]]\n" % director.strip()
+		for t in self._types:
+			cat = u"Filme de %s" % t.lower()
+			cat = pywikibot.Category(pywikibot.getSite(), cat)
+			for p in cat.templatesWithParams():
+				if p[0].title() == "Format:Redirect categorie":
+					break
+			else:
+				text += u"[[%s]]\n" % cat.title()
 		self._text += text
 
 if __name__ == "__main__":
-	a = Article("https://www.cinemagia.ro/filme/aripi-de-zapada-27066/", "http://aarc.ro/filme/film/aripi-de-zapada-1985")
-	a = Article("N/A", "http://aarc.ro/filme/film/abecedarul-1984")
+	#a = Article("https://www.cinemagia.ro/filme/aripi-de-zapada-27066/", "http://aarc.ro/filme/film/aripi-de-zapada-1985")
+	#a = Article("N/A", "http://aarc.ro/filme/film/abecedarul-1984")
+	a = Article(u"Această Lehamite", "https://www.cinemagia.ro/filme/aceasta-lehamite-229/", "http://aarc.ro/filme/film/aceasta-lehamite-1993")
 	a.fetchAarc()
 	a.fetchCm()
 	a.buildArticle()
