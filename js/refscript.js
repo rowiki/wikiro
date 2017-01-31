@@ -894,7 +894,7 @@ if (u.match(/webcitation.org/)) {
 						});
         				if (unimediaArticleDetailsSpans && unimediaArticleDetailsSpans.length > 0) {
         					var dateregex = /^\s*ora.*?,\s*(.*?)$/
-        					var datematcher = dateregex.test(unimediaArticleDetailsSpans[0].textContent);
+        					var datematcher = dateregex.exec(unimediaArticleDetailsSpans[0].textContent);
         					if (datematcher) {
                                 W_Date = datematcher[1];
 							}
