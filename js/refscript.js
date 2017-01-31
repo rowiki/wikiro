@@ -854,7 +854,7 @@ if (u.match(/webcitation.org/)) {
 		}
 	
 	}
-    if (u.match(/unimedia.md/)) {
+    if (u.match(/unimedia.info/)) {
         var W_Date, W_Newspaper, W_Title, W_Authors;
         var unimediaMeta = document.getElementsByTagName('meta');
         for (var metaIdx = 0; metaIdx < unimediaMeta.length; metaIdx++) {
