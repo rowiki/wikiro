@@ -302,28 +302,32 @@ function f_process_URL(P_URL) {
 	return P_URL;
 };
 function f_process_REF_Name() {
-	var P_Ref = u.replace(/\.ro.*/, '.ro');
-	var P_Ref = P_Ref.replace(/\.com.*/, '.com');
-	var P_Ref = P_Ref.replace(/\.net.*/, '.net');
-	var P_Ref = P_Ref.replace(/\.org.*/, '.org');
-	var P_Ref = P_Ref.replace(/\.co.uk.*/, '.co.uk');
-	var P_Ref = P_Ref.replace(/http:\/\/www./, '');
-	var P_Ref = P_Ref.replace(/http:\/\//, '');
-	var P_Ref = P_Ref + '_';
+	var P_Ref = W_Newspaper;
+	if (!P_Ref) {
+		P_Ref = u;
+	}
+	P_Ref = P_Ref.replace(/\.ro.*/, '.ro');
+	P_Ref = P_Ref.replace(/\.com.*/, '.com');
+	P_Ref = P_Ref.replace(/\.net.*/, '.net');
+	P_Ref = P_Ref.replace(/\.org.*/, '.org');
+	P_Ref = P_Ref.replace(/\.co.uk.*/, '.co.uk');
+	P_Ref = P_Ref.replace(/http:\/\/www./, '');
+	P_Ref = P_Ref.replace(/http:\/\//, '');
+	P_Ref = P_Ref + '_';
 	if (u.match(/evz.ro/))
-		var P_Ref = 'evz';
+		P_Ref = 'evz';
 	if (u.match(/evenimentulzilei.ro/))
-		var P_Ref = 'evz';
+		P_Ref = 'evz';
 	if (u.match(/adevarul.ro/))
-		var P_Ref = 'adev';
+		P_Ref = 'adev';
 	if (u.match(/romanialibera.ro/))
-		var P_Ref = 'romlib';
+		P_Ref = 'romlib';
 	if (u.match(/jurnalul.ro/))
-		var P_Ref = 'jurnalul';
+		P_Ref = 'jurnalul';
 	if (u.match(/gandul.info/))
-		var P_Ref = 'gandul';
+		P_Ref = 'gandul';
 	if (u.match(/libertatea.ro/))
-		var P_Ref = 'libertatea';
+		P_Ref = 'libertatea';
 	return P_Ref;
 };
 function f_Array_to_String(myArray) {
@@ -2203,14 +2207,17 @@ if (sItalic == '') {
 	var W_Date = '';
 };
 var s = '[' + W_URL + ' ' + W_Title + ']';
-if (W_Date != '')
-	var s = s + ', ' + W_Date;
+var W_Ref_Date = yyyy + '-' + mm + '-' + zdd
+if (W_Date != '') {
+    var s = s + ', ' + W_Date;
+    W_Ref_Date = W_DateYMD;
+}
 if (W_Authors != '')
 	var s = s + ', ' + W_Authors;
 if (W_Newspaper != '')
 	var s = s + ', ' + sItalic + W_Newspaper + sItalic;
 var W_Ref_Name = f_process_REF_Name();
-var ref1 = '<ref name=' + dq + W_Ref_Name + yyyy + '-' + mm + '-' + zdd + dq + '>';
+var ref1 = '<ref name=' + dq + W_Ref_Name + W_Ref_Date + dq + '>';
 var ref2 = ', accesat la ' + today + '</ref>';
 var sr = ref1 + s + ref2;
 var ref = '{{Citation | url=' + document.URL + '| title=' + W_Title + '| newspaper=' + W_Newspaper + '| date= ' + W_Date + '| author=' + W_Authors + '| accessdate=' + today + '}}';
