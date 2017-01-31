@@ -854,6 +854,44 @@ if (u.match(/webcitation.org/)) {
 		}
 	
 	}
+    if (u.match(/unimedia.md/)) {
+        var W_Date, W_Newspaper, W_Title, W_Authors;
+        var unimediaMeta = document.getElementsByTagName('meta');
+        for (var metaIdx = 0; metaIdx < unimediaMeta.length; metaIdx++) {
+            if (unimediaMeta[metaIdx].getAttribute('property') === 'og:site_name') {
+                W_Newspaper = unimediaMeta[metaIdx].getAttribute('content');
+                continue;
+            }
+            if (unimediaMeta[metaIdx].getAttribute('property') === 'og:title') {
+                W_Title = unimediaMeta[metaIdx].getAttribute('content');
+            }
+        }
+
+        var contentDiv = document.getElementById("content");
+        if (contentDiv) {
+        	var unimediaNewsDetails = contentDiv.getElementsByClassName("news-details");
+        	if (unimediaNewsDetails) {
+        		var unimediaArticleDetailsDiv = unimediaNewsDetails.filter(function(unimediaNewsDetailsDiv) {
+        			return unimediaNewsDetailsDiv.className.indexOf("clear") < 0;
+				});
+        		if (unimediaArticleDetailsDiv && unimediaArticleDetailsDiv.length > 0) {
+        			var unimediaArticleDetailsSpans = unimediaArticleDetailsDiv[0].getElementsByClassName("white-v-separator");
+        			if (unimediaArticleDetailsSpans) {
+        				unimediaArticleDetailsSpans = unimediaArticleDetailsSpans.filter(function(unimediaArticleDetailsSpan) {
+        					return unimediaArticleDetailsSpan.textContent.startsWith("ora");
+						});
+        				if (unimediaArticleDetailsSpans && unimediaArticleDetailsSpans.length > 0) {
+        					var dateregex = /^\s*ora.*?,\s*(.*?)$/
+        					var datematcher = dateregex.test(unimediaArticleDetailsSpans[0].textContent);
+        					if (datematcher) {
+                                W_Date = datematcher[1];
+							}
+						}
+					}
+				}
+			}
+		}
+    }
 	if (u.match(/zf.ro\/ziarul-de-duminica/)) {
 		var W_Newspaper = 'Ziarul de Duminică';
 		var W_Title = W_Title.replace(/ *\/ de .*/, '');
