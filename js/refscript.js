@@ -8,6 +8,18 @@ function toTitleCase(str) {
 		});
 	});
 };
+function filterList(list, func) {
+	if (!list) {
+		return list;
+	}
+	var outlist = [];
+	for (var i = 0; i < list.length; i++) {
+		if (func(list[i])) {
+			outlist.push(list[i]);
+		}
+	}
+	return outlist;
+}
 function resolveRelativeDay(rawdate) {
     if (rawdate == null) { return null; }
     var articleDate = new Date();
@@ -871,13 +883,13 @@ if (u.match(/webcitation.org/)) {
         if (contentDiv) {
         	var unimediaNewsDetails = contentDiv.getElementsByClassName("news-details");
         	if (unimediaNewsDetails) {
-        		var unimediaArticleDetailsDiv = unimediaNewsDetails.filter(function(unimediaNewsDetailsDiv) {
+        		unimediaNewsDetails = filterList(unimediaNewsDetails, function(unimediaNewsDetailsDiv) {
         			return unimediaNewsDetailsDiv.className.indexOf("clear") < 0;
 				});
-        		if (unimediaArticleDetailsDiv && unimediaArticleDetailsDiv.length > 0) {
-        			var unimediaArticleDetailsSpans = unimediaArticleDetailsDiv[0].getElementsByClassName("white-v-separator");
+        		if (unimediaNewsDetails && unimediaNewsDetails.length > 0) {
+        			var unimediaArticleDetailsSpans = unimediaNewsDetails[0].getElementsByClassName("white-v-separator");
         			if (unimediaArticleDetailsSpans) {
-        				unimediaArticleDetailsSpans = unimediaArticleDetailsSpans.filter(function(unimediaArticleDetailsSpan) {
+        				unimediaArticleDetailsSpans = filterList(unimediaArticleDetailsSpans, function(unimediaArticleDetailsSpan) {
         					return unimediaArticleDetailsSpan.textContent.startsWith("ora");
 						});
         				if (unimediaArticleDetailsSpans && unimediaArticleDetailsSpans.length > 0) {
