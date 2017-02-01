@@ -908,6 +908,26 @@ if (u.match(/webcitation.org/)) {
 			}
 		}
     }
+    if (u.match(/publika.md/)) {
+        var W_Date, W_Newspaper, W_Title, W_Authors;
+        var publikaMeta = document.getElementsByTagName('meta');
+        for (var metaIdx = 0; metaIdx < publikaMeta.length; metaIdx++) {
+            if (publikaMeta[metaIdx].getAttribute('property') === 'og:site_name') {
+                W_Newspaper = publikaMeta[metaIdx].getAttribute('content');
+                continue;
+            }
+            if (publikaMeta[metaIdx].getAttribute('property') === 'og:title') {
+                W_Title = publikaMeta[metaIdx].getAttribute('content');
+            }
+            if (publikaMeta[metaIdx].getAttribute('property') === 'article:author') {
+                W_Authors = publikaMeta[metaIdx].getAttribute('content');
+            }
+            if (publikaMeta[metaIdx].getAttribute('property') === 'article:published_time') {
+                var parsedDate = Date.parse(publikaMeta[metaIdx].getAttribute('content'));
+                W_Date = [parsedDate.getDate(), 1 + parsedDate.getMonth(), parsedDate.getYear()].join('.');
+            }
+        }
+	}
 	if (u.match(/zf.ro\/ziarul-de-duminica/)) {
 		var W_Newspaper = 'Ziarul de Duminică';
 		var W_Title = W_Title.replace(/ *\/ de .*/, '');
