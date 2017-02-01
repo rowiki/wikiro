@@ -925,7 +925,7 @@ if (u.match(/webcitation.org/)) {
             if (publikaMeta[metaIdx].getAttribute('property') === 'article:published_time') {
             	var dateContent = publikaMeta[metaIdx].getAttribute('content')
                 var parsedDate = new Date(dateContent);
-                W_Date = [parsedDate.getDate(), [articleDate.getMonth() < 9 ? '0' : '', 1 + articleDate.getMonth()].join(''), parsedDate.getFullYear()].join('.');
+                W_Date = [parsedDate.getDate(), [parsedDate.getMonth() < 9 ? '0' : '', 1 + parsedDate.getMonth()].join(''), parsedDate.getFullYear()].join('.');
             }
         }
 	}
