@@ -37,15 +37,22 @@ class Article:
 		self._imdbId = None
 		self._imdbRating = 0
 		self._types = []
+		self._page = pywikibot.Page(pywikibot.getSite(), title)
 
 	def fetchAarc(self):
 		r = requests.get(self._aarc)
 		text = self.fetchAarcData(r.text)
+		self._title = self.fetchAarcTitle(text)
 		self._year = self.fetchAarcYear(text)
 		self._director = self.fetchAarcEntry(text, "Regie")
 		self._scenario = self.fetchAarcEntry(text, "Scenariu")
 		self._mainActors = self.fetchAarcEntry(text, "Actori")
 		self._distribution = self.fetchAarcDistribution(r.text)
+
+	def fetchAarcTitle(self, text):
+		text = text[text.find("<h1>")+4:text.find("</h1>")]
+		text = text[:text.find("(")].strip()
+		return text
 
 	def fetchAarcEntry(self, text, entry):
 		text = text[text.find(entry):]
@@ -140,7 +147,10 @@ class Article:
 			if m:
 				score = m.group(0)
 				score = score[score.find(':')+1:].strip()
-				return float(score)
+				try:
+					return float(score)
+				except:
+					return 0
 		return 0
 
 	def fetchImdbId(self, text):
@@ -153,18 +163,21 @@ class Article:
                 return None
 
 	def buildArticle(self):
+		if self._page.exists():
+			print u"există"
+			return False
 		self._text = u""
 		self.addInfobox()
 		self.addMainArticle()
 		self.addReception()
 		self.addCommonSections()
 		self.addCats()
-		print self._text
+		return True
 
 	def addInfobox(self):
 		actors = self._mainActors.replace(u",", u"<br/>")
 		text = u"""{{Infocaseta Film
-  | nume_film           =  {{PAGENAME}}
+  | nume_film           =  %s
   | alte_nume           = 
   | imagine             = 
   | descriere_imagine   = Afișul filmului  
@@ -205,7 +218,7 @@ class Article:
   | id_rotten-tomatoes  =
   | id_allrovi          =
 }}
-""" % (u", ".join(self._types), self._director, self._scenario, actors, sf.none2empty(self._cmId), sf.none2empty(self._imdbId))
+""" % (self._title, u", ".join(self._types), self._director, self._scenario, actors, sf.none2empty(self._cmId), sf.none2empty(self._imdbId))
 		self._text += text
 		
 	def addMainArticle(self):
@@ -215,8 +228,12 @@ class Article:
 				actors_list += u"* [[%s]] &mdash; %s\n" % (self._distribution[actor], actor)
 			else:
 				actors_list += u"* [[%s]]\n" % self._distribution[actor]
+		if len(self._mainActors):
+			mainActors = u" Rolurile principale au fost interpretate de actorii " + self._mainActors + u"."
+		else:
+			mainActors = u""
 		self._text += u"""
-'''''{{PAGENAME}}''''' este un film românesc din [[%d]] regizat de %s. Rolurile principale au fost interpretate de actorii %s.
+'''''%s''''' este un film românesc din [[%d]] regizat de %s.%s
 
 ==Prezentare==
 {{sinopsis}}
@@ -225,7 +242,7 @@ class Article:
 {{coloane-listă|2|
 %s
  }}
-""" % (self._year, self._director, self._mainActors, actors_list)
+""" % (self._title, self._year, self._director, mainActors, actors_list)
 
 	def addReception(self):
 		spectators = 0
@@ -253,6 +270,13 @@ Filmul a fost vizionat de {{subst:plural|%d|spectator}} de spectatori în cinema
 
 
 	def addCommonSections(self):
+		_directorTl = u""
+		if self._director:
+			directors = self._director.split(",")
+			for director in directors:
+				f = pywikibot.Page(pywikibot.getSite(), u"Format:" + director.strip())
+				if f.exists():
+					_directorTl += u"{{" + director.strip() + u"}}\n"
 		text = u"""
 ==Note==
 {{Listănote|2}}
@@ -262,9 +286,9 @@ Filmul a fost vizionat de {{subst:plural|%d|spectator}} de spectatori în cinema
 
 ==Vezi și==
 * [[%d în film]]
-
+%s
 {{Ciot-film-România}}
-""" % (self.imdbWikiText(), self.cmWikiText(), self._year)
+""" % (self.imdbWikiText(), self.cmWikiText(), self._year, _directorTl)
 		self._text += text
 
 	def addCats(self):
@@ -291,7 +315,17 @@ Filmul a fost vizionat de {{subst:plural|%d|spectator}} de spectatori în cinema
 if __name__ == "__main__":
 	#a = Article("https://www.cinemagia.ro/filme/aripi-de-zapada-27066/", "http://aarc.ro/filme/film/aripi-de-zapada-1985")
 	#a = Article("N/A", "http://aarc.ro/filme/film/abecedarul-1984")
-	a = Article(u"Această Lehamite", "https://www.cinemagia.ro/filme/aceasta-lehamite-229/", "http://aarc.ro/filme/film/aceasta-lehamite-1993")
-	a.fetchAarc()
-	a.fetchCm()
-	a.buildArticle()
+	#a = Article(u"Această Lehamite", "https://www.cinemagia.ro/filme/aceasta-lehamite-229/", "http://aarc.ro/filme/film/aceasta-lehamite-1993")
+	
+	flist = csvUtils.csvToJson("filme_url.csv", field=u"titlu articol")
+	count = 0
+	for f in flist:
+		print flist[f]
+		a = Article(f.decode('utf8'), flist[f][u"url cinemagia"], flist[f]["url aarc"])
+		a.fetchAarc()
+		a.fetchCm()
+		if a.buildArticle():
+			count += 1
+			a._page.put(a._text)
+		if count and count % 10 == 0:
+			break
