@@ -24,6 +24,9 @@ import strainu_functions as sf
 import csvUtils
 
 
+def fixDia(text):
+	return text.replace(u"Ş", u"Ș").replace(u"ş", u"ș").replace(u"Ţ", u"Ț").replace(u"ţ", u"ț")
+
 
 class Article:
 	def __init__(self, title, cinemagia_url, aarc_url):
@@ -52,13 +55,13 @@ class Article:
 	def fetchAarcTitle(self, text):
 		text = text[text.find("<h1>")+4:text.find("</h1>")]
 		text = text[:text.find("(")].strip()
-		return text
+		return fixDia(text)
 
 	def fetchAarcEntry(self, text, entry):
 		text = text[text.find(entry):]
 		text = text[text.find("</span>")+len("</span>"):]
 		text = text[:text.find("</p>")]
-		return text.strip()
+		return fixDia(text.strip())
 
 	def fetchAarcData(self, text):
 		index1 = text.find("<div class=\"mainfilminfo\">")
@@ -91,7 +94,7 @@ class Article:
 			if m:
 				name = m.group(0)
 			role = role[:role.find("</td")].strip()
-			distribution[role] = name
+			distribution[role] = fixDia(name)
 		return distribution
 
 	def fetchCm(self):
@@ -167,6 +170,8 @@ class Article:
 			print u"există"
 			return False
 		self._text = u""
+		self.fetchAarc()
+		self.fetchCm()
 		self.addInfobox()
 		self.addMainArticle()
 		self.addReception()
@@ -322,8 +327,6 @@ if __name__ == "__main__":
 	for f in flist:
 		print flist[f]
 		a = Article(f.decode('utf8'), flist[f][u"url cinemagia"], flist[f]["url aarc"])
-		a.fetchAarc()
-		a.fetchCm()
 		if a.buildArticle():
 			count += 1
 			a._page.put(a._text)
