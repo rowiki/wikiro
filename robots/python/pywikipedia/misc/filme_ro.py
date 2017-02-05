@@ -340,10 +340,6 @@ Filmul a fost vizionat de {{subst:plural|%d|spectator}} de spectatori în cinema
 		self._text += text
 
 if __name__ == "__main__":
-	#a = Article("https://www.cinemagia.ro/filme/aripi-de-zapada-27066/", "http://aarc.ro/filme/film/aripi-de-zapada-1985")
-	#a = Article("N/A", "http://aarc.ro/filme/film/abecedarul-1984")
-	#a = Article(u"Această Lehamite", "https://www.cinemagia.ro/filme/aceasta-lehamite-229/", "http://aarc.ro/filme/film/aceasta-lehamite-1993")
-	
 	flist = csvUtils.csvToJson("filme_url.csv", field=u"titlu articol")
 	count = 0
 	for f in flist:
@@ -351,6 +347,7 @@ if __name__ == "__main__":
 		a = Article(f.decode('utf8'), flist[f][u"url cinemagia"], flist[f]["url aarc"])
 		if a.buildArticle():
 			count += 1
-			a._page.put(a._text)
+			#print a._text
+			a._page.put(a._text, u"Creez un articol nou despre un film")
 		if count and count % 10 == 0:
 			break
