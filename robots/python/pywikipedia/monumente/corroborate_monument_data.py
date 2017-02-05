@@ -515,7 +515,7 @@ def parseOtherCoords(code, other_data, fields):
 	updateCoord = False
 	otherLat = 0
 	otherLong = 0
-	otherSrc = None
+	otherSrc = "N/A "
 	if fields["lat"] in other_data and fields["lon"] in other_data:
 		try:
 			otherLat = float(other_data[fields["lat"]])
