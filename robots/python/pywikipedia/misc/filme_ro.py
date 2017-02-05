@@ -321,11 +321,12 @@ Filmul a fost vizionat de {{subst:plural|%d|spectator}} de spectatori în cinema
 		for t in self._types:
 			cat = u"Filme de %s" % t.lower()
 			cat = pywikibot.Category(pywikibot.getSite(), cat)
-			for p in cat.templatesWithParams():
-				if p[0].title() == "Format:Redirect categorie":
-					break
-			else:
-				text += u"[[%s]]\n" % cat.title()
+			if cat.exists():
+				for p in cat.templatesWithParams():
+					if p[0].title() == "Format:Redirect categorie":
+						break
+				else:
+					text += u"[[%s]]\n" % cat.title()
 		self._text += text
 
 if __name__ == "__main__":
