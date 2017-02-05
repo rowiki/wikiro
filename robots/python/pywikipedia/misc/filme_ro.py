@@ -31,7 +31,7 @@ def fixDia(text):
 class Article:
 	def __init__(self, title, cinemagia_url, aarc_url):
 		self._text  = u""
-		self._title = title
+		self._title = fixDia(title)
 		self._cinemagia = cinemagia_url
 		self._aarc = aarc_url
 		self._year = 0
@@ -40,7 +40,8 @@ class Article:
 		self._imdbId = None
 		self._imdbRating = 0
 		self._types = []
-		self._page = pywikibot.Page(pywikibot.getSite(), title)
+		self._duration = None
+		self._page = pywikibot.Page(pywikibot.getSite(), self._title)
 
 	def fetchAarc(self):
 		r = requests.get(self._aarc)
