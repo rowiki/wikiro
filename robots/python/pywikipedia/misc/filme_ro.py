@@ -78,23 +78,33 @@ class Article:
 
 	def fetchAarcDistribution(self, text):
 		distribution = {}
-		text = text[text.find("http://aarc.ro/filme/distributie/"):]
-		text = text[:text.find("\"")]
-		r = requests.get(text)
-		text = r.text
-		text = text[text.find(u"<h3>Distribuție</h3>"):]
-		text = text[text.find("<tbody"):]
+		index = 0
+		r = text.find("http://aarc.ro/filme/distributie/")
+		if r > -1:
+			text = text[r:]
+			text = text[:text.find("\"")]
+			r = requests.get(text)
+			text = r.text
+		text = text[text.find(u"<h3>Distribuție"):]
+		text = text[text.find("<tbody"):].strip()
+		text = text[text.find(">"):].strip()
 		text = text[:text.find("</tbody>")]
-		entries = text.split("</tr><tr>")
+		entries = text.split("</tr>")
 		if len(entries) == 1:
 			return distribution
 		for entry in entries:
+			entry = entry.strip()
+			if not entry:
+				break
 			(pic, name, role) = entry.split("<td>")
 			name = name[:name.find("</td")].strip()
 			m = re.search(ur"[^>]*(?=<\/a>)", name)
 			if m:
 				name = m.group(0)
 			role = role[:role.find("</td")].strip()
+			if role == u"":
+				role = str(index)
+				index += 1
 			distribution[role] = fixDia(name)
 		return distribution
 
