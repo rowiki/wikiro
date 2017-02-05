@@ -112,6 +112,16 @@ class Article:
 		self._imdbRating = self.fetchImdbRating(r.text)
 		self._year = self.fetchCmYear(r.text)
 		self._types = self.fetchCmTypes(r.text)
+		self._duration = self.fetchCmDuration(r.text)
+
+	def fetchCmDuration(self, text):
+		r = text.find(u"<h3>Durata")
+		if r > -1:
+			text = text[r:]
+			m = re.search(ur"[^>]*(?=<\/span>)", text)
+                        if m:
+                                return m.group(0)
+		return None
 
 	def fetchCmTypes(self, text):
 		r = text.find("movieGenreUserChoiceResults")
@@ -202,7 +212,7 @@ class Article:
   | premiera            = 
   | premiera_ro         = 
   | premiera_md         = 
-  | durată              = 
+  | durată              = %s
   | țara                = [[România]]
   | limba_originală     = [[limba română|română]]
   | dispromână          = original
@@ -224,13 +234,13 @@ class Article:
   | id_rotten-tomatoes  =
   | id_allrovi          =
 }}
-""" % (self._title, u", ".join(self._types), self._director, self._scenario, actors, sf.none2empty(self._cmId), sf.none2empty(self._imdbId))
+""" % (self._title, u", ".join(self._types), self._director, self._scenario, actors, sf.none2empty(self._duration), sf.none2empty(self._cmId), sf.none2empty(self._imdbId))
 		self._text += text
 		
 	def addMainArticle(self):
 		actors_list = u""
 		for actor in self._distribution:
-			if len(actor):
+			if len(actor) > 2:
 				actors_list += u"* [[%s]] &mdash; %s\n" % (self._distribution[actor], actor)
 			else:
 				actors_list += u"* [[%s]]\n" % self._distribution[actor]
