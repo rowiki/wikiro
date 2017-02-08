@@ -50,7 +50,11 @@ class Article:
 		self._imdbRating = 0
 		self._types = []
 		self._duration = None
-		self._page = pywikibot.Page(pywikibot.getSite(), self._title)
+		if self._title:
+			self._page = pywikibot.Page(pywikibot.getSite(), self._title)
+			self._valid = True
+		else:
+			self._valid = False
 
 	def fetchAarc(self):
 		r = requests.get(self._aarc)
@@ -371,5 +375,5 @@ if __name__ == "__main__":
 			count += 1
 			#print a._text
 			a._page.put(a._text, u"Creez un articol nou despre un film")
-		if count and count % 10 == 0:
+		if a._title and a._title[0] == u'B':
 			break
