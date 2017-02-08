@@ -286,12 +286,18 @@ Filmul a fost vizionat de {{subst:plural|%d|spectator}} de spectatori în cinema
 
 	def imdbWikiText(self):
 		if self._imdbId:
-			return u"* {{Titlu IMDb|%s}} {{rating 10|%.1f}}\n" % (self._imdbId, self._imdbRating)
+			if self._imdbRating:
+				return u"* {{Titlu IMDb|%s}} {{rating 10|%.1f}}\n" % (self._imdbId, self._imdbRating)
+			else:
+				return u"* {{Titlu IMDb|%s}}\n" % self._imdbId
 		return u""
 
 	def cmWikiText(self):
 		if self._cmId:
-			return u"* {{cinemagia|id=%s}} {{rating 10|%.1f}}\n" % (self._cmId, self._cmRating)
+			if self._cmRating:
+				return u"* {{cinemagia|id=%s}} {{rating 10|%.1f}}\n" % (self._cmId, self._cmRating)
+			else:
+				return u"* {{cinemagia|id=%s}}\n" % self._cmId
 		return u""
 
 
