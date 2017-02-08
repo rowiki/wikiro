@@ -79,13 +79,13 @@ class Article:
 		text = text[text.find(entry):]
 		text = text[text.find("</span>")+len("</span>"):]
 		text = text[:text.find("</p>")]
-		return fixDia(text.strip())
+		return fixDia(text)
 
 	def fetchAarcData(self, text):
 		index1 = text.find("<div class=\"mainfilminfo\">")
 		index2 = text.find("main film info", index1)
 		text = text[index1:index2+6]
-		return text
+		return fixDia(text)
 
 	def fetchAarcYear(self, text):
 		m = re.search("<h1>(.*)\((\d*)\)</h1>", text)
@@ -118,7 +118,7 @@ class Article:
 			m = re.search(ur"[^>]*(?=<\/a>)", name)
 			if m:
 				name = m.group(0)
-			role = role[:role.find("</td")].strip()
+			role = fixDia(role[:role.find("</td")])
 			if role == u"":
 				role = str(index)
 				index += 1
@@ -158,7 +158,7 @@ class Article:
 			text = text[:text.find("</div>")]
 			m = re.finditer(ur"<span>(.*?)</span>", text)
                         for t in m:
-                                types.append(t.group(1))
+                                types.append(fixDia(t.group(1)))
 		return types
 
 	def fetchCmRating(self, text):
