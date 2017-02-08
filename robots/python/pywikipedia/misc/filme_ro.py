@@ -309,7 +309,6 @@ Filmul a fost vizionat de {{subst:plural|%d|spectator}} de spectatori în cinema
 
 ==Legături externe==
 %s%s
-
 ==Vezi și==
 * [[%d în film]]
 %s
