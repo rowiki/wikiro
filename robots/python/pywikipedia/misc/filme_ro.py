@@ -25,7 +25,7 @@ import csvUtils
 
 
 def fixDia(text):
-	return text.replace(u"Ş", u"Ș").replace(u"ş", u"ș").replace(u"Ţ", u"Ț").replace(u"ţ", u"ț")
+	return text.strip().replace(u"Ş", u"Ș").replace(u"ş", u"ș").replace(u"Ţ", u"Ț").replace(u"ţ", u"ț")
 
 
 class Article:
