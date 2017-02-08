@@ -57,14 +57,18 @@ class Article:
 			self._valid = False
 
 	def fetchAarc(self):
-		r = requests.get(self._aarc)
-		text = self.fetchAarcData(r.text)
-		self._title = self.fetchAarcTitle(text)
-		self._year = self.fetchAarcYear(text)
-		self._director = self.fetchAarcEntry(text, "Regie")
-		self._scenario = self.fetchAarcEntry(text, "Scenariu")
-		self._mainActors = self.fetchAarcEntry(text, "Actori")
-		self._distribution = self.fetchAarcDistribution(r.text)
+		try:
+			r = requests.get(self._aarc)
+			text = self.fetchAarcData(r.text)
+			self._title = self.fetchAarcTitle(text)
+			self._year = self.fetchAarcYear(text)
+			self._director = self.fetchAarcEntry(text, "Regie")
+			self._scenario = self.fetchAarcEntry(text, "Scenariu")
+			self._mainActors = self.fetchAarcEntry(text, "Actori")
+			self._distribution = self.fetchAarcDistribution(r.text)
+		except:
+			#without AARC data, no article
+			self._valid = False
 
 	def fetchAarcTitle(self, text):
 		text = text[text.find("<h1>")+4:text.find("</h1>")]
@@ -200,12 +204,15 @@ class Article:
                 return None
 
 	def buildArticle(self):
-		if self._page.exists():
+		if self._valid and self._page.exists():
 			print u"există"
 			return False
 		self._text = u""
 		self.fetchAarc()
 		self.fetchCm()
+		if not self._valid:
+			print "invalid"
+			return False
 		self.addInfobox()
 		self.addMainArticle()
 		self.addReception()
