@@ -27,6 +27,15 @@ import csvUtils
 def fixDia(text):
 	return text.strip().replace(u"Ş", u"Ș").replace(u"ş", u"ș").replace(u"Ţ", u"Ț").replace(u"ţ", u"ț")
 
+categories = {
+	u"Filme de documentar": u"Filme documentare românești",
+	u"Filme de comedie": u"Filme de comedie românești",
+	u"Filme de dramă": u"Filme dramatice românești",
+	u"Filme de horror": u"Filme de groază",
+	#u"": u"",
+	#u"": u"",
+}
+
 
 class Article:
 	def __init__(self, title, cinemagia_url, aarc_url):
@@ -332,16 +341,24 @@ Filmul a fost vizionat de {{subst:plural|%d|spectator}} de spectatori în cinema
 		if self._director:
 			directors = self._director.split(",")
 			for director in directors:
-				text += u"[[Categorie:Filme regizate de %s]]\n" % director.strip()
+				cat = u"Categorie:Filme regizate de %s" % director.strip()
+				cat = pywikibot.Category(pywikibot.getSite(), cat)
+				if cat.exists():
+					text += u"[[Categorie:Filme regizate de %s]]\n" % director.strip()
 		for t in self._types:
 			cat = u"Filme de %s" % t.lower()
-			cat = pywikibot.Category(pywikibot.getSite(), cat)
-			if cat.exists():
-				for p in cat.templatesWithParams():
+			catp = None
+			if cat in categories:
+				catp = pywikibot.Category(pywikibot.getSite(), categories[cat])
+			if not catp or not catp.exists():
+				catp = pywikibot.Category(pywikibot.getSite(), cat)
+
+			if catp.exists():
+				for p in catp.templatesWithParams():
 					if p[0].title() == "Format:Redirect categorie":
 						break
 				else:
-					text += u"[[%s]]\n" % cat.title()
+					text += u"[[%s]]\n" % catp.title()
 		self._text += text
 
 if __name__ == "__main__":
