@@ -32,7 +32,7 @@ categories = {
 	u"Filme de comedie": u"Filme de comedie românești",
 	u"Filme de dramă": u"Filme dramatice românești",
 	u"Filme de horror": u"Filme de groază",
-	#u"": u"",
+	u"Filme de polițist": u"Filme polițiste românești",
 	#u"": u"",
 }
 
@@ -50,10 +50,12 @@ class Article:
 		self._imdbRating = 0
 		self._types = []
 		self._duration = None
+		self._distributionSource = u""
 		if self._title:
 			self._page = pywikibot.Page(pywikibot.getSite(), self._title)
 			self._valid = True
 		else:
+			print u"Invalid title"
 			self._valid = False
 
 	def fetchAarc(self):
@@ -66,8 +68,10 @@ class Article:
 			self._scenario = self.fetchAarcEntry(text, "Scenariu")
 			self._mainActors = self.fetchAarcEntry(text, "Actori")
 			self._distribution = self.fetchAarcDistribution(r.text)
+			self._distributionSource = u"<ref name=\"distributie\">[" + self._aarc + u" " + self._title + u"] pe site-ul All About Romanian Cinema</ref>"
 		except:
 			#without AARC data, no article
+			print u"AARC not found"
 			self._valid = False
 
 	def fetchAarcTitle(self, text):
@@ -131,6 +135,7 @@ class Article:
 			self._cmId = m.group(1)
 		else:
 			print "CM not found"
+			self._valid = False
 			return # no need to parse if we cannot match the URL
 		r = requests.get(self._cinemagia)
 		text = r.text
@@ -285,10 +290,11 @@ class Article:
 {{sinopsis}}
 
 ==Distribuție==
+Distribuția filmului este alcătuită din:%s
 {{coloane-listă|2|
 %s
  }}
-""" % (self._title, self._year, self._director, mainActors, actors_list)
+""" % (self._title, self._year, self._director, mainActors, self._distributionSource, actors_list)
 
 	def addReception(self):
 		spectators = 0
@@ -378,9 +384,11 @@ if __name__ == "__main__":
 	for f in flist:
 		print flist[f]
 		a = Article(f.decode('utf8'), flist[f][u"url cinemagia"], flist[f]["url aarc"])
+		#if a._title and a._title[0] == u'C':
+		#	break
 		if a.buildArticle():
 			count += 1
 			#print a._text
 			a._page.put(a._text, u"Creez un articol nou despre un film")
-		if a._title and a._title[0] == u'B':
-			break
+		#if count:
+		#	break
