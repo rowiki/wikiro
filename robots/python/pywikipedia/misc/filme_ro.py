@@ -67,10 +67,13 @@ class Article:
 			self._director = self.fetchAarcEntry(text, "Regie")
 			self._scenario = self.fetchAarcEntry(text, "Scenariu")
 			self._mainActors = self.fetchAarcEntry(text, "Actori")
+			self._producer = self.fetchAarcSection(r.text, u"Producători")
+			self._distributor = self.fetchAarcSection(r.text, u"Distribuitori")
 			self._distribution = self.fetchAarcDistribution(r.text)
 			self._distributionSource = u"<ref name=\"distributie\">[" + self._aarc + u" " + self._title + u"] pe site-ul All About Romanian Cinema</ref>"
-		except:
+		except Exception as e:
 			#without AARC data, no article
+			#print e
 			print u"AARC not found"
 			self._valid = False
 
@@ -96,6 +99,18 @@ class Article:
 		if m:
 			return int(m.group(2))
 		return 0
+
+	def fetchAarcSection(self, text, section):
+		search = r"<h3.*>%s" % section
+		
+		r = re.search(search, text)
+		if r:
+			text = text[text.find(r.group(0)):]
+			m = re.search(ur"<p>(.*?)</p>", text)
+			if m:
+				return m.group(1)
+		return ""
+		
 
 	def fetchAarcDistribution(self, text):
 		distribution = {}
@@ -220,6 +235,7 @@ class Article:
 			return False
 		self.addInfobox()
 		self.addMainArticle()
+		self.addDistribution()
 		self.addReception()
 		self.addCommonSections()
 		self.addCats()
@@ -235,7 +251,7 @@ class Article:
   | rating              =  
   | gen                 = %s
   | regizor             = %s
-  | producător          = 
+  | producător          = %s
   | scenarist           = %s
   | narator             = 
   | rolurile_principale = %s
@@ -243,7 +259,7 @@ class Article:
   | dir_imag            = 
   | montaj              = 
   | studio              = 
-  | distribuitor        = 
+  | distribuitor        = %s
   | premiera            = 
   | premiera_ro         = 
   | premiera_md         = 
@@ -269,16 +285,10 @@ class Article:
   | id_rotten-tomatoes  =
   | id_allrovi          =
 }}
-""" % (self._title, u", ".join(self._types), self._director, self._scenario, actors, sf.none2empty(self._duration), sf.none2empty(self._cmId), sf.none2empty(self._imdbId))
+""" % (self._title, u", ".join(self._types), self._director, self._producer, self._scenario, actors, self._distributor, sf.none2empty(self._duration), sf.none2empty(self._cmId), sf.none2empty(self._imdbId))
 		self._text += text
 		
 	def addMainArticle(self):
-		actors_list = u""
-		for actor in self._distribution:
-			if len(actor) > 2:
-				actors_list += u"* [[%s]] &mdash; %s\n" % (self._distribution[actor], actor)
-			else:
-				actors_list += u"* [[%s]]\n" % self._distribution[actor]
 		if len(self._mainActors):
 			mainActors = u" Rolurile principale au fost interpretate de actorii " + self._mainActors + u"."
 		else:
@@ -288,13 +298,25 @@ class Article:
 
 ==Prezentare==
 {{sinopsis}}
+""" % (self._title, self._year, self._director, mainActors)
+
+	def addDistribution(self):
+		if len(self._distribution) == 0:
+			return
+		actors_list = u""
+		for actor in self._distribution:
+			if len(actor) > 2:
+				actors_list += u"* [[%s]] &mdash; %s\n" % (self._distribution[actor], actor)
+			else:
+				actors_list += u"* [[%s]]\n" % self._distribution[actor]
+		self._text +=u"""
 
 ==Distribuție==
 Distribuția filmului este alcătuită din:%s
 {{coloane-listă|2|
 %s
  }}
-""" % (self._title, self._year, self._director, mainActors, self._distributionSource, actors_list)
+""" % (self._distributionSource, actors_list)
 
 	def addReception(self):
 		spectators = 0
@@ -384,11 +406,11 @@ if __name__ == "__main__":
 	for f in flist:
 		print flist[f]
 		a = Article(f.decode('utf8'), flist[f][u"url cinemagia"], flist[f]["url aarc"])
-		#if a._title and a._title[0] == u'C':
-		#	break
+		if a._title and a._title[0] == u'D':
+			break
 		if a.buildArticle():
 			count += 1
 			#print a._text
 			a._page.put(a._text, u"Creez un articol nou despre un film")
-		#if count:
+		#if count % 10 == 9:
 		#	break
