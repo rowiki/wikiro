@@ -24,7 +24,8 @@ config = {
     'properties': {
             u'Denumire': ('', None, 'label'),
             u'Coord': ('P625', False, 'globe-coordinate'),
-            u'Imagine': ('P18', True, 'commonsMedia'),
+            u'imagine': ('P18', True, 'commonsMedia'),
+            u'hartă': ('P242', False, 'commonsMedia'),
             u'Țară': ('P17', False, 'wikibase-item'),
             u'Commons': ('P373', False, 'string'),
             u'SIRUTA': ('P843', False, 'string'),
@@ -38,6 +39,7 @@ config = {
             u'ISO3166-2': ('P300', False, 'string'),
             u'populație': ('P1082', False, 'quantity'),
             u'reședință pentru': ('P1376', False, 'wikibase-item'),
+            u'site': ('P856', False, 'url'),
             }
 }
 
@@ -215,16 +217,28 @@ class ItemProcessing:
         if prop not in self.item.claims:
             pywikibot.error("County %s does not have an ISO 3166-2 code" % self.item.labels.get('ro'))
 
-    def addPostalCode(self):
+    def addPostalCode(self, cp=None):
         sirutaWD = self.getUniqueClaim(u"SIRUTA")
         codpWD = self.getUniqueClaim(u"codp", canBeNull=True)
         codp = self.sirutaDb.get_postal_code(int(sirutaWD))
         if not codp:
-            return
+            if not cp:
+                return
+            codp = cp
         if codpWD and unicode(codp) != codpWD:
             pywikibot.error("Mismatch for postal code: SIRUTA has %s, WD has %s" % (codp, codpWD))
         if not codpWD:
             self.updateProperty(u"codp", {u"codp": unicode(codp)})
+    
+    def addSite(self, _url=None, _type=u"site"):
+        if not _url:
+            return
+        self.updateProperty(_type, {_type: _url})
+
+    def addImage(self, _img=None, _type=u"imagine"):
+        if not _img:
+            return
+        self.updateProperty(_type, {_type: _img})
 
     def searchSirutaInWD(self, siruta):
         query = "SELECT ?item WHERE { ?item wdt:P843 \"%d\" .     SERVICE wikibase:label { bd:serviceParam wikibase:language \"ro\" }}" % siruta
@@ -330,6 +344,30 @@ class CityData(robot.WorkItem):
 
     def doWork(self, page, item):
         try:
+            rp = item.getSitelink("rowiki")
+            rp = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), rp)
+            if rp.isRedirectPage():
+                rp = rp.getRedirectTarget()
+            text = rp.get()
+            tl = sf.extractTemplate(text, u'(Infocaseta Așezare|Cutie Sate|Casetă comune România)')
+            if tl:
+                tl = sf.tl2Dict(tl)
+                #print tl
+                if u'imagine' in tl:
+                    print u'imagine'
+                    i.addImage(tl[u'imagine'])
+                if u'codpoștal' in tl:
+                    print u'codp'
+                    i.addPostalCode(tl[u'codpoștal'])
+                if u'hartă' in tl:
+                    print u'hartă'
+                    i.addImage(tl[u'hartă'])
+                if u'sit-adresă' in tl:
+                    print u'sit'
+                    i.addSite(tl[u'sit-adresă'])
+                if u'website' in tl:
+                    print u'website'
+                    i.addSite(tl[u'website'])
             i = ItemProcessing(self.config, item, self.sirutaDb, always=self.always)
             #if i.isCounty():
             #    i.createCountySubcategories()
@@ -341,8 +379,8 @@ class CityData(robot.WorkItem):
             #i.addSirutaSup()
             #i.updateCommons()
             #i.addType()
-            i.addTimezone()
-            i.addCapital()
+            #i.addTimezone()
+            #i.addCapital()
             self.always = i.always #remember the choice
         except Exception as e:
             pywikibot.output(e)
