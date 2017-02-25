@@ -9,6 +9,7 @@
 import pywikibot
 from pywikibot import i18n, config, pagegenerators, textlib, weblib
 from pywikibot.data import sparql
+from pywikibot import config as user
 
 import sys
 import csv
@@ -350,25 +351,25 @@ class CityData(robot.WorkItem):
                 rp = rp.getRedirectTarget()
             text = rp.get()
             tl = sf.extractTemplate(text, u'(Infocaseta Așezare|Cutie Sate|Casetă comune România)')
+            i = ItemProcessing(self.config, item, self.sirutaDb, always=self.always)
             if tl:
-                tl = sf.tl2Dict(tl)
+                tl = sf.tl2Dict(tl)[0]
                 #print tl
                 if u'imagine' in tl:
                     print u'imagine'
-                    i.addImage(tl[u'imagine'])
+                    i.addImage(tl[u'imagine'].strip())
                 if u'codpoștal' in tl:
                     print u'codp'
-                    i.addPostalCode(tl[u'codpoștal'])
+                    i.addPostalCode(tl[u'codpoștal'].strip())
                 if u'hartă' in tl:
                     print u'hartă'
-                    i.addImage(tl[u'hartă'])
+                    i.addImage(tl[u'hartă'].strip(), _type=u"hartă")
                 if u'sit-adresă' in tl:
                     print u'sit'
-                    i.addSite(tl[u'sit-adresă'])
+                    i.addSite(tl[u'sit-adresă'].strip())
                 if u'website' in tl:
                     print u'website'
-                    i.addSite(tl[u'website'])
-            i = ItemProcessing(self.config, item, self.sirutaDb, always=self.always)
+                    i.addSite(tl[u'website'].strip())
             #if i.isCounty():
             #    i.createCountySubcategories()
             #    i.checkISOCodes()
@@ -399,8 +400,10 @@ class CityData(robot.WorkItem):
 
 if __name__ == "__main__":
     pywikibot.handle_args()
+    user.mylang = 'wikidata'
+    user.family = 'wikidata'
     page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
-    #page = pywikibot.Page(pywikibot.Site(), "Q1776764", ns=0)#counties
+    #page = pywikibot.Page(pywikibot.Site(), "Q193055", ns=0)
     generator = pagegenerators.ReferringPageGenerator(page)
     bot = robot.WikidataBot(site=True, generator = generator)
 
