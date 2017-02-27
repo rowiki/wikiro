@@ -194,7 +194,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             }
             if (startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:",
                 "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", "imdbname:", "c:file:", "doi:",
-                "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:")) {
+                "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:")) {
                 continue;
             }
             articleTitle = defaultString(targetWiki.resolveRedirect(articleTitle), articleTitle);
