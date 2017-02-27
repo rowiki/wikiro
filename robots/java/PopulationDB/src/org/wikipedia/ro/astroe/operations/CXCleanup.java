@@ -187,10 +187,10 @@ public class CXCleanup implements WikiOperation {
         selfLinkRegEx = replace(selfLinkRegEx, " ", "(\\s+|_)");
         replace(translation, " ", "(\\s+|_)");
         String regEx = "\\[\\[\\:?" + selfLinkRegEx + "#(?<anchor>.*?)\\]\\]";
-        System.out.println(regEx);
         Pattern selfLinkPattern = Pattern.compile(regEx);
         Matcher selfLinkMatcher = selfLinkPattern.matcher(newText.toString());
 
+        
         newText = new StringBuffer();
         int matchesCount = 0;
         while (selfLinkMatcher.find()) {
@@ -199,6 +199,17 @@ public class CXCleanup implements WikiOperation {
         }
         selfLinkMatcher.appendTail(newText);
 
+        String selfLinkRegEx2 = "\\[//" + removeEnd(sourceWikiCode, "wiki") + ".wikipedia.org/wiki/" + replace(ent.getSitelinks().get(sourceWikiCode).getPageName(), " ", "_") + "#(?<anchor>[^\\s]*?)\\s+(?<label>[^\\]]*?)\\]";
+        Pattern selfLinkPattern2 = Pattern.compile(selfLinkRegEx2);
+        Matcher selfLinkMatcher2 = selfLinkPattern2.matcher(newText.toString());
+
+        newText = new StringBuffer();
+        while (selfLinkMatcher2.find()) {
+            selfLinkMatcher2.appendReplacement(newText, "[[#${anchor}|${label}]]");
+        }
+        selfLinkMatcher2.appendTail(newText);
+        
+        
         status = new String[] { "status.removing.supfootnotes" };
         Pattern footnoteBySupPattern = Pattern.compile(
             "\\[\\[#cite_note\\-.*?\\|<sup>(<span(\\s+lang=\".*?\")?\\s+style=\".*?\"\\s*?>\\s*?)?\\[\\d+\\](\\s*</span>\\s*)?</sup>\\]\\]",
