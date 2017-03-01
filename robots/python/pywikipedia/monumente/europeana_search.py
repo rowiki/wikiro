@@ -15,10 +15,11 @@ class EuropeanaInterface:
     def __init__(self, newkey='oYfxfaNeP'):
         self._key = newkey
         self._rows = 100
+        self._cursor = '*'
         
     def _getSlice(self, text, start, _type):
-        url = "http://europeana.eu/api/v2/search.json?wskey={0}&query={1}&qf=TYPE:{2}&start={3}&rows={4}&profile=minimal&reusability=open"
-        actual_url = url.format(self._key, urllib.quote_plus(text), _type, start, self._rows)
+        url = "http://europeana.eu/api/v2/search.json?wskey={0}&query={1}&qf=TYPE:{2}&cursor={3}&rows={4}&profile=minimal&reusability=open"
+        actual_url = url.format(self._key, urllib.quote_plus(text), _type, urllib.quote_plus(self._cursor), self._rows)
         print actual_url
         response = urllib2.urlopen(actual_url)
         txt = response.read()
@@ -36,6 +37,11 @@ class EuropeanaInterface:
                 return []
             if "success" not in _slice or _slice["success"] != True:
                 return []
+            if "nextCursor" in _slice:
+                self._cursor = _slice["nextCursor"]
+                print self._cursor
+            else:
+                break
 
             #items.extend(_slice["items"])
             for elem in _slice["items"]:
@@ -75,7 +81,7 @@ if __name__ == "__main__":
     try:
         f2 = open("europeana_search.json", "r")
         search_results = json.load(f)
-    except IOError:
+    except Exception:
         search_results = robot.searchEuropeana("România", filterLMI, "id")
         f2 = open("europeana_search.json", "w+")
         json.dump(search_results, f2, indent=2)
