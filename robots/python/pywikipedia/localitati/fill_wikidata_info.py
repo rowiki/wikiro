@@ -20,6 +20,7 @@ import sirutalib
 sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions as sf
 from wikidata import robot_romania as robot
+import postal_codes
 
 config = {
     'properties': {
@@ -411,6 +412,8 @@ if __name__ == "__main__":
     pywikibot.handle_args()
     user.mylang = 'wikidata'
     user.family = 'wikidata'
+    sirutaDb = sirutalib.SirutaDatabase()
+    postCodes = postal_codes.PostalCodes("codp_B.csv","codp_50k.csv","codp_1k.csv")
     page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
     #page = pywikibot.Page(pywikibot.Site(), "Q193055", ns=0)
     generator = pagegenerators.ReferringPageGenerator(page)
