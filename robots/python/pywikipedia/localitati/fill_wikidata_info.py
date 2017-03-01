@@ -58,13 +58,12 @@ def sortFromName(self, name):
                 replace(u"Î", u"IÎ")
 
 class ItemProcessing:
-    def __init__(self, config, item, siruta=None, always=False):
+    def __init__(self, config, item, always=False):
         self.always = always
         self.config = config
         self.item = item
         item.get()
         self.label = self.extractLabel()
-        self.sirutaDb = siruta# or sirutalib.SirutaDatabase()
 
     def extractLabel(self):
         if 'ro' in self.item.labels:
