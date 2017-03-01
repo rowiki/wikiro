@@ -27,7 +27,7 @@ class PostalCodes(object):
 
 	def __init__(self, bucharest_file, big_file, small_file):
 		with open(bucharest_file, 'r') as f:
-			key = u"179132"
+			key = 19660
 			self._dict[key] = [sys.maxint, 0]
 			reader = csv.DictReader(f)
 			for r in reader:
@@ -82,6 +82,7 @@ class PostalCodes(object):
 
 if __name__ == "__main__":
 	p = PostalCodes("codp_B.csv","codp_50k.csv","codp_1k.csv")
+	print p.getFromSIRUTA(19660)
 	print p.getFromSIRUTA(86687)
 	print p.getFromSIRUTA(86696)
 	print p.getFromSIRUTA(160270)
