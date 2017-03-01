@@ -45,7 +45,16 @@ config = {
 }
 
 def sortFromName(self, name):
-    return name.replace(u"ș", u"sș").replace(u"ț", u"tț").replace(u"Ș", u"SȘ").replace(u"Ț", u"TȚ").replace(u"ă", u"aă").replace(u"Ă", u"AĂ").replace(u"â", u"aâ").replace(u"Â", u"AÂ").replace(u"î", u"iî").replace(u"Î", u"IÎ")
+    return name.replace(u"ș", u"sș").\
+                replace(u"ț", u"tț").\
+                replace(u"Ș", u"SȘ").\
+                replace(u"Ț", u"TȚ").\
+                replace(u"ă", u"aă").\
+                replace(u"Ă", u"AĂ").\
+                replace(u"â", u"aâ").\
+                replace(u"Â", u"AÂ").\
+                replace(u"î", u"iî").\
+                replace(u"Î", u"IÎ")
 
 class ItemProcessing:
     def __init__(self, config, item, siruta=None, always=False):
