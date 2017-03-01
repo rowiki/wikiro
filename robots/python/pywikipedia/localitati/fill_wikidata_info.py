@@ -71,6 +71,8 @@ class ItemProcessing:
             return self.item.labels['ro']
         if 'en' in self.item.labels:
             return self.item.labels['en']
+        if 'fr' in self.item.labels:
+            return self.item.labels['fr']
 
     def userConfirm(self, question):
         """Obtain user response."""
