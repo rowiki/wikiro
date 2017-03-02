@@ -57,13 +57,12 @@ def sortFromName(self, name):
                 replace(u"î", u"iî").\
                 replace(u"Î", u"IÎ")
 
+
 class ItemProcessing:
-    def __init__(self, config, item, always=False):
-        self.always = always
+    def __init__(self, config, always=False, item=None):
         self.config = config
-        self.item = item
-        item.get()
-        self.label = self.extractLabel()
+        self.always = always
+        self.setItem(item)
 
     def extractLabel(self):
         if 'ro' in self.item.labels:
@@ -72,6 +71,13 @@ class ItemProcessing:
             return self.item.labels['en']
         if 'fr' in self.item.labels:
             return self.item.labels['fr']
+
+    def setItem(self, item):
+        self.item = item
+        if not item:
+            return
+        self.item.get()
+        self.label = self.extractLabel()
 
     def userConfirm(self, question):
         """Obtain user response."""
@@ -301,7 +307,7 @@ class ItemProcessing:
         subdivisions = self.sirutaDb.get_inf_codes(sirutaWD)
         subdivisionsWD = self.getClaim(field)
         for s in (subdivisionsWD or []):
-            i = ItemProcessing(self.config, s)
+            i = ItemProcessing(self.config, item=s)
             subsiruta = int(i.getUniqueClaim(u"SIRUTA"))
             subdivisions.remove(subsiruta)
         for s in subdivisions:
