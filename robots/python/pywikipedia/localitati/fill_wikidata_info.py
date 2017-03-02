@@ -499,5 +499,13 @@ if __name__ == "__main__":
     generator = pagegenerators.ReferringPageGenerator(page)
     bot = robot.WikidataBot(site=True, generator = generator)
 
-    bot.workers.append(CityData(config))
+    bot.workers.append(CountyProcessing(config))
+    bot.workers.append(PostCodeProcessing(config, siruta=sirutaDb, postCode=postCodes))
+    bot.workers.append(URLProcessing(config))
+    bot.workers.append(ImageProcessing(config))
+    bot.workers.append(CommonsProcessing(config))
+    bot.workers.append(SIRUTAProcessing(config, siruta=sirutaDb))
+    bot.workers.append(RelationsProcessing(config, siruta=sirutaDb))
+    bot.workers.append(TimezoneProcessing(config))
+
     bot.run()
