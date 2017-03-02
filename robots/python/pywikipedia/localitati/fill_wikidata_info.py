@@ -166,7 +166,7 @@ class ItemProcessing:
                 pywikibot.error(u"%s does not have a %s claim" % (self.label, name))
             return None
         elif len(self.item.claims[sProp]) > 1:
-            pywikibot.error(u"%s has several %s claims" % (self.label, name))
+            pywikibot.error(u"%s has several '%s' claims" % (self.label, name))
             return None
         return self.item.claims[sProp][0].getTarget()
 
