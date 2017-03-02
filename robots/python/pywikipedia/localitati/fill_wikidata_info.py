@@ -321,11 +321,12 @@ class PostCodeProcessing(ItemProcessing, CityData):
     def addPostalCode(self):
         sirutaWD = self.getUniqueClaim(u"SIRUTA")
         codpWD = self.getUniqueClaim(u"codp", canBeNull=True)
+        codpWP = self.getInfoboxElement(self.item, element=u"codpoștal")
         codp = self.sirutaDb.get_postal_code(int(sirutaWD))
         if not codp:
-            if not cp:
+            if not codpWP:
                 return
-            codp = cp
+            codp = codpWP
         if codpWD and unicode(codp) != codpWD:
             pywikibot.error("Mismatch for postal code: SIRUTA has %s, WD has %s" % (codp, codpWD))
         if not codpWD:
