@@ -153,12 +153,6 @@ class ItemProcessing:
     def isCity(self):
         return self.isOfType(u"Q16858213")
 
-    def createCommonsProperty(self, siruta):
-        if self.isCounty() and self.label != u"București":
-             self.updateProperty(item, u"Commons", {u"Commons": self.item.labels.get('ro') + u" County"})
-        #TODO: search for it first
-        pass
-
     def getUniqueClaim(self, name, canBeNull=False):
         sProp,_,_ = self.config["properties"][name]
         if sProp not in self.item.claims:
@@ -175,6 +169,70 @@ class ItemProcessing:
         if sProp not in self.item.claims:
             return None
         return [self.item.claims[sProp][i].getTarget() for i in range(len(self.item.claims[sProp]))]
+
+    def searchSirutaInWD(self, siruta):
+        query = "SELECT ?item WHERE { ?item wdt:P843 \"%d\" .     SERVICE wikibase:label { bd:serviceParam wikibase:language \"ro\" }}" % siruta
+        query_object = sparql.SparqlQuery()
+        data = query_object.get_items(query, result_type=list)
+        if len(data) != 1:
+            pywikibot.error("There are %d items with siruta %d" % (len(data), siruta))
+            return
+        return data[0]
+
+
+class CityData(robot.WorkItem):
+    _dataType = u"city"
+
+    def getWikiArticle(self, item):
+        try:
+            rp = item.getSitelink("rowiki")
+            rp = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), rp)
+            if rp.isRedirectPage():
+                rp = rp.getRedirectTarget()
+            return rp
+        except Exception as e:
+            print(e)
+            return None
+
+    def getInfoboxContent(self, item, name=u'(Infocaseta Așezare|Cutie Sate|Casetă comune România)'):
+        text = self.getWikiArticle(item).get()
+        tl = sf.extractTemplate(text, name)
+        if tl:
+            tl = sf.tl2Dict(tl)[0]
+        return tl
+
+    def getInfoboxElement(self, item, element=None, name=u'(Infocaseta Așezare|Cutie Sate|Casetă comune România)'):
+        elem = None
+        tl = self.getInfoboxContent(item, name)
+        if tl:
+            elem = tl.get(element)
+            if elem:
+                elem = elem.strip()
+        return elem
+
+    def doWork(self, page, item):
+        raise NotImplementedError()
+
+    def invalidArea(self, item):
+        pywikibot.output(u"Country not set, setting...")
+        i = ItemProcessing(config, item=item)
+        i.updateProperty(u"Țară", {u"Țară": u"România"})
+        self.always = i.always # remember the choice
+
+    def description(self):
+        return u"Updating %s data on Wikidata" % self._dataType
+
+
+class CommonsProcessing(ItemProcessing, CityData):
+    def __init__(self, config, always=False):
+        super(CommonsProcessing, self).__init__(config, always)
+        self._dataType = u"Commons"
+
+    def createCommonsProperty(self, siruta):
+        if self.isCounty() and self.label != u"București":
+             self.updateProperty(item, u"Commons", {u"Commons": self.item.labels.get('ro') + u" County"})
+        #TODO: search for it first
+        pass
 
     def updateCommons(self):
         cProp, cPref, cDatatype = self.config["properties"][u"Commons"]
@@ -207,6 +265,16 @@ class ItemProcessing:
             if answer:
                 page.put(newText, u"Adding SIRUTA code")
 
+    def doWork(self, page, item):
+        self.setItem(item)
+        self.updateCommons()
+
+
+class CountyProcessing(ItemProcessing, CityData):
+    def __init__(self, config, always=False):
+        super(CountyProcessing, self).__init__(config, always)
+        self._dataType = u"county"
+
     def createCountySubcategories(self):
         if self.label == u"București":
             return
@@ -235,7 +303,22 @@ class ItemProcessing:
         if prop not in self.item.claims:
             pywikibot.error("County %s does not have an ISO 3166-2 code" % self.item.labels.get('ro'))
 
-    def addPostalCode(self, cp=None):
+    def doWork(self, page, item):
+        self.setItem(item)
+        if not self.isCounty():
+            return
+        #self.createCountySubcategories()
+        self.checkISOCodes()
+
+
+class PostCodeProcessing(ItemProcessing, CityData):
+    def __init__(self, config, siruta=None, postCode=None, always=False):
+        super(PostCodeProcessing, self).__init__(config, always)
+        self._dataType = u"post code"
+        self.sirutaDb = siruta
+        self.postCodesDb = postCode
+
+    def addPostalCode(self):
         sirutaWD = self.getUniqueClaim(u"SIRUTA")
         codpWD = self.getUniqueClaim(u"codp", canBeNull=True)
         codp = self.sirutaDb.get_postal_code(int(sirutaWD))
@@ -247,25 +330,47 @@ class ItemProcessing:
             pywikibot.error("Mismatch for postal code: SIRUTA has %s, WD has %s" % (codp, codpWD))
         if not codpWD:
             self.updateProperty(u"codp", {u"codp": unicode(codp)})
-    
+
+    def doWork(self, page, item):
+        self.setItem(item)
+        self.addPostalCode()
+
+class URLProcessing(ItemProcessing, CityData):
+    def __init__(self, config, always=False):
+        super(URLProcessing, self).__init__(config, always)
+        self._dataType = u"URL"
+
     def addSite(self, _url=None, _type=u"site"):
         if not _url:
             return
         self.updateProperty(_type, {_type: _url})
+
+    def doWork(self, page, item):
+        self.setItem(item)
+        self.addSite(self.getInfoboxElement(item, element=u"sit-adresă"))
+        self.addSite(self.getInfoboxElement(item, element=u"website"))
+
+
+class ImageProcessing(ItemProcessing, CityData):
+    def __init__(self, config, always=False):
+        super(ImageProcessing, self).__init__(config, always)
+        self._dataType = u"image"
 
     def addImage(self, _img=None, _type=u"imagine"):
         if not _img:
             return
         self.updateProperty(_type, {_type: _img})
 
-    def searchSirutaInWD(self, siruta):
-        query = "SELECT ?item WHERE { ?item wdt:P843 \"%d\" .     SERVICE wikibase:label { bd:serviceParam wikibase:language \"ro\" }}" % siruta
-        query_object = sparql.SparqlQuery()
-        data = query_object.get_items(query, result_type=list)
-        if len(data) != 1:
-            pywikibot.error("There are %d items with siruta %d" % (len(data), siruta))
-            return
-        return data[0]
+    def doWork(self, page, item):
+        self.setItem(item)
+        self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
+        self.addImage(self.getInfoboxElement(item, element=u"hartă"), _type=u"hartă")
+
+class SIRUTAProcessing(ItemProcessing, CityData):
+    def __init__(self, config, siruta=None, always=False):
+        super(SIRUTAProcessing, self).__init__(config, always)
+        self._dataType = u"SIRUTA"
+        self.sirutaDb = siruta
 
     def addSirutaSup(self):
         sirutaWD = int(self.getUniqueClaim(u"SIRUTA"))
@@ -277,6 +382,17 @@ class ItemProcessing:
             return
         if not sirutasupWD:
             self.updateProperty(u"SIRUTASUP", {u"SIRUTASUP": data})
+
+    def doWork(self, page, item):
+        self.setItem(item)
+        self.addSirutaSup()
+
+
+class RelationsProcessing(ItemProcessing, CityData):
+    def __init__(self, config, siruta=None, always=False):
+        super(RelationsProcessing, self).__init__(config, always)
+        self._dataType = u"relations"
+        self.sirutaDb = siruta
 
     def addType(self):
         village_type = {
@@ -320,6 +436,37 @@ class ItemProcessing:
     def addCitySubdivisions(self):
         self.addSubdivisions(u"localități componente")
 
+    def addCapital(self):
+        sirutaWD = int(self.getUniqueClaim(u"SIRUTA"))
+        type = self.sirutaDb.get_type(sirutaWD)
+        if type not in [1, 5, 9, 17, 22]:
+            return
+
+        sirutasup = self.sirutaDb.get_sup_code(sirutaWD)
+        data = self.searchSirutaInWD(sirutasup)
+        sirutasupWD = self.getUniqueClaim(u"reședință pentru")
+        if sirutasupWD and data != sirutasupWD.title():
+            pywikibot.error(u"Mismatch for \"reședință pentru\": SIRUTA has %s, WD has %s" % (data, sirutasupWD.title()))
+            return
+        if not sirutasupWD:
+            self.updateProperty(u"reședință pentru", {u"reședință pentru": data})
+
+    def doWork(self, page, item):
+        self.setItem(item)
+        self.addCapital()
+        self.addType()
+
+        if self.isCounty():
+            self.addCountySubdivisions()
+        else:
+            self.addCitySubdivisions()
+
+
+class TimezoneProcessing(ItemProcessing, CityData):
+    def __init__(self, config, always=False):
+        super(TimezoneProcessing, self).__init__(config, always)
+        self._dataType = u"timezone"
+
     def addTimezone(self):
         prop, pref, datatype = self.config["properties"][u"fus orar"]
         if prop in self.item.claims:
@@ -337,83 +484,9 @@ class ItemProcessing:
                 date.setTarget(t)
                 claim.addQualifier(date)
 
-    def addCapital(self):
-        sirutaWD = int(self.getUniqueClaim(u"SIRUTA"))
-        type = self.sirutaDb.get_type(sirutaWD)
-        if type not in [1, 5, 9, 17, 22]:
-            return
-
-        sirutasup = self.sirutaDb.get_sup_code(sirutaWD)
-        data = self.searchSirutaInWD(sirutasup)
-        sirutasupWD = self.getUniqueClaim(u"reședință pentru")
-        if sirutasupWD and data != sirutasupWD.title():
-            pywikibot.error(u"Mismatch for \"reședință pentru\": SIRUTA has %s, WD has %s" % (data, sirutasupWD.title()))
-            return
-        if not sirutasupWD:
-            self.updateProperty(u"reședință pentru", {u"reședință pentru": data})
-
-
-class CityData(robot.WorkItem):
-    def __init__(self, config):
-        self.db = {}
-        self.always = False
-        self.config = config
-        self.sirutaDb = sirutalib.SirutaDatabase()
-
     def doWork(self, page, item):
-        try:
-            rp = item.getSitelink("rowiki")
-            rp = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), rp)
-            if rp.isRedirectPage():
-                rp = rp.getRedirectTarget()
-            text = rp.get()
-            tl = sf.extractTemplate(text, u'(Infocaseta Așezare|Cutie Sate|Casetă comune România)')
-            i = ItemProcessing(self.config, item, self.sirutaDb, always=self.always)
-            if tl:
-                tl = sf.tl2Dict(tl)[0]
-                #print tl
-                if u'imagine' in tl:
-                    print u'imagine'
-                    i.addImage(tl[u'imagine'].strip())
-                if u'codpoștal' in tl:
-                    print u'codp'
-                    i.addPostalCode(tl[u'codpoștal'].strip())
-                if u'hartă' in tl:
-                    print u'hartă'
-                    i.addImage(tl[u'hartă'].strip(), _type=u"hartă")
-                if u'sit-adresă' in tl:
-                    print u'sit'
-                    i.addSite(tl[u'sit-adresă'].strip())
-                if u'website' in tl:
-                    print u'website'
-                    i.addSite(tl[u'website'].strip())
-            #if i.isCounty():
-            #    i.createCountySubcategories()
-            #    i.checkISOCodes()
-            #    i.addCountySubdivisions()
-            #else:
-            #    i.addCitySubdivisions()
-            #i.addPostalCode()
-            #i.addSirutaSup()
-            #i.updateCommons()
-            #i.addType()
-            #i.addTimezone()
-            #i.addCapital()
-            self.always = i.always #remember the choice
-        except Exception as e:
-            pywikibot.output(e)
-            import traceback
-            traceback.print_exc()
-            pywikibot.output(u"Failed to update city data to Wikidata, skipping...")
-
-    def invalidArea(self, item):
-        pywikibot.output(u"Country not set, setting...")
-        i = ItemProcessing(self.config, item, self.sirutaDb, always=self.always)
-        i.updateProperty(u"Țară", {u"Țară": u"România"})
-        self.always = i.always # remember the choice
-        
-    def description(self):
-        return u"Updating city data on Wikidata"
+        self.setItem(item)
+        self.addTimezone()
 
 if __name__ == "__main__":
     pywikibot.handle_args()
