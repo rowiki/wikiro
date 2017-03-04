@@ -328,12 +328,12 @@ def linkedImages(page):
     @param thistxt: the wikitext of the page
     @return: a list of Page objects.
     """
-    
+
     Rlink = re.compile(r'\[\[(?P<title>[^\]\|\[]*)(\|[^\]]*)?\]\]')
     result = []
     try:
         thistxt = textlib.removeLanguageLinks(page.get(get_redirect=True),
-                                      page.site)
+                                              page.site)
     except pywikibot.NoPage:
         raise
     except pywikibot.IsRedirectPage:
@@ -347,16 +347,16 @@ def linkedImages(page):
     thistxt = textlib.removeDisabledParts(thistxt)
 
     # resolve {{ns:-1}} or {{ns:Help}}
-    #thistxt = page.site.resolvemagicwords(thistxt)
+    # thistxt = page.site.resolvemagicwords(thistxt)
 
     for match in Rlink.finditer(thistxt):
-	#print match.group(0)
+        # print match.group(0)
         title = match.group('title')
         title = title.replace("_", " ").strip(" ")
-	#print title
-	if title == u"":
-		# empty link - problem in the page
-		continue
+        # print title
+        if title == u"":
+            # empty link - problem in the page
+            continue
         # convert relative link to absolute link
         if title.startswith(".."):
             parts = self.title().split('/')
@@ -373,7 +373,7 @@ def linkedImages(page):
                 hash(str(page2))
             except Exception:
                 pywikibot.output(u"Page %s contains invalid link to [[%s]]."
-                        % (page.title(), title))
+                                 % (page.title(), title))
                 continue
             if not page2.isImage():
                 continue
@@ -382,10 +382,6 @@ def linkedImages(page):
     return result
 
 # --------------- CSV functions -------------------
-def unicode_csv_reader(utf8_data, dialect=csv.excel, **kwargs):
-    csv_reader = csv.reader(utf8_data, dialect=dialect, **kwargs)
-    for row in csv_reader:
-        yield [unicode(cell, 'utf-8') for cell in row]
 
 if __name__ == "__main__":
     print extractTemplate("{{Sema_2|a=b<ref>{{citat|}}</ref>|e=f}}", "Sema 2")
@@ -397,5 +393,5 @@ if __name__ == "__main__":
     print tl2Dict("{{Sema4|a={{#if:citat|c|d}}}}")
     pywikibot.output(convertUrlToWikilink(u"//ro.wikipedia.org/w/index.php?title=Lista_monumentelor_istorice_din_jude%C8%9Bul_Alba&oldid=10256783"))
     pywikibot.output(convertUrlToWikilink(u"//ro.wikipedia.org/wiki/Lista_monumentelor_istorice_din_jude%C8%9Bul_Alba"))
-    
-    #print textlib.extract_templates_and_params("{{Sema2|a={{citat|c=d|c1=d1}}|e=f}}")
+
+    # print textlib.extract_templates_and_params("{{Sema2|a={{citat|c=d|c1=d1}}|e=f}}")
