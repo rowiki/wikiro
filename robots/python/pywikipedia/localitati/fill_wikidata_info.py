@@ -2,18 +2,16 @@
 # -:- coding: utf8 -:-
 
 #
-# (C) Strainu 2016
+# (C) Strainu 2016-2017
 #
 # Distributed under the terms of the MIT license.
 #
 import pywikibot
-from pywikibot import i18n, config, pagegenerators, textlib, weblib
+from pywikibot import pagegenerators
 from pywikibot.data import sparql
 from pywikibot import config as user
 
 import sys
-import csv
-import json
 
 import sirutalib
 
@@ -24,38 +22,39 @@ import postal_codes
 
 config = {
     'properties': {
-            u'Denumire': ('', None, 'label'),
-            u'Coord': ('P625', False, 'globe-coordinate'),
-            u'imagine': ('P18', True, 'commonsMedia'),
-            u'hartă': ('P242', False, 'commonsMedia'),
-            u'Țară': ('P17', False, 'wikibase-item'),
-            u'Commons': ('P373', False, 'string'),
-            u'SIRUTA': ('P843', False, 'string'),
-            u'este un/o': ('P31', False, 'wikibase-item'),
-            u'subdiviziuni': ('P150', False, 'wikibase-item'),
-            u'localități componente': ('P1383', False, 'wikibase-item'),
-            u'fus orar': ('P421', False, 'wikibase-item'),
-            u'primar': ('P6', False, 'wikibase-item'),
-            u'codp': ('P281', False, 'string'),
-            u'SIRUTASUP': ('P131', False, 'wikibase-item'),
-            u'ISO3166-2': ('P300', False, 'string'),
-            u'populație': ('P1082', False, 'quantity'),
-            u'reședință pentru': ('P1376', False, 'wikibase-item'),
-            u'site': ('P856', False, 'url'),
-            }
+        u'Denumire': ('', None, 'label'),
+        u'Coord': ('P625', False, 'globe-coordinate'),
+        u'imagine': ('P18', True, 'commonsMedia'),
+        u'hartă': ('P242', False, 'commonsMedia'),
+        u'Țară': ('P17', False, 'wikibase-item'),
+        u'Commons': ('P373', False, 'string'),
+        u'SIRUTA': ('P843', False, 'string'),
+        u'este un/o': ('P31', False, 'wikibase-item'),
+        u'subdiviziuni': ('P150', False, 'wikibase-item'),
+        u'localități componente': ('P1383', False, 'wikibase-item'),
+        u'fus orar': ('P421', False, 'wikibase-item'),
+        u'primar': ('P6', False, 'wikibase-item'),
+        u'codp': ('P281', True, 'string'),
+        u'SIRUTASUP': ('P131', False, 'wikibase-item'),
+        u'ISO3166-2': ('P300', False, 'string'),
+        u'populație': ('P1082', False, 'quantity'),
+        u'reședință pentru': ('P1376', False, 'wikibase-item'),
+        u'site': ('P856', False, 'url'),
+    }
 }
+
 
 def sortFromName(self, name):
     return name.replace(u"ș", u"sș").\
-                replace(u"ț", u"tț").\
-                replace(u"Ș", u"SȘ").\
-                replace(u"Ț", u"TȚ").\
-                replace(u"ă", u"aă").\
-                replace(u"Ă", u"AĂ").\
-                replace(u"â", u"aâ").\
-                replace(u"Â", u"AÂ").\
-                replace(u"î", u"iî").\
-                replace(u"Î", u"IÎ")
+        replace(u"ț", u"tț").\
+        replace(u"Ș", u"SȘ").\
+        replace(u"Ț", u"TȚ").\
+        replace(u"ă", u"aă").\
+        replace(u"Ă", u"AĂ").\
+        replace(u"â", u"aâ").\
+        replace(u"Â", u"AÂ").\
+        replace(u"î", u"iî").\
+        replace(u"Î", u"IÎ")
 
 
 class ItemProcessing:
@@ -100,38 +99,45 @@ class ItemProcessing:
 
     def updateProperty(self, key, data, force=False):
         try:
+            answer = False
             prop, pref, datatype = self.config["properties"][key]
-            if prop in self.item.claims and not force:
-                #don't bother about those yet
-                pywikibot.output(u"Wikidata already has %s: %s" % (key, self.item.claims[prop][0].getTarget()))
-                pass
-            else:
-                if datatype == 'wikibase-item':
-                    val = pywikibot.ItemPage(pywikibot.Site(), data[key])
-                    desc = val.title()
-                elif datatype == 'globe-coordinate':
-                    val = pywikibot.Coordinate(lat=float(data[key][0]),
-                                         lon=float(data[key][1]),
-                                         globe='earth',
-                                         precision=0.001
-                                         )
-                    desc = data[key]
-                elif datatype == 'commonsMedia':
-                    val = pywikibot.FilePage(pywikibot.Site('commons', 'commons'), u"File:" + sf.stripNamespace(data[key]))
-                    while val.isRedirectPage():
-                        val = val.getRedirectTarget()
-                    desc = val.title()
-                    if not val.exists():
-                        raise ValueError("Local image given")
+            if prop in self.item.claims:
+                # don't bother about those yet
+                oldValue = self.item.claims[prop][0]
+                if not force:
+                    pywikibot.output(u"Wikidata already has %s: %s" % (key, oldValue.getTarget()))
+                    return
                 else:
-                    val = desc = data[key]
-                claim = pywikibot.Claim(self.item.repo, prop, datatype=datatype)
-                claim.setTarget(val)
-                answer = self.userConfirm("Update element %s with %s \"%s\"?" % (self.label, key, desc))
-                if answer:
-                    self.item.addClaim(claim)
-                    if pref:
-                        claim.changeRank('preferred')
+                    answer = self.userConfirm("Update element %s with %s '%s' (old value '%s')?" % (self.label, key, data[key], oldValue.getTarget()))
+                    if not answer:
+                        return
+                    self.item.removeClaims(self.item.claims[prop][0])
+            if datatype == 'wikibase-item':
+                val = pywikibot.ItemPage(pywikibot.Site(), data[key])
+                desc = val.title()
+            elif datatype == 'globe-coordinate':
+                val = pywikibot.Coordinate(lat=float(data[key][0]),
+                                           lon=float(data[key][1]),
+                                           globe='earth',
+                                           precision=0.001)
+                desc = data[key]
+            elif datatype == 'commonsMedia':
+                val = pywikibot.FilePage(pywikibot.Site('commons', 'commons'),
+                                         u"File:" + sf.stripNamespace(data[key]))
+                while val.isRedirectPage():
+                    val = val.getRedirectTarget()
+                desc = val.title()
+                if not val.exists():
+                    raise ValueError("Local image given")
+            else:
+                val = desc = data[key]
+            claim = pywikibot.Claim(self.item.repo, prop, datatype=datatype)
+            claim.setTarget(val)
+            answer = answer or self.userConfirm("Update element %s with %s '%s'?" % (self.label, key, desc))
+            if answer:
+                self.item.addClaim(claim)
+                if pref:
+                    claim.changeRank('preferred')
         except Exception as e:
             pywikibot.output(e)
             import traceback
@@ -154,7 +160,7 @@ class ItemProcessing:
         return self.isOfType(u"Q16858213")
 
     def getUniqueClaim(self, name, canBeNull=False):
-        sProp,_,_ = self.config["properties"][name]
+        sProp, _, _ = self.config["properties"][name]
         if sProp not in self.item.claims:
             if not canBeNull:
                 pywikibot.error(u"%s does not have a %s claim" % (self.label, name))
@@ -165,7 +171,7 @@ class ItemProcessing:
         return self.item.claims[sProp][0].getTarget()
 
     def getClaim(self, name):
-        sProp,_,_ = self.config["properties"][name]
+        sProp, _, _ = self.config["properties"][name]
         if sProp not in self.item.claims:
             return None
         return [self.item.claims[sProp][i].getTarget() for i in range(len(self.item.claims[sProp]))]
@@ -194,14 +200,16 @@ class CityData(robot.WorkItem):
             print(e)
             return None
 
-    def getInfoboxContent(self, item, name=u'(Infocaseta Așezare|Cutie Sate|Casetă comune România)'):
+    def getInfoboxContent(self, item,
+                          name=u'(Infocaseta Așezare|Cutie Sate|Casetă comune România)'):
         text = self.getWikiArticle(item).get()
         tl = sf.extractTemplate(text, name)
         if tl:
             tl = sf.tl2Dict(tl)[0]
         return tl
 
-    def getInfoboxElement(self, item, element=None, name=u'(Infocaseta Așezare|Cutie Sate|Casetă comune România)'):
+    def getInfoboxElement(self, item, element=None,
+                          name=u'(Infocaseta Așezare|Cutie Sate|Casetă comune România)'):
         elem = None
         tl = self.getInfoboxContent(item, name)
         if tl:
@@ -217,7 +225,7 @@ class CityData(robot.WorkItem):
         pywikibot.output(u"Country not set, setting...")
         i = ItemProcessing(config, item=item)
         i.updateProperty(u"Țară", {u"Țară": u"România"})
-        self.always = i.always # remember the choice
+        self.always = i.always   # remember the choice
 
     def description(self):
         return u"Updating %s data on Wikidata" % self._dataType
@@ -230,8 +238,9 @@ class CommonsProcessing(ItemProcessing, CityData):
 
     def createCommonsProperty(self, siruta):
         if self.isCounty() and self.label != u"București":
-             self.updateProperty(item, u"Commons", {u"Commons": self.item.labels.get('ro') + u" County"})
-        #TODO: search for it first
+            self.updateProperty(self.item, u"Commons",
+                                {u"Commons": self.item.labels.get('ro') + u" County"})
+        # TODO: search for it first
         pass
 
     def updateCommons(self):
@@ -261,7 +270,7 @@ class CommonsProcessing(ItemProcessing, CityData):
             text = page.get()
             newText = u"{{%s|%s}}\n%s" % (sirutaTl.title(withNamespace=False), siruta, text)
             pywikibot.showDiff(text, newText)
-            answer = self.userConfirm("Add SIRUTA code \"%s\" to the category %s?" % (siruta, page.title()))
+            answer = self.userConfirm("Add SIRUTA code '%s' to category '%s'?" % (siruta, page.title()))
             if answer:
                 page.put(newText, u"Adding SIRUTA code")
 
@@ -279,9 +288,9 @@ class CountyProcessing(ItemProcessing, CityData):
         if self.label == u"București":
             return
         cats = {
-            u"Administrative divisions of %s County": [u"Category:Administrative divisions of Romania by county", ], 
-            u"Cities and towns in %s County": [u"Category:Cities in Romania by county"], 
-            u"Communes in %s County": [u"Category:Communes in Romania"], 
+            u"Administrative divisions of %s County": [u"Category:Administrative divisions of Romania by county", ],
+            u"Cities and towns in %s County": [u"Category:Cities in Romania by county"],
+            u"Communes in %s County": [u"Category:Communes in Romania"],
             u"Villages in %s County": [u"Category:Villages in Romania by county"],
         }
         for template in cats:
@@ -299,15 +308,15 @@ class CountyProcessing(ItemProcessing, CityData):
                 page.put(text, u"Creating new subcategory for a Romanian County")
 
     def checkISOCodes(self):
-        prop,_,_ = self.config['properties'].get(u"ISO3166-2")
+        prop, _, _ = self.config['properties'].get(u"ISO3166-2")
         if prop not in self.item.claims:
-            pywikibot.error("County %s does not have an ISO 3166-2 code" % self.item.labels.get('ro'))
+            pywikibot.error("County %s does not have an ISO 3166-2 code" % self.label)
 
     def doWork(self, page, item):
         self.setItem(item)
         if not self.isCounty():
             return
-        #self.createCountySubcategories()
+        # self.createCountySubcategories()
         self.checkISOCodes()
 
 
@@ -321,20 +330,23 @@ class PostCodeProcessing(ItemProcessing, CityData):
     def addPostalCode(self):
         sirutaWD = self.getUniqueClaim(u"SIRUTA")
         codpWD = self.getUniqueClaim(u"codp", canBeNull=True)
-        codpWP = self.getInfoboxElement(self.item, element=u"codpoștal")
-        codp = self.sirutaDb.get_postal_code(int(sirutaWD))
-        if not codp:
-            if not codpWP:
-                return
-            codp = codpWP
-        if codpWD and unicode(codp) != codpWD:
-            pywikibot.error("Mismatch for postal code: SIRUTA has %s, WD has %s" % (codp, codpWD))
+        # codpWP = self.getInfoboxElement(self.item, element=u"codpoștal")
+        # codp = self.sirutaDb.get_postal_code(int(sirutaWD))
+        print sirutaWD
+        codpPost = self.postCodesDb.getFromSIRUTA(int(sirutaWD))
+        print ('wd', codpWD)
+        print ('post', codpPost)
+        if not codpPost:
+            return
+        if codpWD and codpPost != codpWD:
+            self.updateProperty(u"codp", {u"codp": unicode(codpPost)}, force=True)
         if not codpWD:
-            self.updateProperty(u"codp", {u"codp": unicode(codp)})
+            self.updateProperty(u"codp", {u"codp": unicode(codpPost)})
 
     def doWork(self, page, item):
         self.setItem(item)
         self.addPostalCode()
+
 
 class URLProcessing(ItemProcessing, CityData):
     def __init__(self, config, always=False):
@@ -367,6 +379,7 @@ class ImageProcessing(ItemProcessing, CityData):
         self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
         self.addImage(self.getInfoboxElement(item, element=u"hartă"), _type=u"hartă")
 
+
 class SIRUTAProcessing(ItemProcessing, CityData):
     def __init__(self, config, siruta=None, always=False):
         super(SIRUTAProcessing, self).__init__(config, always)
@@ -397,13 +410,13 @@ class RelationsProcessing(ItemProcessing, CityData):
 
     def addType(self):
         village_type = {
-            1:  u'Q640364',
-            2:  u'Q834101',
-            3:  u'Q659103',
-            4:  u'Q640364',
-            5:  u'Q834101',
-            6:  u'Q15921300',
-            9:  u'Q15921247',
+            1: u'Q640364',
+            2: u'Q834101',
+            3: u'Q659103',
+            4: u'Q640364',
+            5: u'Q834101',
+            6: u'Q15921300',
+            9: u'Q15921247',
             10: u'Q15921247',
             11: u'Q532',
             17: u'Q15921247',
@@ -447,7 +460,7 @@ class RelationsProcessing(ItemProcessing, CityData):
         data = self.searchSirutaInWD(sirutasup)
         sirutasupWD = self.getUniqueClaim(u"reședință pentru")
         if sirutasupWD and data != sirutasupWD.title():
-            pywikibot.error(u"Mismatch for \"reședință pentru\": SIRUTA has %s, WD has %s" % (data, sirutasupWD.title()))
+            pywikibot.error(u"Mismatch for 'reședință pentru': SIRUTA has %s, WD has %s" % (data, sirutasupWD.title()))
             return
         if not sirutasupWD:
             self.updateProperty(u"reședință pentru", {u"reședință pentru": data})
@@ -471,13 +484,13 @@ class TimezoneProcessing(ItemProcessing, CityData):
     def addTimezone(self):
         prop, pref, datatype = self.config["properties"][u"fus orar"]
         if prop in self.item.claims:
-             return
+            return
         for timezone, time in [("Q6723", "Q1777301"), ("Q6760", "Q36669")]:
             tz = pywikibot.ItemPage(pywikibot.Site(), timezone)
             tzdesc = tz.title()
             claim = pywikibot.Claim(self.item.repo, prop, datatype=datatype)
             claim.setTarget(tz)
-            answer = self.userConfirm("Update element %s with %s \"%s\"?" % (self.label, u"fus orar", tzdesc))
+            answer = self.userConfirm("Update element %s with %s '%s'?" % (self.label, u"fus orar", tzdesc))
             if answer:
                 self.item.addClaim(claim)
                 t = pywikibot.ItemPage(pywikibot.Site(), time)
@@ -494,19 +507,19 @@ if __name__ == "__main__":
     user.mylang = 'wikidata'
     user.family = 'wikidata'
     sirutaDb = sirutalib.SirutaDatabase()
-    postCodes = postal_codes.PostalCodes("codp_B.csv","codp_50k.csv","codp_1k.csv")
+    postCodes = postal_codes.PostalCodes("codp_B.csv", "codp_50k.csv", "codp_1k.csv")
     page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
-    #page = pywikibot.Page(pywikibot.Site(), "Q193055", ns=0)
+    # page = pywikibot.Page(pywikibot.Site(), "Q193055", ns=0)
     generator = pagegenerators.ReferringPageGenerator(page)
-    bot = robot.WikidataBot(site=True, generator = generator)
+    bot = robot.WikidataBot(site=True, generator=generator)
 
-    bot.workers.append(CountyProcessing(config))
+    # bot.workers.append(CountyProcessing(config))
     bot.workers.append(PostCodeProcessing(config, siruta=sirutaDb, postCode=postCodes))
-    bot.workers.append(URLProcessing(config))
-    bot.workers.append(ImageProcessing(config))
-    bot.workers.append(CommonsProcessing(config))
-    bot.workers.append(SIRUTAProcessing(config, siruta=sirutaDb))
-    bot.workers.append(RelationsProcessing(config, siruta=sirutaDb))
-    bot.workers.append(TimezoneProcessing(config))
+    # bot.workers.append(URLProcessing(config))
+    # bot.workers.append(ImageProcessing(config))
+    # bot.workers.append(CommonsProcessing(config))
+    # bot.workers.append(SIRUTAProcessing(config, siruta=sirutaDb))
+    # bot.workers.append(RelationsProcessing(config, siruta=sirutaDb))
+    # bot.workers.append(TimezoneProcessing(config))
 
     bot.run()
