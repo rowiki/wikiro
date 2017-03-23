@@ -1063,23 +1063,26 @@ if (u.match(/webcitation.org/)) {
             if (zcomMeta[metaIdx].getAttribute('property') === 'og:site_name') {
                 var W_Newspaper = zcomMeta[metaIdx].getAttribute('content');
             }
-            if (zcomMeta[metaIdx].getAttribute('property') === 'date') {
+            if (zcomMeta[metaIdx].getAttribute('name') === 'date') {
                 var W_Date = convertISO8601Date(zcomMeta[metaIdx].getAttribute('content'));
             }
         }
 
         var fullArticleDiv = document.getElementById('interior_left');
         var authorHeaders = fullArticleDiv.getElementsByClassName('fleft');
-        if (authorHeaders && authorHeaders.length > 0) {
-        	var authorSpans = authorHeaders[0].getElementsByTagName('span');
-        	if (authorSpans && authorSpans.length > 0) {
-        		var authorsBs = authorSpans[0].getElementsByTagName('b');
-        		if (authorsBs && authorsBs.length > 0) {
-        			var W_Authors = authorsBs[0].textContent;
-				} else {
-        			var W_Authors = authorSpans[0].textContent;
-				}
-			}
+        if (authorHeaders) {
+        	for (var authorHeadersIdx = 0; authorHeadersIdx < authorHeaders.length; authorHeadersIdx++) {
+                var authorSpans = authorHeaders[authorHeadersIdx].getElementsByTagName('span');
+                if (authorSpans && authorSpans.length > 0) {
+                    var authorsBs = authorSpans[0].getElementsByTagName('b');
+                    if (authorsBs && authorsBs.length > 0) {
+                        var W_Authors = authorsBs[0].textContent;
+                    } else {
+                        var W_Authors = authorSpans[0].textContent;
+                    }
+                    break;
+                }
+            }
 		}
 
 	};
