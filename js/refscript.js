@@ -20,6 +20,14 @@ function filterList(list, func) {
 	}
 	return outlist;
 }
+function convertISO8601Date(isoDate) {
+    var dateRegex = /(\d{4})\-(\d{2})\-(\d{2})T[\d\:\+\-]+/g;
+    var dateMatcher = dateRegex.exec(isoDate);
+    if (dateMatcher) {
+        return [dateMatcher[3], dateMatcher[2], dateMatcher[1]].join('.');
+    }
+	return isoDate;
+}
 function resolveRelativeDay(rawdate) {
     if (rawdate == null) { return null; }
     var articleDate = new Date();
@@ -446,12 +454,7 @@ if (u.match(/webcitation.org/)) {
                 continue;
             }
             if (evzMeta[metaIdx].getAttribute('property') === 'article:published_time') {
-
-                var dateRegex = /(\d{4})\-(\d{2})\-(\d{2})T[\d\:\+\-]+/g;
-                var dateMatcher = dateRegex.exec(evzMeta[metaIdx].getAttribute('content'));
-                if (dateMatcher) {
-                    W_Date = [dateMatcher[3], dateMatcher[2], dateMatcher[1]].join('.');
-                }
+				var W_Date = convertISO8601Date(evzMeta[metaIdx].getAttribute('content'));
                 continue;
             }
             if (evzMeta[metaIdx].getAttribute('property') === 'og:url') {
@@ -710,11 +713,7 @@ if (u.match(/webcitation.org/)) {
 	                tmpDiv.innerHTML = scriptData.headline;
 	                W_Title = tmpDiv.childNodes[0].nodeValue;
 
-                    var dateRegex = /(\d{4})\-(\d{2})\-(\d{2})T/;
-	                var dateMatcher = dateRegex.exec(scriptData.dateCreated);
-	                if (dateMatcher) {
-	                    W_Date = [dateMatcher[3], dateMatcher[2], dateMatcher[1]].join('.');
-	                }
+	                W_Date = convertISO8601Date(scriptData.dateCreated)
 	                continue;
 	            }
 	            if (scriptData && scriptData['@type'] === 'Organization') {
@@ -768,11 +767,7 @@ if (u.match(/webcitation.org/)) {
             var articleMetas = metadataDiv.getElementsByTagName('meta');
             for (var metaIdx = 0; metaIdx < articleMetas.length; metaIdx++) {
                  if (articleMetas[metaIdx].getAttribute('itemprop') === 'datePublished') {
-                    var dateRegex = /(\d{4})\-(\d{2})\-(\d{2})T[\d\:\+\-]+/g;
-                    var dateMatcher = dateRegex.exec(articleMetas[metaIdx].getAttribute('content'));
-                    if (dateMatcher) {
-                        W_Date = [dateMatcher[3], dateMatcher[2], dateMatcher[1]].join('.');
-                    }
+                 	W_Date = convertISO8601Date(articleMetas[metaIdx].getAttribute('content'));
                  }
             }
         }
@@ -1053,27 +1048,40 @@ if (u.match(/webcitation.org/)) {
 		var W_Newspaper = 'Historia';
 	};
 	if (u.match(/ziare.com/)) {
-		var d = d.replace(/<\/div>/g, '<\/div>\n');
-		var d = d.replace(/<\/span>/g, '<\/span>\n');
-		var x = document.title;
-		var W_Title = x.replace(/ \| Ziare.com/, '');
-		var x = d.match(/padding-top:8px;.*/)[0];
-		var x = x.replace(/<.*/, '');
-		var x = x.replace(/.*>/, '');
-		var x = x.replace(/, ora .*/, '');
-		var W_Date = x.replace(/.*,/, '');
-		if (d.match(/Autor:/)) {
-			var x = d.match(/Autor:.*/)[0];
-			var x = x.replace(/.*<span>/, '');
-			var W_Authors = x.replace(/<.*/, '');
-		};
-		if (d.match(/box_carusel_colaboratori/)) {
-			var x = d.match(/box_carusel_colaboratori.*/)[0];
-			var x = x.replace(/<\/a>.*/, '');
-			var x = x.replace(/<\/b>.*/, '');
-			var W_Authors = x.replace(/.*>/, '');
-		};
-		var W_Newspaper = 'Ziare.com';
+        var zcomMeta = document.getElementsByTagName('meta');
+        for (var metaIdx = 0; metaIdx < zcomMeta.length; metaIdx++) {
+            if (zcomMeta[metaIdx].getAttribute('property') === 'og:title') {
+                var zcomTitle = zcomMeta[metaIdx].getAttribute('content');
+                var tmpDiv = document.createElement('div');
+                tmpDiv.innerHTML = zcomTitle;
+                var W_Title = tmpDiv.childNodes[0].nodeValue;
+                continue;
+            }
+            if (zcomMeta[metaIdx].getAttribute('property') === 'og:url') {
+                var W_URL = zcomMeta[metaIdx].getAttribute('content');
+            }
+            if (zcomMeta[metaIdx].getAttribute('property') === 'og:site_name') {
+                var W_Newspaper = zcomMeta[metaIdx].getAttribute('content');
+            }
+            if (zcomMeta[metaIdx].getAttribute('property') === 'date') {
+                var W_Date = convertISO8601Date(zcomMeta[metaIdx].getAttribute('content'));
+            }
+        }
+
+        var fullArticleDiv = document.getElementById('interior_left');
+        var authorHeaders = fullArticleDiv.getElementsByClassName('fleft');
+        if (authorHeaders && authorHeaders.length > 0) {
+        	var authorSpans = authorHeaders[0].getElementsByTagName('span');
+        	if (authorSpans && authorSpans.length > 0) {
+        		var authorsBs = authorSpans[0].getElementsByTagName('b');
+        		if (authorsBs && authorsBs.length > 0) {
+        			var W_Authors = authorsBs[0].textContent;
+				} else {
+        			var W_Authors = authorSpans[0].textContent;
+				}
+			}
+		}
+
 	};
 	if (u.match(/contributors.ro/)) {
 		var x = document.title;
