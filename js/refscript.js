@@ -973,11 +973,8 @@ if (u.match(/webcitation.org/)) {
 		var dd = dd.replace(/<div>/g, '\n<div>');
 		if (dd.match(/<span itemprop=.author./)) {
 			var x = dd.match(/<span itemprop=.author.*/)[0];
-			alert(x);
 			var x = x.replace(/<\/span>.*/, '');
-			alert(x);
 			var W_Authors = x.replace(/.*>/, '');
-			alert(W_Authors);
 		};
 		if (dd.match(/<span itemprop=.datePublished./)) {
 			var x = dd.match(/<span itemprop=.datePublished.*/)[0];
