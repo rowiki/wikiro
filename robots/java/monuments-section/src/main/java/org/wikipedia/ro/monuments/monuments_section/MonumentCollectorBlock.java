@@ -14,9 +14,9 @@ public class MonumentCollectorBlock implements Block<Document> {
     private List<Monument> collectorList;
 
     private static final Pattern LMI_CODE_PATTERN =
-        Pattern.compile("([A-Z]{1,2})-([IV]+)-([sma])-([AB])-(\\d+)(?:\\.(\\d)+)?");
+        Pattern.compile("([A-Z]{1,2})-([IV]+)-([sma])-([AB])-(\\d+)(?:\\.(\\d+))?");
     
-    private static final Pattern SETTLEMENT_PATTERN = Pattern.compile("(?:(?:sat\\s+)?\\s*\\[\\[(?:[^\\]\\|]*\\|)([^\\]\\|])\\]\\]\\s*;\\s*)?(comuna|oraș|municipiul)");
+    private static final Pattern SETTLEMENT_PATTERN = Pattern.compile("^(?:(?:sat\\s+)?\\s*(\\[\\[([^\\]\\|]*\\|)([^\\]\\|]+)\\]\\]\\s*;\\s*))?(comuna|oraș|municipiul)");
 
     public MonumentCollectorBlock(List<Monument> collectorList) {
         this.collectorList = collectorList;
@@ -45,8 +45,8 @@ public class MonumentCollectorBlock implements Block<Document> {
 
         Matcher settlementMatcher = SETTLEMENT_PATTERN.matcher(t.getString("Localitate"));
         if (settlementMatcher.find()) {
-            if (null != settlementMatcher.group(1) && 0 < settlementMatcher.group(1).trim().length()) {
-                m.settlement = settlementMatcher.group(1).trim();
+            if (null != settlementMatcher.group(3) && 0 < settlementMatcher.group(3).trim().length()) {
+                m.settlement = settlementMatcher.group(3).trim();
             }
         }
 
