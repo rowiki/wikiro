@@ -164,7 +164,7 @@ public class MonumentInCommuneGenerator {
                 paraBuilder.append("În ");
                 paraBuilder.append(retrieveQualifiedCommuneName(communeName));
                 paraBuilder.append(" se află ");
-                paraBuilder.append(retrieveTextForMultipleTypeMons(nationalScopedMonuments, "de interes național"));
+                paraBuilder.append(retrieveTextForMultipleTypeMons(nationalScopedMonuments, "de interes național", false));
                 paragraphs.add(paraBuilder.toString());
             }
             if (localScopedMonuments.size() > 0) {
@@ -189,8 +189,8 @@ public class MonumentInCommuneGenerator {
                 paraBuilder.append(" din ").append(UNIT_TYPE_DESCRIPTIONS.get(communeName.charAt(0))[0]).append(' ')
                     .append(1 == localScopedMonuments.size() ? "este": "sunt").append(" inclus").append(1 == localScopedMonuments.size()? "" : "e")
                     .append(" în [[lista monumentelor istorice din județul ").append(COUNTY_NAMES.get(county))
-                    .append("]]: ");
-                paraBuilder.append(retrieveTextForMultipleTypeMons(localScopedMonuments, "de interes local"));
+                    .append("]]");
+                paraBuilder.append(retrieveTextForMultipleTypeMons(localScopedMonuments, "de interes local", true));
                 paragraphs.add(paraBuilder.toString());
             }
 
@@ -203,7 +203,7 @@ public class MonumentInCommuneGenerator {
     }
 
     // big big function that implements converting the lists
-    private String retrieveTextForMultipleTypeMons(List<Monument> monList, String scopeDescription) {
+    private String retrieveTextForMultipleTypeMons(List<Monument> monList, String scopeDescription, boolean colonBreak) {
         List<List<Monument>> splitMonuments = splitMonumentsByType(monList);
         if (splitMonuments.size() == 0) {
             return null;
@@ -213,6 +213,9 @@ public class MonumentInCommuneGenerator {
         if (splitMonuments.size() == 1) { // only one type of monuments
             if (splitMonuments.get(0).size() == 1) { // only one monument total
                 Monument theMonument = splitMonuments.get(0).get(0);
+                if (colonBreak) {
+                    sb.append(": ");
+                }
                 sb.append(MONUMENT_TYPE_DESCRIPTIONS[theMonument.type][1]).append(' ').append(scopeDescription).append(' ');
                 sb.append(theMonument.name);
                 sb.append(" datând din ").append(theMonument.dating);
