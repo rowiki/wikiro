@@ -38,8 +38,9 @@ public class NumberToWordsConvertor {
             return prefix + "sprezece";
         }
         if (number < 100) {
-            return DIGITS[number / 10 % 10] + ORDERS[1] + (lastDigit > 0 ? (" și " + DIGITS[lastDigit]) : "");
+            return DIGITS[number / 10 % 10] + ORDERS[1]
+                + (lastDigit > 0 ? (" și " + DIGITS[lastDigit] + (lastDigit == 1 ? "u" : "")) : "");
         }
-        return String.valueOf(number); //not implemented
+        return String.valueOf(number); // not implemented
     }
 }
