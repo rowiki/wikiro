@@ -22,8 +22,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 public class MonumentInCommuneGenerator {
-    public String county;
-    public String communeName;
+    private String county;
+    private String communeName;
+    private MongoClient mongoClient;
 
     public MonumentInCommuneGenerator(String county, String communeName) {
         super();
@@ -31,10 +32,14 @@ public class MonumentInCommuneGenerator {
         this.communeName = communeName;
     }
 
+    public void setMongoClient(MongoClient client) {
+        mongoClient = client;
+    }
+
     private static String[][] MONUMENT_TYPE_DESCRIPTIONS = new String[][] {
         new String[] { "monument istoric", "monumentul istoric", "monumente istorice", "monumentele istorice" },
         new String[] { "sit arheologic", "situl arheologic", "situri arheologice", "siturile arheologice" },
-        new String[] { "monument istoric de arhitectură", "monumentul istoric de arhitetură",
+        new String[] { "monument istoric de arhitectură", "monumentul istoric de arhitectură",
             "monumente istorice de arhitectură", "monumentele istorice de arhitectură" },
         new String[] { "monument de for public", "monumentul de for public", "monumente de for public",
             "monumentele de for public" },
@@ -119,13 +124,9 @@ public class MonumentInCommuneGenerator {
     }
 
     public String generate() {
-        StringBuilder sb = new StringBuilder();
-
-        MongoClient client = null;
         try {
-            client = new MongoClient();
 
-            MongoDatabase db = client.getDatabase("monumente");
+            MongoDatabase db = mongoClient.getDatabase("monumente");
 
             MongoCollection<Document> collection = db.getCollection("Monument");
 
@@ -177,25 +178,28 @@ public class MonumentInCommuneGenerator {
                 if (capitalize) {
                     monumentsListSizeInWords = capitalize(monumentsListSizeInWords);
                 }
+                if (1 == localScopedMonuments.size()) {
+                    monumentsListSizeInWords = monumentsListSizeInWords + " singur";
+                }
 
                 paraBuilder.append(monumentsListSizeInWords).append(" obiectiv");
-                if (localScopedMonuments.size() != 1) {
+                if (1 != localScopedMonuments.size()) {
                     paraBuilder.append('e');
                 }
-                paraBuilder.append(" din ").append(UNIT_TYPE_DESCRIPTIONS.get(communeName.charAt(0))[0])
-                    .append(" sunt incluse în [[lista monumentelor istorice din județul ").append(COUNTY_NAMES.get(county))
-                    .append("]]");
+                paraBuilder.append(" din ").append(UNIT_TYPE_DESCRIPTIONS.get(communeName.charAt(0))[0]).append(' ')
+                    .append(1 == localScopedMonuments.size() ? "este": "sunt").append(" inclus").append(1 == localScopedMonuments.size()? "" : "e")
+                    .append(" în [[lista monumentelor istorice din județul ").append(COUNTY_NAMES.get(county))
+                    .append("]]: ");
                 paraBuilder.append(retrieveTextForMultipleTypeMons(localScopedMonuments, "de interes local"));
                 paragraphs.add(paraBuilder.toString());
             }
 
-            System.out.println(joinWithConjunction(paragraphs, ".\n\n", ".\n\n"));
+            return joinWithConjunction(paragraphs, ".\n\n", ".\n\n");
         } finally {
-            if (null != client) {
-                client.close();
+            if (null != mongoClient) {
+                mongoClient.close();
             }
         }
-        return sb.toString();
     }
 
     // big big function that implements converting the lists
