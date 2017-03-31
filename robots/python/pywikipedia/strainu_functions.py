@@ -8,7 +8,7 @@
 #
 #
 
-import re, urllib2, urllib
+import re, urllib.request, urllib.error, urllib.parse, urllib.request, urllib.parse, urllib.error
 import pywikibot
 from pywikibot import textlib
 from pywikibot import pagegenerators
@@ -34,7 +34,7 @@ def extractTemplate(text, template):
     open = 0
     close = 1
     innerTlCount = 0
-    while open < close and open <> -1:
+    while open < close and open != -1:
         open = text.find("{")
         close = text.find("}") + 1
         #print "one" + str(open) + " " + str(close)
@@ -63,10 +63,10 @@ def extractTemplate(text, template):
 #          The name of the template has the key "_name"
 def tl2Dict(template):
     marker = "@@"
-    Rtemplate = re.compile(ur'{{(msg:)?(?P<name>[^{\|]+?)(\|(?P<params>[^{]+?))?}}')
-    Rmath = re.compile(ur'<math>[^<]+</math>')
-    Rref = re.compile(ur'<ref.*?>[^<]+</ref>')
-    Rmarker = re.compile(ur'%s(\d+)%s' % (marker, marker))
+    Rtemplate = re.compile(r'{{(msg:)?(?P<name>[^{\|]+?)(\|(?P<params>[^{]+?))?}}')
+    Rmath = re.compile(r'<math>[^<]+</math>')
+    Rref = re.compile(r'<ref.*?>[^<]+</ref>')
+    Rmarker = re.compile(r'%s(\d+)%s' % (marker, marker))
     count = 0
     intern = {}
     for m in Rref.finditer(template):
@@ -94,29 +94,29 @@ def tl2Dict(template):
     _dict = {}
     _keyList = []
     #print intern
-    template = re.sub(ur'(\r|\n)', '', template)
+    template = re.sub(r'(\r|\n)', '', template)
     template = template[0:len(template)-2]#get rid of '}}'
     params = template.split('|')
-    key = u""
-    value = unicode("",'utf8')
+    key = ""
+    value = ""
     anon_params = 1
     for line in params:
-        line = line.split(u'=')
+        line = line.split('=')
         #pywikibot.output(str(line))
         if (len(line) > 1):
             key = line[0]#.encode("utf8")
             key = key.strip()
-            value = u"=".join(line[1:])
+            value = "=".join(line[1:])
             _dict[key] = value
             if not key in _keyList:
                 _keyList.append(key)
-        elif line[0].startswith(u'{{') and not u"_name" in _dict: #name of the template
+        elif line[0].startswith('{{') and not "_name" in _dict: #name of the template
             #pywikibot.output("Name: " + line[0][2:])
-            _dict[u"_name"] = line[0][2:].strip()
+            _dict["_name"] = line[0][2:].strip()
             if not key in _keyList:
-                _keyList.append(u"_name")
-        elif line[0] != u"" and key != u"":#the first line might not begin with {{
-            _dict[key] = _dict[key] + u"|" + line[0]
+                _keyList.append("_name")
+        elif line[0] != "" and key != "":#the first line might not begin with {{
+            _dict[key] = _dict[key] + "|" + line[0]
             if not key in _keyList:
                 _keyList.append(key)
         else:#anonymous param, hopefully
@@ -125,11 +125,11 @@ def tl2Dict(template):
                 _keyList.append(anon_params)
             anon_params += 1
 	#TODO: add anonymous parameters
-    for key, value in _dict.items():
+    for key, value in list(_dict.items()):
         matches = Rmarker.findall(value)
         for match in matches:
             count = int(match)
-            value = value.replace(u'%s%d%s' % (marker, count, marker), intern[count])
+            value = value.replace('%s%d%s' % (marker, count, marker), intern[count])
             _dict[key] = value
     #print _dict
     return (_dict, _keyList)
@@ -247,31 +247,31 @@ def convertUrlToWikilink(url):
     Handles both /wiki/Title and /w/index.php?title= version
     TODO: error checking; return a Page object
     """
-    from urlparse import urlparse, parse_qs
-    import urllib
+    from urllib.parse import urlparse, parse_qs
+    import urllib.request, urllib.parse, urllib.error
     pr = urlparse(url)
     if (pr.query != ""):
-	q = parse_qs(pr.query.encode("utf8"))
-	title = q["title"][0]
+        q = parse_qs(pr.query.encode("utf8"))
+        title = q["title"][0]
     else:
-        title = urllib.unquote(pr.path.split('/')[-1].encode("utf8"))
+        title = urllib.parse.unquote(pr.path.split('/')[-1].encode("utf8"))
     return title.decode("utf8")
 
 
 # --------- String functions ----------
 def capitalizeWithSigns(text, keep=[]):
-    text = text.replace(u"-", u"@@0@@ ")
-    text = text.replace(u".", u"@@1@@ ")
+    text = text.replace("-", "@@0@@ ")
+    text = text.replace(".", "@@1@@ ")
     i = 2
     for term in keep:
-        text = text.replace(term, u"@@%d@@ " % i)
+        text = text.replace(term, "@@%d@@ " % i)
         i += 1
     text = string.capwords(text,' ')
     for term in reversed(keep):
         i -= 1
-        text = text.replace(u"@@%d@@ " % i, term)
-    text = text.replace(u"@@1@@ ", u".")
-    text = text.replace(u"@@0@@ ", u"-")
+        text = text.replace("@@%d@@ " % i, term)
+    text = text.replace("@@1@@ ", ".")
+    text = text.replace("@@0@@ ", "-")
     return text
 
 def findDigit(s):
@@ -291,7 +291,7 @@ def none2empty(text):
 	if text:
 		return text
 	else:
-		return u""
+		return ""
 
 # --------- Geo functions ------------
 def getDeg(decimal):
@@ -354,16 +354,16 @@ def linkedImages(page):
         title = match.group('title')
         title = title.replace("_", " ").strip(" ")
         # print title
-        if title == u"":
+        if title == "":
             # empty link - problem in the page
             continue
         # convert relative link to absolute link
         if title.startswith(".."):
             parts = self.title().split('/')
             parts.pop()
-            title = u'/'.join(parts) + title[2:]
+            title = '/'.join(parts) + title[2:]
         elif title.startswith("/"):
-            title = u'%s/%s' % (page.title(), title[1:])
+            title = '%s/%s' % (page.title(), title[1:])
         if title.startswith("#"):
             # this is an internal section link
             continue
@@ -372,7 +372,7 @@ def linkedImages(page):
             try:
                 hash(str(page2))
             except Exception:
-                pywikibot.output(u"Page %s contains invalid link to [[%s]]."
+                pywikibot.output("Page %s contains invalid link to [[%s]]."
                                  % (page.title(), title))
                 continue
             if not page2.isImage():
@@ -384,14 +384,14 @@ def linkedImages(page):
 # --------------- CSV functions -------------------
 
 if __name__ == "__main__":
-    print extractTemplate("{{Sema_2|a=b<ref>{{citat|}}</ref>|e=f}}", "Sema 2")
-    print extractTemplate("{{Sema 2|a=b<ref>{{citat|}}</ref>|e=f}}", "Sema_2")
-    print tl2Dict(u"{{Sema|a=bș<ref>{{ciătat|c=d}}</ref>sd|e=f{{citat|c=d|c1=d1}}}}")
-    print tl2Dict("{{Sema2|a=b<ref>{{citat|}}</ref>|e=f}}")
-    print tl2Dict("{{Sema2|a={{citat|c=d|c1=d1}}|e=f}}")
-    print tl2Dict("{{Sema3|a={{#if:citat|{{c}}<ref>{{d}}</ref>|e=f}}}}")
-    print tl2Dict("{{Sema4|a={{#if:citat|c|d}}}}")
-    pywikibot.output(convertUrlToWikilink(u"//ro.wikipedia.org/w/index.php?title=Lista_monumentelor_istorice_din_jude%C8%9Bul_Alba&oldid=10256783"))
-    pywikibot.output(convertUrlToWikilink(u"//ro.wikipedia.org/wiki/Lista_monumentelor_istorice_din_jude%C8%9Bul_Alba"))
+    print(extractTemplate("{{Sema_2|a=b<ref>{{citat|}}</ref>|e=f}}", "Sema 2"))
+    print(extractTemplate("{{Sema 2|a=b<ref>{{citat|}}</ref>|e=f}}", "Sema_2"))
+    print(tl2Dict("{{Sema|a=bș<ref>{{ciătat|c=d}}</ref>sd|e=f{{citat|c=d|c1=d1}}}}"))
+    print(tl2Dict("{{Sema2|a=b<ref>{{citat|}}</ref>|e=f}}"))
+    print(tl2Dict("{{Sema2|a={{citat|c=d|c1=d1}}|e=f}}"))
+    print(tl2Dict("{{Sema3|a={{#if:citat|{{c}}<ref>{{d}}</ref>|e=f}}}}"))
+    print(tl2Dict("{{Sema4|a={{#if:citat|c|d}}}}"))
+    pywikibot.output(convertUrlToWikilink("//ro.wikipedia.org/w/index.php?title=Lista_monumentelor_istorice_din_jude%C8%9Bul_Alba&oldid=10256783"))
+    pywikibot.output(convertUrlToWikilink("//ro.wikipedia.org/wiki/Lista_monumentelor_istorice_din_jude%C8%9Bul_Alba"))
 
     # print textlib.extract_templates_and_params("{{Sema2|a={{citat|c=d|c1=d1}}|e=f}}")
