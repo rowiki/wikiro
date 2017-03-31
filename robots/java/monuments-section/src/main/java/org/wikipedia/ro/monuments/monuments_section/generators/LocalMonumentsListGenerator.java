@@ -23,8 +23,8 @@ public class LocalMonumentsListGenerator extends AbstractMonumentGenerator {
                 describeNameAndDatingLong(sb, theMonument);
                 describeEnsemble(sb, theMonument);
             } else { // more monuments of only one type
-                sb.append(", toate clasificate ca ").append(MONUMENT_TYPE_DESCRIPTIONS[splitMonuments.get(0).get(0).type][2])
-                    .append(": ");
+                sb.append(", ").append(monList.size() == 2 ? "ambele" : "toate").append(" clasificate ca ")
+                    .append(MONUMENT_TYPE_DESCRIPTIONS[splitMonuments.get(0).get(0).type][2]).append(": ");
                 List<String> monumentDescriptions = generateMonumentsListDescription(splitMonuments.get(0));
                 sb.append(joinWithConjunction(monumentDescriptions, ", ", " și "));
             }

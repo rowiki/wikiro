@@ -24,8 +24,8 @@ public class NationalMonumentsListGenerator extends AbstractMonumentGenerator {
                 describeNameAndDatingLong(sb, theMonument);
                 describeEnsemble(sb, theMonument);
             } else { // more monuments of only one type
-                sb.append(new NumberToWordsConvertor(splitMonuments.get(0).size()).convert()).append(" obiective")
-                    .append(" clasificate ca ").append(MONUMENT_TYPE_DESCRIPTIONS[splitMonuments.get(0).get(0).type][2])
+                sb.append(new NumberToWordsConvertor(splitMonuments.get(0).size()).convert()).append(' ')
+                    .append(MONUMENT_TYPE_DESCRIPTIONS[splitMonuments.get(0).get(0).type][2])
                     .append(" de interes național: ");
                 List<String> monumentDescriptions = generateMonumentsListDescription(splitMonuments.get(0));
                 sb.append(joinWithConjunction(monumentDescriptions, ", ", " și "));

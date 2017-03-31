@@ -42,4 +42,26 @@ public class Utils {
             }
         }
     }
+    
+    public static String simplyPluralizeE(int cnt, String pluralizableString) {
+        if (null == pluralizableString) {
+            return null;
+        }
+        if (1 == cnt) {
+            return pluralizableString;
+        }
+        return pluralizableString + "e";
+    }
+    
+    public static String qualifyinglyPluralizeE(int cnt, String pluralizableString) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(new NumberToWordsConvertor(cnt).convert()).append(' ');
+        if (1 == cnt) {
+            sb.append("singur ");
+        } else if (cnt % 100 >= 20 || cnt % 100 == 0) {
+            sb.append("de ");
+        }
+        sb.append(simplyPluralizeE(cnt, pluralizableString));
+        return sb.toString();
+    }
 }

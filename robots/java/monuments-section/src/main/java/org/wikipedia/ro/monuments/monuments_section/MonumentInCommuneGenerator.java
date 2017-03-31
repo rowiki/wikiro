@@ -4,10 +4,11 @@ import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.regex;
 import static org.wikipedia.ro.monuments.monuments_section.Utils.capitalize;
 import static org.wikipedia.ro.monuments.monuments_section.Utils.joinWithConjunction;
+import static org.wikipedia.ro.monuments.monuments_section.Utils.qualifyinglyPluralizeE;
+import static org.wikipedia.ro.monuments.monuments_section.Utils.simplyPluralizeE;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -166,24 +167,20 @@ public class MonumentInCommuneGenerator {
                     paraBuilder.append("În rest, ");
                     capitalize = false;
                 }
-                String monumentsListSizeInWords = new NumberToWordsConvertor(localScopedMonuments.size()).convert();
+                if (localScopedMonuments.size() > 1) {
+                    paraBuilder.append("alte ");
+                }
+                String objCount = qualifyinglyPluralizeE(localScopedMonuments.size(), "obiectiv");
                 if (capitalize) {
-                    monumentsListSizeInWords = capitalize(monumentsListSizeInWords);
+                    objCount = capitalize(objCount);
                 }
-                if (1 == localScopedMonuments.size()) {
-                    monumentsListSizeInWords = monumentsListSizeInWords + " singur";
-                }
+                paraBuilder.append(objCount);
 
-                paraBuilder.append(monumentsListSizeInWords).append(" obiectiv");
-                if (1 != localScopedMonuments.size()) {
-                    paraBuilder.append('e');
-                }
                 paraBuilder.append(" din ").append(UNIT_TYPE_DESCRIPTIONS.get(communeName.charAt(0))[0]).append(' ')
-                    .append(1 == localScopedMonuments.size() ? "este" : "sunt").append(" inclus")
-                    .append(1 == localScopedMonuments.size() ? "" : "e")
+                    .append(1 == localScopedMonuments.size() ? "este" : "sunt").append(' ')
+                    .append(simplyPluralizeE(localScopedMonuments.size(), "inclus"))
                     .append(" în [[lista monumentelor istorice din județul ").append(COUNTY_NAMES.get(county)).append("]]")
-                    .append(" ca monument").append(localScopedMonuments.size() > 1 ? "e" :"")
-                    .append(" de interes local");
+                    .append(" ca ").append(simplyPluralizeE(localScopedMonuments.size(), "monument")).append(" de interes local");
                 paraBuilder.append(new LocalMonumentsListGenerator().generate(localScopedMonuments));
                 paragraphs.add(paraBuilder.toString());
             }
