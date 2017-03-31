@@ -42,18 +42,27 @@ public class Utils {
             }
         }
     }
-    
+
     public static String simplyPluralizeE(int cnt, String pluralizableString) {
-        if (null == pluralizableString) {
+        return simplyPluralizeByGrammarSet(cnt, new String[] { pluralizableString, "", pluralizableString + "e", "" });
+    }
+
+    public static String simplyPluralizeByGrammarSet(int cnt, String[] grammarSet) {
+        if (null == grammarSet || 0 == grammarSet.length) {
             return null;
         }
-        if (1 == cnt) {
-            return pluralizableString;
+        if (1 == cnt || 3 > grammarSet.length) {
+            return grammarSet[0];
         }
-        return pluralizableString + "e";
+        return grammarSet[2];
+
     }
-    
+
     public static String qualifyinglyPluralizeE(int cnt, String pluralizableString) {
+        return qualifyinglyPluralizeByGrammarSet(cnt, new String[] { pluralizableString, "", pluralizableString + "e", "" });
+    }
+
+    public static String qualifyinglyPluralizeByGrammarSet(int cnt, String[] grammarSet) {
         StringBuilder sb = new StringBuilder();
         sb.append(new NumberToWordsConvertor(cnt).convert()).append(' ');
         if (1 == cnt) {
@@ -61,7 +70,8 @@ public class Utils {
         } else if (cnt % 100 >= 20 || cnt % 100 == 0) {
             sb.append("de ");
         }
-        sb.append(simplyPluralizeE(cnt, pluralizableString));
+        sb.append(simplyPluralizeByGrammarSet(cnt, grammarSet));
         return sb.toString();
+
     }
 }

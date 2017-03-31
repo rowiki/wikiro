@@ -7,6 +7,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class TestUtils {
+    
+    private String[] drumGrammarSet = new String[] {"drum", "drumul", "drumuri", "drumurile"};
+    
     @Test
     public void testCapitalize() {
         Assert.assertEquals("Capitalize should leave already capitalized strings alone", "George",
@@ -43,27 +46,63 @@ public class TestUtils {
     
     
     @Test
-    public void testQualifyinglyPluralizeOne() {
+    public void testQualifyinglyPluralizeEOne() {
         Assert.assertEquals("un singur obiectiv", Utils.qualifyinglyPluralizeE(1, "obiectiv"));
     }
 
     @Test
-    public void testQualifyinglyPluralizeThree() {
+    public void testQualifyinglyPluralizeEThree() {
         Assert.assertEquals("trei obiective", Utils.qualifyinglyPluralizeE(3, "obiectiv"));
     }
 
     @Test
-    public void testQualifyinglyPluralizeNty() {
+    public void testQualifyinglyPluralizeENty() {
         Assert.assertEquals(Utils.qualifyinglyPluralizeE(36, "obiectiv"), "treizeci și șase de obiective");
     }
 
     @Test
-    public void testQualifyinglyPluralizeHundredsAndAFew() {
+    public void testQualifyinglyPluralizeEHundredsAndAFew() {
         Assert.assertEquals(Utils.qualifyinglyPluralizeE(106, "obiectiv"), "106 obiective");
     }
 
     @Test
-    public void testQualifyinglyPluralizeHundredsAndNty() {
-        Assert.assertEquals(Utils.qualifyinglyPluralizeE(156, "obiectiv"), "156 de obiective");
+    public void testQualifyinglyPluralizeEHundredsAndNty() {
+        Assert.assertEquals("156 de obiective", Utils.qualifyinglyPluralizeE(156, "obiectiv"));
+    }
+    
+    @Test
+    public void testSimplyPluralizeByGrammarSetOne() {
+        Assert.assertEquals("drum", Utils.simplyPluralizeByGrammarSet(1, drumGrammarSet));
+    }
+
+    @Test
+    public void testSimplyPluralizeByGrammarSetMore() {
+        Assert.assertEquals("drumuri", Utils.simplyPluralizeByGrammarSet(3, drumGrammarSet));
+    }
+    
+    
+    @Test
+    public void testQualifyinglyPluralizeByGrammarSetOne() {
+        Assert.assertEquals("un singur drum", Utils.qualifyinglyPluralizeByGrammarSet(1, drumGrammarSet));
+    }
+
+    @Test
+    public void testQualifyinglyPluralizeByGrammarSetThree() {
+        Assert.assertEquals("trei drumuri", Utils.qualifyinglyPluralizeByGrammarSet(3, drumGrammarSet));
+    }
+
+    @Test
+    public void testQualifyinglyPluralizeByGrammarSetNty() {
+        Assert.assertEquals("treizeci și șase de drumuri", Utils.qualifyinglyPluralizeByGrammarSet(36, drumGrammarSet));
+    }
+
+    @Test
+    public void testQualifyinglyPluralizeByGrammarSetHundredsAndAFew() {
+        Assert.assertEquals("106 drumuri", Utils.qualifyinglyPluralizeByGrammarSet(106, drumGrammarSet));
+    }
+
+    @Test
+    public void testQualifyinglyPluralizeByGrammarSetHundredsAndNty() {
+        Assert.assertEquals("156 de drumuri", Utils.qualifyinglyPluralizeByGrammarSet(156, drumGrammarSet));
     }
 }
