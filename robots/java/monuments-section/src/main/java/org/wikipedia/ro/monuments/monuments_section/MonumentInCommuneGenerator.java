@@ -165,10 +165,10 @@ public class MonumentInCommuneGenerator {
                 boolean capitalize = true;
                 if (0 < paragraphs.size()) {
                     paraBuilder.append("În rest, ");
+                    if (localScopedMonuments.size() > 1) {
+                        paraBuilder.append("alte ");
+                    }
                     capitalize = false;
-                }
-                if (localScopedMonuments.size() > 1) {
-                    paraBuilder.append("alte ");
                 }
                 String objCount = qualifyinglyPluralizeE(localScopedMonuments.size(), "obiectiv");
                 if (capitalize) {
@@ -176,7 +176,15 @@ public class MonumentInCommuneGenerator {
                 }
                 paraBuilder.append(objCount);
 
-                paraBuilder.append(" din ").append(UNIT_TYPE_DESCRIPTIONS.get(communeName.charAt(0))[0]).append(' ')
+                paraBuilder.append(" din ");
+                
+                if (0 < paragraphs.size()) {
+                    paraBuilder.append(UNIT_TYPE_DESCRIPTIONS.get(communeName.charAt(0))[0]);
+                } else {
+                    paraBuilder.append(retrieveQualifiedCommuneName(communeName));
+                }
+                
+                paraBuilder.append(' ')
                     .append(1 == localScopedMonuments.size() ? "este" : "sunt").append(' ')
                     .append(simplyPluralizeE(localScopedMonuments.size(), "inclus"))
                     .append(" în [[lista monumentelor istorice din județul ").append(COUNTY_NAMES.get(county)).append("]]")

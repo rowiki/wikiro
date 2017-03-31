@@ -39,7 +39,6 @@ public class NationalMonumentsListGenerator extends AbstractMonumentGenerator {
                 if (1 == eachMonumentTypeList.size()) {
                     sb.append(introWordSingle).append(" este ")
                         .append(MONUMENT_TYPE_DESCRIPTIONS[eachMonumentTypeList.get(0).type][1]).append(' ');
-
                 } else {
                     String countInWords = new NumberToWordsConvertor(eachMonumentTypeList.size()).convert();
                     if (introWordMultiple.length() > 0) {

@@ -1,5 +1,6 @@
 package org.wikipedia.ro.monuments.monuments_section.generators;
 
+import static org.wikipedia.ro.monuments.monuments_section.Utils.capitalize;
 import static org.wikipedia.ro.monuments.monuments_section.Utils.joinWithConjunction;
 
 import java.util.List;
@@ -31,17 +32,20 @@ public class LocalMonumentsListGenerator extends AbstractMonumentGenerator {
         } else { // more types of monuments
             String introWordSingle = "Unul";
             String introWordMultiple = "";
-            sb.append(new NumberToWordsConvertor(monList.size()).convert()).append(' ')
-                .append(MONUMENT_TYPE_DESCRIPTIONS[0][2]).append(" de interes local ");
+            sb.append(". ");
             for (List<Monument> eachMonumentTypeList : splitMonuments) {
                 if (1 == eachMonumentTypeList.size()) {
                     sb.append(introWordSingle).append(" este ")
                         .append(MONUMENT_TYPE_DESCRIPTIONS[eachMonumentTypeList.get(0).type][1]).append(' ');
-
                 } else {
-                    sb.append(introWordMultiple).append(' ')
-                        .append(new NumberToWordsConvertor(eachMonumentTypeList.size()).convert()).append(" sunt ")
-                        .append(MONUMENT_TYPE_DESCRIPTIONS[eachMonumentTypeList.get(0).type][3]).append(": ");
+                    String countInWords = new NumberToWordsConvertor(eachMonumentTypeList.size()).convert();
+                    if (introWordMultiple.length() > 0) {
+                        sb.append(introWordMultiple).append(' ').append(countInWords);
+                    } else {
+                        sb.append(capitalize(countInWords));
+                    }
+                    sb.append(" sunt ")
+                        .append(MONUMENT_TYPE_DESCRIPTIONS[eachMonumentTypeList.get(0).type][3]).append(' ');
                 }
                 introWordSingle = "Altul";
                 introWordMultiple = "Alte";
