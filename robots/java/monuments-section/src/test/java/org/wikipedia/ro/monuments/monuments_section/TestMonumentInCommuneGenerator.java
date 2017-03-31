@@ -118,7 +118,7 @@ public class TestMonumentInCommuneGenerator {
         String text = generator.generate();
         Assert.assertTrue(text.length() > 0);
         String expectedString =
-            "Un singur obiectiv din comună este inclus în [[lista monumentelor istorice din județul Brăila]]: monumentul istoric de arhitectură de interes local X datând din Dinioara I";
+            "Un singur obiectiv din comună este inclus în [[lista monumentelor istorice din județul Brăila]] ca monument de interes local: monumentul istoric de arhitectură X datând din Dinioara I";
         assertExpectedSubstring(text, expectedString);
 
     }
@@ -153,7 +153,7 @@ public class TestMonumentInCommuneGenerator {
         String text = generator.generate();
         Assert.assertTrue(text.length() > 0);
         String expectedString =
-            "Trei obiective din comună sunt incluse în [[lista monumentelor istorice din județul Brăila]], toate clasificate ca monumente istorice de arhitectură de interes local: X (Dinioara I), Y (Dinioara a II-a) și Z (Dinioara a II-a)";
+            "Trei obiective din comună sunt incluse în [[lista monumentelor istorice din județul Brăila]] ca monumente de interes local, toate clasificate ca monumente istorice de arhitectură: X (Dinioara I), Y (Dinioara a II-a) și Z (Dinioara a II-a)";
         assertExpectedSubstring(text, expectedString);
 
     }
@@ -183,6 +183,36 @@ public class TestMonumentInCommuneGenerator {
         String expectedString =
             "În comuna Cucu se află două obiective clasificate ca monumente istorice de arhitectură de interes național: X (Dinioara I) și Y (Dinioara a II-a)";
         assertExpectedSubstring(text, expectedString);
+
+    }
+
+    @Test
+    public void testOneLocalAndOneNationalMonument() {
+        MonumentInCommuneGenerator generator = new MonumentInCommuneGenerator("BR", "cCucu");
+
+        List<Document> docsNat = new ArrayList<Document>();
+        List<Document> docsLoc = new ArrayList<Document>();
+        Document doc = new Document();
+        doc.put("Denumire", "X");
+        doc.put("Datare", "Dinioara I");
+        doc.put("Cod", "BR-II-m-A-20000");
+        doc.put("Localitate", "sat [[Braca, Brăila|Braca]]; comuna [[Comuna Cucu, Brăila|Cucu]]");
+        docsNat.add(doc);
+
+        doc = new Document();
+        doc.put("Denumire", "Y");
+        doc.put("Datare", "Dinioara a II-a");
+        doc.put("Cod", "BR-II-m-A-20001");
+        doc.put("Localitate", "sat [[Braca, Brăila|Braca]]; comuna [[Comuna Cucu, Brăila|Cucu]]");
+        docsLoc.add(doc);
+        generator.setMongoClient(prepareMock(docsNat, docsLoc));
+
+        String text = generator.generate();
+        Assert.assertTrue(text.length() > 0);
+        assertExpectedSubstring(text,
+            "În comuna Cucu se află monumentul istoric de arhitectură de interes național X datând din Dinioara I");
+        assertExpectedSubstring(text,
+            "În rest, un singur obiectiv din comună este inclus în [[lista monumentelor istorice din județul Brăila]] ca monument de interes local: monumentul istoric de arhitectură Y datând din Dinioara a II-a");
 
     }
 }

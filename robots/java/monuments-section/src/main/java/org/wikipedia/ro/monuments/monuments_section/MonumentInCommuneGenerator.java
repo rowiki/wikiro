@@ -181,7 +181,9 @@ public class MonumentInCommuneGenerator {
                 paraBuilder.append(" din ").append(UNIT_TYPE_DESCRIPTIONS.get(communeName.charAt(0))[0]).append(' ')
                     .append(1 == localScopedMonuments.size() ? "este" : "sunt").append(" inclus")
                     .append(1 == localScopedMonuments.size() ? "" : "e")
-                    .append(" în [[lista monumentelor istorice din județul ").append(COUNTY_NAMES.get(county)).append("]]");
+                    .append(" în [[lista monumentelor istorice din județul ").append(COUNTY_NAMES.get(county)).append("]]")
+                    .append(" ca monument").append(localScopedMonuments.size() > 1 ? "e" :"")
+                    .append(" de interes local");
                 paraBuilder.append(new LocalMonumentsListGenerator().generate(localScopedMonuments));
                 paragraphs.add(paraBuilder.toString());
             }

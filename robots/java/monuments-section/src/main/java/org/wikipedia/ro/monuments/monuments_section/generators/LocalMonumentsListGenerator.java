@@ -19,16 +19,12 @@ public class LocalMonumentsListGenerator extends AbstractMonumentGenerator {
             if (splitMonuments.get(0).size() == 1) { // only one monument total
                 Monument theMonument = splitMonuments.get(0).get(0);
                 sb.append(": ");
-                sb.append(MONUMENT_TYPE_DESCRIPTIONS[theMonument.type][1]).append(" de interes local ");
-                sb.append(theMonument.name);
-                sb.append(" datând din ").append(theMonument.dating);
-                if (0 < theMonument.submonuments.size()) {
-                    sb.append(", ansamblu alcătuit din ");
-                    sb.append(retrieveSubmonumentsText(theMonument));
-                }
+                sb.append(MONUMENT_TYPE_DESCRIPTIONS[theMonument.type][1]).append(' ');
+                describeNameAndDatingLong(sb, theMonument);
+                describeEnsemble(sb, theMonument);
             } else { // more monuments of only one type
                 sb.append(", toate clasificate ca ").append(MONUMENT_TYPE_DESCRIPTIONS[splitMonuments.get(0).get(0).type][2])
-                    .append(" de interes local: ");
+                    .append(": ");
                 List<String> monumentDescriptions = generateMonumentsListDescription(splitMonuments.get(0));
                 sb.append(joinWithConjunction(monumentDescriptions, ", ", " și "));
             }

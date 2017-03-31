@@ -79,4 +79,18 @@ public abstract class AbstractMonumentGenerator {
         return joinWithConjunction(submonumentDescriptions, ", ", " și ");
     }
 
+
+    protected void describeEnsemble(StringBuilder sb, Monument theMonument) {
+        if (0 < theMonument.submonuments.size()) {
+            sb.append(", ansamblu alcătuit din ");
+            sb.append(retrieveSubmonumentsText(theMonument));
+        }
+    }
+
+
+    protected void describeNameAndDatingLong(StringBuilder sb, Monument theMonument) {
+        sb.append(theMonument.name);
+        sb.append(" datând din ").append(theMonument.dating);
+    }
+
 }

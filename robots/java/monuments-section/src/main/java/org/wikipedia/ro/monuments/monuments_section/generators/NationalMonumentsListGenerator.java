@@ -21,12 +21,8 @@ public class NationalMonumentsListGenerator extends AbstractMonumentGenerator {
             if (splitMonuments.get(0).size() == 1) { // only one monument total
                 Monument theMonument = splitMonuments.get(0).get(0);
                 sb.append(MONUMENT_TYPE_DESCRIPTIONS[theMonument.type][1]).append(" de interes național ");
-                sb.append(theMonument.name);
-                sb.append(" datând din ").append(theMonument.dating);
-                if (0 < theMonument.submonuments.size()) {
-                    sb.append(", ansamblu alcătuit din ");
-                    sb.append(retrieveSubmonumentsText(theMonument));
-                }
+                describeNameAndDatingLong(sb, theMonument);
+                describeEnsemble(sb, theMonument);
             } else { // more monuments of only one type
                 sb.append(new NumberToWordsConvertor(splitMonuments.get(0).size()).convert()).append(" obiective")
                     .append(" clasificate ca ").append(MONUMENT_TYPE_DESCRIPTIONS[splitMonuments.get(0).get(0).type][2])
