@@ -141,14 +141,48 @@ public class TestMonumentInCommuneGenerator {
         doc.put("Cod", "BR-II-m-B-20001");
         doc.put("Localitate", "sat [[Braca, Brăila|Braca]]; comuna [[Comuna Cucu, Brăila|Cucu]]");
         docs.add(doc);
+
+        doc = new Document();
+        doc.put("Denumire", "Z");
+        doc.put("Datare", "Dinioara a II-a");
+        doc.put("Cod", "BR-II-m-B-20002");
+        doc.put("Localitate", "sat [[Braca, Brăila|Braca]]; comuna [[Comuna Cucu, Brăila|Cucu]]");
+        docs.add(doc);
         generator.setMongoClient(prepareMock(emptyDocArrayList, docs));
 
         String text = generator.generate();
         Assert.assertTrue(text.length() > 0);
         String expectedString =
-            "Două obiective din comună sunt incluse în [[lista monumentelor istorice din județul Brăila]], toate clasificate ca monumente istorice de arhitectură de interes local: X (Dinioara I) și Y (Dinioara a II-a)";
+            "Trei obiective din comună sunt incluse în [[lista monumentelor istorice din județul Brăila]], toate clasificate ca monumente istorice de arhitectură de interes local: X (Dinioara I), Y (Dinioara a II-a) și Z (Dinioara a II-a)";
         assertExpectedSubstring(text, expectedString);
 
     }
 
+    @Test
+    public void testMoreNatMonumentsOfOneTypeOnly() {
+        MonumentInCommuneGenerator generator = new MonumentInCommuneGenerator("BR", "cCucu");
+
+        List<Document> docs = new ArrayList<Document>();
+        Document doc = new Document();
+        doc.put("Denumire", "X");
+        doc.put("Datare", "Dinioara I");
+        doc.put("Cod", "BR-II-m-A-20000");
+        doc.put("Localitate", "sat [[Braca, Brăila|Braca]]; comuna [[Comuna Cucu, Brăila|Cucu]]");
+        docs.add(doc);
+
+        doc = new Document();
+        doc.put("Denumire", "Y");
+        doc.put("Datare", "Dinioara a II-a");
+        doc.put("Cod", "BR-II-m-A-20001");
+        doc.put("Localitate", "sat [[Braca, Brăila|Braca]]; comuna [[Comuna Cucu, Brăila|Cucu]]");
+        docs.add(doc);
+        generator.setMongoClient(prepareMock(docs, emptyDocArrayList));
+
+        String text = generator.generate();
+        Assert.assertTrue(text.length() > 0);
+        String expectedString =
+            "În comuna Cucu se află două obiective clasificate ca monumente istorice de arhitectură de interes național: X (Dinioara I) și Y (Dinioara a II-a)";
+        assertExpectedSubstring(text, expectedString);
+
+    }
 }

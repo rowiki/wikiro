@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
 
 import org.bson.Document;
 import org.wikipedia.ro.monuments.monuments_section.data.Monument;
+import org.wikipedia.ro.monuments.monuments_section.generators.LocalMonumentsListGenerator;
+import org.wikipedia.ro.monuments.monuments_section.generators.NationalMonumentsListGenerator;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
@@ -35,16 +37,6 @@ public class MonumentInCommuneGenerator {
     public void setMongoClient(MongoClient client) {
         mongoClient = client;
     }
-
-    private static String[][] MONUMENT_TYPE_DESCRIPTIONS = new String[][] {
-        new String[] { "monument istoric", "monumentul istoric", "monumente istorice", "monumentele istorice" },
-        new String[] { "sit arheologic", "situl arheologic", "situri arheologice", "siturile arheologice" },
-        new String[] { "monument istoric de arhitectură", "monumentul istoric de arhitectură",
-            "monumente istorice de arhitectură", "monumentele istorice de arhitectură" },
-        new String[] { "monument de for public", "monumentul de for public", "monumente de for public",
-            "monumentele de for public" },
-        new String[] { "monument memorial sau funerar", "monumentul memorial sau funerar",
-            "monumente memoriale sau funerare", "monumentele memoriale sau funerare" } };
 
     private static final Map<Character, String[]> UNIT_TYPE_DESCRIPTIONS = new HashMap<Character, String[]>() {
         {
@@ -164,7 +156,7 @@ public class MonumentInCommuneGenerator {
                 paraBuilder.append("În ");
                 paraBuilder.append(retrieveQualifiedCommuneName(communeName));
                 paraBuilder.append(" se află ");
-                paraBuilder.append(retrieveTextForMultipleTypeMons(nationalScopedMonuments, "de interes național", false));
+                paraBuilder.append(new NationalMonumentsListGenerator().generate(nationalScopedMonuments));
                 paragraphs.add(paraBuilder.toString());
             }
             if (localScopedMonuments.size() > 0) {
@@ -187,10 +179,10 @@ public class MonumentInCommuneGenerator {
                     paraBuilder.append('e');
                 }
                 paraBuilder.append(" din ").append(UNIT_TYPE_DESCRIPTIONS.get(communeName.charAt(0))[0]).append(' ')
-                    .append(1 == localScopedMonuments.size() ? "este": "sunt").append(" inclus").append(1 == localScopedMonuments.size()? "" : "e")
-                    .append(" în [[lista monumentelor istorice din județul ").append(COUNTY_NAMES.get(county))
-                    .append("]]");
-                paraBuilder.append(retrieveTextForMultipleTypeMons(localScopedMonuments, "de interes local", true));
+                    .append(1 == localScopedMonuments.size() ? "este" : "sunt").append(" inclus")
+                    .append(1 == localScopedMonuments.size() ? "" : "e")
+                    .append(" în [[lista monumentelor istorice din județul ").append(COUNTY_NAMES.get(county)).append("]]");
+                paraBuilder.append(new LocalMonumentsListGenerator().generate(localScopedMonuments));
                 paragraphs.add(paraBuilder.toString());
             }
 
@@ -202,119 +194,12 @@ public class MonumentInCommuneGenerator {
         }
     }
 
-    // big big function that implements converting the lists
-    private String retrieveTextForMultipleTypeMons(List<Monument> monList, String scopeDescription, boolean colonBreak) {
-        List<List<Monument>> splitMonuments = splitMonumentsByType(monList);
-        if (splitMonuments.size() == 0) {
-            return null;
-        }
-        StringBuilder sb = new StringBuilder();
-
-        if (splitMonuments.size() == 1) { // only one type of monuments
-            if (splitMonuments.get(0).size() == 1) { // only one monument total
-                Monument theMonument = splitMonuments.get(0).get(0);
-                if (colonBreak) {
-                    sb.append(": ");
-                }
-                sb.append(MONUMENT_TYPE_DESCRIPTIONS[theMonument.type][1]).append(' ').append(scopeDescription).append(' ');
-                sb.append(theMonument.name);
-                sb.append(" datând din ").append(theMonument.dating);
-                if (0 < theMonument.submonuments.size()) {
-                    sb.append(", ansamblu alcătuit din ");
-                    sb.append(retrieveSubmonumentsText(theMonument));
-                }
-            } else { // more monuments of only one type
-                sb.append(", toate clasificate ca ").append(MONUMENT_TYPE_DESCRIPTIONS[splitMonuments.get(0).get(0).type][2])
-                    .append(' ').append(scopeDescription).append(": ");
-                List<String> monumentDescriptions = generateMonumentsListDescription(splitMonuments.get(0));
-                sb.append(joinWithConjunction(monumentDescriptions, ", ", " și "));
-            }
-        } else { // more types of monuments
-            String introWordSingle = "Unul";
-            String introWordMultiple = "";
-            sb.append(new NumberToWordsConvertor(monList.size()).convert()).append(' ')
-                .append(MONUMENT_TYPE_DESCRIPTIONS[0][2]).append(' ').append(scopeDescription).append(". ");
-            for (List<Monument> eachMonumentTypeList : splitMonuments) {
-                if (1 == eachMonumentTypeList.size()) {
-                    sb.append(introWordSingle).append(" este ")
-                        .append(MONUMENT_TYPE_DESCRIPTIONS[eachMonumentTypeList.get(0).type][1]).append(' ');
-
-                } else {
-                    sb.append(introWordMultiple).append(' ')
-                        .append(new NumberToWordsConvertor(eachMonumentTypeList.size()).convert()).append(" sunt ")
-                        .append(MONUMENT_TYPE_DESCRIPTIONS[eachMonumentTypeList.get(0).type][3]).append(": ");
-                }
-                introWordSingle = "Altul";
-                introWordMultiple = "Alte";
-                List<String> monumentDescriptions = generateMonumentsListDescription(eachMonumentTypeList);
-                sb.append(joinWithConjunction(monumentDescriptions, "; ", "; și ")).append(". ");
-            }
-        }
-
-        return sb.toString();
-    }
-
-    private List<String> generateMonumentsListDescription(List<Monument> monumentsList) {
-        int monIdx = 0;
-        List<String> monumentDescriptions = new ArrayList<String>();
-        for (Monument eachMonument : monumentsList) {
-            StringBuilder eachMonumentDescription = new StringBuilder(retrieveMonumentMention(eachMonument));
-            if (0 < eachMonument.submonuments.size()) {
-                eachMonumentDescription.append("\u00A0\u2014 ansamblu alcătuit din ")
-                    .append(retrieveSubmonumentsText(eachMonument));
-                if (monIdx < monumentsList.size() - 1) {
-                    eachMonumentDescription.append("\u00A0\u2014");
-                }
-            }
-
-            monumentDescriptions.add(eachMonumentDescription.toString());
-            monIdx++;
-        }
-        return monumentDescriptions;
-    }
-
-    private String retrieveMonumentMention(Monument theMonument) {
-        StringBuilder monumentMentionBuilder = new StringBuilder(theMonument.name);
-        if (null != theMonument.dating && 0 < theMonument.dating.trim().length()) {
-            monumentMentionBuilder.append(" (").append(theMonument.dating).append(")");
-        }
-        return monumentMentionBuilder.toString();
-    }
-
-    private String retrieveSubmonumentsText(Monument theMonument) {
-        if (theMonument.submonuments.size() == 0) {
-            return "";
-        }
-
-        List<String> submonumentDescriptions = new ArrayList<String>();
-        List<Monument> sortedSubmonuments = new ArrayList<Monument>(theMonument.submonuments);
-        Collections.sort(sortedSubmonuments,
-            (Monument m1, Monument m2) -> m1.supplementalCodeNumber.compareTo(m2.supplementalCodeNumber));
-        for (Monument eachSubmon : sortedSubmonuments) {
-            submonumentDescriptions.add(retrieveMonumentMention(eachSubmon));
-        }
-        return joinWithConjunction(submonumentDescriptions, ", ", " și ");
-    }
-
     private String retrieveQualifiedCommuneName(String communeName2) {
         StringBuilder communeQualifiedNameBuilder = new StringBuilder();
 
         communeQualifiedNameBuilder.append(UNIT_TYPE_DESCRIPTIONS.get(communeName2.charAt(0))[1]).append(' ')
             .append(communeName.substring(1));
         return communeQualifiedNameBuilder.toString();
-    }
-
-    private List<List<Monument>> splitMonumentsByType(List<Monument> monList) {
-        Map<Integer, List<Monument>> listsMap = new HashMap<Integer, List<Monument>>();
-        for (Monument eachMon : monList) {
-            List<Monument> specificMonumentList = listsMap.get(eachMon.type);
-            if (null == specificMonumentList) {
-                specificMonumentList = new ArrayList<Monument>();
-            }
-            specificMonumentList.add(eachMon);
-            listsMap.put(eachMon.type, specificMonumentList);
-        }
-        return new ArrayList<List<Monument>>(listsMap.values());
     }
 
     private void processSubmons(MongoCollection<Document> collection, final List<Monument> nationalScopedMonuments) {
