@@ -52,6 +52,7 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bson.Document;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikibase.WikibasePropertyFactory;
@@ -66,6 +67,14 @@ import org.wikibase.data.Snak;
 import org.wikibase.data.WikibaseData;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.util.WikiTemplate;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.Block;
+import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 public class FixVillages {
     private static final String CRISANA_LINK = "[[Crișana]]";
@@ -109,6 +118,8 @@ public class FixVillages {
             exception = e;
         }
 
+        MongoClient client = new MongoClient();
+
         Wikibase dwiki = new Wikibase();
         String[] countyCategoryMembers = rowiki.getCategoryMembers("Category:Județe în România", Wiki.CATEGORY_NAMESPACE);
         List<String> countyCategoryMembersList = Arrays.asList(countyCategoryMembers);
@@ -127,6 +138,7 @@ public class FixVillages {
         Property areaProp = WikibasePropertyFactory.getWikibaseProperty("P2046");
         Property altProp = WikibasePropertyFactory.getWikibaseProperty("P2044");
         Property mayorProp = WikibasePropertyFactory.getWikibaseProperty("P6");
+        Property webAddrProp = WikibasePropertyFactory.getWikibaseProperty("P856");
 
         Entity meterEnt = new Entity("Q11573");
         Entity squareKmEnt = new Entity("Q712226");
@@ -640,7 +652,7 @@ public class FixVillages {
 
                             if (!StringUtils.equals(pageText, initialPageText)) {
                                 rowiki.edit(rovillagearticle, pageText,
-                                    "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard.");
+                                    "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
                                 villageChanged = true;
                             }
                         }
@@ -717,6 +729,14 @@ public class FixVillages {
                                     }
                                 }
                                 initialTemplate.removeParam(eachParam);
+                            }
+                            if (startsWith(eachParam, "sit-")) {
+                                if (isNotBlank(paramValue) && (communeWikibaseItem.getClaims().containsKey(webAddrProp))
+                                    || (!StringUtils.equals("sit-adresă", eachParam)
+                                        && !communeWikibaseItem.getClaims().containsKey(webAddrProp)
+                                        && !initialTemplate.getParams().containsKey("sit-adresă"))) {
+                                    initialTemplate.removeParam(eachParam);
+                                }
                             }
                             if (StringUtils.equals(eachParam, "altitudine")) {
                                 if (isNotBlank(paramValue) && (!communeWikibaseItem.getClaims().containsKey(altProp)
@@ -1073,9 +1093,11 @@ public class FixVillages {
                                     + " în județul " + eachCounty + '|' + sortingKey + "]]");
                         }
 
+                        pageText = rewritePoliticsAndAdministrationSection(pageText, eachCounty, communeName, communeType);
+
                         if (!StringUtils.equals(pageText, initialPageText)) {
                             rowiki.edit(rocommunearticle, pageText,
-                                "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard.");
+                                "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard și secțiune de administrație. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
                             communeChanged = true;
                         }
 
@@ -1109,6 +1131,119 @@ public class FixVillages {
                 dwiki.logout();
             }
         }
+    }
+
+    private static final Pattern POLITICS_SECTION_PATTERN =
+        Pattern.compile("==\\s*(Politică|Politică și administrație|Administrație|Administrație și politică)\\s*==");
+    private static final Pattern DEMOGRAPHY_SECTION_PATTERN =
+        Pattern.compile("==\\s*(Populație|Demografie)\\s*==.*?==", Pattern.DOTALL);
+    private static final Pattern ALREADY_GENERATED_SECTION_PATTERN = Pattern.compile(
+        "<!-- secțiune administrație -->.*?<!--sfârșit secțiune administrație-->\\s*\\{\\{Componență politică\\s*\\|.*?\\}\\}",
+        Pattern.DOTALL);
+    private static final Pattern ALREADY_GENERATED_MODIFIED_SECTION_PATTERN = Pattern.compile(
+        "<!-- secțiune administrație modificată manual -->.*?<!--sfârșit secțiune administrație-->\\s*\\{\\{Componență politică\\s*\\|.*?\\}\\}",
+        Pattern.DOTALL);
+
+    private static String rewritePoliticsAndAdministrationSection(String pageText, String countyName, String communeName,
+                                                                  String communeType) {
+        String countyNameForMongo = replace(countyName, "ș", "ş");
+        countyNameForMongo = replace(countyNameForMongo, "ț", "ţ");
+        countyNameForMongo = replace(countyNameForMongo, "Ș", "Ş");
+        countyNameForMongo = replace(countyNameForMongo, "Ț", "Ţ");
+        String communeNameForMongo = replace(communeName, "ș", "ş");
+        communeNameForMongo = replace(communeNameForMongo, "ț", "ţ");
+        communeNameForMongo = replace(communeNameForMongo, "Ș", "Ş");
+        communeNameForMongo = replace(communeNameForMongo, "Ț", "Ţ");
+
+        int replacePosition = -1, insertPosition = -1;
+        Matcher politicsSectionMatcher = POLITICS_SECTION_PATTERN.matcher(pageText);
+        String politicsSectionTitle = "== Politică și administrație ==";
+        if (politicsSectionMatcher.find()) {
+            replacePosition = politicsSectionMatcher.start();
+            politicsSectionTitle = politicsSectionMatcher.group();
+        }
+
+        if (replacePosition < 0) {
+            Matcher demographySectionMatcher = DEMOGRAPHY_SECTION_PATTERN.matcher(pageText);
+            if (demographySectionMatcher.find()) {
+                insertPosition = demographySectionMatcher.end() - "==".length();
+            }
+        }
+
+        communeType = endsWith(communeType, "ă") ? appendIfMissing(removeEnd(communeType, "ă"), "a")
+            : appendIfMissing(appendIfMissing(communeType, "u"), "l");
+
+        MongoClient mongoClient = new MongoClient();
+        MongoDatabase electionsDb = mongoClient.getDatabase("elections2016");
+        MongoCollection<Document> electionsColl = electionsDb.getCollection("ConsLocal");
+        FindIterable<Document> electionResultsItrble =
+            electionsColl.find(Filters.and(Filters.eq("unit_type", communeType.substring(0, 1)),
+                Filters.regex("unit_name", replace(communeNameForMongo, "â", "(â|î)")),
+                Filters.eq("county", countyNameForMongo)));
+        electionResultsItrble.sort(new BasicDBObject("mandates", -1));
+
+        final List<Object[]> electionResults = new ArrayList<Object[]>();
+        electionResultsItrble.forEach(new Block<Document>() {
+
+            @Override
+            public void apply(Document t) {
+                Object[] crtResult = new Object[3];
+                crtResult[0] = t.getString("party_short");
+                crtResult[1] = t.getString("party_long");
+                crtResult[2] = t.get("mandates");
+                electionResults.add(crtResult);
+            }
+        });
+
+        mongoClient.close();
+
+        WikiTemplate councillorsTemplate = new WikiTemplate();
+        councillorsTemplate.setTemplateTitle("Componență politică");
+        councillorsTemplate.setParam("eticheta_compoziție", "Componența Consiliului");
+        councillorsTemplate.setParam("eticheta_mandate", "Consilieri");
+        int mandatesCount = 0;
+        for (int i = 0; i < electionResults.size(); i++) {
+            Object[] eachResult = electionResults.get(i);
+            mandatesCount += (Integer) eachResult[2];
+            councillorsTemplate.setParam("nume_scurt" + String.valueOf(1 + i), eachResult[0].toString());
+            councillorsTemplate.setParam("nume_complet" + String.valueOf(1 + i), eachResult[1].toString());
+            councillorsTemplate.setParam("mandate" + String.valueOf(1 + i), eachResult[2].toString());
+        }
+
+        String section = "\n{{safesubst:Secțiune Administrație comune România|tip_unitate="
+            + StringUtils.capitalize(communeType) + "|nume_unitate=" + communeName + "|num_consilieri=" + mandatesCount
+            + "}}\n\n" + councillorsTemplate.toString();
+        if (replacePosition >= 0) {
+            Matcher alreadyGeneratedAndManuallyModifiedSectionMatcher =
+                ALREADY_GENERATED_MODIFIED_SECTION_PATTERN.matcher(pageText);
+            if (alreadyGeneratedAndManuallyModifiedSectionMatcher.find(replacePosition)) {
+                return pageText;
+            }
+            Matcher alreadyGeneratedSectionMatcher = ALREADY_GENERATED_SECTION_PATTERN.matcher(pageText);
+            StringBuffer sbuf = new StringBuffer();
+            boolean foundOldSection = false;
+            if (alreadyGeneratedSectionMatcher.find(replacePosition)) {
+                alreadyGeneratedSectionMatcher.appendReplacement(sbuf, section);
+                foundOldSection = true;
+            }
+            alreadyGeneratedSectionMatcher.appendTail(sbuf);
+            pageText = sbuf.toString();
+            if (!foundOldSection) {
+                sbuf = new StringBuffer(pageText);
+                sbuf.insert(politicsSectionMatcher.end(), section);
+            }
+            pageText = sbuf.toString();
+        } else if (insertPosition > 0) {
+            StringBuilder sbuf = new StringBuilder(pageText);
+            sbuf.insert(insertPosition, politicsSectionTitle + section + '\n');
+            pageText = sbuf.toString();
+        } else {
+            StringBuilder sbuf = new StringBuilder(pageText);
+            sbuf.append(politicsSectionTitle).append(section).append('\n');
+            pageText = sbuf.toString();
+        }
+
+        return pageText;
     }
 
     private static Claim extractWdAltitudeDataFromParam(Property prop, Entity meterEnt, String data,
@@ -1298,13 +1433,12 @@ public class FixVillages {
             return "[[Oltenia]]";
         }
         if ("Olt".equalsIgnoreCase(trim(county))) {
-            if (Arrays
-                .asList("Bălteni", "Bărăști", "Brebeni", "Colonești", "Corbu", "Coteana", "Crâmpoia", "Cungrea",
-                    "Curtișoara", "Dăneasa", "Dobroteasa", "Făgețelu", "Ghimpețeni", "Icoana", "Ipotești",
-                    "Izvoarele", "Leleasca", "Mărunței", "Mihăești", "Milcov", "Movileni", "Nicolae Titulescu", "Oporelu",
-                    "Optași-Măgura", "Perieți", "Poboru", "Priseaca", "Radomirești", "Sâmburești", "Sârbii-Măgura", "Schitu",
-                    "Seaca", "Spineni", "Sprâncenata", "Stoicănești", "Șerbănești", "Tătulești", "Teslui", "Topana",
-                    "Tufeni", "Vâlcele", "Valea Mare", "Văleni", "Verguleasa", "Vitomirești", "Vulturești", "Drăgănești-Olt")
+            if (Arrays.asList("Bălteni", "Bărăști", "Brebeni", "Colonești", "Corbu", "Coteana", "Crâmpoia", "Cungrea",
+                "Curtișoara", "Dăneasa", "Dobroteasa", "Făgețelu", "Ghimpețeni", "Icoana", "Ipotești", "Izvoarele",
+                "Leleasca", "Mărunței", "Mihăești", "Milcov", "Movileni", "Nicolae Titulescu", "Oporelu", "Optași-Măgura",
+                "Perieți", "Poboru", "Priseaca", "Radomirești", "Sâmburești", "Sârbii-Măgura", "Schitu", "Seaca", "Slatina",
+                "Spineni", "Sprâncenata", "Stoicănești", "Șerbănești", "Tătulești", "Teslui", "Topana", "Tufeni", "Vâlcele",
+                "Valea Mare", "Văleni", "Verguleasa", "Vitomirești", "Vulturești", "Drăgănești-Olt")
                 .contains(trim(commune))) {
                 return MUNTENIA_LINK;
             } else if (Arrays.asList("Câineni").contains(trim(commune))) {
