@@ -44,6 +44,7 @@ public class DeclareTranslatedPage implements WikiOperation {
         try {
             talkPageText = trim(defaultString(targetWiki.getPageText(article)));
         } catch (FileNotFoundException e) {
+            System.out.println("Page not found: " + article + " - " + e.getMessage());
         }
         boolean small = false;
         if (talkPageText.length() > 0) {
