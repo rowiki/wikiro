@@ -417,8 +417,8 @@ if __name__ == "__main__":
     pywikibot.output("...done")
     f.close()
     
-    l = csvUtils.csvToJson("monumente/date_externe/lacase_cimec_descriere.csv", field="cod")
-    m = csvUtils.csvToJson("monumente/date_externe/muzeu_cimec_descriere.csv", field="cod")
+    l = csvUtils.csvToJson("lacase_cimec_descriere.csv", field="cod")
+    m = csvUtils.csvToJson("muzeu_cimec_descriere.csv", field="cod")
 
     site = pywikibot.Site()
     
