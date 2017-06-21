@@ -395,3 +395,4 @@ if __name__ == "__main__":
     pywikibot.output(convertUrlToWikilink("//ro.wikipedia.org/wiki/Lista_monumentelor_istorice_din_jude%C8%9Bul_Alba"))
 
     # print textlib.extract_templates_and_params("{{Sema2|a={{citat|c=d|c1=d1}}|e=f}}")
+    pass
