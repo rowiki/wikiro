@@ -1,6 +1,6 @@
 package org.wikipedia.ro.astroe;
 
-import static org.apache.commons.lang3.StringUtils.appendIfMissing;
+import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.lang3.StringUtils.contains;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
@@ -33,6 +33,7 @@ import java.text.ParseException;
 import java.text.RuleBasedCollator;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -54,6 +55,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.wikibase.Wikibase;
+import org.wikibase.WikibaseEntityFactory;
 import org.wikibase.WikibaseException;
 import org.wikibase.WikibasePropertyFactory;
 import org.wikibase.data.Claim;
@@ -63,7 +65,9 @@ import org.wikibase.data.Item;
 import org.wikibase.data.LanguageString;
 import org.wikibase.data.Property;
 import org.wikibase.data.Quantity;
+import org.wikibase.data.Rank;
 import org.wikibase.data.Snak;
+import org.wikibase.data.Time;
 import org.wikibase.data.WikibaseData;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.populationdb.util.WikiTemplate;
@@ -139,6 +143,9 @@ public class FixVillages {
         Property altProp = WikibasePropertyFactory.getWikibaseProperty("P2044");
         Property mayorProp = WikibasePropertyFactory.getWikibaseProperty("P6");
         Property webAddrProp = WikibasePropertyFactory.getWikibaseProperty("P856");
+        Property popProp = WikibasePropertyFactory.getWikibaseProperty("P1082");
+        Property pointInTimeProp = WikibasePropertyFactory.getWikibaseProperty("P585");
+        Property sirutaProp = WikibasePropertyFactory.getWikibaseProperty("P843");
 
         Entity meterEnt = new Entity("Q11573");
         Entity squareKmEnt = new Entity("Q712226");
@@ -197,7 +204,11 @@ public class FixVillages {
 
                 String[] subcategories =
                     rowiki.getCategoryMembers("Category:Orașe în județul " + eachCounty, Wiki.CATEGORY_NAMESPACE);
-                for (String eachSubcat : subcategories) {
+                List<String> subcategoriesList = new ArrayList<String>();
+                subcategoriesList.addAll(Arrays.asList(subcategories));
+                subcategoriesList.addAll(Arrays
+                    .asList(rowiki.getCategoryMembers("Category:Comune în județul " + eachCounty, Wiki.CATEGORY_NAMESPACE)));
+                for (String eachSubcat : subcategoriesList) {
                     String catTitle = removeStart(eachSubcat, "Categorie:");
                     String[] subarticles = rowiki.getCategoryMembers(eachSubcat, Wiki.MAIN_NAMESPACE);
                     for (String eachSubarticle : subarticles) {
@@ -353,6 +364,36 @@ public class FixVillages {
                                 initialTemplate.removeParam("județ");
                                 initialTemplate.removeParam("resedinta");
                                 initialTemplate.removeParam("reședința");
+                                if (null != villageEntity.getClaims()) {
+                                    Set<Claim> popClaims = villageEntity.getClaims().get(popProp);
+                                    if (null != popClaims && 0 < popClaims.size()) {
+                                        for (Claim eachPopClaim: popClaims) {
+                                            Set<Snak> pointsInTime = eachPopClaim.getQualifiers().get(pointInTimeProp);
+                                            if (null != pointsInTime && 0 < pointsInTime.size()) {
+                                                for (Snak eachPointInTimeSnak: pointsInTime) {
+                                                    Time pointInTimeData = (Time) eachPointInTimeSnak.getData();
+                                                    Calendar cal = pointInTimeData.getCalendar();
+                                                    if (null != cal && cal.get(Calendar.YEAR) >= 2011) {
+                                                        initialTemplate.removeParam("populație");
+                                                        initialTemplate.removeParam("populatie");
+                                                        initialTemplate.removeParam("recensământ");
+                                                        initialTemplate.removeParam("recensamant");
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    Set<Claim> sirutaClaims = villageEntity.getClaims().get(sirutaProp);
+                                    if (null != sirutaClaims && 0 < sirutaClaims.size()) {
+                                        for (Claim eachSirutaClaim: sirutaClaims) {
+                                            if ("statement".equals(eachSirutaClaim.getType())) {
+                                                initialTemplate.removeParam("cod_clasificare");
+                                                initialTemplate.removeParam("tip_cod_clasificare");
+                                            }
+                                        }
+                                    }
+                                }
                                 if (StringUtils.equalsIgnoreCase("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
                                     if (isBlank(initialTemplate.getParams().get("nume_nativ"))
                                         && isNotBlank(initialTemplate.getParams().get("alt_nume"))) {
@@ -658,7 +699,7 @@ public class FixVillages {
                         }
 
                         if (villageChanged) {
-                            long sleeptime = 10 + Math.round(20 * Math.random());
+                            long sleeptime = 10 + Math.round(10 * Math.random());
                             System.out.println("Sleeping " + sleeptime + "s");
                             Thread.sleep(1000l * sleeptime);
                         }
@@ -842,6 +883,18 @@ public class FixVillages {
                         initialTemplate.removeParam("descriere");
                         initialTemplate.removeParam("imagine_dimensiune");
                         initialTemplate.removeParam("dimensiune_imagine");
+                        
+                        Set<Claim> sirutaClaims = communeClaims.get(sirutaProp);
+                        if (null != sirutaClaims && 0 < sirutaClaims.size()) {
+                            for (Claim eachSirutaClaim: sirutaClaims) {
+                                if ("statement".equals(eachSirutaClaim.getType())) {
+                                    initialTemplate.removeParam("cod_clasificare");
+                                    initialTemplate.removeParam("tip_cod_clasificare");
+                                    initialTemplate.removeParam("siruta");
+                                }
+                            }
+                        }
+
                     }
                     if (communeClaims.containsKey(captionProp) && null != communeClaims.get(captionProp)) {
                         Set<Claim> imagesClaims = communeClaims.get(imageProp);
@@ -1093,7 +1146,7 @@ public class FixVillages {
                                     + " în județul " + eachCounty + '|' + sortingKey + "]]");
                         }
 
-                        pageText = rewritePoliticsAndAdministrationSection(pageText, eachCounty, communeName, communeType);
+                        pageText = rewritePoliticsAndAdministrationSection(pageText, eachCounty, communeName, communeType, communeWikibaseItem, dwiki);
 
                         if (!StringUtils.equals(pageText, initialPageText)) {
                             rowiki.edit(rocommunearticle, pageText,
@@ -1136,24 +1189,28 @@ public class FixVillages {
     private static final Pattern POLITICS_SECTION_PATTERN =
         Pattern.compile("==\\s*(Politică|Politică și administrație|Administrație|Administrație și politică)\\s*==");
     private static final Pattern DEMOGRAPHY_SECTION_PATTERN =
-        Pattern.compile("==\\s*(Populație|Demografie)\\s*==.*?==", Pattern.DOTALL);
+        Pattern.compile("==\\s*(Populați(?:e|a)|Demografie)\\s*==.*?==", Pattern.DOTALL);
     private static final Pattern ALREADY_GENERATED_SECTION_PATTERN = Pattern.compile(
-        "<!-- secțiune administrație -->.*?<!--sfârșit secțiune administrație-->\\s*\\{\\{Componență politică\\s*\\|.*?\\}\\}",
+        "\\s?<!-- secțiune administrație -->.*?<!--sfârșit secțiune administrație-->\\s*\\{\\{Componență politică\\s*\\|.*?\\}\\}",
         Pattern.DOTALL);
     private static final Pattern ALREADY_GENERATED_MODIFIED_SECTION_PATTERN = Pattern.compile(
-        "<!-- secțiune administrație modificată manual -->.*?<!--sfârșit secțiune administrație-->\\s*\\{\\{Componență politică\\s*\\|.*?\\}\\}",
+        "\\s?<!-- secțiune administrație modificată manual -->.*?<!--sfârșit secțiune administrație-->\\s*\\{\\{Componență politică\\s*\\|.*?\\}\\}",
         Pattern.DOTALL);
 
     private static String rewritePoliticsAndAdministrationSection(String pageText, String countyName, String communeName,
-                                                                  String communeType) {
+                                                                  String communeType, Entity communeItem, Wikibase dwiki) throws IOException, WikibaseException {
         String countyNameForMongo = replace(countyName, "ș", "ş");
         countyNameForMongo = replace(countyNameForMongo, "ț", "ţ");
         countyNameForMongo = replace(countyNameForMongo, "Ș", "Ş");
         countyNameForMongo = replace(countyNameForMongo, "Ț", "Ţ");
-        String communeNameForMongo = replace(communeName, "ș", "ş");
-        communeNameForMongo = replace(communeNameForMongo, "ț", "ţ");
-        communeNameForMongo = replace(communeNameForMongo, "Ș", "Ş");
-        communeNameForMongo = replace(communeNameForMongo, "Ț", "Ţ");
+        String communeNameRegexForMongo = replace(communeName, "ș", "(ș|ş)");
+        communeNameRegexForMongo = replace(communeNameRegexForMongo, "ț", "[țţ]");
+        communeNameRegexForMongo = replace(communeNameRegexForMongo, "Ș", "[ȘŞ]");
+        communeNameRegexForMongo = replace(communeNameRegexForMongo, "Ț", "[ȚŢ]");
+        communeNameRegexForMongo = replace(communeNameRegexForMongo, "â", "[âî]");
+        communeNameRegexForMongo =
+            replaceEach(communeNameRegexForMongo, new String[] { " ", "-" }, new String[] { "( |\\-)", "( |\\-)" });
+        communeNameRegexForMongo = "^" + communeNameRegexForMongo + "$";
 
         int replacePosition = -1, insertPosition = -1;
         Matcher politicsSectionMatcher = POLITICS_SECTION_PATTERN.matcher(pageText);
@@ -1178,8 +1235,7 @@ public class FixVillages {
         MongoCollection<Document> electionsColl = electionsDb.getCollection("ConsLocal");
         FindIterable<Document> electionResultsItrble =
             electionsColl.find(Filters.and(Filters.eq("unit_type", communeType.substring(0, 1)),
-                Filters.regex("unit_name", replace(communeNameForMongo, "â", "(â|î)")),
-                Filters.eq("county", countyNameForMongo)));
+                Filters.regex("unit_name", communeNameRegexForMongo), Filters.eq("county", countyNameForMongo)));
         electionResultsItrble.sort(new BasicDBObject("mandates", -1));
 
         final List<Object[]> electionResults = new ArrayList<Object[]>();
@@ -1209,9 +1265,36 @@ public class FixVillages {
             councillorsTemplate.setParam("nume_complet" + String.valueOf(1 + i), eachResult[1].toString());
             councillorsTemplate.setParam("mandate" + String.valueOf(1 + i), eachResult[2].toString());
         }
+        
+        String partyIntro = "";
+        Set<Claim> mayors = communeItem.getClaims().get(WikibasePropertyFactory.getWikibaseProperty("P6"));
+        Claim mayorClaim = null;
+        for (Claim eachMayorClaim: mayors) {
+            if (null == mayorClaim || Rank.PREFERRED.equals(eachMayorClaim.getRank())) {
+                mayorClaim = eachMayorClaim;
+            }
+        }
+        if (null != mayorClaim) {
+            Item mayorItem = (Item) mayorClaim.getValue();
+            Entity mayorEnt = dwiki.getWikibaseItemById(mayorItem.getEnt());
+            Set<Claim> partyClaims = mayorEnt.getClaims().get(WikibasePropertyFactory.getWikibaseProperty("P102"));
+            Claim partyClaim = null;
+            for (Claim eachPartyClaim: partyClaims) {
+                if (null == partyClaim || Rank.PREFERRED.equals(eachPartyClaim.getRank())) {
+                    partyClaim = eachPartyClaim;
+                }
+            }
+            if (null != partyClaim) {
+                Entity partyEnt = ((Item) partyClaim.getValue()).getEnt();
+                if (null != partyEnt && !partyEnt.getId().endsWith("327591")) {
+                    partyIntro = "de la";
+                }
+            }
+        }
 
         String section = "\n{{safesubst:Secțiune Administrație comune România|tip_unitate="
             + StringUtils.capitalize(communeType) + "|nume_unitate=" + communeName + "|num_consilieri=" + mandatesCount
+            + "|prefix_partid=" + partyIntro
             + "}}\n\n" + councillorsTemplate.toString();
         if (replacePosition >= 0) {
             Matcher alreadyGeneratedAndManuallyModifiedSectionMatcher =
@@ -1232,15 +1315,15 @@ public class FixVillages {
                 sbuf = new StringBuffer(pageText);
                 sbuf.insert(politicsSectionMatcher.end(), section);
             }
-            pageText = sbuf.toString();
+            pageText = sbuf.toString().trim();
         } else if (insertPosition > 0) {
             StringBuilder sbuf = new StringBuilder(pageText);
             sbuf.insert(insertPosition, politicsSectionTitle + section + '\n');
-            pageText = sbuf.toString();
+            pageText = sbuf.toString().trim();
         } else {
             StringBuilder sbuf = new StringBuilder(pageText);
             sbuf.append(politicsSectionTitle).append(section).append('\n');
-            pageText = sbuf.toString();
+            pageText = sbuf.toString().trim();
         }
 
         return pageText;
@@ -1397,17 +1480,14 @@ public class FixVillages {
                 "Slobozia Ciorăști", "Tâmboești", "Tătăranu", "Urechești", "Vârteșcoiu", "Vintileasca")
                 .contains(trim(commune))) {
                 return MUNTENIA_LINK;
-            } else if (Arrays.asList("Mera", "Vulturu").contains(trim(commune))) {
+            } else if (Arrays.asList("Mera").contains(trim(commune))) {
                 if (Arrays.asList("Vulcăneasa").contains(trim(settlement))) {
                     return MUNTENIA_LINK;
                 }
-                if (Arrays.asList("Hângulești", "Maluri").contains(trim(settlement))) {
-                    return MUNTENIA_LINK;
-                }
-            } else if ("Focșani".equals(trim(commune))) {
+            } else if (Arrays.asList("Focșani", "Vulturu").contains(trim(commune))) {
                 if (null == settlement) {
                     return "la limita între regiunile istorice " + join(Arrays.asList(MOLDOVA_LINK, MUNTENIA_LINK), " și ");
-                } else if (settlement.contains("Munteni")) {
+                } else if (settlement.contains("Munteni") || Arrays.asList("Hângulești", "Maluri").contains(settlement)) {
                     return MUNTENIA_LINK;
                 }
             }
@@ -1525,7 +1605,7 @@ public class FixVillages {
             if (Arrays
                 .asList("Adâncata", "Baia", "Bogdănești", "Boroaia", "Broșteni", "Crucea", "Dolhești", "Drăgușeni",
                     "Dumbrăveni", "Fântâna Mare", "Fântânele", "Forăști", "Grămești", "Hănțești", "Hârtop", "Horodniceni",
-                    "Mălini", "Panaci", "Preutești", "Rădășeni", "Râșca", "Simimicea", "Slatina", "Vadu Moldovei", "Verești",
+                    "Mălini", "Panaci", "Preutești", "Rădășeni", "Râșca", "Siminicea", "Slatina", "Vadu Moldovei", "Verești",
                     "Vulturești", "Zamostea", "Zvoriștea", "Dolhasca", "Fălticeni", "Liteni", "Salcea")
                 .contains(trim(commune))) {
                 return MOLDOVA_LINK;
@@ -1557,6 +1637,10 @@ public class FixVillages {
                 && Arrays.asList("Mănăstioara", "Racova", "Știrbăț").contains(trim(settlement))) {
                 return MOLDOVA_LINK;
             }
+            if ("Siret".equalsIgnoreCase(trim(commune)) && "Pădureni".equalsIgnoreCase(trim(settlement))) {
+                return MOLDOVA_LINK;
+            }
+            
 
             return BUCOVINA_LINK;
         }
