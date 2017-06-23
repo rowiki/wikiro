@@ -251,11 +251,11 @@ def convertUrlToWikilink(url):
     import urllib.request, urllib.parse, urllib.error
     pr = urlparse(url)
     if (pr.query != ""):
-        q = parse_qs(pr.query.encode("utf8"))
+        q = parse_qs(pr.query)
         title = q["title"][0]
     else:
         title = urllib.parse.unquote(pr.path.split('/')[-1].encode("utf8"))
-    return title.decode("utf8")
+    return title
 
 
 # --------- String functions ----------
