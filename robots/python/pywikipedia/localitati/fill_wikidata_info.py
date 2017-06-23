@@ -139,6 +139,9 @@ class ItemProcessing:
                 if pref:
                     claim.changeRank('preferred')
         except Exception as e:
+            print("key", key)
+            print("data", data)
+            print("config", self.config)
             pywikibot.output(e)
             import traceback
             traceback.print_exc()
@@ -202,10 +205,18 @@ class CityData(robot.WorkItem):
 
     def getInfoboxContent(self, item,
                           name=u'(Infocaseta Așezare|Cutie Sate|Casetă comune România)'):
-        text = self.getWikiArticle(item).get()
+        text = self.getWikiArticle(item)
+        if text:
+            text = text.get()
+        else:
+            return None
         tl = sf.extractTemplate(text, name)
         if tl:
             tl = sf.tl2Dict(tl)[0]
+        tl2 = sf.extractTemplate(text, u"commonscat")
+        if tl2:
+            tl2 = sf.tl2Dict(tl2)[0]
+            tl[u"commonscat"] = tl2.get(1)
         return tl
 
     def getInfoboxElement(self, item, element=None,
@@ -238,14 +249,22 @@ class CommonsProcessing(ItemProcessing, CityData):
 
     def createCommonsProperty(self, siruta):
         if self.isCounty() and self.label != u"București":
-            self.updateProperty(self.item, u"Commons",
+            self.updateProperty(u"Commons",
                                 {u"Commons": self.item.labels.get('ro') + u" County"})
+        else:
+            cc = self.getInfoboxElement(self.item, u"commonscat")
+            if cc:
+               print(cc)
+               self.updateProperty(u"Commons", {u"Commons": cc})
         # TODO: search for it first
         pass
 
     def updateCommons(self):
         cProp, cPref, cDatatype = self.config["properties"][u"Commons"]
         sProp, sPref, sDatatype = self.config["properties"][u"SIRUTA"]
+        if self.isOfType(u"Q15303838") or self.isOfType(u"Q659103"):
+            print("Skipping municipality seat for now")
+            return
         if cProp not in self.item.claims:
             self.createCommonsProperty(self.item.claims[sProp][0].getTarget())
         elif len(self.item.claims[cProp]) > 1:
@@ -265,7 +284,7 @@ class CommonsProcessing(ItemProcessing, CityData):
         return
         while page.isRedirectPage():
             page = page.getRedirectTarget()
-        print sirutaTl
+        print(sirutaTl)
         if sirutaTl not in page.templates():
             text = page.get()
             newText = u"{{%s|%s}}\n%s" % (sirutaTl.title(withNamespace=False), siruta, text)
@@ -302,7 +321,7 @@ class CountyProcessing(ItemProcessing, CityData):
             text = u"[[Category:%s County]]\n" % self.label
             for newcat in cats[template]:
                 text += u"[[%s|%s]]" % (newcat, sortFromName(self.label))
-            print text
+            print(text)
             answer = self.userConfirm("Create category %s?" % page.title())
             if answer:
                 page.put(text, u"Creating new subcategory for a Romanian County")
@@ -332,7 +351,7 @@ class PostCodeProcessing(ItemProcessing, CityData):
         codpWD = self.getUniqueClaim(u"codp", canBeNull=True)
         # codpWP = self.getInfoboxElement(self.item, element=u"codpoștal")
         # codp = self.sirutaDb.get_postal_code(int(sirutaWD))
-        print sirutaWD
+        print(sirutaWD)
         codpPost = self.postCodesDb.getFromSIRUTA(int(sirutaWD))
         print ('wd', codpWD)
         print ('post', codpPost)
@@ -507,17 +526,17 @@ if __name__ == "__main__":
     user.mylang = 'wikidata'
     user.family = 'wikidata'
     sirutaDb = sirutalib.SirutaDatabase()
-    postCodes = postal_codes.PostalCodes("codp_B.csv", "codp_50k.csv", "codp_1k.csv")
+    postCodes = None#postal_codes.PostalCodes("codp_B.csv", "codp_50k.csv", "codp_1k.csv")
     page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
     # page = pywikibot.Page(pywikibot.Site(), "Q193055", ns=0)
     generator = pagegenerators.ReferringPageGenerator(page)
     bot = robot.WikidataBot(site=True, generator=generator)
 
     # bot.workers.append(CountyProcessing(config))
-    bot.workers.append(PostCodeProcessing(config, siruta=sirutaDb, postCode=postCodes))
+    #bot.workers.append(PostCodeProcessing(config, siruta=sirutaDb, postCode=postCodes))
     # bot.workers.append(URLProcessing(config))
     # bot.workers.append(ImageProcessing(config))
-    # bot.workers.append(CommonsProcessing(config))
+    bot.workers.append(CommonsProcessing(config))
     # bot.workers.append(SIRUTAProcessing(config, siruta=sirutaDb))
     # bot.workers.append(RelationsProcessing(config, siruta=sirutaDb))
     # bot.workers.append(TimezoneProcessing(config))
