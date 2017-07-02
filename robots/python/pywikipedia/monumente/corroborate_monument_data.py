@@ -326,10 +326,10 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 	my_params = {}
 	rowTemplate = countries.get((_lang, _db)).get('rowTemplate')
 	
-	templates = pywikibot.textlib.extract_templates_and_params(text)
+	templates = pywikibot.textlib.extract_templates_and_params(text, strip=True)
 	for (template, params) in templates:
 		if template == rowTemplate:
-			params = { k.strip(): v for k,v in params.items() }
+			#params = { k.strip(): v for k,v in params.items() }
 			old_params = dict(params)
 			params = monumente.filterOne(params, countries.get((_lang, _db)))
 			for param in params:

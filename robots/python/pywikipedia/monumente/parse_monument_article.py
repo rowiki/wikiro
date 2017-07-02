@@ -338,8 +338,8 @@ def closeLog():
 	_flog.close()
 
 def log(string):
-	pywikibot.output(string.encode("utf8") + "\n")
-	_flog.write(string.encode("utf8") + "\n")
+	pywikibot.output(string + "\n")
+	_flog.write(string + "\n")
 
 def dms2dec(deg, min, sec, sign):
 	return sign * (deg + (min / 60.0) + (sec / 3600.0))
@@ -501,7 +501,7 @@ def processCreatorTemplate(name, conf):
 		return ""
 	while creator.isRedirectPage():
 		creator = creator.getRedirectTarget()
-	tls = pywikibot.extract_templates_and_params(creator.get())
+	tls = pywikibot.extract_templates_and_params(creator.get(), strip=True)
 	for (template,params) in tls:
 		print(params)
 		if template != "Creator":
