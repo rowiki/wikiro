@@ -190,17 +190,20 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
             String linkTitle = innerLinkMatcher.group(3);
             if (isBlank(articleTitle)) {
+                System.out.println("Blank! skipping...");
                 continue;
             }
             if (startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:",
                 "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", "imdbname:", "c:file:", "doi:",
                 "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:")) {
+                System.out.println("Link to another thing! Skipping...");
                 continue;
             }
             articleTitle = defaultString(targetWiki.resolveRedirect(articleTitle), articleTitle);
             status = new String[] { "status.analyzing.link", articleTitle};
 
             if (targetWiki.exists(new String[] { articleTitle })[0]) {
+                System.out.println("Already exists! skipping...");
                 continue;
             }
             String enArticleTitle = defaultString(sourceWiki.resolveRedirect(articleTitle), articleTitle);
