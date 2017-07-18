@@ -26,6 +26,7 @@ import static org.apache.commons.lang3.StringUtils.substringAfter;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 import static org.apache.commons.lang3.StringUtils.trim;
 
+import java.io.Console;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.text.NumberFormat;
@@ -172,17 +173,32 @@ public class FixVillages {
         Collections.sort(countyNames, roComp.init("Județul "));
 
         try {
+            /*
             final Properties credentials = new Properties();
 
             credentials.load(FixVillages.class.getClassLoader().getResourceAsStream("credentials.properties"));
+            
+            rowpusername = credentials.getProperty("rowiki.user");
+            
+            String rowppassword = credentials.getProperty("rowiki.password");
+            String datausername = credentials.getProperty("wd.user");
+            String datapassword = credentials.getProperty("wd.password");
+            */
+            String rowpusername, datausername; 
+            char[] rowppassword, datapassword;
+            Console sysConsole = System.console();
+            sysConsole.printf("Wiki username:");
+            rowpusername = sysConsole.readLine();
+            sysConsole.printf("Wiki password:");
+            rowppassword = sysConsole.readPassword();
+            sysConsole.printf("Data username:");
+            datausername = sysConsole.readLine();
+            sysConsole.printf("Data password:");
+            datapassword = sysConsole.readPassword();
 
-            final String rowpusername = credentials.getProperty("rowiki.user");
-            final String rowppassword = credentials.getProperty("rowiki.password");
-            final String datausername = credentials.getProperty("wd.user");
-            final String datapassword = credentials.getProperty("wd.password");
 
-            rowiki.login(rowpusername, rowppassword.toCharArray());
-            dwiki.login(datausername, datapassword.toCharArray());
+            rowiki.login(rowpusername, rowppassword);
+            dwiki.login(datausername, datapassword);
             rowiki.setMarkBot(true);
 
             String countyStart = null;
@@ -1198,7 +1214,8 @@ public class FixVillages {
         Pattern.DOTALL);
 
     private static String rewritePoliticsAndAdministrationSection(String pageText, String countyName, String communeName,
-                                                                  String communeType, Entity communeItem, Wikibase dwiki) throws IOException, WikibaseException {
+                                                                  String communeType, Entity communeItem, Wikibase dwiki)
+        throws IOException, WikibaseException {
         String countyNameForMongo = replace(countyName, "ș", "ş");
         countyNameForMongo = replace(countyNameForMongo, "ț", "ţ");
         countyNameForMongo = replace(countyNameForMongo, "Ș", "Ş");
@@ -1265,11 +1282,11 @@ public class FixVillages {
             councillorsTemplate.setParam("nume_complet" + String.valueOf(1 + i), eachResult[1].toString());
             councillorsTemplate.setParam("mandate" + String.valueOf(1 + i), eachResult[2].toString());
         }
-        
+
         String partyIntro = "";
         Set<Claim> mayors = communeItem.getClaims().get(WikibasePropertyFactory.getWikibaseProperty("P6"));
         Claim mayorClaim = null;
-        for (Claim eachMayorClaim: mayors) {
+        for (Claim eachMayorClaim : mayors) {
             if (null == mayorClaim || Rank.PREFERRED.equals(eachMayorClaim.getRank())) {
                 mayorClaim = eachMayorClaim;
             }
@@ -1279,7 +1296,7 @@ public class FixVillages {
             Entity mayorEnt = dwiki.getWikibaseItemById(mayorItem.getEnt());
             Set<Claim> partyClaims = mayorEnt.getClaims().get(WikibasePropertyFactory.getWikibaseProperty("P102"));
             Claim partyClaim = null;
-            for (Claim eachPartyClaim: partyClaims) {
+            for (Claim eachPartyClaim : partyClaims) {
                 if (null == partyClaim || Rank.PREFERRED.equals(eachPartyClaim.getRank())) {
                     partyClaim = eachPartyClaim;
                 }
@@ -1294,8 +1311,7 @@ public class FixVillages {
 
         String section = "\n{{safesubst:Secțiune Administrație comune România|tip_unitate="
             + StringUtils.capitalize(communeType) + "|nume_unitate=" + communeName + "|num_consilieri=" + mandatesCount
-            + "|prefix_partid=" + partyIntro
-            + "}}\n\n" + councillorsTemplate.toString();
+            + "|prefix_partid=" + partyIntro + "}}\n\n" + councillorsTemplate.toString();
         if (replacePosition >= 0) {
             Matcher alreadyGeneratedAndManuallyModifiedSectionMatcher =
                 ALREADY_GENERATED_MODIFIED_SECTION_PATTERN.matcher(pageText);
@@ -1640,7 +1656,6 @@ public class FixVillages {
             if ("Siret".equalsIgnoreCase(trim(commune)) && "Pădureni".equalsIgnoreCase(trim(settlement))) {
                 return MOLDOVA_LINK;
             }
-            
 
             return BUCOVINA_LINK;
         }
