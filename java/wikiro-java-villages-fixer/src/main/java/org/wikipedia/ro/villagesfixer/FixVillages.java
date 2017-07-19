@@ -1204,14 +1204,14 @@ public class FixVillages {
     }
 
     private static final Pattern POLITICS_SECTION_PATTERN =
-        Pattern.compile("==\\s*(Politică|Politică și administrație|Administrație|Administrație și politică)\\s*==");
+        Pattern.compile("==\\s*(Politică|Politică și administrație|Administrație|Administrație și politică|Administrați(e|a) locală)\\s*==");
     private static final Pattern DEMOGRAPHY_SECTION_PATTERN =
         Pattern.compile("==\\s*(Populați(?:e|a)|Demografie)\\s*==.*?==", Pattern.DOTALL);
     private static final Pattern ALREADY_GENERATED_SECTION_PATTERN = Pattern.compile(
         "\\s?<!-- secțiune administrație -->.*?<!--sfârșit secțiune administrație-->\\s*\\{\\{Componență politică\\s*\\|.*?\\}\\}",
         Pattern.DOTALL);
     private static final Pattern ALREADY_GENERATED_MODIFIED_SECTION_PATTERN = Pattern.compile(
-        "\\s?<!-- secțiune administrație modificată manual -->.*?<!--sfârșit secțiune administrație-->\\s*\\{\\{Componență politică\\s*\\|.*?\\}\\}",
+        "\\s?<!--\\s*secțiune administrație modificată manual\\s*-->.*?<!--sfârșit secțiune administrație-->\\s*\\{\\{Componență politică\\s*\\|.*?\\}\\}",
         Pattern.DOTALL);
 
     private static String rewritePoliticsAndAdministrationSection(String pageText, String countyName, String communeName,
