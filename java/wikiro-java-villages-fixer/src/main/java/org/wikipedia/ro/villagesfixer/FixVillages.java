@@ -44,7 +44,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,7 +71,6 @@ import org.wikibase.data.WikibaseData;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.InitializableComparator;
 import org.wikipedia.ro.utils.LinkUtils;
-import org.wikipedia.ro.utils.TextUtils;
 import org.wikipedia.ro.utils.WikiTemplate;
 
 import com.mongodb.BasicDBObject;
@@ -231,6 +229,24 @@ public class FixVillages {
                         if (StringUtils.equals(eachSubarticle, catTitle)) {
                             categoryMembersList.add(eachSubarticle);
                         }
+                    }
+                }
+
+                String[] settlementCategories = new String[] { "Categorie:Localități urbane în județul " + eachCounty,
+                    "Categorie:Sate în județul " + eachCounty, "Categorie:Subunități administrative ale județului " + eachCounty };
+                String[] settlementCategoriesContent = new String[] {
+                    "[[Categorie:Localități în județul " + eachCounty + "]]\n[[Categorie:Localități urbane în România|"
+                        + eachCounty + "]]",
+                    "[[Categorie:Localități în județul " + eachCounty + "]]\n[[Categorie:Sate din România după județ|"
+                        + eachCounty + "]]",
+                    "[[Categorie:Geografia județului " + eachCounty
+                        + "]]\n[[Categorie:Subunități administrative ale județelor României|" + eachCounty + "]]", };
+                boolean[] categories = rowiki.exists(settlementCategories);
+
+                for (int catIdx = 0; catIdx < settlementCategories.length; catIdx++) {
+                    if (!categories[catIdx]) {
+                        rowiki.edit(settlementCategories[catIdx], settlementCategoriesContent[catIdx],
+                            "Creare categorii cu localități și subunități administrative pentru județul " + eachCounty);
                     }
                 }
 
@@ -707,9 +723,19 @@ public class FixVillages {
                             String newFirstParagraph = trim(newFirstParagraphBuilder.toString());
                             pageText = pageText.replace(firstParagraph, newFirstParagraph);
 
+                            List<String> desiredCategories = new ArrayList<String>();
+                            if (startsWith(villageType, "localitate")) {
+                                desiredCategories.add("Localități urbane în județul " + eachCounty);
+                            } else {
+                                desiredCategories.add("Sate în județul " + eachCounty);
+                            }
+
+                            pageText = recategorize(pageText, new String[] { villageName, communeName, eachCounty },
+                                rovillagearticle, desiredCategories);
+
                             if (!StringUtils.equals(pageText, initialPageText)) {
                                 rowiki.edit(rovillagearticle, pageText,
-                                    "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
+                                    "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard, recategorisit. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
                                 villageChanged = true;
                             }
                         }
@@ -1162,12 +1188,33 @@ public class FixVillages {
                                     + " în județul " + eachCounty + '|' + sortingKey + "]]");
                         }
 
+                        List<String> desiredCommuneCategories = new ArrayList<String>();
+                        if (communeType.equals("oraș")) {
+                            desiredCommuneCategories.add("Orașe în județul " + eachCounty);
+                            if (urbanSettlements.containsKey(communeName)) {
+                                desiredCommuneCategories.add("Localități urbane în județul " + eachCounty);
+                            }
+                        } else if (communeType.equals("municipiu")) {
+                            desiredCommuneCategories.add("Municipii în România");
+                            if (urbanSettlements.containsKey(communeName)) {
+                                desiredCommuneCategories.add("Localități urbane în județul " + eachCounty);
+                            }
+                        } else {
+                            desiredCommuneCategories.add("Comune în județul " + eachCounty);
+                            if (1 == villages.size() && villages.containsKey(communeName)) {
+                                desiredCommuneCategories.add("Sate în județul " + eachCounty);
+                            }
+                        }
+
+                        pageText = recategorize(pageText, new String[] { communeName, eachCounty }, rocommunearticle,
+                            desiredCommuneCategories);
+
                         pageText = rewritePoliticsAndAdministrationSection(pageText, eachCounty, communeName, communeType,
                             communeWikibaseItem, dwiki);
 
                         if (!StringUtils.equals(pageText, initialPageText)) {
                             rowiki.edit(rocommunearticle, pageText,
-                                "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard și secțiune de administrație. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
+                                "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, recategorisit, revizitat introducere standard și secțiune de administrație. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
                             communeChanged = true;
                         }
 
@@ -1203,8 +1250,8 @@ public class FixVillages {
         }
     }
 
-    private static final Pattern POLITICS_SECTION_PATTERN =
-        Pattern.compile("==\\s*(Politică|Politică și administrație|Administrație|Administrație și politică|Administrați(e|a) locală)\\s*==");
+    private static final Pattern POLITICS_SECTION_PATTERN = Pattern.compile(
+        "==\\s*(Politică|Politică și administrație|Administrație|Administrație și politică|Administrați(e|a) locală)\\s*==");
     private static final Pattern DEMOGRAPHY_SECTION_PATTERN =
         Pattern.compile("==\\s*(Populați(?:e|a)|Demografie)\\s*==.*?==", Pattern.DOTALL);
     private static final Pattern ALREADY_GENERATED_SECTION_PATTERN = Pattern.compile(
@@ -1213,6 +1260,60 @@ public class FixVillages {
     private static final Pattern ALREADY_GENERATED_MODIFIED_SECTION_PATTERN = Pattern.compile(
         "\\s?<!--\\s*secțiune administrație modificată manual\\s*-->.*?<!--sfârșit secțiune administrație-->\\s*\\{\\{Componență politică\\s*\\|.*?\\}\\}",
         Pattern.DOTALL);
+    private static final Pattern CATEGORY_PATTERN =
+        Pattern.compile("\\[\\[(?:C|c)ategor(?:y|ie):([^\\]\\|]*)(?:\\|(.*?))?\\]\\]");
+
+    private static String recategorize(String pageText, String[] namingChain, String articleTitle,
+                                       List<String> desiredCategories) {
+        StringBuffer sbuf = new StringBuffer();
+        Matcher categoryMatcher = CATEGORY_PATTERN.matcher(pageText);
+
+        int catLocation = -1;
+        while (categoryMatcher.find()) {
+            String catName = categoryMatcher.group(1);
+            String catKey = categoryMatcher.group(2);
+            
+            if (startsWith(catName, "Localități în județul ")) {
+                categoryMatcher.appendReplacement(sbuf, "");
+                continue;
+            }
+
+            if (catLocation < 0) {
+                catLocation = categoryMatcher.start();
+            }
+            String newCatName = catName;
+            String newCatKey = catKey;
+            if (articleTitle.equals(catName)) {
+                newCatKey = " ";
+            } else {
+                newCatKey = join(namingChain, ", ");
+            }
+            desiredCategories.remove(newCatName);
+
+            StringBuilder newCatCode = new StringBuilder("[[Categorie:");
+            newCatCode.append(newCatName);
+            newCatCode.append('|');
+            newCatCode.append(newCatKey);
+            newCatCode.append("]]");
+
+            categoryMatcher.appendReplacement(sbuf, newCatCode.toString());
+        }
+        categoryMatcher.appendTail(sbuf);
+        for (String eachNewCat : desiredCategories) {
+            StringBuilder newCatCode = new StringBuilder("[[Categorie:");
+            newCatCode.append(eachNewCat);
+            newCatCode.append('|');
+            newCatCode.append(join(namingChain, ", "));
+            newCatCode.append("]]\n");
+            if (0 <= catLocation) {
+                sbuf.insert(catLocation, newCatCode.toString());
+            } else {
+                sbuf.append(newCatCode.toString());
+            }
+        }
+
+        return sbuf.toString();
+    }
 
     private static String rewritePoliticsAndAdministrationSection(String pageText, String countyName, String communeName,
                                                                   String communeType, Entity communeItem, Wikibase dwiki)
