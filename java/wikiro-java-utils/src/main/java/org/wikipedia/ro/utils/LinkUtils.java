@@ -7,9 +7,11 @@ public class LinkUtils {
             return label;
         }
         StringBuilder sb = new StringBuilder("[[");
-        sb.append(articleTitle);
         if (null != label && !articleTitle.equals(label)) {
+            sb.append(TextUtils.capitalizeName(articleTitle));
             sb.append('|').append(label);
+        } else {
+            sb.append(articleTitle);
         }
         sb.append("]]");
         return sb.toString();
