@@ -13,4 +13,11 @@ public class TestTextUtils {
         Assert.assertEquals("vaci", TextUtils.de(107, "vacă", "vaci"));
         Assert.assertEquals("de&nbsp;vaci", TextUtils.de(200, "vacă", "vaci"));
     }
+    
+    @Test
+    public void testCapitalizeName() {
+        Assert.assertEquals("Poienile de sub Munte", TextUtils.capitalizeName("poiEnile de SUB muNte"));
+        Assert.assertEquals("Gigi Gheorghescu", TextUtils.capitalizeName("gigi gheorghescu"));
+        Assert.assertEquals("Gigi Gheorghescu", TextUtils.capitalizeName("GIGI GHEORGHESCU"));
+    }
 }
