@@ -71,6 +71,8 @@ import org.wikibase.data.Time;
 import org.wikibase.data.WikibaseData;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.InitializableComparator;
+import org.wikipedia.ro.utils.LinkUtils;
+import org.wikipedia.ro.utils.TextUtils;
 import org.wikipedia.ro.utils.WikiTemplate;
 
 import com.mongodb.BasicDBObject;
@@ -174,17 +176,16 @@ public class FixVillages {
 
         try {
             /*
-            final Properties credentials = new Properties();
-
-            credentials.load(FixVillages.class.getClassLoader().getResourceAsStream("credentials.properties"));
-            
-            rowpusername = credentials.getProperty("rowiki.user");
-            
-            String rowppassword = credentials.getProperty("rowiki.password");
-            String datausername = credentials.getProperty("wd.user");
-            String datapassword = credentials.getProperty("wd.password");
-            */
-            String rowpusername, datausername; 
+             * final Properties credentials = new Properties();
+             * 
+             * credentials.load(FixVillages.class.getClassLoader().getResourceAsStream("credentials.properties"));
+             * 
+             * rowpusername = credentials.getProperty("rowiki.user");
+             * 
+             * String rowppassword = credentials.getProperty("rowiki.password"); String datausername =
+             * credentials.getProperty("wd.user"); String datapassword = credentials.getProperty("wd.password");
+             */
+            String rowpusername, datausername;
             char[] rowppassword, datapassword;
             Console sysConsole = System.console();
             sysConsole.printf("Wiki username:");
@@ -195,7 +196,6 @@ public class FixVillages {
             datausername = sysConsole.readLine();
             sysConsole.printf("Data password:");
             datapassword = sysConsole.readPassword();
-
 
             rowiki.login(rowpusername, rowppassword);
             dwiki.login(datausername, datapassword);
@@ -383,10 +383,10 @@ public class FixVillages {
                                 if (null != villageEntity.getClaims()) {
                                     Set<Claim> popClaims = villageEntity.getClaims().get(popProp);
                                     if (null != popClaims && 0 < popClaims.size()) {
-                                        for (Claim eachPopClaim: popClaims) {
+                                        for (Claim eachPopClaim : popClaims) {
                                             Set<Snak> pointsInTime = eachPopClaim.getQualifiers().get(pointInTimeProp);
                                             if (null != pointsInTime && 0 < pointsInTime.size()) {
-                                                for (Snak eachPointInTimeSnak: pointsInTime) {
+                                                for (Snak eachPointInTimeSnak : pointsInTime) {
                                                     Time pointInTimeData = (Time) eachPointInTimeSnak.getData();
                                                     Calendar cal = pointInTimeData.getCalendar();
                                                     if (null != cal && cal.get(Calendar.YEAR) >= 2011) {
@@ -402,7 +402,7 @@ public class FixVillages {
 
                                     Set<Claim> sirutaClaims = villageEntity.getClaims().get(sirutaProp);
                                     if (null != sirutaClaims && 0 < sirutaClaims.size()) {
-                                        for (Claim eachSirutaClaim: sirutaClaims) {
+                                        for (Claim eachSirutaClaim : sirutaClaims) {
                                             if ("statement".equals(eachSirutaClaim.getType())) {
                                                 initialTemplate.removeParam("cod_clasificare");
                                                 initialTemplate.removeParam("tip_cod_clasificare");
@@ -899,10 +899,10 @@ public class FixVillages {
                         initialTemplate.removeParam("descriere");
                         initialTemplate.removeParam("imagine_dimensiune");
                         initialTemplate.removeParam("dimensiune_imagine");
-                        
+
                         Set<Claim> sirutaClaims = communeClaims.get(sirutaProp);
                         if (null != sirutaClaims && 0 < sirutaClaims.size()) {
-                            for (Claim eachSirutaClaim: sirutaClaims) {
+                            for (Claim eachSirutaClaim : sirutaClaims) {
                                 if ("statement".equals(eachSirutaClaim.getType())) {
                                     initialTemplate.removeParam("cod_clasificare");
                                     initialTemplate.removeParam("tip_cod_clasificare");
@@ -1029,8 +1029,8 @@ public class FixVillages {
                                 if (null == urbanSettlementsEntryList.get(0).getValue()) {
                                     villagesList.append(urbanSettlementsEntryList.get(0).getKey()).append(" (reședința)");
                                 } else {
-                                    villagesList.append("[[").append(urbanSettlementsEntryList.get(0).getValue()).append('|')
-                                        .append(urbanSettlementsEntryList.get(0).getKey()).append("]]");
+                                    villagesList.append(LinkUtils.createLink(urbanSettlementsEntryList.get(0).getValue(),
+                                        urbanSettlementsEntryList.get(0).getKey()));
                                 }
                             } else if (1 < urbanSettlements.size()) {
                                 villagesList.append(", format din localitățile componente ");
@@ -1044,8 +1044,8 @@ public class FixVillages {
                                     if (null == eachSettlementEntry.getValue()) {
                                         villagesList.append(eachSettlementEntry.getKey());
                                     } else {
-                                        villagesList.append("[[").append(eachSettlementEntry.getValue()).append('|')
-                                            .append(eachSettlementEntry.getKey()).append("]]");
+                                        villagesList.append(LinkUtils.createLink(eachSettlementEntry.getValue(),
+                                            eachSettlementEntry.getKey()));
                                     }
                                     if (null == eachSettlementEntry.getValue() || (null != capitalEntity.getSitelinks()
                                         && null != capitalEntity.getSitelinks().get("rowiki")
@@ -1162,7 +1162,8 @@ public class FixVillages {
                                     + " în județul " + eachCounty + '|' + sortingKey + "]]");
                         }
 
-                        pageText = rewritePoliticsAndAdministrationSection(pageText, eachCounty, communeName, communeType, communeWikibaseItem, dwiki);
+                        pageText = rewritePoliticsAndAdministrationSection(pageText, eachCounty, communeName, communeType,
+                            communeWikibaseItem, dwiki);
 
                         if (!StringUtils.equals(pageText, initialPageText)) {
                             rowiki.edit(rocommunearticle, pageText,
