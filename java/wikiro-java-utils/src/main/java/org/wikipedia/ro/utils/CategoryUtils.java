@@ -1,5 +1,7 @@
 package org.wikipedia.ro.utils;
 
+import static org.apache.commons.lang3.StringUtils.substringAfter;
+
 import java.io.IOException;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -23,7 +25,7 @@ public class CategoryUtils {
         } while (!categoriesRead);
 
         for (final String eachCat : cats) {
-            if (StringUtils.equals(category, StringUtils.substringAfter(eachCat, ":"))) {
+            if (StringUtils.equals(category, substringAfter(eachCat, ":"))) {
                 return true;
             }
             if (0 < depth) {
@@ -53,7 +55,7 @@ public class CategoryUtils {
         } while (!categoriesRead);
 
         for (final String eachCat : cats) {
-            if (ArrayUtils.contains(categories, StringUtils.substringAfter(eachCat, ":"))) {
+            if (ArrayUtils.contains(categories, substringAfter(eachCat, ":"))) {
                 return true;
             }
             if (0 < depth) {
