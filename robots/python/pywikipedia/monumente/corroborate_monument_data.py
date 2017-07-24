@@ -121,6 +121,8 @@ lmi_blacklist = [#all lowercase
 		u'fereastr',
 		u'logo',#logo
 		u'icon',
+		u'inscrip',#incriptie, incription
+		u'fresc',#frescă, fresco
 	    ]
 
 plan = 	[#all lowercase
@@ -554,13 +556,13 @@ def getImageType(image):
 	:type: string or None
 	"""	
 	search = image.lower()
-	#print search
+	#print(search)
 	fields = countries.get((_lang, _db)).get('fields')
 	for field in fields:
 		#print "*" + field
 		if fields[field]['code'] == Changes.image:
 			for skip in fields[field]['blacklist']:
-				#print "**" + skip
+				#print("**" + skip)
 				if search.find(skip) != -1:
 					break
 			else:
@@ -571,8 +573,10 @@ def getImageType(image):
 def chooseImagePicky(files):
 	#print files
 	tries = 0
+	randimagelist = random.sample(files,  len(files))
+	#print(randimagelist)
 	while tries < len(files):
-		artimage = random.sample(files,  1)[0]["name"]
+		artimage = randimagelist[tries]["name"]
 		tries += 1
 		#be picky and don't choose a detail picture; also stop on some arbitrary condition
 		imageType =  getImageType(artimage)
@@ -622,7 +626,7 @@ def extractCopyrightField(creators):
 		year = getYearsFromWikidata(page)
 		#print page.title()
 		#print year
-		if year > last_death:
+		if year and year > last_death:
 			last_death = year
 	return last_death
 
