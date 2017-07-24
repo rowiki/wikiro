@@ -19,19 +19,19 @@ from wikidata import robot_romania as robot
 class PopulationDataCSV(robot.WorkItem):
     def __init__(self, template):
         self.censusItems = {
-            1859: {"q": "Q22704065", "name": u"Recensământul populației din 1859-1860", "month": None},
-            1860: {"q": "Q22704065", "name": u"Recensământul populației din 1859-1860", "month": None}, #same as above
-            1899: {"q": "Q22704088", "name": u"Recensământul populației din 1899", "month": None},
-            1912: {"q": "Q22704095", "name": u"Recensământul General al Populației din 1912", "month": None},
-            1930: {"q": "Q12739150", "name": u"Recensământul populației din 1859-1860", "month": None},
-            1941: {"q": "Q22704099", "name": u"Recensământul General al României", "month": None},
-            1948: {"q": "Q22704103", "name": u"Recensământul populației din ianuarie 1948", "month": 1},
-            1956: {"q": "Q22704106", "name": u"Recensământul populației din februarie 1956", "month": 2},
-            1966: {"q": "Q22704111", "name": u"Recensământul populației și locuințelor din martie 1966", "month": 3},
-            1977: {"q": "Q22704114", "name": u"Recensământul populației și locuințelor din anul 1977", "month": 1},
-            1992: {"q": "Q22704118", "name": u"Recensământul populației și locuințelor din anul 1992", "month": 1},
-            2002: {"q": "Q4350762", "name": u"Recensământul populației și locuințelor din anul 2002", "month": 3},
-            #2011: {"q": "Q12181933", "name": u"Recensământul populației din 1859-1860", "month": 10},
+            1859: {"q": "Q22704065", "name": u"Recensământul populației din 1859-1860", "month": None, "day": None},
+            1860: {"q": "Q22704065", "name": u"Recensământul populației din 1859-1860", "month": None, "day": None}, #same as above
+            1899: {"q": "Q22704088", "name": u"Recensământul populației din 1899", "month": None, "day": None},
+            1912: {"q": "Q22704095", "name": u"Recensământul General al Populației din 1912", "month": None, "day": None},
+            1930: {"q": "Q12739150", "name": u"Recensământul populației din 1859-1860", "month": None, "day": None},
+            1941: {"q": "Q22704099", "name": u"Recensământul General al României", "month": None, "day": None},
+            1948: {"q": "Q22704103", "name": u"Recensământul populației din ianuarie 1948", "month": 1, "day": None},
+            1956: {"q": "Q22704106", "name": u"Recensământul populației din februarie 1956", "month": 2, "day": None},
+            1966: {"q": "Q22704111", "name": u"Recensământul populației și locuințelor din martie 1966", "month": 3, "day": None},
+            1977: {"q": "Q22704114", "name": u"Recensământul populației și locuințelor din anul 1977", "month": 1, "day": None},
+            1992: {"q": "Q22704118", "name": u"Recensământul populației și locuințelor din anul 1992", "month": 1, "day": None},
+            2002: {"q": "Q4350762", "name": u"Recensământul populației și locuințelor din anul 2002", "month": 3, "day": None},
+            2011: {"q": "Q12181933", "name": u"Recensământul populației și locuințelor din anul 2011", "month": 10, "day": 31},
         }
         self.template = template
         self.always = False
@@ -64,10 +64,11 @@ class PopulationDataCSV(robot.WorkItem):
 
     def updateWikidata(self, item, year, pop):
         try:
-            census_date = pywikibot.WbTime(year=year, month=self.censusItems[year]["month"])
+            census_date = pywikibot.WbTime(year=year, month=self.censusItems[year]["month"], day=self.censusItems[year]["day"])
             if "P1082" in item.claims:
                 claims = item.claims["P1082"]
                 for claim in claims:
+                    #print claim.qualifiers
                     if claim.has_qualifier('P585', census_date):
                         print item.labels['ro'] + u" already has population for " + str(year)
                         return
