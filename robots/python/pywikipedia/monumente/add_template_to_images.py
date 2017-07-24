@@ -212,7 +212,13 @@ def cat2commons(cat):
 					found = True
 					print(params)
 					if code != str(params[0]):
-						log(u"W: Nepotrivire între codul din categorie (%s) și unul din codurile din imagine (%s)" % (code, params[0]))
+						newtext = text.replace(params[0], code)
+						pywikibot.showDiff(text, newtext)
+						answer = pywikibot.inputChoice("Do you want to update the code?", ["Yes", "No"], ["y", "n"])
+						if answer == "n":
+							log(u"W: Nepotrivire între codul din listă (%s) și unul din codurile din imagine (%s)" % (code, params[0]))
+						else:
+							page.put(newtext, u"Updating code based on category")	
 				elif template.title(withNamespace = False) == u"Information" or template.title(withNamespace = False) == u"Artwork":
 					pass
 					#info_params = params
