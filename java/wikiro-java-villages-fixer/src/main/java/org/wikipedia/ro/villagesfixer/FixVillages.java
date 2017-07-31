@@ -730,7 +730,7 @@ public class FixVillages {
                                 desiredCategories.add("Sate în județul " + eachCounty);
                             }
 
-                            pageText = recategorize(pageText, new String[] { villageName, communeName, eachCounty },
+                            pageText = recategorize(pageText, new String[] { villageName, communeName },
                                 rovillagearticle, desiredCategories);
 
                             if (!StringUtils.equals(pageText, initialPageText)) {
@@ -1206,7 +1206,7 @@ public class FixVillages {
                             }
                         }
 
-                        pageText = recategorize(pageText, new String[] { communeName, eachCounty }, rocommunearticle,
+                        pageText = recategorize(pageText, new String[] { communeName }, rocommunearticle,
                             desiredCommuneCategories);
 
                         pageText = rewritePoliticsAndAdministrationSection(pageText, eachCounty, communeName, communeType,
@@ -1273,13 +1273,12 @@ public class FixVillages {
             String catName = categoryMatcher.group(1);
             String catKey = categoryMatcher.group(2);
             
+            if (catLocation < 0) {
+                catLocation = categoryMatcher.start();
+            }
             if (startsWith(catName, "Localități în județul ")) {
                 categoryMatcher.appendReplacement(sbuf, "");
                 continue;
-            }
-
-            if (catLocation < 0) {
-                catLocation = categoryMatcher.start();
             }
             String newCatName = catName;
             String newCatKey = catKey;
