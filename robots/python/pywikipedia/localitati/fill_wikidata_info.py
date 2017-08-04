@@ -100,44 +100,63 @@ class ItemProcessing:
     def updateProperty(self, key, data, force=False):
         try:
             answer = False
+            oldValue = None
             prop, pref, datatype = self.config["properties"][key]
             if prop in self.item.claims:
                 # don't bother about those yet
-                oldValue = self.item.claims[prop][0]
+                oldValue = set(v.getTarget() for v in self.item.claims[prop])
                 if not force:
-                    pywikibot.output(u"Wikidata already has %s: %s" % (key, oldValue.getTarget()))
+                    pywikibot.output(u"Wikidata already has %s: %s" % (key, oldValue))
                     return
+            if type(data[key]).__name__ != 'list':
+                data[key] = [data[key]]
+            claims = []
+            descs = []
+            for elem in data[key]:
+                if datatype == 'wikibase-item':
+                    val = pywikibot.ItemPage(pywikibot.Site(), elem)
+                    desc = val.title()
+                elif datatype == 'globe-coordinate':
+                    val = pywikibot.Coordinate(lat=float(elem[0]),
+                                               lon=float(elem[1]),
+                                               globe='earth',
+                                               precision=0.001)
+                    desc = elem
+                elif datatype == 'commonsMedia':
+                    val = pywikibot.FilePage(pywikibot.Site('commons', 'commons'),
+                                             u"File:" + sf.stripNamespace(elem))
+                    while val.isRedirectPage():
+                        val = val.getRedirectTarget()
+                    desc = val.title()
+                    if not val.exists():
+                        raise ValueError("Local image given")
                 else:
-                    answer = self.userConfirm("Update element %s with %s '%s' (old value '%s')?" % (self.label, key, data[key], oldValue.getTarget()))
-                    if not answer:
-                        return
-                    self.item.removeClaims(self.item.claims[prop][0])
-            if datatype == 'wikibase-item':
-                val = pywikibot.ItemPage(pywikibot.Site(), data[key])
-                desc = val.title()
-            elif datatype == 'globe-coordinate':
-                val = pywikibot.Coordinate(lat=float(data[key][0]),
-                                           lon=float(data[key][1]),
-                                           globe='earth',
-                                           precision=0.001)
-                desc = data[key]
-            elif datatype == 'commonsMedia':
-                val = pywikibot.FilePage(pywikibot.Site('commons', 'commons'),
-                                         u"File:" + sf.stripNamespace(data[key]))
-                while val.isRedirectPage():
-                    val = val.getRedirectTarget()
-                desc = val.title()
-                if not val.exists():
-                    raise ValueError("Local image given")
-            else:
-                val = desc = data[key]
-            claim = pywikibot.Claim(self.item.repo, prop, datatype=datatype)
-            claim.setTarget(val)
-            answer = answer or self.userConfirm("Update element %s with %s '%s'?" % (self.label, key, desc))
-            if answer:
-                self.item.addClaim(claim)
+                    val = desc = elem
+                claim = pywikibot.Claim(self.item.repo, prop, datatype=datatype)
+                claim.setTarget(val)
+                claims.append(claim)
                 if pref:
                     claim.changeRank('preferred')
+                descs.append(desc)
+
+            cv = set(v.getTarget() for v in claims)
+            rmlist = list(oldValue.difference(cv))
+            addlist = list(cv.difference(oldValue))
+            if not len(addlist) and not len(rmlist):
+                return
+            answer = answer or self.userConfirm("Update element %s with %s '%s' (old value '%s')?" % (self.label, key, str(cv), str(oldValue)))
+            if answer:
+                if len(rmlist):
+                    print("Removing", rmlist)
+                    rmclaims = [v for v in self.item.claims[prop] if v.getTarget() in rmlist]
+                    self.item.removeClaims(rmclaims)
+                if len(addlist):
+                    print("Adding", addlist)
+                    addclaims = [v for v in claims if v.getTarget() in addlist]
+                    for claim in addclaims:
+                        self.item.addClaim(claim)
+        except pywikibot.bot.QuitKeyboardInterrupt:
+            raise
         except Exception as e:
             print("key", key)
             print("data", data)
