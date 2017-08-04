@@ -448,27 +448,25 @@ class RelationsProcessing(ItemProcessing, CityData):
 
     def addType(self):
         village_type = {
-            1: u'Q640364',
-            2: u'Q834101',
-            3: u'Q659103',
-            4: u'Q640364',
-            5: u'Q834101',
-            6: u'Q15921300',
-            9: u'Q15921247',
-            10: u'Q15921247',
-            11: u'Q532',
-            17: u'Q15921247',
-            18: u'Q15921247',
-            19: u'Q532',
-            22: u'Q532',
-            23: u'Q532',
-            40: u'Q1776764',
+            1: [u'Q640364', u'Q34843301'],
+            2: [u'Q16858213'],
+            3: [u'Q659103'],
+            4: [u'Q640364'],
+            5: [u'Q16858213', u'Q34843301'],
+            6: [u'Q15921300'],
+            9: [u'Q15921247', u'Q34842776'],
+            10: [u'Q15921247'],
+            11: [u'Q532'],
+            17: [u'Q15921247', u'Q34842263'],
+            18: [u'Q15921247'],
+            19: [u'Q532'],
+            22: [u'Q532', u'Q34841063'],
+            23: [u'Q532'],
+            40: [u'Q1776764'],
         }
         sirutaWD = int(self.getUniqueClaim(u"SIRUTA"))
         type = self.sirutaDb.get_type(sirutaWD)
-        typeWD = self.getClaim(u"este un/o")
-        if not typeWD:
-            self.updateProperty(u"este un/o", {u"este un/o": village_type[type]})
+        self.updateProperty(u"este un/o", {u"este un/o": village_type[type]}, force=True)
 
     def addSubdivisions(self, field):
         sirutaWD = int(self.getUniqueClaim(u"SIRUTA"))
