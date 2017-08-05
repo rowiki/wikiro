@@ -223,7 +223,7 @@ class CityData(robot.WorkItem):
             return None
 
     def getInfoboxContent(self, item,
-                          name=u'(Infocaseta Așezare|Cutie Sate|Casetă comune România)'):
+                          name=u'(Infocaseta Așezare|Cutie Sate|Casetă comune România|Infocaseta Județe)'):
         text = self.getWikiArticle(item)
         if text:
             text = text.get()
@@ -239,7 +239,7 @@ class CityData(robot.WorkItem):
         return tl
 
     def getInfoboxElement(self, item, element=None,
-                          name=u'(Infocaseta Așezare|Cutie Sate|Casetă comune România)'):
+                          name=u'(Infocaseta Așezare|Cutie Sate|Casetă comune România|Infocaseta Județe)'):
         elem = None
         tl = self.getInfoboxContent(item, name)
         if tl:
