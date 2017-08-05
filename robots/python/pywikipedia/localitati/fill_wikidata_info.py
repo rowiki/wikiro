@@ -100,13 +100,13 @@ class ItemProcessing:
     def updateProperty(self, key, data, force=False):
         try:
             answer = False
-            oldValue = None
+            oldValue = set([])
             prop, pref, datatype = self.config["properties"][key]
             if prop in self.item.claims:
                 # don't bother about those yet
                 oldValue = set(v.getTarget() for v in self.item.claims[prop])
                 if not force:
-                    pywikibot.output(u"Wikidata already has %s: %s" % (key, oldValue))
+                    pywikibot.output(u"Wikidata already has %s: %s" % (key, unicode(str(oldValue), 'utf8')))
                     return
             if type(data[key]).__name__ != 'list':
                 data[key] = [data[key]]
@@ -144,7 +144,7 @@ class ItemProcessing:
             addlist = list(cv.difference(oldValue))
             if not len(addlist) and not len(rmlist):
                 return
-            answer = answer or self.userConfirm("Update element %s with %s '%s' (old value '%s')?" % (self.label, key, str(cv), str(oldValue)))
+            answer = answer or self.userConfirm("Update element %s with %s '%s' (old value '%s')?" % (self.label, key, unicode(str(cv), 'utf8'), unicode(str(oldValue), 'utf8')))
             if answer:
                 if len(rmlist):
                     print("Removing", rmlist)
@@ -219,7 +219,7 @@ class CityData(robot.WorkItem):
                 rp = rp.getRedirectTarget()
             return rp
         except Exception as e:
-            print(e)
+            pywikibot.error(e)
             return None
 
     def getInfoboxContent(self, item,
@@ -233,7 +233,7 @@ class CityData(robot.WorkItem):
         if tl:
             tl = sf.tl2Dict(tl)[0]
         tl2 = sf.extractTemplate(text, u"commonscat")
-        if tl2:
+        if tl and tl2:
             tl2 = sf.tl2Dict(tl2)[0]
             tl[u"commonscat"] = tl2.get(1)
         return tl
@@ -543,7 +543,7 @@ if __name__ == "__main__":
     user.mylang = 'wikidata'
     user.family = 'wikidata'
     sirutaDb = sirutalib.SirutaDatabase()
-    postCodes = None#postal_codes.PostalCodes("codp_B.csv", "codp_50k.csv", "codp_1k.csv")
+    postCodes = postal_codes.PostalCodes("codp_B.csv", "codp_50k.csv", "codp_1k.csv")
     page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
     # page = pywikibot.Page(pywikibot.Site(), "Q193055", ns=0)
     generator = pagegenerators.ReferringPageGenerator(page)
