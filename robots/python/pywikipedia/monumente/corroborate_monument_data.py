@@ -421,7 +421,7 @@ def readJson(filename, what):
 		f.close()
 		return db
 	except IOError:
-		pywikibot.output("Failed to read " + filename + ". Trying to do without it.")
+		pywikibot.error("Failed to read " + filename + ". Trying to do without it.")
 		return {}
 	
 def readOtherData(filename):
@@ -436,7 +436,7 @@ def readOtherData(filename):
 	elif filename.endswith(".csv"):
 		db = csvUtils.csvToJson(filename)
 	else:
-		pywikibot.output("Could not recognise file type")
+		pywikibot.error("Could not recognise file type")
 		return {}
 	pywikibot.output("...done")
 	return db
