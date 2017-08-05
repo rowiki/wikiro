@@ -538,6 +538,62 @@ class TimezoneProcessing(ItemProcessing, CityData):
         self.setItem(item)
         self.addTimezone()
 
+
+class CoordProcessing(ItemProcessing, CityData):
+    def __init__(self, config, always=False):
+        super(CoordProcessing, self).__init__(config, always)
+        self._found = False
+
+    def convertDecimalSep(self, inp):
+        if not inp:
+            return '0'
+        inp = str(inp)
+        return inp.replace(',', '.')
+
+    def coordFromWiki(self):
+        if self._found:
+            return
+        latd = self.convertDecimalSep(self.getInfoboxElement(self.item, element=u"latd"))
+        latm = self.convertDecimalSep(self.getInfoboxElement(self.item, element=u"latm"))
+        lats = self.convertDecimalSep(self.getInfoboxElement(self.item, element=u"lats"))
+        latNS = self.getInfoboxElement(self.item, element=u"latNS")
+        longd = self.convertDecimalSep(self.getInfoboxElement(self.item, element=u"longd"))
+        longm = self.convertDecimalSep(self.getInfoboxElement(self.item, element=u"longm"))
+        longs = self.convertDecimalSep(self.getInfoboxElement(self.item, element=u"longs"))
+        longEV = self.getInfoboxElement(self.item, element=u"longEV")
+
+        if latNS and latNS.strip() != 'N':
+            pywikibot.error(u"latNS has invalid value %s", latNS)
+            return
+        if longEV and longEV.strip() != 'E':
+            pywikibot.error(u"longEV has invalid value %s", longEV)
+            return
+        if latd and longd:
+            print(latd, latm, lats, longd, longm, longs)
+            latf = float(latd) + float(latm) / 60 + float(lats) / 3600
+            longf = float(longd) + float(longm) / 60 + float(longs) / 3600
+            if latf < 43 or latf > 48.25 or longf < 20 or longf > 29.67:
+                pywikibot.error(unicode(self.item.labels.get('ro')) + u" is not in the right country: " + str(latf) + ", " + str(longf))
+                return
+            # TODO: check county/UAT data
+            self._found = True
+            self.updateProperty(u"Coord", {u"Coord": (latf, longf)})
+
+
+    def coordFromOSM(self):
+        if self._found:
+            return
+
+    def searchCoords(self):
+        self.coordFromWiki()
+        self.coordFromOSM()
+        
+    def doWork(self, page, item):
+        self._found = False
+        self.setItem(item)
+        self.searchCoords()
+
+
 if __name__ == "__main__":
     pywikibot.handle_args()
     user.mylang = 'wikidata'
@@ -557,5 +613,6 @@ if __name__ == "__main__":
     # bot.workers.append(SIRUTAProcessing(config, siruta=sirutaDb))
     # bot.workers.append(RelationsProcessing(config, siruta=sirutaDb))
     # bot.workers.append(TimezoneProcessing(config))
+    # bot.workers.append(CoordProcessing(config))
 
     bot.run()
