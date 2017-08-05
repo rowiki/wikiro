@@ -404,9 +404,10 @@ class URLProcessing(ItemProcessing, CityData):
 
 
 class ImageProcessing(ItemProcessing, CityData):
-    def __init__(self, config, always=False):
+    def __init__(self, config, lmi=None, always=False):
         super(ImageProcessing, self).__init__(config, always)
         self._dataType = u"image"
+        self._lmi = lmi
 
     def addImage(self, _img=None, _type=u"imagine"):
         if not _img:
@@ -417,6 +418,19 @@ class ImageProcessing(ItemProcessing, CityData):
         self.setItem(item)
         self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
         self.addImage(self.getInfoboxElement(item, element=u"hartă"), _type=u"hartă")
+
+        img = self.getUniqueClaim(u"imagine", canBeNull=True)
+        if img:
+            return
+
+        label = self.getWikiArticle(self.item)
+        if not label:
+            return
+        label = label.title()
+        for monument in self._lmi or []:
+            if len(monument["Imagine"]) and monument["Localitate"].find(u"[[" + label) > -1:
+                self.addImage(monument["Imagine"])
+                break
 
 
 class SIRUTAProcessing(ItemProcessing, CityData):
@@ -622,7 +636,7 @@ if __name__ == "__main__":
     # bot.workers.append(CountyProcessing(config))
     #bot.workers.append(PostCodeProcessing(config, siruta=sirutaDb, postCode=postCodes))
     # bot.workers.append(URLProcessing(config))
-    # bot.workers.append(ImageProcessing(config))
+    bot.workers.append(ImageProcessing(config, lmi=lmiDb))
     bot.workers.append(CommonsProcessing(config))
     # bot.workers.append(SIRUTAProcessing(config, siruta=sirutaDb))
     # bot.workers.append(RelationsProcessing(config, siruta=sirutaDb))
