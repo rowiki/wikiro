@@ -135,9 +135,9 @@ class ItemProcessing:
                     val = desc = elem
                 claim = pywikibot.Claim(self.item.repo, prop, datatype=datatype)
                 claim.setTarget(val)
-                claims.append(claim)
                 if pref:
-                    claim.changeRank('preferred')
+                    claim.setRank('preferred')
+                claims.append(claim)
                 descs.append(desc)
 
             cv = set(v.getTarget() for v in claims)
