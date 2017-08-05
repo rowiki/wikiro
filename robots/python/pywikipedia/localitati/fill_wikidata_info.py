@@ -12,6 +12,7 @@ from pywikibot.data import sparql
 from pywikibot import config as user
 
 import sys
+import json
 
 import sirutalib
 
@@ -594,12 +595,25 @@ class CoordProcessing(ItemProcessing, CityData):
         self.searchCoords()
 
 
+def readJson(filename, what):
+    try:
+        f = open(filename, "r+")
+        pywikibot.output("Reading " + what + " file...")
+        db = json.load(f)
+        pywikibot.output("...done")
+        f.close()
+        return db
+    except IOError:
+        pywikibot.error("Failed to read " + filename + ". Trying to do without it.")
+        return {}
+
 if __name__ == "__main__":
     pywikibot.handle_args()
     user.mylang = 'wikidata'
     user.family = 'wikidata'
     sirutaDb = sirutalib.SirutaDatabase()
     postCodes = postal_codes.PostalCodes("codp_B.csv", "codp_50k.csv", "codp_1k.csv")
+    lmiDb = readJson("ro_lmi_db.json", "monument database")
     page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
     # page = pywikibot.Page(pywikibot.Site(), "Q193055", ns=0)
     generator = pagegenerators.ReferringPageGenerator(page)
