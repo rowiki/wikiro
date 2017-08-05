@@ -445,9 +445,7 @@ class RelationsProcessing(ItemProcessing, CityData):
         super(RelationsProcessing, self).__init__(config, always)
         self._dataType = u"relations"
         self.sirutaDb = siruta
-
-    def addType(self):
-        village_type = {
+        self.village_type = {
             1: [u'Q640364', u'Q34843301'],
             2: [u'Q16858213'],
             3: [u'Q659103'],
@@ -464,9 +462,11 @@ class RelationsProcessing(ItemProcessing, CityData):
             23: [u'Q532'],
             40: [u'Q1776764'],
         }
+
+    def addType(self):
         sirutaWD = int(self.getUniqueClaim(u"SIRUTA"))
         type = self.sirutaDb.get_type(sirutaWD)
-        self.updateProperty(u"este un/o", {u"este un/o": village_type[type]}, force=True)
+        self.updateProperty(u"este un/o", {u"este un/o": self.village_type[type]}, force=True)
 
     def addSubdivisions(self, field):
         sirutaWD = int(self.getUniqueClaim(u"SIRUTA"))
