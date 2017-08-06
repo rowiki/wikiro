@@ -419,8 +419,7 @@ class ImageProcessing(ItemProcessing, CityData):
         self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
         self.addImage(self.getInfoboxElement(item, element=u"hartă"), _type=u"hartă")
 
-        img = self.getUniqueClaim(u"imagine", canBeNull=True)
-        if img:
+        if self.getUniqueClaim(u"imagine", canBeNull=True):
             return
 
         label = self.getWikiArticle(self.item)
