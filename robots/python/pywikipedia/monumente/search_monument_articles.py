@@ -16,7 +16,7 @@ from pywikibot import textlib
 
 codeRegexp = re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I)
 #codeRegexp = re.compile("([1-9]{1,2})([A-D])([0-9]{4})( |\)|\. |\, )", re.I)
-templateRegexp = re.compile("\{\{([aA]utorCodLMI|[cC]odLMI|[Ii]nfocaseta Monument)")
+templateRegexp = re.compile("\{\{([aA]utorCodLMI|[cC]odLMI|[Ii]nfocaseta Monument|[Ii]nfocaseta Biserică din lemn)")
 errorRegexp = re.compile("eroare\s?=\s?([^0])", re.I)
 _log = "search.err.log"
 #_log = "search_92.err.log"
@@ -30,8 +30,8 @@ def closeLog():
 	global _flog
 	_flog.close()
 
-def log(string):
-	_flog.write(string.encode("utf8") + "\n")
+def log(s):
+	_flog.write(s + "\n")
 
 def processArticle(page):
 	text = page.get()
