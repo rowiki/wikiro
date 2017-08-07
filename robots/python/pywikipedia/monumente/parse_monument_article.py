@@ -386,8 +386,8 @@ def parseGeohackLinks(page, conf):
 	#sanitize non-standard strings
 	l = tokens[:]
 	for token in l:
-		if token.strip() == '' or string.find(token, ':') > -1 or \
-				string.find(token, '{{{') > -1:
+		if token.strip() == '' or token.find(':') > -1 or \
+				token.find('{{{') > -1:
 			tokens.remove(token)
 	numElem = len(tokens)
 	if tokens[0] == link: #no _
@@ -503,10 +503,12 @@ def processCreatorTemplate(name, conf):
 		creator = creator.getRedirectTarget()
 	tls = pywikibot.extract_templates_and_params(creator.get(), strip=True)
 	for (template,params) in tls:
-		print(params)
+		#print(params)
 		if template != "Creator":
 			continue
-		occupation = params["Occupation"]
+		occupation = params.get("Occupation")
+		if not occupation:
+			continue
 		for valid in conf['validOccupations']:
 			if occupation.find(valid) > -1:
 				#print occupation
