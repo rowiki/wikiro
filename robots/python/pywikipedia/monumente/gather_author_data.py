@@ -44,10 +44,10 @@ fullDict = {}
 def getYearsFromWikidata(page):
 	wdpage = page.data_item()
 	data = wdpage.get()
-	#print data['claims']
+	#print(data['claims'])
 	if 'P570' in data['claims']:
 		if len(data['claims']['P570']) > 1:
-			print data['claims']
+			print(data['claims'])
 			return None
 		claim = data['claims']['P570'][0]
 		return claim.getTarget().year 
@@ -60,7 +60,7 @@ def processArticle(text, page, conf):
 	if results == None:
 		return	
 	else:
-		print repr(results)
+		print(repr(results))
 		year = getYearsFromWikidata(page)
 		for result in results:
 			code = result[0]
@@ -104,7 +104,7 @@ def main():
 			# Do some checking
 			processArticle(page.get(), page, langOpt)
 			count += 1
-	print count
+	print(count)
 	f = open("_".join([lang, db, "authors.json"]), "w+")
 	json.dump(fullDict, f)
 	f.close();

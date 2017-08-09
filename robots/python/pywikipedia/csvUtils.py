@@ -32,7 +32,7 @@ def csvToTemplate(inFile, outFile, templateName, pre=None, post=None):
         i = 0
         for row in csvDict:
             i = i + 1
-            print i
+            print(i)
             uniDict = dict([(unicode(key, 'utf-8'), unicode(value, 'utf-8')) for key, value in row.iteritems()])
             if pre:
                 out += pre + u"\n"

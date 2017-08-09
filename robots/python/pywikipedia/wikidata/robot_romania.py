@@ -33,8 +33,8 @@ class WorkItem(object):
 class DemoWorkItem(WorkItem):
 
     def doWork(self, page, item):
-        print u"Page: " + page.title()
-        print u"Item: " + item.id()
+        print(u"Page: " + page.title())
+        print(u"Item: " + item.id())
 
     def description(self):
         return u"Demo Work Item"
@@ -68,7 +68,7 @@ class WikidataBot(SingleSiteBot):
                 return item
             return page.data_item()
         except:
-            print u"Could not obtain wikidata item for " + page.title()
+            print(u"Could not obtain wikidata item for " + page.title())
             return None
 
     def treat(self, page):
@@ -83,14 +83,14 @@ class WikidataBot(SingleSiteBot):
             return
         #if self._treat_counter == 25:
         #    self.quit()
-        print page.title()
+        print(page.title())
         
         #TODO:thread this
         for work in self.workers:
             work.doWork(page, item)
             
 if __name__ == "__main__":
-    print pywikibot.handle_args()
+    print(pywikibot.handle_args())
     generator = pagegenerators.AllpagesPageGenerator()
     bot = WikidataBot(site=True, generator = generator)
 

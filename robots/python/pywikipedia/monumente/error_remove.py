@@ -135,7 +135,11 @@ mistakes = {
 	u'chimbarea a grup': u'chimbarea grup',
 	u'(\| (?!Imagine|Plan|Commons|NotăCod|Adresă))(.*)([”„\.]) -([^\s])': u'\g<1>\g<2>\g<3> - \g<4>',
 	u'Epoca([a-zA-Z]+)': u'Epoca \g<1>',
-	u'\{\{#tag:ref\|(.*)\|name=\"cimec\"\}\}': u'<ref name=\"cimec\">\g<1></ref>'
+	u'\{\{#tag:ref\|(.*)\|name=\"cimec\"\}\}': u'<ref name=\"cimec\">\g<1></ref>',
+	u'căzuțiîn': u'căzuți în',
+	u'în([pP])rimul': u'în \g<1>rimul',
+	u'boimondial': u'boi mondial',
+	u'rimulrăzboi': u'rimul război'
 }
 minormistakes = {
 	u'([Zz])iddeapărare': u'\g<1>id de apărare',
@@ -263,8 +267,8 @@ def processList(page):
 	global mistakes
 	global minormistakes
 	marker = "@@"
-	Rref = re.compile(ur'(<ref.*?>[^<]+</ref>|<ref.*?/>)')
-	Rmarker = re.compile(ur'%s(\d+)%s' % (marker, marker))
+	Rref = re.compile(u'(<ref.*?>[^<]+</ref>|<ref.*?/>)')
+	Rmarker = re.compile(u'%s(\d+)%s' % (marker, marker))
 	#global authors
 	origtext = newtext = text = page.get()
 	changed = False
@@ -294,7 +298,7 @@ def processList(page):
 			count = int(match)
 			newtext = newtext.replace(u'%s%d%s' % (marker, count, marker), intern[count])
 		if newtext != origtext:
-			print mistake
+			print(mistake)
 			text = checkAndUpload(page, origtext, newtext, comment)
 		else:
 		    text = origtext
@@ -316,7 +320,7 @@ def processList(page):
 			count = int(match)
 			newtext = newtext.replace(u'%s%d%s' % (marker, count, marker), intern[count])
 		if newtext != origtext:
-			print mistake
+			print(mistake)
 			text = checkAndUpload(page, origtext, newtext, comment)
 		else:
 		    text = origtext

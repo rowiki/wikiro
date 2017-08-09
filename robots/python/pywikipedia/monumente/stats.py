@@ -12,7 +12,7 @@ import pywikibot
 def split_code(code):
 	parts = code.split('-')
 	if len(parts) < 3:
-		print parts
+		print(parts)
 		return (None, None, None, None)
 	return (parts[0], parts[1], parts[2], parts[3])
 
@@ -73,7 +73,7 @@ def main():
 	for monument in db:
 		(county, nature, type, interest) = split_code(monument["Cod"])
 		if county == None:
-			print monument
+			print(monument)
 			continue
 		if county == "B":
 			i = monument["source"].find(u"sector")
@@ -95,8 +95,8 @@ def main():
 			nature = "memoriale"
 		else:
 			nature = "eroare natura"
-			print nature
-			print monument
+			print(nature)
+			print(monument)
 
 		if type == "m":
 			type = "monumente"
@@ -106,8 +106,8 @@ def main():
 			type = "ansambluri"
 		else:
 			type = "eroare tip"
-			print type
-			print monument
+			print(type)
+			print(monument)
 
 		if interest == "A":
 			interest = "national"
@@ -115,8 +115,8 @@ def main():
 			interest = "local"
 		else:
 			interest = "eroare interes"
-			print interest
-			print monument
+			print(interest)
+			print(monument)
 
 		if not county in total_county:
 			total_county[county] = 1
@@ -138,18 +138,18 @@ def main():
 			image_interest[interest] = 0
 		else:
 			total_interest[interest] += 1
-		if monument["Imagine"].strip() <> "":
+		if monument["Imagine"].strip() != "":
 			images += 1
 			image_county[county] += 1
 			image_nature[nature] += 1
 			image_type[type] += 1
 			image_interest[interest] += 1
-		if monument["Plan"].strip() <> "":
+		if monument["Plan"].strip() != "":
 			#images += 1
 			plans += 1
-		if monument["Lat"] <> "" or monument["Lon"] <> "" or monument["OsmLat"] <> "" or monument["OsmLon"] <> "":
+		if monument["Lat"] != "" or monument["Lon"] != "" or monument["OsmLat"] != "" or monument["OsmLon"] != "":
 			coords += 1
-		if monument["Creatori"] <> "":
+		if monument["Creatori"] != "":
 			authors += 1
 		clasament[monument["Cod"]] = 0
 		if monument["Cod"] in pages_commons:
@@ -168,39 +168,39 @@ def main():
 	#print sorted_clasament
 
 	
-	print "* Total imagini: ''%d''" % total_images
-	print "* Monumente cu imagini: ''%d/%d (%f%%)''" % (images, total, images * 100.0 / total)
-	print "* Monumente cu imagini sau plan: ''%d/%d (%f%%)''" % (images + plans, total, (images + plans) * 100.0 / total)
-	print "* Monumente cu coordonate: ''%d/%d (%f%%)''" % (coords, total, coords * 100.0 / total)
-	print "* Monumente cu arhitect: ''%d/%d (%f%%)''" % (authors, total, authors * 100.0 / total)
-	print "* Monumente cu articole: ''%d/%d (%f%%)''" % (articles, total, articles * 100.0 / total)
-	print "* Categorii la commons: ''%d''" % len(cat_commons)
-	print "* Articole distincte: ''%d''" % len(pages_ro)
-	print "* Articole lipsă (cat A): ''%d''" % potential_articles
+	print("* Total imagini: ''%d''" % total_images)
+	print("* Monumente cu imagini: ''%d/%d (%f%%)''" % (images, total, images * 100.0 / total))
+	print("* Monumente cu imagini sau plan: ''%d/%d (%f%%)''" % (images + plans, total, (images + plans) * 100.0 / total))
+	print("* Monumente cu coordonate: ''%d/%d (%f%%)''" % (coords, total, coords * 100.0 / total))
+	print("* Monumente cu arhitect: ''%d/%d (%f%%)''" % (authors, total, authors * 100.0 / total))
+	print("* Monumente cu articole: ''%d/%d (%f%%)''" % (articles, total, articles * 100.0 / total))
+	print("* Categorii la commons: ''%d''" % len(cat_commons))
+	print("* Articole distincte: ''%d''" % len(pages_ro))
+	print("* Articole lipsă (cat A): ''%d''" % potential_articles)
 
-	print "----"
+	print("----")
 	for nature in image_nature.keys():
 		if nature != "arheologie":
 			total_apmnir += total_nature[nature]
 			image_apmnir += image_nature[nature]
-		print "* Imagini pentru monumente de %s: ''%f%%''" % (nature, image_nature[nature] * 100.0 / total_nature[nature])
-	print "----"
+		print("* Imagini pentru monumente de %s: ''%f%%''" % (nature, image_nature[nature] * 100.0 / total_nature[nature]))
+	print("----")
 	for type in image_type.keys():
-		print "* Imagini pentru %s: ''%f%%''" % (type, image_type[type] * 100.0 / total_type[type])
-	print "* Comparație cu monumenteromania.ro: ''%f%% (%d/%d)''" % (image_apmnir * 100.0 / total_apmnir, image_apmnir, total_apmnir)
-	print "----"
+		print("* Imagini pentru %s: ''%f%%''" % (type, image_type[type] * 100.0 / total_type[type]))
+	print("* Comparație cu monumenteromania.ro: ''%f%% (%d/%d)''" % (image_apmnir * 100.0 / total_apmnir, image_apmnir, total_apmnir))
+	print("----")
 	for interest in image_interest.keys():
-		print "* Imagini pentru monumente de interes %s: ''%f%%''" % (interest, image_interest[interest] * 100.0 / total_interest[interest])
-	print "----"
+		print("* Imagini pentru monumente de interes %s: ''%f%%''" % (interest, image_interest[interest] * 100.0 / total_interest[interest]))
+	print("----")
 
 	#image_keys = image_county.keys()
 	#image_keys.sort()
 	images_percent = {}
 	for county in image_county.keys():
 		images_percent[county] = image_county[county] * 100.0 / total_county[county]
-	sorted_images = sorted(images_percent.iteritems(), key=operator.itemgetter(1), reverse=True)
+	sorted_images = sorted(images_percent.items(), key=operator.itemgetter(1), reverse=True)
 	for county,number in sorted_images:
-		print "* Imagini pentru judetul %s: ''%f%% (%d/%d)''" % (county, number , image_county[county], total_county[county])
+		print("* Imagini pentru judetul %s: ''%f%% (%d/%d)''" % (county, number , image_county[county], total_county[county]))
 
 if __name__ == "__main__":
 	try:

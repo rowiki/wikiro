@@ -82,8 +82,8 @@ class PostalCodes(object):
 
 if __name__ == "__main__":
 	p = PostalCodes("codp_B.csv","codp_50k.csv","codp_1k.csv")
-	print p.getFromSIRUTA(19660)
-	print p.getFromSIRUTA(86687)
-	print p.getFromSIRUTA(86696)
-	print p.getFromSIRUTA(160270)
-	print p.getFromSIRUTA(154718)
+	print(p.getFromSIRUTA(19660))
+	print(p.getFromSIRUTA(86687))
+	print(p.getFromSIRUTA(86696))
+	print(p.getFromSIRUTA(160270))
+	print(p.getFromSIRUTA(154718))

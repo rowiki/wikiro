@@ -86,7 +86,9 @@ Command-line arguments:
 '''
 
 import sys, time, warnings, json, string, random, re
-import math, urlparse, os
+import math
+import urllib
+import os
 import codecs
 import collections
 sys.path.append("wikiro/robots/python/pywikipedia")
@@ -104,7 +106,7 @@ class Changes:
 	article = 0x010
 	coord   = 0x020
 	image   = 0x040
-        creator = 0x080
+	creator = 0x080
 	commons = 0x100
 	other	= 0x200
 	all	= 0xFFF
@@ -263,15 +265,15 @@ def closeLog():
 
 def log(string):
 	pywikibot.output(string.encode("utf8"))
-	_flog.write(string.encode("utf8") + "\n")
+	_flog.write(string + "\n")
 	
 def rebuildTemplate(params, skipEmpty=True):
 	my_template = u"{{" + countries.get((_lang, _db)).get('rowTemplate') + u"\n"
 	for name in countries.get((_lang, _db)).get('fields'):
-		if skipEmpty and name in params and params[name] <> u"":
-			my_template += u"| " + name + u" = " + params[name] + u"\n"
+		if skipEmpty and name in params and params[name] != u"":
+			my_template += u"| " + name + u" = " + params[name].strip() + u"\n"
 		elif not skipEmpty and name in params:
-			my_template += u"| " + name + u" = " + params[name] + u"\n"
+			my_template += u"| " + name + u" = " + params[name].strip() + u"\n"
 	my_template += u"}}\n"
 	return my_template
 
@@ -313,7 +315,7 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 		return
 
 	site = pywikibot.Site()
-	title = urlparse.parse_qs(urlparse.urlparse(str(url)).query)['title'][0].decode('utf8')
+	title = urllib.parse.parse_qs(urllib.parse.urlparse(str(url)).query)['title'][0]
 	page = pywikibot.Page(site, title)
 	
 	if text == None:
@@ -326,9 +328,10 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 	my_params = {}
 	rowTemplate = countries.get((_lang, _db)).get('rowTemplate')
 	
-	templates = pywikibot.textlib.extract_templates_and_params(text)
+	templates = pywikibot.textlib.extract_templates_and_params(text, strip=True)
 	for (template, params) in templates:
 		if template == rowTemplate:
+			#params = { k.strip(): v for k,v in params.items() }
 			old_params = dict(params)
 			params = monumente.filterOne(params, countries.get((_lang, _db)))
 			for param in params:
@@ -467,8 +470,8 @@ def parseArticleCoords(code, allPages):
 	updateCoord = False
 	global _differentCoords
 	for page in allPages:
-		if page["lat"] <> 0 and page["long"] <> 0:
-			if artLat <> 0: #this also means artLong <> 0
+		if page["lat"] != 0 and page["long"] != 0:
+			if artLat != 0: #this also means artLong != 0
 				if math.fabs(artLat - page["lat"]) > _coordVariance or \
 					math.fabs(artLon - page["long"]) > _coordVariance:
 					if page["name"] not in _differentCoords:
@@ -636,9 +639,9 @@ def hasDependencyCycles(field, value, type, monument):
 	and Wikidata.
 	"""
 	fields = countries.get((_lang, _db)).get('fields')
-        for otherField in fields:
-                #print "*" + field
-                if fields[otherField]['code'] & type and \
+	for otherField in fields:
+		#print "*" + field
+		if fields[otherField]['code'] & type and \
 			field != otherField and \
 			monument.get(otherField) == value:
 			pywikibot.output(u"Dependency cycle detected:\nmonument[%s]=%s\nmonument[%s]=%s" % (field, value, otherField, monument[otherField]))
@@ -652,7 +655,7 @@ def getFieldsWithAliases():
 def getMiscDataFromPages(dataSource):
 	data = {}
 	fields = getFieldsWithAliases()
-        for field in fields:
+	for field in fields:
 		alias = fields[field]
 		if alias in dataSource:
 			data[field] = dataSource[alias]
@@ -748,7 +751,7 @@ def main():
 
 	#this is the big loop that must only happen once
 	for index, monument in enumerate(db_json):
-		if monument["source"] <> lastSource:
+		if monument["source"] != lastSource:
 			articleText = None
 			lastSource = monument["source"]
 
@@ -803,11 +806,11 @@ def main():
 					for pic in pages_commons[code]:
 						otherData.append(getMiscDataFromPages(pic))
 						author_list = ""
-						if pic_author == None and author_list == "" and pic["author"] <> None:
+						if pic_author == None and author_list == "" and pic["author"] != None:
 							pic_author = pic["author"]
 							author_list += u"[[:%s]], " % pic["name"]
 							#print u"Pic Author: " + pic_author
-						elif pic["author"] <> None and pic_author <> pic["author"]:
+						elif pic["author"] != None and pic_author != pic["author"]:
 							#multiple authors, ignore and report error
 							author_list += u"[[:%s]], " % pic["name"]
 							pic_author = None
@@ -819,7 +822,7 @@ def main():
 					if picture == None: #no quality pictures, but do not log - we'll choose a random one
 						pass
 						#log(msg)
-					if pic_author == None and author_list <> "":
+					if pic_author == None and author_list != "":
 						log(u"* [COM] '''E''': ''[%s]'' În lista de imagini sunt trecuți mai multi autori: %s" % (code, author_list))
 				allPages.extend(pages_commons[code])
 			if code in files_local:
@@ -845,7 +848,7 @@ def main():
 			articleText = addRanData(code, monument, ran_data, articleText)
 	
 		#monument name and link
-		if article <> None and article["name"] <> None and article["name"] <> "":
+		if article != None and article["name"] != None and article["name"] != "":
 			if monument[articleField].find("[[") == -1:
 				link = u"[[" + article["name"] + "|" + monument[articleField] + "]]"
 				#pywikibot.output(link)
@@ -857,17 +860,17 @@ def main():
 				else:
 					page1 = pywikibot.Page(pywikibot.Link(link, pywikibot.Site()))
 					page2 = pywikibot.Page(pywikibot.Site(), article["name"])
-					if force and page1.title() <> page2.title():
+					if force and page1.title() != page2.title():
 						field = "".join(strainu.stripLinkWithSurroundingText(monument[articleField]))
 						link = u"[[" + article["name"] + "|" + field + "]]"
 						articleText = updateTableData(monument["source"], code, articleField, link, monument, text=articleText)
-					elif page1.title() <> page2.title() and \
-					(not page1.isRedirectPage() or page1.getRedirectTarget() <> page2) and \
-					(not page2.isRedirectPage() or page2.getRedirectTarget() <> page1):
+					elif page1.title() != page2.title() and \
+					(not page1.isRedirectPage() or page1.getRedirectTarget() != page2) and \
+					(not page2.isRedirectPage() or page2.getRedirectTarget() != page1):
 						log(u"* [WPListă]''W'': ''[%s]'' Câmpul Denumire are o legătură internă către %s, dar articolul despre monument este %s" % (code, page1, page2))
 
 		#author from article
-		if article <> None and article["author"] <> None and article["author"].strip() <> "":
+		if article != None and article["author"] != None and article["author"].strip() != "":
 			#print "Author from article"
 			#author = strainu.stripLink(article["author"]).strip()
 			author = article["author"].strip()
@@ -879,7 +882,7 @@ def main():
 			else:
 				a1 = author.strip()
 				a2 = monument[creatorField].strip()
-				if a1 <> a2 and strainu.extractLink(a1) <> strainu.extractLink(a2) and force:
+				if a1 != a2 and strainu.extractLink(a1) != strainu.extractLink(a2) and force:
 					articleText = updateTableData(monument["source"], code, creatorField, a1, monument, text=articleText)
 				#	log(u"*''W'': ''[%s]'' Câmpul Creatori este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
 
@@ -889,7 +892,7 @@ def main():
 			authors = monument[creatorField].strip()
 			for author in authors_local[code]:
 				if authors.find(author["name"]) == -1: #we don't already know the author
-					if authors <> "":
+					if authors != "":
 						authors = author["name"] + ", " + authors
 					else:
 						authors = author["name"]
@@ -897,14 +900,14 @@ def main():
 					log(u"* [WPListă]''W'': ''[%s]'' Se pare că nu toți creatorii sunt menționați în listă. În articol, [[%s]] este menționat ca autor." % (code, author["name"]))
 					last_death = author["dead"]
 			a2 = monument[creatorField].strip()
-			if a2 == u"" or authors <> a2  and strainu.extractLink(authors) <> strainu.extractLink(a2): # if something changed, update the text
+			if a2 == u"" or authors != a2  and strainu.extractLink(authors) != strainu.extractLink(a2): # if something changed, update the text
 				if force or a2 == u"":
 					pywikibot.output(authors)
 					articleText = updateTableData(monument["source"], code, creatorField, authors, monument, text=articleText)
 
-		elif pic_author <> None and pic_author.strip() <> "":
+		elif pic_author != None and pic_author.strip() != "":
 			#print "Author from commons"
-			if strainu.stripLink(pic_author) <> strainu.stripLink(monument[creatorField]).strip():
+			if strainu.stripLink(pic_author) != strainu.stripLink(monument[creatorField]).strip():
 				if force or monument[creatorField].strip() == u"":
 					articleText = updateTableData(monument["source"], code, creatorField, pic_author, monument, text=articleText)
 
@@ -913,14 +916,14 @@ def main():
 			#print "Author from other data"
 			authors = monument[creatorField].strip()
 			author = other_data[code][creatorField]
-			if authors <> u"" and authors.find(author) == -1: #we don't already know the author
+			if authors != u"" and authors.find(author) == -1: #we don't already know the author
 				authors = author + ", " + authors
 			elif authors == u"":
 				authors = author
 			else:
 				log("* [Listă] ''W'': ''[%s]'' Lista are creatorii %s, iar în fișierul importat apare %s" % \
 						code, authors, author)
-			if authors <> monument[creatorField]: # if something changed, update the text
+			if authors != monument[creatorField]: # if something changed, update the text
 				if force:
 					pywikibot.output(authors)
 					articleText = updateTableData(monument["source"], code, creatorField, authors, monument, text=articleText)
@@ -934,7 +937,7 @@ def main():
 		#we will only consider other types of image if no picture exists
 		if isNullorEmpty(monument.get(imageField)) or force:
 			#image from Commons, none in the list
-			if picture <> None:
+			if picture != None:
 				#pywikibot.output("We're uploading a selected picture from Commons: " + picture)
 				if picture.find(':') < 0:#no namespace
 					picture = "File:" + picture
@@ -944,7 +947,7 @@ def main():
 				pass# when forced, only upload quality images
 			#use image from article only if none is available (or was selected) 
 			#from commons and we don't have a picture in the list
-			elif article <> None and article["image"] <> None and article["image"] <> "":
+			elif article != None and article["image"] != None and article["image"] != "":
 				#pywikibot.output("We're uploading image " + article["image"] + " from the article")
 				artimage = strainu.extractImageLink(article["image"]).strip()
 				if artimage == None or artimage == "":
@@ -991,7 +994,7 @@ def main():
 				articleText = updateTableData(monument["source"], code,
 								"Commons", "commons:" + cat["name"],
 								monument, text=articleText)
-			elif monument.get("Commons") and monument.get("Commons").strip() <> ("commons:" + cat["name"].strip()):
+			elif monument.get("Commons") and monument.get("Commons").strip() != ("commons:" + cat["name"].strip()):
 				log(u"* [COM] ''E'': ''[%s]'' Există mai multe categorii pentru acest cod: <span lang=\"x-sic\">[[:%s]] și [[:%s]]</span>" % (code, "commons:" + cat["name"], monument["Commons"]))
 		#next option: a category from the RAN database
 		elif code in ran_data:
@@ -1040,9 +1043,9 @@ def main():
 						u"a fi din regiunea căutată" %	(otherSrc[:3], code, otherLat, otherLong))
 				otherValid = False
 				continue
-			if lat <> 0 and \
+			if lat != 0 and \
 				otherValid and \
-				otherLat <> 0 and \
+				otherLat != 0 and \
 				( \
 				 math.fabs(otherLat - lat) > _coordVariance or \
 				 math.fabs(otherLong - long) > _coordVariance \

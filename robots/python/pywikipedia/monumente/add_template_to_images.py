@@ -11,7 +11,6 @@ import strainu_functions as sf
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot import config as user
-from pywikibot import catlib as catlib
 
 
 _log = "link2.err.log"
@@ -27,23 +26,23 @@ def closeLog():
 	_flog.close()
 
 def log(string):
-	pywikibot.output(string.encode("utf8") + "\n")
-	_flog.write(string.encode("utf8") + "\n")
+	pywikibot.output(string + "\n")
+	_flog.write(string + "\n")
 
 def commonsImage(image):
 	site = pywikibot.Site('commons', 'commons')
 	#print image
-        try:
-                page = pywikibot.Page(site, image)
+	try:
+		page = pywikibot.Page(site, image)
 		if not page.exists():
-			print "Page does not exists on commons"
+			print("Page does not exists on commons")
 			return None
-                if page.isRedirectPage():
-                        page = page.getRedirectTarget()
+		if page.isRedirectPage():
+			page = page.getRedirectTarget()
 
-        except Exception as e:
-		print e
-                return None
+	except Exception as e:
+		print(e)
+		return None
 	return page
 
 def localImage(image):
@@ -51,7 +50,7 @@ def localImage(image):
 	try:
 		page = pywikibot.Page(site, image)
 		if not page.exists():
-			print "Page does not exists on ro.wp"
+			print("Page does not exists on ro.wp")
 			return None
 		if page.isRedirectPage():
 			page = page.getRedirectTarget()
@@ -82,37 +81,35 @@ def addCodeToTemplate(page, code):
 	if code == None:
 		return
 	templates = page.templatesWithParams()
-        info_params = None
-        text = page.get()
-        for (template, params) in templates:
-                #print template
-                if unicode(template.title(withNamespace = False)) == u"Information" or unicode(template.title(withNamespace = False)) == u"Informații":
-                        pass
-                        info_params = params
-                        #print params
+	info_params = None
+	text = page.get()
+	for (template, params) in templates:
+		if template.title(withNamespace = False) == u"Information" or template.title(withNamespace = False) == u"Informații":
+			pass
+			info_params = params
+			#print params
 
         #print text
-        addedText = "{{Monument istoric|%s}}" % code
-        if info_params == None:
-                text = addedText + "\n" + text
-                #print text
+	addedText = "{{Monument istoric|%s}}" % code
+	if info_params == None:
+		text = addedText + "\n" + text
 		put(page, text, u"Adding {{tl|Monument istoric}}")
-        else:
-                description = None
-                for param in info_params:
-                        pos = unicode(param.lower()).find(u"descri")
-                        if  pos == 0 or (pos > 0 and param[0:pos].strip() == ""):
-                                description = unicode(param)
-                                break
-                if description:
-                        #print addedText
-                        new = description + addedText + "\n"
-                        #print new
-                        text = text.replace(description, new)
-                        #print text
+	else:
+		description = None
+		for param in info_params:
+			pos = param.lower().find(u"descri")
+			if  pos == 0 or (pos > 0 and param[0:pos].strip() == ""):
+				description = param
+				break
+		if description:
+			#print addedText
+			new = description + addedText + "\n"
+			#print new
+			text = text.replace(description, new)
+			#print text
 			put(page, text, u"Adding {{tl|Monument istoric}}")
-                else:
-                        log(u"E: Imaginea pentru %s are formatul {{f|information}} dar nu și o descriere" % code)
+		else:
+			log(u"E: Imaginea pentru %s are formatul {{f|information}} dar nu și o descriere" % code)
 
 def list2commons(db):
 	#this is the big loop that should only happen once
@@ -136,7 +133,7 @@ def list2commons(db):
 		page = commonsImage(image)
 		#print page
 		if page == None:
-                	log("I: Local image [[:%s]] for code %s" % (image, code))
+			log("I: Local image [[:%s]] for code %s" % (image, code))
 			page = localImage(image)
 		if page == None:
 			log("E: Local image [[:%s]] for code %s does not exist" % (image, code))
@@ -151,11 +148,11 @@ def list2commons(db):
 		found = 0
 		for (template, params) in templates:
 			#print template
-			if unicode(template.title(withNamespace = False)) == u"Monument istoric" or unicode(template.title(withNamespace = False)) == u"CodLMI":
+			if template.title(withNamespace = False) == u"Monument istoric" or template.title(withNamespace = False) == u"CodLMI":
 				found = 1
-				if code <> str(params[0]):
+				if code != str(params[0]):
 					log(u"W: Nepotrivire între codul din listă (%s) și unul din codurile din imagine (%s)" % (code, params[0]))
-			elif unicode(template.title(withNamespace = False)) == u"Information" or unicode(template.title(withNamespace = False)) == u"Informații":
+			elif template.title(withNamespace = False) == u"Information" or template.title(withNamespace = False) == u"Informații":
 				pass
 				#info_params = params
 				#print params
@@ -165,15 +162,15 @@ def list2commons(db):
 			addedText = "{{Monument istoric|%s}}" % code
 			if info_params == None:
 				text = addedText + "\n" + text
-				print text
+				print(text)
 				pywikibot.input()
 				page.put(text, comment="Adding {{tl|Monument istoric}}")
 			else:
 				description = None
 				for param in info_params:
-					pos = unicode(param.lower()).find(u"descri")
+					pos = param.lower().find(u"descri")
 					if  pos == 0 or (pos > 0 and param[0:pos].strip() == ""):
-						description = unicode(param)
+						description = param
 						break
 				if description:
 					#print addedText
@@ -199,7 +196,7 @@ def cat2commons(cat):
 			continue
 		pywikibot.output(u"Working on cat %s" % name)
 		site = pywikibot.getSite('commons', 'commons')
-		transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, name))
+		transGen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(site, name))
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen, [6], site)
 		pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 50)
 		for page in pregenerator:
@@ -211,7 +208,7 @@ def cat2commons(cat):
 			found = False
 			info_params = None
 			for (template, params) in templates:
-				if unicode(template.title(withNamespace = False)) == u"Monument istoric":
+				if template.title(withNamespace = False) == u"Monument istoric":
 					found = True
 					print(params)
 					if code != str(params[0]):
@@ -238,9 +235,9 @@ def cat2commons(cat):
 			else:
 				description = None
 			for param in info_params:
-				pos = unicode(param.lower()).find(u"description")
+				pos = param.lower().find(u"description")
 				if pos == 0 or (pos > 0 and param[0:pos].strip() == ""):
-					description = unicode(param)
+					description = param
 					break
 			if description:
 				text = text.replace(description, description + addedText + "\n")
@@ -275,7 +272,7 @@ def article2commons(article):
 		pywikibot.output(u"Working on file %s" % page.title())
 		imagecode = checkForCode(page)
 		if imagecode == None:
-			print code
+			print(code)
 			addCodeToTemplate(page, code)
 		elif imagecode != code:
 			log(u"W: Nepotrivire între codul din articol (%s) și unul din codurile din imagine (%s)" % (code, imagecode))
@@ -302,10 +299,10 @@ def main():
 	f.close();
 	#list2commons(db)
 	if cat:
-		for code in categs.keys():
+		for code in list(categs.keys()):
 			if categs[code][0][u"name"] != cat:
 				del categs[code]
-		print categs
+		print(categs)
 		cat2commons(categs)
 	if pg:
 		article2commons(pg)
