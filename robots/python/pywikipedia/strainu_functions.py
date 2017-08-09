@@ -350,35 +350,40 @@ def linkedImages(page):
     # thistxt = page.site.resolvemagicwords(thistxt)
 
     for match in Rlink.finditer(thistxt):
-        # print match.group(0)
-        title = match.group('title')
-        title = title.replace("_", " ").strip(" ")
-        # print title
-        if title == "":
-            # empty link - problem in the page
-            continue
-        # convert relative link to absolute link
-        if title.startswith(".."):
-            parts = self.title().split('/')
-            parts.pop()
-            title = '/'.join(parts) + title[2:]
-        elif title.startswith("/"):
-            title = '%s/%s' % (page.title(), title[1:])
-        if title.startswith("#"):
-            # this is an internal section link
-            continue
-        if not page.site.isInterwikiLink(title):
-            page2 = pywikibot.Page(page.site, title)
-            try:
-                hash(str(page2))
-            except Exception:
-                pywikibot.output("Page %s contains invalid link to [[%s]]."
+        try:
+            #print(match.group(0))
+            title = match.group('title')
+            title = title.replace("_", " ").strip(" ")
+            # print title
+            if title == "":
+                # empty link - problem in the page
+                continue
+            # convert relative link to absolute link
+            if title.startswith(".."):
+                parts = self.title().split('/')
+                parts.pop()
+                title = '/'.join(parts) + title[2:]
+            elif title.startswith("/"):
+                title = '%s/%s' % (page.title(), title[1:])
+            if title.startswith("#"):
+                # this is an internal section link
+                continue
+            if not page.site.isInterwikiLink(title):
+                page2 = pywikibot.Page(page.site, title)
+                try:
+                    hash(str(page2))
+                except Exception:
+                    pywikibot.output("Page %s contains invalid link to [[%s]]."
                                  % (page.title(), title))
-                continue
-            if not page2.isImage():
-                continue
-            if page2.title(withSection=False) and page2 not in result:
-                result.append(page2)
+                    continue
+                if not page2.isImage():
+                    continue
+                if page2.title(withSection=False) and page2 not in result:
+                    result.append(page2)
+        except pywikibot.NoUsername:
+            continue
+        except:
+            raise
     return result
 
 # --------------- CSV functions -------------------
