@@ -233,7 +233,8 @@ public class FixVillages {
                 }
 
                 String[] settlementCategories = new String[] { "Categorie:Localități urbane în județul " + eachCounty,
-                    "Categorie:Sate în județul " + eachCounty, "Categorie:Subunități administrative ale județului " + eachCounty };
+                    "Categorie:Sate în județul " + eachCounty,
+                    "Categorie:Subunități administrative ale județului " + eachCounty };
                 String[] settlementCategoriesContent = new String[] {
                     "[[Categorie:Localități în județul " + eachCounty + "]]\n[[Categorie:Localități urbane în România|"
                         + eachCounty + "]]",
@@ -730,8 +731,8 @@ public class FixVillages {
                                 desiredCategories.add("Sate în județul " + eachCounty);
                             }
 
-                            pageText = recategorize(pageText, new String[] { villageName, communeName },
-                                rovillagearticle, desiredCategories);
+                            pageText = recategorize(pageText, new String[] { villageName, communeName }, rovillagearticle,
+                                desiredCategories);
 
                             if (!StringUtils.equals(pageText, initialPageText)) {
                                 rowiki.edit(rovillagearticle, pageText,
@@ -1206,8 +1207,8 @@ public class FixVillages {
                             }
                         }
 
-                        pageText = recategorize(pageText, new String[] { communeName }, rocommunearticle,
-                            desiredCommuneCategories);
+                        pageText =
+                            recategorize(pageText, new String[] { communeName }, rocommunearticle, desiredCommuneCategories);
 
                         pageText = rewritePoliticsAndAdministrationSection(pageText, eachCounty, communeName, communeType,
                             communeWikibaseItem, dwiki);
@@ -1272,7 +1273,7 @@ public class FixVillages {
         while (categoryMatcher.find()) {
             String catName = categoryMatcher.group(1);
             String catKey = categoryMatcher.group(2);
-            
+
             if (catLocation < 0) {
                 catLocation = categoryMatcher.start();
             }
@@ -1633,10 +1634,10 @@ public class FixVillages {
             if (Arrays.asList("Bălteni", "Bărăști", "Brebeni", "Colonești", "Corbu", "Coteana", "Crâmpoia", "Cungrea",
                 "Curtișoara", "Dăneasa", "Dobroteasa", "Făgețelu", "Ghimpețeni", "Icoana", "Ipotești", "Izvoarele",
                 "Leleasca", "Mărunței", "Mihăești", "Milcov", "Movileni", "Nicolae Titulescu", "Oporelu", "Optași-Măgura",
-                "Perieți", "Poboru", "Priseaca", "Radomirești", "Sâmburești", "Sârbii-Măgura", "Schitu", "Seaca", "Slatina",
-                "Spineni", "Sprâncenata", "Stoicănești", "Șerbănești", "Tătulești", "Teslui", "Topana", "Tufeni", "Vâlcele",
-                "Valea Mare", "Văleni", "Verguleasa", "Vitomirești", "Vulturești", "Drăgănești-Olt")
-                .contains(trim(commune))) {
+                "Perieți", "Poboru", "Potcoava", "Priseaca", "Radomirești", "Sâmburești", "Sârbii-Măgura", "Schitu",
+                "Scornicești", "Seaca", "Slatina", "Spineni", "Sprâncenata", "Stoicănești", "Șerbănești", "Tătulești",
+                "Teslui", "Topana", "Tufeni", "Vâlcele", "Valea Mare", "Văleni", "Verguleasa", "Vitomirești", "Vulturești",
+                "Drăgănești-Olt").contains(trim(commune))) {
                 return MUNTENIA_LINK;
             } else if (Arrays.asList("Câineni").contains(trim(commune))) {
                 if (Arrays.asList("Câinenii Mici", "Greblești", "Priloage").contains(trim(settlement))) {
