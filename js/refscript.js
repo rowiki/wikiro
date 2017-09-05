@@ -1066,22 +1066,23 @@ if (u.match(/webcitation.org/)) {
         }
 
         var fullArticleDiv = document.getElementById('interior_left');
-        var authorHeaders = fullArticleDiv.getElementsByClassName('fleft');
-        if (authorHeaders) {
-        	for (var authorHeadersIdx = 0; authorHeadersIdx < authorHeaders.length; authorHeadersIdx++) {
-                var authorSpans = authorHeaders[authorHeadersIdx].getElementsByTagName('span');
-                if (authorSpans && authorSpans.length > 0) {
-                    var authorsBs = authorSpans[0].getElementsByTagName('b');
-                    if (authorsBs && authorsBs.length > 0) {
-                        var W_Authors = authorsBs[0].textContent;
-                    } else {
-                        var W_Authors = authorSpans[0].textContent;
-                    }
-                    break;
+	if (fullArticleDiv) {
+	        var authorHeaders = fullArticleDiv.getElementsByClassName('fleft');
+        	if (authorHeaders) {
+        		for (var authorHeadersIdx = 0; authorHeadersIdx < authorHeaders.length; authorHeadersIdx++) {
+	                var authorSpans = authorHeaders[authorHeadersIdx].getElementsByTagName('span');
+	                if (authorSpans && authorSpans.length > 0) {
+        	            var authorsBs = authorSpans[0].getElementsByTagName('b');
+                	    if (authorsBs && authorsBs.length > 0) {
+                        	var W_Authors = authorsBs[0].textContent;
+	                    } else {
+        	                var W_Authors = authorSpans[0].textContent;
+                	    }
+	                    break;
+        	        }
+	            }
                 }
-            }
-		}
-
+	    }
 	};
 	if (u.match(/contributors.ro/)) {
 		var x = document.title;
