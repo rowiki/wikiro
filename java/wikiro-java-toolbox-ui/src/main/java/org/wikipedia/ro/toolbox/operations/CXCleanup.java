@@ -191,6 +191,27 @@ public class CXCleanup implements WikiOperation {
             footnoteBySupMatcher.appendReplacement(newText, "");
         }
         footnoteBySupMatcher.appendTail(newText);
+        
+        status = new String[] { "status.harvnbizing" };
+        Pattern footnoteHarvnbPattern = Pattern.compile(
+            "<ref(?:\\s+name=\"([^\"]*)\")?>\\s*\\[\\[#CITEREF(\\p{Alpha}*?)(\\d+)\\|[^\\]]*\\]\\](?:,\\s*(pp?)\\.(?:\\s+|&nbsp;)([\\d–\\-]+))?\\s*</ref>",
+            Pattern.DOTALL);
+        Matcher footnoteHarvnbMatcher = footnoteHarvnbPattern.matcher(newText.toString());
+        newText = new StringBuffer();
+        while (footnoteHarvnbMatcher.find()) {
+            StringBuilder thisHarvnb = new StringBuilder("<ref");
+            if (null != footnoteHarvnbMatcher.group(1)) {
+                thisHarvnb.append(" name=\"").append(footnoteHarvnbMatcher.group(1)).append("\"");
+            }
+            thisHarvnb.append(">{{Harvnb|").append(footnoteHarvnbMatcher.group(2)).append('|').append(footnoteHarvnbMatcher.group(3));
+            if (null != footnoteHarvnbMatcher.group(4) && null != footnoteHarvnbMatcher.group(5)) {
+                thisHarvnb.append('|').append(footnoteHarvnbMatcher.group(4)).append('=').append(footnoteHarvnbMatcher.group(5));
+            }
+            thisHarvnb.append("}}</ref>");
+            footnoteHarvnbMatcher.appendReplacement(newText, thisHarvnb.toString());
+        }
+        footnoteHarvnbMatcher.appendTail(newText);
+        
 
         Pattern frenchCommaBetweenRefsPattern = Pattern.compile("\\<sup\\s*class=\"reference cite_virgule\"\\>,\\</sup\\>");
         Matcher frenchCommaBetweenRefsMatcher = frenchCommaBetweenRefsPattern.matcher(newText.toString());
