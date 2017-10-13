@@ -1,4 +1,7 @@
-package org.wikipedia.ro.java.wikiprojects;
+package org.wikipedia.ro.java.wikiprojects.utils;
+
+import java.util.Arrays;
+import java.util.List;
 
 public enum ArticleClass {
     FA, A, GA, B, C, START, STUB, L, FL, TEMPLATE, PORTAL, ALL_QUALITY, UNKNOWN_QUALITY,
@@ -43,5 +46,13 @@ public enum ArticleClass {
         default:
             return null;
         }
+    }
+
+    public static List<ArticleClass> qualityClasses() {
+        return Arrays.asList(FA, A, GA, B, C, START, STUB);
+    }
+
+    public static List<ArticleClass> importanceClasses() {
+        return Arrays.asList(TOP, HIGH, MEDIUM, SMALL);
     }
 }

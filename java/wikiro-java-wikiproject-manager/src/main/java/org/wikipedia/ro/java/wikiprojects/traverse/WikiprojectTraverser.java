@@ -1,4 +1,4 @@
-package org.wikipedia.ro.java.wikiprojects;
+package org.wikipedia.ro.java.wikiprojects.traverse;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.prependIfMissing;
@@ -14,6 +14,9 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.commons.collections4.map.MultiKeyMap;
 import org.wikipedia.Wiki;
+import org.wikipedia.ro.java.wikiprojects.utils.ArticleClass;
+import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
+import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
 
 public class WikiprojectTraverser {
     private String wikiprojectName;
@@ -38,23 +41,10 @@ public class WikiprojectTraverser {
 
         Wiki wiki = new Wiki(wikiAddress);
 
-        String username = System.getenv("WIKI_WIKIPROJECT_MANAGER_USERNAME");
-        String password = System.getenv("WIKI_WIKIPROJECT_MANAGER_PASSWORD");
-
-        Console c = System.console();
-        if (null == username) {
-            username = c.readLine("User name: ");
-        }
-        char[] pass = null;
-        if (null == password) {
-            c.printf("Password: ");
-            pass = c.readPassword();
-        } else {
-            pass = password.toCharArray();
-        }
+        Credentials credentials = WikiprojectsUtils.identifyCredentials();
 
         try {
-            wiki.login(username, pass);
+            wiki.login(credentials.username, credentials.password);
 
             wiki.setMarkBot(true);
             
