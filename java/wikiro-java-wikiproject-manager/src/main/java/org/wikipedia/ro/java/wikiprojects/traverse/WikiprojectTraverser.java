@@ -54,6 +54,9 @@ public class WikiprojectTraverser {
 
             for (String eachPage : pages) {
                 int namespace = wiki.namespace(eachPage);
+                if (Wiki.CATEGORY_NAMESPACE == namespace) {
+                    continue;
+                }
                 int classificationNamespace = namespace;
                 String classificationPage =
                     prependIfMissing(removeStart(eachPage, wiki.namespaceIdentifier(namespace) + ":"),
