@@ -70,11 +70,11 @@ class DiacriticsReplaceBot:
             return
             
         #turkish_regexp  = re.compile(u"(<(span) lang=[^<>]*>((.|\r|\n)*?)<\/\1>)", re.I);
-        turkish_regexp = re.compile(u"((<(span) lang=[^<>]*>(.|\r|\n)*?<\/span>)|(<(ref)(.*?)>(.|\r|\n)*?<\/ref>)|(<ref(.*?)\/(\s?)>)|(<(gallery)(.*?)>(.|\r|\n)*?<\/gallery>)|(\| (?=Commons).*\n)|(\|\s*(?=[Ii]magine).*\n)|(\|\s*(?=[hH]art[ăa]).*\n)|(\|\s*(?=[Ff]oto).*\n))", re.I);
+        turkish_regexp = re.compile(u"((<(span|div) lang=[^<>]*>(.|\r|\n)*?<\/span>)|(<(ref)(.*?)>(.|\r|\n)*?<\/ref>)|(<ref(.*?)\/(\s?)>)|(<(gallery)(.*?)>(.|\r|\n)*?<\/gallery>)|(\| (?=Commons).*\n)|(\|\s*(?=[Ii]magine).*\n)|(\|\s*(?=[hH]art[ăa]).*\n)|(\|\s*(?=[Ff]oto).*\n))", re.I);
         turkish_phrases = turkish_regexp.findall(text)
         interwiki_regexp  = re.compile(u"(\[\[:?([a-z]{2,3}|fișier|imagine|media|simple|roa-rup|be-x-old|zh-(yue|classical|min-nan)|bat-smg|cbk-zam|nds-nl|map-bms|cbk-zam|fişier|file|image):(.*?)\]\])", re.I);
         interwiki_phrases = interwiki_regexp.findall(text)
-        template_regexp  = re.compile(u"(\{\{(proiecte surori|sisterlinks|commons|commonscat|wikicitat|wikimanuale|wikisursă|wikitravel|wikiştiri|wikţionar|WikimediaPentruPortale|titlu corect|wikisource)\|((.|\n|\r)*?)\}\})", re.I);
+        template_regexp  = re.compile(u"(\{\{(proiecte surori|sisterlinks|commons|commonscat|wikicitat|wikimanuale|wikisursă|wikitravel|wikiştiri|wikţionar|WikimediaPentruPortale|titlu corect|wikisource|lang|lang-tr|lang-tt|lang-az|lang-ku)\|((.|\n|\r)*?)\}\})", re.I);
         template_phrases = template_regexp.findall(text)
         
         new_text = string.replace(text, u'ş', u'ș')
