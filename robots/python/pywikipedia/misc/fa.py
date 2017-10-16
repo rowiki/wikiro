@@ -16,9 +16,8 @@ from collections import OrderedDict as od
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot import config as user
-from pywikibot import catlib
 
-sys.path.append(".")
+sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions as sf
 
 def printWikidata(page):
@@ -33,7 +32,7 @@ def printCombo(generator):
 		#skip non-articles until we know what to do with them
 		if page.namespace() != 0:
 			text = u"--" + text
-		print text
+		print(text)
 		ret += text + u"\n"
 	return ret
 
@@ -44,26 +43,26 @@ if __name__ == "__main__":
 	text = u"local featuredPages = {\n"
 
 	text += u"--Categorie:Articole de calitate\n"
-	cat = catlib.Category(pywikibot.getSite(), u"Categorie:Articole de calitate")
+	cat = pywikibot.Category(pywikibot.getSite(), u"Categorie:Articole de calitate")
 	gen = pagegenerators.PreloadingGenerator(pagegenerators.CategorizedPageGenerator(cat))
 	text += printCombo(gen)
 
 	text += u"--Categorie:Articole bune\n"
-	cat = catlib.Category(pywikibot.getSite(), u"Categorie:Articole bune")
+	cat = pywikibot.Category(pywikibot.getSite(), u"Categorie:Articole bune")
 	gen = pagegenerators.PreloadingGenerator(pagegenerators.CategorizedPageGenerator(cat))
 	text += printCombo(gen)
 
 	text += u"--Categorie:Liste de calitate\n"
-	cat = catlib.Category(pywikibot.getSite(), u"Categorie:Liste de calitate")
+	cat = pywikibot.Category(pywikibot.getSite(), u"Categorie:Liste de calitate")
 	gen = pagegenerators.PreloadingGenerator(pagegenerators.CategorizedPageGenerator(cat))
 	text += printCombo(gen)
 
 	text += u"""}
 
-local keys, i = {}, 1	
+local keys, i = {}, 0
 for k,_ in pairs(featuredPages) do
-    keys[i] = k
     i= i+1
+    keys[i] = k
 end
 
 return {
