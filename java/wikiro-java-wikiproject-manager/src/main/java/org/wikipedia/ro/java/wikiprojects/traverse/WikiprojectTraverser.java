@@ -134,22 +134,30 @@ public class WikiprojectTraverser {
             .append(wikiprojectName)
             .append("|Medie}} !! {{clasament-mic|categorie=Categorie:Articole de importanță mică pentru proiectul ")
             .append(wikiprojectName)
-            .append("|Mică}} !! Neclasificate || Total ").append("\n|-").append("\n! rowspan=\"10\" | Calitate");
+            .append("|Mică}} !! Neclasificate || Total ").append("\n|-").append("\n! rowspan=\"14\" | Calitate");
 
         printTableLine(sbuilder, ArticleClass.FA, "{{clasament-AC|categorie=Categorie:Articole de calitate ale proiectului ",
             "|AC}}");
         printTableLine(sbuilder, ArticleClass.A, "{{clasament-A|categorie=Categorie:Articole de clasa „A” ale proiectului ",
-            "|AC}}");
+            "|A}}");
         printTableLine(sbuilder, ArticleClass.GA, "{{clasament-AB|categorie=Categorie:Articole bune ale proiectului ",
-            "|AC}}");
+            "|AB}}");
         printTableLine(sbuilder, ArticleClass.B, "{{clasament-B|categorie=Categorie:Articole de clasa „B” ale proiectului ",
-            "|AC}}");
+            "|B}}");
         printTableLine(sbuilder, ArticleClass.C, "{{clasament-C|categorie=Categorie:Articole de clasa „C” ale proiectului ",
-            "|AC}}");
+            "|C}}");
         printTableLine(sbuilder, ArticleClass.START,
-            "{{clasament-început|categorie=Categorie:Articole de clasa „început” ale proiectului ", "|AC}}");
+            "{{clasament-început|categorie=Categorie:Articole de clasa „început” ale proiectului ", "|început}}");
         printTableLine(sbuilder, ArticleClass.STUB,
-            "{{clasament-ciot|categorie=Categorie:Articole de clasa „ciot” ale proiectului ", "|AC}}");
+            "{{clasament-ciot|categorie=Categorie:Articole de clasa „ciot” ale proiectului ", "|ciot}}");
+        printTableLine(sbuilder, ArticleClass.LIST,
+            "{{clasament-listă|categorie=Categorie:Articole de clasa „listă” ale proiectului ", "|listă}}");
+        printTableLine(sbuilder, ArticleClass.FL,
+            "{{clasament-LC|categorie=Categorie:Liste de calitate ale proiectului ", "|listă}}");
+        printTableLine(sbuilder, ArticleClass.PORTAL,
+            "{{clasament-portal|categorie=Categorie:Articole de clasa „portal” ale proiectului ", "|portal}}");
+        printTableLine(sbuilder, ArticleClass.TEMPLATE,
+            "{{clasament-format|categorie=Categorie:Articole de clasa „format” ale proiectului ", "|format}}");
         printTableLine(sbuilder, ArticleClass.UNKNOWN_QUALITY, "{{neclasificat}}", null);
         printTableLine(sbuilder, ArticleClass.ALL_QUALITY, "Total", null);
 

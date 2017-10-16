@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum ArticleClass {
-    FA, A, GA, B, C, START, STUB, L, FL, TEMPLATE, PORTAL, ALL_QUALITY, UNKNOWN_QUALITY,
+    FA, A, GA, B, C, START, STUB, L, FL, LIST, TEMPLATE, PORTAL, FUTURE, ALL_QUALITY, UNKNOWN_QUALITY,
     TOP, HIGH, MEDIUM, SMALL, ALL_IMPORTANCE, UNKNOWN_IMPORTANCE;
     
     public static ArticleClass fromString(String s) {
@@ -43,16 +43,23 @@ public enum ArticleClass {
         case "MICĂ":
         case "MICA":
             return SMALL;
+        case "LIST":
+        case "LISTĂ":
+            return LIST;
+        case "LC":
+        case "FL":
+            return FL;
+        case "TEMPLATE":
+        case "FORMAT":
+            return TEMPLATE;
+        case "PORTAL":
+            return PORTAL;
+        case "FUTURE":
+        case "VIITOR":
+            return FUTURE;
         default:
             return null;
         }
     }
 
-    public static List<ArticleClass> qualityClasses() {
-        return Arrays.asList(FA, A, GA, B, C, START, STUB);
-    }
-
-    public static List<ArticleClass> importanceClasses() {
-        return Arrays.asList(TOP, HIGH, MEDIUM, SMALL);
-    }
 }

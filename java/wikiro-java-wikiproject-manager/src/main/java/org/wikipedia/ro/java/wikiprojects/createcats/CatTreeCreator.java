@@ -1,16 +1,24 @@
 package org.wikipedia.ro.java.wikiprojects.createcats;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.lowerCase;
+import static org.apache.commons.lang3.StringUtils.prependIfMissing;
 import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.A;
 import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.B;
 import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.C;
 import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.FA;
+import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.FL;
+import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.FUTURE;
 import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.GA;
 import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.HIGH;
+import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.LIST;
 import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.MEDIUM;
+import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.PORTAL;
 import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.SMALL;
 import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.START;
 import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.STUB;
+import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.TEMPLATE;
 import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.TOP;
 
 import java.io.IOException;
@@ -19,7 +27,6 @@ import java.util.Map;
 
 import javax.security.auth.login.LoginException;
 
-import static org.apache.commons.lang3.StringUtils.*;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.utils.ArticleClass;
 import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
@@ -40,6 +47,10 @@ public class CatTreeCreator {
             put(HIGH, "mare");
             put(MEDIUM, "medie");
             put(SMALL, "mică");
+            put(TEMPLATE, "format");
+            put(LIST, "listă");
+            put(FUTURE, "viitor");
+            put(FL, "listă de calitate");
         }
     };
     private static final Map<ArticleClass, String> catLinks = new HashMap<ArticleClass, String>() {
@@ -58,6 +69,11 @@ public class CatTreeCreator {
             put(C, "Articole de clasa „C”");
             put(START, "Articole de clasa „început”");
             put(STUB, "Articole de clasa „ciot”");
+            put(LIST, "Articole de clasa „listă”");
+            put(FL, "Liste de calitate");
+            put(PORTAL, "Articole de clasa „portal”");
+            put(TEMPLATE, "Articole de clasa „format”");
+            put(FUTURE, "Articole cu subiect de viitor");
             put(TOP, "Cele mai importante articole");
             put(HIGH, "Articole de importanță mare");
             put(MEDIUM, "Articole de importanță medie");
@@ -69,6 +85,8 @@ public class CatTreeCreator {
         {
             put(FA, "Articole de calitate (clasament)");
             put(GA, "Articole bune (clasament)");
+            put(FL, "Liste de calitate (clasament)");
+            put(FUTURE, "Viitor (clasament)");
         }
     };
 
