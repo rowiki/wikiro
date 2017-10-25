@@ -77,7 +77,7 @@ options = {
 			'namespaces': [0, 6],
 			#'namespaces': [6],
 			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
-			'templateRegexp': re.compile("\{\{[a-z]*codLMI\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
+                        'templateRegexp': re.compile("\{\{(?:[a-z]*codLMI|Monument istoric)\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'codeTemplate': ["codLMI", "Monument istoric"],
 			'codeTemplateParams': 
 			[
@@ -211,7 +211,7 @@ options = {
 			'namespaces': [14, 6],
 			#'namespaces': [14],
 			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
-			'templateRegexp': re.compile("\{\{Monument istoric\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
+                        'templateRegexp': re.compile("\{\{(?:Monument istoric|codLMI)\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
 			'codeTemplate': ["Monument istoric", "Monumente istorice", "codLMI"],
 			'codeTemplateParams': 
 			[
@@ -585,8 +585,10 @@ def processArticle(text, page, conf):
 
 	code = None
 	codes = re.findall(conf[_db]['codeRegexp'], text)
+	#print (codes)
 	if len(codes) > 1 and checkMultipleMonuments([res[0] for res in codes]): #more than one code, juse use the one that is marked with the template
 		tlCodes = re.findall(conf[_db]['templateRegexp'], text)
+		#print(tlCodes)
 		if len(tlCodes) == 1:
 			code = tlCodes[0][0]
 		codes = tlCodes
@@ -670,7 +672,7 @@ def processArticle(text, page, conf):
 			#try to identify the correct code
 			if dictElem['code'] == None and key == _db and box[key] in _dict:
 				infoCodes = re.findall(conf[_db]['codeRegexp'], _dict[box[key]])
-				#print infoCodes
+				#print(infoCodes)
 				if len(infoCodes) != 1 and checkMultipleMonuments([res[0] for res in infoCodes]): # more or less than one code is marked; just ignore
 					invalidCount(len(codes), title, _db, [res[0] for res in codes])#count comes from the first search
 					return
@@ -875,7 +877,7 @@ def main():
 						fullDict[code].append(content)
 					else:
 						fullDict[code] = [content]
-					pywikibot.output('Skipping "%s"' % page.title())
+					#pywikibot.output('Skipping "%s"' % page.title())
 					#continue
 				elif page.exists() and not page.isRedirectPage():
 					print((page.title()))
