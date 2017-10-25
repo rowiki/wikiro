@@ -77,41 +77,41 @@ class DiacriticsReplaceBot:
         template_regexp  = re.compile(u"(\{\{(proiecte surori|sisterlinks|commons|commonscat|wikicitat|wikimanuale|wikisursă|wikitravel|wikiştiri|wikţionar|WikimediaPentruPortale|titlu corect|wikisource|lang|lang-tr|lang-tt|lang-az|lang-ku)\|((.|\n|\r)*?)\}\})", re.I);
         template_phrases = template_regexp.findall(text)
         
-        new_text = string.replace(text, u'ş', u'ș')
-        new_text = string.replace(new_text, u'ţ', u'ț')
-        new_text = string.replace(new_text, u'Ş', u'Ș')
-        new_text = string.replace(new_text, u'Ţ', u'Ț')
+        new_text = text.replace(u'ş', u'ș')
+        new_text = new_text.replace(u'ţ', u'ț')
+        new_text = new_text.replace(u'Ş', u'Ș')
+        new_text = new_text.replace(u'Ţ', u'Ț')
         
-        print "turkish"
+        #print "turkish"
         mixed_phrases = turkish_regexp.findall(new_text)
-        print mixed_phrases
-        print turkish_phrases
+        #print mixed_phrases
+        #print turkish_phrases
         if len(mixed_phrases) > 0 and len(turkish_phrases) > 0:
             for i in range(len(mixed_phrases)):
-                new_text = string.replace(new_text, mixed_phrases[i][0], turkish_phrases[i][0], 1)
+                new_text = new_text.replace(mixed_phrases[i][0], turkish_phrases[i][0], 1)
         
-        print "interwiki" 
+        #print "interwiki" 
         mixed_phrases = interwiki_regexp.findall(new_text)
-        print mixed_phrases
+        #print mixed_phrases
 	#print "-----------------------------------------------------------------------"
-        print interwiki_phrases
+        #print interwiki_phrases
         if len(mixed_phrases) > 0 and len(interwiki_phrases) > 0:
             for i in range(len(mixed_phrases)):
-                new_text = string.replace(new_text, mixed_phrases[i][0], interwiki_phrases[i][0], 1)
+                new_text = new_text.replace(mixed_phrases[i][0], interwiki_phrases[i][0], 1)
         
-	print "template"
+	#print "template"
         mixed_phrases = template_regexp.findall(new_text)
-        print mixed_phrases
-	print template_phrases
+        #print mixed_phrases
+	#print template_phrases
         if len(mixed_phrases) > 0 and len(template_phrases) > 0:
             for i in range(len(mixed_phrases)):
-                new_text = string.replace(new_text, mixed_phrases[i][0], template_phrases[i][0], 1)
+                new_text = new_text.replace(mixed_phrases[i][0], template_phrases[i][0], 1)
                 
         if new_text == text:
             pywikibot.output(u"Weird, no diacritics in the page, skipping...")
             return
 
-	pywikibot.showDiff(text, new_text)
+        pywikibot.showDiff(text, new_text)
             
         if not self.acceptall:
             choice = pywikibot.inputChoice(
@@ -128,7 +128,7 @@ class DiacriticsReplaceBot:
                 pywikibot.output(u"Replaced diacritics...")
             except Exception as e:
                 pywikibot.output(u"An error occurred, skipping...%s")
-		print e
+                pywikibot.output(e)
 
 def main():
     genFactory = pagegenerators.GeneratorFactory()
