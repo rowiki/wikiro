@@ -107,7 +107,7 @@ class ItemProcessing:
                 # don't bother about those yet
                 oldValue = set(v.getTarget() for v in self.item.claims[prop])
                 if not force:
-                    pywikibot.output(u"Wikidata already has %s: %s" % (key, unicode(str(oldValue), 'utf8')))
+                    pywikibot.output(u"Wikidata already has %s: %s" % (key, str(oldValue)))
                     return
             if type(data[key]).__name__ != 'list':
                 data[key] = [data[key]]
@@ -145,7 +145,7 @@ class ItemProcessing:
             addlist = list(cv.difference(oldValue))
             if not len(addlist) and not len(rmlist):
                 return
-            answer = answer or self.userConfirm("Update element %s with %s '%s' (old value '%s')?" % (self.label, key, unicode(str(cv), 'utf8'), unicode(str(oldValue), 'utf8')))
+            answer = answer or self.userConfirm("Update element %s with %s '%s' (old value '%s')?" % (self.label, key, str(cv), str(oldValue)))
             if answer:
                 if len(rmlist):
                     print("Removing", rmlist)
@@ -428,7 +428,7 @@ class ImageProcessing(ItemProcessing, CityData):
             return
         label = label.title()
         for monument in self._lmi or []:
-            if len(monument["Imagine"]) and monument["Localitate"].find(u"[[" + label) > -1:
+            if len(monument["Imagine"]) and monument["Localitate"].find(u"[[" + label + u"|") > -1:
                 self.addImage(monument["Imagine"])
                 break
 
@@ -626,10 +626,10 @@ if __name__ == "__main__":
     user.mylang = 'wikidata'
     user.family = 'wikidata'
     sirutaDb = sirutalib.SirutaDatabase()
-    postCodes = postal_codes.PostalCodes("codp_B.csv", "codp_50k.csv", "codp_1k.csv")
+    #postCodes = postal_codes.PostalCodes("codp_B.csv", "codp_50k.csv", "codp_1k.csv")
     lmiDb = readJson("ro_lmi_db.json", "monument database")
     page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
-    # page = pywikibot.Page(pywikibot.Site(), "Q193055", ns=0)
+    #page = pywikibot.Page(pywikibot.Site(), "Q16898095", ns=0)
     generator = pagegenerators.ReferringPageGenerator(page)
     bot = robot.WikidataBot(site=True, generator=generator)
 
