@@ -166,7 +166,7 @@ minormistakes = {
 	u' și(de|a|pe)': u' și \g<1>',
 	u' k ': u' km ',
 	u'([^aeiourpăâc\(_" ])și': u'\g<1> și',
-	u' de([bg])': u' de \g<1>',
+	#u' de([bg])': u' de \g<1>',
 	u' de(pe|la|sub|peste|o|lemn|locul) ': u' de \g<1> ',
 	u' la(vecini|extremitatea) ': u' de \g<1> ',
 	u' pe(malul) ': u' pe \g<1> ',
@@ -189,7 +189,7 @@ minormistakes = {
 	u'o(\s?)-(\s?)(dac|roman)': u'o-\g<3>',
 	u'(\| (?!Imagine|Plan|Commons|NotăCod|Adresă))(.*) -([^\s\"„\-])': u'\g<1>\g<2>-\g<3>',
 	u'(\| (?!Imagine|Plan|Commons|NotăCod|Adresă))(.*)([^\s\"”\-;,\.])- ': u'\g<1>\g<2>\g<3>-',
-	u'(\| (?!Imagine|Plan|Commons|NotăCod|Adresă))(.*) -([\"„\-])': u'\g<1>\g<2> - \g<3>',
+	u'(\| (?!Imagine|Plan|Commons|NotăCod|Adresă))(.*) -([\"„])': u'\g<1>\g<2> - \g<3>',
 	u'(\| (?!Imagine|Plan|Commons|NotăCod|Adresă))(.*)([\"”\.])- ': u'\g<1>\g<2>\g<3> - ',
 	u'([Cc])as([aă])d': u'\g<1>as\g<2> d',
 	u'([a-z])înpartea': u'\g<1> în partea',
@@ -197,7 +197,7 @@ minormistakes = {
 	u'{{CompactTOC6}}': u'{{CuprinsPrefix|prefix={{subst:#invoke:String|sub|{{subst:urlencode:{{subst:PAGENAME}}|WIKI}}|1|-2}}}}\n{{-}}',
 	u'peambelemaluriale': u'pe ambele maluri ale',
 	u'fața([^d\s\)])': u'fața \g<1>',
-	u'părți([^lt\s\),.])': u'părți \g<1>',
+	u'părți([^ltr\s\),.])': u'părți \g<1>',
 	u'învi([ae])': u'în vi\g<1>',
 	u'dealta': u'de alta',
 	u'([XV]+)l ': u'\g<1>I ',
@@ -229,6 +229,8 @@ minormistakes = {
 	u'(a|ale)șoselei': u'\g<1> șoselei',
 	u'”\"': u'”',
 	u'deextremitate': u'de extremitate',
+        u'([Cc])imitirul([^u\s\-„”\.,;])': u'\g<1>imitirul \g<2>',
+        u'([a-zA-Z])pentru([a-zA-Z])': u'\g<1> pentru \g<2>',
 }
 
 deprecated = {
@@ -239,11 +241,13 @@ deprecated = {
 
 improvements = OrderedDict([
 	#link km and m to the number
-	(u'([0-9])\s*[kK]m', u'\g<1>&nbsp;km'),
-	(u'([0-9])\s*[mM]([\s,\.])', u'\g<1>&nbsp;m\g<2>'),
-	(u'&nbsp;\s', u'&nbsp;'),
+	(u'([0-9])\s*[kK]m', u'\g<1> km'),
+	(u'([0-9])\s*[mM]([\s,\.])', u'\g<1> m\g<2>'),
+	#(u'([0-9])\s*[kK]m', u'\g<1>&nbsp;km'),
+	#(u'([0-9])\s*[mM]([\s,\.])', u'\g<1>&nbsp;m\g<2>'),
+	#(u'&nbsp;\s', u'&nbsp;'),
 	(u'&nbsp;', u' '),#the replacement is U+00A0
-	(u' \s', u' '),#the replacement is U+00A0
+	#(u' \s', u' '),#the replacement is U+00A0
 ])
 
 authors = {
@@ -275,11 +279,13 @@ def processList(page):
 	#comment = u'Înlocuiesc spațiul cu non-breaking space (U+00A0) în unitățile de distranță din articolul [[%s]]' % page.title(True)
 	#comment = u'Scot câmpul învechite din {{ElementLMI}} în articolul [[%s]]' % page.title(True)
 	comment = u'Se corectează anumite erori frecvente din articolul [[%s]]' % page.title(True)
-	#for mistake in improvements.keys():
-	#	newtext = re.sub(mistake, improvements[mistake], text)
-	#	if text <> newtext:
-	#		changed = True
-	#		text = newtext
+	for mistake in improvements.keys():
+		#origtext = text
+		newtext = re.sub(mistake, improvements[mistake], text)
+		if newtext != origtext:
+			print(mistake)
+			text = newtext
+	text = checkAndUpload(page, origtext, newtext, comment)
 	for mistake in mistakes.keys():
 		origtext = text
 		count = 0
