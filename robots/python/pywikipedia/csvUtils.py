@@ -17,7 +17,7 @@ def csvToJson( inFile, outFile=None, field=u"Cod", delimiter=","):
         for row in csvDict:
             if field not in row:
                 return None
-            out.update({row[field]: dict([(unicode(key, 'utf-8'), unicode(value, 'utf-8')) for key, value in row.iteritems()])})
+            out.update({row[field]: dict([(key, value) for key, value in row.items()])})
 
     if outFile and out:
         with open(outFile, 'w') as jsonFile:

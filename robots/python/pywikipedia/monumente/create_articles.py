@@ -85,7 +85,7 @@ def extractCreator(monument):
 
     res = []
     for creator in creators:
-        print creator
+        pywikibot.output(creator)
         if '(' not in creator:
             artist = creator
             if splitCode(monument[u"Cod"])[1] == "III":
@@ -117,7 +117,7 @@ def writeSubmonuments(submonuments):
     
     text = u"\nAnsamblul este format din următoarele monumente:\n"
     for sub in submonuments:
-        print sub
+        pywikibot.output(sub)
         text += u"* %s ({{codLMI|%s}})\n" %(sub["Denumire"], sub["Cod"])
         
     return text
@@ -235,25 +235,26 @@ def addExternalData(data, source="europeana"):
 def addVillageToTitles(titles, village):
     ret = set(titles)
     for title in titles:
-	    if title.find(u" din ") == -1 and (not village or title.find(village) == -1):
-		title = title.strip()
-		title = re.sub(ur'Ansamblul (.*)', ur'Ansamblul \1 din %s' % village, title)
-		title = re.sub(ur'Biseric(ă|a) (.*)', ur'Biserica \2 din %s' % village, title)
-		title = re.sub(ur'Capela (.*)', ur'Capela \1 din %s' % village, title)
-		title = re.sub(ur'Basilica (.*)', ur'Basilica \1 din %s' % village, title)
-		title = re.sub(ur'Statuia (.*)', ur'Statuia \1 din %s' % village, title)
-		title = re.sub(ur'Centrul (.*)', ur'Centrul \1 din %s' % village, title)
-		title = re.sub(ur'Bustul (.*)', ur'Bustul \1 din %s' % village, title)
-		title = re.sub(ur'Monumentul (.*)', ur'Monumentul \1 din %s' % village, title)
-		title = re.sub(ur'Palatul (.*)', ur'Palatul \1 din %s' % village, title)
-		title = re.sub(ur'Conacul (.*)', ur'Conacul \1 din %s' % village, title)
-		title = re.sub(ur'Podul (.*)', ur'Podul \1 din %s' % village, title)
-		title = re.sub(ur'Cazinou(.*)', ur'Cazinoul\1 din %s' % village, title)
-		title = re.sub(ur'Hotel(.*)', ur'Hotelul\1 din %s' % village, title)
+        if title.find(u" din ") == -1 and (not village or title.find(village) == -1):
+            title = title.strip()
+            title = re.sub(r'Ansamblul (.*)', r'Ansamblul \1 din %s' % village, title)
+            title = re.sub(r'Biseric(ă|a) (.*)', r'Biserica \2 din %s' % village, title)
+            title = re.sub(r'Capela (.*)', r'Capela \1 din %s' % village, title)
+            title = re.sub(r'Basilica (.*)', r'Basilica \1 din %s' % village, title)
+            title = re.sub(r'Statuia (.*)', r'Statuia \1 din %s' % village, title)
+            title = re.sub(r'Centrul (.*)', r'Centrul \1 din %s' % village, title)
+            title = re.sub(r'Bustul (.*)', r'Bustul \1 din %s' % village, title)
+            title = re.sub(r'Monumentul (.*)', r'Monumentul \1 din %s' % village, title)
+            title = re.sub(r'Palatul (.*)', r'Palatul \1 din %s' % village, title)
+            title = re.sub(r'Castelul (.*)', r'Castelul \1 din %s' % village, title)
+            title = re.sub(r'Conacul (.*)', r'Conacul \1 din %s' % village, title)
+            title = re.sub(r'Podul (.*)', r'Podul \1 din %s' % village, title)
+            title = re.sub(r'Cazinou(.*)', r'Cazinoul\1 din %s' % village, title)
+            title = re.sub(r'Hotel(.*)', r'Hotelul\1 din %s' % village, title)
 
-	    if title.find(u" din ") == -1 and (not village or title.find(village) == -1):
-		title = title + (" din %s" % village)
-            ret.add(title)
+        if title.find(u" din ") == -1 and (not village or title.find(village) == -1):
+            title = title + (" din %s" % village)
+        ret.add(title)
     return ret
 
 def generateList(seq):
@@ -272,12 +273,13 @@ def cleanupTitle(monument):
     title = monument["Denumire"]
     village = monument["Localitate"]
     address = monument[u"Adresă"]
-    print "***" + title
+    pywikibot.output("***" + title)
     village = strainu_functions.extractLink(village)
     if village and village.find(",") > -1:
         village = village[:village.find(",")]
 
-    title = re.sub(ur'(.*?)?"(.*?)"', ur'\1„\2”', title)
+    title = re.sub(r'<br\s?\/>', r' ', title)
+    title = re.sub(r'(.*?)?"(.*?)"', r'\1„\2”', title)
     #print title
     ret.add(title)
 
@@ -286,24 +288,25 @@ def cleanupTitle(monument):
         ret.add(title[title.find(u"„")+1:title.find(u"”")])
 
     title2 = title.replace(u'Ansamblul conacului', u'Conacul').\
-		replace(u'Ansamblul castelului', u'Castelul').\
-		replace(u'Ansamblul cetății', u'Cetatea').\
-		replace(u'Ansamblul capelei', u'Capela')
-    title2 = re.sub(ur'Ansamblul bisericii ([\w\-]*)e', ur'Biserica \1ă', title)
-    title2 = re.sub(ur'Ansamblul bisericii', ur'Biserica', title)
+        replace(u'Ansamblul castelului', u'Castelul').\
+        replace(u'Ansamblul cetății', u'Cetatea').\
+        replace(u'Ansamblul capelei', u'Capela')
+    title2 = re.sub(r'Ansamblul bisericii ([\w\-]*)e', r'Biserica \1ă', title2)
+    title2 = re.sub(r'Ansamblul bisericii', r'Biserica', title2)
+    title2 = title2.replace(u' dă ', u' de ')
     if title2 != title:
         #print title2
         ret.add(title2)
     ret.add(title2.replace(u"„", u"").replace(u"”", u""))
-        
+
     if title == u'Casă':
         title = u'Casă din %s (%s)' % (village, address)
         #print title
-	ret.add(title)
+        ret.add(title)
     if title == u'Gară':
         title = u'Gara din %s' % (village)
         #print title
-	ret.add(title)
+        ret.add(title)
 
     if title.find(u"(") > -1:
         title2 = title[:title.find(u"(")]
@@ -320,7 +323,7 @@ def cleanupTitle(monument):
 
     if title.find(u"azi ") > -1:
         title2 = title[:title.find(u"azi ")]
-	if title2.endswith(u', '):
+        if title2.endswith(u', '):
             title2 = title2[:-2]
         #print title2
         ret.add(title2)
@@ -333,7 +336,7 @@ def cleanupTitle(monument):
     ret = addVillageToTitles(ret, village)
     #print ret
     return generateList(ret)
-    
+
 def generateGallery(imageList, articleImage):
     no = -1
     start = u""
@@ -348,20 +351,19 @@ def generateGallery(imageList, articleImage):
             no = 8
         start = u"==Galerie==\n<gallery>\n"
         end = u"</gallery>\n"
-        
-            
+
     text += start
     while no >= 0:
         no -= 1
         if imageList[no]["name"] == articleImage:
             continue
         text += imageList[no]["name"] + "\n"
-        
+
     text += end
-    
+
     return text
-        
-    
+
+
 def addSuffix(text, monument, images):
     cats = u"""
 == Note ==
@@ -437,7 +439,7 @@ if __name__ == "__main__":
 
         #generate articles for A-grade monuments with pics or 
         #for monuments with external data
-        if monument["Cod"] not in j and (monument[u"Imagine"] == ""):# or splitCode(monument[u"Cod"])[3] == "B"):
+        if monument["Cod"] not in j and (monument[u"Imagine"] == "" or splitCode(monument[u"Cod"])[3] == "B"):
             continue
         if monument["Denumire"].find("[[") > -1:
             continue
@@ -446,12 +448,12 @@ if __name__ == "__main__":
         
         submonuments = []
         subcode = splitCode(monument["Cod"])
-        for suffix in range(1, 100):
+        for suffix in range(1, 400):
             for nature in ['I', 'II', 'III', 'IV']:
                 for clasif in ['a', 's', 'm']:
                     for importance in ['A', 'B']:
                         check = subcode[0] + "-" + nature + "-" + clasif + "-" + importance + "-" + subcode[4] + "." + ("%02d" % suffix)
-                        print check
+                        #pywikibot.output(check)
                         if check in newdb:
                             submonuments.append(newdb[check])
                             break
@@ -482,25 +484,25 @@ if __name__ == "__main__":
         
         pywikibot.output(text)
         newtitles = cleanupTitle(monument)
-	versions = "[s]kip\n[r]ename\n"
-	for x in range(len(newtitles)):
-		versions += "[%d]: %s\n" % (x, newtitles[x])
+        versions = "[s]kip\n[r]ename\n"
+        for x in range(len(newtitles)):
+            versions += "[%d]: %s\n" % (x, newtitles[x])
         answer = pywikibot.input(u"Choose a name for the article?\n%s" % versions)
-	if answer == 's' or answer == '':
-	    continue
+        if answer == 's' or answer == '':
+            continue
         if answer == 'r':
             pywikibot.output(u"The monument is in: %s." % monument["Localitate"])
             newtitle = pywikibot.input(u"Please input another title:")
-	elif int(answer) < len(newtitles):
-	    newtitle = newtitles[int(answer)]
-	else:
+        elif int(answer) < len(newtitles):
+            newtitle = newtitles[int(answer)]
+        else:
             continue
-        
+            
         #newtitle = "Utilizator:Strainu/3"
         page = pywikibot.Page(site, newtitle)
         if not page.exists():
             page.put(text, "Scriu un articol nou despre un monument istoric")
-        
+
         if talkPage:
             talk = page.toggleTalkPage()
             if not talk.exists():
