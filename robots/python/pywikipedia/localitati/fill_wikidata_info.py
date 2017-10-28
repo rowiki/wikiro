@@ -108,8 +108,8 @@ class ItemProcessing:
                 oldValue = set(v.getTarget() for v in self.item.claims[prop])
                 if not force:
                     pywikibot.output(u"Wikidata already has %s: %s" % (key, str(oldValue)))
-                    return
-            if type(data[key]).__name__ != 'list':
+                    return False
+            if not isinstance(data[key], list):
                 data[key] = [data[key]]
             claims = []
             descs = []
@@ -124,13 +124,17 @@ class ItemProcessing:
                                                precision=0.001)
                     desc = elem
                 elif datatype == 'commonsMedia':
-                    val = pywikibot.FilePage(pywikibot.Site('commons', 'commons'),
-                                             u"File:" + sf.stripNamespace(elem))
+                    commons = pywikibot.Site('commons', 'commons')
+                    if isinstance(elem, pywikibot.FilePage):
+                            val = elem
+                    else:
+                        val = pywikibot.FilePage(commons, u"File:" + sf.stripNamespace(elem))
+
+                    if not val.exists() or not val.fileIsShared():
+                        raise ValueError("Local image given")
                     while val.isRedirectPage():
                         val = val.getRedirectTarget()
                     desc = val.title()
-                    if not val.exists():
-                        raise ValueError("Local image given")
                 else:
                     val = desc = elem
                 claim = pywikibot.Claim(self.item.repo, prop, datatype=datatype)
@@ -156,16 +160,17 @@ class ItemProcessing:
                     addclaims = [v for v in claims if v.getTarget() in addlist]
                     for claim in addclaims:
                         self.item.addClaim(claim)
+                return True
         except pywikibot.bot.QuitKeyboardInterrupt:
             raise
         except Exception as e:
             print("key", key)
             print("data", data)
             print("config", self.config)
-            pywikibot.output(e)
+            pywikibot.error(u"Could not update " + self.label + " because of error " + e)
             import traceback
             traceback.print_exc()
-            pywikibot.output(u"Could not update " + self.label)
+            return False
 
     def isOfType(self, typeName):
         for claim in (self.item.claims.get(u"P31") or []):
@@ -408,16 +413,19 @@ class ImageProcessing(ItemProcessing, CityData):
         super(ImageProcessing, self).__init__(config, always)
         self._dataType = u"image"
         self._lmi = lmi
+        self._blacklist = ["svg", "location", "josephin", "CoA"]
 
     def addImage(self, _img=None, _type=u"imagine"):
         if not _img:
-            return
-        self.updateProperty(_type, {_type: _img})
+            return False
+        return self.updateProperty(_type, {_type: _img})
 
     def doWork(self, page, item):
         self.setItem(item)
-        self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
-        self.addImage(self.getInfoboxElement(item, element=u"hartă"), _type=u"hartă")
+        if self.getUniqueClaim(u"imagine", canBeNull=True):
+            return
+        # self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
+        # self.addImage(self.getInfoboxElement(item, element=u"hartă"), _type=u"hartă")
 
         if self.getUniqueClaim(u"imagine", canBeNull=True):
             return
@@ -425,6 +433,11 @@ class ImageProcessing(ItemProcessing, CityData):
         label = self.getWikiArticle(self.item)
         if not label:
             return
+        pi = label.page_image()
+        if pi and not any(v in pi.title().lower() for v in self._blacklist):
+            print(pi)
+            self.addImage(pi)
+
         label = label.title()
         for monument in self._lmi or []:
             if len(monument["Imagine"]) and monument["Localitate"].find(u"[[" + label + u"|") > -1:
@@ -633,10 +646,10 @@ if __name__ == "__main__":
     bot = robot.WikidataBot(site=True, generator=generator)
 
     # bot.workers.append(CountyProcessing(config))
-    #bot.workers.append(PostCodeProcessing(config, siruta=sirutaDb, postCode=postCodes))
+    # bot.workers.append(PostCodeProcessing(config, siruta=sirutaDb, postCode=postCodes))
     # bot.workers.append(URLProcessing(config))
     bot.workers.append(ImageProcessing(config, lmi=lmiDb))
-    bot.workers.append(CommonsProcessing(config))
+    # bot.workers.append(CommonsProcessing(config))
     # bot.workers.append(SIRUTAProcessing(config, siruta=sirutaDb))
     # bot.workers.append(RelationsProcessing(config, siruta=sirutaDb))
     # bot.workers.append(TimezoneProcessing(config))
