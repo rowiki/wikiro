@@ -58,6 +58,18 @@ counties = {
 "VN": u"județul Vrancea",
 }
 
+numbers = {
+    1: "un",
+    2: "două",
+    3: "trei",
+    4: "patru",
+    5: "cinci",
+    6: "șase",
+    7: "șapte",
+    8: "opt",
+    9: "nouă",
+}
+
 j={}
 l={}
 m={}
@@ -112,10 +124,11 @@ def formatCreator(monument):
     return outText
     
 def writeSubmonuments(submonuments):
-    if len(submonuments) == 0:
+    count = len(submonuments)
+    if count == 0:
         return ""
     
-    text = u"\nAnsamblul este format din următoarele monumente:\n"
+    text = u"\nAnsamblul este format din %s monumente:\n" % (numbers.get(count) or str(count))
     for sub in submonuments:
         pywikibot.output(sub)
         text += u"* %s ({{codLMI|%s}})\n" %(sub["Denumire"], sub["Cod"])
@@ -293,11 +306,16 @@ def cleanupTitle(monument):
         replace(u'Ansamblul capelei', u'Capela')
     title2 = re.sub(r'Ansamblul bisericii ([\w\-]*)e', r'Biserica \1ă', title2)
     title2 = re.sub(r'Ansamblul bisericii', r'Biserica', title2)
+    title2 = re.sub(r'Fosta [mM]ănăstire', r'Mănăstirea', title2)
     title2 = title2.replace(u' dă ', u' de ')
     if title2 != title:
         #print title2
         ret.add(title2)
     ret.add(title2.replace(u"„", u"").replace(u"”", u""))
+    title3 = re.sub(r'evanghelică C\.?\s?A\.?', r'evanghelică', title2)
+    if title3 != title2:
+        #print(title3)
+        ret.add(title3)    
 
     if title == u'Casă':
         title = u'Casă din %s (%s)' % (village, address)
@@ -346,7 +364,7 @@ def generateGallery(imageList, articleImage):
         if len(imageList) <= 8:
             no = 4
         elif len(imageList) <= 16:
-            no = len(imageList) / 2
+            no = int(len(imageList) / 2)
         else:
             no = 8
         start = u"==Galerie==\n<gallery>\n"
