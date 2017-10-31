@@ -98,22 +98,22 @@ public class CatTreeCreator {
     public void createCats() throws IOException, LoginException {
 
         Wiki wiki = new Wiki(wikiAddress);
-        
+
         Credentials credentials = WikiprojectsUtils.identifyCredentials();
 
         try {
             wiki.login(credentials.username, credentials.password);
 
             wiki.setMarkBot(true);
-            
+
             String mainCat = "Categorie:Articole din domeniul proiectului " + wikiprojectName;
-            if (!wiki.exists(new String[]{mainCat})[0]) {
+            if (!wiki.exists(new String[] { mainCat })[0]) {
                 StringBuilder sbuild = new StringBuilder("[[Categorie:Articole din domeniul proiectelor|");
                 sbuild.append(wikiprojectName);
                 sbuild.append("]]");
                 wiki.edit(mainCat, sbuild.toString(), "Creare categorie principală pentru proiectul " + wikiprojectName);
             }
-            
+
             for (ArticleClass eachQualClass : ArticleClass.values()) {
                 String catToCreate = categoryPrefixes.get(eachQualClass);
                 String parentQualCat = defaultIfNull(parentCategories.get(eachQualClass), catToCreate);
@@ -122,16 +122,35 @@ public class CatTreeCreator {
                     catToCreate = "Categorie:" + catToCreate + " " + catLink + " " + wikiprojectName;
                     parentQualCat = prependIfMissing(parentQualCat, "Categorie:");
                 }
-                
-                if (null != catToCreate && !wiki.exists(new String[]{catToCreate})[0]) {
+
+                if (null != catToCreate && !wiki.exists(new String[] { catToCreate })[0]) {
                     String catKey = defaultIfNull(classKeys.get(eachQualClass), lowerCase(eachQualClass.name()));
                     StringBuilder sbuild = new StringBuilder();
-                    sbuild.append("[[").append(mainCat).append('|').append(catKey).append("]]")
-                        .append("\n[[").append(parentQualCat).append('|').append(wikiprojectName).append("]]");
-                    wiki.edit(catToCreate, sbuild.toString(), "Creare categorie de evaluare pentru proiectul " + wikiprojectName);
+                    sbuild.append("[[").append(mainCat).append('|').append(catKey).append("]]").append("\n[[")
+                        .append(parentQualCat).append('|').append(wikiprojectName).append("]]");
+                    wiki.edit(catToCreate, sbuild.toString(),
+                        "Creare categorie de evaluare pentru proiectul " + wikiprojectName);
                 }
             }
-            
+
+            String unclassifiedPrefix = "Categorie:Articole neclasificate ale proiectului ";
+            String[] unclassifiedTypes = new String[] { "importanță", "calitate" };
+            String[] unclassifiedCategories = new String[unclassifiedTypes.length];
+            for (int unclassifiedIdx = 0; unclassifiedIdx < unclassifiedTypes.length; unclassifiedIdx++) {
+                unclassifiedCategories[unclassifiedIdx] =
+                    unclassifiedPrefix + wikiprojectName + " (" + unclassifiedTypes[unclassifiedIdx] + ")";
+                String unclassifiedCat = unclassifiedCategories[unclassifiedIdx];
+                if (null != unclassifiedCat && !wiki.exists(new String[] { unclassifiedCat })[0]) {
+                    StringBuilder sbuild = new StringBuilder();
+                    sbuild.append("[[").append(mainCat).append('|').append("neclasificate, ")
+                        .append(unclassifiedTypes[unclassifiedIdx]).append("]]").append("\n[[")
+                        .append("Categorie:Articole neclasificate").append('|').append(wikiprojectName).append(", ")
+                        .append(unclassifiedTypes[unclassifiedIdx]).append("]]");
+                    wiki.edit(unclassifiedCat, sbuild.toString(),
+                        "Creare categorie de evaluare pentru proiectul " + wikiprojectName);
+                }
+            }
+
         } finally {
             wiki.logout();
         }

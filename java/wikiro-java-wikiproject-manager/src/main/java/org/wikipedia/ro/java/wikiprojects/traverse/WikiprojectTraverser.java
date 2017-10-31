@@ -47,7 +47,7 @@ public class WikiprojectTraverser {
             wiki.login(credentials.username, credentials.password);
 
             wiki.setMarkBot(true);
-            
+
             String pagesBigcat = "Articole din domeniul proiectului " + wikiprojectName;
 
             String[] pages = wiki.getCategoryMembers(pagesBigcat);
@@ -116,10 +116,10 @@ public class WikiprojectTraverser {
 
         prevValue = defaultIfNull(articles.get(ArticleClass.ALL_QUALITY, impClass), Integer.valueOf(0));
         articles.put(ArticleClass.ALL_QUALITY, impClass, Integer.valueOf(1 + prevValue));
-        
+
         prevValue = defaultIfNull(articles.get(ArticleClass.ALL_QUALITY, ArticleClass.ALL_IMPORTANCE), Integer.valueOf(0));
         articles.put(ArticleClass.ALL_QUALITY, ArticleClass.ALL_IMPORTANCE, Integer.valueOf(1 + prevValue));
-        
+
     }
 
     private String createBriefingPage() {
@@ -133,8 +133,9 @@ public class WikiprojectTraverser {
             .append("|Mare}} !! {{clasament-mediu|categorie=Categorie:Articole de importanță medie pentru proiectul ")
             .append(wikiprojectName)
             .append("|Medie}} !! {{clasament-mic|categorie=Categorie:Articole de importanță mică pentru proiectul ")
-            .append(wikiprojectName)
-            .append("|Mică}} !! Neclasificate || Total ").append("\n|-").append("\n! rowspan=\"14\" | Calitate");
+            .append(wikiprojectName).append("|Mică}} !! [[:Categorie:Articole neclasificate ale proiectului ")
+            .append(wikiprojectName).append("(importanță)|Neclasificate]] || Total ").append("\n|-")
+            .append("\n! rowspan=\"14\" | Calitate");
 
         printTableLine(sbuilder, ArticleClass.FA, "{{clasament-AC|categorie=Categorie:Articole de calitate ale proiectului ",
             "|AC}}");
@@ -152,13 +153,13 @@ public class WikiprojectTraverser {
             "{{clasament-ciot|categorie=Categorie:Articole de clasa „ciot” ale proiectului ", "|ciot}}");
         printTableLine(sbuilder, ArticleClass.LIST,
             "{{clasament-listă|categorie=Categorie:Articole de clasa „listă” ale proiectului ", "|listă}}");
-        printTableLine(sbuilder, ArticleClass.FL,
-            "{{clasament-LC|categorie=Categorie:Liste de calitate ale proiectului ", "|listă}}");
+        printTableLine(sbuilder, ArticleClass.FL, "{{clasament-LC|categorie=Categorie:Liste de calitate ale proiectului ",
+            "|listă}}");
         printTableLine(sbuilder, ArticleClass.PORTAL,
             "{{clasament-portal|categorie=Categorie:Articole de clasa „portal” ale proiectului ", "|portal}}");
         printTableLine(sbuilder, ArticleClass.TEMPLATE,
             "{{clasament-format|categorie=Categorie:Articole de clasa „format” ale proiectului ", "|format}}");
-        printTableLine(sbuilder, ArticleClass.UNKNOWN_QUALITY, "{{neclasificat}}", null);
+        printTableLine(sbuilder, ArticleClass.UNKNOWN_QUALITY, "[[:Categorie:Articole neclasificate ale proiectului " + wikiprojectName + " (calitate)|Neclasificate]]", null);
         printTableLine(sbuilder, ArticleClass.ALL_QUALITY, "Total", null);
 
         sbuilder.append("\n|}");
