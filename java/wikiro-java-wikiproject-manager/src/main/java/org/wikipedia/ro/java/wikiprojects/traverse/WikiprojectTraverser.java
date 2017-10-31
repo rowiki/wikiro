@@ -134,7 +134,7 @@ public class WikiprojectTraverser {
             .append(wikiprojectName)
             .append("|Medie}} !! {{clasament-mic|categorie=Categorie:Articole de importanță mică pentru proiectul ")
             .append(wikiprojectName).append("|Mică}} !! [[:Categorie:Articole neclasificate ale proiectului ")
-            .append(wikiprojectName).append("(importanță)|Neclasificate]] || Total ").append("\n|-")
+            .append(wikiprojectName).append(" (importanță)|Neclasificate]] || Total ").append("\n|-")
             .append("\n! rowspan=\"14\" | Calitate");
 
         printTableLine(sbuilder, ArticleClass.FA, "{{clasament-AC|categorie=Categorie:Articole de calitate ale proiectului ",
