@@ -284,7 +284,7 @@ def updateCounts(database):
 	if database != "lmi":
 		return
 	global monuments_counts
-	section = """==Lista monumentelor pe județ==
+	section = """==Lista monumentelor după județ==
 <!--lista totală e prea lungă pentru a fi păstrată într-o singură pagină. Editați listele pe fiecare județ-->
 Puteți căuta în lista de monumente folosind formularul de mai jos, sau puteți naviga prin paginile cu monumente aferente fiecărui județ.
 <inputbox>
@@ -338,7 +338,7 @@ searchbuttonlabel=Căutare în liste
 	section += "|}\n\n"
 	page = pywikibot.Page(pywikibot.getSite(), "Lista_monumentelor_istorice_din_România#Lista_monumentelor_pe_jude.C8.9B")
 	page.get()
-	pywikibot.getSite().editpage(page,text=section, section=2)
+	pywikibot.getSite().editpage(page,text=section, section=1)
 	pywikibot.output("Saved the monument counts per county")
 	monuments_counts = {}
 	print(total_count)
