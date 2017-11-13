@@ -118,6 +118,9 @@ countries = {
 			'subtip',
 			'imagine',
 			'categorie',
+                        'q',
+                        'wikilink',
+                        'numar',
 			],
 		'idField': 'ID',
 		'pagePrefix': {
