@@ -323,6 +323,34 @@ class CommonsProcessing(ItemProcessing, CityData):
         self.updateCommons()
 
 
+class LabelProcessing(ItemProcessing, CityData):
+    def __init__(self, config, always=False):
+        super(LabelProcessing, self).__init__(config, always)
+        self._dataType = u"label"
+
+    def doWork(self, pag, item):
+        self.setItem(item)
+        content = item.get()
+        labels = content.get('labels')
+        newlabels = {}
+        for label in labels:
+            text = labels[label]
+            new_text = text.replace(u'ş', u'ș')
+            new_text = new_text.replace(u'ţ', u'ț')
+            new_text = new_text.replace(u'Ş', u'Ș')
+            new_text = new_text.replace(u'Ţ', u'Ț')
+            new_text = new_text.replace(u'ã', u'ă')
+            if new_text != text:
+                newlabels[label] = new_text
+        if len(newlabels):
+            print(newlabels)
+            try:
+                item.editLabels(newlabels, summary="Correcting Romanian diacritics in labels of Romanian cities")
+            except:
+                pass
+            #exit(0)
+
+
 class CountyProcessing(ItemProcessing, CityData):
     def __init__(self, config, always=False):
         super(CountyProcessing, self).__init__(config, always)
@@ -648,7 +676,8 @@ if __name__ == "__main__":
     # bot.workers.append(CountyProcessing(config))
     # bot.workers.append(PostCodeProcessing(config, siruta=sirutaDb, postCode=postCodes))
     # bot.workers.append(URLProcessing(config))
-    bot.workers.append(ImageProcessing(config, lmi=lmiDb))
+    bot.workers.append(LabelProcessing(config))
+    # bot.workers.append(ImageProcessing(config, lmi=lmiDb))
     # bot.workers.append(CommonsProcessing(config))
     # bot.workers.append(SIRUTAProcessing(config, siruta=sirutaDb))
     # bot.workers.append(RelationsProcessing(config, siruta=sirutaDb))
