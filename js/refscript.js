@@ -1950,7 +1950,7 @@ if (u.match(/webcitation.org/)) {
 
         var dateElems = document.getElementsByClassName('detail date');
         if (dateElems && 0 < dateElems.length) {
-        	var dateRaw = dateElems[0].textContent();
+        	var dateRaw = dateElems[0].textContent;
         	W_Date = dateRaw;
 		}
 
