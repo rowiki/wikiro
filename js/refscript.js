@@ -105,25 +105,37 @@ function f_process_Authors(P_Authors) {
 		var P_Authors = 'Stelian Gomboş';
 	return P_Authors;
 };
-function f_process_Newspaper_Name() {
-	var P_Newspaper = u.replace(/\.ro.*/, '.ro');
-	var P_Newspaper = P_Newspaper.replace(/\.com.*/, '.com');
-	var P_Newspaper = P_Newspaper.replace(/\.net.*/, '.net');
-	var P_Newspaper = P_Newspaper.replace(/\.co.uk.*/, '.co.uk');
-	var P_Newspaper = P_Newspaper.replace(/\.org.*/, '.org');
-	var P_Newspaper = P_Newspaper.replace(/\.net.*/, '.net');
-	var P_Newspaper = P_Newspaper.replace(/http:\/\/www./, '');
-	var P_Newspaper = P_Newspaper.replace(/http:\/\//, '');
-	var P_Newspaper = toTitleCase(P_Newspaper);
-	if (P_Newspaper == 'Napocanews.ro')
+function f_process_Newspaper_Name(document) {
+    var P_Newspaper;
+    var metaTags = document.getElementsByTagName('meta');
+    for (var metaIdx = 0; metaIdx < metaTags.length; metaIdx++) {
+        if (metaTags[metaIdx].getAttribute('property') === 'og:site_name') {
+            P_Newspaper = metaTags[metaIdx].getAttribute('content');
+            continue;
+        }
+    }
+
+    if (!P_Newspaper or P_Newspaper === '') {
+    	P_Newspaper = document.url
+	}
+	P_Newspaper = P_Newspaper.replace(/\.ro.*/, '.ro');
+	P_Newspaper = P_Newspaper.replace(/\.com.*/, '.com');
+	P_Newspaper = P_Newspaper.replace(/\.net.*/, '.net');
+	P_Newspaper = P_Newspaper.replace(/\.co.uk.*/, '.co.uk');
+	P_Newspaper = P_Newspaper.replace(/\.org.*/, '.org');
+	P_Newspaper = P_Newspaper.replace(/\.net.*/, '.net');
+	P_Newspaper = P_Newspaper.replace(/https?:\/\/www./, '');
+	P_Newspaper = P_Newspaper.replace(/https?:\/\//, '');
+	P_Newspaper = toTitleCase(P_Newspaper);
+	if (P_Newspaper === 'Napocanews.ro')
 		var P_Newspaper = 'Napoca News';
-	if (P_Newspaper == 'Manastiriortodoxe.ro')
+	if (P_Newspaper === 'Manastiriortodoxe.ro')
 		var P_Newspaper = 'ManastiriOrtodoxe.ro';
-	if (P_Newspaper == 'Bzi.ro')
+	if (P_Newspaper === 'Bzi.ro')
 		var P_Newspaper = 'Bună Ziua Iaşi';
-	if (P_Newspaper == 'Stiintasitehnica.com')
+	if (P_Newspaper === 'Stiintasitehnica.com')
 		var xP_Newspaper = 'Știinţă şi Tehnică';
-	if (P_Newspaper == 'Webcitation.org')
+	if (P_Newspaper === 'Webcitation.org')
 		var P_Newspaper = '';
 	return P_Newspaper;
 };
@@ -385,7 +397,7 @@ var today = f_process_Date(today);
 var yesterday = f_process_Date(yesterday);
 var WW_Title = document.title;
 var WW_Title = WW_Title.replace(/ *\|.*/, '');
-var WW_Newspaper = f_process_Newspaper_Name();
+var WW_Newspaper = f_process_Newspaper_Name(document);
 var W_URL = f_process_URL(u);
 var dq = String.fromCharCode(34);
 if (u.match(/webcitation.org/)) {
@@ -445,10 +457,6 @@ if (u.match(/webcitation.org/)) {
 	} else if (u.match(/evz.ro/)) {
         var evzMeta = document.getElementsByTagName('meta');
         for (var metaIdx = 0; metaIdx < evzMeta.length; metaIdx++) {
-            if (evzMeta[metaIdx].getAttribute('property') === 'og:site_name') {
-                W_Newspaper = evzMeta[metaIdx].getAttribute('content');
-                continue;
-            }
             if (evzMeta[metaIdx].getAttribute('property') === 'og:title') {
                 W_Title = evzMeta[metaIdx].getAttribute('content');
                 continue;
@@ -753,10 +761,6 @@ if (u.match(/webcitation.org/)) {
         var W_Date, W_Newspaper, W_Title, W_Authors;
 		var digisportMeta = document.getElementsByTagName('meta');
 		for (var metaIdx = 0; metaIdx < digisportMeta.length; metaIdx++) {
-			if (digisportMeta[metaIdx].getAttribute('property') === 'og:site_name') {
-				W_Newspaper = digisportMeta[metaIdx].getAttribute('content');
-				continue;
-			}
 			if (digisportMeta[metaIdx].getAttribute('property') === 'og:title') {
 				W_Title = digisportMeta[metaIdx].getAttribute('content');
 			}
@@ -791,10 +795,6 @@ if (u.match(/webcitation.org/)) {
 		var W_Date, W_Newspaper, W_Title, W_Authors;
 		var gspMeta = document.getElementsByTagName('meta');
 		for (var metaIdx = 0; metaIdx < gspMeta.length; metaIdx++) {
-			if (gspMeta[metaIdx].getAttribute('property') === 'og:site_name') {
-				W_Newspaper = gspMeta[metaIdx].getAttribute('content');
-				continue;
-			}
 			if (gspMeta[metaIdx].getAttribute('property') === 'og:title') {
 				W_Title = gspMeta[metaIdx].getAttribute('content');
 			}
@@ -828,10 +828,6 @@ if (u.match(/webcitation.org/)) {
 		var W_Date, W_Newspaper, W_Title, W_Authors;
 		var prosportMeta = document.getElementsByTagName('meta');
 		for (var metaIdx = 0; metaIdx < prosportMeta.length; metaIdx++) {
-			if (prosportMeta[metaIdx].getAttribute('property') === 'og:site_name') {
-				W_Newspaper = prosportMeta[metaIdx].getAttribute('content');
-				continue;
-			}
 			if (prosportMeta[metaIdx].getAttribute('property') === 'og:title') {
 				W_Title = prosportMeta[metaIdx].getAttribute('content');
 			}
@@ -869,10 +865,6 @@ if (u.match(/webcitation.org/)) {
         var W_Date, W_Newspaper, W_Title, W_Authors;
         var unimediaMeta = document.getElementsByTagName('meta');
         for (var metaIdx = 0; metaIdx < unimediaMeta.length; metaIdx++) {
-            if (unimediaMeta[metaIdx].getAttribute('property') === 'og:site_name') {
-                W_Newspaper = unimediaMeta[metaIdx].getAttribute('content');
-                continue;
-            }
             if (unimediaMeta[metaIdx].getAttribute('property') === 'og:title') {
                 W_Title = unimediaMeta[metaIdx].getAttribute('content');
             }
@@ -907,10 +899,6 @@ if (u.match(/webcitation.org/)) {
         var W_Date, W_Newspaper, W_Title, W_Authors;
         var publikaMeta = document.getElementsByTagName('meta');
         for (var metaIdx = 0; metaIdx < publikaMeta.length; metaIdx++) {
-            if (publikaMeta[metaIdx].getAttribute('property') === 'og:site_name') {
-                W_Newspaper = publikaMeta[metaIdx].getAttribute('content');
-                continue;
-            }
             if (publikaMeta[metaIdx].getAttribute('property') === 'og:title') {
                 W_Title = publikaMeta[metaIdx].getAttribute('content');
             }
@@ -1056,9 +1044,6 @@ if (u.match(/webcitation.org/)) {
             }
             if (zcomMeta[metaIdx].getAttribute('property') === 'og:url') {
                 var W_URL = zcomMeta[metaIdx].getAttribute('content');
-            }
-            if (zcomMeta[metaIdx].getAttribute('property') === 'og:site_name') {
-                var W_Newspaper = zcomMeta[metaIdx].getAttribute('content');
             }
             if (zcomMeta[metaIdx].getAttribute('name') === 'date') {
                 var W_Date = convertISO8601Date(zcomMeta[metaIdx].getAttribute('content'));
@@ -1939,10 +1924,6 @@ if (u.match(/webcitation.org/)) {
 	if (u.match(/fanatik.ro/)) {
         var fanatikMeta = document.getElementsByTagName('meta');
         for (var metaIdx = 0; metaIdx < fanatikMeta.length; metaIdx++) {
-            if (fanatikMeta[metaIdx].getAttribute('property') === 'og:site_name') {
-                W_Newspaper = fanatikMeta[metaIdx].getAttribute('content');
-                continue;
-            }
             if (fanatikMeta[metaIdx].getAttribute('property') === 'og:title') {
                 W_Title = fanatikMeta[metaIdx].getAttribute('content');
             }
