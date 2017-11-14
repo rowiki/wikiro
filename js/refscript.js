@@ -1940,11 +1940,11 @@ if (u.match(/webcitation.org/)) {
         var fanatikMeta = document.getElementsByTagName('meta');
         for (var metaIdx = 0; metaIdx < fanatikMeta.length; metaIdx++) {
             if (fanatikMeta[metaIdx].getAttribute('property') === 'og:site_name') {
-                W_Newspaper = prosportMeta[metaIdx].getAttribute('content');
+                W_Newspaper = fanatikMeta[metaIdx].getAttribute('content');
                 continue;
             }
             if (fanatikMeta[metaIdx].getAttribute('property') === 'og:title') {
-                W_Title = prosportMeta[metaIdx].getAttribute('content');
+                W_Title = fanatikMeta[metaIdx].getAttribute('content');
             }
         }
 
