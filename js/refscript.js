@@ -115,7 +115,7 @@ function f_process_Newspaper_Name(document) {
         }
     }
 
-    if (!P_Newspaper or P_Newspaper === '') {
+    if (!P_Newspaper || P_Newspaper === '') {
     	P_Newspaper = document.url
 	}
 	P_Newspaper = P_Newspaper.replace(/\.ro.*/, '.ro');
