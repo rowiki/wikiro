@@ -1937,19 +1937,38 @@ if (u.match(/webcitation.org/)) {
 		var W_Newspaper = 'ShowBiz.ro';
 	};
 	if (u.match(/fanatik.ro/)) {
-		var x = document.title;
-		var x = x.replace(/ \| Sport si pariuri/, '');
-		var W_Title = x.replace(/ - Fanatik/, '');
-		var dd = d.replace(/[\r\n]/g, '');
-		var dd = dd.replace(/<\/span>/g, '\n<\/span>');
-		var dd = dd.replace(/<span>/g, '\n<span>');
-		var x = dd.match(/<span class=.date-ico.>.*/)[0];
-		var x = x.replace(/.*>/, '');
-		var x = x.replace(/ *\w*:.*$/, '');
-		var W_Date = x.replace(/,/, '');
-		var x = dd.match(/<span class=.pencil.>.*/)[0];
-		var W_Authors = x.replace(/.*>/, '');
-		var W_Newspaper = 'Fanatik';
+        var fanatikMeta = document.getElementsByTagName('meta');
+        for (var metaIdx = 0; metaIdx < prosportMeta.length; metaIdx++) {
+            if (fanatikMeta[metaIdx].getAttribute('property') === 'og:site_name') {
+                W_Newspaper = prosportMeta[metaIdx].getAttribute('content');
+                continue;
+            }
+            if (fanatikMeta[metaIdx].getAttribute('property') === 'og:title') {
+                W_Title = prosportMeta[metaIdx].getAttribute('content');
+            }
+        }
+
+        var dateElems = document.getElementsByClassName('detail date');
+        if (null != dateElems && 0 < dateElems.length) {
+        	var dateRaw = dateElems[0].textContent();
+        	W_Date = dateRaw;
+		}
+
+		var authorBoxes = document.getElementsByClassName('author_box animated_element');
+        var authorsList = new Array();
+        if (null != authorBoxes && 0 < authorBoxes.length) {
+        	var authorsDivs = authorBoxes[0].getElementsByClassName('author');
+        	for (authorIdx = 0; authorIdx < authorsDivs.length; authorIdx ++ ) {
+        		var authorH5 = authorsDivs[authorIdx].getElementsByClassName('h5');
+        		if (null != authorH5 && 0 < authorH5.length) {
+        			var authorA = authorH5[0].getElementsByTagName('a');
+        			if (null != authorA && 0 < authorA.length) {
+        				authorsList.push(authorA[0].getAttribute('title'));
+					}
+				}
+			}
+		}
+		var W_Authors = authorsList.join(', ');
 	};
 	if (u.match(/revistatango.ro/)) {
 		var W_Title = document.title;
