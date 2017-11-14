@@ -1938,7 +1938,7 @@ if (u.match(/webcitation.org/)) {
 	};
 	if (u.match(/fanatik.ro/)) {
         var fanatikMeta = document.getElementsByTagName('meta');
-        for (var metaIdx = 0; metaIdx < prosportMeta.length; metaIdx++) {
+        for (var metaIdx = 0; metaIdx < fanatikMeta.length; metaIdx++) {
             if (fanatikMeta[metaIdx].getAttribute('property') === 'og:site_name') {
                 W_Newspaper = prosportMeta[metaIdx].getAttribute('content');
                 continue;
@@ -1949,14 +1949,14 @@ if (u.match(/webcitation.org/)) {
         }
 
         var dateElems = document.getElementsByClassName('detail date');
-        if (null != dateElems && 0 < dateElems.length) {
+        if (dateElems && 0 < dateElems.length) {
         	var dateRaw = dateElems[0].textContent();
         	W_Date = dateRaw;
 		}
 
 		var authorBoxes = document.getElementsByClassName('author_box animated_element');
         var authorsList = new Array();
-        if (null != authorBoxes && 0 < authorBoxes.length) {
+        if (authorBoxes && 0 < authorBoxes.length) {
         	var authorsDivs = authorBoxes[0].getElementsByClassName('author');
         	for (authorIdx = 0; authorIdx < authorsDivs.length; authorIdx ++ ) {
         		var authorH5 = authorsDivs[authorIdx].getElementsByClassName('h5');
