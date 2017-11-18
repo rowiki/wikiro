@@ -127,10 +127,12 @@ class ItemProcessing:
                     commons = pywikibot.Site('commons', 'commons')
                     if isinstance(elem, pywikibot.FilePage):
                             val = elem
+                            val._link._site = commons
                     else:
                         val = pywikibot.FilePage(commons, u"File:" + sf.stripNamespace(elem))
 
                     if not val.exists() or not val.fileIsShared():
+                        print(val)
                         raise ValueError("Local image given")
                     while val.isRedirectPage():
                         val = val.getRedirectTarget()
@@ -167,7 +169,7 @@ class ItemProcessing:
             print("key", key)
             print("data", data)
             print("config", self.config)
-            pywikibot.error(u"Could not update " + self.label + " because of error " + e)
+            pywikibot.error(u"Could not update " + self.label + " because of error " + str(e))
             import traceback
             traceback.print_exc()
             return False
@@ -441,7 +443,7 @@ class ImageProcessing(ItemProcessing, CityData):
         super(ImageProcessing, self).__init__(config, always)
         self._dataType = u"image"
         self._lmi = lmi
-        self._blacklist = ["svg", "location", "josephin", "CoA"]
+        self._blacklist = ["svg", "location", "josephin", "coa", " jud", "3d"]
 
     def addImage(self, _img=None, _type=u"imagine"):
         if not _img:
@@ -452,8 +454,8 @@ class ImageProcessing(ItemProcessing, CityData):
         self.setItem(item)
         if self.getUniqueClaim(u"imagine", canBeNull=True):
             return
-        # self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
-        # self.addImage(self.getInfoboxElement(item, element=u"hartă"), _type=u"hartă")
+        self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
+        self.addImage(self.getInfoboxElement(item, element=u"hartă"), _type=u"hartă")
 
         if self.getUniqueClaim(u"imagine", canBeNull=True):
             return
@@ -676,8 +678,8 @@ if __name__ == "__main__":
     # bot.workers.append(CountyProcessing(config))
     # bot.workers.append(PostCodeProcessing(config, siruta=sirutaDb, postCode=postCodes))
     # bot.workers.append(URLProcessing(config))
-    bot.workers.append(LabelProcessing(config))
-    # bot.workers.append(ImageProcessing(config, lmi=lmiDb))
+    # bot.workers.append(LabelProcessing(config))
+    bot.workers.append(ImageProcessing(config, lmi=lmiDb))
     # bot.workers.append(CommonsProcessing(config))
     # bot.workers.append(SIRUTAProcessing(config, siruta=sirutaDb))
     # bot.workers.append(RelationsProcessing(config, siruta=sirutaDb))
