@@ -1,4 +1,4 @@
-var Manifest = '   RefScript version 42 (2015-12-10). This program is in the Public Domain. You can use it as you wish.   ';
+var Manifest = '   RefScript version 43 (2017-11-18). This program is in the Public Domain. You can use it as you wish.   ';
 var Tips = '  Pentru scurtarea scriptului, stergeţi între crestinortodox.ro şi youtube.com  -  sau folosiţi bookmarklet-ul din secţiunea care urmează după aceasta';
 function toTitleCase(str) {
 	var str = str.toLowerCase();
@@ -106,7 +106,7 @@ function f_process_Authors(P_Authors) {
 	return P_Authors;
 };
 function f_process_Newspaper_Name(document) {
-	var P_Newspaper;
+	var P_Newspaper = '';
 	var metaTags = document.getElementsByTagName('meta');
 	for (var metaIdx = 0; metaIdx < metaTags.length; metaIdx++) {
 		if (metaTags[metaIdx].getAttribute('property') === 'og:site_name') {
