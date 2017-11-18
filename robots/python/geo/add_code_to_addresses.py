@@ -12,7 +12,7 @@ import sys
 import overpass
 import osmapi as OsmApi
 sys.path.append('wikiro/robots/python/pywikipedia')
-import strainu_functions as fun
+import csvUtils as fun
 import coduripostale
 
 #structure is:
@@ -50,17 +50,17 @@ filters_ro = {
 }
 
 api = OsmApi.OsmApi(api="api.openstreetmap.org", passwordfile = "osmpasswd", debug = True)
-#oapi = "www.overpass-api.de"
-#obase="api",
-oapi = "overpass.osm.rambler.ru"
-obase= "cgi"
+oapi = "z.overpass-api.de"
+obase="api"
+#oapi = "overpass.osm.rambler.ru"
+#obase= "cgi"
 
 def readVillageFile():
 	villages = {}
-	reader = fun.unicode_csv_reader(open("codp_1k.csv", "r"))
+	reader = fun.unicodeCsvReader(open("codp_1k.csv", "r"))
 	for row in reader:
 		#county, village (commune), postal_code
-		county, village, code = row
+		_, county, village, code, _ = row
 		if village in villages:
 			villages[village] = None
 		else:
@@ -185,9 +185,9 @@ def check_Bucharest(isNode=True):
 		print "No response received from the overpass API"
 		return
 	print json.dumps(obj, indent=2)
-	reader = fun.unicode_csv_reader(open("codp_B.csv", "r"))
+	reader = fun.unicodeCsvReader(open("codp_B.csv", "r"))
 	for row in reader:
-		tip, street, nr, code, sector, unused = row
+		tip, street, nr, code, sector, _, _, _, _ = row
 		_ids = findId(tip, street, nr, u"București")
 		if _ids == 0:
 			_ids = findId(tip, coduripostale.convertName(street, u""), nr, u"București")
@@ -215,10 +215,10 @@ def check_cities(isNode=True):
 		print "No response received from the overpass API"
 		return
 	#print json.dumps(obj, indent=2)
-	reader = fun.unicode_csv_reader(open("codp_50k.csv", "r"))
+	reader = fun.unicodeCsvReader(open("codp_50k.csv", "r"))
 	villages = readVillageFile()
 	for row in reader:
-		county, city, tip, street, nr, code = row
+		county, city, tip, street, nr, code, _, _, _ = row
 		if nr[:2] == u"bl":
 			continue
 		_ids = findId(tip, street, nr, city)
@@ -243,5 +243,5 @@ def check_cities(isNode=True):
 if __name__ == "__main__":
 	#print obj
 	for isNode in [True,False]:
-		check_Bucharest(isNode)
+		#check_Bucharest(isNode)
 		check_cities(isNode)
