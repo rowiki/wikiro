@@ -110,7 +110,7 @@ function f_process_Newspaper_Name(document) {
 	var metaTags = document.getElementsByTagName('meta');
 	for (var metaIdx = 0; metaIdx < metaTags.length; metaIdx++) {
 		if (metaTags[metaIdx].getAttribute('property') === 'og:site_name') {
-		    P_Newspaper = metaTags[metaIdx].getAttribute('content');
+		    var P_Newspaper = metaTags[metaIdx].getAttribute('content');
 		    continue;
 		}
 	}
