@@ -45,13 +45,14 @@ class OverpassRequest:
 	def makeRequest(self, req=None):
 		if req == None:
 			return None
-		
-		http = httplib.HTTPConnection(self._api)
+		http = httplib.HTTPSConnection(self._api)
 		params = urllib.urlencode({'@data': req})
 		headers = {"Content-type": "application/x-www-form-urlencoded",
-				"Accept": "text/plain"}
-		http.request("POST", self.base, params, headers)
+				"Accept": "text/plain",
+				"User-Agent": "Strainubot"}
+		http.request("POST", self.base, req, headers)
 		response = http.getresponse()
+		print(response.status)
 		if response.status == 200:
 			ret = response.read()
 			http.close()
