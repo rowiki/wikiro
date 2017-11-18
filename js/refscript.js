@@ -116,17 +116,17 @@ function f_process_Newspaper_Name(document) {
 	}
 
 	if (!P_Newspaper || P_Newspaper === '') {
-    		var P_Newspaper = document.url;
+    		var P_Newspaper = document.URL;
 	}
-	var P_Newspaper = P_Newspaper.replace(/\.ro.*/, '.ro');
-	var P_Newspaper = P_Newspaper.replace(/\.com.*/, '.com');
-	var P_Newspaper = P_Newspaper.replace(/\.net.*/, '.net');
-	var P_Newspaper = P_Newspaper.replace(/\.co.uk.*/, '.co.uk');
-	var P_Newspaper = P_Newspaper.replace(/\.org.*/, '.org');
-	var P_Newspaper = P_Newspaper.replace(/\.net.*/, '.net');
-	var P_Newspaper = P_Newspaper.replace(/https?:\/\/www./, '');
-	var P_Newspaper = P_Newspaper.replace(/https?:\/\//, '');
-	var P_Newspaper = toTitleCase(P_Newspaper);
+	P_Newspaper = P_Newspaper.replace(/\.ro.*/, '.ro');
+	P_Newspaper = P_Newspaper.replace(/\.com.*/, '.com');
+	P_Newspaper = P_Newspaper.replace(/\.net.*/, '.net');
+	P_Newspaper = P_Newspaper.replace(/\.co.uk.*/, '.co.uk');
+	P_Newspaper = P_Newspaper.replace(/\.org.*/, '.org');
+	P_Newspaper = P_Newspaper.replace(/\.net.*/, '.net');
+	P_Newspaper = P_Newspaper.replace(/https?:\/\/www./, '');
+	P_Newspaper = P_Newspaper.replace(/https?:\/\//, '');
+	P_Newspaper = toTitleCase(P_Newspaper);
 	if (P_Newspaper === 'Napocanews.ro')
 		var P_Newspaper = 'Napoca News';
 	if (P_Newspaper === 'Manastiriortodoxe.ro')
