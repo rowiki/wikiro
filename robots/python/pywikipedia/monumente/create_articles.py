@@ -305,6 +305,7 @@ def cleanupTitle(monument):
         replace(u'Ansamblul cetății', u'Cetatea').\
         replace(u'Ansamblul capelei', u'Capela')
     title2 = re.sub(r'Ansamblul bisericii ([\w\-]*)e', r'Biserica \1ă', title2)
+    title2 = re.sub(r'evanghelică fortificate', r'evanghelică fortificată', title2)
     title2 = re.sub(r'Ansamblul bisericii', r'Biserica', title2)
     title2 = re.sub(r'Fosta [mM]ănăstire', r'Mănăstirea', title2)
     title2 = title2.replace(u' dă ', u' de ')
