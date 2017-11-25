@@ -14,11 +14,13 @@ import static org.apache.commons.lang3.StringUtils.substringBefore;
 import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
@@ -154,8 +156,10 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         anotherNewText = new StringBuffer();
         while (innerLinkMatcher.find()) {
 
-            System.out.println("Link:" + innerLinkMatcher.group(1));
-            String articleLink = removeStart(trim(innerLinkMatcher.group(1)), " ");
+            String link = innerLinkMatcher.group(1);
+            link = URLDecoder.decode(link, "UTF-8");
+            System.out.println("Link:" + link);
+            String articleLink = removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
             String linkTitle = innerLinkMatcher.group(3);
             if (isBlank(articleTitle)) {
@@ -187,6 +191,8 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                     }
                 } catch (WikibaseException e) {
                     e.printStackTrace();
+                } catch (Throwable th) {
+                    th.printStackTrace();
                 }
                 String sourceLang = removeEnd(sourceWikiCode, "wiki");
                 if (null == wbEntity) {
