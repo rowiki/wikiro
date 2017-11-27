@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.security.auth.login.LoginException;
 
 import org.wikipedia.ro.java.wikiprojects.createcats.CatTreeCreator;
+import org.wikipedia.ro.java.wikiprojects.stubs.StubClassifier;
 import org.wikipedia.ro.java.wikiprojects.traverse.WikiprojectTraverser;
 
 
@@ -28,6 +29,18 @@ public class MaintainWikiproject {
                 new CatTreeCreator(eachArg, "ro.wikipedia.org").createCats();
             }
             
+        } else if ("stubs".equals(args[0])) {
+            if (1 < args.length) {
+                int startIdx = 0;
+                if (2 < args.length) {
+                    try {
+                        startIdx = Integer.parseInt(args[2]);
+                    } catch(NumberFormatException nfe) {
+                        System.err.println("Not a number: " + args[2] + ". Defaulting to 0.");
+                    }
+                }
+                new StubClassifier(args[1], "ro.wikipedia.org", startIdx).classifyStubs();
+            }
         }
     }
 }
