@@ -199,6 +199,9 @@ public class StubClassifier {
                         if (2 > projsImportance.size()) {
                             newTemplate.setTemplateTitle("Proiect " + wikiprojectName);
                             newTemplate.setParam("clasament", "ciot");
+                            if (projsImportance.containsKey(wikiprojectName)) {
+                                newTemplate.setParam("importanță", projsImportance.get(wikiprojectName));
+                            }
                         } else {
                             newTemplate.setTemplateTitle("Proiecte multiple");
                             int idx = 1;
