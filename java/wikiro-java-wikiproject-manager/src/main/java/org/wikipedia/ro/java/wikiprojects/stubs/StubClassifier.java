@@ -194,23 +194,12 @@ public class StubClassifier {
                             projsImportance.put(wikiprojectName, "");
                         }
 
+                        boolean removeBpv = false;
+                        WikiTemplate newTemplate = new WikiTemplate(); 
                         if (2 > projsImportance.size()) {
-                            WikiTemplate newTemplate = new WikiTemplate();
                             newTemplate.setTemplateTitle("Proiect " + wikiprojectName);
                             newTemplate.setParam("clasament", "ciot");
-                            if ("Biografii".equals(wikiprojectName)) {
-                                newTextBuf = new StringBuffer();
-                                Matcher bpvMatcher = bpvPattern.matcher(talk);
-                                while (bpvMatcher.find()) {
-                                    newTemplate.setParam("living", "yes");
-                                    bpvMatcher.appendReplacement(newTextBuf, "");
-                                }
-                                bpvMatcher.appendTail(newTextBuf);
-                                talk = newTextBuf.toString();
-                            }
-                            newTalk = newTemplate.toString() + "\n" + talk;
                         } else {
-                            WikiTemplate newTemplate = new WikiTemplate();
                             newTemplate.setTemplateTitle("Proiecte multiple");
                             int idx = 1;
                             for (Map.Entry<String, String> eachProjEntry : projsImportance.entrySet()) {
@@ -224,32 +213,31 @@ public class StubClassifier {
                             for (Map.Entry<String, String> eachOtherEntry : otherParams.entrySet()) {
                                 newTemplate.setParam(eachOtherEntry.getKey(), eachOtherEntry.getValue());
                             }
-                            Matcher bpvMatcher = bpvPattern.matcher(talk);
-                            boolean removeBpv = false;
-                            if (bpvMatcher.find()) {
-                                newTemplate.setParam("living", "yes");
-                                removeBpv = true;
-                            }
+                        }
+                        Matcher bpvMatcher = bpvPattern.matcher(talk);
+                        if (bpvMatcher.find()) {
+                            newTemplate.setParam("living", "yes");
+                            removeBpv = true;
+                        }
 
-                            multiProjsTemplateMatcher.reset();
-                            if (multiProjsTemplateMatcher.find()) {
-                                newTextBuf = new StringBuffer();
-                                multiProjsTemplateMatcher.appendReplacement(newTextBuf, newTemplate.toString());
-                                multiProjsTemplateMatcher.appendTail(newTextBuf);
-                                newTalk = newTextBuf.toString();
-                            } else {
-                                newTalk = newTemplate.toString() + '\n' + newTextBuf;
-                            }
+                        multiProjsTemplateMatcher.reset();
+                        if (multiProjsTemplateMatcher.find()) {
+                            newTextBuf = new StringBuffer();
+                            multiProjsTemplateMatcher.appendReplacement(newTextBuf, newTemplate.toString());
+                            multiProjsTemplateMatcher.appendTail(newTextBuf);
+                            newTalk = newTextBuf.toString();
+                        } else {
+                            newTalk = newTemplate.toString() + '\n' + newTextBuf;
+                        }
 
-                            if (removeBpv) {
-                                bpvMatcher = bpvPattern.matcher(newTalk);
-                                newTextBuf = new StringBuffer();
-                                while (bpvMatcher.find()) {
-                                    bpvMatcher.appendReplacement(newTextBuf, "");
-                                }
-                                bpvMatcher.appendTail(newTextBuf);
-                                newTalk = newTextBuf.toString();
+                        if (removeBpv) {
+                            bpvMatcher = bpvPattern.matcher(newTalk);
+                            newTextBuf = new StringBuffer();
+                            while (bpvMatcher.find()) {
+                                bpvMatcher.appendReplacement(newTextBuf, "");
                             }
+                            bpvMatcher.appendTail(newTextBuf);
+                            newTalk = newTextBuf.toString();
                         }
                     }
                 } else {
