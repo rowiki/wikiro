@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.security.auth.login.LoginException;
 
 import org.wikipedia.ro.java.wikiprojects.createcats.CatTreeCreator;
+import org.wikipedia.ro.java.wikiprojects.createproj.WikiprojectCreator;
 import org.wikipedia.ro.java.wikiprojects.stubs.StubClassifier;
 import org.wikipedia.ro.java.wikiprojects.traverse.WikiprojectTraverser;
 
@@ -44,6 +45,12 @@ public class MaintainWikiproject {
                     }
                 }
                 new StubClassifier(args[1], "ro.wikipedia.org", startIdx).classifyStubs();
+            }
+        } else if ("create".equals(args[0])) {
+            if (3 < args.length) {
+                new WikiprojectCreator(args[1], "ro.wikipedia.org", args[2], args[3]).createWikiproject();
+            } else {
+                System.err.println("Please specify project name, description and image");
             }
         }
     }
