@@ -34,16 +34,18 @@ public class StubClassifier {
     private String wikiprojectName;
 
     private String wikiAddress;
-    
+
     private int startIndex = 0;
-    
+
+    private Map<String, Pattern> projectPatterns = new HashMap<String, Pattern>();
+
     public StubClassifier(String wikiprojectName, String wikiAddress, int startIndex) {
         super();
         this.wikiprojectName = wikiprojectName;
         this.wikiAddress = wikiAddress;
         this.startIndex = startIndex;
     }
-    
+
     public StubClassifier(String wikiprojectName, String wikiAddress) {
         this(wikiprojectName, wikiAddress, 0);
     }
@@ -81,9 +83,6 @@ public class StubClassifier {
                 catIdx++;
             }
 
-            Pattern thisProjPattern = Pattern.compile(
-                "\\{\\{\\s*(?:Wiki)?[Pp]ro[ij]ect " + wikiprojectName + "\\s*(?:[^\\}]*\\|\\s*clasament\\s*=\\s*([^\\|\\}]+))?[^\\\\}]*\\}\\}",
-                Pattern.DOTALL);
             Pattern singleProjPattern = Pattern.compile(
                 "\\{\\{\\s*(?:Wiki)?[Pp]ro[ij]ect ([^\\|\\}]+)(?:[^\\}]*\\|\\s*clasament\\s*=\\s*([^\\|\\}]+))?[^\\\\}]*\\}\\}",
                 Pattern.DOTALL);
@@ -93,14 +92,16 @@ public class StubClassifier {
             Pattern projIndexedPattern = Pattern.compile("proiect(\\d+)");
             List<String> stubList = new ArrayList<String>(stubs);
             for (int stubIdx = startIndex; stubIdx < stubList.size(); stubIdx++) {
-                String eachMathStub = stubList.get(stubIdx);
-                String stubTalkPage = rowiki.getTalkPage(eachMathStub);
-                System.out.println("Vizitez ciot " + eachMathStub + " [ " + (1 + stubIdx) + '/' + stubs.size() + " ] ");
+                String eachStub = stubList.get(stubIdx);
+                String stubTalkPage = rowiki.getTalkPage(eachStub);
+                System.out.println("Vizitez ciot " + eachStub + " [ " + (1 + stubIdx) + '/' + stubs.size() + " ] ");
+                String subproj = getSubproject(eachStub, rowiki);
                 boolean talkExists = rowiki.exists(new String[] { stubTalkPage })[0];
                 String newTalk = "";
                 String talk = null;
                 if (talkExists) {
                     talk = rowiki.getPageText(stubTalkPage);
+                    Pattern thisProjPattern = getPattern(subproj);
                     Matcher projTemplateMatcher = thisProjPattern.matcher(talk);
                     StringBuffer talkBuffer = new StringBuffer();
                     if (projTemplateMatcher.find()) {
@@ -109,8 +110,8 @@ public class StubClassifier {
                             wtemplate.setTemplateTitle(removeStart(wtemplate.getTemplateTitle(), "Wiki"));
                             if (!wtemplate.getParamNames().contains("clasament")
                                 || 0 == wtemplate.getParams().get("clasament").length()) {
-                                if (wtemplate.getParamNames().contains("clasificare") && 
-                                    0 < wtemplate.getParams().get("clasificare").length()) {
+                                if (wtemplate.getParamNames().contains("clasificare")
+                                    && 0 < wtemplate.getParams().get("clasificare").length()) {
                                     wtemplate.setParam("clasament", wtemplate.getParams().get("clasificare"));
                                     wtemplate.removeParam("clasificare");
                                 } else {
@@ -145,7 +146,8 @@ public class StubClassifier {
                                 qualClass = defaultIfBlank(template.getParams().get("clasament"), qualClass);
                             }
                             for (Map.Entry<String, String> eachParamEntry : template.getParams().entrySet()) {
-                                if (!startsWithAny(eachParamEntry.getKey(), "importanță", "proiect", "clasament", "clasificare")) {
+                                if (!startsWithAny(eachParamEntry.getKey(), "importanță", "proiect", "clasament",
+                                    "clasificare")) {
                                     otherParams.put(eachParamEntry.getKey(), eachParamEntry.getValue());
                                 }
                             }
@@ -190,17 +192,17 @@ public class StubClassifier {
                             }
 
                         }
-                        if (!projsImportance.containsKey(wikiprojectName)) {
-                            projsImportance.put(wikiprojectName, "");
+                        if (!projsImportance.containsKey(subproj)) {
+                            projsImportance.put(subproj, "");
                         }
 
                         boolean removeBpv = false;
-                        WikiTemplate newTemplate = new WikiTemplate(); 
+                        WikiTemplate newTemplate = new WikiTemplate();
                         if (2 > projsImportance.size()) {
-                            newTemplate.setTemplateTitle("Proiect " + wikiprojectName);
+                            newTemplate.setTemplateTitle("Proiect " + subproj);
                             newTemplate.setParam("clasament", "ciot");
-                            if (projsImportance.containsKey(wikiprojectName)) {
-                                newTemplate.setParam("importanță", projsImportance.get(wikiprojectName));
+                            if (projsImportance.containsKey(subproj)) {
+                                newTemplate.setParam("importanță", projsImportance.get(subproj));
                             }
                         } else {
                             newTemplate.setTemplateTitle("Proiecte multiple");
@@ -244,10 +246,10 @@ public class StubClassifier {
                         }
                     }
                 } else {
-                    newTalk = "{{Proiect " + wikiprojectName + "|clasament=ciot}}";
+                    newTalk = "{{Proiect " + subproj + "|clasament=ciot}}";
                 }
                 if (!newTalk.equals(talk)) {
-                    rowiki.edit(stubTalkPage, newTalk, "Robot: clasificat ciot pentru Proiect " + wikiprojectName);
+                    rowiki.edit(stubTalkPage, newTalk, "Robot: clasificat ciot pentru Proiect " + subproj);
                 }
             }
 
@@ -265,4 +267,22 @@ public class StubClassifier {
         }
     }
 
+    private String getSubproject(String page, Wiki wiki) {
+        if ("Istorie".equals(wikiprojectName)) {
+            if (startsWithAny(lowerCase(page), "bătălia", "asediul", "regimentul", "divizia", "batalionul", "războiul", "războaiele",
+                "prima bătălie", "a doua bătălie", "a treia bătălie", "primul război", "al doilea război",
+                "al treilea război", "campania", "lupta", "operațiunea")) {
+                return "Istorie militară";
+            }
+        }
+        return wikiprojectName;
+    }
+
+    private Pattern getPattern(String projectName) {
+        if (!projectPatterns.containsKey(projectName)) {
+            projectPatterns.put(projectName, Pattern.compile("\\{\\{\\s*(?:Wiki)?[Pp]ro[ij]ect " + projectName
+                + "\\s*(?:[^\\}]*\\|\\s*clasament\\s*=\\s*([^\\|\\}]+))?[^\\\\}]*\\}\\}", Pattern.DOTALL));
+        }
+        return projectPatterns.get(projectName);
+    }
 }
