@@ -41,8 +41,9 @@ public class WikiprojectCreator {
             String[] projPageTitles = new String[] { "Proiect:" + this.wikiprojectName,
                 "Proiect:" + this.wikiprojectName + "/Participanți", "Format:Proiect " + this.wikiprojectName, };
 
-            String[] projPageDefaultTexts = new String[] { "Acest proiect are ca scop crearea unor articole despre "
-                + this.wikiprojectDescr + "\n" + "== Participanți ==\n" + "{{/Participanți}}\n" + "\n" + "== Articole ==\n"
+            String[] projPageDefaultTexts = new String[] { "[[Fișier:" + this.wikiprojectImage + "|right|200px]]\n" 
+                + "Acest proiect are ca scop crearea unor articole despre "
+                + this.wikiprojectDescr + ".\n" + "== Participanți ==\n" + "{{/Participanți}}\n" + "\n" + "== Articole ==\n"
                 + "Puteți marca articolele de interes pentru proiectul acesta introducând formatul {{f|Proiect "
                 + this.wikiprojectName + "}} în ''pagina de discuții'' a articolelor respective, sau adăugând proiectul ''"
                 + this.wikiprojectName + "'' în lista de proiecte specificată cu formatul {{f|Proiecte multiple}}.\n" + "\n"

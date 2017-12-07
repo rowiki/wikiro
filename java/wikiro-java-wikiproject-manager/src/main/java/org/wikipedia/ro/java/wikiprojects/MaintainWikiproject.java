@@ -18,6 +18,7 @@ public class MaintainWikiproject {
             System.err.println(" - stubs - classify stubs");
             System.err.println(" - stats - compute stats");
             System.err.println(" - categories - create wikiproject category tree");
+            System.err.println(" - create- create wikiproject pages, including category tree");
             System.exit(1);
         }
 
