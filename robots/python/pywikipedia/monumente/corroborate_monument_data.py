@@ -137,7 +137,9 @@ plan = 	[#all lowercase
 		u'map'
 		u'layout',
 		u'grundriss',
-		u'schi',#scita, schiță - TODO: is it large enough?
+		u'schita',
+		u'schiță',
+		u'schița',
 	]
 
 countries = {
