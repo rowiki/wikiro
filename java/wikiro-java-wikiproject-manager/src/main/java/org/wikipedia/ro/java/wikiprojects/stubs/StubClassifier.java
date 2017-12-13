@@ -24,6 +24,8 @@ import java.util.regex.Pattern;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
 import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
@@ -39,15 +41,18 @@ public class StubClassifier {
 
     private Map<String, Pattern> projectPatterns = new HashMap<String, Pattern>();
 
-    public StubClassifier(String wikiprojectName, String wikiAddress, int startIndex) {
+    private List<String> synonyms;
+
+    public StubClassifier(String wikiprojectName, String wikiAddress, int startIndex, List<String> synonyms) {
         super();
         this.wikiprojectName = wikiprojectName;
         this.wikiAddress = wikiAddress;
         this.startIndex = startIndex;
+        this.synonyms = synonyms;
     }
 
     public StubClassifier(String wikiprojectName, String wikiAddress) {
-        this(wikiprojectName, wikiAddress, 0);
+        this(wikiprojectName, wikiAddress, 0, Collections.<String>emptyList());
     }
 
     public void classifyStubs() {
@@ -59,9 +64,14 @@ public class StubClassifier {
             rowiki.setMarkBot(true);
 
             List<String> visitableCategories = new ArrayList<String>();
-            visitableCategories.add("Cioturi " + capitalize(wikiprojectName));
-            visitableCategories.add("Cioturi " + lowerCase(wikiprojectName));
-            visitableCategories.add("Cioturi legate de " + lowerCase(wikiprojectName));
+            Set<String> projectIdentifiers = new LinkedHashSet<String>();
+            projectIdentifiers.add(wikiprojectName);
+            projectIdentifiers.addAll(synonyms);
+            for (String eachProjSynonym: projectIdentifiers) {
+                visitableCategories.add("Cioturi " + capitalize(eachProjSynonym));
+                visitableCategories.add("Cioturi " + lowerCase(eachProjSynonym));
+                visitableCategories.add("Cioturi legate de " + lowerCase(eachProjSynonym));
+            }
 
             Set<String> stubs = new LinkedHashSet<String>();
 
