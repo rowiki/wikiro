@@ -8,6 +8,7 @@ import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 import static org.apache.commons.lang3.StringUtils.startsWithAny;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,8 +25,6 @@ import java.util.regex.Pattern;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.ListUtils;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
 import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
@@ -117,7 +116,7 @@ public class StubClassifier {
                     if (projTemplateMatcher.find()) {
                         if (null == projTemplateMatcher.group(1)) {
                             WikiTemplate wtemplate = new WikiTemplate(projTemplateMatcher.group(0));
-                            wtemplate.setTemplateTitle(removeStart(wtemplate.getTemplateTitle(), "Wiki"));
+                            wtemplate.setTemplateTitle(trim(removeStart(wtemplate.getTemplateTitle(), "Wiki")));
                             if (!wtemplate.getParamNames().contains("clasament")
                                 || 0 == wtemplate.getParams().get("clasament").length()) {
                                 if (wtemplate.getParamNames().contains("clasificare")
@@ -147,7 +146,7 @@ public class StubClassifier {
                         // find one other project
                         Matcher otherProjTemplateMatcher = singleProjPattern.matcher(talk);
                         while (otherProjTemplateMatcher.find()) {
-                            WikiTemplate template = new WikiTemplate(otherProjTemplateMatcher.group(0));
+                            WikiTemplate template = new WikiTemplate(trim(otherProjTemplateMatcher.group(0)));
                             projsImportance.put(otherProjTemplateMatcher.group(1),
                                 defaultString(template.getParams().get("importanță"), ""));
                             if (template.getParams().containsKey("clasificare")) {
@@ -285,7 +284,7 @@ public class StubClassifier {
                 return "Istorie militară";
             }
         }
-        return wikiprojectName;
+        return trim(wikiprojectName);
     }
 
     private Pattern getPattern(String projectName) {
