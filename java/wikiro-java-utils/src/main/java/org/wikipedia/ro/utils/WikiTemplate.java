@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  * A self-made push-down automaton that receives the text of a template declaration and identifies its arguments
  * 
@@ -141,6 +143,9 @@ public class WikiTemplate {
             }
         }
         initialTemplateText = templateTextBuilder.toString();
+        if (initialTemplateText.matches("\\{\\{\\s*" + templateTitle + "\\s*\\}\\}")) {
+            params.remove("1");
+        }
     }
 
     public Map<String, String> getParams() {
