@@ -1,6 +1,6 @@
 package org.wikipedia.ro.java.wikiprojects.stubs;
 
-import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -68,8 +68,8 @@ public class StubClassifier {
             projectIdentifiers.addAll(synonyms);
             for (String eachProjSynonym: projectIdentifiers) {
                 visitableCategories.add("Cioturi " + capitalize(eachProjSynonym));
-                visitableCategories.add("Cioturi " + lowerCase(eachProjSynonym));
-                visitableCategories.add("Cioturi legate de " + lowerCase(eachProjSynonym));
+                visitableCategories.add("Cioturi " + lowerCase(substring(eachProjSynonym, 0, 1)) + substring(eachProjSynonym, 1));
+                visitableCategories.add("Cioturi legate de " + lowerCase(substring(eachProjSynonym, 0, 1)) + substring(eachProjSynonym, 1));
             }
 
             Set<String> stubs = new LinkedHashSet<String>();
@@ -147,7 +147,7 @@ public class StubClassifier {
                         Matcher otherProjTemplateMatcher = singleProjPattern.matcher(talk);
                         while (otherProjTemplateMatcher.find()) {
                             WikiTemplate template = new WikiTemplate(trim(otherProjTemplateMatcher.group(0)));
-                            projsImportance.put(otherProjTemplateMatcher.group(1),
+                            projsImportance.put(trim(otherProjTemplateMatcher.group(1)),
                                 defaultString(template.getParams().get("importanță"), ""));
                             if (template.getParams().containsKey("clasificare")) {
                                 qualClass = defaultIfBlank(template.getParams().get("clasificare"), qualClass);
