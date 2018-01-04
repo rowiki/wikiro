@@ -92,7 +92,7 @@ public class WikiprojectsModel {
             Matcher oneProjectMatcher = oneProjectFinderPattern.matcher(talkPageText);
             if (oneProjectMatcher.find()) {
                 String projName = oneProjectMatcher.group(1).trim();
-                Matcher argsMatcher = argsPattern.matcher(oneProjectMatcher.group(2));
+                Matcher argsMatcher = argsPattern.matcher(defaultString(oneProjectMatcher.group(2)));
                 while (argsMatcher.find()) {
                     switch (argsMatcher.group(1).trim()) {
                     case "clasament":
