@@ -276,7 +276,7 @@ function f_Repara_Poceli(P_Title) {
 	var P_Title = P_Title.replace(/â€”/g, '–');
 	var P_Title = P_Title.replace(/â€™/g, '’');
 	var P_Title = P_Title.replace(/â€˜/g, '‘');
-	var P_Title = P_Title.replace(/â€/g, '”');
+		var P_Title = P_Title.replace(/â€/g, '”');
 	var P_Title = P_Title.replace(/”ž/g, '„');
 	var P_Title = P_Title.replace(/â€œ/g, '“');
 	var P_Title = P_Title.replace(/â€ž/g, '„');
@@ -672,6 +672,16 @@ if (u.match(/webcitation.org/)) {
 			var W_Authors = '';
 		var W_Newspaper = 'Cotidianul';
 	};
+	if (u.match(/rfi\.ro/)) {
+		var rfiLdJsonElement = document.querySelector('script[type="application/ld+json"]');
+		if (rfiLdJsonElement) {
+			var rfiLdJsonObj = JSON.parse(rfiLdJsonElement.innerText);
+            W_Date = convertISO8601Date(rfiLdJsonObj.dateCreated);
+            W_Title = rfiLdJsonObj.headline;
+            W_Authors = rfiLdJsonObj.author.name;
+            W_Newspaper = rfiLdJsonObj.publisher.name;
+		}
+	}
 	if (u.match(/gandul.info/)) {
 		var x = document.title;
 		var x = x.replace(/ - Ieseanul/, '');
