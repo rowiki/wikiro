@@ -1,6 +1,7 @@
 package org.wikipedia.ro.java.wikiprojects.stubs;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.containsAny;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -8,6 +9,7 @@ import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 import static org.apache.commons.lang3.StringUtils.startsWithAny;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.substring;
 import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.io.IOException;
@@ -51,7 +53,7 @@ public class StubClassifier {
     }
 
     public StubClassifier(String wikiprojectName, String wikiAddress) {
-        this(wikiprojectName, wikiAddress, 0, Collections.<String>emptyList());
+        this(wikiprojectName, wikiAddress, 0, Collections.<String> emptyList());
     }
 
     public void classifyStubs() {
@@ -66,10 +68,12 @@ public class StubClassifier {
             Set<String> projectIdentifiers = new LinkedHashSet<String>();
             projectIdentifiers.add(wikiprojectName);
             projectIdentifiers.addAll(synonyms);
-            for (String eachProjSynonym: projectIdentifiers) {
+            for (String eachProjSynonym : projectIdentifiers) {
                 visitableCategories.add("Cioturi " + capitalize(eachProjSynonym));
-                visitableCategories.add("Cioturi " + lowerCase(substring(eachProjSynonym, 0, 1)) + substring(eachProjSynonym, 1));
-                visitableCategories.add("Cioturi legate de " + lowerCase(substring(eachProjSynonym, 0, 1)) + substring(eachProjSynonym, 1));
+                visitableCategories
+                    .add("Cioturi " + lowerCase(substring(eachProjSynonym, 0, 1)) + substring(eachProjSynonym, 1));
+                visitableCategories
+                    .add("Cioturi legate de " + lowerCase(substring(eachProjSynonym, 0, 1)) + substring(eachProjSynonym, 1));
             }
 
             Set<String> stubs = new LinkedHashSet<String>();
@@ -278,10 +282,19 @@ public class StubClassifier {
 
     private String getSubproject(String page, Wiki wiki) {
         if ("Istorie".equals(wikiprojectName)) {
-            if (startsWithAny(lowerCase(page), "bătălia", "asediul", "regimentul", "divizia", "batalionul", "războiul", "războaiele",
-                "prima bătălie", "a doua bătălie", "a treia bătălie", "primul război", "al doilea război",
+            if (startsWithAny(lowerCase(page), "bătălia", "asediul", "regimentul", "divizia", "batalionul", "războiul",
+                "războaiele", "prima bătălie", "a doua bătălie", "a treia bătălie", "primul război", "al doilea război",
                 "al treilea război", "campania", "lupta", "operațiunea")) {
                 return "Istorie militară";
+            }
+        }
+        if ("Transport".equals(wikiprojectName)) {
+            if (startsWithAny(lowerCase(page), "dn", "dj", "autostrada", "șoseaua", "drumul")
+                || containsAny(lowerCase(page), "highway", "interstate")) {
+                return "Drumuri";
+            }
+            if (startsWithAny(lowerCase(page), "aeroport", "airbus", "boeing", "embraer", "american airlines")) {
+                return "Aviație";
             }
         }
         return trim(wikiprojectName);
