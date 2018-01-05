@@ -132,6 +132,9 @@ public class WikiprojectsModel {
             if (livingPerson) {
                 sbuild.append("\n| living = yes");
             }
+            if (null != qualClass) {
+                sbuild.append("\n| clasament = ").append(qualClass);
+            }
             int idx = 0;
             for (Map.Entry<String, String> eachEntry : projectsImportance.entrySet()) {
                 idx++;
