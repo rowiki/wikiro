@@ -63,7 +63,7 @@ public class WikiprojectsModel {
 
     public static WikiprojectsModel fromTalkPage(String talkPageText) {
         WikiprojectsModel model = new WikiprojectsModel();
-        Matcher moreProjectsMatcher = moreProjectsFinderPattern.matcher(talkPageText);
+        Matcher moreProjectsMatcher = moreProjectsFinderPattern.matcher(defaultString(talkPageText));
         if (moreProjectsMatcher.find()) {
             Matcher argsMatcher = argsPattern.matcher(moreProjectsMatcher.group(1));
             Map<Integer, String> projsIndices = new HashMap<Integer, String>();
@@ -97,7 +97,7 @@ public class WikiprojectsModel {
                 model.projectsImportance.put(projsIndices.get(eachIdx), defaultString(importanceIndices.get(eachIdx)));
             }
         } else {
-            Matcher oneProjectMatcher = oneProjectFinderPattern.matcher(talkPageText);
+            Matcher oneProjectMatcher = oneProjectFinderPattern.matcher(defaultString(talkPageText));
             if (oneProjectMatcher.find()) {
                 String projName = oneProjectMatcher.group(1).trim();
                 Matcher argsMatcher = argsPattern.matcher(defaultString(oneProjectMatcher.group(2)));
@@ -159,7 +159,7 @@ public class WikiprojectsModel {
     public String saveToTalkPage(String talkPageText) {
         StringBuffer newTalkText = new StringBuffer();
         int replacementsDone = 0;
-        Matcher moreProjectsMatcher = moreProjectsFinderPattern.matcher(talkPageText);
+        Matcher moreProjectsMatcher = moreProjectsFinderPattern.matcher(defaultString(talkPageText));
         if (moreProjectsMatcher.find()) {
             moreProjectsMatcher.appendReplacement(newTalkText, this.toString());
             replacementsDone++;
@@ -170,7 +170,7 @@ public class WikiprojectsModel {
         newTalkText = new StringBuffer();
 
         if (0 == replacementsDone) {
-            Matcher oneProjectMatcher = oneProjectFinderPattern.matcher(talkPageText);
+            Matcher oneProjectMatcher = oneProjectFinderPattern.matcher(defaultString(talkPageText));
             if (oneProjectMatcher.find()) {
                 oneProjectMatcher.appendReplacement(newTalkText, this.toString());
                 replacementsDone++;
@@ -180,7 +180,7 @@ public class WikiprojectsModel {
         }
 
         if (0 == replacementsDone) {
-            talkPageText = join(new String[] { this.toString(), trim(talkPageText) }, "\n");
+            talkPageText = join(new String[] { this.toString(), trim(defaultString(talkPageText)) }, "\n");
         }
         return talkPageText;
     }
