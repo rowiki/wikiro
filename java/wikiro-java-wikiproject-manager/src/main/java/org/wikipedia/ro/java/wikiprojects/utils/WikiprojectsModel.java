@@ -52,6 +52,14 @@ public class WikiprojectsModel {
     public void setLivingPerson(boolean livingPerson) {
         this.livingPerson = livingPerson;
     }
+    
+    public boolean isInProject(String project) {
+        return this.projectsImportance.containsKey(project);
+    }
+    
+    public void removeFromProject(String project) {
+        this.projectsImportance.remove(project);
+    }
 
     public static WikiprojectsModel fromTalkPage(String talkPageText) {
         WikiprojectsModel model = new WikiprojectsModel();
@@ -147,4 +155,34 @@ public class WikiprojectsModel {
         sbuild.append("\n}}");
         return sbuild.toString();
     }
+    
+    public String saveToTalkPage(String talkPageText) {
+        StringBuffer newTalkText = new StringBuffer();
+        int replacementsDone = 0;
+        Matcher moreProjectsMatcher = moreProjectsFinderPattern.matcher(talkPageText);
+        if (moreProjectsMatcher.find()) {
+            moreProjectsMatcher.appendReplacement(newTalkText, this.toString());
+            replacementsDone++;
+        }
+        moreProjectsMatcher.appendTail(newTalkText);
+
+        talkPageText = newTalkText.toString();
+        newTalkText = new StringBuffer();
+
+        if (0 == replacementsDone) {
+            Matcher oneProjectMatcher = oneProjectFinderPattern.matcher(talkPageText);
+            if (oneProjectMatcher.find()) {
+                oneProjectMatcher.appendReplacement(newTalkText, this.toString());
+                replacementsDone++;
+            }
+            oneProjectMatcher.appendTail(newTalkText);
+            talkPageText = newTalkText.toString();
+        }
+
+        if (0 == replacementsDone) {
+            talkPageText = join(new String[] { this.toString(), trim(talkPageText) }, "\n");
+        }
+        return talkPageText;
+    }
+
 }
