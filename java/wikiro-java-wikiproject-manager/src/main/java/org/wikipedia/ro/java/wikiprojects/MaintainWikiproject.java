@@ -76,7 +76,7 @@ public class MaintainWikiproject {
             List<String> recCats = new ArrayList<String>();
             Map<String, String> projImportance = new LinkedHashMap<String, String>();
             int depth = 3;
-            for (int i = 2; i < args.length; i++) {
+            for (int i = 1; i < args.length; i++) {
                 String eachArg = args[i];
                 if (startsWith(eachArg, "-project:")) {
                     projects.add(removeStart(eachArg, "-project:"));

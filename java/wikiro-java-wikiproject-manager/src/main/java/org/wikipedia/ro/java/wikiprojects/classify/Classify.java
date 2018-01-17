@@ -91,7 +91,7 @@ public class Classify {
                         boolean isHuman = false;
                         if (null != instanceOfClaims) {
                             for (Claim eachInstanceOfClaim : instanceOfClaims) {
-                                if ("Q5".equals(((Item) eachInstanceOfClaim.getMainsnak().getData()).getEnt().getId())) {
+                                if ("5".equals(((Item) eachInstanceOfClaim.getMainsnak().getData()).getEnt().getId())) {
                                     isHuman = true;
                                     break;
                                 }
