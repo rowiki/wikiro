@@ -63,6 +63,9 @@ public class WikiprojectsModel {
 
     public static WikiprojectsModel fromTalkPage(String talkPageText) {
         WikiprojectsModel model = new WikiprojectsModel();
+        if (null == talkPageText) {
+            return model;
+        }
         Matcher moreProjectsMatcher = moreProjectsFinderPattern.matcher(defaultString(talkPageText));
         if (moreProjectsMatcher.find()) {
             Matcher argsMatcher = argsPattern.matcher(moreProjectsMatcher.group(1));
@@ -132,7 +135,7 @@ public class WikiprojectsModel {
                 if (livingPerson) {
                     sbuild.append("\n| living = yes");
                 }
-                sbuild.append("\n| clasament = ").append(qualClass);
+                sbuild.append("\n| clasament = ").append(null != qualClass ? qualClass : "");
                 sbuild.append("\n| importanță = ").append(theEntry.getValue());
             }
         } else {
@@ -141,7 +144,7 @@ public class WikiprojectsModel {
                 sbuild.append("\n| living = yes");
             }
             if (null != qualClass) {
-                sbuild.append("\n| clasament = ").append(qualClass);
+                sbuild.append("\n| clasament = ").append(null != qualClass ? qualClass : "");
             }
             int idx = 0;
             for (Map.Entry<String, String> eachEntry : projectsImportance.entrySet()) {
@@ -157,6 +160,9 @@ public class WikiprojectsModel {
     }
     
     public String saveToTalkPage(String talkPageText) {
+        if (isBlank(talkPageText)) {
+            return this.toString();
+        }
         StringBuffer newTalkText = new StringBuffer();
         int replacementsDone = 0;
         Matcher moreProjectsMatcher = moreProjectsFinderPattern.matcher(defaultString(talkPageText));
