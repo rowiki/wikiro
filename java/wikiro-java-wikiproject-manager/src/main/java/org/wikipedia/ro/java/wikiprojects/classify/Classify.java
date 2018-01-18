@@ -73,7 +73,7 @@ public class Classify {
             int idx = 0;
             for (String eachArticleInCat : pagesToRun) {
                 idx++;
-                System.out.printf("Working on page %s [ %d/%d ]", eachArticleInCat, idx, pagesToRun.size());
+                System.out.printf("Working on page %s [ %d/%d ]%n", eachArticleInCat, idx, pagesToRun.size());
                 String eachTalkPageOfArticleInCat = rowiki.getTalkPage(eachArticleInCat);
                 String talkPageText = rowiki.getPageText(eachTalkPageOfArticleInCat);
                 WikiprojectsModel projectModel = WikiprojectsModel.fromTalkPage(talkPageText);
