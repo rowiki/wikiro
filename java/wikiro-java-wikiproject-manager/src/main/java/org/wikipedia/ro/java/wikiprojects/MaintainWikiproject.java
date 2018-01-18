@@ -69,41 +69,42 @@ public class MaintainWikiproject {
                 System.err.println("Please specify project name, description and image");
             }
         } else if ("classify".equals(args[0])) {
-            if (3 < args.length) {
-                
-            List<String> projects = new ArrayList<String>();
-            List<String> cats = new ArrayList<String>();
-            List<String> recCats = new ArrayList<String>();
-            Map<String, String> projImportance = new LinkedHashMap<String, String>();
-            int depth = 3;
-            for (int i = 1; i < args.length; i++) {
-                String eachArg = args[i];
-                if (startsWith(eachArg, "-project:")) {
-                    projects.add(removeStart(eachArg, "-project:"));
-                }
-                if (startsWith(eachArg, "-cat:")) {
-                    cats.add(removeStart(eachArg, "-cat:"));
-                }
-                if (startsWith(eachArg, "-catr:")) {
-                    recCats.add(removeStart(eachArg, "-catr:"));
-                }
-                for (String eachProjDef : projects) {
-                    String[] projParts = split(eachProjDef, ':');
-                    String importance = projParts.length > 1 ? projParts[1] : "";
-                    String eachProj = projParts[0];
-                    projImportance.put(eachProj, importance);
-                }
-                if (startsWith(eachArg, "-depth:")) {
-                    try {
-                        depth = Integer.parseInt(removeStart(eachArg, "-depth:"));
-                    } catch(NumberFormatException nfe) {
-                        System.err.println("Error reading depth parameter " + eachArg + "; ignoring...");
+            if (2 < args.length) {
+
+                List<String> projects = new ArrayList<String>();
+                List<String> cats = new ArrayList<String>();
+                List<String> recCats = new ArrayList<String>();
+                Map<String, String> projImportance = new LinkedHashMap<String, String>();
+                int depth = 3;
+                for (int i = 1; i < args.length; i++) {
+                    String eachArg = args[i];
+                    if (startsWith(eachArg, "-project:")) {
+                        projects.add(removeStart(eachArg, "-project:"));
+                    }
+                    if (startsWith(eachArg, "-cat:")) {
+                        cats.add(removeStart(eachArg, "-cat:"));
+                    }
+                    if (startsWith(eachArg, "-catr:")) {
+                        recCats.add(removeStart(eachArg, "-catr:"));
+                    }
+                    for (String eachProjDef : projects) {
+                        String[] projParts = split(eachProjDef, ':');
+                        String importance = projParts.length > 1 ? projParts[1] : "";
+                        String eachProj = projParts[0];
+                        projImportance.put(eachProj, importance);
+                    }
+                    if (startsWith(eachArg, "-depth:")) {
+                        try {
+                            depth = Integer.parseInt(removeStart(eachArg, "-depth:"));
+                        } catch (NumberFormatException nfe) {
+                            System.err.println("Error reading depth parameter " + eachArg + "; ignoring...");
+                        }
                     }
                 }
-            }
-            new Classify("ro.wikipedia.org", projImportance, cats, recCats, depth).classify();
+                new Classify("ro.wikipedia.org", projImportance, cats, recCats, depth).classify();
             } else {
-                System.err.println("Usage: add projects with -project:PROJECT[:IMPORTANCE] and categories with -cat:CATEGORY or -catr:RECURSE_CATEGORY with -depth:MAXDEPTH");
+                System.err.println(
+                    "Usage: add projects with -project:PROJECT[:IMPORTANCE] and categories with -cat:CATEGORY or -catr:RECURSE_CATEGORY with -depth:MAXDEPTH");
             }
         }
     }

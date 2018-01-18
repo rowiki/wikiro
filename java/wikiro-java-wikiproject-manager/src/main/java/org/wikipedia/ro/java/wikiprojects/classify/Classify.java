@@ -82,12 +82,12 @@ public class Classify {
                         projectModel.setQualClass("listă");
                     } else {
                         int proseSize = PageUtils.getProseSize(rowiki, eachArticleInCat);
-                        String qualClass =
-                            proseSize < 700 ? "ciot" : (proseSize < 2500 ? "start" : (proseSize < 10000 ? "început" : null));
+                        String qualClass = proseSize < 700 ? "ciot"
+                            : (proseSize < 2500 ? "start" : (proseSize < 10000 ? "început" : null));
                         if (null != qualClass) {
                             projectModel.setQualClass(qualClass);
                         }
-
+                        
                         Entity wdEntity = dwiki.getWikibaseItemBySiteAndTitle("rowiki", eachArticleInCat);
                         Map<Property, Set<Claim>> wdClaims = wdEntity.getClaims();
                         Set<Claim> instanceOfClaims = wdClaims.get(WikibasePropertyFactory.getWikibaseProperty("P31"));
