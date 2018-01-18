@@ -82,28 +82,35 @@ public class Classify {
                         projectModel.setQualClass("listă");
                     } else {
                         int proseSize = PageUtils.getProseSize(rowiki, eachArticleInCat);
-                        String qualClass = proseSize < 700 ? "ciot"
-                            : (proseSize < 2500 ? "start" : (proseSize < 10000 ? "început" : null));
+                        String qualClass =
+                            proseSize < 700 ? "ciot" : (proseSize < 2500 ? "start" : (proseSize < 10000 ? "început" : null));
                         if (null != qualClass) {
                             projectModel.setQualClass(qualClass);
                         }
-                        
+
                         Entity wdEntity = dwiki.getWikibaseItemBySiteAndTitle("rowiki", eachArticleInCat);
-                        Map<Property, Set<Claim>> wdClaims = wdEntity.getClaims();
-                        Set<Claim> instanceOfClaims = wdClaims.get(WikibasePropertyFactory.getWikibaseProperty("P31"));
-                        boolean isHuman = false;
-                        if (null != instanceOfClaims) {
-                            for (Claim eachInstanceOfClaim : instanceOfClaims) {
-                                if ("5".equals(((Item) eachInstanceOfClaim.getMainsnak().getData()).getEnt().getId())) {
-                                    isHuman = true;
-                                    break;
+                        if (null != wdEntity) {
+                            Map<Property, Set<Claim>> wdClaims = wdEntity.getClaims();
+                            if (null != wdClaims) {
+                                Set<Claim> instanceOfClaims =
+                                    wdClaims.get(WikibasePropertyFactory.getWikibaseProperty("P31"));
+                                boolean isHuman = false;
+                                if (null != instanceOfClaims) {
+                                    for (Claim eachInstanceOfClaim : instanceOfClaims) {
+                                        if ("5"
+                                            .equals(((Item) eachInstanceOfClaim.getMainsnak().getData()).getEnt().getId())) {
+                                            isHuman = true;
+                                            break;
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                        if (isHuman) {
-                            Set<Claim> deathDateClaims = wdClaims.get(WikibasePropertyFactory.getWikibaseProperty("P570"));
-                            if (null == deathDateClaims || 0 == deathDateClaims.size()) {
-                                projectModel.setLivingPerson(true);
+                                if (isHuman) {
+                                    Set<Claim> deathDateClaims =
+                                        wdClaims.get(WikibasePropertyFactory.getWikibaseProperty("P570"));
+                                    if (null == deathDateClaims || 0 == deathDateClaims.size()) {
+                                        projectModel.setLivingPerson(true);
+                                    }
+                                }
                             }
                         }
                     }
