@@ -118,7 +118,9 @@ public class WikiprojectsModel {
                         break;
                     }
                 }
-
+                if (!model.projectsImportance.containsKey(projName)) {
+                    model.projectsImportance.put(projName, "");
+                }
             }
         }
         return model;
