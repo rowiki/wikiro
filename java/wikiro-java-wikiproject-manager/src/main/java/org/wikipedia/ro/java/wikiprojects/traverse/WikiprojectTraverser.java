@@ -5,8 +5,9 @@ import static org.apache.commons.lang3.StringUtils.prependIfMissing;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 import static org.apache.commons.lang3.StringUtils.trim;
 
-import java.io.Console;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +37,19 @@ public class WikiprojectTraverser {
         this.wikiprojectName = wikiprojectName;
         this.wikiAddress = wikiAddress;
     }
+
+    public static final Map<String, String> ALIASES = new HashMap<String, String>() {
+        {
+            put("Limbi", "Lingvistică");
+            put("Filosofie", "Filozofie");
+            put("ȚL", "Țările lumii");
+            put("Pn", "Perioada napoleoniană");
+            put("Fb", "Fotbal");
+            put("PLS", "Popoarele și limbile slave");
+            put("Vexilologie", "Vexilologie și heraldică");
+            put("Heraldică", "Vexilologie și heraldică");
+        }
+    };
 
     public void traverse() throws IOException, LoginException {
 
@@ -135,7 +149,7 @@ public class WikiprojectTraverser {
             .append("|Medie}} !! {{clasament-mic|categorie=Categorie:Articole de importanță mică pentru proiectul ")
             .append(wikiprojectName).append("|Mică}} !! [[:Categorie:Articole neclasificate ale proiectului ")
             .append(wikiprojectName).append(" (importanță)|Neclasificate]] || Total ").append("\n|-")
-            .append("\n! rowspan=\"14\" | Calitate");
+            .append("\n! rowspan=\"15\" | Calitate");
 
         printTableLine(sbuilder, ArticleClass.FA, "{{clasament-AC|categorie=Categorie:Articole de calitate ale proiectului ",
             "|AC}}");
@@ -159,7 +173,10 @@ public class WikiprojectTraverser {
             "{{clasament-portal|categorie=Categorie:Articole de clasa „portal” ale proiectului ", "|portal}}");
         printTableLine(sbuilder, ArticleClass.TEMPLATE,
             "{{clasament-format|categorie=Categorie:Articole de clasa „format” ale proiectului ", "|format}}");
-        printTableLine(sbuilder, ArticleClass.UNKNOWN_QUALITY, "[[:Categorie:Articole neclasificate ale proiectului " + wikiprojectName + " (calitate)|Neclasificate]]", null);
+        printTableLine(sbuilder, ArticleClass.FUTURE,
+            "{{clasament-viitor|categorie=Categorie:Articole cu subiect de viitor ale proiectului ", "|viitor}}");
+        printTableLine(sbuilder, ArticleClass.UNKNOWN_QUALITY,
+            "[[:Categorie:Articole neclasificate ale proiectului " + wikiprojectName + " (calitate)|Neclasificate]]", null);
         printTableLine(sbuilder, ArticleClass.ALL_QUALITY, "Total", null);
 
         sbuilder.append("\n|}");
