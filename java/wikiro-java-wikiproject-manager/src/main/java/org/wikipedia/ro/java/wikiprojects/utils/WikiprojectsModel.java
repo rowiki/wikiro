@@ -1,5 +1,11 @@
 package org.wikipedia.ro.java.wikiprojects.utils;
 
+import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.join;
+import static org.apache.commons.lang3.StringUtils.trim;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static org.apache.commons.lang3.StringUtils.*;
 
 public class WikiprojectsModel {
     private String qualClass;
@@ -59,6 +63,10 @@ public class WikiprojectsModel {
     
     public void removeFromProject(String project) {
         this.projectsImportance.remove(project);
+    }
+    
+    public Map<String, String> getImportanceMap() {
+        return Collections.unmodifiableMap(projectsImportance);
     }
 
     public static WikiprojectsModel fromTalkPage(String talkPageText) {
