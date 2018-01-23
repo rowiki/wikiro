@@ -27,7 +27,8 @@ public class MaintainWikiproject {
             System.err.println(" - stubs - classify stubs");
             System.err.println(" - stats - compute stats");
             System.err.println(" - categories - create wikiproject category tree");
-            System.err.println(" - create- create wikiproject pages, including category tree");
+            System.err.println(" - create - create wikiproject pages, including category tree");
+            System.err.println(" - classify - automagically classify pages in the bottom categories");
             System.exit(1);
         }
 
@@ -109,7 +110,7 @@ public class MaintainWikiproject {
                 new Classify("ro.wikipedia.org", projImportance, cats, tmplCats, recCats, depth).classify();
             } else {
                 System.err.println(
-                    "Usage: add projects with -project:PROJECT[:IMPORTANCE] and categories with -cat:CATEGORY or -catr:RECURSE_CATEGORY with -depth:MAXDEPTH");
+                    "Usage: add projects with -project:PROJECT[:IMPORTANCE] and categories with -cat:CATEGORY -cattmpl:TEMPLATE_CATEGORY or -catr:RECURSE_CATEGORY with -depth:MAXDEPTH");
             }
         }
     }
