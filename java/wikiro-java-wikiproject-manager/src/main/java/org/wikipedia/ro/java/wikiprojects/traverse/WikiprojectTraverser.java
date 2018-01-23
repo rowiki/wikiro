@@ -1,22 +1,22 @@
 package org.wikipedia.ro.java.wikiprojects.traverse;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.prependIfMissing;
 import static org.apache.commons.lang3.StringUtils.removeStart;
-import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.security.auth.login.LoginException;
 
 import org.apache.commons.collections4.map.MultiKeyMap;
+import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.utils.ArticleClass;
 import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
+import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsModel;
 import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
 
 public class WikiprojectTraverser {
@@ -25,13 +25,6 @@ public class WikiprojectTraverser {
     private String wikiAddress;
 
     private MultiKeyMap<ArticleClass, Integer> articles = new MultiKeyMap<ArticleClass, Integer>();
-
-    private static final Pattern classPattern =
-        Pattern.compile("\\|\\s*clasament\\s*=\\s*([^\\|\\}\\s]+)", Pattern.MULTILINE);
-    private static final Pattern importancePattern =
-        Pattern.compile("\\|\\s*importanță\\s*=\\s*([^\\|\\}\\s]+)", Pattern.MULTILINE);
-    private static final Pattern numberedProjectPattern =
-        Pattern.compile("\\|\\s*proiect(\\d+)\\s*=\\s*([^\\|\\}]+)", Pattern.MULTILINE);
 
     public WikiprojectTraverser(String wikiprojectName, String wikiAddress) {
         this.wikiprojectName = wikiprojectName;
@@ -80,28 +73,15 @@ public class WikiprojectTraverser {
 
                 ArticleClass qualClass = null;
                 ArticleClass impClass = null;
-                Matcher classMatcher = classPattern.matcher(classificationText);
-                Matcher importanceMatcher = importancePattern.matcher(classificationText);
-                if (classMatcher.find()) {
-                    qualClass = ArticleClass.fromString(classMatcher.group(1));
-                }
-                if (importanceMatcher.find()) {
-                    impClass = ArticleClass.fromString(importanceMatcher.group(1));
-                } else {
-                    Matcher numberedProjectMatcher = numberedProjectPattern.matcher(classificationText);
-                    String projNumber = null;
-                    while (numberedProjectMatcher.find()) {
-                        if (wikiprojectName.equals(trim(numberedProjectMatcher.group(2)))) {
-                            projNumber = numberedProjectMatcher.group(1);
-                        }
-                    }
-                    if (null != projNumber) {
-                        Pattern numberedImportancePattern = Pattern
-                            .compile("\\|\\s*importanță" + projNumber + "\\s*=\\s*([^\\|\\}\\s]+)", Pattern.MULTILINE);
-                        Matcher numberedImportanceMatcher = numberedImportancePattern.matcher(classificationText);
-                        if (numberedImportanceMatcher.find()) {
-                            impClass = ArticleClass.fromString(numberedImportanceMatcher.group(1));
-                        }
+
+                WikiprojectsModel projModel = WikiprojectsModel.fromTalkPage(classificationText);
+
+                qualClass = ArticleClass.fromString(projModel.getQualClass());
+                for (Map.Entry<String, String> eachProjectEntries : projModel.getImportanceMap().entrySet()) {
+                    if (StringUtils.equals(
+                        defaultString(ALIASES.get(eachProjectEntries.getKey()), eachProjectEntries.getKey()),
+                        defaultString(ALIASES.get(wikiprojectName), wikiprojectName))) {
+                        impClass = ArticleClass.fromString(eachProjectEntries.getValue());
                     }
                 }
 
