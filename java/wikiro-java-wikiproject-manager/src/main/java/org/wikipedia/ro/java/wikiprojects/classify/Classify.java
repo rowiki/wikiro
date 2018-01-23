@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.startsWithAny;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -32,15 +33,17 @@ public class Classify {
     private Map<String, String> projects;
     private List<String> recursiveCategories;
     private List<String> categories;
+    private List<String> tmplCats;
     private int depth;
     private String wikiAddress;
 
-    public Classify(String wikiAddress, Map<String, String> projects, List<String> categories,
+    public Classify(String wikiAddress, Map<String, String> projects, List<String> categories, List<String> templateCategories,
         List<String> recursiveCategories, int depth) {
         super();
         this.wikiAddress = wikiAddress;
         this.projects = projects;
         this.categories = categories;
+        this.tmplCats = templateCategories;
         this.recursiveCategories = recursiveCategories;
         this.depth = depth;
     }
@@ -56,7 +59,7 @@ public class Classify {
                 System.err.println("No projects specified");
                 return;
             }
-            if (recursiveCategories.size() + categories.size() == 0) {
+            if (recursiveCategories.size() + categories.size() + tmplCats.size() == 0) {
                 System.err.println("No categories specified");
                 return;
             }
@@ -129,6 +132,29 @@ public class Classify {
                     }
                     rowiki.edit(eachTalkPageOfArticleInCat, newTalkPageText, "Robot: luat în evidență pentru wikiproiecte");
                 }
+            }
+            
+            List<String> templatesToRun = new ArrayList<>();
+            for (String eachTmplCat: tmplCats) {
+                templatesToRun.addAll(Arrays.asList(rowiki.getCategoryMembers(eachTmplCat, Wiki.TEMPLATE_NAMESPACE)));
+            }
+            int tmplIdx = 0;
+            for (String eachTmpl: templatesToRun) {
+                tmplIdx++;
+                System.out.printf("Running on template %s [ %d/%d ]%n", eachTmpl, tmplIdx, templatesToRun.size());
+                
+                String tmplTalkPageTitle = rowiki.getTalkPage(eachTmpl);
+                String tmplTalkPageText = rowiki.getPageText(tmplTalkPageTitle);
+                WikiprojectsModel projectModel = WikiprojectsModel.fromTalkPage(tmplTalkPageText);
+                projectModel.setQualClass("format");
+
+                for (String eachProj : projects.keySet()) {
+                    if (!projectModel.isInProject(eachProj) || isBlank(projectModel.getImportance(eachProj))) {
+                        projectModel.setImportance(eachProj, projects.get(eachProj));
+                    }
+                }
+                
+                rowiki.edit(tmplTalkPageTitle, projectModel.saveToTalkPage(tmplTalkPageText), "Robot: luat în evidență pentru wikiproiecte");
             }
 
         } catch (FailedLoginException e) {

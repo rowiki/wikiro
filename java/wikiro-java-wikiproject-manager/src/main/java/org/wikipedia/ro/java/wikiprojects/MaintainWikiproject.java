@@ -20,6 +20,7 @@ import org.wikipedia.ro.java.wikiprojects.traverse.WikiprojectTraverser;
 
 public class MaintainWikiproject {
     public static void main(String[] args) throws LoginException, IOException {
+        
         if (0 == args.length) {
             System.err.println("Please specify command and arguments");
             System.err.println("Available commands:");
@@ -74,6 +75,7 @@ public class MaintainWikiproject {
                 List<String> projects = new ArrayList<String>();
                 List<String> cats = new ArrayList<String>();
                 List<String> recCats = new ArrayList<String>();
+                List<String> tmplCats = new ArrayList<>();
                 Map<String, String> projImportance = new LinkedHashMap<String, String>();
                 int depth = 3;
                 for (int i = 1; i < args.length; i++) {
@@ -86,6 +88,9 @@ public class MaintainWikiproject {
                     }
                     if (startsWith(eachArg, "-catr:")) {
                         recCats.add(removeStart(eachArg, "-catr:"));
+                    }
+                    if (startsWith(eachArg, "-cattmpl:")) {
+                        tmplCats.add(removeStart(eachArg, "-cattmpl:"));
                     }
                     for (String eachProjDef : projects) {
                         String[] projParts = split(eachProjDef, ':');
@@ -101,7 +106,7 @@ public class MaintainWikiproject {
                         }
                     }
                 }
-                new Classify("ro.wikipedia.org", projImportance, cats, recCats, depth).classify();
+                new Classify("ro.wikipedia.org", projImportance, cats, tmplCats, recCats, depth).classify();
             } else {
                 System.err.println(
                     "Usage: add projects with -project:PROJECT[:IMPORTANCE] and categories with -cat:CATEGORY or -catr:RECURSE_CATEGORY with -depth:MAXDEPTH");
