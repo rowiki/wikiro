@@ -154,7 +154,10 @@ public class Classify {
                     }
                 }
                 
-                rowiki.edit(tmplTalkPageTitle, projectModel.saveToTalkPage(tmplTalkPageText), "Robot: luat în evidență pentru wikiproiecte");
+                String newTalkPageText = projectModel.saveToTalkPage(tmplTalkPageText);
+                if (!StringUtils.equals(newTalkPageText, tmplTalkPageText)) {
+                    rowiki.edit(tmplTalkPageTitle, newTalkPageText, "Robot: luat în evidență pentru wikiproiecte");
+                }
             }
 
         } catch (FailedLoginException e) {
