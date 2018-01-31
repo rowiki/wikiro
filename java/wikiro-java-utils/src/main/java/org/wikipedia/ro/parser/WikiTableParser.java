@@ -1,17 +1,17 @@
 package org.wikipedia.ro.parser;
 
-import org.wikipedia.ro.model.WikiPart;
+import org.wikipedia.ro.model.WikiTable;
 
-public class WikiTableParser extends WikiPartParser {
+public class WikiTableParser extends WikiPartParser<WikiTable> {
 
     public boolean startsWithMe(String wikiText) {
         return null != wikiText && wikiText.startsWith("{|");
     }
 
     @Override
-    public void parse(String wikiText, TriFunction<WikiPart, String, String, Void> resumeCallback) {
+    public ParseResult<WikiTable> parse(String wikiText) {
         // TODO Auto-generated method stub
-        
+        return null;
     }
 
 }

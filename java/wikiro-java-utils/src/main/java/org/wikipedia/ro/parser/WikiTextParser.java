@@ -1,8 +1,8 @@
 package org.wikipedia.ro.parser;
 
-import org.wikipedia.ro.model.WikiPart;
+import org.wikipedia.ro.model.PlainText;
 
-public class WikiTextParser extends WikiPartParser {
+public class WikiTextParser extends WikiPartParser<PlainText> {
 
     @Override
     public boolean startsWithMe(String wikiText) {
@@ -10,9 +10,24 @@ public class WikiTextParser extends WikiPartParser {
     }
 
     @Override
-    public void parse(String wikiText, TriFunction<WikiPart, String, String, Void> resumeCallback) {
-        // TODO Auto-generated method stub
-        
+    public ParseResult<PlainText> parse(String wikiText) {
+        StringBuilder textBuilder = new StringBuilder();
+
+        int idx = 0;
+        while (idx < wikiText.length()) {
+            boolean othersTakeItFromHere = false;
+            for (WikiPartParser<?> eachParser : AggregatingParser.ALL_PARSERS) {
+                if (!(eachParser instanceof WikiTextParser)) {
+                    othersTakeItFromHere = othersTakeItFromHere || eachParser.startsWithMe(wikiText.substring(idx));
+                }
+                if (othersTakeItFromHere) {
+                    return new ParseResult<PlainText>(new PlainText(textBuilder.toString()), textBuilder.toString(), wikiText.substring(idx));
+                }
+                textBuilder.append(wikiText.charAt(idx));
+                idx++;
+            }
+        }
+        return new ParseResult<PlainText>(new PlainText(textBuilder.toString()), textBuilder.toString(), "");
     }
 
 }

@@ -7,6 +7,11 @@ public class PlainText extends WikiPart {
         return text;
     }
 
+    public PlainText() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
     public void setText(String text) {
         this.text = text;
     }

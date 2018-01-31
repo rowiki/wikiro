@@ -3,9 +3,10 @@ package org.wikipedia.ro.parser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.wikipedia.ro.model.WikiFile;
 import org.wikipedia.ro.model.WikiPart;
 
-public class WikiFileParser extends WikiPartParser {
+public class WikiFileParser extends WikiPartParser<WikiFile> {
 
     private static Pattern FILE_START_MATCHER = Pattern.compile("\\[\\[(Fișier|File|Imagine|Image|Media)");
 
@@ -18,8 +19,9 @@ public class WikiFileParser extends WikiPartParser {
     }
 
     @Override
-    public void parse(String wikiText, TriFunction<WikiPart, String, String, Void> resumeCallback) {
+    public ParseResult<WikiFile> parse(String wikiText) {
         // TODO Auto-generated method stub
-        
+        return null;
     }
+
 }

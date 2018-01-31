@@ -1,13 +1,15 @@
 package org.wikipedia.ro.parser;
 
+import static org.apache.commons.lang3.StringUtils.removeStart;
+import static org.apache.commons.lang3.StringUtils.split;
+import static org.apache.commons.lang3.StringUtils.trim;
+
 import java.util.Arrays;
 import java.util.List;
 
-import org.wikipedia.ro.model.WikiPart;
+import org.wikipedia.ro.model.WikiTag;
 
-import static org.apache.commons.lang3.StringUtils.*;
-
-public class WikiTagParser extends WikiPartParser {
+public class WikiTagParser extends WikiPartParser<WikiTag> {
 
     private List<String> validTagNames = Arrays.asList("div", "font", "table", "tr", "th", "td", "span", "br", "tt");
     
@@ -24,9 +26,9 @@ public class WikiTagParser extends WikiPartParser {
     }
 
     @Override
-    public void parse(String wikiText, TriFunction<WikiPart, String, String, Void> resumeCallback) {
+    public ParseResult<WikiTag> parse(String wikiText) {
         // TODO Auto-generated method stub
-        
+        return null;
     }
-    
+
 }

@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import org.wikipedia.ro.model.WikiPart;
 import org.wikipedia.ro.model.WikiTemplate;
 
-public class WikiTemplateParser extends WikiPartParser {
+public class WikiTemplateParser extends WikiPartParser<WikiTemplate> {
 
     private static final Pattern START_PATTERN = Pattern.compile("\\{\\{");
 
@@ -23,20 +23,17 @@ public class WikiTemplateParser extends WikiPartParser {
     }
 
     @Override
-    public void parse(String wikiText, TriFunction<WikiPart, String, String, Void> resumeCallback) {
-        WikiTemplate template = new WikiTemplate();
-        if (null == wikiText || 0 == wikiText.length()) {
-            return;
+    public ParseResult<WikiTemplate> parse(String wikiText) {
+        if (!startsWithMe(wikiText)) {
+            return null;
         }
+        WikiTemplate template = new WikiTemplate();
         
         final char[] chars = wikiText.toCharArray();
         int index = 0;
         StringBuilder templateTitleBuilder = new StringBuilder();
         StringBuilder templateTextBuilder = new StringBuilder("{{");
 
-        if (index >= chars.length - 1) {
-            return;
-        }
         index += 2;
         while (index < chars.length && chars[index] != '|' && chars[index] != '}') { // skip initial template name
             templateTitleBuilder.append(chars[index]);
@@ -131,7 +128,7 @@ public class WikiTemplateParser extends WikiPartParser {
             template.removeParam("1");
         }
         template.setInitialText(initialTemplateText);
-        resumeCallback.apply(template, initialTemplateText, wikiText.substring(initialTemplateText.length()));
+        return new ParseResult<WikiTemplate>(template, initialTemplateText, wikiText.substring(initialTemplateText.length()));
     }
 
 }

@@ -3,12 +3,12 @@ package org.wikipedia.ro.parser;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.wikipedia.ro.model.WikiPart;
+import org.wikipedia.ro.model.WikiReference;
 
-public class WikiReferenceParser extends WikiPartParser {
-
+public class WikiReferenceParser extends WikiPartParser<WikiReference> {
 
     private static final Pattern START_PATTERN = Pattern.compile("<\\s*ref\\s");
+
     public boolean startsWithMe(String wikiText) {
         if (null == wikiText) {
             return false;
@@ -19,9 +19,10 @@ public class WikiReferenceParser extends WikiPartParser {
         }
         return false;
     }
+
     @Override
-    public void parse(String wikiText, TriFunction<WikiPart, String, String, Void> resumeCallback) {
+    public ParseResult<WikiReference> parse(String wikiText) {
         // TODO Auto-generated method stub
-        
+        return null;
     }
 }

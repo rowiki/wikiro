@@ -40,4 +40,5 @@ public class WikiTag extends WikiPart {
     public void setAttributes(Map<String, List<WikiPart>> attributes) {
         this.attributes = attributes;
     }
+
 }
