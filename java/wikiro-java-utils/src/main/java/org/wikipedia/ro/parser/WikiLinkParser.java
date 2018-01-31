@@ -1,10 +1,11 @@
 package org.wikipedia.ro.parser;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
-import org.wikipedia.ro.model.PlainText;
 import org.wikipedia.ro.model.WikiLink;
+import org.wikipedia.ro.model.WikiPart;
 
 public class WikiLinkParser extends WikiPartParser<WikiLink> {
 
@@ -68,23 +69,24 @@ public class WikiLinkParser extends WikiPartParser<WikiLink> {
                     break;
                 }
             }
-            
+
             if (appendToBuilder) {
                 crtBuilder.append(wikiText.charAt(idx));
             }
             originalTextBuilder.append(wikiText.charAt(idx));
             idx++;
         }
-        
+
         WikiLink identifiedLink = new WikiLink();
         identifiedLink.setTarget(targetBuilder.toString());
-        
+
         if (labelPresent) {
-            PlainText ptLabel = new PlainText();
-            ptLabel.setText(labelBuilder.toString());
-            identifiedLink.setLabelStructure(Arrays.asList(ptLabel));
+            AggregatingParser labelParser = new AggregatingParser();
+            List<ParseResult<? extends WikiPart>> labelParts = labelParser.parse(labelBuilder.toString());
+            identifiedLink
+                .setLabelStructure(labelParts.stream().map(ParseResult::getIdentifiedPart).collect(Collectors.toList()));
         }
-        
+
         return new ParseResult<WikiLink>(identifiedLink, originalTextBuilder.toString(), wikiText.substring(idx));
     }
 

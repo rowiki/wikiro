@@ -8,28 +8,31 @@ import org.wikipedia.ro.model.WikiPart;
 
 public class AggregatingParser {
     public static final List<WikiPartParser<? extends WikiPart>> ALL_PARSERS =
-        Arrays.asList(new WikiLinkParser(), new WikiFileParser(), new WikiTemplateParser(), new WikiReferenceParser(),
+        Arrays.asList(new WikiLinkParser(), new WikiFileParser(), new WikiTemplateParser(),
             new WikiTableParser(), new WikiTagParser(), new WikiTextParser());
 
-    public List<WikiPart> parse(String wikiText) {
+    public List<ParseResult<? extends WikiPart>> parse(String wikiText) {
         if (null == wikiText) {
             return null;
         }
 
-        List<WikiPart> identifiedParts = new ArrayList<WikiPart>();
+        List<ParseResult<? extends WikiPart>> resultList = new ArrayList<ParseResult<? extends WikiPart>>();
         ParseResult<? extends WikiPart> parseResult = null;
-        do {
+        String toParse = wikiText;
+        while (null != toParse
+            && 0 < toParse.length()) {
             for (WikiPartParser<? extends WikiPart> eachParser : ALL_PARSERS) {
-                if (eachParser.startsWithMe(wikiText)) {
-                    parseResult = eachParser.parse(wikiText);
+                if (eachParser.startsWithMe(toParse)) {
+                    parseResult = eachParser.parse(toParse);
                     if (null != parseResult) {
-                        identifiedParts.add(parseResult.getIdentifiedPart());
+                        resultList.add(parseResult);
+                        toParse = parseResult.getUnparsedString();
+                        break;
                     }
                 }
             }
-        } while (null != parseResult && null != parseResult.getUnparsedString()
-            && 0 < parseResult.getUnparsedString().length());
-        return identifiedParts;
+        }
+        return resultList;
     }
 
 }

@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.wikipedia.ro.model.WikiFile;
-import org.wikipedia.ro.model.WikiPart;
 
 public class WikiFileParser extends WikiPartParser<WikiFile> {
 

@@ -79,4 +79,27 @@ public class TestWikiTemplateParser {
 
     }
 
+    @Test
+    public void testInlineTemplate() {
+        String text = "{{Template|NonameParam|Param=Arg}}";
+        
+        WikiTemplateParser sut = new WikiTemplateParser();
+        
+        ParseResult<WikiTemplate> parseResult = sut.parse(text);
+        Assert.assertEquals(text, parseResult.getParsedString());
+        Assert.assertEquals("", parseResult.getUnparsedString());
+        Assert.assertTrue(parseResult.getIdentifiedPart().isSingleLine());
+    }
+
+    @Test
+    public void testBlockTemplate() {
+        String text = "{{Template\n|NonameParam\n|Param = Arg}}";
+        
+        WikiTemplateParser sut = new WikiTemplateParser();
+        
+        ParseResult<WikiTemplate> parseResult = sut.parse(text);
+        Assert.assertEquals(text, parseResult.getParsedString());
+        Assert.assertEquals("", parseResult.getUnparsedString());
+        Assert.assertFalse(parseResult.getIdentifiedPart().isSingleLine());
+    }
 }

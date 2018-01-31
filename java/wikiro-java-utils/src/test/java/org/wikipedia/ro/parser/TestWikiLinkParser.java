@@ -68,4 +68,5 @@ public class TestWikiLinkParser {
         Assert.assertEquals("Target", ((PlainText) parsedPart.getLabelStructure().get(0)).getText());
 
     }
+    
 }

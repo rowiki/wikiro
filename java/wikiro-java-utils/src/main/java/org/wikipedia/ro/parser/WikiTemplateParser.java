@@ -6,7 +6,6 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.wikipedia.ro.model.WikiPart;
 import org.wikipedia.ro.model.WikiTemplate;
 
 public class WikiTemplateParser extends WikiPartParser<WikiTemplate> {
@@ -28,7 +27,7 @@ public class WikiTemplateParser extends WikiPartParser<WikiTemplate> {
             return null;
         }
         WikiTemplate template = new WikiTemplate();
-        
+
         final char[] chars = wikiText.toCharArray();
         int index = 0;
         StringBuilder templateTitleBuilder = new StringBuilder();
@@ -48,6 +47,7 @@ public class WikiTemplateParser extends WikiPartParser<WikiTemplate> {
 
         final Stack<String> automatonStack = new Stack<String>();
 
+        Pattern startOfParamBlockStylePattern = Pattern.compile("[\\n\\r]+\\s*[\\|\\}]");
         String crtParamName = null;
         int crtParamIndex = 1;
         final StringBuilder crtBuilder = new StringBuilder();
@@ -57,6 +57,14 @@ public class WikiTemplateParser extends WikiPartParser<WikiTemplate> {
             templateTextBuilder.append(crtChar);
 
             switch (crtChar) {
+            case '\n':
+            case '\r':
+                if (0 == automatonStack.stream().filter(stackElement -> stackElement.equals("{{")).count()) {
+                    Matcher startOfParamBlockStyleMatcher = startOfParamBlockStylePattern.matcher(wikiText);
+                    if (startOfParamBlockStyleMatcher.find(index) && index == startOfParamBlockStyleMatcher.start()) {
+                        template.setSingleLine(false);
+                    }
+                }
             case '=':
                 if (automatonStack.isEmpty() && crtParamName == null) {
                     crtParamName = crtBuilder.toString();
@@ -128,7 +136,8 @@ public class WikiTemplateParser extends WikiPartParser<WikiTemplate> {
             template.removeParam("1");
         }
         template.setInitialText(initialTemplateText);
-        return new ParseResult<WikiTemplate>(template, initialTemplateText, wikiText.substring(initialTemplateText.length()));
+        return new ParseResult<WikiTemplate>(template, initialTemplateText,
+            wikiText.substring(initialTemplateText.length()));
     }
 
 }
