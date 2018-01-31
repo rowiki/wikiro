@@ -5,7 +5,6 @@ import java.util.Stack;
 
 import org.wikipedia.ro.model.PlainText;
 import org.wikipedia.ro.model.WikiLink;
-import org.wikipedia.ro.model.WikiPart;
 
 public class WikiLinkParser extends WikiPartParser<WikiLink> {
 

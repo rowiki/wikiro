@@ -13,7 +13,7 @@ public abstract class WikiPart {
         this.initialText = initialText;
     }
     
-    protected String partsListToString(List<WikiPart> parts) {
+    protected String partsListToString(List<? extends WikiPart> parts) {
         StringBuilder sbuild = new StringBuilder();
         for (WikiPart part: parts) {
             sbuild.append(part.toString());

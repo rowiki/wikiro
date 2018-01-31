@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class WikiLink extends WikiPart {
     private String target = null;
-    private List<WikiPart> labelStructure = new ArrayList<WikiPart>();
+    private List<? extends WikiPart> labelStructure = new ArrayList<WikiPart>();
 
     public WikiLink() {
         super();
@@ -42,11 +42,11 @@ public class WikiLink extends WikiPart {
         labelStructure = Arrays.asList(new PlainText(label));
     }
 
-    public List<WikiPart> getLabelStructure() {
+    public List<? extends WikiPart> getLabelStructure() {
         return labelStructure;
     }
 
-    public void setLabelStructure(List<WikiPart> labelStructure) {
+    public void setLabelStructure(List<? extends WikiPart> labelStructure) {
         this.labelStructure = labelStructure;
     }
 

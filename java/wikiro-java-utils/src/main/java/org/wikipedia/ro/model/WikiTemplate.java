@@ -21,7 +21,7 @@ import java.util.Stack;
 public class WikiTemplate extends WikiPart {
 
     private final Map<String, String> rawParams = new LinkedHashMap<String, String>();
-    private final Map<String, List<WikiPart>> params = new LinkedHashMap<String, List<WikiPart>>();
+    private final Map<String, List<? extends WikiPart>> params = new LinkedHashMap<String, List<? extends WikiPart>>();
     private final Stack<String> automatonStack = new Stack<String>();
     private String beforeText;
 
