@@ -20,12 +20,12 @@ public class WikiTextParser extends WikiPartParser<PlainText> {
                 if (!(eachParser instanceof WikiTextParser)) {
                     othersTakeItFromHere = othersTakeItFromHere || eachParser.startsWithMe(wikiText.substring(idx));
                 }
-                if (othersTakeItFromHere) {
-                    return new ParseResult<PlainText>(new PlainText(textBuilder.toString()), textBuilder.toString(), wikiText.substring(idx));
-                }
-                textBuilder.append(wikiText.charAt(idx));
-                idx++;
             }
+            if (othersTakeItFromHere) {
+                return new ParseResult<PlainText>(new PlainText(textBuilder.toString()), textBuilder.toString(), wikiText.substring(idx));
+            }
+            textBuilder.append(wikiText.charAt(idx));
+            idx++;
         }
         return new ParseResult<PlainText>(new PlainText(textBuilder.toString()), textBuilder.toString(), "");
     }
