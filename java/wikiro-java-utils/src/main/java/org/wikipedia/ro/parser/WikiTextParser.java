@@ -22,12 +22,16 @@ public class WikiTextParser extends WikiPartParser<PlainText> {
                 }
             }
             if (othersTakeItFromHere) {
-                return new ParseResult<PlainText>(new PlainText(textBuilder.toString()), textBuilder.toString(), wikiText.substring(idx));
+                PlainText foundPart = new PlainText(textBuilder.toString());
+                foundPart.setInitialText(textBuilder.toString());
+                return new ParseResult<PlainText>(foundPart, textBuilder.toString(), wikiText.substring(idx));
             }
             textBuilder.append(wikiText.charAt(idx));
             idx++;
         }
-        return new ParseResult<PlainText>(new PlainText(textBuilder.toString()), textBuilder.toString(), "");
+        PlainText foundPart = new PlainText(textBuilder.toString());
+        foundPart.setInitialText(textBuilder.toString());
+        return new ParseResult<PlainText>(foundPart, textBuilder.toString(), "");
     }
 
 }

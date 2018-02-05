@@ -146,6 +146,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
         if (validTagNames.stream().anyMatch(tag -> tag.equalsIgnoreCase(tagUC.getTagName()))) {
             ParseResult<WikiTag> resultingTag = new ParseResult<WikiTag>();
             resultingTag.setIdentifiedPart(tagUC);
+            tagUC.setInitialText(originalTextBuilder.toString());
             resultingTag.setParsedString(originalTextBuilder.toString());
             resultingTag.setUnparsedString(wikiText.substring(idx));
             return resultingTag;

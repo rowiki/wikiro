@@ -1,6 +1,6 @@
 package org.wikipedia.ro.parser;
 
-import org.wikipedia.ro.model.WikiTable;
+import org.wikipedia.ro.model.table.WikiTable;
 
 public class WikiTableParser extends WikiPartParser<WikiTable> {
 
