@@ -24,7 +24,7 @@ public class WikiLinkParser extends WikiPartParser<WikiLink> {
         StringBuilder originalTextBuilder = new StringBuilder("[[");
         int idx = 2;
         boolean closed = false;
-        Stack<String> bracketStack = new Stack<String>();
+        Stack<String> bracketStack = new Stack<>();
         bracketStack.push("[[");
         StringBuilder labelBuilder = new StringBuilder();
         StringBuilder targetBuilder = new StringBuilder();
@@ -41,8 +41,8 @@ public class WikiLinkParser extends WikiPartParser<WikiLink> {
                     originalTextBuilder.append("{");
                     appendToBuilder = false;
                     idx++;
-                    break;
                 }
+                break;
             case '}':
                 if ('}' == nextChar && "{{".equals(bracketStack.peek())) {
                     bracketStack.pop();
@@ -50,8 +50,8 @@ public class WikiLinkParser extends WikiPartParser<WikiLink> {
                     appendToBuilder = false;
 
                     idx++;
-                    break;
                 }
+                break;
             case ']':
                 if (']' == nextChar && "[[".equals(bracketStack.peek()) && 1 == bracketStack.size()) {
                     closed = true;
@@ -59,15 +59,17 @@ public class WikiLinkParser extends WikiPartParser<WikiLink> {
                     bracketStack.pop();
                     appendToBuilder = false;
                     idx++;
-                    break;
                 }
+                break;
             case '|':
                 if ("[[".equals(bracketStack.peek()) && 1 == bracketStack.size()) {
                     appendToBuilder = false;
                     labelPresent = true;
                     crtBuilder = labelBuilder;
-                    break;
                 }
+                break;
+            default:
+                break;
             }
 
             if (appendToBuilder) {
@@ -87,7 +89,7 @@ public class WikiLinkParser extends WikiPartParser<WikiLink> {
                 .setLabelStructure(labelParts.stream().map(ParseResult::getIdentifiedPart).collect(Collectors.toList()));
         }
 
-        return new ParseResult<WikiLink>(identifiedLink, originalTextBuilder.toString(), wikiText.substring(idx));
+        return new ParseResult<>(identifiedLink, originalTextBuilder.toString(), wikiText.substring(idx));
     }
 
 }

@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
  */
 public class WikiTemplate extends WikiPart {
 
-    private final Map<String, String> rawParams = new LinkedHashMap<String, String>();
-    private final Map<String, List<? extends WikiPart>> params = new LinkedHashMap<String, List<? extends WikiPart>>();
-    private final Stack<String> automatonStack = new Stack<String>();
+    private final Map<String, String> rawParams = new LinkedHashMap<>();
+    private final Map<String, List<? extends WikiPart>> params = new LinkedHashMap<>();
+    private final Stack<String> automatonStack = new Stack<>();
     private String beforeText;
 
     private String templateTitle;

@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class WikiLink extends WikiPart {
     private String target = null;
-    private List<? extends WikiPart> labelStructure = new ArrayList<WikiPart>();
+    private List<? extends WikiPart> labelStructure = new ArrayList<>();
 
     public WikiLink() {
         super();
@@ -50,7 +50,7 @@ public class WikiLink extends WikiPart {
         this.labelStructure = labelStructure;
     }
 
-    private static Pattern LINK_PATTERN = Pattern.compile("\\[\\[\\s*([^\\]\\|]+)(?:\\s*\\|([^\\]]+))?\\]\\]");
+    private static final Pattern LINK_PATTERN = Pattern.compile("\\[\\[\\s*([^\\]\\|]+)(?:\\s*\\|([^\\]]+))?\\]\\]");
 
     public static WikiLink fromString(String linkText) {
         if (null == linkText) {
@@ -70,7 +70,7 @@ public class WikiLink extends WikiPart {
     public String toString() {
         StringBuilder sbuild = new StringBuilder("[[");
         sbuild.append(target);
-        if (0 < labelStructure.size()) {
+        if (!labelStructure.isEmpty()) {
             sbuild.append("|");
             sbuild.append(partsListToString(labelStructure));
         }

@@ -9,7 +9,7 @@ public class WikiTag extends WikiPart {
     private String tagName;
     private boolean selfClosing;
     private boolean closing;
-    private Map<String, List<? extends WikiPart>> attributes = new LinkedHashMap<String, List<? extends WikiPart>>();
+    private Map<String, List<? extends WikiPart>> attributes = new LinkedHashMap<>();
 
     public String getTagName() {
         return tagName;

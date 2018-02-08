@@ -23,10 +23,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
             return false;
         }
         String tagFromTagName = trim(removeStart(wikiText, "<"));
-        if (validTagNames.contains(split(tagFromTagName)[0])) {
-            return true;
-        }
-        return false;
+        return validTagNames.contains(split(tagFromTagName)[0]);
     }
 
     @Override
@@ -41,7 +38,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
         StringBuilder tagNameBuilder = new StringBuilder();
         StringBuilder attrNameBuilder = new StringBuilder();
         StringBuilder attrValueBuilder = new StringBuilder();
-        Stack<String> attrValueBracketing = new Stack<String>();
+        Stack<String> attrValueBracketing = new Stack<>();
 
         WikiTag tagUC = new WikiTag();
 
@@ -53,12 +50,8 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
             char crtChar = wikiText.charAt(idx);
             switch (state) {
             case -1:
-                switch (crtChar) {
-                case '<':
+                if ('<' == crtChar) {
                     state = 0;
-                    break;
-                default:
-                    return null;
                 }
                 break;
             case 0:
@@ -100,7 +93,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
             case 4:
                 boolean isPartOfAttrName = true;
                 if ('\'' == crtChar || '"' == crtChar) {
-                    if (0 < attrValueBracketing.size() && String.valueOf(crtChar).equals(attrValueBracketing.peek())) {
+                    if (!attrValueBracketing.isEmpty() && String.valueOf(crtChar).equals(attrValueBracketing.peek())) {
                         state = 2;
                         AggregatingParser attrValueParser = new AggregatingParser();
                         List<ParseResult<? extends WikiPart>> parsedValues =
@@ -111,10 +104,10 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                         attrValueBuilder.setLength(0);
                         attrValueBracketing.pop();
                         isPartOfAttrName = false;
-                    } else if (0 == attrValueBracketing.size() && 0 == attrValueBuilder.length()) {
+                    } else if (!attrValueBracketing.isEmpty() && 0 == attrValueBuilder.length()) {
                         attrValueBracketing.push(String.valueOf(crtChar));
                         isPartOfAttrName = false;
-                    } else if (0 == attrValueBracketing.size() && 0 != attrValueBuilder.length()) {
+                    } else if (!attrValueBracketing.isEmpty() && 0 != attrValueBuilder.length()) {
                         return null;
                     }
                 }
@@ -122,7 +115,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                     if (!Character.isWhitespace(crtChar)) {
                         attrValueBuilder.append(crtChar);
                     }
-                    if (Character.isWhitespace(crtChar) && 0 == attrValueBracketing.size() && 0 < attrNameBuilder.length()) {
+                    if (Character.isWhitespace(crtChar) && attrValueBracketing.isEmpty() && 0 < attrNameBuilder.length()) {
                         tagUC.setAttribute(attrNameBuilder.toString().trim(),
                             new AggregatingParser().parse(attrValueBuilder.toString()).stream()
                                 .map(ParseResult::getIdentifiedPart).collect(Collectors.toList()));
@@ -138,13 +131,15 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                 }
                 isFinishedReading = true;
                 break;
+            default:
+                break;
             }
 
             originalTextBuilder.append(crtChar);
             idx++;
         }
         if (validTagNames.stream().anyMatch(tag -> tag.equalsIgnoreCase(tagUC.getTagName()))) {
-            ParseResult<WikiTag> resultingTag = new ParseResult<WikiTag>();
+            ParseResult<WikiTag> resultingTag = new ParseResult<>();
             resultingTag.setIdentifiedPart(tagUC);
             tagUC.setInitialText(originalTextBuilder.toString());
             resultingTag.setParsedString(originalTextBuilder.toString());

@@ -20,7 +20,6 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
     private static final int STATE_TABLE_STARTED = 0;
     private static final int STATE_READING_ATTRIB = 2;
     private static final int STATE_BEGINNING_CONTAINED_ELEM = 4;
-    private static final int STATE_READING_CAPTION = 6;
 
     @Override
     public ParseResult<WikiTable> parse(String wikiText) {
@@ -85,6 +84,8 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                     state = STATE_INITIAL;
                 }
                 break;
+            default:
+                break;
             }
             initialText.append(wikiText.substring(idx, idx + nextIncrement));
             idx += nextIncrement;
@@ -133,7 +134,7 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                 }
                 break;
             case STATE_BEGINNING_CONTAINED_ELEM:
-                if (prevChar == '\n' && (crtChar == '!' || crtChar == '|' && nextChar != '}')) {
+                if (prevChar == '\n' && (crtChar == '!' || crtChar == '|' && nextChar != '}' && nextChar != '-')) {
                     ParseResult<WikiTableCell> parsedCell = parseTableCell(wikiText.substring(idx - 1));
                     parsedRow.addSubPart(parsedCell.getIdentifiedPart());
                     nextIncrement = parsedCell.getParsedString().length() - 1;
@@ -148,11 +149,12 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                     nextIncrement = 0;
                 }
                 break;
+            default:
+                break;
             }
 
             initialTextBuilder.append(wikiText.substring(idx, idx + nextIncrement));
             idx += nextIncrement;
-            prevChar = crtChar;
         }
         ParseResult<WikiTableRow> res = new ParseResult<>();
         res.setIdentifiedPart(parsedRow);
@@ -226,7 +228,8 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                 }
                 break;
             case STATE_BEGINNING_CONTAINED_ELEM:
-                if (Arrays.asList("||", "!!", "\n|", "\n!", "|}", "|-").contains(thisAndNextChar) && bracketStack.isEmpty()) {
+                if (Arrays.asList("||", "!!", "\n|", "\n!", "|}", "|-").contains(thisAndNextChar)
+                    && bracketStack.isEmpty()) {
                     parsedCell.setSubParts(new AggregatingParser().parse(workingElemBuilder.toString()).stream()
                         .map(elem -> elem.getIdentifiedPart()).collect(Collectors.toList()));
                     nextIncrement = 0;
@@ -240,6 +243,8 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                     nextIncrement = 2;
                     bracketStack.pop();
                 }
+                break;
+            default:
                 break;
             }
 
