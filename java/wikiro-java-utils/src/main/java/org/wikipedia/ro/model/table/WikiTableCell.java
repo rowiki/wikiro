@@ -1,53 +1,39 @@
 package org.wikipedia.ro.model.table;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.stream.Collectors;
 
 import org.wikipedia.ro.model.WikiPart;
 
-public class WikiTableCell extends WikiPart {
-    private List<WikiPart> subParts;
-    private boolean header;
-    private boolean onOwnRow;
+public class WikiTableCell extends WikiTableElement {
 
-    public List<WikiPart> getSubParts() {
-        return Collections.unmodifiableList(subParts);
+    private String cellSeparator = "\n|";
+
+    public String getCellSeparator() {
+        return cellSeparator;
     }
 
-    public void setSubParts(List<WikiPart> subParts) {
-        if (null == subParts) {
-            return;
+    public void setCellSeparator(String cellSeparator) {
+        this.cellSeparator = cellSeparator;
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sbuild = new StringBuilder(cellSeparator);
+
+        if (null != attribs) {
+            sbuild.append(' ').append(attribs.stream().map(eachPart -> eachPart.toString()).collect(Collectors.joining()))
+                .append(" |");
         }
-        if (null != this.subParts) {
-            this.subParts.clear();
+
+        if (null != subParts && 0 < subParts.size()) {
+            sbuild.append(' ');
+            for (WikiPart eachSubPart : subParts) {
+                sbuild.append(eachSubPart);
+            }
         }
-        for (WikiPart eachSubPart : subParts) {
-            this.addSubPart(eachSubPart);
-        }
-    }
 
-    public void addSubPart(WikiPart subPart) {
-        if (null == this.subParts) {
-            this.subParts = new ArrayList<>();
-        }
-        this.subParts.add(subPart);
-    }
-
-    public boolean isHeader() {
-        return header;
-    }
-
-    public void setHeader(boolean header) {
-        this.header = header;
-    }
-
-    public boolean isOnOwnRow() {
-        return onOwnRow;
-    }
-
-    public void setOnOwnRow(boolean onOwnRow) {
-        this.onOwnRow = onOwnRow;
+        return sbuild.toString();
     }
 
 }
