@@ -9,13 +9,16 @@ import org.wikipedia.ro.model.WikiFile;
 import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiPart;
 
-public class TestFileParser {
+public class TestWikiFileParser {
     @Test
     public void testParseImageNoCaption() {
         String wikiText = "[[Fișier:gigibobo.jpg]]";
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
+        
+        Assert.assertEquals(wikiText, parseRes.getParsedString());
+        Assert.assertEquals("", parseRes.getUnparsedString());
 
         Assert.assertNotNull(parseRes);
         Assert.assertNotNull(parseRes.getIdentifiedPart());
@@ -40,6 +43,8 @@ public class TestFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
+        Assert.assertEquals(wikiText, parseRes.getParsedString());
+        Assert.assertEquals("", parseRes.getUnparsedString());
 
         Assert.assertNotNull(parseRes);
         Assert.assertNotNull(parseRes.getIdentifiedPart());
@@ -70,6 +75,8 @@ public class TestFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
+        Assert.assertEquals(wikiText, parseRes.getParsedString());
+        Assert.assertEquals("", parseRes.getUnparsedString());
 
         Assert.assertNotNull(parseRes);
         Assert.assertNotNull(parseRes.getIdentifiedPart());
@@ -100,6 +107,8 @@ public class TestFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
+        Assert.assertEquals(wikiText, parseRes.getParsedString());
+        Assert.assertEquals("", parseRes.getUnparsedString());
 
         Assert.assertNotNull(parseRes);
         Assert.assertNotNull(parseRes.getIdentifiedPart());
@@ -130,6 +139,8 @@ public class TestFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
+        Assert.assertEquals(wikiText, parseRes.getParsedString());
+        Assert.assertEquals("", parseRes.getUnparsedString());
 
         Assert.assertNotNull(parseRes);
         Assert.assertNotNull(parseRes.getIdentifiedPart());
@@ -160,6 +171,8 @@ public class TestFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
+        Assert.assertEquals(wikiText, parseRes.getParsedString());
+        Assert.assertEquals("", parseRes.getUnparsedString());
 
         Assert.assertNotNull(parseRes);
         Assert.assertNotNull(parseRes.getIdentifiedPart());
@@ -190,6 +203,8 @@ public class TestFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
+        Assert.assertEquals(wikiText, parseRes.getParsedString());
+        Assert.assertEquals("", parseRes.getUnparsedString());
 
         Assert.assertNotNull(parseRes);
         Assert.assertNotNull(parseRes.getIdentifiedPart());
@@ -221,6 +236,8 @@ public class TestFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
+        Assert.assertEquals(wikiText, parseRes.getParsedString());
+        Assert.assertEquals("", parseRes.getUnparsedString());
 
         Assert.assertNotNull(parseRes);
         Assert.assertNotNull(parseRes.getIdentifiedPart());
@@ -251,6 +268,8 @@ public class TestFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
+        Assert.assertEquals(wikiText, parseRes.getParsedString());
+        Assert.assertEquals("", parseRes.getUnparsedString());
 
         Assert.assertNotNull(parseRes);
         Assert.assertNotNull(parseRes.getIdentifiedPart());

@@ -51,6 +51,7 @@ public class WikiFileParser extends WikiPartParser<WikiFile> {
         if (fileStartMatcher.find() && 0 == fileStartMatcher.start()) {
             parsedFile.setNamespace(fileStartMatcher.group(1));
             parsedFile.setName(fileStartMatcher.group(2));
+            initialText.append(fileStartMatcher.group(0));
 
             idx = fileStartMatcher.end();
         } else {

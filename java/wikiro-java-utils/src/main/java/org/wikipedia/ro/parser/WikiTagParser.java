@@ -10,12 +10,15 @@ import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.ro.model.WikiPart;
 import org.wikipedia.ro.model.WikiTag;
 
+import sun.swing.StringUIClientPropertyKey;
+
 public class WikiTagParser extends WikiPartParser<WikiTag> {
 
-    private List<String> validTagNames = Arrays.asList("div", "font", "table", "tr", "th", "td", "span", "br", "tt");
+    private List<String> validTagNames = Arrays.asList("div", "font", "table", "tr", "th", "td", "span", "br", "tt", "center");
 
     @Override
     public boolean startsWithMe(String wikiText) {
@@ -23,11 +26,14 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
             return false;
         }
         String tagFromTagName = trim(removeStart(wikiText, "<"));
-        return validTagNames.contains(split(tagFromTagName)[0]);
+        return validTagNames.contains(split(tagFromTagName, " \n/>")[0]);
     }
 
     @Override
     public ParseResult<WikiTag> parse(String wikiText) {
+        if (!startsWithMe(wikiText)) {
+            return null;
+        }
         // Automaton states:
         // -1 -- before starting <
         // 0 -- reading tag name
