@@ -100,9 +100,6 @@ public class PageUtils {
                 }
             }
 
-            // System.out.println(String.format("Article %s total size %d refs %d resulting size %d", eachArticle,
-            // proseSize, refmarkSize, proseSize - refmarkSize));
-
             readableSize = proseSize - refmarkSize;
         }
 

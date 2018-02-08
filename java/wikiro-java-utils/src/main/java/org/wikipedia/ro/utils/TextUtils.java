@@ -6,6 +6,10 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 public class TextUtils {
+    private TextUtils() {
+        
+    }
+    
     public static String de(final int number, final String singular, final String plural) {
         if (number == 1) {
             return singular;

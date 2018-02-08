@@ -1,9 +1,6 @@
 package org.wikipedia.ro.model;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class WikiFile extends WikiPart{
     private String fileName;

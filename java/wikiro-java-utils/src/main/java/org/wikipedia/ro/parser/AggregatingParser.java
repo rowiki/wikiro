@@ -7,7 +7,7 @@ import java.util.List;
 import org.wikipedia.ro.model.WikiPart;
 
 public class AggregatingParser {
-    public static final List<WikiPartParser<? extends WikiPart>> ALL_PARSERS =
+    protected static final List<WikiPartParser<? extends WikiPart>> ALL_PARSERS =
         Arrays.asList(new WikiLinkParser(), new WikiFileParser(), new WikiTemplateParser(),
             new WikiTableParser(), new WikiTagParser(), new WikiTextParser());
 

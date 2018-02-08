@@ -9,6 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.Wiki;
 
 public class CategoryUtils {
+    private CategoryUtils() {
+
+    }
+
     public static boolean isInCategoryTree(final String pageTitle, final Wiki wiki, final int depth, final String category) {
         String[] cats = null;
         boolean categoriesRead = false;
@@ -28,10 +32,8 @@ public class CategoryUtils {
             if (StringUtils.equals(category, substringAfter(eachCat, ":"))) {
                 return true;
             }
-            if (0 < depth) {
-                if (isInCategoryTree(eachCat, wiki, depth - 1, category)) {
-                    return true;
-                }
+            if (0 < depth && isInCategoryTree(eachCat, wiki, depth - 1, category)) {
+                return true;
             }
         }
         return false;
