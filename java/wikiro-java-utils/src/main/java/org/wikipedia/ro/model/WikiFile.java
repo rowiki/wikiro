@@ -2,6 +2,7 @@ package org.wikipedia.ro.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WikiFile extends WikiPart {
     private String name;
@@ -110,6 +111,41 @@ public class WikiFile extends WikiPart {
 
     public void setDisplayType(String displayType) {
         this.displayType = displayType;
+    }
+
+    @Override
+    public String toString() {
+        List<String> parts = new ArrayList<>();
+        parts.add(namespace + ':' + name);
+        if (null != displayType) {
+            parts.add(displayType);
+        }
+        if (null != size) {
+            parts.add(size);
+        }
+        if (null != location) {
+            parts.add(location);
+        }
+        if (null != border) {
+            parts.add(border);
+        }
+        if (null != alignment) {
+            parts.add(alignment);
+        }
+        if (null != lang) {
+            parts.add("lang=" + lang);
+        }
+        if (null != alt) {
+            parts.add("alt=" + alt);
+        }
+        if (null != link) {
+            parts.add("link=" + link);
+        }
+        for (List<WikiPart> eachCaption: captions) {
+            parts.add(eachCaption.stream().map(elem -> elem.toString()).collect(Collectors.joining()));
+        }
+        
+        return "[[" + parts.stream().map(elem -> elem.toString()).collect(Collectors.joining("|")) + "]]";
     }
 
 }
