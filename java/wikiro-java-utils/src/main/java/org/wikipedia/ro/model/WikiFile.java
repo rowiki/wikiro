@@ -145,7 +145,7 @@ public class WikiFile extends WikiPart {
             parts.add(eachCaption.stream().map(elem -> elem.toString()).collect(Collectors.joining()));
         }
         
-        return "[[" + parts.stream().map(elem -> elem.toString()).collect(Collectors.joining("|")) + "]]";
+        return parts.stream().map(elem -> elem.toString()).collect(Collectors.joining("|", "[[", "]]"));
     }
 
 }

@@ -8,7 +8,7 @@ import org.wikipedia.ro.model.WikiPart;
 
 public class AggregatingParser {
     protected static final List<WikiPartParser<? extends WikiPart>> ALL_PARSERS =
-        Arrays.asList(new WikiLinkParser(), new WikiFileParser(), new WikiTemplateParser(),
+        Arrays.asList(new WikiFileParser(), new WikiLinkParser(), new WikiTemplateParser(),
             new WikiTableParser(), new WikiTagParser(), new WikiTextParser());
 
     public List<ParseResult<? extends WikiPart>> parse(String wikiText) {
