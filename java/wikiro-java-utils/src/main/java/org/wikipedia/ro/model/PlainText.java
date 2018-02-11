@@ -1,5 +1,9 @@
 package org.wikipedia.ro.model;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 public class PlainText extends WikiPart {
     private String text;
 
@@ -24,5 +28,11 @@ public class PlainText extends WikiPart {
     public String toString() {
         return text;
     }
+
+    @Override
+    protected Collection<List<WikiPart>> getAllWikiPartCollections() {
+        return Collections.emptyList();
+    }
+
     
 }

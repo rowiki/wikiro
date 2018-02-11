@@ -1,5 +1,6 @@
 package org.wikipedia.ro.model;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,7 @@ public class WikiTag extends WikiPart {
     private String tagName;
     private boolean selfClosing;
     private boolean closing;
-    private Map<String, List<? extends WikiPart>> attributes = new LinkedHashMap<>();
+    private Map<String, List<WikiPart>> attributes = new LinkedHashMap<>();
 
     public String getTagName() {
         return tagName;
@@ -35,11 +36,11 @@ public class WikiTag extends WikiPart {
         this.closing = closing;
     }
 
-    public Map<String, List<? extends WikiPart>> getAttributes() {
+    public Map<String, List<WikiPart>> getAttributes() {
         return attributes;
     }
 
-    public void setAttribute(String k, List<? extends WikiPart> v) {
+    public void setAttribute(String k, List<WikiPart> v) {
         attributes.put(k, v);
     }
 
@@ -51,17 +52,22 @@ public class WikiTag extends WikiPart {
     public String toString() {
         StringBuilder sbuild = new StringBuilder("<");
         sbuild.append(closing ? "/" : "").append(tagName);
-        
+
         if (!attributes.isEmpty()) {
             sbuild.append(' ');
         }
-        
+
         sbuild.append(attributes.entrySet().stream()
-                .map(entry -> String.format("%s=\"%s\"", entry.getKey(),
-                    entry.getValue().stream().map(value -> value.toString()).collect(Collectors.joining())))
-                .collect(Collectors.joining(" ")))
-            .append(selfClosing ? " /" : "").append('>');
+            .map(entry -> String.format("%s=\"%s\"", entry.getKey(),
+                entry.getValue().stream().map(value -> value.toString()).collect(Collectors.joining())))
+            .collect(Collectors.joining(" "))).append(selfClosing ? " /" : "").append('>');
 
         return sbuild.toString();
     }
+
+    @Override
+    protected Collection<List<WikiPart>> getAllWikiPartCollections() {
+        return attributes.values();
+    }
+
 }

@@ -6,6 +6,7 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 public class WikiTemplate extends WikiPart {
 
     private final Map<String, String> rawParams = new LinkedHashMap<>();
-    private final Map<String, List<? extends WikiPart>> params = new LinkedHashMap<>();
+    private final Map<String, List<WikiPart>> params = new LinkedHashMap<>();
     private final Stack<String> automatonStack = new Stack<>();
     private String beforeText;
 
@@ -225,9 +226,9 @@ public class WikiTemplate extends WikiPart {
         StringBuilder sbuild = new StringBuilder("{{");
         sbuild.append(templateTitle);
 
-        List<Entry<String, List<? extends WikiPart>>> anonEntries =
+        List<Entry<String, List<WikiPart>>> anonEntries =
             params.entrySet().stream().filter(entry -> entry.getKey().matches("\\d+")).collect(Collectors.toList());
-        List<Entry<String, List<? extends WikiPart>>> namedEntries =
+        List<Entry<String, List<WikiPart>>> namedEntries =
             params.entrySet().stream().filter(entry -> !entry.getKey().matches("\\d+")).collect(Collectors.toList());
 
         int prevVal = 0;
@@ -242,9 +243,9 @@ public class WikiTemplate extends WikiPart {
 
         final int finalGap = gap;
         if (0 < finalGap) {
-            List<Entry<String, List<? extends WikiPart>>> namedAnonEntries = anonEntries.stream()
+            List<Entry<String, List<WikiPart>>> namedAnonEntries = anonEntries.stream()
                 .filter(entry -> finalGap < Integer.parseInt(entry.getKey())).collect(Collectors.toList());
-            List<Entry<String, List<? extends WikiPart>>> newNamedEntries = new ArrayList<>();
+            List<Entry<String, List<WikiPart>>> newNamedEntries = new ArrayList<>();
             newNamedEntries.addAll(namedAnonEntries);
             newNamedEntries.addAll(namedEntries);
             namedEntries = newNamedEntries;
@@ -272,5 +273,10 @@ public class WikiTemplate extends WikiPart {
 
     public void setLength(int i) {
         this.templateLength = i;
+    }
+
+    @Override
+    protected Collection<List<WikiPart>> getAllWikiPartCollections() {
+        return this.params.values();
     }
 }

@@ -1,6 +1,7 @@
 package org.wikipedia.ro.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -149,6 +150,11 @@ public class WikiFile extends WikiPart {
         }
         
         return parts.stream().map(elem -> elem.toString()).collect(Collectors.joining("|", "[[", "]]"));
+    }
+
+    @Override
+    protected Collection<List<WikiPart>> getAllWikiPartCollections() {
+        return captions;
     }
 
 }

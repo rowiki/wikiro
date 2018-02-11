@@ -20,4 +20,5 @@ public class WikiTable extends WikiTableElement {
         return builder.toString();
     }
 
+
 }

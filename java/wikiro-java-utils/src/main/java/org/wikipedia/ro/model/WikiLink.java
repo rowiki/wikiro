@@ -2,13 +2,14 @@ package org.wikipedia.ro.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WikiLink extends WikiPart {
     private String target = null;
-    private List<? extends WikiPart> labelStructure = new ArrayList<>();
+    private List<WikiPart> labelStructure = new ArrayList<>();
 
     public WikiLink() {
         super();
@@ -46,7 +47,7 @@ public class WikiLink extends WikiPart {
         return labelStructure;
     }
 
-    public void setLabelStructure(List<? extends WikiPart> labelStructure) {
+    public void setLabelStructure(List<WikiPart> labelStructure) {
         this.labelStructure = labelStructure;
     }
 
@@ -77,4 +78,10 @@ public class WikiLink extends WikiPart {
         sbuild.append("]]");
         return sbuild.toString();
     }
+
+    @Override
+    protected Collection<List<WikiPart>> getAllWikiPartCollections() {
+        return Arrays.asList(labelStructure);
+    }
+
 }

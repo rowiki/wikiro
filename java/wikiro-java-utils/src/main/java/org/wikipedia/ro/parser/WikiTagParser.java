@@ -10,11 +10,8 @@ import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.ro.model.WikiPart;
 import org.wikipedia.ro.model.WikiTag;
-
-import sun.swing.StringUIClientPropertyKey;
 
 public class WikiTagParser extends WikiPartParser<WikiTag> {
 

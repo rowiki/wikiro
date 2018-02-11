@@ -1,13 +1,9 @@
 package org.wikipedia.ro.parser;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.wikipedia.ro.model.PlainText;
 import org.wikipedia.ro.model.WikiLink;
-import org.wikipedia.ro.model.WikiPart;
 
 public class TestWikiLinkParser {
 

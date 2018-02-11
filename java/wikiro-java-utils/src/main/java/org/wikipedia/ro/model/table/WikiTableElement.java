@@ -1,6 +1,8 @@
 package org.wikipedia.ro.model.table;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,12 +36,21 @@ public abstract class WikiTableElement extends WikiPart {
         this.subParts.add(subPart);
     }
 
+    public void removeSubPart(int idx) {
+        this.subParts.remove(idx);
+    }
+    
     public List<WikiPart> getAttribs() {
         return attribs;
     }
 
     public void setAttribs(List<WikiPart> attribs) {
         this.attribs = attribs;
+    }
+
+    @Override
+    protected Collection<List<WikiPart>> getAllWikiPartCollections() {
+        return Arrays.asList(attribs, subParts);
     }
 
 }
