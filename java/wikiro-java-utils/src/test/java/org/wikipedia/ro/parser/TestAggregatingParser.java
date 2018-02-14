@@ -16,7 +16,7 @@ public class TestAggregatingParser {
 
         AggregatingParser sut = new AggregatingParser();
 
-        List<ParseResult<? extends WikiPart>> parseRes = sut.parse(wikiText);
+        List<ParseResult<WikiPart>> parseRes = sut.parse(wikiText);
 
         Assert.assertNotNull(parseRes);
         Assert.assertEquals(1, parseRes.size());
@@ -32,16 +32,16 @@ public class TestAggregatingParser {
 
         AggregatingParser sut = new AggregatingParser();
 
-        List<ParseResult<? extends WikiPart>> parseRes = sut.parse(wikiText);
+        List<ParseResult<WikiPart>> parseRes = sut.parse(wikiText);
 
         Assert.assertNotNull(parseRes);
         Assert.assertEquals(2, parseRes.size());
-        ParseResult<? extends WikiPart> firstResult = parseRes.get(0);
+        ParseResult<WikiPart> firstResult = parseRes.get(0);
         Assert.assertTrue(firstResult.getIdentifiedPart() instanceof WikiLink);
         WikiLink link = (WikiLink) firstResult.getIdentifiedPart();
         Assert.assertEquals("link", link.getTarget());
 
-        ParseResult<? extends WikiPart> secondResult = parseRes.get(1);
+        ParseResult<WikiPart> secondResult = parseRes.get(1);
         Assert.assertTrue(secondResult.getIdentifiedPart() instanceof PlainText);
         PlainText plainText = (PlainText) secondResult.getIdentifiedPart();
         Assert.assertEquals(" and text", plainText.getText());

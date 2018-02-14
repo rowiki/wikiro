@@ -55,7 +55,7 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                 break;
             case STATE_READING_ATTRIB:
                 if (crtChar == '\n') {
-                    List<ParseResult<? extends WikiPart>> parsedAttribParts =
+                    List<ParseResult<WikiPart>> parsedAttribParts =
                         new AggregatingParser().parse(partTextBuilder.toString());
                     parsedTable.setAttribs(parsedAttribParts.stream().map(parseRes -> parseRes.getIdentifiedPart())
                         .collect(Collectors.toList()));

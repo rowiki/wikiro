@@ -84,7 +84,7 @@ public class WikiLinkParser extends WikiPartParser<WikiLink> {
 
         if (labelPresent) {
             AggregatingParser labelParser = new AggregatingParser();
-            List<ParseResult<? extends WikiPart>> labelParts = labelParser.parse(labelBuilder.toString());
+            List<ParseResult<WikiPart>> labelParts = labelParser.parse(labelBuilder.toString());
             identifiedLink
                 .setLabelStructure(labelParts.stream().map(ParseResult::getIdentifiedPart).collect(Collectors.toList()));
         }

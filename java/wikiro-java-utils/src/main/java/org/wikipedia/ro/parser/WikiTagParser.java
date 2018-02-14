@@ -99,7 +99,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                     if (!attrValueBracketing.isEmpty() && String.valueOf(crtChar).equals(attrValueBracketing.peek())) {
                         state = 2;
                         AggregatingParser attrValueParser = new AggregatingParser();
-                        List<ParseResult<? extends WikiPart>> parsedValues =
+                        List<ParseResult<WikiPart>> parsedValues =
                             attrValueParser.parse(attrValueBuilder.toString());
                         tagUC.setAttribute(attrNameBuilder.toString().trim(),
                             parsedValues.stream().map(ParseResult::getIdentifiedPart).collect(Collectors.toList()));
