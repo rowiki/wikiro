@@ -3,6 +3,7 @@ package org.wikipedia.ro.model;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.security.auth.login.LoginException;
@@ -118,5 +119,19 @@ public class WikiPage {
             eachOp.execute();
         }
         return this;
+    }
+    
+    public List<PartContext> search(Predicate<WikiPart> predicate) {
+        List<PartContext> ret = new ArrayList<>();
+        for (WikiPart eachDirectPart: parts) {
+            if (predicate.test(eachDirectPart)) {
+                PartContext res = new PartContext(eachDirectPart);
+                res.setPage(this);
+                res.setParentPart(null);
+                res.setSiblings(parts);
+            }
+            ret.addAll(eachDirectPart.search(predicate));
+        }
+        return ret;
     }
 }
