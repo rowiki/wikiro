@@ -32,7 +32,10 @@ public class OpChain extends Op {
             return;
         }
         StringBuilder sbuild = new StringBuilder();
-        boolean appendSummary = true;
+        boolean appendSummary = null == this.summary;
+        if (appendSummary) {
+            this.summary = "";
+        }
         for (Op eachOp: ops) {
             String eachSummary = eachOp.getSummary();
             try {
