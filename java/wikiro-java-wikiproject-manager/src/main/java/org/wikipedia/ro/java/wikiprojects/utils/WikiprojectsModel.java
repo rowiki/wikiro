@@ -20,6 +20,8 @@ public class WikiprojectsModel {
     private String qualClass;
     private Map<String, String> projectsImportance = new LinkedHashMap<String, String>();
     private boolean livingPerson;
+    
+    private boolean livingPersonRo = false;
 
     private static final Pattern moreProjectsFinderPattern =
         Pattern.compile("\\{\\{\\s*[Pp]roiecte multiple\\s*(\\|([^\\}]*))*\\}\\}", Pattern.DOTALL);
@@ -117,8 +119,9 @@ public class WikiprojectsModel {
                     case "clasament":
                         model.setQualClass(argsMatcher.group(2).trim());
                         break;
-                    case "living":
                     case "în viață":
+                        model.livingPersonRo = true;
+                    case "living":
                         model.setLivingPerson(Arrays.asList("da", "yes").contains(argsMatcher.group(2).trim()));
                         break;
                     case "importanță":
@@ -143,7 +146,7 @@ public class WikiprojectsModel {
             for (Map.Entry<String, String> theEntry : projectsImportance.entrySet()) {
                 sbuild.append("Proiect ").append(theEntry.getKey());
                 if (livingPerson) {
-                    sbuild.append("\n| living = yes");
+                    sbuild.append(livingPersonRo ? "\n| în viață = da" : "\n| living = yes");
                 }
                 sbuild.append("\n| clasament = ").append(null != qualClass ? qualClass : "");
                 sbuild.append("\n| importanță = ").append(theEntry.getValue());
@@ -151,7 +154,7 @@ public class WikiprojectsModel {
         } else {
             sbuild.append("Proiecte multiple");
             if (livingPerson) {
-                sbuild.append("\n| living = yes");
+                sbuild.append(livingPersonRo ? "\n| în viață = da" : "\n| living = yes");
             }
             if (null != qualClass) {
                 sbuild.append("\n| clasament = ").append(null != qualClass ? qualClass : "");
