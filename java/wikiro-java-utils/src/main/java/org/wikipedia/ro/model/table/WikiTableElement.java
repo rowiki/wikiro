@@ -10,8 +10,8 @@ import org.wikipedia.ro.model.WikiPart;
 
 public abstract class WikiTableElement extends WikiPart {
 
-    protected List<WikiPart> subParts;
-    protected List<WikiPart> attribs;
+    protected List<WikiPart> subParts = new ArrayList<>();
+    protected List<WikiPart> attribs = new ArrayList<>();
 
     public List<WikiPart> getSubParts() {
         return Collections.unmodifiableList(subParts);
