@@ -218,7 +218,7 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                     workingElemBuilder.append(thisAndNextChar);
                 } else {
                     if ('"' == crtChar) {
-                        if ("\"".equals(bracketStack.peek())) {
+                        if (!bracketStack.isEmpty() && "\"".equals(bracketStack.peek())) {
                             bracketStack.pop();
                         } else {
                             bracketStack.push("\"");
