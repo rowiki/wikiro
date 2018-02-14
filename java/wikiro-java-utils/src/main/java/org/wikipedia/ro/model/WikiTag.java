@@ -1,6 +1,7 @@
 package org.wikipedia.ro.model;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,36 +17,46 @@ public class WikiTag extends WikiPart {
         return tagName;
     }
 
-    public void setTagName(String tagName) {
+    public WikiTag setTagName(String tagName) {
         this.tagName = tagName;
+        return this;
     }
 
     public boolean isSelfClosing() {
         return selfClosing;
     }
 
-    public void setSelfClosing(boolean selfClosing) {
+    public WikiTag setSelfClosing(boolean selfClosing) {
         this.selfClosing = selfClosing;
+        return this;
     }
 
     public boolean isClosing() {
         return closing;
     }
 
-    public void setClosing(boolean closing) {
+    public WikiTag setClosing(boolean closing) {
         this.closing = closing;
+        return this;
     }
 
     public Map<String, List<WikiPart>> getAttributes() {
         return attributes;
     }
-
-    public void setAttribute(String k, List<WikiPart> v) {
-        attributes.put(k, v);
+    
+    public WikiTag clearAttributes() {
+        this.attributes = new HashMap<>();
+        return this;
     }
 
-    public void removeAttribute(String k) {
+    public WikiTag setAttribute(String k, List<WikiPart> v) {
+        attributes.put(k, v);
+        return this;
+    }
+
+    public WikiTag removeAttribute(String k) {
         attributes.remove(k);
+        return this;
     }
 
     @Override
