@@ -7,21 +7,21 @@ import java.util.List;
 import org.wikipedia.ro.model.WikiPart;
 
 public class AggregatingParser {
-    protected static final List<WikiPartParser<? extends WikiPart>> ALL_PARSERS =
+    protected static final List<WikiPartParser> ALL_PARSERS =
         Arrays.asList(new WikiFileParser(), new WikiLinkParser(), new WikiTemplateParser(),
             new WikiTableParser(), new WikiTagParser(), new WikiTextParser());
 
-    public List<ParseResult<? extends WikiPart>> parse(String wikiText) {
+    public List<ParseResult<WikiPart>> parse(String wikiText) {
         if (null == wikiText) {
             return null;
         }
 
-        List<ParseResult<? extends WikiPart>> resultList = new ArrayList<ParseResult<? extends WikiPart>>();
-        ParseResult<? extends WikiPart> parseResult = null;
+        List<ParseResult<WikiPart>> resultList = new ArrayList<ParseResult<WikiPart>>();
+        ParseResult<WikiPart> parseResult = null;
         String toParse = wikiText;
         while (null != toParse
             && 0 < toParse.length()) {
-            for (WikiPartParser<? extends WikiPart> eachParser : ALL_PARSERS) {
+            for (WikiPartParser<WikiPart> eachParser : ALL_PARSERS) {
                 if (eachParser.startsWithMe(toParse)) {
                     parseResult = eachParser.parse(toParse);
                     if (null != parseResult) {
