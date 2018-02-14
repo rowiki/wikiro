@@ -15,7 +15,7 @@ import org.wikipedia.ro.model.WikiFile;
 public class WikiFileParser extends WikiPartParser<WikiFile> {
 
     private static final Pattern FILE_START_MATCHER =
-        Pattern.compile("\\[\\[([Ff]ișier|[Ff]ile|[Mm]edia|[Ii]mage|[Ii]magine):([^\\|\\]]+)");
+        Pattern.compile("\\[\\[([Ff]i[șş]ier|[Ff]ile|[Mm]edia|[Ii]mage|[Ii]magine):([^\\|\\]]+)");
     private static final Pattern PIXELING_MATCHER = Pattern.compile("(\\d+)?x?(\\d+)?(px)?");
 
     public boolean startsWithMe(String s) {
