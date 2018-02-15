@@ -116,4 +116,20 @@ public class TestWikiTagParser {
         Assert.assertFalse(parseRes.getIdentifiedPart().isSelfClosing());
     }
 
+    @Test
+    public void testTagWithParamsWithoutQuotes() {
+        String wikiText = "<font color=white>Out of tag";
+        
+        WikiTagParser sut = new WikiTagParser();
+        ParseResult<WikiTag> parseRes = sut.parse(wikiText);
+
+        Assert.assertEquals("<font color=white>", parseRes.getParsedString());
+        Assert.assertEquals("Out of tag", parseRes.getUnparsedString());
+        
+        WikiTag tag = parseRes.getIdentifiedPart();
+        Assert.assertEquals("font", tag.getTagName());
+        Assert.assertEquals(1, tag.getAttributes().size());
+        Assert.assertNotNull(tag.getAttributes().get("color"));
+        Assert.assertEquals("white", tag.getAttributes().get("color").stream().map(Object::toString).collect(Collectors.joining()));
+    }
 }

@@ -15,7 +15,8 @@ import org.wikipedia.ro.model.WikiTag;
 
 public class WikiTagParser extends WikiPartParser<WikiTag> {
 
-    private List<String> validTagNames = Arrays.asList("div", "font", "table", "tr", "th", "td", "span", "br", "tt", "center");
+    private List<String> validTagNames =
+        Arrays.asList("div", "font", "table", "tr", "th", "td", "span", "br", "tt", "center");
 
     @Override
     public boolean startsWithMe(String wikiText) {
@@ -99,8 +100,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                     if (!attrValueBracketing.isEmpty() && String.valueOf(crtChar).equals(attrValueBracketing.peek())) {
                         state = 2;
                         AggregatingParser attrValueParser = new AggregatingParser();
-                        List<ParseResult<WikiPart>> parsedValues =
-                            attrValueParser.parse(attrValueBuilder.toString());
+                        List<ParseResult<WikiPart>> parsedValues = attrValueParser.parse(attrValueBuilder.toString());
                         tagUC.setAttribute(attrNameBuilder.toString().trim(),
                             parsedValues.stream().map(ParseResult::getIdentifiedPart).collect(Collectors.toList()));
                         attrNameBuilder.setLength(0);
@@ -112,6 +112,18 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                         isPartOfAttrName = false;
                     } else if (attrValueBracketing.isEmpty() && 0 != attrValueBuilder.length()) {
                         return null;
+                    }
+                }
+                if ((Character.isWhitespace(crtChar) || '>' == crtChar) && attrValueBracketing.isEmpty() && 0 < attrValueBuilder.length()) {
+                    AggregatingParser attrValueParser = new AggregatingParser();
+                    List<ParseResult<WikiPart>> parsedValues = attrValueParser.parse(attrValueBuilder.toString());
+                    tagUC.setAttribute(attrNameBuilder.toString().trim(),
+                        parsedValues.stream().map(ParseResult::getIdentifiedPart).collect(Collectors.toList()));
+                    attrNameBuilder.setLength(0);
+                    attrValueBuilder.setLength(0);
+                    isPartOfAttrName = false;
+                    if ('>' == crtChar) {
+                        isFinishedReading = true;
                     }
                 }
                 if (isPartOfAttrName) {
