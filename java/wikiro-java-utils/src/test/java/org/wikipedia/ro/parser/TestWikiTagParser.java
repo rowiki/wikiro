@@ -63,7 +63,7 @@ public class TestWikiTagParser {
         Assert.assertFalse(parseRes.getIdentifiedPart().isClosing());
         Assert.assertTrue(parseRes.getIdentifiedPart().isSelfClosing());
     }
-    
+
     @Test
     public void testTagNoClosingWithText() {
         String wikiText = "<test key='val'>and another thing";
@@ -98,8 +98,8 @@ public class TestWikiTagParser {
         Assert.assertEquals("span", parseRes.getIdentifiedPart().getTagName());
         Assert.assertEquals(1, parseRes.getIdentifiedPart().getAttributes().size());
         Assert.assertEquals(2, parseRes.getIdentifiedPart().getAttributes().get("lang").size());
-        Assert.assertEquals("en_{{Abbreviation|country=USA}}", parseRes.getIdentifiedPart().getAttributes().get("lang").stream().map(Object::toString)
-            .collect(Collectors.joining("")));
+        Assert.assertEquals("en_{{Abbreviation|country=USA}}", parseRes.getIdentifiedPart().getAttributes().get("lang")
+            .stream().map(Object::toString).collect(Collectors.joining("")));
         Assert.assertTrue(parseRes.getIdentifiedPart().getAttributes().get("lang").get(0) instanceof PlainText);
         Assert.assertEquals("en_", ((PlainText) parseRes.getIdentifiedPart().getAttributes().get("lang").get(0)).getText());
 
@@ -110,8 +110,7 @@ public class TestWikiTagParser {
         Assert.assertNotNull(tmpl.getParam("country"));
         Assert.assertEquals(1, tmpl.getParam("country").size());
         Assert.assertEquals("USA", tmpl.getParam("country").get(0).toString());
-        
-        
+
         Assert.assertFalse(parseRes.getIdentifiedPart().isClosing());
         Assert.assertFalse(parseRes.getIdentifiedPart().isSelfClosing());
     }
@@ -119,17 +118,36 @@ public class TestWikiTagParser {
     @Test
     public void testTagWithParamsWithoutQuotes() {
         String wikiText = "<font color=white>Out of tag";
-        
+
         WikiTagParser sut = new WikiTagParser();
         ParseResult<WikiTag> parseRes = sut.parse(wikiText);
 
         Assert.assertEquals("<font color=white>", parseRes.getParsedString());
         Assert.assertEquals("Out of tag", parseRes.getUnparsedString());
-        
+
         WikiTag tag = parseRes.getIdentifiedPart();
         Assert.assertEquals("font", tag.getTagName());
         Assert.assertEquals(1, tag.getAttributes().size());
         Assert.assertNotNull(tag.getAttributes().get("color"));
-        Assert.assertEquals("white", tag.getAttributes().get("color").stream().map(Object::toString).collect(Collectors.joining()));
+        Assert.assertEquals("white",
+            tag.getAttributes().get("color").stream().map(Object::toString).collect(Collectors.joining()));
+    }
+
+    @Test
+    public void testTagWithSpacesInAttr() {
+        String wikiText =
+            "<div class=\"NavHead\" style=\"background-color:#025ad0;border:1px solid #000000;padding: 0px 0px 0px 4px; font-size: 100%; text-align:left;margin:0px;color:#330000\">";
+
+        WikiTagParser sut = new WikiTagParser();
+        ParseResult<WikiTag> parseRes = sut.parse(wikiText);
+
+        WikiTag tag = parseRes.getIdentifiedPart();
+        Assert.assertEquals("div", tag.getTagName());
+        Assert.assertEquals("NavHead",
+            tag.getAttributes().get("class").stream().map(Object::toString).collect(Collectors.joining()));
+        Assert.assertEquals(
+            "background-color:#025ad0;border:1px solid #000000;padding: 0px 0px 0px 4px; font-size: 100%; text-align:left;margin:0px;color:#330000",
+            tag.getAttributes().get("style").stream().map(Object::toString).collect(Collectors.joining()));
+
     }
 }

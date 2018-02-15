@@ -127,9 +127,6 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                     }
                 }
                 if (isPartOfAttrName) {
-                    if (!Character.isWhitespace(crtChar)) {
-                        attrValueBuilder.append(crtChar);
-                    }
                     if (Character.isWhitespace(crtChar) && attrValueBracketing.isEmpty() && 0 < attrNameBuilder.length()) {
                         tagUC.setAttribute(attrNameBuilder.toString().trim(),
                             new AggregatingParser().parse(attrValueBuilder.toString()).stream()
@@ -137,6 +134,8 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                         state = 2;
                         attrNameBuilder.setLength(0);
                         attrValueBuilder.setLength(0);
+                    } else {
+                        attrValueBuilder.append(crtChar);
                     }
                 }
                 break;
