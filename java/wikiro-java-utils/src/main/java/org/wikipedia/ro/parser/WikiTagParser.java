@@ -1,5 +1,6 @@
 package org.wikipedia.ro.parser;
 
+import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 import static org.apache.commons.lang3.StringUtils.split;
 import static org.apache.commons.lang3.StringUtils.trim;
@@ -18,13 +19,18 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
     private List<String> validTagNames = Arrays.asList("div", "font", "table", "tr", "th", "td", "span", "br", "tt",
         "center", "ref", "noinclude", "includeonly", "pre", "references", "small", "b", "i", "big");
 
+    private static final int STATE_INITIAL = -1;
+    private static final int STATE_READING_TAG_NAME = 0;
+    private static final int STATE_READING_ATTRIB_NAME = 2;
+    private static final int STATE_READING_ATTRIB_VALUE = 4;
+    private static final int STATE_READING_END_OF_TAG = 6;
     @Override
     public boolean startsWithMe(String wikiText) {
         if (null == wikiText || !wikiText.startsWith("<")) {
             return false;
         }
         String tagFromTagName = trim(removeStart(wikiText, "<"));
-        return validTagNames.contains(split(tagFromTagName, " \n/>")[0]);
+        return validTagNames.contains(lowerCase(split(tagFromTagName, " \n/>")[0]));
     }
 
     @Override
@@ -49,7 +55,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
         boolean isFinishedReading = false;
 
         int idx = 0;
-        int state = -1;
+        int state = STATE_INITIAL;
         while (!isFinishedReading && idx < wikiText.length()) {
             char crtChar = wikiText.charAt(idx);
             switch (state) {
@@ -60,10 +66,10 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                 break;
             case 0:
                 if (Character.isWhitespace(crtChar) && 0 < tagNameBuilder.length()) {
-                    state = 2;
-                    tagUC.setTagName(tagNameBuilder.toString().trim());
+                    state = STATE_READING_ATTRIB_NAME;
+                    tagUC.setTagName(tagNameBuilder.toString().trim().toLowerCase());
                 } else if ('/' == crtChar && 0 < tagNameBuilder.length()) {
-                    state = 6;
+                    state = STATE_READING_END_OF_TAG;
                     tagUC.setTagName(tagNameBuilder.toString().trim());
                     tagUC.setSelfClosing(true);
                 } else if ('/' == crtChar && 0 == tagNameBuilder.length()) {
@@ -79,14 +85,14 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                 if (!Character.isWhitespace(crtChar) && !"=/>".contains(String.valueOf(crtChar))) {
                     attrNameBuilder.append(crtChar);
                 } else if ('=' == crtChar && 0 < attrNameBuilder.length()) {
-                    state = 4;
+                    state = STATE_READING_ATTRIB_VALUE;
                 } else if ('/' == crtChar && 0 < attrNameBuilder.length()) {
                     tagUC.setAttribute(attrNameBuilder.toString().trim(), new ArrayList<WikiPart>());
                     tagUC.setSelfClosing(true);
-                    state = 6;
+                    state = STATE_READING_END_OF_TAG;
                 } else if ('/' == crtChar && 0 == attrNameBuilder.length()) {
                     tagUC.setSelfClosing(true);
-                    state = 6;
+                    state = STATE_READING_END_OF_TAG;
                 } else if ('>' == crtChar && 0 < attrNameBuilder.length()) {
                     isFinishedReading = true;
                     tagUC.setAttribute(attrNameBuilder.toString().trim(), new ArrayList<WikiPart>());
@@ -98,7 +104,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                 boolean isPartOfAttrName = true;
                 if ('\'' == crtChar || '"' == crtChar) {
                     if (!attrValueBracketing.isEmpty() && String.valueOf(crtChar).equals(attrValueBracketing.peek())) {
-                        state = 2;
+                        state = STATE_READING_ATTRIB_NAME;
                         AggregatingParser attrValueParser = new AggregatingParser();
                         List<ParseResult<WikiPart>> parsedValues = attrValueParser.parse(attrValueBuilder.toString());
                         tagUC.setAttribute(attrNameBuilder.toString().trim(),
@@ -125,6 +131,8 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                     isPartOfAttrName = false;
                     if ('>' == crtChar) {
                         isFinishedReading = true;
+                    } else {
+                        state = STATE_READING_ATTRIB_NAME;
                     }
                 }
                 if (isPartOfAttrName) {
@@ -132,7 +140,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                         tagUC.setAttribute(attrNameBuilder.toString().trim(),
                             new AggregatingParser().parse(attrValueBuilder.toString()).stream()
                                 .map(ParseResult::getIdentifiedPart).collect(Collectors.toList()));
-                        state = 2;
+                        state = STATE_READING_ATTRIB_NAME;
                         attrNameBuilder.setLength(0);
                         attrValueBuilder.setLength(0);
                     } else {
@@ -140,7 +148,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                     }
                 }
                 break;
-            case 6:
+            case STATE_READING_END_OF_TAG:
                 if ('>' != crtChar) {
                     return null;
                 }
