@@ -28,7 +28,7 @@ public class OpChain extends Op {
     }
     
     public void changePageStructure() {
-        if (0 == ops.size()) {
+        if (ops.isEmpty()) {
             return;
         }
         StringBuilder sbuild = new StringBuilder();
