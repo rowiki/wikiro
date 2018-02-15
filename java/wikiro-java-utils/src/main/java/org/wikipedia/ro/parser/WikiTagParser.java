@@ -15,8 +15,8 @@ import org.wikipedia.ro.model.WikiTag;
 
 public class WikiTagParser extends WikiPartParser<WikiTag> {
 
-    private List<String> validTagNames =
-        Arrays.asList("div", "font", "table", "tr", "th", "td", "span", "br", "tt", "center");
+    private List<String> validTagNames = Arrays.asList("div", "font", "table", "tr", "th", "td", "span", "br", "tt",
+        "center", "ref", "noinclude", "includeonly", "pre", "references");
 
     @Override
     public boolean startsWithMe(String wikiText) {
@@ -114,7 +114,8 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                         return null;
                     }
                 }
-                if ((Character.isWhitespace(crtChar) || '>' == crtChar) && attrValueBracketing.isEmpty() && 0 < attrValueBuilder.length()) {
+                if ((Character.isWhitespace(crtChar) || '>' == crtChar) && attrValueBracketing.isEmpty()
+                    && 0 < attrValueBuilder.length()) {
                     AggregatingParser attrValueParser = new AggregatingParser();
                     List<ParseResult<WikiPart>> parsedValues = attrValueParser.parse(attrValueBuilder.toString());
                     tagUC.setAttribute(attrNameBuilder.toString().trim(),
