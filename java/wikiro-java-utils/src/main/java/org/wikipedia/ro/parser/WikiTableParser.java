@@ -264,11 +264,13 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                 } else if (Arrays.asList("{{", "[[", "{|").contains(thisAndNextChar)) {
                     nextIncrement = 2;
                     bracketStack.push(thisAndNextChar);
+                    workingElemBuilder.append(thisAndNextChar);
                 } else if ("}}".equals(thisAndNextChar) && !bracketStack.isEmpty() && "{{".equals(bracketStack.peek())
                     || "]]".equals(thisAndNextChar) && !bracketStack.isEmpty() && "[[".equals(bracketStack.peek())
                     || "|}".equals(thisAndNextChar) && !bracketStack.isEmpty() && "|}".equals(bracketStack.peek())) {
                     nextIncrement = 2;
                     bracketStack.pop();
+                    workingElemBuilder.append(thisAndNextChar);
                 } else {
                     workingElemBuilder.append(crtChar);
                 }

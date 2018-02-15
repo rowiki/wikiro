@@ -1,11 +1,13 @@
 package org.wikipedia.ro.parser;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.wikipedia.ro.model.PartContext;
 import org.wikipedia.ro.model.PlainText;
+import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiPart;
 import org.wikipedia.ro.model.table.WikiTable;
 import org.wikipedia.ro.model.table.WikiTableCell;
@@ -236,127 +238,36 @@ public class TestWikiTableParser {
             cell1.search(part -> part instanceof PlainText && ((PlainText) part).getText().contains("EMINESCU"));
         Assert.assertEquals(1, eminescuSearchRes.size());
     }
-    
+
     @Test
     public void testWikiTableFromActualArticlePatriciaArquette() {
-        String tableText = "{| class=\"wikitable\"\n" + 
-            "! Anul ||Titlul || Rolul \n" + 
-            "|-\n" + 
-            "| 1986\n" + 
-            "| ''Pretty Smart''\n" + 
-            "| Zero\n" + 
-            "|-\n" + 
-            "| 1987\n" + 
-            "| ''[[A Nightmare on Elm Street 3: Dream Warriors]]''\n" + 
-            "| [[Kristen Parker]]\n" + 
-            "|-\n" + 
-            "| 1988\n" + 
-            "| ''Far North''\n" + 
-            "| Jilly\n" + 
-            "|-\n" + 
-            "| 1990\n" + 
-            "| ''[[Prayer of the Rollerboys]]''\n" + 
-            "| Casey\n" + 
-            "|-\n" + 
-            "| 1991\n" + 
-            "| ''[[The Indian Runner]]''\n" + 
-            "| Dorothy\n" + 
-            "|-\n" + 
-            "| 1991\n" + 
-            "| ''[[The Wild Flower]]''\n" + 
-            "|-\n" + 
-            "|rowspan=\"2\"| 1992\n" + 
-            "| ''Trouble Bound''\n" + 
-            "| Kit Califano\n" + 
-            "|-\n" + 
-            "| ''[[Inside Monkey Zetterland]]''\n" + 
-            "| Grace Zetterland\n" + 
-            "|-\n" + 
-            "| 1993\n" + 
-            "| ''[[True Romance]]''\n" + 
-            "| Alabama Whitman\n" + 
-            "|-\n" + 
-            "| 1994\n" + 
-            "|''[[Ed Wood(film)]]''\n" + 
-            "| Kathy O'Hara\n" + 
-            "|-\n" + 
-            "| 1994\n" + 
-            "| [[Holy Matrimony]]\n" + 
-            "| Havana\n" + 
-            "|-\n" + 
-            "| 1995\n" + 
-            "| ''[[Beyond Rangoon]]''\n" + 
-            "| Laura Bowman\n" + 
-            "|-\n" + 
-            "|rowspan=\"2\"| 1996\n" + 
-            "| ''[[Flirting with Disaster]]''\n" + 
-            "| Nancy\n" + 
-            "|-\n" + 
-            "| ''[[Infinity (film)|Infinity]]''\n" + 
-            "| Arline Greenbaum\n" + 
-            "|-\n" + 
-            "|rowspan=\"2\"| 1997\n" + 
-            "| ''[[Lost Highway]]''\n" + 
-            "| Renee Madison/Alice Wakefield\n" + 
-            "|-\n" + 
-            "| ''[[Nightwatch (1997 film)|Nightwatch]]''\n" + 
-            "| Katherine\n" + 
-            "|-\n" + 
-            "| 1998\n" + 
-            "| ''The Hi-Lo Country''\n" + 
-            "| Mona Birk\n" + 
-            "|-\n" + 
-            "|rowspan=\"3\"| 1999\n" + 
-            "| ''[[Bringing Out the Dead]]''\n" + 
-            "| Mary Burke\n" + 
-            "|-\n" + 
-            "| ''[[Goodbye Lover]]''\n" + 
-            "| Sandra Dunmore\n" + 
-            "|-\n" + 
-            "| ''[[Stigmata (film)|Stigmata]]''\n" + 
-            "| Frankie Paige\n" + 
-            "|-\n" + 
-            "| 2000\n" + 
-            "| ''[[Little Nicky (film)|Little Nicky]]''\n" + 
-            "| Valerie Veran\n" + 
-            "|-\n" + 
-            "| 2001\n" + 
-            "| ''[[Human Nature (film)|Human Nature]]''\n" + 
-            "| Lila Jute\n" + 
-            "|-\n" + 
-            "|rowspan=\"2\"| 2002\n" + 
-            "| ''[[The Badge]]''\n" + 
-            "| Scarlet\n" + 
-            "|-\n" + 
-            "|''[[Searching for Debra Winger]]''\n" + 
-            "| Herself\n" + 
-            "|-\n" + 
-            "|rowspan=\"4\"| 2003\n" + 
-            "| ''Deeper Than Deep''\n" + 
-            "| Linda Lovelace\n" + 
-            "|-\n" + 
-            "| ''[[Tiptoes]]''\n" + 
-            "| Lucy\n" + 
-            "|-\n" + 
-            "| ''[[Holes (film)|Holes]]''\n" + 
-            "| Miss Katherine 'Kissin' Kate' Barlow\n" + 
-            "|-\n" + 
-            "| ''[[Abby Singer (film)|Abby Singer]]''\n" + 
-            "| Cameo\n" + 
-            "|-\n" + 
-            "| 2005\n" + 
-            "| ''[[Medium (TV series)|Medium]]'' ([[television program|TV series]])\n" + 
-            "| Allison DuBois\n" + 
-            "|-\n" + 
-            "| 2006\n" + 
-            "| ''[[Fast Food Nation (film)|Fast Food Nation]]''\n" + 
-            "| Cindy\n" + 
-            "|-\n" + 
-            "| 2013\n" + 
-            "| ''[[Boyhood (film)|Boyhood]]''\n" + 
-            "|\n" + 
-            "|}";
-        
+        String tableText = "{| class=\"wikitable\"\n" + "! Anul ||Titlul || Rolul \n" + "|-\n" + "| 1986\n"
+            + "| ''Pretty Smart''\n" + "| Zero\n" + "|-\n" + "| 1987\n"
+            + "| ''[[A Nightmare on Elm Street 3: Dream Warriors]]''\n" + "| [[Kristen Parker]]\n" + "|-\n" + "| 1988\n"
+            + "| ''Far North''\n" + "| Jilly\n" + "|-\n" + "| 1990\n" + "| ''[[Prayer of the Rollerboys]]''\n" + "| Casey\n"
+            + "|-\n" + "| 1991\n" + "| ''[[The Indian Runner]]''\n" + "| Dorothy\n" + "|-\n" + "| 1991\n"
+            + "| ''[[The Wild Flower]]''\n" + "|-\n" + "|rowspan=\"2\"| 1992\n" + "| ''Trouble Bound''\n"
+            + "| Kit Califano\n" + "|-\n" + "| ''[[Inside Monkey Zetterland]]''\n" + "| Grace Zetterland\n" + "|-\n"
+            + "| 1993\n" + "| ''[[True Romance]]''\n" + "| Alabama Whitman\n" + "|-\n" + "| 1994\n"
+            + "|''[[Ed Wood(film)]]''\n" + "| Kathy O'Hara\n" + "|-\n" + "| 1994\n" + "| [[Holy Matrimony]]\n" + "| Havana\n"
+            + "|-\n" + "| 1995\n" + "| ''[[Beyond Rangoon]]''\n" + "| Laura Bowman\n" + "|-\n" + "|rowspan=\"2\"| 1996\n"
+            + "| ''[[Flirting with Disaster]]''\n" + "| Nancy\n" + "|-\n" + "| ''[[Infinity (film)|Infinity]]''\n"
+            + "| Arline Greenbaum\n" + "|-\n" + "|rowspan=\"2\"| 1997\n" + "| ''[[Lost Highway]]''\n"
+            + "| Renee Madison/Alice Wakefield\n" + "|-\n" + "| ''[[Nightwatch (1997 film)|Nightwatch]]''\n"
+            + "| Katherine\n" + "|-\n" + "| 1998\n" + "| ''The Hi-Lo Country''\n" + "| Mona Birk\n" + "|-\n"
+            + "|rowspan=\"3\"| 1999\n" + "| ''[[Bringing Out the Dead]]''\n" + "| Mary Burke\n" + "|-\n"
+            + "| ''[[Goodbye Lover]]''\n" + "| Sandra Dunmore\n" + "|-\n" + "| ''[[Stigmata (film)|Stigmata]]''\n"
+            + "| Frankie Paige\n" + "|-\n" + "| 2000\n" + "| ''[[Little Nicky (film)|Little Nicky]]''\n"
+            + "| Valerie Veran\n" + "|-\n" + "| 2001\n" + "| ''[[Human Nature (film)|Human Nature]]''\n" + "| Lila Jute\n"
+            + "|-\n" + "|rowspan=\"2\"| 2002\n" + "| ''[[The Badge]]''\n" + "| Scarlet\n" + "|-\n"
+            + "|''[[Searching for Debra Winger]]''\n" + "| Herself\n" + "|-\n" + "|rowspan=\"4\"| 2003\n"
+            + "| ''Deeper Than Deep''\n" + "| Linda Lovelace\n" + "|-\n" + "| ''[[Tiptoes]]''\n" + "| Lucy\n" + "|-\n"
+            + "| ''[[Holes (film)|Holes]]''\n" + "| Miss Katherine 'Kissin' Kate' Barlow\n" + "|-\n"
+            + "| ''[[Abby Singer (film)|Abby Singer]]''\n" + "| Cameo\n" + "|-\n" + "| 2005\n"
+            + "| ''[[Medium (TV series)|Medium]]'' ([[television program|TV series]])\n" + "| Allison DuBois\n" + "|-\n"
+            + "| 2006\n" + "| ''[[Fast Food Nation (film)|Fast Food Nation]]''\n" + "| Cindy\n" + "|-\n" + "| 2013\n"
+            + "| ''[[Boyhood (film)|Boyhood]]''\n" + "|\n" + "|}";
+
         WikiTableParser sut = new WikiTableParser();
         ParseResult<WikiTable> parseResult = sut.parse(tableText);
         WikiTable parsedTable = parseResult.getIdentifiedPart();
@@ -367,5 +278,43 @@ public class TestWikiTableParser {
         WikiTableRow firstRow = (WikiTableRow) firstPart;
         Assert.assertEquals(3, firstRow.getSubParts().size());
 
+    }
+
+    @Test
+    public void testWikiTableFromActualArticleMitCeltTemplate() {
+        String wikiText =
+            "{| class=\"toccolours\" cellspacing=\"1px\" align=\"right\" width=\"250\" style=\"float: right; margin: 0 0 1em 1em; text-align:center; border: 1px solid #50C878;\"\n"
+                + "|-\n"
+                + "| style=\"background:#50C878; padding-bottom:2px;\" colspan=\"2\" |<span style=\"color: white;\"><small>Din seria </small></span><br /><font size=4>'''[[Mitologie celtică|<span style=\"color: white; text-decoration: underline;\">Mitologia celtică</span>]]<br />'''</font>\n"
+                + "|-\n" + "|<br />[[Image:Hope-coventina01a.jpg|150px|]]\n" + "|-\n" + "| style=\"font-size:11px\" |\n"
+                + "'''[[zeitate|Divinități]]'''<br />\n"
+                + "[[Dagda]], [[Danu]], [[Brigid]], [[Ogma]], [[Lug]], [[Tuatha de Danann]]<br>[[Listă de zei în mitologia celtică]]\n"
+                + "|-\n" + "| style=\"font-size:11px\" |\n" + "'''[[Ființă fabuloasă|Ființe fabuloase]]'''<br />\n"
+                + "[[Fomorii]] <br> [[Listă de ființe legendare în mitologia celtică]]\n" + "|-\n"
+                + "| style=\"font-size:11px\" |\n" + "'''[[Legendă|Personaje legendare]]'''<br />\n"
+                + "[[Blodeuwedd]], [[Bran]], [[Cuchulainn]], [[Finn]], [[Pwyll]] <br>\n"
+                + "[[Listă de eroi în mitologia celtică]]\n" + "|-\n" + "| style=\"font-size:11px\" |\n"
+                + "'''[[Loc (geografie)|Locuri]] [[Locuri mitice|mitice]] & [[Sacru|sacre]]'''<br />\n" + "  \n" + "|-\n"
+                + "| style=\"font-size:11px\" |\n"
+                + "'''[[Listă de obiecte sacre în mitologia sacră|Obiecte sacre]]'''<br />\n"
+                + "...<br>[[Listă de obiecte sacre în mitologia celtică]]\n" + "|-\n" + "| style=\"font-size:11px\" |\n"
+                + "'''Surse'''<br />\n" + "{{Tnavbar-plain|Mit celt}}</center>\n" + "|}";
+
+        WikiTableParser sut = new WikiTableParser();
+        ParseResult<WikiTable> parseResult = sut.parse(wikiText);
+        WikiTable parsedTable = parseResult.getIdentifiedPart();
+        Assert.assertNotNull(parsedTable.getSubParts());
+
+        WikiPart firstPart = parsedTable.getSubParts().get(0);
+        Assert.assertTrue(firstPart instanceof WikiTableRow);
+        WikiTableRow firstRow = (WikiTableRow) firstPart;
+        Assert.assertEquals(1, firstRow.getSubParts().size());
+
+        WikiPart firstPartOfFirstRow = firstRow.getSubParts().get(0);
+        Assert.assertTrue(firstPartOfFirstRow instanceof WikiTableCell);
+        WikiTableCell firstCell = (WikiTableCell) firstPartOfFirstRow;
+        Assert.assertEquals("style=\"background:#50C878; padding-bottom:2px;\" colspan=\"2\"",
+            firstCell.getAttribs().stream().map(Object::toString).collect(Collectors.joining()).trim());
+        Assert.assertTrue(firstCell.getSubParts().stream().anyMatch(part -> part instanceof WikiLink));
     }
 }
