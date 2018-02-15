@@ -1,9 +1,12 @@
 package org.wikipedia.ro.parser;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.wikipedia.ro.model.WikiLink;
+import org.wikipedia.ro.model.WikiPart;
 import org.wikipedia.ro.model.WikiTemplate;
 
 public class TestWikiTemplateParser {
@@ -120,5 +123,23 @@ public class TestWikiTemplateParser {
         Assert.assertNull(parseResult.getIdentifiedPart().getParam("2"));
         Assert.assertEquals("arg", parseResult.getIdentifiedPart().getParam("param").stream().map(Object::toString).collect(Collectors.joining()));
 
+    }
+    
+    @Test
+    public void testTemplateWithLinkInParam() {
+        String text = "{{Template|param=value [[link]] value}}";
+        
+        WikiTemplateParser sut = new WikiTemplateParser();
+        
+        ParseResult<WikiTemplate> parseResult = sut.parse(text);
+        WikiTemplate templ = parseResult.getIdentifiedPart();
+        Assert.assertEquals(text, parseResult.getParsedString());
+        Assert.assertEquals(1, templ.getParamNames().size());
+        List<WikiPart> param = templ.getParam("param");
+        Assert.assertNotNull(param);
+        Assert.assertEquals(3, param.size());
+        Assert.assertTrue(param.get(1) instanceof WikiLink);
+        Assert.assertEquals("link", ((WikiLink) param.get(1)).getTarget());
+        
     }
 }

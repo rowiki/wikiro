@@ -17,6 +17,9 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
+import org.wikipedia.ro.parser.AggregatingParser;
+import org.wikipedia.ro.parser.ParseResult;
+
 /**
  * A self-made push-down automaton that receives the text of a template declaration and identifies its arguments
  * 
@@ -183,7 +186,8 @@ public class WikiTemplate extends WikiPart {
 
     public void setParam(String key, String value) {
         rawParams.put(key, value);
-        params.put(key, Arrays.asList(new PlainText(value)));
+        params.put(key,
+            new AggregatingParser().parse(value).stream().map(ParseResult::getIdentifiedPart).collect(Collectors.toList()));
     }
 
     public List<WikiPart> getParam(String key) {
