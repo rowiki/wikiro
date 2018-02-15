@@ -80,7 +80,12 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                     ParseResult<WikiTableRow> enclosedRow = parseTableRow(wikiText.substring(idx));
                     parsedTable.addSubPart(enclosedRow.getIdentifiedPart());
                     nextIncrement = enclosedRow.getParsedString().length();
-                } else if (crtChar == '!' && nextChar != '!' && nextChar != '+' && nextChar != '-' && prevChar == '\n') {
+                } else if (crtChar == '|' && nextChar == '}') {
+                    closed = true;
+                    nextIncrement = 2;
+                    state = STATE_INITIAL;
+                } else if ((crtChar == '!' && nextChar != '!' || crtChar == '|' && nextChar != '|') && nextChar != '+'
+                    && nextChar != '-' && prevChar == '\n') {
                     WikiTableRow headerRow = null;
                     if (!parsedTable.getSubParts().isEmpty()) {
                         WikiPart candidateRow = parsedTable.getSubParts().get(parsedTable.getSubParts().size() - 1);
@@ -95,11 +100,7 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                     ParseResult<WikiTableCell> enclosedHeaderCell = parseTableCell(wikiText.substring(idx - 1));
                     headerRow.addSubPart(enclosedHeaderCell.getIdentifiedPart());
                     nextIncrement = enclosedHeaderCell.getParsedString().length();
-                    
-                } else if (crtChar == '|' && nextChar == '}') {
-                    closed = true;
-                    nextIncrement = 2;
-                    state = STATE_INITIAL;
+
                 }
                 break;
             default:
