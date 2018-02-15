@@ -16,7 +16,7 @@ import org.wikipedia.ro.model.WikiTag;
 public class WikiTagParser extends WikiPartParser<WikiTag> {
 
     private List<String> validTagNames = Arrays.asList("div", "font", "table", "tr", "th", "td", "span", "br", "tt",
-        "center", "ref", "noinclude", "includeonly", "pre", "references");
+        "center", "ref", "noinclude", "includeonly", "pre", "references", "small", "b", "i", "big");
 
     @Override
     public boolean startsWithMe(String wikiText) {

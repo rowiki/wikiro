@@ -148,6 +148,6 @@ public class TestWikiTagParser {
         Assert.assertEquals(
             "background-color:#025ad0;border:1px solid #000000;padding: 0px 0px 0px 4px; font-size: 100%; text-align:left;margin:0px;color:#330000",
             tag.getAttributes().get("style").stream().map(Object::toString).collect(Collectors.joining()));
-
     }
+ 
 }
