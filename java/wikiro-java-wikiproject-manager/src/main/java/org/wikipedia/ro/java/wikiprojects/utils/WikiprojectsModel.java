@@ -22,6 +22,7 @@ public class WikiprojectsModel {
     private boolean livingPerson;
 
     private boolean livingPersonRo = false;
+    private boolean importanceWithNoArgs = false;
 
     private static final Pattern moreProjectsFinderPattern =
         Pattern.compile("\\{\\{\\s*[Pp]roiecte multiple\\s*(\\|([^\\}]*))*\\}\\}", Pattern.DOTALL);
@@ -115,17 +116,21 @@ public class WikiprojectsModel {
                 String projName = oneProjectMatcher.group(1).trim();
                 Matcher argsMatcher = argsPattern.matcher(defaultString(oneProjectMatcher.group(2)));
                 while (argsMatcher.find()) {
-                    switch (argsMatcher.group(1).trim()) {
+                    String importanceStr = trim(argsMatcher.group(2));
+                    switch (trim(argsMatcher.group(1))) {
                     case "clasament":
-                        model.setQualClass(argsMatcher.group(2).trim());
+                        model.setQualClass(importanceStr);
                         break;
                     case "în viață":
                         model.livingPersonRo = true;
                     case "living":
-                        model.setLivingPerson(Arrays.asList("da", "yes").contains(argsMatcher.group(2).trim()));
+                        model.setLivingPerson(Arrays.asList("da", "yes").contains(importanceStr));
                         break;
                     case "importanță":
-                        model.projectsImportance.put(projName, argsMatcher.group(2).trim());
+                        if (isBlank(importanceStr)) {
+                            model.importanceWithNoArgs = true;
+                        }
+                        model.projectsImportance.put(projName, importanceStr);
                         break;
                     }
                 }
@@ -149,7 +154,7 @@ public class WikiprojectsModel {
                     sbuild.append(livingPersonRo ? "\n| în viață = da" : "\n| living = yes");
                 }
                 sbuild.append("\n| clasament = ").append(null != qualClass ? qualClass : "");
-                if (isNotBlank(theEntry.getValue())) {
+                if (importanceWithNoArgs || isNotBlank(theEntry.getValue())) {
                     sbuild.append("\n| importanță = ").append(theEntry.getValue());
                 }
             }
