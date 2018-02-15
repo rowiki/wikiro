@@ -107,10 +107,10 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                         attrValueBuilder.setLength(0);
                         attrValueBracketing.pop();
                         isPartOfAttrName = false;
-                    } else if (!attrValueBracketing.isEmpty() && 0 == attrValueBuilder.length()) {
+                    } else if (attrValueBracketing.isEmpty() && 0 == attrValueBuilder.length()) {
                         attrValueBracketing.push(String.valueOf(crtChar));
                         isPartOfAttrName = false;
-                    } else if (!attrValueBracketing.isEmpty() && 0 != attrValueBuilder.length()) {
+                    } else if (attrValueBracketing.isEmpty() && 0 != attrValueBuilder.length()) {
                         return null;
                     }
                 }
