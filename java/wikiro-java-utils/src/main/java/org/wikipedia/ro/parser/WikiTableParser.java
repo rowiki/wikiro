@@ -84,8 +84,8 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                     closed = true;
                     nextIncrement = 2;
                     state = STATE_INITIAL;
-                } else if ((crtChar == '!' && nextChar != '!' || crtChar == '|' && nextChar != '|') && nextChar != '+'
-                    && nextChar != '-' && prevChar == '\n') {
+                } else if ((crtChar == '!' || crtChar == '|') && nextChar != '+'
+                    && nextChar != '-' && (prevChar == '\n' || nextChar == crtChar)) {
                     WikiTableRow headerRow = null;
                     if (!parsedTable.getSubParts().isEmpty()) {
                         WikiPart candidateRow = parsedTable.getSubParts().get(parsedTable.getSubParts().size() - 1);
@@ -97,11 +97,19 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                         headerRow = new WikiTableRow();
                         parsedTable.addSubPart(headerRow);
                     }
-                    ParseResult<WikiTableCell> enclosedHeaderCell = parseTableCell(wikiText.substring(idx - 1));
+                    
+                    int textToParseCellOffset = -1;
+                    if (crtChar == nextChar) {
+                        textToParseCellOffset = 0;
+                    }
+                    
+                    String textToParseCell = wikiText.substring(idx + textToParseCellOffset);
+                    ParseResult<WikiTableCell> enclosedHeaderCell = parseTableCell(textToParseCell);
                     headerRow.addSubPart(enclosedHeaderCell.getIdentifiedPart());
-                    nextIncrement = enclosedHeaderCell.getParsedString().length();
+                    nextIncrement = enclosedHeaderCell.getParsedString().length() + textToParseCellOffset;
 
                 }
+                   
                 break;
             default:
                 break;
