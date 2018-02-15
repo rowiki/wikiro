@@ -2,9 +2,11 @@ package org.wikipedia.ro.parser;
 
 import static org.apache.commons.lang3.StringUtils.trim;
 
+import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.wikipedia.ro.model.WikiTemplate;
 
@@ -132,9 +134,16 @@ public class WikiTemplateParser extends WikiPartParser<WikiTemplate> {
             }
         }
         String initialTemplateText = templateTextBuilder.toString();
-        if (initialTemplateText.matches("\\{\\{\\s*" + template.getTemplateTitle() + "\\s*\\}\\}")) {
-            template.removeParam("1");
+
+        List<String> emptyUnnamedParams = template.getParamNames().stream().filter(name -> name.matches("\\d+"))
+            .filter(name -> template.getParam(name).size() == 0
+                || template.getParam(name).size() == 1 && template.getParam(name).get(0).toString().trim().length() == 0)
+            .collect(Collectors.toList());
+
+        for (String eachEmptyUnnamedParam : emptyUnnamedParams) {
+            template.removeParam(eachEmptyUnnamedParam);
         }
+
         template.setInitialText(initialTemplateText);
         return new ParseResult<WikiTemplate>(template, initialTemplateText,
             wikiText.substring(initialTemplateText.length()));
