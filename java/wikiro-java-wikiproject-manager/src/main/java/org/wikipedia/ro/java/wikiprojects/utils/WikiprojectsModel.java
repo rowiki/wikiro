@@ -31,7 +31,7 @@ public class WikiprojectsModel {
         Pattern.compile("\\{\\{\\s*(?:Wiki)?[Pp]ro[ij]ect ([^\\|\\}]+)(\\|([^\\}]*))*\\}\\}", Pattern.DOTALL);
 
     private static final Pattern argsPattern =
-        Pattern.compile("\\|\\s*([^=\\|\\}]+)\\s*=\\s*([^\\|\\}]+)\\s*", Pattern.DOTALL);
+        Pattern.compile("\\|\\s*([^=\\|\\}]+)\\s*=\\s*([^\\|\\}]*)\\s*", Pattern.DOTALL);
 
     private static final Pattern projArgPattern = Pattern.compile("proiect(\\d+)");
     private static final Pattern importanceArgPattern = Pattern.compile("importanță(\\d+)");
