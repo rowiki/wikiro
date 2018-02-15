@@ -129,6 +129,7 @@ public class WikiPage {
                 res.setPage(this);
                 res.setParentPart(null);
                 res.setSiblings(parts);
+                ret.add(res);
             }
             ret.addAll(eachDirectPart.search(predicate));
         }
