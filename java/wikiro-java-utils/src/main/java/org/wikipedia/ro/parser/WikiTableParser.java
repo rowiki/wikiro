@@ -37,6 +37,7 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
         while (idx < wikiText.length() && !closed) {
             char crtChar = wikiText.charAt(idx);
             char nextChar = idx + 1 < wikiText.length() ? wikiText.charAt(idx + 1) : 0;
+            char prevChar = 0 < idx ? wikiText.charAt(idx - 1) : 0;
             int nextIncrement = 1;
 
             switch (state) {
@@ -51,6 +52,7 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                     state = STATE_BEGINNING_CONTAINED_ELEM; // beginning of contained element
                 } else if (!Character.isWhitespace(crtChar)) {
                     state = STATE_READING_ATTRIB; // reading table attrib
+                    nextIncrement = 0;
                 }
                 break;
             case STATE_READING_ATTRIB:
@@ -78,6 +80,22 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                     ParseResult<WikiTableRow> enclosedRow = parseTableRow(wikiText.substring(idx));
                     parsedTable.addSubPart(enclosedRow.getIdentifiedPart());
                     nextIncrement = enclosedRow.getParsedString().length();
+                } else if (crtChar == '!' && nextChar != '!' && nextChar != '+' && nextChar != '-' && prevChar == '\n') {
+                    WikiTableRow headerRow = null;
+                    if (!parsedTable.getSubParts().isEmpty()) {
+                        WikiPart candidateRow = parsedTable.getSubParts().get(parsedTable.getSubParts().size() - 1);
+                        if (candidateRow instanceof WikiTableRow) {
+                            headerRow = (WikiTableRow) candidateRow;
+                        }
+                    }
+                    if (null == headerRow) {
+                        headerRow = new WikiTableRow();
+                        parsedTable.addSubPart(headerRow);
+                    }
+                    ParseResult<WikiTableCell> enclosedHeaderCell = parseTableCell(wikiText.substring(idx - 1));
+                    headerRow.addSubPart(enclosedHeaderCell.getIdentifiedPart());
+                    nextIncrement = enclosedHeaderCell.getParsedString().length();
+                    
                 } else if (crtChar == '|' && nextChar == '}') {
                     closed = true;
                     nextIncrement = 2;
@@ -242,6 +260,8 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                     || "|}".equals(thisAndNextChar) && !bracketStack.isEmpty() && "|}".equals(bracketStack.peek())) {
                     nextIncrement = 2;
                     bracketStack.pop();
+                } else {
+                    workingElemBuilder.append(crtChar);
                 }
                 break;
             default:
