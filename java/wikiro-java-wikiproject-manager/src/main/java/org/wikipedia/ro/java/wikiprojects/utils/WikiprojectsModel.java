@@ -20,7 +20,7 @@ public class WikiprojectsModel {
     private String qualClass;
     private Map<String, String> projectsImportance = new LinkedHashMap<String, String>();
     private boolean livingPerson;
-    
+
     private boolean livingPersonRo = false;
 
     private static final Pattern moreProjectsFinderPattern =
@@ -58,15 +58,15 @@ public class WikiprojectsModel {
     public void setLivingPerson(boolean livingPerson) {
         this.livingPerson = livingPerson;
     }
-    
+
     public boolean isInProject(String project) {
         return this.projectsImportance.containsKey(project);
     }
-    
+
     public void removeFromProject(String project) {
         this.projectsImportance.remove(project);
     }
-    
+
     public Map<String, String> getImportanceMap() {
         return Collections.unmodifiableMap(projectsImportance);
     }
@@ -149,7 +149,9 @@ public class WikiprojectsModel {
                     sbuild.append(livingPersonRo ? "\n| în viață = da" : "\n| living = yes");
                 }
                 sbuild.append("\n| clasament = ").append(null != qualClass ? qualClass : "");
-                sbuild.append("\n| importanță = ").append(theEntry.getValue());
+                if (isNotBlank(theEntry.getValue())) {
+                    sbuild.append("\n| importanță = ").append(theEntry.getValue());
+                }
             }
         } else {
             sbuild.append("Proiecte multiple");
@@ -171,7 +173,7 @@ public class WikiprojectsModel {
         sbuild.append("\n}}");
         return sbuild.toString();
     }
-    
+
     public String saveToTalkPage(String talkPageText) {
         if (isBlank(talkPageText)) {
             return this.toString();
