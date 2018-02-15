@@ -16,7 +16,7 @@ public class WikiTable extends WikiTableElement {
         for (WikiPart eachSubPart: subParts) {
             builder.append(eachSubPart);
         }
-        
+        builder.append("|}");
         return builder.toString();
     }
 

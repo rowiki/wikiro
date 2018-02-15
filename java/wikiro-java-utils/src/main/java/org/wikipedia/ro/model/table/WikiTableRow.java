@@ -9,7 +9,7 @@ public class WikiTableRow extends WikiTableElement {
     @Override
     public String toString() {
         StringBuilder sbuild = new StringBuilder("\n|-");
-        if (null != attribs) {
+        if (null != attribs && (1 < attribs.size() || 1 == attribs.size() && 0 < attribs.get(0).toString().trim().length() )) {
             sbuild.append(' ').append(attribs.stream().map(eachPart -> eachPart.toString()).collect(Collectors.joining()));
         }
         

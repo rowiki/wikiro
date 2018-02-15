@@ -21,9 +21,12 @@ public class WikiTableCell extends WikiTableElement {
 
         StringBuilder sbuild = new StringBuilder(cellSeparator);
 
+        String attribsStr = null;
         if (null != attribs) {
-            sbuild.append(' ').append(attribs.stream().map(eachPart -> eachPart.toString()).collect(Collectors.joining()))
-                .append(" |");
+            attribsStr = attribs.stream().map(eachPart -> eachPart.toString()).collect(Collectors.joining());
+            if (null != attribsStr && 0 < attribsStr.trim().length()) {
+                sbuild.append(' ').append(attribsStr.trim()).append(" |");
+            }
         }
 
         if (null != subParts && 0 < subParts.size()) {
