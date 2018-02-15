@@ -23,6 +23,9 @@ public class WikiTemplateParser extends WikiPartParser<WikiTemplate> {
         return startMatcher.find() && 0 == startMatcher.start();
     }
 
+    private static final int STATE_READING_NAME = 0;
+    private static final int STATE_READING_ARGS = 2;
+    
     @Override
     public ParseResult<WikiTemplate> parse(String wikiText) {
         if (!startsWithMe(wikiText)) {
@@ -32,6 +35,7 @@ public class WikiTemplateParser extends WikiPartParser<WikiTemplate> {
 
         final char[] chars = wikiText.toCharArray();
         int index = 0;
+        int state = STATE_READING_NAME;
         StringBuilder templateTitleBuilder = new StringBuilder();
         StringBuilder templateTextBuilder = new StringBuilder("{{");
 
@@ -67,6 +71,8 @@ public class WikiTemplateParser extends WikiPartParser<WikiTemplate> {
                         template.setSingleLine(false);
                     }
                 }
+                index++;
+                break;
             case '=':
                 if (automatonStack.isEmpty() && crtParamName == null) {
                     crtParamName = crtBuilder.toString();

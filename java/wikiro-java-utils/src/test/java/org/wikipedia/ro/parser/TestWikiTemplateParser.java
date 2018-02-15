@@ -1,5 +1,7 @@
 package org.wikipedia.ro.parser;
 
+import java.util.stream.Collectors;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.wikipedia.ro.model.WikiTemplate;
@@ -82,9 +84,9 @@ public class TestWikiTemplateParser {
     @Test
     public void testInlineTemplate() {
         String text = "{{Template|NonameParam|Param=Arg}}";
-        
+
         WikiTemplateParser sut = new WikiTemplateParser();
-        
+
         ParseResult<WikiTemplate> parseResult = sut.parse(text);
         Assert.assertEquals(text, parseResult.getParsedString());
         Assert.assertEquals("", parseResult.getUnparsedString());
@@ -94,12 +96,29 @@ public class TestWikiTemplateParser {
     @Test
     public void testBlockTemplate() {
         String text = "{{Template\n|NonameParam\n|Param = Arg}}";
-        
+
         WikiTemplateParser sut = new WikiTemplateParser();
-        
+
         ParseResult<WikiTemplate> parseResult = sut.parse(text);
         Assert.assertEquals(text, parseResult.getParsedString());
         Assert.assertEquals("", parseResult.getUnparsedString());
         Assert.assertFalse(parseResult.getIdentifiedPart().isSingleLine());
+
+        Assert.assertEquals("NonameParam", parseResult.getIdentifiedPart().getParam("1").stream().map(Object::toString).collect(Collectors.joining()));
+    }
+
+    @Test
+    public void testBlockTemplateWithEmptyUnnamedParams() {
+        String text = "{{Template|nonameparam||param = arg}}";
+
+        WikiTemplateParser sut = new WikiTemplateParser();
+
+        ParseResult<WikiTemplate> parseResult = sut.parse(text);
+        Assert.assertEquals(text, parseResult.getParsedString());
+        Assert.assertEquals("", parseResult.getUnparsedString());
+        Assert.assertEquals("nonameparam", parseResult.getIdentifiedPart().getParam("1").stream().map(Object::toString).collect(Collectors.joining()));
+        Assert.assertNull(parseResult.getIdentifiedPart().getParam("2"));
+        Assert.assertEquals("arg", parseResult.getIdentifiedPart().getParam("param").stream().map(Object::toString).collect(Collectors.joining()));
+
     }
 }

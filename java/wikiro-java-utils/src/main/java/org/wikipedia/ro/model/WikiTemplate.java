@@ -187,7 +187,7 @@ public class WikiTemplate extends WikiPart {
     }
 
     public List<WikiPart> getParam(String key) {
-        return Collections.unmodifiableList(params.get(key));
+        return null == params.get(key) ? null : Collections.unmodifiableList(params.get(key));
     }
 
     public void setParam(String key, List<WikiPart> value) {
