@@ -79,6 +79,7 @@ public class MaintainWikiproject {
                 List<String> tmplCats = new ArrayList<>();
                 Map<String, String> projImportance = new LinkedHashMap<String, String>();
                 int depth = 3;
+                boolean autoEval = false;
                 for (int i = 1; i < args.length; i++) {
                     String eachArg = args[i];
                     if (startsWith(eachArg, "-project:")) {
@@ -93,6 +94,10 @@ public class MaintainWikiproject {
                     if (startsWith(eachArg, "-cattmpl:")) {
                         tmplCats.add(removeStart(eachArg, "-cattmpl:"));
                     }
+                    if (startsWith(eachArg, "-auto-eval")) {
+                        autoEval = true;
+                    }
+                        
                     for (String eachProjDef : projects) {
                         String[] projParts = split(eachProjDef, ':');
                         String importance = projParts.length > 1 ? projParts[1] : "";
@@ -107,7 +112,7 @@ public class MaintainWikiproject {
                         }
                     }
                 }
-                new Classify("ro.wikipedia.org", projImportance, cats, tmplCats, recCats, depth).classify();
+                new Classify("ro.wikipedia.org", projImportance, cats, tmplCats, recCats, depth, autoEval).classify();
             } else {
                 System.err.println(
                     "Usage: add projects with -project:PROJECT[:IMPORTANCE] and categories with -cat:CATEGORY -cattmpl:TEMPLATE_CATEGORY or -catr:RECURSE_CATEGORY with -depth:MAXDEPTH");

@@ -3,6 +3,7 @@ package org.wikipedia.ro.java.wikiprojects.stubs;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.containsAny;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 import static org.apache.commons.lang3.StringUtils.startsWithAny;
@@ -14,14 +15,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
@@ -110,16 +111,24 @@ public class StubClassifier {
                         projModel.setQualClass("ciot");
                     }
 
-                    if (projModel.getImportanceMap().keySet().stream().anyMatch(projkey -> WikiprojectsHierarchy.isParent(wikiprojectName, projkey))) {
+                    if (projModel.getImportanceMap().keySet().stream()
+                        .anyMatch(projkey -> WikiprojectsHierarchy.isParent(wikiprojectName, projkey))) {
                         System.out.println("Already in a child project. Skipping...");
                         continue;
                     }
-                    
-                    Set<String> parents = projModel.getImportanceMap().keySet().stream().filter(projkey -> WikiprojectsHierarchy.isParent(projkey, wikiprojectName)).collect(Collectors.toSet());
+
+                    Set<String> parents = projModel.getImportanceMap().keySet().stream()
+                        .filter(projkey -> WikiprojectsHierarchy.isParent(projkey, wikiprojectName))
+                        .collect(Collectors.toSet());
+                    Optional<String> importanceFromParent = projModel.getImportanceMap().keySet().stream()
+                        .filter(projkey -> WikiprojectsHierarchy.isParent(projkey, wikiprojectName))
+                        .filter(p -> isNotBlank(projModel.getImportance(p))).findFirst()
+                        .map(p -> projModel.getImportance(p));
+
                     parents.stream().forEach(projModel::removeFromProject);
-                    
+
                     if (!projModel.isInProject(wikiprojectName)) {
-                        projModel.setImportance(wikiprojectName, "");
+                        projModel.setImportance(wikiprojectName, importanceFromParent.orElse(""));
                     }
 
                     boolean removeBpv = false;

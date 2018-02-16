@@ -1,6 +1,7 @@
 package org.wikipedia.ro.java.wikiprojects.classify;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.startsWithAny;
 
 import java.io.IOException;
@@ -9,7 +10,9 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
@@ -23,6 +26,7 @@ import org.wikibase.data.Entity;
 import org.wikibase.data.Item;
 import org.wikibase.data.Property;
 import org.wikipedia.Wiki;
+import org.wikipedia.ro.java.wikiprojects.WikiprojectsHierarchy;
 import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
 import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsModel;
 import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
@@ -36,9 +40,10 @@ public class Classify {
     private List<String> tmplCats;
     private int depth;
     private String wikiAddress;
+    private boolean autoEvaluateBySize;
 
-    public Classify(String wikiAddress, Map<String, String> projects, List<String> categories, List<String> templateCategories,
-        List<String> recursiveCategories, int depth) {
+    public Classify(String wikiAddress, Map<String, String> projects, List<String> categories,
+        List<String> templateCategories, List<String> recursiveCategories, int depth, boolean autoEvaluateBySize) {
         super();
         this.wikiAddress = wikiAddress;
         this.projects = projects;
@@ -46,6 +51,7 @@ public class Classify {
         this.tmplCats = templateCategories;
         this.recursiveCategories = recursiveCategories;
         this.depth = depth;
+        this.autoEvaluateBySize = autoEvaluateBySize;
     }
 
     public void classify() {
@@ -84,13 +90,14 @@ public class Classify {
                     if (startsWithAny(eachArticleInCat, "Legislatura", "Lista", "Listă", "Galerie", "Galeria")) {
                         projectModel.setQualClass("listă");
                     } else {
-                        int proseSize = PageUtils.getProseSize(rowiki, eachArticleInCat);
-                        String qualClass =
-                            proseSize < 700 ? "ciot" : (proseSize < 2500 ? "start" : (proseSize < 10000 ? "început" : null));
-                        if (null != qualClass) {
-                            projectModel.setQualClass(qualClass);
+                        if (autoEvaluateBySize) {
+                            int proseSize = PageUtils.getProseSize(rowiki, eachArticleInCat);
+                            String qualClass = proseSize < 700 ? "ciot"
+                                : (proseSize < 2500 ? "start" : (proseSize < 10000 ? "început" : null));
+                            if (null != qualClass) {
+                                projectModel.setQualClass(qualClass);
+                            }
                         }
-
                         Entity wdEntity = dwiki.getWikibaseItemBySiteAndTitle("rowiki", eachArticleInCat);
                         if (null != wdEntity) {
                             Map<Property, Set<Claim>> wdClaims = wdEntity.getClaims();
@@ -121,7 +128,23 @@ public class Classify {
 
                 for (String eachProj : projects.keySet()) {
                     if (!projectModel.isInProject(eachProj) || isBlank(projectModel.getImportance(eachProj))) {
-                        projectModel.setImportance(eachProj, projects.get(eachProj));
+                        if (projectModel.getImportanceMap().keySet().stream()
+                            .anyMatch(projkey -> WikiprojectsHierarchy.isParent(eachProj, projkey))) {
+                            System.out.println("Already in a child project. Skipping...");
+                            continue;
+                        }
+
+                        Set<String> parents = projectModel.getImportanceMap().keySet().stream()
+                            .filter(projkey -> WikiprojectsHierarchy.isParent(projkey, eachProj))
+                            .collect(Collectors.toSet());
+                        Optional<String> importanceFromParent = projectModel.getImportanceMap().keySet().stream()
+                            .filter(projkey -> WikiprojectsHierarchy.isParent(projkey, eachProj))
+                            .filter(p -> isNotBlank(projectModel.getImportance(p))).findFirst()
+                            .map(p -> projectModel.getImportance(p));
+
+                        parents.stream().forEach(projectModel::removeFromProject);
+
+                        projectModel.setImportance(eachProj, importanceFromParent.orElse(projects.get(eachProj)));
                     }
                 }
 
@@ -133,16 +156,16 @@ public class Classify {
                     rowiki.edit(eachTalkPageOfArticleInCat, newTalkPageText, "Robot: luat în evidență pentru wikiproiecte");
                 }
             }
-            
+
             List<String> templatesToRun = new ArrayList<>();
-            for (String eachTmplCat: tmplCats) {
+            for (String eachTmplCat : tmplCats) {
                 templatesToRun.addAll(Arrays.asList(rowiki.getCategoryMembers(eachTmplCat, Wiki.TEMPLATE_NAMESPACE)));
             }
             int tmplIdx = 0;
-            for (String eachTmpl: templatesToRun) {
+            for (String eachTmpl : templatesToRun) {
                 tmplIdx++;
                 System.out.printf("Running on template %s [ %d/%d ]%n", eachTmpl, tmplIdx, templatesToRun.size());
-                
+
                 String tmplTalkPageTitle = rowiki.getTalkPage(eachTmpl);
                 String tmplTalkPageText = rowiki.getPageText(tmplTalkPageTitle);
                 WikiprojectsModel projectModel = WikiprojectsModel.fromTalkPage(tmplTalkPageText);
@@ -153,7 +176,7 @@ public class Classify {
                         projectModel.setImportance(eachProj, projects.get(eachProj));
                     }
                 }
-                
+
                 String newTalkPageText = projectModel.saveToTalkPage(tmplTalkPageText);
                 if (!StringUtils.equals(newTalkPageText, tmplTalkPageText)) {
                     rowiki.edit(tmplTalkPageTitle, newTalkPageText, "Robot: luat în evidență pentru wikiproiecte");
