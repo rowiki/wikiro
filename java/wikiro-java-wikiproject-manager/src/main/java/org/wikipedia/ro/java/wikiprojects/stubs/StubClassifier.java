@@ -21,11 +21,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
 import org.wikipedia.Wiki;
+import org.wikipedia.ro.java.wikiprojects.WikiprojectsHierarchy;
 import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
 import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsModel;
 import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
@@ -77,8 +79,7 @@ public class StubClassifier {
             int catIdx = 0;
             while (catIdx < visitableCategories.size()) {
                 String crtCat = visitableCategories.get(catIdx);
-                System.out.println(
-                    "Parcurg categorie " + crtCat + " [ " + (1 + catIdx) + '/' + visitableCategories.size() + " ] ");
+                System.out.printf("Parcurg categorie %s [ %d/%d ] %n", crtCat, (1 + catIdx), visitableCategories.size());
                 stubs.addAll(Arrays.asList(rowiki.getCategoryMembers(crtCat, Wiki.MAIN_NAMESPACE)));
 
                 String[] subCats = rowiki.getCategoryMembers(crtCat, Wiki.CATEGORY_NAMESPACE);
@@ -97,7 +98,7 @@ public class StubClassifier {
             for (int stubIdx = startIndex; stubIdx < stubList.size(); stubIdx++) {
                 String eachStub = stubList.get(stubIdx);
                 String stubTalkPage = rowiki.getTalkPage(eachStub);
-                System.out.println("Vizitez ciot " + eachStub + " [ " + (1 + stubIdx) + '/' + stubs.size() + " ] ");
+                System.out.printf("Vizitez ciot %s [ %d/%d ] %n", eachStub, (1 + stubIdx), stubList.size());
                 String subproj = getSubproject(eachStub, rowiki);
                 boolean talkExists = rowiki.exists(new String[] { stubTalkPage })[0];
                 String newTalk = "";
@@ -108,18 +109,26 @@ public class StubClassifier {
                     if (isBlank(projModel.getQualClass())) {
                         projModel.setQualClass("ciot");
                     }
+
+                    if (projModel.getImportanceMap().keySet().stream().anyMatch(projkey -> WikiprojectsHierarchy.isParent(wikiprojectName, projkey))) {
+                        System.out.println("Already in a child project. Skipping...");
+                        continue;
+                    }
+                    
+                    Set<String> parents = projModel.getImportanceMap().keySet().stream().filter(projkey -> WikiprojectsHierarchy.isParent(projkey, wikiprojectName)).collect(Collectors.toSet());
+                    parents.stream().forEach(projModel::removeFromProject);
                     
                     if (!projModel.isInProject(wikiprojectName)) {
                         projModel.setImportance(wikiprojectName, "");
                     }
-                    
+
                     boolean removeBpv = false;
                     Matcher bpvMatcher = bpvPattern.matcher(talk);
                     if (bpvMatcher.find()) {
                         projModel.setLivingPerson(true);
                         removeBpv = true;
                     }
-                    
+
                     newTalk = projModel.saveToTalkPage(talk);
                     if (removeBpv) {
                         bpvMatcher = bpvPattern.matcher(newTalk);
@@ -130,7 +139,7 @@ public class StubClassifier {
                         bpvMatcher.appendTail(newTextBuf);
                         newTalk = newTextBuf.toString();
                     }
-                    
+
                 } else {
                     WikiprojectsModel projModel = new WikiprojectsModel();
                     projModel.setImportance(wikiprojectName, "");
