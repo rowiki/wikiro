@@ -14,6 +14,8 @@ public class WikiprojectsHierarchy {
     private static final Map<String, Wikiproject> WIKIPROJECTS = new HashMap<>();
     static {
         declareParent("Muzică", "Muzică rock");
+        declareParent("Muzică", "Muzică pop");
+        declareParent("Muzică", "Hip hop");
         declareParent("Transport", "Aviație");
         declareParent("Transport", "Drumuri");
         declareParent("Transport", "Trenuri");
