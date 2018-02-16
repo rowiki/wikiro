@@ -22,6 +22,7 @@ public class WikiprojectsHierarchy {
         declareParent("Localitățile din România", "Orașele României");
         declareParent("România", "Localitățile din România");
         declareParent("Țările lumii", "România");
+        declareParent("Istorie", "Arheologie");
     }
 
     private static void declareParent(String parent, String child) {
