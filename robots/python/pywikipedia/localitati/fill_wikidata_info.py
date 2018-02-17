@@ -41,6 +41,8 @@ config = {
         u'populație': ('P1082', False, 'quantity'),
         u'reședință pentru': ('P1376', False, 'wikibase-item'),
         u'site': ('P856', False, 'url'),
+        u'stemă': ('P94', False, 'commonsMedia'),
+        u'drapel': ('P41', False, 'commonsMedia'),
     }
 }
 
@@ -473,6 +475,9 @@ class ImageProcessing(ItemProcessing, CityData):
             return
         self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
         self.addImage(self.getInfoboxElement(item, element=u"hartă"), _type=u"hartă")
+        if "P31" in item.claims and "Q532" not in set(v.getTarget().title() for v in self.item.claims["P31"]):
+            self.addImage(self.getInfoboxElement(item, element=u"stemă"), _type=u"stemă")
+            self.addImage(self.getInfoboxElement(item, element=u"drapel"), _type=u"drapel")
 
         if self.getUniqueClaim(u"imagine", canBeNull=True):
             return
