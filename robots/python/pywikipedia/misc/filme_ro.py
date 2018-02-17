@@ -17,7 +17,6 @@ import requests
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot import config as user
-from pywikibot import catlib
 
 sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions as sf
@@ -55,7 +54,7 @@ class Article:
 			self._page = pywikibot.Page(pywikibot.getSite(), self._title)
 			self._valid = True
 		else:
-			print u"Invalid title"
+			print(u"Invalid title")
 			self._valid = False
 
 	def fetchAarc(self):
@@ -74,7 +73,7 @@ class Article:
 		except Exception as e:
 			#without AARC data, no article
 			#print e
-			print u"AARC not found"
+			print(u"AARC not found")
 			self._valid = False
 
 	def fetchAarcTitle(self, text):
@@ -106,7 +105,7 @@ class Article:
 		r = re.search(search, text)
 		if r:
 			text = text[text.find(r.group(0)):]
-			m = re.search(ur"<p>(.*?)</p>", text)
+			m = re.search(r"<p>(.*?)</p>", text)
 			if m:
 				return m.group(1)
 		return ""
@@ -134,7 +133,7 @@ class Article:
 				break
 			(pic, name, role) = entry.split("<td>")
 			name = name[:name.find("</td")].strip()
-			m = re.search(ur"[^>]*(?=<\/a>)", name)
+			m = re.search(r"[^>]*(?=<\/a>)", name)
 			if m:
 				name = m.group(0)
 			role = fixDia(role[:role.find("</td")])
@@ -148,9 +147,10 @@ class Article:
 		m = re.search("https\:\/\/www\.cinemagia\.ro\/filme\/.*\-(\d*)\/", self._cinemagia)
 		if m:
 			self._cmId = m.group(1)
-		else:
-			print "CM not found"
 			self._valid = False
+			return
+		else:
+			print("CM not found")
 			return # no need to parse if we cannot match the URL
 		r = requests.get(self._cinemagia)
 		text = r.text
@@ -165,9 +165,9 @@ class Article:
 		r = text.find(u"<h3>Durata")
 		if r > -1:
 			text = text[r:]
-			m = re.search(ur"[^>]*(?=<\/span>)", text)
-                        if m:
-                                return m.group(0)
+			m = re.search(r"[^>]*(?=<\/span>)", text)
+			if m:
+				return m.group(0)
 		return None
 
 	def fetchCmTypes(self, text):
@@ -176,9 +176,9 @@ class Article:
 		if r > -1:
 			text = text[r:]
 			text = text[:text.find("</div>")]
-			m = re.finditer(ur"<span>(.*?)</span>", text)
-                        for t in m:
-                                types.append(fixDia(t.group(1)))
+			m = re.finditer(r"<span>(.*?)</span>", text)
+			for t in m:
+				types.append(fixDia(t.group(1)))
 		return types
 
 	def fetchCmRating(self, text):
@@ -186,25 +186,25 @@ class Article:
 		if r > -1:
 			text = text[r:]
 			text = text[:text.find("</div>")]
-			m = re.search(ur"[^>]*(?=<\/span>)", text)
-                        if m:
-                                return float(m.group(0))
+			m = re.search(r"[^>]*(?=<\/span>)", text)
+			if m:
+				return float(m.group(0))
 		return 0
 
 	def fetchCmYear(self, text):
-                r = text.find("link1")
-                if r > -1:
-                        text = text[r:]
-                        m = re.search(ur"(?<=\()[^>]*(?=\)<\/a>)", text)
-                        if m:
-                                return int(m.group(0))
-                return 0
+		r = text.find("link1")
+		if r > -1:
+			text = text[r:]
+			m = re.search(r"(?<=\()[^>]*(?=\)<\/a>)", text)
+			if m:
+				return int(m.group(0))
+		return 0
 
 	def fetchImdbRating(self, text):
 		r = text.find("imdb-rating")
 		if r > -1:
 			text = text[r:]
-			m = re.search(ur"[^>]*(?=<\/a>)", text)
+			m = re.search(r"[^>]*(?=<\/a>)", text)
 			if m:
 				score = m.group(0)
 				score = score[score.find(':')+1:].strip()
@@ -216,22 +216,22 @@ class Article:
 
 	def fetchImdbId(self, text):
 		r = text.find("imdb-rating")
-                if r > -1:
-                        text = text[r:]
-                        m = re.search("http.*\/tt(.*?)(?=\/\")", text)
-                        if m:
-                                return m.group(1)
-                return None
+		if r > -1:
+			text = text[r:]
+			m = re.search("http.*\/tt(.*?)(?=\/\")", text)
+			if m:
+				return m.group(1)
+		return None
 
 	def buildArticle(self):
 		if self._valid and self._page.exists():
-			print u"există"
+			print(u"există")
 			return False
 		self._text = u""
 		self.fetchAarc()
 		self.fetchCm()
 		if not self._valid:
-			print "invalid"
+			print("invalid")
 			return False
 		self.addInfobox()
 		self.addMainArticle()
@@ -329,7 +329,7 @@ Distribuția filmului este alcătuită din:%s
 		self._text += u"""
 
 ==Primire==
-Filmul a fost vizionat de {{subst:plural|%d|spectator}} de spectatori în cinematografele din România, după cum atestă o situație a numărului de spectatori înregistrat de filmele românești de la data premierei și până la data de 31 decembrie 2014 alcătuită de [[Centrul Național al Cinematografiei]].<ref>{{cite web|url=http://cnc.gov.ro/wp-content/uploads/2015/10/6_Spectatori-film-romanesc-la-31.12.2014.pdf |title=Situația numărului de spectatori înregistrat de filmele românești ieșite în premieră până la 31.12.2014|date=2014-12-31|format=PDF|publisher=Centrul Național al Cinematografiei|accessdate=2017-01-29}}</ref>
+Filmul a fost vizionat de {{subst:plural|%d|spectator}} în cinematografele din România, după cum atestă o situație a numărului de spectatori înregistrat de filmele românești de la data premierei și până la data de 31 decembrie 2014 alcătuită de [[Centrul Național al Cinematografiei]].<ref>{{cite web|url=http://cnc.gov.ro/wp-content/uploads/2015/10/6_Spectatori-film-romanesc-la-31.12.2014.pdf |title=Situația numărului de spectatori înregistrat de filmele românești ieșite în premieră până la 31.12.2014|date=2014-12-31|format=PDF|publisher=Centrul Național al Cinematografiei|accessdate=2017-01-29}}</ref>
 """ % spectators
 
 	def imdbWikiText(self):
@@ -404,10 +404,8 @@ if __name__ == "__main__":
 	flist = csvUtils.csvToJson("filme_url.csv", field=u"titlu articol")
 	count = 0
 	for f in flist:
-		print flist[f]
-		a = Article(f.decode('utf8'), flist[f][u"url cinemagia"], flist[f]["url aarc"])
-		if a._title and a._title[0] == u'D':
-			break
+		print(flist[f])
+		a = Article(f, flist[f][u"url cinemagia"], flist[f]["url aarc"])
 		if a.buildArticle():
 			count += 1
 			#print a._text
