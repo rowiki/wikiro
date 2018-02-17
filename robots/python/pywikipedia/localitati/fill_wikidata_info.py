@@ -325,14 +325,31 @@ class CommonsProcessing(ItemProcessing, CityData):
         self.updateCommons()
 
 
-class LabelProcessing(ItemProcessing, CityData):
+class DiacriticsProcessing(ItemProcessing, CityData):
     def __init__(self, config, always=False):
-        super(LabelProcessing, self).__init__(config, always)
+        super(DiacriticsProcessing, self).__init__(config, always)
         self._dataType = u"label"
 
     def doWork(self, pag, item):
         self.setItem(item)
-        content = item.get()
+        self.wikidataDiacritics()
+        self.wikipediaDiacritics()
+
+    def wikipediaDiacritics(self):
+        page = self.getWikiArticle(self.item)
+        if not page:
+            return
+        newTitle = page.title().replace(u'â', 'î')
+        newPage = pywikibot.Page(page.site, newTitle)
+        if newPage.exists():
+            return
+        newText = u"#redirect [[" + page.title() + u"]]"
+        answer = self.userConfirm("Redirect '%s' to '%s'" % (newTitle, page.title()))
+        if answer:
+            newPage.put(newText, u"Redirecting to [[%s]]" % page.title())
+
+    def wikidataDiacritics(self):
+        content = self.item.get()
         labels = content.get('labels')
         newlabels = {}
         for label in labels:
@@ -678,7 +695,7 @@ if __name__ == "__main__":
     # bot.workers.append(CountyProcessing(config))
     # bot.workers.append(PostCodeProcessing(config, siruta=sirutaDb, postCode=postCodes))
     # bot.workers.append(URLProcessing(config))
-    # bot.workers.append(LabelProcessing(config))
+    # bot.workers.append(DiacriticsProcessing(config))
     bot.workers.append(ImageProcessing(config, lmi=lmiDb))
     # bot.workers.append(CommonsProcessing(config))
     # bot.workers.append(SIRUTAProcessing(config, siruta=sirutaDb))
