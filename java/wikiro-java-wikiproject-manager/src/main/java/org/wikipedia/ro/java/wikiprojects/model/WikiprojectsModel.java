@@ -1,4 +1,4 @@
-package org.wikipedia.ro.java.wikiprojects.utils;
+package org.wikipedia.ro.java.wikiprojects.model;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isBlank;

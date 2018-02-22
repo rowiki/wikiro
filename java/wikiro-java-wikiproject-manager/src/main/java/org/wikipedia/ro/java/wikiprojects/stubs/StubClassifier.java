@@ -29,8 +29,8 @@ import javax.security.auth.login.LoginException;
 
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.WikiprojectsHierarchy;
+import org.wikipedia.ro.java.wikiprojects.model.WikiprojectsModel;
 import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
-import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsModel;
 import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
 
 public class StubClassifier {

@@ -14,9 +14,9 @@ import javax.security.auth.login.LoginException;
 import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.Wiki;
+import org.wikipedia.ro.java.wikiprojects.model.WikiprojectsModel;
 import org.wikipedia.ro.java.wikiprojects.utils.ArticleClass;
 import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
-import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsModel;
 import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
 
 public class WikiprojectTraverser {
