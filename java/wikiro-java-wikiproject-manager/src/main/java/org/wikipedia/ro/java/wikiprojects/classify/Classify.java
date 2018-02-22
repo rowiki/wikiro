@@ -117,7 +117,9 @@ public class Classify {
                                 if (isHuman) {
                                     Set<Claim> deathDateClaims =
                                         wdClaims.get(WikibasePropertyFactory.getWikibaseProperty("P570"));
-                                    if (null == deathDateClaims || 0 == deathDateClaims.size()) {
+                                    if (null == deathDateClaims || deathDateClaims.isEmpty()
+                                        || deathDateClaims.stream().noneMatch(claim -> "statement".equals(claim.getType())
+                                            && "value".equals(claim.getMainsnak().getSnaktype()))) {
                                         projectModel.setLivingPerson(true);
                                     }
                                 }
