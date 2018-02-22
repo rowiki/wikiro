@@ -84,9 +84,11 @@ public class Classify {
             int idx = 0;
             Pattern faPattern = Pattern.compile("\\{\\{\\s*[Aa]rticol de calitate\\s*\\}\\}");
             Pattern gaPattern = Pattern.compile("\\{\\{\\s*[Aa]rticol bun\\s*\\}\\}");
+            Pattern flPattern = Pattern.compile("\\{\\{\\s*[Ll]istă de calitate\\s*\\}\\}");
+
             for (String eachArticleInCat : pagesToRun) {
                 idx++;
-                
+
                 System.out.printf("Working on page %s [ %d/%d ]%n", eachArticleInCat, idx, pagesToRun.size());
                 String eachTalkPageOfArticleInCat = rowiki.getTalkPage(eachArticleInCat);
                 String talkPageText = rowiki.getPageText(eachTalkPageOfArticleInCat);
@@ -97,12 +99,16 @@ public class Classify {
                 if (faMatcher.find()) {
                     projectModel.setQualClass("AC");
                 } else {
-                    Matcher gaMatcher = gaPattern.matcher(articleText);
-                    if (gaMatcher.find() && !"A".equals(projectModel.getQualClass())) {
-                        projectModel.setQualClass("AB");
+                    Matcher flMatcher = flPattern.matcher(articleText);
+                    if (flMatcher.find()) {
+                        projectModel.setQualClass("LC");
+                    } else {
+                        Matcher gaMatcher = gaPattern.matcher(articleText);
+                        if (gaMatcher.find() && !"A".equals(projectModel.getQualClass())) {
+                            projectModel.setQualClass("AB");
+                        }
                     }
                 }
-                
                 if (isBlank(projectModel.getQualClass())) {
                     if (startsWithAny(eachArticleInCat, "Legislatura", "Lista", "Listă", "Galerie", "Galeria")) {
                         projectModel.setQualClass("listă");
@@ -202,7 +208,9 @@ public class Classify {
                 }
             }
 
-        } catch (FailedLoginException e) {
+        } catch (
+
+        FailedLoginException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
