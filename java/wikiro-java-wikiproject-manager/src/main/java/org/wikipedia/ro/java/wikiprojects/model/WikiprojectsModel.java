@@ -89,6 +89,7 @@ public class WikiprojectsModel {
                 }
                 if (Arrays.asList("living", "în viață").contains(argsMatcher.group(1).trim())) {
                     model.setLivingPerson(Arrays.asList("da", "yes").contains(argsMatcher.group(2).trim()));
+                    model.livingPersonRo = "în viață".equals(argsMatcher.group(1).trim());
                     continue;
                 }
                 Matcher projArgMatcher = projArgPattern.matcher(argsMatcher.group(1));
