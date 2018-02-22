@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.security.auth.login.FailedLoginException;
@@ -80,12 +82,27 @@ public class Classify {
 
             Wikibase dwiki = new Wikibase("www.wikidata.org");
             int idx = 0;
+            Pattern faPattern = Pattern.compile("\\{\\{\\s*[Aa]rticol de calitate\\s*\\}\\}");
+            Pattern gaPattern = Pattern.compile("\\{\\{\\s*[Aa]rticol bun\\s*\\}\\}");
             for (String eachArticleInCat : pagesToRun) {
                 idx++;
+                
                 System.out.printf("Working on page %s [ %d/%d ]%n", eachArticleInCat, idx, pagesToRun.size());
                 String eachTalkPageOfArticleInCat = rowiki.getTalkPage(eachArticleInCat);
                 String talkPageText = rowiki.getPageText(eachTalkPageOfArticleInCat);
                 WikiprojectsModel projectModel = WikiprojectsModel.fromTalkPage(talkPageText);
+
+                String articleText = rowiki.getPageText(eachArticleInCat);
+                Matcher faMatcher = faPattern.matcher(articleText);
+                if (faMatcher.find()) {
+                    projectModel.setQualClass("AC");
+                } else {
+                    Matcher gaMatcher = gaPattern.matcher(articleText);
+                    if (gaMatcher.find() && !"A".equals(projectModel.getQualClass())) {
+                        projectModel.setQualClass("AB");
+                    }
+                }
+                
                 if (isBlank(projectModel.getQualClass())) {
                     if (startsWithAny(eachArticleInCat, "Legislatura", "Lista", "Listă", "Galerie", "Galeria")) {
                         projectModel.setQualClass("listă");
