@@ -1,5 +1,6 @@
 package org.wikipedia.ro.java.wikiprojects.classify;
 
+import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.startsWithAny;
@@ -85,6 +86,8 @@ public class Classify {
             Pattern faPattern = Pattern.compile("\\{\\{\\s*[Aa]rticol de calitate\\s*\\}\\}");
             Pattern gaPattern = Pattern.compile("\\{\\{\\s*[Aa]rticol bun\\s*\\}\\}");
             Pattern flPattern = Pattern.compile("\\{\\{\\s*[Ll]istă de calitate\\s*\\}\\}");
+            Pattern stubPattern = Pattern.compile("\\{\\{\\s*[Cc]iot\\-");
+            Pattern blpPattern = Pattern.compile("\\{\\{\\s*[Bb]pv\\s*\\}\\}");
 
             for (String eachArticleInCat : pagesToRun) {
                 idx++;
@@ -120,6 +123,15 @@ public class Classify {
                             if (null != qualClass) {
                                 projectModel.setQualClass(qualClass);
                             }
+                        } else {
+                            Matcher stubMatcher = stubPattern.matcher(articleText);
+                            if (stubMatcher.find()) {
+                                projectModel.setQualClass("ciot");
+                            }
+                        }
+                        Matcher blpMatcher = blpPattern.matcher(defaultString(talkPageText));
+                        if (blpMatcher.find()) {
+                            projectModel.setLivingPerson(true);
                         }
                         Entity wdEntity = dwiki.getWikibaseItemBySiteAndTitle("rowiki", eachArticleInCat);
                         if (null != wdEntity) {
