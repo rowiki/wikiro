@@ -134,7 +134,7 @@ counties = {
 "Alba": { "coa": "Fișier:Actual Alba county CoA.png", "count": 0},
 "Arad": { "coa": "Fișier:Actual Arad county CoA.png", "count": 0},
 "Argeș": { "coa": "Fișier:Actual Arges county CoA.png", "count": 0},
-"Bacău": { "coa": "Fișier:Actual Bacau county CoA.png", "count": 0},
+"Bacău": { "coa": "Fișier:Stema judetului Bacau.svg", "count": 0},
 "Bihor": { "coa": "Fișier:Actual Bihor county CoA.png", "count": 0},
 "Bistrița-Năsăud": { "coa": "Fișier:Actual Bistrita-Nasaud county CoA.png", "count": 0},
 "Botoșani": { "coa": "Fișier:Stema judetului Botosani.svg", "count": 0},
