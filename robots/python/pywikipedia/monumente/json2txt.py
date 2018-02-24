@@ -9,7 +9,7 @@ from pywikibot import config as user
 def split_code(code):
         parts = code.split('-')
         if len(parts) < 3:
-                print parts
+                print(parts)
                 return (None, None, None, None)
         return (parts[0], parts[1], parts[2], parts[3])
 
