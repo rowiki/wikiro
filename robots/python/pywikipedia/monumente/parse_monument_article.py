@@ -557,12 +557,13 @@ def getWikidataProperty(page, prop):
 		claim = item.claims[prop][0]
 		try:
 			target = claim.getTarget()
-			#print target
+			#print(target)
 			if isinstance(target, pywikibot.Coordinate):
-					if target.precision < _coordVariance:
-						return target.lat, target.lon
-					else:
-						return 0,0
+				#Bug: https://www.mail-archive.com/wikidata-tech@lists.wikimedia.org/msg00714.html
+				if (target.precision or 1.0 / 3600) < _coordVariance:
+					return target.lat, target.lon
+				else:
+					return 0,0
 			else:
 				return target
 		except Exception as e:
