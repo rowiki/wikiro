@@ -9,8 +9,8 @@ The pages to be saved are read from a text file given as the "file" parameter.
 Usage: python save_from_commons.py -lang:commons -family:commons -cfg:[lmiro|lmicommons|default]
 """
 import os
-import urllib2
 import codecs
+import urllib.request
 from os import listdir
 from os.path import isfile, join
 
@@ -28,8 +28,8 @@ config = {
 	},
 	'lmicommons': {
 		'file': u"monumentfiles.txt",
-		#'dir': u"/mnt/jacob/filme/monumentimages/",
-		'dir': u"/mnt/files/monumentimages/",
+		'dir': u"/mnt/jacob/filme/monumentimages/",
+		#'dir': u"/mnt/files/monumentimages/",
 		'lang': u"commons",
 		'family': u"commons",
 	},
@@ -78,7 +78,7 @@ def processFile(name, destdir):
 		title = imagepage.title()
 		jpgfile = destdir + title
 		txtfile = jpgfile + u".wiki.txt"
-		print txtfile
+		print (txtfile)
 		if os.path.exists(txtfile):
 			pywikibot.output(jpgfile + u" already exists, skipping")
 			continue
@@ -95,7 +95,7 @@ def processFile(name, destdir):
 			pywikibot.output("Failed")
 			continue
 		pywikibot.output(u"Getting image...")
-		response = urllib2.urlopen(url)
+		response = urllib.request.urlopen(url)
 		jpg = response.read()
 		pywikibot.output(u"Saving image...")
 		f = open(jpgfile, "wb+")
