@@ -40,11 +40,14 @@ Command line options:
 -nopreload	Do not preload pages, but retrieve them as we need them.
                  Default: false; true when using -parse:quick
 -ns		Comma-separated list of namespaces to parse. Overrides the config
--parse		There are three possible values:
+-parse		There are four possible values:
 		* quick: All pages that are already in our database are skipped.
 			Only new pages are parsed.
 		* normal: New pages are parsed, as well as pages that were edited
 			since the last script run
+		* extended: New pages are parsed, as well as pages that had their
+			metadata modified (i.e. edited on wiki or at Wikidata, templates
+			changed etc.)
 		* full: All pages are parsed
 		Default: normal
 '''
