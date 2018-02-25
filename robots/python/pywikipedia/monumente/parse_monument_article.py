@@ -66,251 +66,9 @@ from pywikibot import config as user
 
 sys.path.append('wikiro/robots/python/pywikipedia')
 import strainu_functions as strainu
+import monumente
 
-options = {
-	'wikidata':
-	{
-		'lmi': 'P1770',
-		'ran': 'P2845',
-	},
-	'ro':
-	{
-		'lmi':#database we work on
-		{
-			'namespaces': [0, 6],
-			#'namespaces': [6],
-			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
-                        'templateRegexp': re.compile("\{\{(?:[a-z]*codLMI|Monument istoric)\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
-			'codeTemplate': ["codLMI", "Monument istoric"],
-			'codeTemplateParams': 
-			[
-			],
-			'geolimits': {
-				'north': 48.3,
-				'south': 43.6,
-				'west':  20.27,
-				'east':  29.7,
-			},
-		},
-		'ran':#database we work on
-		{
-			'namespaces': [0, 6],
-			#'namespaces': [6],
-			'codeRegexp': re.compile("([0-9]{4,6}(\.[0-9][0-9]){1,3})", re.I),
-			'templateRegexp': re.compile("\{\{codRAN\|([0-9]{4,6}(\.[0-9][0-9]){1,3})", re.I),
-			'codeTemplate': ["codRAN"],
-			'codeTemplateParams': 
-			[
-			],
-			'geolimits': {
-				'north': 48.3,
-				'south': 43.6,
-				'west':  20.27,
-				'east':  29.7,
-			},
-		},
-		'wlemd':#database we work on
-		{
-			'namespaces': [0],
-			'codeRegexp': re.compile("((MD)-([a-z]{1,2})-([a-z]{2,3}(\.[a-z]{1,2})?)-([0-9]+))", re.I),
-			'templateRegexp': re.compile("\{\{Monument natural MD\|((MD)-([a-z]{1,2})-([a-z]{2,3}(\.[a-z]{1,2})?)-([0-9]+))", re.I),
-			'codeTemplate': ["Monument natural MD"],
-			'codeTemplateParams': 
-			[
-			],
-			'geolimits': {
-				'north': 48.5,
-				'south': 45.4,
-				'west':  26.6,
-				'east':  30.2,
-			},
-		},
-		'infoboxes':
-		[
-		{
-			'name': 'Infocaseta Monument|Cutie Monument',
-			'author': ['artist', 'artist1', 'artist2', 'arhitect'],
-			'image': 'imagine',
-			# the databases we work on
-			'ran': 'cod2',#TODO: this is a hack, we probably need to duplicate the entry
-			'lmi': 'cod',
-		},
-		{
-			'name': 'Clădire Istorică',
-			'author': ['arhitect'],
-			'image': 'imagine',
-			# the databases we work on
-			'ran': 'cod-ran',
-			'lmi': 'cod-lmi',
-		},
-		{
-			'name': 'Cutie Edificiu Religios|Infocaseta Edificiu religios|Infocaseta Teatru|Moschee',
-			'author': ['arhitect'],
-			'image': 'imagine',
-			# the databases we work on
-			'ran': '',#nada yet
-			'lmi': '',
-		},
-		{
-			'name': 'Castru|Infocaseta Castru|Infocaseta Villa rustica',
-			'author': [],
-			'image': 'imagine',
-			# the databases we work on
-			'ran': 'cod RAN',
-			'lmi': 'cod LMI',
-		},
-		{
-			'name': 'Infocasetă Davă|Infocaseta Davă|Infocaseta Cetate dacică',
-			'author': [],
-			'image': 'imagine',
-			# the databases we work on
-			'ran': 'ref:RO:RAN',
-			'lmi': 'ref:RO:LMI',
-		},
-		{
-			'name': 'Infocaseta Gară|Infocaseta Muzeu',
-			'author': [],
-			'image': 'imagine',
-			# the databases we work on
-			'ran': '',
-			'lmi': '',
-		},
-		{
-			'name': 'Infocaseta Biserică din lemn',
-			'author': ['meșteri', 'zugravi'],
-			'image': 'imagine',
-			# the databases we work on
-			'ran': 'cod RAN',
-			'lmi': 'cod LMI',
-		},
-		{
-			'name': 'Infocaseta Lăcaș de cult|Mănăstire',
-			'author': ['arhitect', 'constructor', 'pictor'],
-			'image': 'imagine',
-			# the databases we work on
-			'ran': 'codRAN',
-			'lmi': 'codLMI',
-		},
-		{
-			'name': 'Infocaseta clădire|Infobox cladire|Infobox building',
-			'author': ['arhitect', 'firma_arhitectura', 'inginer', 'alti_designeri'],
-			'image': 'image',
-			# the databases we work on
-			'ran': '',#nada yet
-			'lmi': '',
-		},
-		],
-		'qualityTemplates':
-		[
-			'Articol bun',
-			'Articol de calitate',
-			'Listă de calitate',
-		],
-	},
-	'commons':
-	{
-		'lmi':
-		{
-			'namespaces': [14, 6],
-			#'namespaces': [14],
-			'codeRegexp': re.compile("(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
-                        'templateRegexp': re.compile("\{\{(?:Monument istoric|codLMI)\|(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))", re.I),
-			'codeTemplate': ["Monument istoric", "Monumente istorice", "codLMI"],
-			'codeTemplateParams': 
-			[
-				'lmi92',
-				'ran',
-				'eroare',
-			],
-			'geolimits': {
-				'north': 48.3,
-				'south': 43.6,
-				'west':  20.27,
-				'east':  29.7,
-			},
-		},
-		'ran':#database we work on
-		{
-			'namespaces': [14, 6],
-			#'namespaces': [6],
-			'codeRegexp': re.compile("([0-9]{4,6}(\.[0-9][0-9]){1,3})", re.I),
-			'templateRegexp': re.compile("\{\{codRAN\|([0-9]{4,6}(\.[0-9][0-9]){1,3})", re.I),
-			'codeTemplate': ["codRAN", "RAN"],
-			'codeTemplateParams': 
-			[
-			],
-			'geolimits': {
-				'north': 48.3,
-				'south': 43.6,
-				'west':  20.27,
-				'east':  29.7,
-			},
-		},
-		'wlemd':#database we work on
-		{
-			'namespaces': [14, 6],
-			'codeRegexp': re.compile("((MD)-([a-z]{1,2})-([a-z]{2,3}(\.[a-z]{1,2})?)-([0-9]+))", re.I),
-			'templateRegexp': re.compile("\{\{Monument natural MD\|((MD)-([a-z]{1,2})-([a-z]{2,3}(\.[a-z]{1,2})?)-([0-9]+))", re.I),
-			'codeTemplate': ["Monument natural MD"],
-			'codeTemplateParams': 
-			[
-			],
-			'geolimits': {
-				'north': 48.5,
-				'south': 45.4,
-				'west':  26.6,
-				'east':  30.2,
-			},
-		},
-		'infoboxes': 
-		[
-			{
-				#the format is actually {{Creator:Name}} without parameters
-				'name': 'Creator',
-				'author': ['_name'],
-				'image': 'imagine',
-				# the databases we work on
-				'ran': '',
-				'lmi': '',
-			},
-			{
-				'name': 'codLMI|Monument istoric',
-				'author': [],
-				'image': 'imagine',
-				# the databases we work on
-				'ran': 'ran',
-				'lmi': '1',#TODO
-			},
-		],
-		'qualityTemplates':
-		[
-			'Valued image',
-			'QualityImage',
-			'Assessments',
-			'Wiki Loves Monuments 2011 Europe nominee',
-			'WLM finalist or winner image 2012',
-			'WLM finalist or winner image',
-			'Picture of the day',
-			'Media of the day',
-		],
-		'validOccupations':
-		{
-			#we don't care about the creators of the 2D representation
-			'architect': 'arhitect',
-			'architectural painter': 'pictor arhitectural',
-			'artist': 'artist',
-			'artisan': 'artizan',
-			'author': 'autor',
-			'carpenter': 'tâmplar',
-			'decorator': 'decorator',
-			'engineer': 'inginer',
-			'entrepreneur': 'întreprinzător',
-			'ornamental painter': 'pictor ornamental',
-			'sculptor': 'sculptor',
-		},
-	}
-}
-
+options = monumente.config
 
 errorRegexp = re.compile("eroare\s?=\s?([^0])", re.I)
 geohackRegexp = re.compile("geohack\.php\?pagename=(.*?)&(amp;)?params=(.*?)&(amp;)?language=")
@@ -588,10 +346,10 @@ def processArticle(text, page, conf):
 		return
 
 	code = None
-	codes = re.findall(conf[_db]['codeRegexp'], text)
+	codes = re.findall(conf[_db]['codeRegexpCompiled'], text)
 	#print (codes)
 	if len(codes) > 1 and checkMultipleMonuments([res[0] for res in codes]): #more than one code, juse use the one that is marked with the template
-		tlCodes = re.findall(conf[_db]['templateRegexp'], text)
+		tlCodes = re.findall(conf[_db]['templateRegexpCompiled'], text)
 		#print(tlCodes)
 		if len(tlCodes) == 1:
 			code = tlCodes[0][0]
@@ -675,7 +433,7 @@ def processArticle(text, page, conf):
 			#print key
 			#try to identify the correct code
 			if dictElem['code'] == None and key == _db and box[key] in _dict:
-				infoCodes = re.findall(conf[_db]['codeRegexp'], _dict[box[key]])
+				infoCodes = re.findall(conf[_db]['codeRegexpCompiled'], _dict[box[key]])
 				#print(infoCodes)
 				if len(infoCodes) != 1 and checkMultipleMonuments([res[0] for res in infoCodes]): # more or less than one code is marked; just ignore
 					invalidCount(len(codes), title, _db, [res[0] for res in codes])#count comes from the first search

@@ -4,13 +4,11 @@
 made from 3 templates: one at the beginning, one at the end, and one for each
 line in the database.
 
-The script requires some configuration for each database the user wants to parse.
-The global variable ''countries'' is a dictionary. The key is a tuple containing
-the language and the database. The value is another dict containing the
-following fields:
+The script requires some configuration for each database the user wants to parse,
+which is kept in the 'monumente' module. The following fields are used:
 * project: the project family to work on
 * lang: the language to work on
-* namespaces: the namespaces that contain the pages to be parsed
+* listNamespaces: the namespaces that contain the pages to be parsed
 * fields: The acceptable fields of rowTemplate; if some other field is found, an
            error message is thrown and that field is ignored
 * pagePrefix: A list of page prefixes that we will work on; all other pages are
@@ -28,106 +26,6 @@ from pywikibot import pagegenerators
 from pywikibot import config
 
 import monumente
-
-countries = {
-	('ro', 'lmi') : {
-		'project' : 'wikipedia',
-		'lang' : 'ro',
-		'rowTemplate' : 'ElementLMI',
-		'namespaces' : [0],
-		'fields' : [
-			'Cod',
-			'Denumire',
-			'Localitate',
-			'Adresă',
-			'Datare',
-			'Creatori',
-			'Lat',
-			'Lon',
-			'OsmLat',
-			'OsmLon',
-			'Imagine',
-			'Plan',
-			'Commons',
-			'NotăCod',
-			'FostCod',
-			'Cod92',
-			'CodRan',
-			'Copyright',
-			'RefCod',
-			],
-		'idField': 'Cod',
-		'pagePrefix': {
-			'Lista monumentelor istorice din județul',
-			'Lista monumentelor istorice din București',
-		}
-	},
-	('ro', 'ran') : {
-		'project' : 'wikipedia',
-		'lang' : 'ro',
-		'rowTemplate' : 'ElementRAN',
-		'namespaces' : [0],
-		'fields' : {
-			'Cod': 'Cod',
-			'NotăCod': 'Notăcod',
-			'CodLMI': 'CodLMI',
-			'Nume': 'Nume',
-			'NumeAlternative': 'NumeAlternative',
-			'Categorie': 'Categorie',
-			'TipMonument': 'TipMonument',
-			'Localitate': 'Localitate',
-			'Adresă': 'Adresă',
-			'Cultura': 'Cultura',
-			'Faza': 'Faza',
-			'Datare': 'Datare',
-			'Lat': 'Lat',
-			'Lon': 'Lon',
-			'Descoperit': 'Descoperit',
-			'Descoperitor': 'Descoperitor',
-			'Datare': 'Datare',
-			'Imagine': 'Imagine',
-			'Commons': 'Commons',
-			'Index': 'Index',
-			'CodSIRUTA': 'CodSIRUTA',
-			'Stare': 'Stare',
-			'TipCod': 'TipCod',
-			},
-		'idField': 'Cod',
-		'pagePrefix': {
-			'Lista siturilor arheologice din județul',
-			'Lista siturilor arheologice din București',
-		}
-	},
-	('ro', 'wlemd') : {
-		'project' : 'wikipedia',
-		'lang' : 'ro',
-		'rowTemplate' : 'Wikipedia:Wiki Loves Earth/Moldova/item',
-		'namespaces' : [4],
-		'fields' : [
-			'ID',
-			'denumire',
-			'proprietar',
-			'descriere',
-			'raion',
-			'ascunde_raion',
-			'amplasament',
-			'suprafata',
-			'latitudine',
-			'longitudine',
-			'tip',
-			'subtip',
-			'imagine',
-			'categorie',
-                        'q',
-                        'wikilink',
-                        'numar',
-			],
-		'idField': 'ID',
-		'pagePrefix': {
-			'Wikipedia:Wiki Loves Earth/Moldova/Lista',
-		}
-	},
-}
 
 counties = {
 "București": { "coa": "Fișier:Bucharest-Coat-of-Arms.png", "count": 0, "list": "[[Lista monumentelor istorice din București]] (sector [[Lista monumentelor istorice din București, sector 1|1]], [[Lista monumentelor istorice din București, sector 2|2]], [[Lista monumentelor istorice din București, sector 3|3]], [[Lista monumentelor istorice din București, sector 4|4]], [[Lista monumentelor istorice din București, sector 5|5]], [[Lista monumentelor istorice din București, sector 6|6]], [[Lista monumentelor istorice din București cu sector necunoscut|necunoscut]])"},
@@ -176,6 +74,9 @@ counties = {
 
 monuments_db = []
 monuments_counts = {}
+
+def getCfg(_lang, _db):
+	return monumente.config.get(_lang).get(_db)
 
 def processMonument(params, source, countryconfig, title, previous):
 	'''
@@ -251,7 +152,7 @@ def processDatabase(countryconfig, dbname="lmi"):
 	rowTemplate = pywikibot.Page(site, rowTemplate)
 
 	transGen = pagegenerators.ReferringPageGenerator(rowTemplate, onlyTemplateInclusion=True)
-	filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen, countryconfig.get('namespaces'))
+	filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen, countryconfig.get('listNamespaces'))
 	pregenerator = pagegenerators.PreloadingGenerator(filteredGen)
 
 	for page in pregenerator:
@@ -271,17 +172,20 @@ def processDatabase(countryconfig, dbname="lmi"):
 def update(database):
 	if database:
 		lang = pywikibot.Site().language()
-		if not countries.get((lang, database)):
+		if not getCfg(lang, database):
 			pywikibot.output('I have no config for database "%s" in language "%s"' % (database, lang))
 			return False
 		pywikibot.output('Working on database "%s" in language "%s"' % (database, lang))
-		processDatabase(countries.get((lang, database)), database)
+		processDatabase(getCfg(lang, database), database)
 		updateCounts(database)
 	else:
-		for (lang, database), countryconfig in countries.items():
-			pywikibot.output('Working on database "%s" in language "%s"' % (database, lang))
-			processDatabase(countryconfig, database)
-			updateCounts(database)
+		for lang in monumente.config:
+			for database, countryconfig in monumente.config.get(lang).items():
+				if 'pagePrefix' not in countryconfig:
+					continue
+				pywikibot.output('Working on database "%s" in language "%s"' % (database, lang))
+				processDatabase(countryconfig, database)
+				updateCounts(database)
 
 def updateCounts(database):
 	if database != "lmi":

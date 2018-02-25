@@ -22,7 +22,7 @@ Errors reported to a log file:
   0.001 grade or ~3,6 degree seconds)
 
 The script requires some configuration for each database one plans to work on.
-The global variable ''countries'' is a dictionary. The key is a tuple containing
+The global variable ''cfg'' is a dictionary. The key is a tuple containing
 the language and the database. The value is another dict containing the
 following fields:
 * headerTemplate: The template that marks the beginning of the list in the page
@@ -96,158 +96,11 @@ import strainu_functions as strainu
 import csvUtils
 
 import monumente
+from monumente import Changes
 
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot import config as user
-
-class Changes:
-	none	= 0x000
-	article = 0x010
-	coord   = 0x020
-	image   = 0x040
-	creator = 0x080
-	commons = 0x100
-	other	= 0x200
-	all	= 0xFFF
-
-
-lmi_blacklist = [#all lowercase
-		u'detali',#detaliu, detalii
-		u'pisani',#pisanie, pisanii
-		u'interio',#interior, interioare
-		u'plac',#placa, placă
-		u'usa',
-		u'fereastr',
-		u'logo',#logo
-		u'icon',
-		u'inscrip',#incriptie, incription
-		u'fresc',#frescă, fresco
-	    ]
-
-plan = 	[#all lowercase
-		u'.svg',#svg files are definetely not pictures
-		u'schem',
-		u'plan',#plans are plans
-		u'v1',
-		u'v2',
-		u'reconstituire',
-		u'3d',
-		u'localizare',
-		u'map'
-		u'layout',
-		u'grundriss',
-		u'schita',
-		u'schiță',
-		u'schița',
-	]
-
-countries = {
-	('ro', 'lmi') : {
-		'headerTemplate' : u'ÎnceputTabelLMI',
-		'rowTemplate' : u'ElementLMI',
-		'footerTemplate' : u'SfârșitTabelLMI',
-		'codeRegexp' : "(([a-z]{1,2})-(i|ii|iii|iv)-([a-z])-([a-z])-([0-9]{5}(\.[0-9]{2,3})?))",
-		'fields' : collections.OrderedDict([
-						(u'Cod', {'code': Changes.all, }),
-						(u'NotăCod', {'code': Changes.all, }),
-						(u'FostCod', {'code': Changes.other, }),
-						(u'CodRan', {'code': Changes.other, 'alias': 'ran', }),
-						(u'Cod92', {'code': Changes.other, 'alias': 'lmi92', }),
-						(u'Denumire', {'code': Changes.article, }),
-						(u'Localitate', {'code': Changes.all, }),
-						(u'Adresă', {'code': Changes.all, }),
-						(u'Datare', {'code': Changes.all, }),
-						(u'Creatori', {'code': Changes.creator, }),
-						(u'Lat', {'code': Changes.coord, }),
-						(u'Lon', {'code': Changes.coord, }),
-						(u'OsmLat', {'code': Changes.coord, }),
-						(u'OsmLon', {'code': Changes.coord, }),
-						(u'Imagine', {'code': Changes.image, 'blacklist': lmi_blacklist + plan}),
-						(u'Plan', {'code': Changes.image, 'blacklist': lmi_blacklist}),
-						(u'Commons', {'code': Changes.commons, }),
-						(u'Copyright', {'code': Changes.creator, }),
-					]),
-		'geolimits': {
-			'north': 48.3,
-			'south': 43.6,
-			'west':  20.27,
-			'east':  29.7,
-		},
-		'idField': u'Cod',
-		'keepEmptyFields': False,
-	},
-	('ro', 'ran') : {
-		'headerTemplate' : u'ÎnceputTabelRAN',
-		'rowTemplate' : u'ElementRAN',
-		'footerTemplate' : u'SfârșitTabelRAN',
-		'codeRegexp': "([0-9]{4,6}(\.[0-9][0-9]){1,3})",
-		'fields' : collections.OrderedDict([
-						(u'Cod', {'code': Changes.all, }),
-						(u'NotăCod', {'code': Changes.all, }),
-						(u'CodLMI', {'code': Changes.other, }),
-						(u'Nume', {'code': Changes.article, }),
-						(u'NumeAlternative', {'code': Changes.all, }),
-						(u'Categorie', {'code': Changes.all, }),
-						(u'TipMonument', {'code': Changes.all, }),
-						(u'Localitate', {'code': Changes.all, }),
-						(u'Adresă', {'code': Changes.all, }),
-						(u'Cultura', {'code': Changes.all, }),
-						(u'Faza', {'code': Changes.all, }),
-						(u'Datare', {'code': Changes.all, }),
-						(u'Descoperitor', {'code': Changes.creator, }),
-						(u'Descoperit', {'code': Changes.all, }),
-						(u'Lat', {'code': Changes.coord, }),
-						(u'Lon', {'code': Changes.coord, }),
-						(u'Latd', {'code': Changes.coord, }),
-						(u'Latm', {'code': Changes.coord, }),
-						(u'Lats', {'code': Changes.coord, }),
-						(u'Lond', {'code': Changes.coord, }),
-						(u'Lonm', {'code': Changes.coord, }),
-						(u'Lons', {'code': Changes.coord, }),
-						(u'Imagine', {'code': Changes.image, 'blacklist': lmi_blacklist + plan}),
-						(u'Commons', {'code': Changes.commons, }),
-					]),
-		'geolimits': {
-			'north': 48.3,
-			'south': 43.6,
-			'west':  20.27,
-			'east':  29.7,
-		},
-		'idField': u'Cod',
-		'keepEmptyFields': False,
-	},
-	('ro', 'wlemd') : {
-		'headerTemplate' : u'Wikipedia:Wiki Loves Earth/Moldova/start',
-		'rowTemplate' : u'Wikipedia:Wiki Loves Earth/Moldova/item',
-		'footerTemplate' : u'Wikipedia:Wiki Loves Earth/Moldova/end',
-		'codeRegexp' : "((MD)-([a-z]{1,2})-([a-z]{2,3}(\.[a-z]{1,2})?)-([0-9]+))",
-		'fields' : collections.OrderedDict([
-						(u'ID', {'code': Changes.all, }),
-						(u'denumire', {'code': Changes.article, }),
-						(u'proprietar', {'code': Changes.all, }),
-						(u'descriere', {'code': Changes.all, }),
-						(u'raion', {'code': Changes.all, }),
-						(u'ascunde_raion', {'code': Changes.all, }),
-						(u'amplasament', {'code': Changes.all, }),
-						(u'suprafata', {'code': Changes.all, }),
-						(u'latitudine', {'code': Changes.coord, }),
-						(u'longitudine', {'code': Changes.coord, }),
-						(u'tip', {'code': Changes.all, }),
-						(u'subtip', {'code': Changes.all, }),
-						(u'imagine', {'code': Changes.image, 'blacklist': []}),
-						(u'categorie', {'code': Changes.commons, }),
-					]),
-		'geolimits': {
-				'north': 48.5,
-				'south': 45.4,
-				'west':  26.6,
-				'east':  30.2,
-		},
-		'idField': u'ID',
-		'keepEmptyFields': True,
-	},
-}
 
 _flog = None
 _coordVariance = 0.001 #decimal degrees
@@ -268,10 +121,16 @@ def closeLog():
 def log(string):
 	pywikibot.output(string.encode("utf8"))
 	_flog.write(string + "\n")
+
+def getCfg(_lang, _db):
+	return monumente.config.get(_lang).get(_db)
+
+def getFields(_lang, _db):
+	return getCfg(_lang, _db).get('fields')
 	
 def rebuildTemplate(params, skipEmpty=True):
-	my_template = u"{{" + countries.get((_lang, _db)).get('rowTemplate') + u"\n"
-	for name in countries.get((_lang, _db)).get('fields'):
+	my_template = u"{{" + getCfg(_lang, _db).get('rowTemplate') + u"\n"
+	for name in getFields(_lang, _db):
 		if skipEmpty and name in params and params[name] != u"":
 			my_template += u"| " + name + u" = " + params[name].strip() + u"\n"
 		elif not skipEmpty and name in params:
@@ -308,11 +167,11 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 	:return: The modified text of the page
 	:rtype: string
 	"""
-	if (field not in countries.get((_lang, _db)).get('fields') or \
-	countries.get((_lang, _db)).get('fields')[field]['code'] & _changes) == Changes.none:
+	if (field not in getFields(_lang, _db) or \
+	getFields(_lang, _db)[field]['code'] & _changes) == Changes.none:
 		pywikibot.output("Skipping updating %s for %s" % (field, code))
 		return
-	if hasDependencyCycles(field, newvalue, countries.get((_lang, _db)).get('fields')[field]['code'], olddata):
+	if hasDependencyCycles(field, newvalue, getFields(_lang, _db)[field]['code'], olddata):
 		pywikibot.output("Skipping updating %s for %s" % (field, code))
 		return
 
@@ -328,14 +187,14 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 	last = None
 	rawCode = None
 	my_params = {}
-	rowTemplate = countries.get((_lang, _db)).get('rowTemplate')
+	rowTemplate = getCfg(_lang, _db).get('rowTemplate')
 	
 	templates = pywikibot.textlib.extract_templates_and_params(text, strip=True)
 	for (template, params) in templates:
 		if template == rowTemplate:
 			#params = { k.strip(): v for k,v in params.items() }
 			old_params = dict(params)
-			params = monumente.filterOne(params, countries.get((_lang, _db)))
+			params = monumente.filterOne(params, getCfg(_lang, _db))
 			for param in params:
 				val = params[param]
 				val = val.split("<ref")[0].strip()
@@ -343,7 +202,7 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 				
 				fld = param.strip()
 				
-				if fld == countries.get((_lang, _db)).get('idField') and val2 == code:
+				if fld == getCfg(_lang, _db).get('idField') and val2 == code:
 					codeFound = True
 					rawCode = old_params[param]
 					my_params = params
@@ -356,9 +215,9 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 		pywikibot.output(u"updateTableData: Code %s not found, giving up" % code)
 		return None
 	
-	orig = rebuildTemplate(my_params, not countries.get((_lang, _db)).get('keepEmptyFields')) 
+	orig = rebuildTemplate(my_params, not getCfg(_lang, _db).get('keepEmptyFields')) 
 	my_params[field] = newvalue
-	new = rebuildTemplate(my_params, not countries.get((_lang, _db)).get('keepEmptyFields'))
+	new = rebuildTemplate(my_params, not getCfg(_lang, _db).get('keepEmptyFields'))
 	
 	if orig.strip() == new.strip() and upload != None:
 		#pywikibot.output("No change in field %s for %s, nothing to upload!" % (field, code))
@@ -386,7 +245,7 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 		# if we cannot find another template after the current, we
 		# are most likely the last template on the page
 		if cliva < 0:
-			cliva = after.find(u"{{" + countries.get((_lang, _db)).get('footerTemplate'))
+			cliva = after.find(u"{{" + getCfg(_lang, _db).get('footerTemplate'))
 		if cliva >= 0 and clivb >= 0:
 			after = after[cliva:]
 			before = before[:clivb]
@@ -559,7 +418,7 @@ def getImageType(image):
 	"""	
 	search = image.lower()
 	#print(search)
-	fields = countries.get((_lang, _db)).get('fields')
+	fields = getFields(_lang, _db)
 	for field in fields:
 		#print "*" + field
 		if fields[field]['code'] == Changes.image:
@@ -640,7 +499,7 @@ def hasDependencyCycles(field, value, type, monument):
 	Checking this breaks dependency cycles between the list, the articles
 	and Wikidata.
 	"""
-	fields = countries.get((_lang, _db)).get('fields')
+	fields = getFields(_lang, _db)
 	for otherField in fields:
 		#print "*" + field
 		if fields[otherField]['code'] & type and \
@@ -651,7 +510,7 @@ def hasDependencyCycles(field, value, type, monument):
 	return False
 
 def getFieldsWithAliases():
-	fields = countries.get((_lang, _db)).get('fields')
+	fields = getFields(_lang, _db)
 	return {field: fields[field]['alias'] for field in fields if fields[field].get('alias')}
 
 def getMiscDataFromPages(dataSource):
@@ -697,7 +556,7 @@ def main():
 		_changes = Changes.all
 
 	_lang = pywikibot.Site().lang
-	if countries.get((_lang, _db)) == None:
+	if getCfg(_lang, _db) == None:
 		pywikibot.output("Couldn't find the config for lang %s, database %s. Did you miss a parameter?" % (_lang, _db))
 		pywikibot.output("----")
 		pywikibot.showHelp()
@@ -714,7 +573,7 @@ def main():
 	files_local =			readJson("_".join(filter(None, [_lang, _db,  pywikibot.Site().namespace(6), "pages.json"])), _lang + ".wp files")
 	categories_commons =	readJson("_".join(filter(None, ["commons", _db, "Category_pages.json"])), "commons categories")
 	pages_commons =			readJson("_".join(filter(None, ["commons", _db, "File_pages.json"])), "commons images")
-	
+
 	other_data = readOtherData(otherFile)
 	
 	checkNewMonuments(other_data, db_json)
@@ -724,24 +583,24 @@ def main():
 	else:
 		ran_data = {}
 	articleField = u"Denumire"
-	for field in countries.get((_lang, _db))["fields"]:
-		if countries.get((_lang, _db))["fields"][field]['code'] == Changes.article:
+	for field in getFields(_lang, _db):
+		if getFields(_lang, _db)[field]['code'] == Changes.article:
 			articleField = field
 			break
 	creatorField = u"Creatori"
-	for field in countries.get((_lang, _db))["fields"]:
-		if countries.get((_lang, _db))["fields"][field]['code'] == Changes.creator:
+	for field in getFields(_lang, _db):
+		if getFields(_lang, _db)[field]['code'] == Changes.creator:
 			creatorField = field
 			break
 	imageField = u"Imagine"
-	for field in countries.get((_lang, _db))["fields"]:
-		if countries.get((_lang, _db))["fields"][field]['code'] == Changes.image:
+	for field in getFields(_lang, _db):
+		if getFields(_lang, _db)[field]['code'] == Changes.image:
 			imageField = field
 			break
 	latField = None
 	lonField = None
-	for field in countries.get((_lang, _db))["fields"]:
-		if countries.get((_lang, _db))["fields"][field]['code'] == Changes.coord:
+	for field in getFields(_lang, _db):
+		if getFields(_lang, _db)[field]['code'] == Changes.coord:
 			#TODO: maybe use the first letters? We currently hardcode the order
 			if not latField:
 				latField = field
@@ -757,8 +616,8 @@ def main():
 			articleText = None
 			lastSource = monument["source"]
 
-		rawCode = monument[countries.get((_lang, _db)).get('idField')]
-		regexp = re.compile(countries.get((_lang, _db)).get('codeRegexp'), re.I)
+		rawCode = monument[getCfg(_lang, _db).get('idField')]
+		regexp = re.compile(getCfg(_lang, _db).get('codeRegexp'), re.I)
 		result = re.findall(regexp, rawCode)
 		if len(result) > 0:
 			code = result[0][0]
@@ -984,7 +843,7 @@ def main():
 			else:
 				newcode = code.replace(u"-a-", u"-m-") + u".01"
 				if code.find(u"-a-") > -1 and \
-					db_json[index+1][countries.get((_lang, _db)).get('idField')] == newcode and \
+					db_json[index+1][getCfg(_lang, _db).get('idField')] == newcode and \
 					not isNullorEmpty(db_json[index+1].get(imageField)):
 					pywikibot.output(u"Importing image from submonument %s" % newcode)
 					articleText = updateTableData(monument["source"], code, imageField, db_json[index+1].get(imageField), monument, text=articleText)
@@ -1037,10 +896,10 @@ def main():
 				otherValid = False
 				continue
 			elif (otherLat > 0 or otherLong > 0) and \
-				(otherLat > countries.get((_lang, _db)).get('geolimits').get('north') or \
-				otherLat < countries.get((_lang, _db)).get('geolimits').get('south') or \
-				otherLong > countries.get((_lang, _db)).get('geolimits').get('east') or \
-				otherLong < countries.get((_lang, _db)).get('geolimits').get('west')) :
+				(otherLat > getCfg(_lang, _db).get('geolimits').get('north') or \
+				otherLat < getCfg(_lang, _db).get('geolimits').get('south') or \
+				otherLong > getCfg(_lang, _db).get('geolimits').get('east') or \
+				otherLong < getCfg(_lang, _db).get('geolimits').get('west')) :
 				log(u"* [%s] ''W'': ''[%s]'' Coordonatele (%f,%f) au nevoie de o verificare - nu par " \
 						u"a fi din regiunea căutată" %	(otherSrc[:3], code, otherLat, otherLong))
 				otherValid = False
