@@ -17,6 +17,8 @@ public class WikiprojectsHierarchy {
         declareParent("Muzică", "Muzică pop");
         declareParent("Muzică", "Hip hop");
         declareParent("Muzică", "Muzică clasică");
+        declareParent("Muzică", "Muzică românească");
+        declareParent("Muzică", "Jazz");
         declareParent("Transport", "Aviație");
         declareParent("Transport", "Drumuri");
         declareParent("Transport", "Trenuri");
@@ -25,6 +27,7 @@ public class WikiprojectsHierarchy {
         declareParent("Localitățile din România", "Orașele României");
         declareParent("România", "Localitățile din România");
         declareParent("România", "Istoria României");
+        declareParent("România", "Muzică românească");
         declareParent("Țările lumii", "România");
         declareParent("Țările lumii", "Irlanda");
         declareParent("Țările lumii", "Australia");
@@ -32,6 +35,8 @@ public class WikiprojectsHierarchy {
         declareParent("Istorie", "Istoria României");
         declareParent("Economie", "Afaceri");
         declareParent("Economie", "Transport");
+        declareParent("Geografie", "Râuri");
+        declareParent("Geografie", "Munți");
     }
 
     private static void declareParent(String parent, String child) {
