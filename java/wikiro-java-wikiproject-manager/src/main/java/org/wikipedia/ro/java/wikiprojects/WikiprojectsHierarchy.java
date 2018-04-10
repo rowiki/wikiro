@@ -37,6 +37,7 @@ public class WikiprojectsHierarchy {
         declareParent("Economie", "Transport");
         declareParent("Geografie", "Râuri");
         declareParent("Geografie", "Munți");
+        declareParent("Film", "Televiziune");
     }
 
     private static void declareParent(String parent, String child) {
