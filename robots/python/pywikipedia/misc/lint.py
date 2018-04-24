@@ -40,16 +40,17 @@ def solve_misnested_tag(text):
 
 def solve_image_options(text):
 	newtext = text
-	newtext = re.sub(r"(\d{2,4})\s*px\.", r"\1px", newtext)
+	newtext = re.sub(r"(\d{2,4})\s*px\.\|", r"\1px|", newtext)
 	newtext = re.sub(r"(\d{2,4})\s*pv", r"\1px", newtext)
 	newtext = re.sub(r"(\d{2,4})\s*pix\s*\|", r"\1px|", newtext)
-	newtext = re.sub(r"(\d{2,4})\s*pt", r"\1px", newtext)
-	newtext = re.sub(r"(\d{2,4})\s*x([^\d])", r"\1px\2", newtext)
+	newtext = re.sub(r"(\d{2,4})\s*pt\|", r"\1px|", newtext)
+	#newtext = re.sub(r"(\d{2,4})\s*x([^\d])", r"\1px\2", newtext)
 	newtext = re.sub(r"(\d{2,4})\s*pcx", r"\1px", newtext)
+	newtext = re.sub(r"\[\[(File|Fișier|Image|Imagine)(.*)\|(\d{2,4})\|", r"[[\1\2|\3px|", newtext, re.I)
 	newtext = re.sub(r"\|upleft", r"", newtext)
 	newtext = re.sub(r"\|\{\{\{\d\}\}\}", r"", newtext)
-	newtext = re.sub(r"\|links", r"|left", newtext)
-	newtext = re.sub(r"\|sinistra", r"|left", newtext)
+	newtext = re.sub(r"\|(links|esquerda|sinistra)", r"|left", newtext)
+	#newtext = re.sub(r"\|sinistra", r"|left", newtext)
 	newtext = re.sub(r"\|rechts", r"|right", newtext)
 	newtext = re.sub(r"\|([^r])igh([^t]?)\|", r"|right|", newtext)
 	newtext = re.sub(r"\|vertical(ă?)", r"|upright", newtext)
@@ -58,6 +59,8 @@ def solve_image_options(text):
 	#newtext = re.sub(r"\|(\d+)\|", r"|\1px|", newtext)
 	newtext = re.sub(r"\|\s*\|\s*\|\s*thumb", r"|thumb", newtext)
 	newtext = re.sub(r"\|\s*\|\s*thumb", r"|thumb", newtext)
+	newtext = re.sub(r"(мини)", r"thumb", newtext)
+	newtext = re.sub(r"\|(jpg|gif|png|svg|pdf)\|", r"|", newtext)
 	return newtext
 
 def solve(lintError, f):
