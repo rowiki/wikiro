@@ -133,6 +133,7 @@ def treat(day, month, event):
             follow = True
         if not follow:
             continue
+
         try:
             item = link.data_item()
         except:
@@ -147,6 +148,7 @@ def treat(day, month, event):
         if not follow:
             #print("Not a person: %s" % link)
             continue
+
         score = 0
         pno = events[event][1]
         #print(item)
@@ -154,6 +156,7 @@ def treat(day, month, event):
             r = "|- style=\"background-color:#ffff88\"\n|  %s || [[%s]] || [[%s]] || %d %s || [[:d:%s|%s]] || [fără dată] || 0\n" % (event, link.title(), title, day, month, item.title(), item.title())
             ret += r
             continue
+
         preferred = None
         if len(item.claims[pno]) > 1:
             score += MULTIPLE_DATE_PENALTY * (len(item.claims[pno]) - 1)
@@ -165,13 +168,16 @@ def treat(day, month, event):
                     preferred = c
         else:
             preferred = item.claims[pno][0]
+
         if preferred == None:
             r = "|- style=\"background-color:#88ffff\"\n|  %s || [[%s]] || [[%s]] || %d %s || [[:d:%s|%s]] || [date multiple] || %d\n" % (event, link.title(), title, day, month, item.title(), item.title(), score)
             ret += r
             continue
+
         if preferred.getTarget() == None:
             print("Impossible to extract reliable data for %s (wrong date)" % link)
             continue
+
         date = preferred.getTarget()
         sources = preferred.getSources()
         score += MULTIPLE_SOURCES_BONUS * len(sources)
@@ -182,18 +188,20 @@ def treat(day, month, event):
                m = months[date.month -1]
            else:
                m = "[fără lună]"
-           r = "|- style=\"background-color:#ffff88\"\n|  %s || [[%s]] || [[%s]] || %d %s || [[:d:%s#%s|%s]] || %s %s %d || %d\n" % (event, link.title(), title, day, month, item.title(), pno, item.title(), m, d, date.year, score)
+           r = "|- style=\"background-color:#ffff88\"\n|  %s || [[%s]] || [[%s]] || %d %s || [[:d:%s#%s|%s]] || %s %s %d || %d\n" % (event, link.title(), title, day, month, item.title(), pno, item.title(), d, m, date.year, score)
            ret += r
            continue
+
         mydate = pywikibot.WbTime(year=date.year, month = int(1 + months.index(month)), day=day)
-        otherdate = convertCalendar(date)
         if not equal_dates(date, mydate):
+            otherdate = convertCalendar(date)
             if not equal_dates(otherdate, mydate):
                 r = "|- style=\"background-color:#ff8888\"\n|  %s || [[%s]] || [[%s]] || %d %s || [[:d:%s#%s|%s]] || %d %s || %d\n" % (event, link.title(), title, day, month, item.title(), pno, item.title(), date.day, months[date.month-1], score)
             else:
                 #different calendar, same date
                 r = "|- style=\"background-color:#88ff88\"\n|  %s || [[%s]] || [[%s]] || %d %s || [[:d:%s#%s|%s]] || %d %s || 0\n" % (event, link.title(), title, day, month, item.title(), pno, item.title(), date.day, months[date.month-1])
             ret += r
+
     return ret
 
 def main():
