@@ -49,10 +49,11 @@ filters_ro = {
 	},
 }
 
-api = OsmApi.OsmApi(api="api.openstreetmap.org", passwordfile = "osmpasswd", debug = True)
+api = OsmApi.OsmApi(api="https://api.openstreetmap.org", passwordfile = "osmpasswd", debug = True)
 oapi = "z.overpass-api.de"
+oapi = "lz4.overpass-api.de"
 obase="api"
-#oapi = "overpass.osm.rambler.ru"
+#oapi = "overpass.openstreetmap.ru"
 #obase= "cgi"
 
 def readVillageFile():
@@ -60,7 +61,7 @@ def readVillageFile():
 	reader = fun.unicodeCsvReader(open("codp_1k.csv", "r"))
 	for row in reader:
 		#county, village (commune), postal_code
-		_, county, village, code, _ = row
+		county, village, code = row
 		if village in villages:
 			villages[village] = None
 		else:
@@ -74,16 +75,18 @@ def uploadNode(node_id, code):
 	tags = node["tag"]
 	if tags["addr:city"] == u"Bucureşti":
 		tags["addr:city"] = u"București"
-	if "postal_code" in tags or "addr:postcode" in tags:
-		print (u"Place %s %s, %s already has a postal code. Check for errors in the request?" % (tags["addr:street"], tags["addr:housenumber"], tags["addr:city"]))
+	if ("postal_code" in tags and tags["postal_code"] == code) or ("addr:postcode" in tags and tags["addr:postcode"] == code):
+		print (u"Place %s %s, %s already has a postal code (%s). Check for errors in the request?" % (tags["addr:street"], tags["addr:housenumber"], tags["addr:city"], tags.get("addr:postcode") or tags.get("postal_code")))
 		return 0 
+        elif "addr:postcode" in tags:
+		print (u"Replacing code %s with %s" % (tags.get("addr:postcode"), code))
 	tags["addr:postcode"] = code
 	tags["addr:postcode:source"] = u"Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana"
 	node["tag"] = tags
 	print ("Ready to add postal_code (%s) to %s %s, %s" % (tags["addr:postcode"], tags["addr:street"], tags["addr:housenumber"], tags["addr:city"]))
 	print "Do you want to update the record? ([y]es/[n]o/[a]llways/[q]uit)"
-	#line = sys.stdin.readline().strip()
-	line = 'y'
+	line = sys.stdin.readline().strip()
+	#line = 'y'
 	if line == 'y':
 		api.ChangesetCreate({u"comment": "adding postal code to %s %s, %s" % (tags["addr:street"], tags["addr:housenumber"], tags["addr:city"])})
 		api.NodeUpdate(node)
@@ -97,16 +100,18 @@ def uploadWay(way_id, code):
 	tags = node["tag"]
 	if tags["addr:city"] == u"Bucureşti":
 		tags["addr:city"] = u"București"
-	if "postal_code" in tags or "addr:postcode" in tags:
-		print (u"Place %s %s, %s already has a postal code. Check for errors in the request?" % (tags["addr:street"], tags["addr:housenumber"], tags["addr:city"]))
+	if ("postal_code" in tags and tags["postal_code"] == code) or ("addr:postcode" in tags and tags["addr:postcode"] == code):
+		print (u"Place %s %s, %s already has a postal code (%s). Check for errors in the request?" % (tags["addr:street"], tags["addr:housenumber"], tags["addr:city"], tags.get("addr:postcode") or tags.get("postal_code")))
 		return 0 
+        elif "addr:postcode" in tags:
+		print (u"Replacing code %s with %s" % (tags.get("addr:postcode"), code))
 	tags["addr:postcode"] = code
 	tags["addr:postcode:source"] = u"Date de la Poșta Română, publicate sub Licența pentru Guvernare Deschisă v1.0 la http://date.gov.ro/organization/posta-romana"
 	node["tag"] = tags
 	print ("Ready to add postal_code (%s) to %s %s, %s" % (tags["addr:postcode"], tags["addr:street"], tags["addr:housenumber"], tags["addr:city"]))
 	print "Do you want to update the record? ([y]es/[n]o/[a]llways/[q]uit)"
-	#line = sys.stdin.readline().strip()
-	line = 'y'
+	line = sys.stdin.readline().strip()
+	#line = 'y'
 	if line == 'y':
 		api.ChangesetCreate({u"comment": "adding postal code to %s %s" % (tags["addr:street"], tags["addr:housenumber"])})
 		api.WayUpdate(node)
@@ -218,7 +223,7 @@ def check_cities(isNode=True):
 	reader = fun.unicodeCsvReader(open("codp_50k.csv", "r"))
 	villages = readVillageFile()
 	for row in reader:
-		county, city, tip, street, nr, code, _, _, _ = row
+		county, city, tip, street, nr, code = row
 		if nr[:2] == u"bl":
 			continue
 		_ids = findId(tip, street, nr, city)
@@ -238,7 +243,7 @@ def check_cities(isNode=True):
 		for a in obj[o]:
 			c = a["city"]
 			if c in villages and villages[c]:
-				upload(a["id"], villages[c], isNode)
+				pass #upload(a["id"], villages[c], isNode)
 
 if __name__ == "__main__":
 	#print obj
