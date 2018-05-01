@@ -155,8 +155,8 @@ def stripLink(text):
 #from [[a|b]] get a
 def extractLink(text):
     start = text.find("[[")
-    end = text.find("]]")
-    sep = text.find("|")
+    end = text.find("]]", start)
+    sep = text.find("|", start, end)
     
     if start < 0 or end < 0:
         return None
