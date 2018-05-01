@@ -10,11 +10,11 @@ class OverpassRequest:
 		self.base = os.path.join("/", base, "interpreter")
 		self._api = api
 		self._poly = poly
-		print api
-		print base
-		print poly
-		print filters
-		print output
+		print (api)
+		print (base)
+		print (poly)
+		print (filters)
+		print (output)
 		self._filters = filters
 		self._output = output
 		
@@ -39,7 +39,7 @@ class OverpassRequest:
 			req += u"->." + filts + u";"
 		req += u"\n" + vars + u");"
 		req += u"\nout body;"
-		print req
+		print (req)
 		return req.encode("utf8")
 
 	def makeRequest(self, req=None):

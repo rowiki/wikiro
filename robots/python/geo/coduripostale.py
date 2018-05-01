@@ -57,7 +57,7 @@ filters = {
 	u"siruta:code": (u".", False),
 	u"amenity": (u"post_office", False),
 	},
-}
+	}
 
 log = None
 
@@ -86,7 +86,7 @@ class OverpassRequest:
 			req += u"->." + filts + u";"
 		req += u"\n" + vars + u");"
 		req += u"\nout body;"
-		#print req
+		print(req)
 		return req.encode("utf8")
 
 	def makeRequest(self, req=None):
@@ -199,6 +199,8 @@ class PostcodeErrLog:
 	def upload(self):
 		self.finish()
 		print "Uploading page to server"
+		import sys
+		sys.path.append("..")
 		import pywikibot
 		from pywikibot import config as user
 		user.mylang = "en"
@@ -266,7 +268,7 @@ def atoi(s):
 	
 def splitNumberList(nrlist):
 	#print u"*" + unicode(nrlist, "utf8")
-	if not nrlist or nrlist == "":
+	if not nrlist:
 		return range(1,201)
 	elif nrlist.find(";") > -1 or nrlist.find(",") > -1:
 		if nrlist.find(";") > -1:
@@ -329,9 +331,11 @@ def maketransU(s1, s2, todel=""):
 	
 def removeDiacritics(name, lowerCase=True):
 	tran = maketransU(u"ȘșȚțŞşŢţÎîÂâĂăáöőé", u"SsTtSsTtIiAaAaaooe")
+	name = unicode(name)
 	if lowerCase:
 		name = name.lower()
-	return name.translate(tran)
+	name = name.translate(tran)
+	return name
 	
 def matchStreets(osm_street, postal_code_data):
 	#print osm_street
