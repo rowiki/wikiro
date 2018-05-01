@@ -26,7 +26,7 @@ def treat(item):
         item = pywikibot.ItemPage( pywikibot.Site("wikidata", "wikidata"), item.title())
         item.get()
         name = item.labels.get('ro')
-        print(name)
+        #print(name)
         siruta = item.claims.get('P843')[0].getTarget()
     except Exception as e:
         print(e)
@@ -55,22 +55,24 @@ def treat_sparql(dic):
         name = dic['itemLabel']
         img = dic['image']
         siruta = dic['siruta']
+        linkLabel = name + " (" + siruta + ")"
+	altLink = u'Județul ' + dic.get('countyLabel')
         if img:
             imgl = pywikibot.Link('File:' + img[img.rfind('/')+1:])
-            gallery.append(imgl.title + '|[[' + (dic.get('page_title') or dic.get('countyLabel')) + '|' + siruta + "]]")
+            gallery.append(imgl.title + '|[[' + (dic.get('page_title') or altLink) + '|' + linkLabel + ']]')
             return
         if dic.get('page_title'):
             rp = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), dic.get('page_title'))
             #print(rp)
             pi = rp.page_image()
             if pi:
-                gallery.append(pi.title() + '|[[' + rp.title() + '|' + siruta + "]]")
+                gallery.append(pi.title() + '|[[' + rp.title() + '|' + name + " (" + siruta + ")]]")
                 return
-        gallery.append('File:Replace this image - temple.JPG|[[' + (dic.get('page_title') or "Județul " + dic.get('countyLabel')) + '|' + siruta + "]]")
+        gallery.append(u'File:Replace this image - temple.JPG|[[' + (dic.get('page_title') or altLink) + '|' + linkLabel + ']]')
     except Exception as e:
         print(dic)
         print(e)
-        #raise
+        raise
     
    
 def dump_text(gallery):
@@ -91,7 +93,7 @@ def add_text(where, t, overwrite=False):
         if art.exists() and not overwrite:
             text = art.get()
         text += t
-        print(text)
+        #print(text)
         art.put(text)
     except Exception as e:
         print(e)
