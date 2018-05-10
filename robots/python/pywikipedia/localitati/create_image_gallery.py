@@ -7,6 +7,7 @@ from pywikibot import pagegenerators
 from pywikibot.data import sparql
 
 gallery = []
+stats = {}
 
 def getWikiArticle(item):
     try:
@@ -51,24 +52,41 @@ def treat(item):
 
 def treat_sparql(dic):
     global gallery
+    global stats
     try:
         name = dic['itemLabel']
         img = dic['image']
         siruta = dic['siruta']
         linkLabel = name + " (" + siruta + ")"
-	altLink = u'Județul ' + dic.get('countyLabel')
+        county = dic.get('countyLabel')
+        altLink = u'Județul ' + county
+        if county not in stats:
+            stats[county] = {
+                'total': 0,
+                'wikidata': 0,
+                'local': 0,
+                'missing': 0
+            }
+        stats[county]['total'] += 1
         if img:
             imgl = pywikibot.Link('File:' + img[img.rfind('/')+1:])
             gallery.append(imgl.title + '|[[' + (dic.get('page_title') or altLink) + '|' + linkLabel + ']]')
+            stats[county]['wikidata'] += 1
             return
         if dic.get('page_title'):
             rp = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), dic.get('page_title'))
             #print(rp)
             pi = rp.page_image()
-            if pi:
+            if pi and " map" not in pi.title() and \
+                      "harta" not in pi.title() and \
+                      "3D" not in pi.title() and \
+                      "Josephinische" not in pi.title() and \
+                      "svg" not in pi.title():
                 gallery.append(pi.title() + '|[[' + rp.title() + '|' + name + " (" + siruta + ")]]")
+                stats[county]['local'] += 1
                 return
         gallery.append(u'File:Replace this image - temple.JPG|[[' + (dic.get('page_title') or altLink) + '|' + linkLabel + ']]')
+        stats[county]['missing'] += 1
     except Exception as e:
         print(dic)
         print(e)
@@ -87,16 +105,47 @@ def dump_text(gallery):
 
 def add_text(where, t, overwrite=False):
     try:
-        art = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), 'Utilizator:Strainu/wlro' + where)
+        art = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), 'Utilizator:Strainu/wlro/' + where)
         print(art)
         text = ""
         if art.exists() and not overwrite:
             text = art.get()
         text += t
         #print(text)
-        art.put(text)
+        art.put(text, "Actualizare galerie")
     except Exception as e:
         print(e)
+
+def generate_stats(county):
+    table_line = """
+|-
+| %s || %d || %d (%.2f%%) || %d (%.2f%%) || %d (%.2f%%) || %s"""
+    wikidata_percentage = float(stats[county]['wikidata']) * 100.0 / stats[county]['total']
+    local_percentage = float(stats[county]['local']) * 100.0 / stats[county]['total']
+    missing_percentage = float(stats[county]['missing']) * 100.0 / stats[county]['total']
+    bar = "<span style=\"background-color:green\">"
+    for i in range(round(wikidata_percentage)):
+        bar += "&nbsp;"
+    bar += "</span>"
+    bar += "<span style=\"background-color:yellow\">"
+    for i in range(round(local_percentage)):
+        bar += "&nbsp;"
+    bar += "</span>"
+    bar += "<span style=\"background-color:red\">"
+    for i in range(round(missing_percentage)):
+        bar += "&nbsp;"
+    bar += "</span>"
+    text = table_line % ( "[[/" + county + "|" + county + "]]",
+            stats[county]['total'],
+            stats[county]['wikidata'],
+            wikidata_percentage,
+            stats[county]['local'],
+            local_percentage,
+            stats[county]['missing'],
+            missing_percentage,
+            bar
+	)
+    return text
 
 if __name__ == "__main__":
     pywikibot.handle_args()
@@ -104,6 +153,13 @@ if __name__ == "__main__":
     user.family = 'wikidata'
     global gallery
     gallery = []
+    main_text = """{| class=\"wikitable sortable\"
+! Județ
+! Total
+! Wikidata
+! Local
+! Fără imagine
+! Acoperire"""
     #page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
     # page = pywikibot.Page(pywikibot.Site(), "Q193055", ns=0)
     #generator = pagegenerators.ReferringPageGenerator(page)
@@ -121,7 +177,7 @@ WHERE
 			schema:isPartOf <https://ro.wikipedia.org/>;  schema:name ?page_title  . }
   SERVICE wikibase:label { bd:serviceParam wikibase:language 'ro'. }
 }
-ORDER BY ?countyLabel ?itemLabel"""
+ORDER BY ?countyLabel ?itemLabel ?siruta"""
     data = query_object.select(query)
     #print (data)
     #count = 0
@@ -137,12 +193,15 @@ ORDER BY ?countyLabel ?itemLabel"""
             if result['countyLabel'] != last_county:
                 #add_text("", "\n* [[/" + result['countyLabel'] + "]]")
                 if last_county:
-                    add_text("/" + last_county, dump_text(gallery), True)
+                    add_text(last_county, dump_text(gallery), True)
+                    main_text += generate_stats(last_county)
                 gallery = []
                 last_county = result['countyLabel']
             treat_sparql(result)
-        add_text("/" + last_county, dump_text(gallery), True)
-            
+        add_text(last_county, dump_text(gallery), True)
+        main_text += generate_stats(last_county) + "\n|}"
+        art = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), 'Utilizator:Strainu/wlro')
+        art.put(main_text, "Actualizare statistici")        
     except Exception as e:
         print(e)
         raise
