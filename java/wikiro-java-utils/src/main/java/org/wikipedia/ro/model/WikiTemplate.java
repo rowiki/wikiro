@@ -5,7 +5,6 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -184,31 +183,41 @@ public class WikiTemplate extends WikiPart {
         return templateTitle;
     }
 
-    public void setParam(String key, String value) {
-        rawParams.put(key, value);
-        params.put(key,
-            new AggregatingParser().parse(value).stream().map(ParseResult::getIdentifiedPart).collect(Collectors.toList()));
+    public WikiTemplate setParam(String key, String value) {
+        if (null == value) {
+            rawParams.remove(key);
+            params.remove(key);
+        } else {
+            rawParams.put(key, value);
+            params.put(key, new AggregatingParser().parse(value).stream().map(ParseResult::getIdentifiedPart)
+                .collect(Collectors.toList()));
+        }
+        return this;
     }
 
     public List<WikiPart> getParam(String key) {
         return null == params.get(key) ? null : Collections.unmodifiableList(params.get(key));
     }
 
-    public void setParam(String key, List<WikiPart> value) {
+    public WikiTemplate setParam(String key, List<WikiPart> value) {
         params.put(key, value);
+        return this;
     }
 
-    public void removeParam(String key) {
+    public WikiTemplate removeParam(String key) {
         rawParams.remove(key);
         params.remove(key);
+        return this;
     }
 
-    public void setTemplateTitle(String title) {
+    public WikiTemplate setTemplateTitle(String title) {
         templateTitle = title;
+        return this;
     }
 
-    public void setSingleLine(boolean singleLine) {
+    public WikiTemplate setSingleLine(boolean singleLine) {
         this.singleLine = singleLine;
+        return this;
     }
 
     public String getInitialTemplateText() {
