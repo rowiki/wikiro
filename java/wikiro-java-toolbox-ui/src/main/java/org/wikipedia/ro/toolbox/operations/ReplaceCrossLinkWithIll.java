@@ -1,6 +1,7 @@
 package org.wikipedia.ro.toolbox.operations;
 
 import static org.apache.commons.lang3.StringUtils.capitalize;
+import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
@@ -15,18 +16,21 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.security.auth.login.LoginException;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikibase.data.Entity;
 import org.wikibase.data.Sitelink;
 import org.wikipedia.Wiki;
+import org.wikipedia.ro.model.WikiLink;
+import org.wikipedia.ro.model.WikiTemplate;
 
 @Operation(labelKey = "operation.insertill.label", useWikibase = true)
 public class ReplaceCrossLinkWithIll implements WikiOperation {
@@ -38,6 +42,9 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
     private String sourceWikiCode;
     private String targetWikiCode;
     private String[] status = new String[] { "status.not.inited" };
+
+    private Map<String, String> roArticlesCache = new HashMap<>();
+    private Map<String, Entity> wikidataItemsCache = new HashMap<>();
 
     public ReplaceCrossLinkWithIll(Wiki targetWiki, Wiki sourceWiki, Wikibase dataWiki, String article) {
         this.targetWiki = targetWiki;
@@ -69,33 +76,42 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
             status = new String[] { "status.analyzing.link", foreignTitle };
 
-            String roLabel = null;
-            Entity wbEntity = null;
-            try {
-                if ("d".equals(lang)) {
-                    wbEntity =
-                        dataWiki.getWikibaseItemById(defaultString(dataWiki.resolveRedirect(foreignTitle), foreignTitle));
-                } else {
-                    Wiki sourceWiki = new Wiki(lang + ".wikipedia.org");
-                    String target = defaultString(sourceWiki.resolveRedirect(foreignTitle), foreignTitle);
-                    wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(lang + "wiki", target);
+            String roTitle = roArticlesCache.get(lang + ":" + foreignTitle);
+            Entity wbEntity = wikidataItemsCache.get(lang + ":" + foreignTitle);
+            if (null == roTitle && null == wbEntity) {
+                try {
+                    if (null == wbEntity) {
+                        if ("d".equals(lang)) {
+                            wbEntity = dataWiki
+                                .getWikibaseItemById(defaultString(dataWiki.resolveRedirect(foreignTitle), foreignTitle));
+                        } else {
+                            String target = defaultString(sourceWiki.resolveRedirect(foreignTitle), foreignTitle);
+                            wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(lang + "wiki", target);
+                        }
+                    }
+                    wikidataItemsCache.put(lang + ":" + foreignTitle, wbEntity);
+                    roTitle = wbEntity.getLabels().get("ro");
+                    roArticlesCache.put(lang + ":" + foreignTitle, roTitle);
+                } catch (WikibaseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
-                roLabel = wbEntity.getLabels().get("ro");
-            } catch (WikibaseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
             String replacedString = null;
-            if (null == wbEntity) {
-                replacedString = "{{Ill|" + lang + (roLabel != null ? ("|" + roLabel) : "") + "|" + foreignTitle
-                    + (null != localLabel ? ("|4=" + localLabel) : "") + "}}";
+            if (null != roTitle && StringUtils.equals(roTitle, localLabel)) {
+                replacedString = new WikiLink(roTitle, localLabel).toString();
+            } else if (null == wbEntity) {
+                replacedString = new WikiTemplate().setTemplateTitle("Ill").setSingleLine(true).setParam("1", lang)
+                    .setParam("2", roTitle).setParam("3", foreignTitle).setParam("4", localLabel).toString();
             } else {
-                replacedString = "{{Ill-wd|" + prependIfMissing(wbEntity.getId(), "Q")
-                    + (null != localLabel ? ("|3=" + localLabel) : "") + "}}";
+                replacedString = new WikiTemplate().setTemplateTitle("Ill-wd").setSingleLine(true)
+                    .setParam("1", prependIfMissing(wbEntity.getId(), "Q")).setParam("3", localLabel).toString();
             }
 
-            extLinkMatcher.appendReplacement(newText,
-                startsWith(foreignTitle, "Special:") ? extLinkMatcher.group(0) : replacedString);
+            if (null != replacedString) {
+                extLinkMatcher.appendReplacement(newText,
+                    startsWith(foreignTitle, "Special:") ? extLinkMatcher.group(0) : replacedString);
+            }
             System.out.println(extLinkMatcher.group(0) + " ---> " + replacedString);
             countMatches++;
         }
@@ -113,34 +129,39 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
             status = new String[] { "status.analyzing.link", articleTitle };
 
-            Wiki sourceWiki = new Wiki(lang + ".wikipedia.org");
-            String target = defaultString(sourceWiki.resolveRedirect(articleTitle), articleTitle);
-            Entity wbEntity = null;
+            Wiki srcWiki = new Wiki(lang + ".wikipedia.org");
+            String target = defaultString(srcWiki.resolveRedirect(articleTitle), articleTitle);
             String targetLang = removeEnd(targetWikiCode, "wiki");
-            String sourceLang = removeEnd(sourceWikiCode, "wiki");
+            String sourceLang = defaultIfEmpty(lang, removeEnd(sourceWikiCode, "wiki"));
+
             String roLabel = null;
-            String roArticle = null;
-            try {
-                wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(lang + "wiki", target);
-                if (null != wbEntity) {
-                    roLabel = wbEntity.getLabels().get(targetLang);
-                    Sitelink roSitelink = wbEntity.getSitelinks().get(targetWikiCode);
-                    if (null != roSitelink) {
-                        roArticle = roSitelink.getPageName();
+            String roArticle = roArticlesCache.get(sourceLang + ":" + target);
+            Entity wbEntity = wikidataItemsCache.get(sourceLang + ":" + target);
+            if (null == roArticle && null == wbEntity) {
+                try {
+                    wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(sourceLang + "wiki", target);
+                    wikidataItemsCache.put(sourceLang + ":" + target, wbEntity);
+                    if (null != wbEntity) {
+                        roLabel = wbEntity.getLabels().get(targetLang);
+                        Sitelink roSitelink = wbEntity.getSitelinks().get(targetWikiCode);
+                        if (null != roSitelink) {
+                            roArticle = roSitelink.getPageName();
+                            roArticlesCache.put(sourceLang + ":" + target, roArticle);
+                        }
                     }
+                } catch (WikibaseException e) {
+                    e.printStackTrace();
                 }
-            } catch (WikibaseException e) {
-                e.printStackTrace();
             }
             String replacedString;
-            if (null == wbEntity) {
-                replacedString = "{{Ill|" + lang + (roLabel != null ? ("|" + roLabel) : "") + "|" + articleTitle
-                    + (null != linkTitle ? ("|4=" + linkTitle) : "") + "}}";
-            } else if (null != roArticle) {
-                replacedString = "[[" + roArticle + (roArticle.equals(linkTitle) ? "" : ("|" + linkTitle)) + "]]";
+            if (null != roArticle) {
+                replacedString = new WikiLink(roArticle, linkTitle).toString();
+            } else if (null == wbEntity) {
+                replacedString = new WikiTemplate().setSingleLine(true).setTemplateTitle("Ill").setParam("1", lang)
+                    .setParam("2", roLabel).setParam("3", articleTitle).setParam("4", linkTitle).toString();
             } else {
-                replacedString = "{{Ill-wd|" + prependIfMissing(wbEntity.getId(), "Q")
-                    + (null != linkTitle ? ("|3=" + linkTitle) : "") + "}}";
+                replacedString = new WikiTemplate().setSingleLine(true).setTemplateTitle("Ill-wd")
+                    .setParam("1", prependIfMissing(wbEntity.getId(), "Q")).setParam("3", linkTitle).toString();
             }
             wlAsExtLinkMatcher.appendReplacement(anotherNewText,
                 startsWith(articleTitle, "Special:") ? wlAsExtLinkMatcher.group(0) : replacedString);
@@ -169,40 +190,57 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             if (startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:",
                 "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", "imdbname:", "c:file:", "doi:",
                 "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:")) {
-                System.out.println("Link to another thing! Skipping...");
+                System.out.println("Link to something else! Skipping...");
                 continue;
             }
             articleTitle = defaultString(targetWiki.resolveRedirect(articleTitle), articleTitle);
-            status = new String[] { "status.analyzing.link", articleTitle};
+            status = new String[] { "status.analyzing.link", articleTitle };
 
             if (targetWiki.exists(new String[] { articleTitle })[0]) {
                 System.out.println("Already exists! skipping...");
                 continue;
             }
-            String enArticleTitle = defaultString(sourceWiki.resolveRedirect(articleTitle), articleTitle);
-            String replacedString = innerLinkMatcher.group(0);
-            if (sourceWiki.exists(new String[] { enArticleTitle })[0]) {
-                Entity wbEntity = null;
-                String roLabel = null;
-                try {
-                    wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(sourceWikiCode, enArticleTitle);
-                    if (null != wbEntity) {
-                        roLabel = wbEntity.getLabels().get("ro");
+            String foreignArticleTitle = defaultString(sourceWiki.resolveRedirect(articleTitle), articleTitle);
+            String replacedString = null;
+            String sourceLang = removeEnd(sourceWikiCode, "wiki");
+
+            String roLabel = null;
+            String roArticle = roArticlesCache.get(sourceLang + ":" + foreignArticleTitle);
+
+            if (sourceWiki.exists(new String[] { foreignArticleTitle })[0]) {
+                Entity wbEntity = wikidataItemsCache.get(sourceLang + ":" + foreignArticleTitle);
+                if (null == roArticle && null == wbEntity) {
+                    try {
+                        wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(sourceWikiCode, foreignArticleTitle);
+                        wikidataItemsCache.put(sourceLang + ":" + foreignArticleTitle, wbEntity);
+                        if (null != wbEntity) {
+                            roLabel = wbEntity.getLabels().get("ro");
+                            Sitelink roSitelink = wbEntity.getSitelinks().get(targetWikiCode);
+                            if (null != roSitelink) {
+                                roArticle = roSitelink.getPageName();
+                                roArticlesCache.put(sourceLang + ":" + foreignArticleTitle, roArticle);
+                            }
+                        }
+
+                    } catch (WikibaseException e) {
+                        e.printStackTrace();
+                    } catch (Throwable th) {
+                        th.printStackTrace();
                     }
-                } catch (WikibaseException e) {
-                    e.printStackTrace();
-                } catch (Throwable th) {
-                    th.printStackTrace();
                 }
-                String sourceLang = removeEnd(sourceWikiCode, "wiki");
-                if (null == wbEntity) {
-                    replacedString = "{{Ill|" + sourceLang + (roLabel != null ? ("|" + roLabel) : "") + "|" + articleLink
-                        + (null != linkTitle ? ("|4=" + linkTitle) : "") + "}}";
+                if (null != roArticle) {
+                    replacedString = new WikiLink(roArticle, linkTitle).toString();
+                } else if (null == wbEntity) {
+                    replacedString =
+                        new WikiTemplate().setTemplateTitle("Ill").setParam("1", sourceLang).setParam("2", roLabel)
+                            .setParam("3", articleLink).setParam("4", linkTitle).setSingleLine(true).toString();
                 } else {
-                    replacedString = "{{Ill-wd|" + prependIfMissing(wbEntity.getId(), "Q")
-                        + (null != linkTitle ? ("|3=" + linkTitle) : "") + "}}";
+                    replacedString =
+                        new WikiTemplate().setTemplateTitle("Ill-wd").setParam("1", prependIfMissing(wbEntity.getId(), "Q"))
+                            .setParam("3", linkTitle).setSingleLine(true).toString();
                 }
             }
+            replacedString = defaultString(replacedString, innerLinkMatcher.group(0));
             innerLinkMatcher.appendReplacement(anotherNewText, replacedString);
 
         }
