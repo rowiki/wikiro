@@ -16,10 +16,16 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.security.auth.login.LoginException;
 
@@ -85,6 +91,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                             wbEntity = dataWiki
                                 .getWikibaseItemById(defaultString(dataWiki.resolveRedirect(foreignTitle), foreignTitle));
                         } else {
+                            foreignTitle = capitalize(substringBefore(foreignTitle, "#"));
                             String target = defaultString(sourceWiki.resolveRedirect(foreignTitle), foreignTitle);
                             wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(lang + "wiki", target);
                         }
@@ -175,11 +182,68 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         Pattern innerLinkPattern = Pattern.compile(innerLinkRegEx);
         Matcher innerLinkMatcher = innerLinkPattern.matcher(anotherNewText.toString());
         anotherNewText = new StringBuffer();
+        List<String> localLinks = new ArrayList<>();
+        Map<String, String> actualLocalTitleMap = new HashMap<>();
+        Map<String, Boolean> localLinkExistenceMap = new HashMap<>();
+
+        Map<String, String> actualForeignTitleMap = new HashMap<>();
+        Map<String, Boolean> foreignLinkExistenceMap = new HashMap<>();
         while (innerLinkMatcher.find()) {
+            // first pass - evaluate links existance
 
             String link = innerLinkMatcher.group(1);
-            link = URLDecoder.decode(link, "UTF-8");
-            System.out.println("Link:" + link);
+            link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());
+            System.out.println("Link: " + link);
+            String articleLink = removeStart(trim(link), " ");
+            String articleTitle = capitalize(substringBefore(articleLink, "#"));
+            if (isBlank(articleTitle)) {
+                System.out.println("Blank! skipping...");
+                continue;
+            }
+            if (startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:",
+                "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", "imdbname:", "c:file:", "doi:",
+                "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:")) {
+                System.out.println("Link to something else! Skipping...");
+                continue;
+            }
+            if (!localLinks.contains(articleTitle)) {
+                localLinks.add(articleTitle);
+            }
+        }
+        String[] localLinksArray = localLinks.toArray(new String[localLinks.size()]);
+        String[] localResolvedRedirects = targetWiki.resolveRedirects(localLinksArray);
+        for (int idx = 0; idx < localLinksArray.length; idx++) {
+            actualLocalTitleMap.put(localLinksArray[idx], defaultString(localResolvedRedirects[idx], localLinksArray[idx]));
+        }
+        localLinksArray = actualLocalTitleMap.values().stream().collect(Collectors.toList())
+            .toArray(new String[actualForeignTitleMap.size()]);
+        boolean[] localExistanceArray = targetWiki.exists(localLinksArray);
+        for (int idx = 0; idx < localLinksArray.length; idx++) {
+            localLinkExistenceMap.put(localLinksArray[idx], Boolean.valueOf(localExistanceArray[idx]));
+        }
+
+        String[] nonExistingLinksArray = localLinkExistenceMap.keySet().stream()
+            .filter(key -> !localLinkExistenceMap.get(key)).collect(Collectors.toList()).toArray(new String[0]);
+        String[] actualForeignTitlesArray = sourceWiki.resolveRedirects(nonExistingLinksArray);
+        for (int idx = 0; idx < nonExistingLinksArray.length; idx++) {
+            actualForeignTitleMap.put(nonExistingLinksArray[idx],
+                defaultString(actualForeignTitlesArray[idx], nonExistingLinksArray[idx]));
+        }
+
+        nonExistingLinksArray = actualForeignTitleMap.values().stream().collect(Collectors.toList())
+            .toArray(new String[actualForeignTitleMap.size()]);
+        boolean[] foreignLinkExistenceArray = sourceWiki.exists(nonExistingLinksArray);
+        for (int idx = 0; idx < foreignLinkExistenceArray.length; idx++) {
+            foreignLinkExistenceMap.put(nonExistingLinksArray[idx], Boolean.valueOf(foreignLinkExistenceArray[idx]));
+        }
+
+        innerLinkMatcher.reset();
+        while (innerLinkMatcher.find()) {
+            // second pass - actually perform changes with data already collected in an optimized way
+
+            String link = innerLinkMatcher.group(1);
+            link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());
+            System.out.println("Link: " + link);
             String articleLink = removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
             String linkTitle = innerLinkMatcher.group(3);
@@ -193,21 +257,21 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                 System.out.println("Link to something else! Skipping...");
                 continue;
             }
-            articleTitle = defaultString(targetWiki.resolveRedirect(articleTitle), articleTitle);
-            status = new String[] { "status.analyzing.link", articleTitle };
+            String actualLocalArticleTitle = actualLocalTitleMap.get(articleTitle);
+            status = new String[] { "status.analyzing.link", actualLocalArticleTitle };
 
-            if (targetWiki.exists(new String[] { articleTitle })[0]) {
+            if (localLinkExistenceMap.get(actualLocalArticleTitle)) {
                 System.out.println("Already exists! skipping...");
                 continue;
             }
-            String foreignArticleTitle = defaultString(sourceWiki.resolveRedirect(articleTitle), articleTitle);
+            String foreignArticleTitle = actualForeignTitleMap.get(articleTitle);
             String replacedString = null;
             String sourceLang = removeEnd(sourceWikiCode, "wiki");
 
             String roLabel = null;
             String roArticle = roArticlesCache.get(sourceLang + ":" + foreignArticleTitle);
 
-            if (sourceWiki.exists(new String[] { foreignArticleTitle })[0]) {
+            if (foreignLinkExistenceMap.get(foreignArticleTitle)) {
                 Entity wbEntity = wikidataItemsCache.get(sourceLang + ":" + foreignArticleTitle);
                 if (null == roArticle && null == wbEntity) {
                     try {
@@ -247,6 +311,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         innerLinkMatcher.appendTail(anotherNewText);
 
         return anotherNewText.toString();
+
     }
 
     public String[] getStatus() {
