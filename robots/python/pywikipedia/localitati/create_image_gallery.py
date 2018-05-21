@@ -56,6 +56,7 @@ def treat_sparql(dic):
     try:
         name = dic['itemLabel']
         img = dic['image']
+        upperImg = dic['upperImage']
         siruta = dic['siruta']
         linkLabel = name + " (" + siruta + ")"
         county = dic.get('countyLabel')
@@ -73,6 +74,12 @@ def treat_sparql(dic):
             gallery.append(imgl.title + '|[[' + (dic.get('page_title') or altLink) + '|' + linkLabel + ']]')
             stats[county]['wikidata'] += 1
             return
+        if upperImg:
+            imgl = pywikibot.Link('File:' + upperImg[upperImg.rfind('/')+1:])
+            gallery.append(imgl.title + '|[[' + (dic.get('page_title') or altLink) + '|' + linkLabel + ']]')
+            stats[county]['wikidata'] += 1
+            return
+
         if dic.get('page_title'):
             rp = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), dic.get('page_title'))
             #print(rp)
@@ -166,15 +173,20 @@ if __name__ == "__main__":
     repo = pywikibot.Site().data_repository()
     dependencies = {'endpoint': None, 'entity_url': None, 'repo': repo}
     query_object = sparql.SparqlQuery(**dependencies)
-    query = """SELECT ?item ?itemLabel ?siruta ?image ?page_title ?countyLabel
+    query = """SELECT ?item ?itemLabel ?siruta ?image ?upperImage ?page_title ?countyLabel
 WHERE 
 {
   ?item wdt:P843 ?siruta.
   ?item wdt:P131* ?county.
   ?county wdt:P31 wd:Q1776764.
   OPTIONAL { ?item wdt:P18 ?image. }
-  OPTIONAL {?article 	schema:about ?item ;
-			schema:isPartOf <https://ro.wikipedia.org/>;  schema:name ?page_title  . }
+  OPTIONAL { 
+    { ?item wdt:P31 wd:Q34842263. } UNION {?item wdt:P31 wd:Q34842776.}
+    ?item wdt:P1376 ?upper.          
+    ?upper wdt:P18 ?upperImage.
+  }
+  OPTIONAL {?article    schema:about ?item ;
+                        schema:isPartOf <https://ro.wikipedia.org/>;  schema:name ?page_title  . }
   SERVICE wikibase:label { bd:serviceParam wikibase:language 'ro'. }
 }
 ORDER BY ?countyLabel ?itemLabel ?siruta"""
