@@ -239,11 +239,13 @@ def fix(entry, olddate, newdate, event):
     pywikibot.output("Fixing " + entry)
     line = get_event_line(olddate, event, entry)
     newline = line
-    if olddate.year != newdate.year:
+    if newdate and olddate.year != newdate.year:
         newline = line.replace(str(olddate.year), str(newdate.year))
     print("Trying to move line: " + line)
     r = remove_entry(entry, olddate, event, line)
     if r == False:
+        return r
+    if newdate == None:
         return r
     r = add_entry(entry, newdate, event, newline)
     if r == False:
@@ -296,6 +298,8 @@ def treat(page, day, month, event):
             preferred = item.claims[pno][0]
 
         if preferred == None:
+            if score < -SCORE_LIMIT and fix(person, mydate, None, event):
+                continue
             r = "|- style=\"background-color:#88ffff\"\n|  %s || [[%s]] || [[%s]] || %d %s %d || [[:d:%s#%s|%s]] || [date multiple] || %d\n" % (event, person, title, mydate.day, month, mydate.year, qitem, pno, qitem, score)
             ret += r
             continue
