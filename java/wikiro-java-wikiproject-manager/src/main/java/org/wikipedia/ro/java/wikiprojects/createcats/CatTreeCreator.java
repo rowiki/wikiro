@@ -2,27 +2,27 @@ package org.wikipedia.ro.java.wikiprojects.createcats;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.prependIfMissing;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.A;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.B;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.C;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.FA;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.FL;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.FUTURE;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.GA;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.HIGH;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.LIST;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.MEDIUM;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.PORTAL;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.SMALL;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.START;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.STUB;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.TEMPLATE;
-import static org.wikipedia.ro.java.wikiprojects.utils.ArticleClass.TOP;
+import static org.wikipedia.ro.java.wikiprojects.utils.QualityClass.A;
+import static org.wikipedia.ro.java.wikiprojects.utils.QualityClass.B;
+import static org.wikipedia.ro.java.wikiprojects.utils.QualityClass.C;
+import static org.wikipedia.ro.java.wikiprojects.utils.QualityClass.FA;
+import static org.wikipedia.ro.java.wikiprojects.utils.QualityClass.FL;
+import static org.wikipedia.ro.java.wikiprojects.utils.QualityClass.FUTURE;
+import static org.wikipedia.ro.java.wikiprojects.utils.QualityClass.GA;
+import static org.wikipedia.ro.java.wikiprojects.utils.QualityClass.LIST;
+import static org.wikipedia.ro.java.wikiprojects.utils.QualityClass.PORTAL;
+import static org.wikipedia.ro.java.wikiprojects.utils.QualityClass.START;
+import static org.wikipedia.ro.java.wikiprojects.utils.QualityClass.STUB;
+import static org.wikipedia.ro.java.wikiprojects.utils.QualityClass.TEMPLATE;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.security.auth.login.LoginException;
@@ -30,6 +30,10 @@ import javax.security.auth.login.LoginException;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.utils.ArticleClass;
 import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
+import org.wikipedia.ro.java.wikiprojects.utils.DefaultImportanceClass;
+import org.wikipedia.ro.java.wikiprojects.utils.ImportanceClass;
+import org.wikipedia.ro.java.wikiprojects.utils.NumberedImportanceClass;
+import org.wikipedia.ro.java.wikiprojects.utils.QualityClass;
 import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
 
 public class CatTreeCreator {
@@ -44,9 +48,9 @@ public class CatTreeCreator {
             put(GA, "AB");
             put(START, "început");
             put(STUB, "ciot");
-            put(HIGH, "mare");
-            put(MEDIUM, "medie");
-            put(SMALL, "mică");
+            put(DefaultImportanceClass.HIGH, "mare");
+            put(DefaultImportanceClass.MID, "medie");
+            put(DefaultImportanceClass.LOW, "mică");
             put(TEMPLATE, "format");
             put(LIST, "listă");
             put(FUTURE, "viitor");
@@ -55,9 +59,9 @@ public class CatTreeCreator {
     };
     private static final Map<ArticleClass, String> catLinks = new HashMap<ArticleClass, String>() {
         {
-            put(HIGH, "pentru proiectul");
-            put(MEDIUM, "pentru proiectul");
-            put(SMALL, "pentru proiectul");
+            put(DefaultImportanceClass.HIGH, "pentru proiectul");
+            put(DefaultImportanceClass.MID, "pentru proiectul");
+            put(DefaultImportanceClass.LOW, "pentru proiectul");
         }
     };
     private static final Map<ArticleClass, String> categoryPrefixes = new HashMap<ArticleClass, String>() {
@@ -74,10 +78,10 @@ public class CatTreeCreator {
             put(PORTAL, "Articole de clasa „portal”");
             put(TEMPLATE, "Articole de clasa „format”");
             put(FUTURE, "Articole cu subiect de viitor");
-            put(TOP, "Cele mai importante articole");
-            put(HIGH, "Articole de importanță mare");
-            put(MEDIUM, "Articole de importanță medie");
-            put(SMALL, "Articole de importanță mică");
+            put(DefaultImportanceClass.TOP, "Cele mai importante articole");
+            put(DefaultImportanceClass.HIGH, "Articole de importanță mare");
+            put(DefaultImportanceClass.MID, "Articole de importanță medie");
+            put(DefaultImportanceClass.LOW, "Articole de importanță mică");
         }
     };
 
@@ -114,7 +118,11 @@ public class CatTreeCreator {
                 wiki.edit(mainCat, sbuild.toString(), "Creare categorie principală pentru proiectul " + wikiprojectName);
             }
 
-            for (ArticleClass eachQualClass : ArticleClass.values()) {
+            List<ArticleClass> classesToCreate = new ArrayList<>();
+            classesToCreate.addAll(Arrays.asList(QualityClass.values()));
+            ImportanceClass[] impClasses = equalsIgnoreCase("România în Primul Război Mondial", wikiprojectName) ? NumberedImportanceClass.values() :DefaultImportanceClass.values();
+            classesToCreate.addAll(Arrays.asList(impClasses));
+            for (ArticleClass eachQualClass : classesToCreate) {
                 String catToCreate = categoryPrefixes.get(eachQualClass);
                 String parentQualCat = defaultIfNull(parentCategories.get(eachQualClass), catToCreate);
                 String catLink = defaultString(catLinks.get(eachQualClass), "ale proiectului");
@@ -133,6 +141,7 @@ public class CatTreeCreator {
                 }
             }
 
+            
             String unclassifiedPrefix = "Categorie:Articole neclasificate ale proiectului ";
             String[] unclassifiedTypes = new String[] { "importanță", "calitate" };
             String[] unclassifiedCategories = new String[unclassifiedTypes.length];

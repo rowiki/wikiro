@@ -78,6 +78,7 @@ public class Classify {
                 pagesToRun.addAll(Arrays.asList(rowiki.getCategoryMembers(eachCat, Wiki.MAIN_NAMESPACE)));
             }
             for (String eachRecCat : recursiveCategories) {
+                System.out.printf("Analyzing category %s in depth %d%n", eachRecCat, depth);
                 pagesToRun.addAll(Arrays.asList(rowiki.getCategoryMembers(eachRecCat, depth, false, Wiki.MAIN_NAMESPACE)));
             }
 

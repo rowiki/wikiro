@@ -28,6 +28,7 @@ public class WikiprojectsHierarchy {
         declareParent("România", "Localitățile din România");
         declareParent("România", "Istoria României");
         declareParent("România", "Muzică românească");
+        declareParent("România", "România în Primul Război Mondial");
         declareParent("Țările lumii", "România");
         declareParent("Țările lumii", "Irlanda");
         declareParent("Țările lumii", "Australia");
