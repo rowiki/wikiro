@@ -72,8 +72,11 @@ public class WikiLink extends WikiPart {
         StringBuilder sbuild = new StringBuilder("[[");
         sbuild.append(target);
         if (!labelStructure.isEmpty()) {
-            sbuild.append("|");
-            sbuild.append(partsListToString(labelStructure));
+            String labelStr = partsListToString(labelStructure);
+            if (null != labelStr && !labelStr.equals(target)) {
+                sbuild.append("|");
+                sbuild.append(labelStr);
+            }
         }
         sbuild.append("]]");
         return sbuild.toString();
