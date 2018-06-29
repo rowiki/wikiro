@@ -162,7 +162,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             }
             String replacedString;
             if (null != roArticle) {
-                replacedString = new WikiLink(roArticle, linkTitle).toString();
+                replacedString = new WikiLink(roArticle, defaultString(linkTitle, articleTitle)).toString();
             } else if (null == wbEntity) {
                 replacedString = new WikiTemplate().setSingleLine(true).setTemplateTitle("Ill").setParam("1", lang)
                     .setParam("2", roLabel).setParam("3", articleTitle).setParam("4", linkTitle).toString();
@@ -224,19 +224,22 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
         String[] nonExistingLinksArray = localLinkExistenceMap.keySet().stream()
             .filter(key -> !localLinkExistenceMap.get(key)).collect(Collectors.toList()).toArray(new String[0]);
-        String[] actualForeignTitlesArray = sourceWiki.resolveRedirects(nonExistingLinksArray);
-        for (int idx = 0; idx < nonExistingLinksArray.length; idx++) {
-            actualForeignTitleMap.put(nonExistingLinksArray[idx],
-                defaultString(actualForeignTitlesArray[idx], nonExistingLinksArray[idx]));
+        if (0 < nonExistingLinksArray.length) {
+            String[] actualForeignTitlesArray = sourceWiki.resolveRedirects(nonExistingLinksArray);
+            for (int idx = 0; idx < nonExistingLinksArray.length; idx++) {
+                actualForeignTitleMap.put(nonExistingLinksArray[idx],
+                    defaultString(actualForeignTitlesArray[idx], nonExistingLinksArray[idx]));
+            }
         }
 
         nonExistingLinksArray = actualForeignTitleMap.values().stream().collect(Collectors.toList())
             .toArray(new String[actualForeignTitleMap.size()]);
-        boolean[] foreignLinkExistenceArray = sourceWiki.exists(nonExistingLinksArray);
-        for (int idx = 0; idx < foreignLinkExistenceArray.length; idx++) {
-            foreignLinkExistenceMap.put(nonExistingLinksArray[idx], Boolean.valueOf(foreignLinkExistenceArray[idx]));
+        if (0 < nonExistingLinksArray.length) {
+            boolean[] foreignLinkExistenceArray = sourceWiki.exists(nonExistingLinksArray);
+            for (int idx = 0; idx < foreignLinkExistenceArray.length; idx++) {
+                foreignLinkExistenceMap.put(nonExistingLinksArray[idx], Boolean.valueOf(foreignLinkExistenceArray[idx]));
+            }
         }
-
         innerLinkMatcher.reset();
         while (innerLinkMatcher.find()) {
             // second pass - actually perform changes with data already collected in an optimized way

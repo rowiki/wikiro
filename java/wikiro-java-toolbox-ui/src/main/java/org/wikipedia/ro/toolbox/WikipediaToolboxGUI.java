@@ -563,8 +563,7 @@ public class WikipediaToolboxGUI {
 
                     targetWiki.edit(actionParams[i], result, commitMessage);
                     timeToStart = System.currentTimeMillis() + throttle;
-                } catch (SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException e1) {
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | RuntimeException e1) {
                     int userOption = JOptionPane.showOptionDialog(frame, e1.getMessage(),
                         bundle.getString("error.processing"), JOptionPane.YES_NO_CANCEL_OPTION,
                         JOptionPane.ERROR_MESSAGE, null, new String[] { bundle.getString("error.abort"),
