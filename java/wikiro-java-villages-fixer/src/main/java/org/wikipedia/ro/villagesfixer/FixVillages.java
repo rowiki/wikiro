@@ -207,6 +207,7 @@ public class FixVillages {
             rowiki.login(rowpusername, rowppassword);
             dwiki.login(datausername, datapassword);
             rowiki.setMarkBot(true);
+            dwiki.setMarkBot(true);
 
             String countyStart = null;
             boolean countyTouched = args.length < 1;
