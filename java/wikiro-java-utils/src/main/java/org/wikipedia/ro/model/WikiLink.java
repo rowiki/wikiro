@@ -40,7 +40,11 @@ public class WikiLink extends WikiPart {
     }
 
     public void setLabel(String label) {
-        labelStructure = Arrays.asList(new PlainText(label));
+        if (null == label) {
+            labelStructure.clear();
+        } else {
+            labelStructure = Arrays.asList(new PlainText(label));
+        }
     }
 
     public List<? extends WikiPart> getLabelStructure() {
