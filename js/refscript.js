@@ -785,7 +785,7 @@ if (u.match(/webcitation.org/)) {
                 	var dateRegex = /(\d{2})\.(\d{2})\.(\d{4})/g;
             	    var dateMatcher = dateRegex.exec(dateTxt);
             	    if (dateMatcher) {
-            	    	W_Date = datematcher[0];
+            	    	W_Date = dateMatcher[0];
             	    }
                  }
             }
