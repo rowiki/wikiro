@@ -775,7 +775,7 @@ if (u.match(/webcitation.org/)) {
 				W_Title = digisportMeta[metaIdx].getAttribute('content');
 			}
 		}
-        var articleDivs = document.('article');
+        var articleDivs = document.getElementsByTagName('article');
         if (articleDivs.length > 0) {
             var articleDiv = articleDivs[0];
             var articleCites = articleDiv.getElementsByTagName('cite');
