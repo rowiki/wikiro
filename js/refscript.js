@@ -775,10 +775,10 @@ if (u.match(/webcitation.org/)) {
 				W_Title = digisportMeta[metaIdx].getAttribute('content');
 			}
 		}
-        var articleDivs = document.getElementsByTagName('article');
+        var articleDivs = document.('article');
         if (articleDivs.length > 0) {
             var articleDiv = articleDivs[0];
-            var articleCites = metadataDiv.getElementsByTagName('cite');
+            var articleCites = articleDiv.getElementsByTagName('cite');
             if (articleCites) for (var citeIdx = 0; citeIdx < articleCites.length; citeIdx++) {
                  if (undefined != articleCites[citeIdx].textContent) {
                  	W_Date = articleCites[citeIdx].textContent.trim();
