@@ -780,8 +780,13 @@ if (u.match(/webcitation.org/)) {
             var articleDiv = articleDivs[0];
             var articleCites = articleDiv.getElementsByTagName('cite');
             if (articleCites) for (var citeIdx = 0; citeIdx < articleCites.length; citeIdx++) {
-                 if (undefined != articleCites[citeIdx].textContent) {
-                 	W_Date = articleCites[citeIdx].textContent.trim();
+            	if (undefined != articleCites[citeIdx].textContent) {
+                	var dateTxt = articleCites[citeIdx].textContent.trim();
+                	var dateRegex = /(\d{2})\.(\d{2})\.(\d{4})/g;
+            	    var dateMatcher = dateRegex.exec(isoDate);
+            	    if (dateMatcher) {
+            	    	W_Date = datematcher[0];
+            	    }
                  }
             }
         }
