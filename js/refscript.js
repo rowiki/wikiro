@@ -775,13 +775,13 @@ if (u.match(/webcitation.org/)) {
 				W_Title = digisportMeta[metaIdx].getAttribute('content');
 			}
 		}
-        var metadataDivs = document.getElementsByClassName('article-heading');
-        if (metadataDivs.length > 0) {
-            var metadataDiv = metadataDivs[0];
-            var articleMetas = metadataDiv.getElementsByTagName('meta');
-            for (var metaIdx = 0; metaIdx < articleMetas.length; metaIdx++) {
-                 if (articleMetas[metaIdx].getAttribute('itemprop') === 'datePublished') {
-                 	W_Date = convertISO8601Date(articleMetas[metaIdx].getAttribute('content'));
+        var articleDivs = document.getElementsByTagName('article');
+        if (articleDivs.length > 0) {
+            var articleDiv = articleDivs[0];
+            var articleCites = metadataDiv.getElementsByTagName('cite');
+            if (articleCites) for (var citeIdx = 0; citeIdx < articleCites.length; citeIdx++) {
+                 if (undefined != articleCites[citeIdx].textContent) {
+                 	W_Date = articleCites[citeIdx].textContent.trim();
                  }
             }
         }
