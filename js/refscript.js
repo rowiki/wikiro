@@ -1047,6 +1047,27 @@ if (u.match(/webcitation.org/)) {
 			var W_Authors = '';
 		var W_Newspaper = 'Historia';
 	};
+	if (u.match(/g4media.ro/)) {
+		var g4mMeta = document.getElementByTagName('meta');
+		for (var g4mMetaIdx = 0; g4mMetaIdx < g4mMeta.length; g4mMetaIdx++) {
+			if (g4mMeta[g4mMetaIdx].getAttribute('property') === 'og:title') {
+                var g4mTitle = g4mMeta[g4mMetaIdx].getAttribute('content');
+                var tmpDiv = document.createElement('div');
+                tmpDiv.innerHTML = g4mTitle;
+                var W_Title = tmpDiv.childNodes[0].nodeValue;
+                continue;
+			}
+			if (g4mMeta[g4mMetaIdx].getAttribute('property') === 'og:url') {
+                var W_URL = g4mMeta[g4mMetaIdx].getAttribute('content');
+            }
+			if (g4mMeta[g4mMetaIdx].getAttribute('property') === 'article:published_time') {
+                var W_Date = convertISO8601Date(g4mMeta[g4mMetaIdx].getAttribute('content'));
+            }
+			if (g4mMeta[g4mMetaIdx].getAttribute('itemprop') === 'author') {
+                var W_Authors = g4mMeta[g4mMetaIdx].getAttribute('content');
+            }
+		}
+	}
 	if (u.match(/ziare.com/)) {
         var zcomMeta = document.getElementsByTagName('meta');
         for (var metaIdx = 0; metaIdx < zcomMeta.length; metaIdx++) {
