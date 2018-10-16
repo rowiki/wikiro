@@ -1048,7 +1048,7 @@ if (u.match(/webcitation.org/)) {
 		var W_Newspaper = 'Historia';
 	};
 	if (u.match(/g4media.ro/)) {
-		var g4mMeta = document.getElementByTagName('meta');
+		var g4mMeta = document.getElementsByTagName('meta');
 		for (var g4mMetaIdx = 0; g4mMetaIdx < g4mMeta.length; g4mMetaIdx++) {
 			if (g4mMeta[g4mMetaIdx].getAttribute('property') === 'og:title') {
                 var g4mTitle = g4mMeta[g4mMetaIdx].getAttribute('content');
