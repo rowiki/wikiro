@@ -410,7 +410,7 @@ if (u.match(/webcitation.org/)) {
 	};
 } else {
 	var articleMeta = document.getElementsByTagName('meta');
-	for (var metaIdx = 0; metaIdx < articleMeta.length; metaIdx++) {}
+	for (var metaIdx = 0; metaIdx < articleMeta.length; metaIdx++) {
 		if (articleMeta[metaIdx].getAttribute('property') === 'og:title') {
 	        var articleTitle = articleMeta[metaIdx].getAttribute('content');
 	        var tmpDiv = document.createElement('div');
