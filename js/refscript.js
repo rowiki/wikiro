@@ -421,27 +421,18 @@ if (u.match(/webcitation.org/)) {
 		if (articleMeta[metaIdx].getAttribute('property') === 'og:url') {
 	        var W_URL = articleMeta[metaIdx].getAttribute('content');
 	    }
+		if (articleMeta[metaIdx].getAttribute('property') === 'og:site_name') {
+	        var W_Newspaper = articleMeta[metaIdx].getAttribute('content');
+	    }
 		if (articleMeta[metaIdx].getAttribute('property') === 'article:published_time') {
 	        var W_Date = convertISO8601Date(articleMeta[metaIdx].getAttribute('content'));
 	    }
 	}
 	
     if (u.match(/dcnews.ro/)) {
-    	var W_Newspaper = 'DC News';
-        var dcnewsMeta = document.getElementsByTagName('meta');
-        for (var metaIdx = 0; metaIdx < dcnewsMeta.length; metaIdx++) {
-        	if (dcnewsMeta[metaIdx].getAttribute('property') === 'og:title') {
-        		var dcnewsTitle = dcnewsMeta[metaIdx].getAttribute('content');
-                var tmpDiv = document.createElement('div');
-                tmpDiv.innerHTML = dcnewsTitle;
-                var W_Title = tmpDiv.childNodes[0].nodeValue;
-                continue;
-			}
-			if (dcnewsMeta[metaIdx].getAttribute('property') === 'og:url') {
-        		var W_URL = dcnewsMeta[metaIdx].getAttribute('content');
-			}
-		}
-
+    	if (W_Newspaper === '') {
+    		W_Newspaper = 'DC News';
+    	}
 		var dcNewsArtInfoDivs = document.getElementsByClassName('articol_info');
         for (var dcNewsArtInfoDivIdx = 0; dcNewsArtInfoDivIdx < dcNewsArtInfoDivs.length; dcNewsArtInfoDivIdx++) {
         	var dcNewsArtInfoDiv = dcNewsArtInfoDivs[dcNewsArtInfoDivIdx];
@@ -509,7 +500,9 @@ if (u.match(/webcitation.org/)) {
 	};
 	if (u.match(/adevarul.ro/)) {
 		var x = document.title;
-		var W_Title = x.replace(/ \| adevarul.ro/, '');
+		if (W_Title === '') {
+			W_Title = x.replace(/ \| adevarul.ro/, '');
+		}
 		if (d.match(/time datetime=/)) {
 			var x = d.replace(/\n/g, '');
 			var x = x.replace(/\r/g, '');
@@ -739,23 +732,15 @@ if (u.match(/webcitation.org/)) {
 			var W_Newspaper = 'Clujeanul';
 	};
 	if (u.match(/digi24.ro/)) {
-	    var W_Authors, W_Newspaper, W_Date, W_Title;
-	    var scriptTags = document.getElementsByTagName('script');
-	    for (var scriptIdx = 0; scriptIdx < scriptTags.length; scriptIdx++) {
-	        if (scriptTags[scriptIdx].getAttribute('type') === 'application/ld+json') {
-	            var scriptData = JSON.parse(scriptTags[scriptIdx].textContent);
-	            if (scriptData && scriptData['@type'] === 'NewsArticle') {
-	                var tmpDiv = document.createElement('div');
-	                tmpDiv.innerHTML = scriptData.headline;
-	                W_Title = tmpDiv.childNodes[0].nodeValue;
-
-	                W_Date = convertISO8601Date(scriptData.dateCreated)
-	                continue;
-	            }
-	            if (scriptData && scriptData['@type'] === 'Organization') {
-	                W_Newspaper = scriptData.name;
-	            }
-	        }
+	    
+	    var timeTags = document.getElementsByTagName('time');
+	    for (timeIdx = 0; timeIdx < timeTags.length; timeIdx++) {
+	    	if (timeTags[timeIdx].getAttribute('itemprop') === 'datePublished') {
+	    		W_Date = convertISO8601Date(timeTags[timeIdx].getAttribute('datetime'))
+	    	}
+	    }
+	    if (W_Newspaper === '') {
+	    	W_Newspaper = 'Digi 24'
 	    }
 	}
 	if (u.match(/zf.ro/)) {
@@ -787,12 +772,6 @@ if (u.match(/webcitation.org/)) {
 
     if (u.match(/digisport.ro/)) {
         var W_Date, W_Newspaper, W_Title, W_Authors;
-		var digisportMeta = document.getElementsByTagName('meta');
-		for (var metaIdx = 0; metaIdx < digisportMeta.length; metaIdx++) {
-			if (digisportMeta[metaIdx].getAttribute('property') === 'og:title') {
-				W_Title = digisportMeta[metaIdx].getAttribute('content');
-			}
-		}
         var articleDivs = document.getElementsByTagName('article');
         if (articleDivs.length > 0) {
             var articleDiv = articleDivs[0];
@@ -810,18 +789,14 @@ if (u.match(/webcitation.org/)) {
         }
     }
 
-    if (u.match(/dolce\-?sport.ro/)) {
+    if (u.match(/telekomsport.ro/)) {
         var W_Date, W_Newspaper, W_Title, W_Authors;
-        var dolcesportMeta = document.getElementsByTagName('meta');
-        for (var metaIdx = 0; metaIdx < dolcesportMeta.length; metaIdx++) {
-            if (dolcesportMeta[metaIdx].getAttribute('property') === 'og:title') {
-                W_Title = dolcesportMeta[metaIdx].getAttribute('content');
-            }
-        }
-        W_Newspaper = 'DolceSport';
-        var dateSpan = document.getElementsByClassName('article-date');
-        if (dateSpan.length > 0) {
-            W_Date = dateSpan[0].textContent.trim();
+        var dateContainer = document.getElementsByClassName('author-name');
+        if (dateContainer.length > 0) {
+        	var dateElements = dateContainer[0].getElementsByTagName('time');
+        	if (dateElements.length > 0) {
+        		W_Date = convertISO8601Date(dateElements[0].getAttribute('datetime').trim());
+        	}
         }
     }
 	if (u.match(/gsp.ro/)) {
@@ -859,12 +834,6 @@ if (u.match(/webcitation.org/)) {
 	}
 	if (u.match(/prosport.ro/)) {
 		var W_Date, W_Newspaper, W_Title, W_Authors;
-		var prosportMeta = document.getElementsByTagName('meta');
-		for (var metaIdx = 0; metaIdx < prosportMeta.length; metaIdx++) {
-			if (prosportMeta[metaIdx].getAttribute('property') === 'og:title') {
-				W_Title = prosportMeta[metaIdx].getAttribute('content');
-			}
-		}
 		var dateHolders = document.getElementsByClassName('ic20-date');
 		if (dateHolders.length > 0) {
 			var dateText = dateHolders[0].textContent;
