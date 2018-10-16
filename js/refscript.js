@@ -850,27 +850,16 @@ if (u.match(/webcitation.org/)) {
 		var authorHolders = document.getElementsByClassName('author');
 		if (authorHolders.length > 0) {
 			var authorLis = authorHolders[0].getElementsByTagName('li');
-			var authorList = new Array();
 			for (var authorLiIdx = 0; authorLiIdx < authorLis.length; authorLiIdx++) {
 				var authorAnchors = authorLis[authorLiIdx].getElementsByTagName('a');
 				if (authorAnchors.length > 0) {
-					authorList[authorList.length] = authorAnchors[0].textContent;
+					W_AuthorsList.push(authorAnchors[0].textContent);
 				}
 			}
-			if (authorList.length > 0) {
-				W_Authors = authorList.join(', ');
-			}
 		}
-	
 	}
     if (u.match(/unimedia.info/)) {
         var W_Date, W_Newspaper, W_Title, W_Authors;
-        var unimediaMeta = document.getElementsByTagName('meta');
-        for (var metaIdx = 0; metaIdx < unimediaMeta.length; metaIdx++) {
-            if (unimediaMeta[metaIdx].getAttribute('property') === 'og:title') {
-                W_Title = unimediaMeta[metaIdx].getAttribute('content');
-            }
-        }
 
         var contentDiv = document.getElementById("content");
         if (contentDiv) {
@@ -901,9 +890,6 @@ if (u.match(/webcitation.org/)) {
         var W_Date, W_Newspaper, W_Title, W_Authors;
         var publikaMeta = document.getElementsByTagName('meta');
         for (var metaIdx = 0; metaIdx < publikaMeta.length; metaIdx++) {
-            if (publikaMeta[metaIdx].getAttribute('property') === 'og:title') {
-                W_Title = publikaMeta[metaIdx].getAttribute('content');
-            }
             if (publikaMeta[metaIdx].getAttribute('property') === 'article:author') {
                 W_Authors = publikaMeta[metaIdx].getAttribute('content');
             }
@@ -921,12 +907,6 @@ if (u.match(/webcitation.org/)) {
 	if (u.match(/revista22.ro/)) {
 		var W_Title = document.title;
 		var titleregex = /<meta\s+property=.og:title.\s+content=.(.+?).\s+\/>/g;
-		var metas = document.getElementsByTagName('meta');
-		for (metasindex = 0; metasindex < metas.length; metasindex++) {
-			if (metas[metasindex].getAttribute('property') == 'og:title') {
-				W_Title = metas[metasindex].getAttribute('content');
-			};
-		};
 		var dateregex = /<div\s+class=.date.>(<b>)?(\d{4}\-\d{2}\-\d{2})(<\/b>)?<\/div>/g;
 		var datematches;
 		var x = '';
@@ -1038,31 +1018,21 @@ if (u.match(/webcitation.org/)) {
 		var g4mMeta = document.getElementsByTagName('meta');
 		for (var g4mMetaIdx = 0; g4mMetaIdx < g4mMeta.length; g4mMetaIdx++) {
 			if (g4mMeta[g4mMetaIdx].getAttribute('itemprop') === 'author') {
-                var W_Authors = g4mMeta[g4mMetaIdx].getAttribute('content');
+                W_Authors = g4mMeta[g4mMetaIdx].getAttribute('content');
             }
 		}
 	}
 	if (u.match(/ziare.com/)) {
         var zcomMeta = document.getElementsByTagName('meta');
         for (var metaIdx = 0; metaIdx < zcomMeta.length; metaIdx++) {
-            if (zcomMeta[metaIdx].getAttribute('property') === 'og:title') {
-                var zcomTitle = zcomMeta[metaIdx].getAttribute('content');
-                var tmpDiv = document.createElement('div');
-                tmpDiv.innerHTML = zcomTitle;
-                var W_Title = tmpDiv.childNodes[0].nodeValue;
-                continue;
-            }
-            if (zcomMeta[metaIdx].getAttribute('property') === 'og:url') {
-                var W_URL = zcomMeta[metaIdx].getAttribute('content');
-            }
             if (zcomMeta[metaIdx].getAttribute('name') === 'date') {
                 var W_Date = convertISO8601Date(zcomMeta[metaIdx].getAttribute('content'));
             }
         }
 
         var fullArticleDiv = document.getElementById('interior_left');
-	if (fullArticleDiv) {
-	        var authorHeaders = fullArticleDiv.getElementsByClassName('fleft');
+        if (fullArticleDiv) {
+        	var authorHeaders = fullArticleDiv.getElementsByClassName('fleft');
         	if (authorHeaders) {
         		for (var authorHeadersIdx = 0; authorHeadersIdx < authorHeaders.length; authorHeadersIdx++) {
 	                var authorSpans = authorHeaders[authorHeadersIdx].getElementsByTagName('span');
@@ -1075,8 +1045,8 @@ if (u.match(/webcitation.org/)) {
                 	    }
 	                    break;
         	        }
-	            }
-                }
+        		}
+            }
 	    }
 	};
 	if (u.match(/contributors.ro/)) {
