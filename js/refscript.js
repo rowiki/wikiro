@@ -363,6 +363,7 @@ var SiteLN = 'ro';
 var AuthorNameTitleCase = 'yes';
 var comment = 'End Flag variables here';
 var W_Authors = '';
+var W_AuthorsList = new Array();
 var W_Date = '';
 var W_Title = '';
 var W_Newspaper = '';
@@ -408,6 +409,23 @@ if (u.match(/webcitation.org/)) {
 		var W_URL = x.replace(/.*>/, '');
 	};
 } else {
+	var articleMeta = document.getElementsByTagName('meta');
+	for (var metaIdx = 0; metaIdx < articleMeta.length; metaIdx++) {}
+		if (articleMeta[metaIdx].getAttribute('property') === 'og:title') {
+	        var articleTitle = articleMeta[metaIdx].getAttribute('content');
+	        var tmpDiv = document.createElement('div');
+	        tmpDiv.innerHTML = articleTitle;
+	        var W_Title = tmpDiv.childNodes[0].nodeValue;
+	        continue;
+		}
+		if (articleMeta[metaIdx].getAttribute('property') === 'og:url') {
+	        var W_URL = articleMeta[metaIdx].getAttribute('content');
+	    }
+		if (articleMeta[metaIdx].getAttribute('property') === 'article:published_time') {
+	        var W_Date = convertISO8601Date(articleMeta[metaIdx].getAttribute('content'));
+	    }
+	}
+	
     if (u.match(/dcnews.ro/)) {
     	var W_Newspaper = 'DC News';
         var dcnewsMeta = document.getElementsByTagName('meta');
@@ -1050,19 +1068,6 @@ if (u.match(/webcitation.org/)) {
 	if (u.match(/g4media.ro/)) {
 		var g4mMeta = document.getElementsByTagName('meta');
 		for (var g4mMetaIdx = 0; g4mMetaIdx < g4mMeta.length; g4mMetaIdx++) {
-			if (g4mMeta[g4mMetaIdx].getAttribute('property') === 'og:title') {
-                var g4mTitle = g4mMeta[g4mMetaIdx].getAttribute('content');
-                var tmpDiv = document.createElement('div');
-                tmpDiv.innerHTML = g4mTitle;
-                var W_Title = tmpDiv.childNodes[0].nodeValue;
-                continue;
-			}
-			if (g4mMeta[g4mMetaIdx].getAttribute('property') === 'og:url') {
-                var W_URL = g4mMeta[g4mMetaIdx].getAttribute('content');
-            }
-			if (g4mMeta[g4mMetaIdx].getAttribute('property') === 'article:published_time') {
-                var W_Date = convertISO8601Date(g4mMeta[g4mMetaIdx].getAttribute('content'));
-            }
 			if (g4mMeta[g4mMetaIdx].getAttribute('itemprop') === 'author') {
                 var W_Authors = g4mMeta[g4mMetaIdx].getAttribute('content');
             }
@@ -1958,34 +1963,10 @@ if (u.match(/webcitation.org/)) {
 		var W_Newspaper = 'ShowBiz.ro';
 	};
 	if (u.match(/fanatik.ro/)) {
-        var fanatikMeta = document.getElementsByTagName('meta');
-        for (var metaIdx = 0; metaIdx < fanatikMeta.length; metaIdx++) {
-            if (fanatikMeta[metaIdx].getAttribute('property') === 'og:title') {
-                W_Title = fanatikMeta[metaIdx].getAttribute('content');
-            }
-        }
-
-        var dateElems = document.getElementsByClassName('detail date');
-        if (dateElems && 0 < dateElems.length) {
-        	var dateRaw = dateElems[0].textContent;
-        	W_Date = dateRaw;
+		var authorBoxes = document.getElementsByClassName('author');
+		for (authorElemIdx = 0; authorElemIdx < authorBoxes.length; authorElemIdx++) {
+			W_AuthorsList.push(authorBoxes[authorElemIdx].textContent.trim());
 		}
-
-		var authorBoxes = document.getElementsByClassName('author_box animated_element');
-        var authorsList = new Array();
-        if (authorBoxes && 0 < authorBoxes.length) {
-        	var authorsDivs = authorBoxes[0].getElementsByClassName('author');
-        	for (authorIdx = 0; authorIdx < authorsDivs.length; authorIdx ++ ) {
-        		var authorH5 = authorsDivs[authorIdx].getElementsByClassName('h5');
-        		if (null != authorH5 && 0 < authorH5.length) {
-        			var authorA = authorH5[0].getElementsByTagName('a');
-        			if (null != authorA && 0 < authorA.length) {
-        				authorsList.push(authorA[0].getAttribute('title'));
-					}
-				}
-			}
-		}
-		var W_Authors = authorsList.join(', ');
 	};
 	if (u.match(/revistatango.ro/)) {
 		var W_Title = document.title;
@@ -2286,7 +2267,18 @@ var W_Ref_Name = f_process_REF_Name();
 var ref1 = '<ref name=' + dq + W_Ref_Name + W_Ref_Date + dq + '>';
 var ref2 = ', accesat la ' + today + '</ref>';
 var sr = ref1 + s + ref2;
-var ref = '{{Citation | url=' + document.URL + '| title=' + W_Title + '| newspaper=' + W_Newspaper + '| date= ' + W_Date + '| author=' + W_Authors + '| accessdate=' + today + '}}';
+var ref = '{{Citation | url=' + document.URL + '| title=' + W_Title + '| newspaper=' + W_Newspaper + '| date= ' + W_Date + '| accessdate=' + today
+
+if (W_AuthorsList.length > 0) {
+	for (var authIdx = 0; authIdx < W_AuthorsList.length; authIdx++) {
+		ref = ref + ' |author' + (1 + authIdx) + ' = ' + W_AuthorsList[authIdx];
+	}
+} else if (W_Authors != '') {
+	ref = ref + ' |author = ' + W_Authors;
+}
+
+ref = ref + '}}';
+
 var ref = ref1 + ref + '</ref>';
 var sc = ref;
 var comment = 'SD = Link and Date (in wiki format)';
