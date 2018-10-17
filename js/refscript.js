@@ -772,7 +772,7 @@ if (u.match(/webcitation.org/)) {
 	
 	if (u.match(/www\.sport\.ro/)) {
 		var sportRoMetas = document.getElementsByTagName('meta');
-		if (var metaIdx = 0; metaIdx < sportRoMetas.length; metaIdx++) {
+		for (var metaIdx = 0; metaIdx < sportRoMetas.length; metaIdx++) {
 			if (sportRoMetas[metaIdx].getAttribute("itemprop") === 'datePublished') {
 				W_Date = convertISO8601Date(sportRoMetas[metaIdx].getAttribute('content'));
 			}
