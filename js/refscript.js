@@ -769,7 +769,15 @@ if (u.match(/webcitation.org/)) {
 		}
 		var W_Newspaper = 'Ziarul financiar';
 	};
-
+	
+	if (u.match(/www\.sport\.ro/)) {
+		var sportRoMetas = document.getElementsByTagName('meta');
+		if (var metaIdx = 0; metaIdx < sportRoMetas.length; metaIdx++) {
+			if (sportRoMetas[metaIdx].getAttribute("itemprop") === 'datePublished') {
+				W_Date = convertISO8601Date(sportRoMetas[metaIdx].getAttribute('content'));
+			}
+		}
+	}
     if (u.match(/digisport.ro/)) {
         var W_Date, W_Newspaper, W_Title, W_Authors;
         var articleDivs = document.getElementsByTagName('article');
@@ -788,7 +796,6 @@ if (u.match(/webcitation.org/)) {
             }
         }
     }
-
     if (u.match(/telekomsport.ro/)) {
         var W_Date, W_Newspaper, W_Title, W_Authors;
         var dateContainer = document.getElementsByClassName('author-name');
