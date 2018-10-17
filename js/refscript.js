@@ -808,23 +808,15 @@ if (u.match(/webcitation.org/)) {
     }
 	if (u.match(/gsp.ro/)) {
 		var W_Date, W_Newspaper, W_Title, W_Authors;
-		var gspMeta = document.getElementsByTagName('meta');
-		for (var metaIdx = 0; metaIdx < gspMeta.length; metaIdx++) {
-			if (gspMeta[metaIdx].getAttribute('property') === 'og:title') {
-				W_Title = gspMeta[metaIdx].getAttribute('content');
-			}
-		}
 		var dateAuthorHolders = document.getElementsByClassName('data-autor');
 		if (dateAuthorHolders.length > 0) {
 			var authorAnchors = dateAuthorHolders[0].getElementsByTagName('a');
-			var authorList = new Array();
 			var dateAuthorText = dateAuthorHolders[0].textContent
 			var dateStartIndex = 0;
 			for (var authorIdx = 0; authorIdx < authorAnchors.length; authorIdx++) {
-				authorList[authorIdx] = authorAnchors[authorIdx].textContent;
+				W_AuthorsList.push(authorAnchors[authorIdx].textContent);
 				dateStartIndex = 4 + dateAuthorText.indexOf('</a>', dateStartIndex);
 			}
-			W_Authors = authorList.join(', ');
 			var dateStartIndex = 0;
 			var dateText = dateAuthorText.substring(dateStartIndex);
 			var dateRegex = /\b\w+\,(.+?)(,.*)?$/g;
@@ -834,7 +826,7 @@ if (u.match(/webcitation.org/)) {
 				var yearRegex = /\b\d{4}\b/g;
 				var yearFinder = yearRegex.exec(W_Date);
 				if (!yearFinder) {
-					W_Date = [W_Date, new Date().getFullYear()].join(' ');
+					W_Date = [W_Date.trim(), new Date().getFullYear()].join(' ');
 				}
 			}
 		}
