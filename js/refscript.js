@@ -818,7 +818,7 @@ if (u.match(/webcitation.org/)) {
 				dateStartIndex = 4 + dateAuthorText.indexOf('</a>', dateStartIndex);
 			}
 			var dateStartIndex = 0;
-			var dateText = dateAuthorText.substring(dateStartIndex);
+			var dateText = dateAuthorText.substring(dateStartIndex).trim();
 			var dateRegex = /\b\w+\,(.+?)(,.*)?$/g;
 			var dateMatches = dateRegex.exec(dateText);
 			if (dateMatches) {
@@ -826,7 +826,7 @@ if (u.match(/webcitation.org/)) {
 				var yearRegex = /\b\d{4}\b/g;
 				var yearFinder = yearRegex.exec(W_Date);
 				if (!yearFinder) {
-					W_Date = [W_Date.trim(), new Date().getFullYear()].join(' ');
+					W_Date = [W_Date, new Date().getFullYear()].join(' ');
 				}
 			}
 		}
