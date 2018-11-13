@@ -1,11 +1,13 @@
 #!/usr/bin/python
 
 import copy
+from collections import OrderedDict
 import datetime
 import math
 import pywikibot
 import sys
 import re
+import time
 
 sys.path.append("/home/andrei/pywikibot-core/wikiro/robots/python/pywikipedia")
 import strainu_functions as sf
@@ -14,8 +16,8 @@ months = ["ianuarie", "februarie", "martie", "aprilie", "mai", "iunie",
 "iulie", "august", "septembrie", "octombrie", "noiembrie", "decembrie"]
 
 sections = {
-	"Nașteri": [2, "P569"],
-	"Decese": [3, "P570"],
+	"Nașteri": "P569",
+	"Decese": "P570",
 }
 
 calendars = [ "Q1985727", "Q1985786" ] 
@@ -26,8 +28,21 @@ MULTIPLE_DATE_PENALTY = -3
 MULTIPLE_SOURCES_BONUS = 1
 SCORE_LIMIT = 5
 
+def get_section_index(page, name):
+    req = pywikibot.getSite()._simple_request(action='parse', prop='sections', page=page)
+    json = req.submit()
+    #print(json)
+    if not json or 'parse' not in json or 'sections' not in json['parse']:
+         return None
+    for section in json['parse']['sections']:
+         #print(section['anchor'])
+         if section['anchor'] == name:
+             return section['index']
+    return None 
+
 ienr = re.compile(r"([1-9]\d{0,3}) (î\.\s?[Hh]r\.?|î\.\s?e\.\s?n\.?)")
 yr = re.compile(r"([1-9]\d{0,3})")
+dr = re.compile(r"([1-3]?\d) (%s)" % "|".join(months))
 
 def year_to_int(stry):
     year = None
@@ -41,6 +56,12 @@ def year_to_int(stry):
         if m:
             return int(m.group(1))
     return year
+
+def parse_date(strd):
+    m = dr.search(strd)
+    if m:
+        return (int(m.group(1)), str(m.group(2)))
+    return (None, None)
 
 #conversion code based on [[:c:Module:Calendar]]
 def _jdn2date(jdn, gregorian):
@@ -130,27 +151,36 @@ def equal_dates(date1, date2):
     return True
 
 
-def get_event_text(page, day, month, event):
+def get_event_text(page, day, month, year, event):
     if type(month) == int:
         month = months[month - 1]
     if not page:
-        page = pywikibot.Page(pywikibot.getSite(),  "%d %s" % (day, month))
+        if year:
+            page = pywikibot.Page(pywikibot.getSite(),  "%d" % year)
+        else:
+            page = pywikibot.Page(pywikibot.getSite(),  "%d %s" % (day, month))
         if not page.exists():
-            print("ERROR get_event_text")
+            pywikibot.error("ERROR get_event_text")
             return ""
-    section = sections.get(event)
-    if section:
-        section = section[0]
+        if page.isRedirectPage():
+            page = page.getRedirectTarget()
+    section = get_section_index(page, event)
+    #if not section:
+    #    return ""
+    #print("Section: %s" % section)
     page.site.loadrevisions(page=page, content=True,section=section)
     text = page.get()
     return text
 
 
-def set_event_text(page, day, month, text, comment):
+def set_event_text(page, day, month, year, text, comment):
     if type(month) == int:
         month = months[month - 1]
     if not page:
-        page = pywikibot.Page(pywikibot.getSite(),  "%d %s" % (day, month))
+        if year:
+            page = pywikibot.Page(pywikibot.getSite(),  "%d" % year)
+        else:
+            page = pywikibot.Page(pywikibot.getSite(),  "%d %s" % (day, month))
     try:
         page.put(text, comment)
     except pywikibot.PageNotSaved:
@@ -158,65 +188,76 @@ def set_event_text(page, day, month, text, comment):
     return True
 
 
-def get_line_elements(page, day, month, event):
+def get_line_elements(page, day, month, year, event):
     global events
-    index = "%d_%s_%s" % (day, month, event)
+    index = "%d_%s_%d_%s" % (day or 0, month or "", year or 0, event)
     if index in events:
         return events[index]
-    text = get_event_text(page, day, month, event)
-    elem = {}
+    text = get_event_text(page, day, month, year, event)
+    elem = OrderedDict({})
     lines = [x for x in text.split("\n") if len(x) and x[0] == '*']
     for line in lines:
         l = line.split(':', 1)
         if len(l) < 2: #no need to parse more if we can't identify names 
             continue
-        y, name = l
-        year = year_to_int(sf.extractLink(y) or y)
-        name = sf.extractLink(name)
-        if year == None or name == None:
-            print(line)
-            print(year)
-            print(name)
+        d, name = l
+        if not year:
+            y = year_to_int(sf.extractLink(d) or d)
+            name = sf.extractLink(name)
+            if y == None or name == None:
+                print(line)
+                print(y)
+                print(name)
+            else:
+                elem[name] = { 'year': y, 'line': line }
         else:
-            elem[name] = { 'year': year, 'line': line }
+            day, month = parse_date(sf.extractLink(d) or d)
+            name = sf.extractLink(name)
+            if day == None or month == None or name == None:
+                print(line)
+                print(year)
+                print(name)
+            else:
+                elem[name] = { 'day': day, 'month': month, 'line': line }
+            
     #if len(elem):
     events[index] = elem
     return elem
 
 
-def get_event_line(date, event, entry):
+def get_date_line(date, event, entry):
     global events
     # we should already have this data
-    e = get_line_elements(None, date.day, months[date.month-1], event)
+    e = get_line_elements(None, date.day, months[date.month-1], None, event)
     if entry not in e:
         return None
 
     return e[entry]['line']
     
 
-def replace_entry(entry, date, event, oldline, newline):
-    text = get_event_text(None, date.day, date.month, "Full")
+def replace_date_entry(entry, date, event, oldline, newline):
+    text = get_event_text(None, date.day, date.month, None, "Full")
     newtext = text.replace(oldline, newline)
     if newtext == text:
         return False
-    return set_event_text(None, date.day, date.month, newtext, "Modific intrarea despre [[%s]] din secțiunea '%s'" % (entry, event))
+    return set_event_text(None, date.day, date.month, None, newtext, "Modific intrarea despre [[%s]] din secțiunea '%s'" % (entry, event))
 
 
-def remove_entry(entry, date, event, line):
+def remove_date_entry(entry, date, event, line):
     global events
-    r = replace_entry(entry, date, event, line + "\n", "")
+    r = replace_date_entry(entry, date, event, line + "\n", "")
     if r:
-        e = get_line_elements(None, date.day, months[date.month-1], event)
+        e = get_line_elements(None, date.day, months[date.month-1], None, event)
         e.pop(entry)
     return r
 
 
-def add_entry(entry, date, event, line):
+def add_date_entry(entry, date, event, line):
     global events
-    e = get_line_elements(None, date.day, months[date.month-1], event)
+    e = get_line_elements(None, date.day, months[date.month-1], None, event)
     if entry in e: #already in the page, don't do anything
         if line != e[entry]['line']:
-            return replace_entry(entry, date, event, e[entry]['line'], line)
+            return replace_date_entry(entry, date, event, e[entry]['line'], line)
         else:
             return True
     max_date = -10000 #TODO
@@ -229,39 +270,39 @@ def add_entry(entry, date, event, line):
         return False #TODO: we can do more here
 
     newline = oldline + "\n" + line
-    r = replace_entry(entry, date, event, oldline, newline)
+    r = replace_date_entry(entry, date, event, oldline, newline)
     if r:
         e[entry] = { 'year': date.year, 'line': line }
     return r
 
 
-def fix(entry, olddate, newdate, event):
+def fix_date(entry, olddate, newdate, event):
     pywikibot.output("Fixing " + entry)
-    line = get_event_line(olddate, event, entry)
+    line = get_date_line(olddate, event, entry)
     newline = line
     if newdate and olddate.year != newdate.year:
         newline = line.replace(str(olddate.year), str(newdate.year))
     print("Trying to move line: " + line)
-    r = remove_entry(entry, olddate, event, line)
+    r = remove_date_entry(entry, olddate, event, line)
     if r == False:
         return r
     if newdate == None:
         return r
-    r = add_entry(entry, newdate, event, newline)
+    r = add_date_entry(entry, newdate, event, newline)
     if r == False:
-        r = add_entry(entry, olddate, event, line)
+        r = add_date_entry(entry, olddate, event, line)
         if r == False:
-            pywikibot.error("ERROR: Moving the entry failed and an invalid state was created. Please check all changes done by the bot")
+            pywikibot.error("Moving the entry %s failed and an invalid state was created. Please check all changes done by the bot" % entry)
             exit(1)
         return False
     pywikibot.output("Fixed " + entry)
     return True
 
-def treat(page, day, month, event):
+def treat_date(page, day, month, event):
     title = "%d %s#%s" % (day, month, event)
     print(title)
     ret = ""
-    people = copy.deepcopy(get_line_elements(page, day, month, event))
+    people = copy.deepcopy(get_line_elements(page, day, month, None, event))
     site = pywikibot.getSite()
     for person in people:
         link = pywikibot.Page(site, person)
@@ -277,7 +318,7 @@ def treat(page, day, month, event):
 
         score = 0
         mydate = pywikibot.WbTime(year=people[person]['year'], month = int(1 + months.index(month)), day=day)
-        pno = sections[event][1]
+        pno = sections[event]
         qitem = item.title()
         #print(item)
         if pno not in item.claims:
@@ -298,7 +339,7 @@ def treat(page, day, month, event):
             preferred = item.claims[pno][0]
 
         if preferred == None:
-            if score < -SCORE_LIMIT and fix(person, mydate, None, event):
+            if score < -SCORE_LIMIT and fix_date(person, mydate, None, event):
                 continue
             r = "|- style=\"background-color:#88ffff\"\n|  %s || [[%s]] || [[%s]] || %d %s %d || [[:d:%s#%s|%s]] || [date multiple] || %d\n" % (event, person, title, mydate.day, month, mydate.year, qitem, pno, qitem, score)
             ret += r
@@ -330,19 +371,185 @@ def treat(page, day, month, event):
         if not equal_dates(date, mydate):
             otherdate = convert_calendar(date)
             if not equal_dates(otherdate, mydate):
-                if score >= SCORE_LIMIT and fix(person, mydate, date, event):
+                if score >= SCORE_LIMIT and fix_date(person, mydate, date, event):
                     continue
-                r = "|- style=\"background-color:#ff8888\"\n|  %s || [[%s]] || [[%s]] || %d %s %d || [[:d:%s#%s|%s]] || %d %s %s || %d\n" % (event, person, title, mydate.day, month, mydate.year, qitem, pno, qitem, date.day, months[date.month-1], date.year, score)
+                r = "|- style=\"background-color:#ff8888\"\n|  %s || [[%s]] || [[%s]] || %d %s %d || [[:d:%s#%s|%s]] || %d %s %d || %d\n" % (event, person, title, mydate.day, month, mydate.year, qitem, pno, qitem, date.day, months[date.month-1], date.year, score)
             else:
                 #different calendar, same date
-                r = "|- style=\"background-color:#88ff88\"\n|  %s || [[%s]] || [[%s]] || %d %s %d || [[:d:%s#%s|%s]] || %d %s %s || 0\n" % (event, person, title, mydate.day, month, mydate.year, qitem, pno, qitem, date.day, months[date.month-1], date.year)
+                r = "|- style=\"background-color:#88ff88\"\n|  %s || [[%s]] || [[%s]] || %d %s %d || [[:d:%s#%s|%s]] || %d %s %d || 0\n" % (event, person, title, mydate.day, month, mydate.year, qitem, pno, qitem, date.day, months[date.month-1], date.year)
             ret += r
 
     return ret
 
+def get_year_line(date, event, entry):
+    global events
+    # we should already have this data
+    e = get_line_elements(None, None, None, date.year, event)
+    if entry not in e:
+        return None
+
+    return e[entry]['line']
+    
+
+def replace_year_entry(entry, date, event, oldline, newline):
+    text = get_event_text(None, None, None, date.year, "Full")
+    newtext = text.replace(oldline, newline)
+    #print("Replace")
+    #print(oldline)
+    #print(newline)
+    if newtext == text:
+        return True
+    return True #set_event_text(None, None, None, date.year, newtext, "Modific intrarea despre [[%s]] din secțiunea '%s'" % (entry, event))
+
+
+def remove_year_entry(entry, date, event, line):
+    global events
+    #print("Removing " + str(line))
+    r = replace_year_entry(entry, date, event, line + "\n", "")
+    if r:
+        e = get_line_elements(None, None, None, date.year, event)
+        e.pop(entry)
+    return r
+
+
+def add_year_entry(entry, date, event, line):
+    global events
+    #print("Adding line " + str(line))
+    e = get_line_elements(None, None, None, date.year, event)
+    if entry in e: #already in the page, don't do anything
+        if line != e[entry]['line']:
+            return replace_year_entry(entry, date, event, e[entry]['line'], line)
+        else:
+            return True
+    oldline = None
+    for elem in e:
+        if months.index(e[elem]['month']) + 1 < date.month or \
+		(months.index(e[elem]['month']) + 1 == date.month and e[elem]['day'] <= date.day):
+            oldline = e[elem]['line']
+    if oldline == None:
+        oldline = "== %s ==" % event #TODO: we can do more here
+
+    newline = oldline + "\n" + line
+    r = replace_year_entry(entry, date, event, oldline, newline)
+    if r:
+        e[entry] = { 'day': date.day, 'month': months[date.month - 1], 'line': line }
+    return r
+
+def fix_year(entry, olddate, newdate, event):
+    pywikibot.output("Fixing " + entry)
+    line = get_year_line(olddate, event, entry)
+    newline = line
+    if newdate and (olddate.month != newdate.month or olddate.day != newdate.day):
+        o = "%d %s" % (olddate.day, months[olddate.month - 1])
+        n = "%d %s" % (newdate.day, months[newdate.month - 1])
+        newline = line.replace(o, n)
+    print("Trying to move line: %s\n to line: %s" % (line, newline))
+    r = remove_year_entry(entry, olddate, event, line)
+    if r == False:
+        return r
+    if newdate == None:
+        return r
+    r = add_year_entry(entry, newdate, event, newline)
+    if r == False:
+        r = add_year_entry(entry, olddate, event, line)
+        if r == False:
+            pywikibot.error("Moving the entry failed and an invalid state was created. Please check all changes done by the bot")
+            exit(1)
+        return False
+    pywikibot.output("Fixed " + entry)
+    return True
+
+def treat_year(page, year, suffix, event):
+    if year > 0:
+        title = "%d#%s" % (year, event)
+    else:
+        title = "%s%s#%s" % (-year, suffix, event)
+    print(title)
+    ret = ""
+    people = copy.deepcopy(get_line_elements(page, None, None, year, event))
+    site = pywikibot.getSite()
+    for person in people:
+        link = pywikibot.Page(site, person)
+        if not link.exists():
+            continue
+        if page.isRedirectPage():
+            page = page.getRedirectTarget()
+
+        try:
+            item = link.data_item()
+        except:
+            continue
+
+        score = 0
+        month = people[person]['month']
+        mydate = pywikibot.WbTime(year=year, month = int(1 + months.index(month)), day=people[person]['day'])
+        pno = sections[event]
+        qitem = item.title()
+        #print(item)
+        if pno not in item.claims:
+            r = "|- style=\"background-color:#ffff88\"\n|  %s || [[%s]] || [[%s]] || %d %s %d || [[:d:%s|%s]] || [fără dată] || 0\n" % (event, person, title, mydate.day, month, mydate.year, qitem, qitem)
+            ret += r
+            continue
+
+        preferred = None
+        item.claims[pno] = [x for x in item.claims[pno] if x.getRank() != "deprecated"]
+        if len(item.claims[pno]) > 1:
+            score += MULTIPLE_DATE_PENALTY * (len(item.claims[pno]) - 1)
+            for c in item.claims[pno]:
+                if preferred != None and c.getRank() == "preferred":
+                    print("Impossible to extract reliable data for %s (wrong rank)" % link)
+                    continue
+                if c.getRank() == "preferred":
+                    preferred = c
+        elif len(item.claims[pno]):
+            #print(item.claims[pno])
+            preferred = item.claims[pno][0]
+
+        if preferred == None:
+            if score < -SCORE_LIMIT and fix_year(person, mydate, None, event):
+                continue
+            r = "|- style=\"background-color:#88ffff\"\n|  %s || [[%s]] || [[%s]] || %d %s %d || [[:d:%s#%s|%s]] || [date multiple] || %d\n" % (event, person, title, mydate.day, month, mydate.year, qitem, pno, qitem, score)
+            ret += r
+            continue
+
+        if preferred.getTarget() == None:
+            print("Impossible to extract reliable data for %s (wrong date)" % link)
+            continue
+
+        date = preferred.getTarget()
+        sources = preferred.getSources()
+        score += MULTIPLE_SOURCES_BONUS * len(sources)
+        precise = True
+        if date.precision < 11:
+           d = "[fără zi]"
+           precise = False
+        else:
+           d = str(date.day)
+        if date.precision < 10:
+           m = "[fără lună]"
+           precise = False
+        else:
+           m = months[date.month -1]
+        if not precise:
+           r = "|- style=\"background-color:#ffff88\"\n|  %s || [[%s]] || [[%s]] || %d %s %d || [[:d:%s#%s|%s]] || %s %s %d || %d\n" % (event, person, title, mydate.day, month, mydate.year, qitem, pno, qitem, d, m, date.year, score)
+           ret += r
+           continue
+
+        if not equal_dates(date, mydate):
+            otherdate = convert_calendar(date)
+            if not equal_dates(otherdate, mydate):
+                if score >= SCORE_LIMIT and fix_year(person, mydate, date, event):
+                    continue
+                r = "|- style=\"background-color:#ff8888\"\n|  %s || [[%s]] || [[%s]] || %d %s %d || [[:d:%s#%s|%s]] || %d %s %d || %d\n" % (event, person, title, mydate.day, month, mydate.year, qitem, pno, qitem, date.day, months[date.month-1], date.year, score)
+            else:
+                #different calendar, same date
+                r = "|- style=\"background-color:#88ff88\"\n|  %s || [[%s]] || [[%s]] || %d %s %d || [[:d:%s#%s|%s]] || %d %s %d || 0\n" % (event, person, title, mydate.day, month, mydate.year, qitem, pno, qitem, date.day, months[date.month-1], date.year)
+            ret += r
+    return ret
+
 def main():
     text = """{{Proiect:Aniversările zilei/Antet}}
-Tabelul de mai jos conține informații despre erorile găsite în datele de naștere și deces ale personalităților menționate în paginile zilelor. 
+Tabelul de mai jos conține informații despre erorile găsite în datele de naștere și deces ale personalităților menționate în paginile zilelor și ale anilor. Comparația se face între listele de pe Wikipedia și elementele Wikidata ale personalităților respective.
 
 Legendă:
 * liniile cu fundal <span style="background-color:#ff8888">roșu</span> reprezintă nepotriviri certe (datele sunt complete în ambele părți, dar nu se potrivesc)
@@ -368,13 +575,28 @@ Scorul este alocat automat pe baza numărului de posibile date de naștere de la
     #pdb.set_trace()
     #treat(page, day, month, event)
     #return
+    for year in range(1901, time.localtime().tm_year):
+        for suffix in ["", " î.Hr."]:
+            page = pywikibot.Page(pywikibot.getSite(),  "%d%s" % (year, suffix))
+            if not page.exists():
+                continue
+            if page.isRedirectPage():
+                page = page.getRedirectTarget()
+            if suffix != "":
+                year = -year
+            for event in sections.keys():
+                text += treat_year(page, year, suffix, event)
     for month in months:
         for day in range(1,32):
             page = pywikibot.Page(pywikibot.getSite(),  "%d %s" % (day, month))
             if not page.exists():
                 continue
+            if page.isRedirectPage():
+                page = page.getRedirectTarget()
             for event in sections.keys():
-                text += treat(page, day, month, event)
+                text += treat_date(page, day, month, event)
+
+
     page = pywikibot.Page(pywikibot.getSite(), "Proiect:Aniversări/Erori")
     page.put(text + "|}", "Actualizare nepotriviri")
 
