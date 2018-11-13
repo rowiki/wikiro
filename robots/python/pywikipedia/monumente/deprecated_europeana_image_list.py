@@ -32,10 +32,10 @@ import string
 import cProfile
 import re
 sys.path.append("..")
-import wikipedia
-import pagegenerators
-import config as user
+from pywikibot import config as user
 from pywikibot import *
+import pywikibot
+sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions as strainu
 
 options = {
@@ -74,7 +74,7 @@ def log(list):
     for s in list:
         #s = s.replace( '"', '\\"')
         s = s.replace(u'"', u'”')
-        line += "\"" + s.encode("utf-8") + "\";"
+        line += "\"" + s + "\";"
     line = line[:-1] + "\n"
     _flog.write(line)
     
@@ -91,8 +91,8 @@ def geosign(check, plus, minus):
     
 def parseGeohackLinks(page):
     #title = page.title()
-    #html = page.site().getUrl( "/wiki/" + page.urlname(), True)
-    output = page.site().getUrl("/w/api.php?action=parse&format=json&page=" +
+    #html = page.site.getUrl( "/wiki/" + page.urlname(), True)
+    output = page.site.getUrl("/w/api.php?action=parse&format=json&page=" +
             page.urlname() + "&prop=externallinks&uselang=ro")
     linksdb = json.loads(output)
     title = linksdb["parse"]["title"]
@@ -101,7 +101,7 @@ def parseGeohackLinks(page):
     geohack_match = None
     for item in links:
         geohack_match = geohackRegexp.search(item)
-        if geohack_match <> None:
+        if geohack_match != None:
             link = geohack_match.group(3)
             #wikipedia.output(geohack_match.group(3))
             break
@@ -121,8 +121,8 @@ def parseGeohackLinks(page):
     #sanitize non-standard strings
     l = tokens[:]
     for token in l:
-        if token.strip() == '' or string.find(token, ':') > -1 or \
-                string.find(token, '{{{') > -1:
+        if token.strip() == '' or str.find(token, ':') > -1 or \
+                str.find(token, '{{{') > -1:
             tokens.remove(token)
     numElem = len(tokens)
     if tokens[0] == link: #no _
@@ -131,12 +131,12 @@ def parseGeohackLinks(page):
             lat = tokens[0]
             long = tokens[1]
         else:
-            wikipedia.output(u"*''E'': [[:%s]] Problemă (1) cu legătura Geohack: nu pot \
+            pywikibot.output(u"*''E'': [[:%s]] Problemă (1) cu legătura Geohack: nu pot \
                 identifica coordonatele în grade zecimale: %s" % (title, link))
             return 0,0
     elif numElem == 9: # D_N_D_E_to_D_N_D_E or D_M_S_N_D_M_S_E_something
-        if tokens[4] <> "to":
-            wikipedia.output(u"*[[%s]] We should ignore parameter 9: %s (%s)" % 
+        if tokens[4] != "to":
+            pywikibot.output(u"*[[%s]] We should ignore parameter 9: %s (%s)" % 
                             (title, tokens[8], link))
             deg1 = float(tokens[0])
             min1 = float(tokens[1])
@@ -149,7 +149,7 @@ def parseGeohackLinks(page):
             lat = dms2dec(deg1, min1, sec1, sign1)
             long = dms2dec(deg2, min2, sec2, sign2)
             if sec1 == 0 and sec2 == 0:
-                wikipedia.output(u"*''W'': [[:%s]] ar putea avea nevoie de actualizarea \
+                pywikibot.output(u"*''W'': [[:%s]] ar putea avea nevoie de actualizarea \
                     coordonatelor - valoarea secundelor este 0" % title)
         else:
             lat1 = float(tokens[0]) * geosign(tokens[1], 'N', 'S')
@@ -158,7 +158,7 @@ def parseGeohackLinks(page):
             long2 = float(tokens[7]) * geosign(tokens[8], 'E', 'V')
             if lat1 == 0 or long1 == 0 or lat2 == 0 or long2 == 0: 
                 #TODO: one of them is 0; this is also true for equator and GMT
-                wikipedia.output(u"*''E'': [[:%s]] Problemă (2) cu legătura Geohack: - \
+                pywikibot.output(u"*''E'': [[:%s]] Problemă (2) cu legătura Geohack: - \
                     una dintre coordonatele de bounding box e 0: %s" % 
                     (title, link))
                 return 0,0
@@ -176,7 +176,7 @@ def parseGeohackLinks(page):
         lat = dms2dec(deg1, min1, sec1, sign1)
         long = dms2dec(deg2, min2, sec2, sign2)
         if sec1 == 0 and sec2 == 0:
-            wikipedia.output(u"*''W'': [[:%s]] ar putea avea nevoie de actualizarea \
+            pywikibot.output(u"*''W'': [[:%s]] ar putea avea nevoie de actualizarea \
                 coordonatelor - valoarea secundelor este 0" % title)
     elif numElem == 6: # D_M_N_D_M_E
         deg1 = float(tokens[0])
@@ -189,7 +189,7 @@ def parseGeohackLinks(page):
         sign2 = geosign(tokens[5],'E','V')
         lat = dms2dec(deg1, min1, sec1, sign1)
         long = dms2dec(deg2, min2, sec2, sign2)
-        wikipedia.output(u"*''E'': [[:%s]] are nevoie de actualizarea coordonatelor \
+        pywikibot.output(u"*''E'': [[:%s]] are nevoie de actualizarea coordonatelor \
             nu sunt disponibile secundele" % title)
     elif numElem == 4: # D_N_D_E
         deg1 = float(tokens[0])
@@ -199,11 +199,11 @@ def parseGeohackLinks(page):
         lat = sign1 * deg1
         long = sign2 * deg2
     else:
-        wikipedia.output(u"*''E'': [[:%s]] Problemă (3) cu legătura Geohack: nu pot \
+        pywikibot.output(u"*''E'': [[:%s]] Problemă (3) cu legătura Geohack: nu pot \
             identifica nicio coordonată: %s" % (title, link))
         return 0,0
     if lat < 43 or lat > 48.25 or long < 20 or long > 29.67:
-        wikipedia.output(u"*''E'': [[:%s]] Coordonate invalide pentru România: %f,%f \
+        pywikibot.output(u"*''E'': [[:%s]] Coordonate invalide pentru România: %f,%f \
             (extrase din %s)" % (title, lat, long, link))
         return 0,0
     return lat,long
@@ -224,7 +224,7 @@ def findTemplate(list, tl):
 
 def checkAllCodes(result, title):
     if len(result) == 0:
-        wikipedia.output(u"*''E'': [[:%s]] nu conține niciun cod LMI valid" % title)
+        pywikibot.output(u"*''E'': [[:%s]] nu conține niciun cod LMI valid" % title)
         return None
     elif len(result) > 1:
         code = result[0][0]
@@ -240,7 +240,7 @@ def checkAllCodes(result, title):
                     else: 
                         c2 = res[0][-5:]
                     if c1 != c2: #they're NOT sub-monuments
-                        wikipedia.output(u"*''W'': [[:%s]] conține mai multe coduri LMI \
+                        pywikibot.output(u"*''W'': [[:%s]] conține mai multe coduri LMI \
                             distincte: %s, %s. Dacă nu e vorba de o \
                             greșeală, ar putea fi oportună separarea \
                             articolelor/decuparea pozelor pentru acele \
@@ -254,14 +254,14 @@ def processArticle(text, page, conf):
     templates = page.templatesWithParams()
     #wikipedia.output(str(templates))
     
-    if re.search(errorRegexp, text) <> None:
+    if re.search(errorRegexp, text) != None:
         return
     global codeRegexp
     code = checkAllCodes(re.findall(codeRegexp, text), title)
     if code == None:
         return
         
-    if qualityRegexp <> None and re.search(qualityRegexp, text) <> None:
+    if qualityRegexp != None and re.search(qualityRegexp, text) != None:
         quality = "1"
     else:
         quality = "0"
@@ -280,7 +280,7 @@ def processArticle(text, page, conf):
     
     #desc_ro
     t = findTemplate(templates, 'Ro')
-    if t <> None:
+    if t != None:
         desc_ro = t[1][0]
         if desc_ro.startswith(u"1="):
             desc_ro = desc_ro[2:]
@@ -288,7 +288,7 @@ def processArticle(text, page, conf):
     
     #desc_en
     t = findTemplate(templates, 'En')
-    if t <> None:
+    if t != None:
         desc_en = t[1][0]
         if desc_en.startswith(u"1="):
             desc_en = desc_en[2:]
@@ -303,8 +303,8 @@ def processArticle(text, page, conf):
         author = strainu.stripExternalLink(author).strip()
         #wikipedia.output(author)
     else:#search for the author of the first upload
-        #wikipedia.output(str(history))
-        author = history[1]
+        #pywikibot.output(str(history))
+        author = history['user']
         
     #date
     if dateTl: #search for {{Date}}
@@ -312,13 +312,13 @@ def processArticle(text, page, conf):
         if len(dateTl[1]) > 1:
             date += "-" + dateTl[1][1]
         if len(dateTl[1]) > 2:
-			date += "-" + dateTl[1][2]
+            date += "-" + dateTl[1][2]
     elif information:#search for {{Information}}
         date = extractParam(information[1], u"date").strip()
         date = textlib.removeDisabledParts(date.replace("\n", "<br/>"))
         #wikipedia.output(date)
     else: #search for the date of the first upload
-        date = history[0][:10]
+        date = history['timestamp']
     
     #license
     if findTemplate(templates, u'PD') or findTemplate(templates, u'PD-self'):
@@ -384,7 +384,7 @@ def processArticle(text, page, conf):
         elif text.find('{{PD-'):
             #wikipedia.output("8")
             license = "DP"
-        elif information <> None:#search for {{Information}}
+        elif information != None:#search for {{Information}}
             #wikipedia.output("9")
             license = extractParam(templates['Information'], "Permission")
             
@@ -392,19 +392,22 @@ def processArticle(text, page, conf):
     pretty = page.titleWithoutNamespace()
     pretty = pretty[:pretty.rfind('.')]
     
-    #code, title, pageURL, fileURL, desc_en, desc_ro, quality, author, date, lat, long, license
-    log([code, pretty, urlPrefix + page.urlname(), page.fileUrl(), license, author, date, desc_ro, desc_en, str(lat), str(long), quality])
+    try:
+        #code, title, pageURL, fileURL, desc_en, desc_ro, quality, author, date, lat, long, license
+        log([code, pretty, urlPrefix + page.urlname(), page.fileUrl(), license, author, date, desc_ro, desc_en, str(lat), str(long), quality])
+    except:
+        pass
     
 def main():
     user.mylang = "commons"
     user.family = "commons"
     start = None
-    for arg in wikipedia.handleArgs():
+    for arg in pywikibot.handleArgs():
         if arg.startswith('-start:'):
             start = arg [len('-start:'):]
         
-    site = wikipedia.getSite(code = user.mylang, fam=user.family)
-    rowTemplate = wikipedia.Page(site, u'%s:%s' % (site.namespace(10), \
+    site = pywikibot.getSite(code = user.mylang, fam=user.family)
+    rowTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), \
                                 options.get('codeTemplate')))
     global _log
     global fullDict
@@ -420,30 +423,30 @@ def main():
     qualityRegexp = re.compile(qReg, re.I)
 
     for namespace in options.get('namespaces'):
-        transGen = pagegenerators.ReferringPageGenerator(rowTemplate, 
+        transGen = pywikibot.pagegenerators.ReferringPageGenerator(rowTemplate, 
                                     onlyTemplateInclusion=True)
-        filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen, 
+        filteredGen = pywikibot.pagegenerators.NamespaceFilterPageGenerator(transGen, 
                                     [namespace], site)
-        pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 250)
+        pregenerator = pywikibot.pagegenerators.PreloadingGenerator(filteredGen, 250)
         
         count = 0
         for page in pregenerator:
-            wikipedia.output(u'Working on "%s"' % page.title())
-            if start and page.urlname() <> start:
+            pywikibot.output(u'Working on "%s"' % page.title())
+            if start and page.urlname() != start:
                 continue
             elif start:
                 start = None
                 continue
             if page.exists() and not page.isRedirectPage():
-                image = wikipedia.ImagePage(site, page.title())
+                image = pywikibot.ImagePage(site, page.title())
                 # Do some checking
                 processArticle(image.get(), image, options)
                 count += 1
-        print count
+        print(count)
 
 if __name__ == "__main__":
     try:
         #cProfile.run('main()', './parseprofile.txt')
         main()
     finally:
-        wikipedia.stopme()
+        pywikibot.stopme()

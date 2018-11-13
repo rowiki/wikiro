@@ -189,9 +189,9 @@ def cat2commons(cat):
 			log(u"E: Există mai multe categorii pentru %s" % code)
 			continue
 		name = cat[code][0]["name"]
-		if name == u"Category:Cetatea Oradea":
-			start = True
-			continue
+		#if name == u"Category:Cetatea Oradea":
+		#	start = True
+		#	continue
 		if not start:
 			continue
 		pywikibot.output(u"Working on cat %s" % name)
