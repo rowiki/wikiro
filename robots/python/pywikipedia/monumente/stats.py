@@ -183,14 +183,14 @@ def main():
 		if nature != "arheologie":
 			total_apmnir += total_nature[nature]
 			image_apmnir += image_nature[nature]
-		print("* Imagini pentru monumente de %s: ''%f%%''" % (nature, image_nature[nature] * 100.0 / total_nature[nature]))
+		print("* Imagini pentru monumente de %s: ''%f%%'' (%d/%d)" % (nature, image_nature[nature] * 100.0 / total_nature[nature], image_nature[nature], total_nature[nature]))
 	print("----")
 	for type in image_type.keys():
-		print("* Imagini pentru %s: ''%f%%''" % (type, image_type[type] * 100.0 / total_type[type]))
+		print("* Imagini pentru %s: ''%f%%'' (%d/%d)" % (type, image_type[type] * 100.0 / total_type[type], image_type[type], total_type[type]))
 	print("* Comparație cu monumenteromania.ro: ''%f%% (%d/%d)''" % (image_apmnir * 100.0 / total_apmnir, image_apmnir, total_apmnir))
 	print("----")
 	for interest in image_interest.keys():
-		print("* Imagini pentru monumente de interes %s: ''%f%%''" % (interest, image_interest[interest] * 100.0 / total_interest[interest]))
+		print("* Imagini pentru monumente de interes %s: ''%f%%'' (%d/%d)" % (interest, image_interest[interest] * 100.0 / total_interest[interest], image_interest[interest], total_interest[interest]))
 	print("----")
 
 	#image_keys = image_county.keys()
