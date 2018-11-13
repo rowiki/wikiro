@@ -131,15 +131,15 @@ def generate_stats(county):
     local_percentage = float(stats[county]['local']) * 100.0 / stats[county]['total']
     missing_percentage = float(stats[county]['missing']) * 100.0 / stats[county]['total']
     bar = "<span style=\"background-color:green\">"
-    for i in range(round(wikidata_percentage)):
+    for i in range(int(round(wikidata_percentage))):
         bar += "&nbsp;"
     bar += "</span>"
     bar += "<span style=\"background-color:yellow\">"
-    for i in range(round(local_percentage)):
+    for i in range(int(round(local_percentage))):
         bar += "&nbsp;"
     bar += "</span>"
     bar += "<span style=\"background-color:red\">"
-    for i in range(round(missing_percentage)):
+    for i in range(int(round(missing_percentage))):
         bar += "&nbsp;"
     bar += "</span>"
     text = table_line % ( "[[/" + county + "|" + county + "]]",
