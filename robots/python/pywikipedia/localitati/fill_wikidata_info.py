@@ -462,7 +462,7 @@ class ImageProcessing(ItemProcessing, CityData):
         super(ImageProcessing, self).__init__(config, always)
         self._dataType = u"image"
         self._lmi = lmi
-        self._blacklist = ["svg", "location", "josephin", "coa", " jud", "3d"]
+        self._blacklist = ["svg", "location", "josephin", "coa", " jud", "3d", "harta"]
 
     def addImage(self, _img=None, _type=u"imagine"):
         if not _img:
@@ -475,10 +475,17 @@ class ImageProcessing(ItemProcessing, CityData):
             return
         self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
         self.addImage(self.getInfoboxElement(item, element=u"hartă"), _type=u"hartă")
-        if "P31" in item.claims and "Q532" not in set(v.getTarget().title() for v in self.item.claims["P31"]):
-            self.addImage(self.getInfoboxElement(item, element=u"stemă"), _type=u"stemă")
-            self.addImage(self.getInfoboxElement(item, element=u"drapel"), _type=u"drapel")
-
+        if "P31" in item.claims:
+            isa = set(v.getTarget().title() for v in item.claims["P31"])
+            if "Q532" not in isa:
+                self.addImage(self.getInfoboxElement(item, element=u"stemă"), _type=u"stemă")
+                self.addImage(self.getInfoboxElement(item, element=u"drapel"), _type=u"drapel")
+            if self.getUniqueClaim(u"imagine", canBeNull=True):
+                return
+            if "P1376" in item.claims and ("Q34842263" in isa or "Q34842776" in isa):
+                parent = item.claims["P1376"][0].getTarget()
+                if "P18" in parent.claims:
+                    self.addImage(parent.claims["P18"][0].getTarget(), _type=u"imagine")
         if self.getUniqueClaim(u"imagine", canBeNull=True):
             return
 
