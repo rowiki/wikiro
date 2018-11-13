@@ -359,7 +359,7 @@ Filmul a fost vizionat de {{subst:plural|%d|spectator}} în cinematografele din 
 					_directorTl += u"{{" + director.strip() + u"}}\n"
 		text = u"""
 ==Note==
-{{Listănote|2}}
+<references />
 
 ==Legături externe==
 %s%s
@@ -408,7 +408,9 @@ if __name__ == "__main__":
 		a = Article(f, flist[f][u"url cinemagia"], flist[f]["url aarc"])
 		if a.buildArticle():
 			count += 1
-			#print a._text
-			a._page.put(a._text, u"Creez un articol nou despre un film")
+			print(a._text)
+			answer = pywikibot.inputChoice("Upload?", ['Yes', 'No'], ["y", "n"])
+			if answer == 'y':
+				a._page.put(a._text, u"Creez un articol nou despre un film")
 		#if count % 10 == 9:
 		#	break
