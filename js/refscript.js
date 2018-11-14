@@ -429,6 +429,9 @@ if (u.match(/webcitation.org/)) {
 		if (articleMeta[metaIdx].getAttribute('property') === 'article:published_time') {
 	        var W_Date = convertISO8601Date(articleMeta[metaIdx].getAttribute('content'));
 	    }
+		if (articleMeta[metaIdx].getAttribute('property') === 'article:author') {
+	        var W_Authors = articleMeta[metaIdx].getAttribute('content');
+	    }
 	}
 	
     if (u.match(/dcnews.ro/)) {
