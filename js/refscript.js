@@ -727,6 +727,30 @@ if (u.match(/webcitation.org/)) {
 		if (u.match(/clujeanul.gandul.info/))
 			var W_Newspaper = 'Clujeanul';
 	};
+	if (u.match(/agerpres.ro/)) {
+		var divTitleDate = document.getElementsByClassName("details_news");
+		for (var divIdx = 0; divIdx < divTitleDate.length; divIdx++) {
+			var titleHs = divTitleDate[divIdx].getElementsByTagName('h2');
+			for (var hIdx = 0; hIdx < titleHs.length; hIdx++) {
+				if (titleHs[hIdx].textContent) {
+					W_Title = titleHs[hIdx].textContent;
+					break;
+				}
+			}
+			var dateDivs = divTitleDate[divIdx].getElementsByClassName("timeago");
+			for (var dateIdx = 0; dateIdx < dateDivs.length; dateIdx++) {
+				if (dateDivs[dateIdx].textContent) {
+					var dateRegex = /\d{4}\-\d{2}\-\d{2}/;
+					var dateMatcher = dateRegex.exec(dateDivs[dateIdx].textContent)
+					
+            	    if (dateMatcher) {
+            	    	W_Date = dateMatcher[0];
+            	    }
+					break;
+				}
+			}
+		}
+	}
 	if (u.match(/digi24.ro/)) {
 	    
 	    var timeTags = document.getElementsByTagName('time');
