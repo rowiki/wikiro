@@ -744,7 +744,7 @@ if (u.match(/webcitation.org/)) {
 					var dateMatcher = dateRegex.exec(dateDivs[dateIdx].textContent)
 					
             	    if (dateMatcher) {
-            	    	W_Date = dateMatcher[0];
+            	    	W_Date = convertISO8601Date(dateMatcher[0] + 'T0')
             	    }
 					break;
 				}
