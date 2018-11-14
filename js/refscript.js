@@ -413,9 +413,11 @@ if (u.match(/webcitation.org/)) {
 	for (var metaIdx = 0; metaIdx < articleMeta.length; metaIdx++) {
 		if (articleMeta[metaIdx].getAttribute('property') === 'og:title') {
 	        var articleTitle = articleMeta[metaIdx].getAttribute('content');
-	        var tmpDiv = document.createElement('div');
-	        tmpDiv.innerHTML = articleTitle;
-	        var W_Title = tmpDiv.childNodes[0].nodeValue;
+	        if (articleTitle && 0 < articleTitle.length) {
+		        var tmpDiv = document.createElement('div');
+		        tmpDiv.innerHTML = articleTitle;
+		        var W_Title = tmpDiv.childNodes[0].nodeValue;
+	        }
 	        continue;
 		}
 		if (articleMeta[metaIdx].getAttribute('property') === 'og:url') {
@@ -700,27 +702,21 @@ if (u.match(/webcitation.org/)) {
 		var x = x.replace(/ - Clujeanul/, '');
 		var x = x.replace(/ - Bihoreanul/, '');
 		var W_Title = x.replace(/ - G(a|â)ndul/, '');
-		var dateregex = /<div\s+class=.datetime.>\s*(.*?)\s*<\/div>/g;
-		var datematches;
-		var x = '';
-		while (datematches = dateregex.exec(d)) {
-			x = datematches[1];
-			x = x.replace(/<p>\s*(P|p)ublicat(a|ă)?\s*<\/p>/g, '');
-			x = x.replace(/<p\s*.*?>\s*\d{2}:\d{2}\s*<\/p>/g, '');
-			x = x.replace(/<\/?p\s*(.*?)>/g, ' ');
-			x = x.replace(/\s\s+/g, ' ');
-		};
-		var W_Date = x;
-		var W_Authors = '';
-		var authorregex = /<p\s+class=.name.\s*>(de)?\s*<a\s+href\s*=\s*(.*?)\s+title\s*=\s*.*?>(.*?)\s*<\/a>\s*<\/p>/g
-		var authormatches;
-		while (authormatches = authorregex.exec(d)) {
-			x = authormatches[3];
-			if (W_Authors != '') {
-				W_Authors = W_Authors + ', '
+
+		var allSpans = document.getElementsByTagName('span');
+		for (var spanIdx = 0; spanIdx < allSpans.length; spanIdx++) {
+			var spanItemprop = allSpans[spanIdx].getAttribute('itemprop');
+			if (spanItemprop === 'author') {
+				var authorAnchors = allSpans[spanIdx].getElementsByTagName('a');
+				for (authAnchorIdx = 0; authAnchorIdx < authorAnchors.length; authAnchorIdx++) {
+					W_AuthorsList.push(authorAnchors[authAnchorIdx].textContent);
+				}
 			}
-			W_Authors = W_Authors + x
+			if (spanItemprop === 'datePublished') {
+				W_Date = convertISO8601Date(allSpans[spanIdx].getAttribute('content'));
+			}
 		}
+		
 		var W_Newspaper = 'Gândul';
 		if (u.match(/ieseanul.gandul.info/))
 			var W_Newspaper = 'Ieşeanul';
