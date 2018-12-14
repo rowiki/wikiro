@@ -124,6 +124,9 @@ public class CatTreeCreator {
             classesToCreate.addAll(Arrays.asList(impClasses));
             for (ArticleClass eachQualClass : classesToCreate) {
                 String catToCreate = categoryPrefixes.get(eachQualClass);
+                if (null == catToCreate && (eachQualClass instanceof NumberedImportanceClass)) {
+                    catToCreate = "Articole de nivel " + eachQualClass;
+                }
                 String parentQualCat = defaultIfNull(parentCategories.get(eachQualClass), catToCreate);
                 String catLink = defaultString(catLinks.get(eachQualClass), "ale proiectului");
                 if (null != catToCreate) {
