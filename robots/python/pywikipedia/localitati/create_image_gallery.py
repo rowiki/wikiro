@@ -6,8 +6,12 @@ from pywikibot import config as user
 from pywikibot import pagegenerators
 from pywikibot.data import sparql
 
+import fill_wikidata_info as wikidata
+
 gallery = []
 stats = {}
+fix = False
+always = False
 
 def getWikiArticle(item):
     try:
@@ -19,36 +23,23 @@ def getWikiArticle(item):
     except Exception as e:
         pywikibot.error(e)
         return None
-
-
-def treat(item):
-    global gallery
-    try:
-        item = pywikibot.ItemPage( pywikibot.Site("wikidata", "wikidata"), item.title())
-        item.get()
-        name = item.labels.get('ro')
-        #print(name)
-        siruta = item.claims.get('P843')[0].getTarget()
-    except Exception as e:
-        print(e)
-        return
-    rp = getWikiArticle(item)
-    if not rp:
-        gallery.append('File:Replace this image - temple.JPG|' + name + '/SIRUTA: ' + str(siruta))
-        return
-    img = item.claims.get('P18')
-    if img:
-        img = img[0].getTarget()
-        #print(img)
-        gallery.append(img.title() + '|[[' + rp.title() + '|' + str(siruta) + "]]")
-        return
-
-    pi = rp.page_image()
-    if not pi:
-        gallery.append('File:Replace this image - temple.JPG|[[' + rp.title() + '|' + str(siruta) + "]]")
-        return
-    gallery.append(pi.title() + '|[[' + rp.title() + '|' + str(siruta) + "]]")
  
+def fix_local_image(img, item):
+    global always, fix
+
+    if not fix:
+        return
+    #check if page exists on commons
+    if not img.fileIsShared():
+        #local image, nothing to fix
+        return
+    img = pywikibot.FilePage(pywikibot.Site('commons', 'commons'),img.title(with_ns=False))
+
+    worker = wikidata.ImageProcessing(wikidata.config)
+    worker.always = always
+    worker.setItem(item)
+    worker.addImage(img)
+    always = worker.always
 
 def treat_sparql(dic):
     global gallery
@@ -69,15 +60,18 @@ def treat_sparql(dic):
                 'missing': 0
             }
         stats[county]['total'] += 1
+        stats['total']['total'] += 1
         if img:
             imgl = pywikibot.Link('File:' + img[img.rfind('/')+1:])
-            gallery.append(imgl.title + '|[[' + (dic.get('page_title') or altLink) + '|' + linkLabel + ']]')
+            gallery.append(imgl.title + '|<div style="background:lightgreen">[[' + (dic.get('page_title') or altLink) + '|' + linkLabel + ']]</div>')
             stats[county]['wikidata'] += 1
+            stats['total']['wikidata'] += 1
             return
         if upperImg:
             imgl = pywikibot.Link('File:' + upperImg[upperImg.rfind('/')+1:])
-            gallery.append(imgl.title + '|[[' + (dic.get('page_title') or altLink) + '|' + linkLabel + ']]')
+            gallery.append(imgl.title + '|<div style="background:lightgreen">[[' + (dic.get('page_title') or altLink) + '|' + linkLabel + ']]</div>')
             stats[county]['wikidata'] += 1
+            stats['total']['wikidata'] += 1
             return
 
         if dic.get('page_title'):
@@ -85,15 +79,21 @@ def treat_sparql(dic):
             #print(rp)
             pi = rp.page_image()
             if pi and " map" not in pi.title() and \
-                      "harta" not in pi.title() and \
+                      "harta" not in pi.title().lower() and \
                       "3D" not in pi.title() and \
                       "Josephinische" not in pi.title() and \
-                      "svg" not in pi.title():
-                gallery.append(pi.title() + '|[[' + rp.title() + '|' + name + " (" + siruta + ")]]")
+                      "svg" not in pi.title() and \
+                      " judetul " not in pi.title() and \
+                      " distrikto " not in pi.title() and \
+                      " jud " not in pi.title():
+                gallery.append(pi.title() + '|<div style="background:yellow">[[' + rp.title() + '|' + name + " (" + siruta + ")]]</div>")
                 stats[county]['local'] += 1
+                stats['total']['local'] += 1
+                fix_local_image(pi, rp.data_item())
                 return
-        gallery.append(u'File:Replace this image - temple.JPG|[[' + (dic.get('page_title') or altLink) + '|' + linkLabel + ']]')
+        gallery.append(u'File:Replace this image - temple.JPG|<div style="background:red">[[' + (dic.get('page_title') or altLink) + '|' + linkLabel + ']]</div>')
         stats[county]['missing'] += 1
+        stats['total']['missing'] += 1
     except Exception as e:
         print(dic)
         print(e)
@@ -124,6 +124,10 @@ def add_text(where, t, overwrite=False):
         print(e)
 
 def generate_stats(county):
+    if county == 'total':
+        name = "'''Total'''"
+    else:
+        name = "[[/" + county + "|" + county + "]]"
     table_line = """
 |-
 | %s || %d || %d (%.2f%%) || %d (%.2f%%) || %d (%.2f%%) || %s"""
@@ -142,7 +146,7 @@ def generate_stats(county):
     for i in range(int(round(missing_percentage))):
         bar += "&nbsp;"
     bar += "</span>"
-    text = table_line % ( "[[/" + county + "|" + county + "]]",
+    text = table_line % ( name,
             stats[county]['total'],
             stats[county]['wikidata'],
             wikidata_percentage,
@@ -154,8 +158,13 @@ def generate_stats(county):
 	)
     return text
 
-if __name__ == "__main__":
-    pywikibot.handle_args()
+def main():
+    global always, fix
+    for arg in pywikibot.handle_args():
+        if arg.startswith("-fix"):
+            fix = True
+        if arg.startswith("-always"):
+            always = True
     user.mylang = 'wikidata'
     user.family = 'wikidata'
     global gallery
@@ -191,6 +200,8 @@ WHERE
 }
 ORDER BY ?countyLabel ?itemLabel ?siruta"""
     data = query_object.select(query)
+    if not data:
+        return
     #print (data)
     #count = 0
     last_county = None
@@ -200,10 +211,15 @@ ORDER BY ?countyLabel ?itemLabel ?siruta"""
             #count += 1
             #if count % 100 == 0:
             #    dump_text(gallery)
+        stats['total'] = {
+            'total': 0,
+            'wikidata': 0,
+            'local': 0,
+            'missing': 0
+        }
         for result in data:
             #print(result)
             if result['countyLabel'] != last_county:
-                #add_text("", "\n* [[/" + result['countyLabel'] + "]]")
                 if last_county:
                     add_text(last_county, dump_text(gallery), True)
                     main_text += generate_stats(last_county)
@@ -211,7 +227,8 @@ ORDER BY ?countyLabel ?itemLabel ?siruta"""
                 last_county = result['countyLabel']
             treat_sparql(result)
         add_text(last_county, dump_text(gallery), True)
-        main_text += generate_stats(last_county) + "\n|}"
+        main_text += generate_stats(last_county)
+        main_text += generate_stats('total') + "\n|}"
         art = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), 'Utilizator:Strainu/wlro')
         art.put(main_text, "Actualizare statistici")        
     except Exception as e:
@@ -219,3 +236,6 @@ ORDER BY ?countyLabel ?itemLabel ?siruta"""
         raise
     #finally:
         #dump_text(gallery)
+
+if __name__ == "__main__":
+    main()
