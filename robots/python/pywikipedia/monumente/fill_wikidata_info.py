@@ -23,7 +23,8 @@ config = {
 			u'FostCod': ('P1770', False, 'external-id'),
 			u'CodRan': ('P2845', False, 'external-id'),
 			u'Denumire': ('', None, 'label'),
-			u'Localitate': ('P131', False, 'wikibase-item'),
+			u'UAT': ('P131', False, 'wikibase-item'),
+			u'Localitate': ('P276', False, 'wikibase-item'),
 			u'Creatori': ('P1770', True, 'wikibase-item'),
 			u'Coord': ('P625', False, 'globe-coordinate'),
 			u'OsmCoord': ('P625', True, 'globe-coordinate'),
@@ -39,12 +40,17 @@ config = {
 class MonumentsData(robot.WorkItem):
     def __init__(self, db, config):
         self.db = {}
-	for monument in db:
-	    if monument["Denumire"].find("[[") < 0:
-	        continue
+        for monument in db:
+            if monument["Denumire"].find("[[") < 0:
+                continue
             name = sf.extractLink(monument["Denumire"])
             monument["Commons"] = monument["Commons"].replace("commons:Category:", "")
-            monument["Localitate"] = sf.extractLink(monument["Localitate"])
+            l = monument["Localitate"].split(';')
+            if len(l) > 1:
+                monument["Localitate"] = sf.extractLink(monument["Localitate"])
+            else:
+                monument["Localitate"] = ""
+            monument["UAT"] = sf.extractLink(l[-1])
             if monument["Lat"] != '':
                 monument["Coord"] = (monument["Lat"], monument["Lon"])
             if monument["OsmLat"] != '':
@@ -127,7 +133,7 @@ class MonumentsData(robot.WorkItem):
         try:
             if page.title() not in self.db:
                 pywikibot.output(u"Could not find article " + page.title())
-        	return
+                return
             self.updateWikidata(item, self.db[page.title()])
         except Exception as e:
             pywikibot.output(e)
