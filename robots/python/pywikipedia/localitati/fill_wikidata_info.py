@@ -153,7 +153,7 @@ class ItemProcessing:
             addlist = list(cv.difference(oldValue))
             if not len(addlist) and not len(rmlist):
                 return
-            answer = answer or self.userConfirm("Update element %s with %s '%s' (old value '%s')?" % (self.label, key, str(cv), str(oldValue)))
+            answer = answer or self.userConfirm("Update element %s with %s \"%s\" (old value \"%s\")?" % (self.label, key, str(list(cv)), str(oldValue)))
             if answer:
                 if len(rmlist):
                     print("Removing", rmlist)
@@ -484,6 +484,7 @@ class ImageProcessing(ItemProcessing, CityData):
                 return
             if "P1376" in item.claims and ("Q34842263" in isa or "Q34842776" in isa):
                 parent = item.claims["P1376"][0].getTarget()
+                parent.get() #if we have the data, this is a no-op
                 if "P18" in parent.claims:
                     self.addImage(parent.claims["P18"][0].getTarget(), _type=u"imagine")
         if self.getUniqueClaim(u"imagine", canBeNull=True):
@@ -659,7 +660,7 @@ class CoordProcessing(ItemProcessing, CityData):
             latf = float(latd) + float(latm) / 60 + float(lats) / 3600
             longf = float(longd) + float(longm) / 60 + float(longs) / 3600
             if latf < 43 or latf > 48.25 or longf < 20 or longf > 29.67:
-                pywikibot.error(unicode(self.item.labels.get('ro')) + u" is not in the right country: " + str(latf) + ", " + str(longf))
+                pywikibot.error(self.item.labels.get('ro') + u" is not in the right country: " + str(latf) + ", " + str(longf))
                 return
             # TODO: check county/UAT data
             self._found = True
