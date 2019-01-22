@@ -276,9 +276,21 @@ def generateList(seq):
     return sorted([ x.strip() for x in seq if not (x in seen or seen_add(x))])
 
 def expandSaints(ret):
-    ret.update([x.replace(u"Sf.", u"Sfântul") for x in ret])
-    ret.update([x.replace(u"Sf.", u"Sfânta") for x in ret])
-    ret.update([x.replace(u"Sf.", u"Sfinții") for x in ret])
+    i = 0
+    lret = list(ret)
+    for x in lret:
+        if u"Sf." not in x:
+            continue
+        if any([y in x for y in ["Mihail și Gavril", "Mihail si Gaviil", "Petru și Pavel", "Mucenici", "Apostoli"]]):
+            ret.append(x.replace(u"Sf.", u"Sfinții"))
+        elif any([y in x for y in ["Nicolae", "Andrei", "Gheorghe", "Dumitru"]]):
+            ret.append(x.replace(u"Sf.", u"Sfântul"))
+        elif any([y in x for y in ["Maria", "Parascheva", "Paraschiva", "Treime"]]):
+            ret.append(x.replace(u"Sf.", u"Sfânta"))
+        else:
+            ret.append(x.replace(u"Sf.", u"Sfinții"))
+            ret.append(x.replace(u"Sf.", u"Sfântul"))
+            ret.append(x.replace(u"Sf.", u"Sfânta"))
     return ret
     
 def cleanupTitle(monument):
@@ -303,11 +315,13 @@ def cleanupTitle(monument):
     title2 = title.replace(u'Ansamblul conacului', u'Conacul').\
         replace(u'Ansamblul castelului', u'Castelul').\
         replace(u'Ansamblul cetății', u'Cetatea').\
+        replace(u'Ansamblul curții', u'Curtea').\
         replace(u'Ansamblul capelei', u'Capela')
     title2 = re.sub(r'Ansamblul bisericii ([\w\-]*)e', r'Biserica \1ă', title2)
     title2 = re.sub(r'evanghelică fortificate', r'evanghelică fortificată', title2)
     title2 = re.sub(r'Ansamblul bisericii', r'Biserica', title2)
-    title2 = re.sub(r'Fosta [mM]ănăstire', r'Mănăstirea', title2)
+    title2 = re.sub(r'Fosta [mM]ănăstire( a?)', r'Mănăstirea', title2)
+    title2 = re.sub(r'Biserica de lemn(.*)', r'Biserica de lemn din %s' % village, title2)
     title2 = title2.replace(u' dă ', u' de ')
     if title2 != title:
         #print title2
@@ -331,6 +345,8 @@ def cleanupTitle(monument):
         title2 = title[:title.find(u"(")]
         #print title2
         ret.add(title2)
+        title2 = title[title.find(u"(")+1:title.find(u")")]
+        ret.add(title2)
     if title.find(u",") > -1:
         title2 = title[:title.find(u",")]
         #print title2
@@ -349,9 +365,18 @@ def cleanupTitle(monument):
         title3 = title[title.find(u"azi ")+len(u"azi"):]
         #print title3
         ret.add(title3)
-    #print ret
-    ret = expandSaints(ret)
-    #print ret
+    elif title.find(u"în prezent ") > -1:
+        title2 = title[:title.find(u"în prezent ")]
+        if title2.endswith(u', '):
+            title2 = title2[:-2]
+        #print title2
+        ret.add(title2)
+        title3 = title[title.find(u"în prezent ")+len(u"în prezent"):]
+        #print title3
+        ret.add(title3)
+    print(ret)
+    ret = set(expandSaints(list(ret)))
+    print(ret)
     ret = addVillageToTitles(ret, village)
     #print ret
     return generateList(ret)
@@ -461,6 +486,12 @@ if __name__ == "__main__":
         if monument["Cod"] not in j and (monument[u"Imagine"] == "" or splitCode(monument[u"Cod"])[3] == "B"):
             continue
         if monument["Denumire"].find("[[") > -1:
+            continue
+        if monument["Denumire"].find("Casă") > -1:
+            continue
+        if monument["Denumire"].find("Casa ") > -1:
+            continue
+        if monument["Denumire"].find("Cruce") > -1:
             continue
         #pywikibot.output("* [[Cod:LMI:" + monument["Cod"] + "]]: " + monument["Denumire"])
         #continue
