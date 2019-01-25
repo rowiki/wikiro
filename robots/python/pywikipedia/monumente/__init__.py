@@ -34,6 +34,12 @@ lmi_blacklist = [#all lowercase
 		u'fresc',#frescă, fresco
 	    ]
 
+natura2000_blacklist = [#all lowercase
+		u'coa',
+		u'logo',
+		u'.svg',
+	]
+
 plan = 	[#all lowercase
 		u'.svg',#svg files are definetely not pictures
 		u'schem',
@@ -222,6 +228,51 @@ config = {
 				'east':  30.2,
 			},
 		},
+		'natura2000':#database we work on
+		{
+			#where to search for information
+			'project' : 'wikipedia',
+			'lang' : 'ro',
+			'namespaces': [0, 6],
+			#'namespaces': [6],
+			'listNamespaces': [0],
+			'pagePrefix': {
+				'Lista siturilor Natura 2000',
+			},
+			'codeRegexp' : "(RO(SCI|SPA)([0-9]{4,5}))",
+			'codeRegexpCompiled': re.compile("(RO(SCI|SPA)([0-9]{4,5}))", re.I),
+            'templateRegexpCompiled': re.compile("\{\{(codSCISPA)\|(RO(SCI|SPA)([0-9]{4}))", re.I),
+			'codeTemplate': ["SCI", "SPA"],
+			'codeTemplateParams': 
+			[
+			],
+			#list params
+			'headerTemplate' : u'ÎnceputTabelNatura2000',
+			'rowTemplate' : u'ElementTabelNatura2000',
+			'footerTemplate' : u'SfârșitTabelNatura2000',
+			'fields' : collections.OrderedDict([
+						(u'cod', {'code': Changes.all, }),
+						(u'suprafață', {'code': Changes.all, }),
+						(u'arii protejate', {'code': Changes.all, }),
+						(u'nume', {'code': Changes.article, }),
+						(u'localizare', {'code': Changes.all, }),
+						(u'lat', {'code': Changes.coord, }),
+						(u'lon', {'code': Changes.coord, }),
+						(u'imagine', {'code': Changes.image, 'blacklist': natura2000_blacklist}),
+						(u'mărime imagine', {'code': Changes.all, }),
+						(u'descriere imagine', {'code': Changes.all, }),
+						(u'commons', {'code': Changes.commons, }),
+					]),
+			'idField': u'cod',
+			'keepEmptyFields': False,
+			#coordinates params
+			'geolimits': {
+				'north': 48.3,
+				'south': 43.6,
+				'west':  20.27,
+				'east':  29.7,
+			},
+		},
 		'infoboxes':
 		[
 		{
@@ -231,6 +282,7 @@ config = {
 			# the databases we work on
 			'ran': 'cod2',#TODO: this is a hack, we probably need to duplicate the entry
 			'lmi': 'cod',
+			'natura2000': '',
 		},
 		{
 			'name': 'Clădire Istorică',
@@ -239,6 +291,7 @@ config = {
 			# the databases we work on
 			'ran': 'cod-ran',
 			'lmi': 'cod-lmi',
+			'natura2000': '',
 		},
 		{
 			'name': 'Cutie Edificiu Religios|Infocaseta Edificiu religios|Infocaseta Teatru|Moschee',
@@ -247,6 +300,7 @@ config = {
 			# the databases we work on
 			'ran': '',#nada yet
 			'lmi': '',
+			'natura2000': '',
 		},
 		{
 			'name': 'Castru|Infocaseta Castru|Infocaseta Villa rustica',
@@ -255,6 +309,7 @@ config = {
 			# the databases we work on
 			'ran': 'cod RAN',
 			'lmi': 'cod LMI',
+			'natura2000': '',
 		},
 		{
 			'name': 'Infocasetă Davă|Infocaseta Davă|Infocaseta Cetate dacică',
@@ -263,6 +318,7 @@ config = {
 			# the databases we work on
 			'ran': 'ref:RO:RAN',
 			'lmi': 'ref:RO:LMI',
+			'natura2000': '',
 		},
 		{
 			'name': 'Infocaseta Gară|Infocaseta Muzeu',
@@ -271,6 +327,7 @@ config = {
 			# the databases we work on
 			'ran': '',
 			'lmi': '',
+			'natura2000': '',
 		},
 		{
 			'name': 'Infocaseta Biserică din lemn',
@@ -279,6 +336,7 @@ config = {
 			# the databases we work on
 			'ran': 'cod RAN',
 			'lmi': 'cod LMI',
+			'natura2000': '',
 		},
 		{
 			'name': 'Infocaseta Lăcaș de cult|Mănăstire',
@@ -287,6 +345,7 @@ config = {
 			# the databases we work on
 			'ran': 'codRAN',
 			'lmi': 'codLMI',
+			'natura2000': '',
 		},
 		{
 			'name': 'Infocaseta clădire|Infobox cladire|Infobox building',
@@ -295,6 +354,15 @@ config = {
 			# the databases we work on
 			'ran': '',#nada yet
 			'lmi': '',
+			'natura2000': '',
+		},
+		{
+			'name': 'Infocaseta Arie protejată',
+			'author': [],
+			'image': 'foto',
+			'description': 'descriere_foto',
+			# the databases we work on
+			'natura2000': 'cod_natura2000',
 		},
 		],
 		'qualityTemplates':

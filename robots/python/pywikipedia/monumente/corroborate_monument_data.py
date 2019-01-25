@@ -59,14 +59,17 @@ Command-line arguments:
 
 -addRan         [ro specific] Add RAN codes and use RAN db to update monuments
 
--db             Together with "-lang" specifies the config to be used.
-                Default is "lmi"
+-code           The LMI code we want to work on. Can also be a code prefix.
 
 -county         The 2-letter code of the county (the same as the second part of
                 the ISO 3166-2 code). Limits the monuments we work on to the
                 ones from the specified county
 
--code           The LMI code we want to work on. Can also be a code prefix.
+-db             Together with "-lang" specifies the config to be used.
+                Default is "lmi"
+
+-enforceBlacklist Do not use images from blacklist. Default behavior is to use
+				them as last resort
 
 -import         Name of the file containing additional data; this can be either
                 a JSON or a CSV file. The JSON keys or CSV columns must match
@@ -76,11 +79,11 @@ Command-line arguments:
 
 -updateArticle  Update the link to the article if available
 
+-updateCommons  Update the link to Wikimedia Commons if available
+
 -updateCoord    Update the coords if available
 
 -updateCreator  Update the creator(s) if available
-
--updateCommons  Update the link to Wikimedia Commons if available
 
 -updateImage    Update the image if available
 '''
@@ -109,6 +112,7 @@ _lang ='ro'
 _db = 'lmi'
 _log = _lang + _db + "_link.err.log"
 _differentCoords = {}
+_allowBlacklist = True
 
 def initLog():
 	global _flog, _log;
@@ -167,6 +171,8 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 	:return: The modified text of the page
 	:rtype: string
 	"""
+	if not field:
+		return
 	if (field not in getFields(_lang, _db) or \
 	getFields(_lang, _db)[field]['code'] & _changes) == Changes.none:
 		pywikibot.output("Skipping updating %s for %s" % (field, code))
@@ -345,7 +351,7 @@ def parseArticleCoords(code, allPages):
 				artLon = page["long"]
 				artSrc = u"WP : " + page["name"]
 				updateCoord = True
-	return (artLat, artLon, artSrc, updateCoord, {"lat": u"Lat", "lon": u"Lon", "prefix": artSrc})
+	return (artLat, artLon, artSrc, updateCoord, {"prefix": artSrc})
 
 def parseRanCoords(code, ran_data):
 	"""
@@ -372,7 +378,7 @@ def parseRanCoords(code, ran_data):
 				if ranCod not in _differentCoords:
 					_differentCoords[ranCod] = [ranLat, ranLon]
 				updateCoord = False
-	return (ranLat, ranLon, prefix + ranCod, updateCoord, {"lat": u"Lat", "lon": u"Lon", "prefix": prefix})
+	return (ranLat, ranLon, prefix + ranCod, updateCoord, {"prefix": prefix})
 	
 def parseOtherCoords(code, other_data, fields):
 	"""
@@ -382,7 +388,7 @@ def parseOtherCoords(code, other_data, fields):
 	otherLat = 0
 	otherLong = 0
 	otherSrc = "N/A "
-	if fields["lat"] in other_data and fields["lon"] in other_data:
+	if fields.get("lat", 0) in other_data and fields.get("lon", 0) in other_data:
 		try:
 			otherLat = float(other_data[fields["lat"]])
 			otherLong = float(other_data[fields["lon"]])
@@ -420,11 +426,12 @@ def getImageType(image):
 	#print(search)
 	fields = getFields(_lang, _db)
 	for field in fields:
-		#print "*" + field
+		#print("*" + field)
 		if fields[field]['code'] == Changes.image:
 			for skip in fields[field]['blacklist']:
 				#print("**" + skip)
 				if search.find(skip) != -1:
+					#print("break")
 					break
 			else:
 				return field
@@ -432,10 +439,10 @@ def getImageType(image):
 	return None
 
 def chooseImagePicky(files):
-	#print files
+	#print(files)
 	tries = 0
 	randimagelist = random.sample(files,  len(files))
-	#print(randimagelist)
+	print(randimagelist)
 	while tries < len(files):
 		artimage = randimagelist[tries]["name"]
 		tries += 1
@@ -443,7 +450,9 @@ def chooseImagePicky(files):
 		imageType =  getImageType(artimage)
 		if imageType:
 			return (artimage, imageType)
-	return (artimage, getImageType(""))
+	if _allowBlacklist:
+		return (artimage, getImageType(""))
+	return None, None
 	
 def checkNewMonuments(other_data, db):
 	f = codecs.open(_db + "_monumente_noi.wiki", "w", "utf8")
@@ -527,7 +536,7 @@ def main():
 	addRan = False
 	force = False
 	codePrefix = None
-	global _changes, _db, _differentCoords
+	global _changes, _db, _differentCoords, _allowBlacklist
 	
 	for arg in pywikibot.handleArgs():
 		if arg.startswith('-import:'):
@@ -548,6 +557,8 @@ def main():
 			_changes = _changes | Changes.creator
 		if arg.startswith('-updateCommons'):
 			_changes = _changes | Changes.commons
+		if arg.startswith('-enforceBlacklist'):
+			_allowBlacklist = False
 		for prefixParam in ['-code:', '-county:']:
 			if arg.startswith(prefixParam):
 				codePrefix = arg [len(prefixParam):]
@@ -583,24 +594,25 @@ def main():
 	else:
 		ran_data = {}
 	articleField = u"Denumire"
-	for field in getFields(_lang, _db):
-		if getFields(_lang, _db)[field]['code'] == Changes.article:
+	fields = getFields(_lang, _db)
+	for field in fields:
+		if fields[field]['code'] == Changes.article:
 			articleField = field
 			break
 	creatorField = u"Creatori"
-	for field in getFields(_lang, _db):
-		if getFields(_lang, _db)[field]['code'] == Changes.creator:
+	for field in fields:
+		if fields[field]['code'] == Changes.creator:
 			creatorField = field
 			break
 	imageField = u"Imagine"
-	for field in getFields(_lang, _db):
-		if getFields(_lang, _db)[field]['code'] == Changes.image:
+	for field in fields:
+		if fields[field]['code'] == Changes.image:
 			imageField = field
 			break
 	latField = None
 	lonField = None
-	for field in getFields(_lang, _db):
-		if getFields(_lang, _db)[field]['code'] == Changes.coord:
+	for field in fields:
+		if fields[field]['code'] == Changes.coord:
 			#TODO: maybe use the first letters? We currently hardcode the order
 			if not latField:
 				latField = field
@@ -883,7 +895,7 @@ def main():
 			otherCoords.append(parseRanCoords(code, ran_data[code]))
 		if code in other_data:
 			#print other_data[code]
-			otherCoords.append(parseOtherCoords(code, other_data[code], {"lat": u"Lat", "lon": u"Lon", "prefix": other_data[code].get("Source")}))
+			otherCoords.append(parseOtherCoords(code, other_data[code], {"prefix": other_data[code].get("Source")}))
 			otherCoords.append(parseOtherCoords(code, other_data[code], {"lat": u"OsmLat", "lon": u"OsmLon", "prefix": u"OSM"}))
 
 		for (otherLat, otherLong, otherSrc, otherValid, otherFields) in otherCoords:
@@ -926,9 +938,9 @@ def main():
 				#if otherSrc[5:] == monument["CodRan"]:
 				#	ask = False
 				uploadlat = ("Lon" in monument and monument["Lon"] != "")
-				articleText = updateTableData(monument["source"], code, otherFields["lat"], str(otherLat), monument,
+				articleText = updateTableData(monument["source"], code, otherFields.get("lat") or latField, str(otherLat), monument,
 								upload = uploadlat, text = articleText, ask = ask, source = otherSrc)
-				articleText = updateTableData(monument["source"], code, otherFields["lon"], str(otherLong), monument,
+				articleText = updateTableData(monument["source"], code, otherFields.get("lon") or lonField, str(otherLong), monument,
 								upload = True, text = articleText, ask = ask, source = otherSrc)
 		if len(_differentCoords) > 0:
 			text = u"* ''E'': ''[%s]'' Coordonate diferite între " % code

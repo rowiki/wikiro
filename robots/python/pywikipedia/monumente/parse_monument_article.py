@@ -370,7 +370,7 @@ def processArticle(text, page, conf):
 	try:		
 		coor = page.coordinates(True)
 		if coor:
-			#print coor
+			#print(coor)
 			lat = coor.lat
 			long = coor.lon
 		else:
@@ -393,13 +393,16 @@ def processArticle(text, page, conf):
 		    'quality': quality,
 		    'lastedit': pywikibot.Timestamp.fromISOformat(page._timestamp).totimestampformat(),
 		    'code': code,
+		    'description': "",
 		}
-	#print dictElem
+	#print(dictElem)
 	for key in conf['infoboxes'][0]:
+		#print(key)
 		if key not in dictElem:
 			dictElem[key] = None
+	#print(dictElem)
 
-	#print conf['infoboxes']
+	#print(conf['infoboxes'])
 	for box in conf['infoboxes']:
 		#pywikibot.output("Searching for template %s" % box['name'])
 		tl = strainu.extractTemplate(text, box['name'])
@@ -545,8 +548,6 @@ def main():
 	if not namespaces:
 		namespaces = langOpt.get(_db).get('namespaces')
 
-	rowTemplate = pywikibot.Page(site, '%s:%s' % (site.namespace(10), \
-								langOpt.get(_db).get('codeTemplate')[0]))
 	_log = "_".join([lang, _db, _log]);
 	initLog()
 
@@ -560,10 +561,16 @@ def main():
 	site.login()
 
 	for namespace in namespaces:
-		transGen = pagegenerators.ReferringPageGenerator(rowTemplate,
-									onlyTemplateInclusion=True, content=False)
+		transGen = []
+		for template in langOpt.get(_db).get('codeTemplate'):
+			rowTemplate = pywikibot.Page(site, '%s:%s' % (site.namespace(10), \
+								template))
+			transGen.append(pagegenerators.ReferringPageGenerator(rowTemplate,
+									onlyTemplateInclusion=True, content=False))
+		combinedGen = pagegenerators.CombinedPageGenerator(transGen)
+		combinedGen = pagegenerators.DuplicateFilterPageGenerator(combinedGen)
 		#filteredGen = transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, u"Category:1690s churches in Romania"))
-		filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen,
+		filteredGen = pagegenerators.NamespaceFilterPageGenerator(combinedGen,
 									[namespace], site)
 		if preload:
 			pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 500)
