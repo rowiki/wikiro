@@ -68,9 +68,6 @@ Command-line arguments:
 -db             Together with "-lang" specifies the config to be used.
                 Default is "lmi"
 
--enforceBlacklist Do not use images from blacklist. Default behavior is to use
-				them as last resort
-
 -import         Name of the file containing additional data; this can be either
                 a JSON or a CSV file. The JSON keys or CSV columns must match
                 the fields from the config
@@ -99,7 +96,7 @@ import strainu_functions as strainu
 import csvUtils
 
 import monumente
-from monumente import Changes
+from monumente import Changes, Quality
 
 import pywikibot
 from pywikibot import pagegenerators
@@ -112,7 +109,7 @@ _lang ='ro'
 _db = 'lmi'
 _log = _lang + _db + "_link.err.log"
 _differentCoords = {}
-_allowBlacklist = True
+_fieldsWithAliases = None
 
 def initLog():
 	global _flog, _log;
@@ -129,13 +126,16 @@ def log(string):
 def getCfg(_lang, _db):
 	return monumente.config.get(_lang).get(_db)
 
-def getFields(_lang, _db):
-	return getCfg(_lang, _db).get('fields')
+def getFields(_lang, _db, type=Changes.all):
+	fields = getCfg(_lang, _db).get('fields')
+	if type == Changes.all:
+		return fields
+	return collections.OrderedDict({k: v for k, v in fields.items() if v.get('code') == type})
 	
 def rebuildTemplate(params, skipEmpty=True):
 	my_template = u"{{" + getCfg(_lang, _db).get('rowTemplate') + u"\n"
 	for name in getFields(_lang, _db):
-		if skipEmpty and name in params and params[name] != u"":
+		if skipEmpty and name in params and not isNullorEmpty(params[name]):
 			my_template += u"| " + name + u" = " + params[name].strip() + u"\n"
 		elif not skipEmpty and name in params:
 			my_template += u"| " + name + u" = " + params[name].strip() + u"\n"
@@ -172,14 +172,14 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 	:rtype: string
 	"""
 	if not field:
-		return
+		return text, False
 	if (field not in getFields(_lang, _db) or \
 	getFields(_lang, _db)[field]['code'] & _changes) == Changes.none:
 		pywikibot.output("Skipping updating %s for %s" % (field, code))
-		return
+		return text, False
 	if hasDependencyCycles(field, newvalue, getFields(_lang, _db)[field]['code'], olddata):
 		pywikibot.output("Skipping updating %s for %s" % (field, code))
-		return
+		return text, False
 
 	site = pywikibot.Site()
 	title = urllib.parse.parse_qs(urllib.parse.urlparse(str(url)).query)['title'][0]
@@ -219,15 +219,15 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 	else: #for .. else
 		log(u"* [Listă] ''E'': ''[%s]'' Codul nu este prezent în [[%s|listă]]" % (rawCode, title))
 		pywikibot.output(u"updateTableData: Code %s not found, giving up" % code)
-		return None
-	
+		return text, False
+
 	orig = rebuildTemplate(my_params, not getCfg(_lang, _db).get('keepEmptyFields')) 
 	my_params[field] = newvalue
 	new = rebuildTemplate(my_params, not getCfg(_lang, _db).get('keepEmptyFields'))
 	
 	if orig.strip() == new.strip() and upload != None:
 		#pywikibot.output("No change in field %s for %s, nothing to upload!" % (field, code))
-		return text
+		return text, False
 
 	pywikibot.output("Updating %s for %s to value \"%s\"" % (field, code, newvalue))
 	
@@ -239,10 +239,9 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 		answer = pywikibot.input(u"Upload change? ([y]es/[n]o/[l]og)")
 	else:
 		answer = 'y'
+
+	updated = False
 	if answer == 'y':
-		if code == u"MD-GL-rs-005":
-			import pdb
-			pdb.set_trace()
 		(before, code, after) = text.partition(rawCode)
 		
 		# we need to clean the whole template from both before and after
@@ -256,12 +255,13 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 			after = after[cliva:]
 			before = before[:clivb]
 		else:
-			pywikibot.output("Could not find the current template, aborting!")
-			return text
+			pywikibot.output("Could not find the current template, aborting update!")
+			return text, False
 		
 		# rebuild the page with the new text
 		after = new + after
 		text = "".join((before, after))
+		updated = True
 		
 		if upload == True or upload == None:
 			if source:
@@ -273,14 +273,15 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 				page.put(text, comment)
 			except pywikibot.exceptions.Error:
 				pywikibot.output("Some error occured, let's move on and hope for the best!")
-			return None
+				# Note: This returns the new text in the hope that it will be quietly uploaded on the next try
+			return text, updated
 			
 	elif answer == 'l':
 		orig = orig.replace("\n", "<br/>")
 		new = new.replace("\n", "<br/>")
 		log(u"*''W'': ''[%s]'' De verificat dacă înlocuirea câmpului ''%s'' cu ''%s'' este corectă (inclusiv legăturile adăugate)" % (code, orig, new))
 	
-	return text
+	return text, updated
 	
 def readJson(filename, what):
 	try:
@@ -409,50 +410,62 @@ def addRanData(code, monument, ran_data, articleText):
 		sites.sort()
 		#print sites
 		sites = ", ".join(sites)
-		articleText = updateTableData(monument["source"], code, "CodRan", sites, \
+		articleText, _ = updateTableData(monument["source"], code, "CodRan", sites, \
 								 text=articleText, ask=False)
 	return articleText
 
-def getImageType(image):
+def getBestField(image, fields, type):
 	""" 
-	This function decides if an image should be uploaded or not, and if yes,
-	what field it should be uploaded to
+	This function determines the type of an image
+
+    :param image: the image that we want to check
+    :type image: string
+    :param fields: the fields that we want to check against
+    :type fields: dict
+    :param type: restrict the search to fields of this type
+    :type type: class Changes
 
 	:return: None if it should not be uploaded, otherwise the field it should
 		be uploaded to
 	:type: string or None
 	"""	
+	allFields = getFields(_lang, _db, type)
 	search = image.lower()
-	#print(search)
-	fields = getFields(_lang, _db)
 	for field in fields:
-		#print("*" + field)
-		if fields[field]['code'] == Changes.image:
-			for skip in fields[field]['blacklist']:
-				#print("**" + skip)
-				if search.find(skip) != -1:
-					#print("break")
-					break
-			else:
+		#TODO: order of fields matters; it shouldn't
+		for skip in (allFields.get(field).get('blacklist') or []):
+			if search.find(skip) != -1:
+				break
+		else:
+			wl = allFields.get(field).get('whitelist')
+			if wl == None or any(w in search for w in wl):
 				return field
-
 	return None
 
-def chooseImagePicky(files):
-	#print(files)
-	tries = 0
-	randimagelist = random.sample(files,  len(files))
-	print(randimagelist)
-	while tries < len(files):
-		artimage = randimagelist[tries]["name"]
-		tries += 1
-		#be picky and don't choose a detail picture; also stop on some arbitrary condition
-		imageType =  getImageType(artimage)
-		if imageType:
-			return (artimage, imageType)
-	if _allowBlacklist:
-		return (artimage, getImageType(""))
-	return None, None
+def imageListSortKey(elem):
+	return elem.get('quality') or -sys.maxsize
+
+def chooseImagePicky(files, fields):
+	"""
+	This function picks a single image of type 'field' from e list of files.
+
+	:param files: a list of files in the format of the json returned by
+		parse_monument_articole
+	:type files: list of dicts
+	:param fields: the fields that we're searching an image for
+	:type fields: list
+
+	:return: Images for each field from fields
+	:return type: A dict of files for each field
+	"""
+	ret = {}
+	for field in fields:
+		ret[field] = None
+	for file in files:
+		imageType = getBestField(file["name"], fields, Changes.image)
+		if imageType and not ret[imageType]:
+			ret[imageType] = file["name"]
+	return ret
 	
 def checkNewMonuments(other_data, db):
 	f = codecs.open(_db + "_monumente_noi.wiki", "w", "utf8")
@@ -478,7 +491,7 @@ def getYearsFromWikidata(page):
 		return claim.getTarget().year
 	return None
 
-def extractCopyrightField(creators):
+def computeCopyrightField(creators):
 	last_death = 0
 	#print creators
 	post = creators
@@ -508,19 +521,26 @@ def hasDependencyCycles(field, value, type, monument):
 	Checking this breaks dependency cycles between the list, the articles
 	and Wikidata.
 	"""
-	fields = getFields(_lang, _db)
+	#empy values are normal
+	if isNullorEmpty(value):
+		return False
+	fields = getFields(_lang, _db, type)
 	for otherField in fields:
 		#print "*" + field
 		if fields[otherField]['code'] & type and \
 			field != otherField and \
 			monument.get(otherField) == value:
-			pywikibot.output(u"Dependency cycle detected:\nmonument[%s]=%s\nmonument[%s]=%s" % (field, value, otherField, monument[otherField]))
+			pywikibot.output(u"Dependency cycle detected:\nmonument[%s]=%s\nmonument[%s]=%s" % (field, value, otherField, monument.get(otherField)))
 			return True
 	return False
 
 def getFieldsWithAliases():
+	global _fieldsWithAliases
+	if _fieldsWithAliases:
+		return _fieldsWithAliases
 	fields = getFields(_lang, _db)
-	return {field: fields[field]['alias'] for field in fields if fields[field].get('alias')}
+	_fieldsWithAliases = {field: fields[field]['alias'] for field in fields if fields[field].get('alias')}
+	return _fieldsWithAliases
 
 def getMiscDataFromPages(dataSource):
 	data = {}
@@ -531,12 +551,85 @@ def getMiscDataFromPages(dataSource):
 			data[field] = dataSource[alias]
 	return data
 
+def getCodeForMonument(monument, codePrefix):
+	code = None
+	rawCode = monument[getCfg(_lang, _db).get('idField')]
+	regexp = re.compile(getCfg(_lang, _db).get('codeRegexp'), re.I)
+	result = re.findall(regexp, rawCode)
+	if len(result) > 0:
+		code = result[0][0]
+	else:
+		code = rawCode
+	return code
+
+def needDataFromFile(monument):
+	"""
+	This function checks if any of the fields that can be determined from a
+	file page is missing
+
+	:param monument: The monument we're working on
+	:type monument: dict
+	"""
+	fields = list(getFields(_lang, _db, Changes.image).keys())
+	fields += list(getFields(_lang, _db, Changes.creator).keys())
+	fields += list(getFieldsWithAliases().keys())
+	#print(fields)
+	return any([isNullorEmpty(monument.get(field)) for field in fields])
+
+def checkUpdateArticleField(monument, article, articleText, force):
+	"""
+	This function determines if there are any errors in the article field and
+	updates the field if needed
+
+	:param monument: The monument we're working on
+	:type monument: dict
+	:param article: The article for the @monument, as extracted from existing data
+	:type article: string
+	:param articleText: The wikitext of the list containing @monument
+	:type articleText: string
+	:param force: Whether to force-update the field
+	:type force: bool
+
+	:return: The new list text
+	:rtype: string
+	"""
+	articleField = getFields(_lang, _db, Changes.article)
+	code = monument[getCfg(_lang, _db).get('idField')]
+	#print(articleField)
+	if len(articleField) != 1:
+		pywikibot.error("Multiple article fields in config. Exiting")
+		exit(1)
+	articleField, _ = articleField.popitem()
+
+	if article != None and article["name"] != None and article["name"] != "":
+		if monument[articleField].find("[[") == -1:
+			link = u"[[" + article["name"] + "|" + monument[articleField] + "]]"
+			#pywikibot.output(link)
+			articleText, _ = updateTableData(monument["source"], code, articleField, link, monument, text=articleText)
+		else: # check if the 2 links are the same
+			link = strainu.extractLink(monument[articleField])
+			if link == None:
+				log(u"* [Listă] ''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire - e posibil să existe o problemă de închidere a tagurilor" % code)
+			else:
+				page1 = pywikibot.Page(pywikibot.Link(link, pywikibot.Site()))
+				page2 = pywikibot.Page(pywikibot.Site(), article["name"])
+				if force and page1.title() != page2.title():
+					field = "".join(strainu.stripLinkWithSurroundingText(monument[articleField]))
+					link = u"[[" + article["name"] + "|" + field + "]]"
+					articleText, _ = updateTableData(monument["source"], code, articleField, link, monument, text=articleText)
+				elif page1.title() != page2.title() and \
+				(not page1.isRedirectPage() or page1.getRedirectTarget() != page2) and \
+				(not page2.isRedirectPage() or page2.getRedirectTarget() != page1):
+					log(u"* [WPListă]''W'': ''[%s]'' Câmpul Denumire are o legătură internă către %s, dar articolul despre monument este %s" % (
+						code, page1, page2))
+	return articleText
+
 def main():
 	otherFile = "other_monument_data.csv"
 	addRan = False
 	force = False
 	codePrefix = None
-	global _changes, _db, _differentCoords, _allowBlacklist
+	global _changes, _db, _differentCoords
 	
 	for arg in pywikibot.handleArgs():
 		if arg.startswith('-import:'):
@@ -557,8 +650,6 @@ def main():
 			_changes = _changes | Changes.creator
 		if arg.startswith('-updateCommons'):
 			_changes = _changes | Changes.commons
-		if arg.startswith('-enforceBlacklist'):
-			_allowBlacklist = False
 		for prefixParam in ['-code:', '-county:']:
 			if arg.startswith(prefixParam):
 				codePrefix = arg [len(prefixParam):]
@@ -583,22 +674,17 @@ def main():
 	authors_local =			readJson("_".join(filter(None, [_lang, _db, "authors.json"])), _lang + ".wp authors")
 	files_local =			readJson("_".join(filter(None, [_lang, _db,  pywikibot.Site().namespace(6), "pages.json"])), _lang + ".wp files")
 	categories_commons =	readJson("_".join(filter(None, ["commons", _db, "Category_pages.json"])), "commons categories")
-	pages_commons =			readJson("_".join(filter(None, ["commons", _db, "File_pages.json"])), "commons images")
+	files_commons =			readJson("_".join(filter(None, ["commons", _db, "File_pages.json"])), "commons images")
 
+	ran_data = {}
 	other_data = readOtherData(otherFile)
 	
 	checkNewMonuments(other_data, db_json)
 	
 	if addRan:
 		ran_data = readRan("ro_ran_db.json")
-	else:
-		ran_data = {}
-	articleField = u"Denumire"
+
 	fields = getFields(_lang, _db)
-	for field in fields:
-		if fields[field]['code'] == Changes.article:
-			articleField = field
-			break
 	creatorField = u"Creatori"
 	for field in fields:
 		if fields[field]['code'] == Changes.creator:
@@ -628,30 +714,24 @@ def main():
 			articleText = None
 			lastSource = monument["source"]
 
-		rawCode = monument[getCfg(_lang, _db).get('idField')]
-		regexp = re.compile(getCfg(_lang, _db).get('codeRegexp'), re.I)
-		result = re.findall(regexp, rawCode)
-		if len(result) > 0:
-			code = result[0][0]
-		else:
-			code = rawCode
+		code = getCodeForMonument(monument, codePrefix)
 		if codePrefix and not code.startswith(codePrefix):
-			continue
+			return None
 		pywikibot.output(code)
 
 		allPages = list()
 		article = None
-		picture = None
+		pictures = list()
 		pic_author = None
 		otherData = []
 		ran = None
 		_differentCoords = {}
 		last_death = 0
+		copyright = monument.get(u"Copyright")
 		
 		try:
-			copyright = monument.get(u"Copyright") or u"yes"
-			if monument.get(creatorField) != "" and (copyright == u"" or force):
-				last_death = extractCopyrightField(monument.get(creatorField))
+			if isNullorEmpty(copyright) or force:
+				last_death = computeCopyrightField(monument.get(creatorField))
 			elif len(copyright) == 4:#hack based on the valid values of Copyright
 				last_death = int(copyright)
 
@@ -665,18 +745,17 @@ def main():
 				elif len(allPages) == 1:
 					article = allPages[0]
 					ran = allPages[0].get('ran')
-			if code in pages_commons:
-				if len(pages_commons[code]) == 1: #exactly one picture
-					#picture = pages_commons[code][0]["name"]
+			if code in files_commons:
+				pictures.extend(files_commons[code])
+				if len(files_commons[code]) == 1: #exactly one picture
+					#picture = files_commons[code][0]["name"]
 					if pic_author == None:
-						pic_author = pages_commons[code][0]["author"]
-					otherData.append(getMiscDataFromPages(pages_commons[code][0]))
-				elif isNullorEmpty(monument.get(imageField)) or \
-						isNullorEmpty(monument.get(creatorField)) or \
-						any([isNullorEmpty(monument.get(field)) for field in getFieldsWithAliases()]):
+						pic_author = files_commons[code][0]["author"]
+					otherData.append(getMiscDataFromPages(files_commons[code][0]))
+				elif needDataFromFile(monument):
 					#multiple images available, we need to parse them
-					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(pages_commons[code]))
-					for pic in pages_commons[code]:
+					msg = u"*''I'': ''[%s]'' Există %d imagini disponibile la commons pentru acest cod: " % (code, len(files_commons[code]))
+					for pic in files_commons[code]:
 						otherData.append(getMiscDataFromPages(pic))
 						author_list = ""
 						if pic_author == None and author_list == "" and pic["author"] != None:
@@ -689,17 +768,13 @@ def main():
 							pic_author = None
 							#print "pic_author removed"
 						msg += u"[[:%s]], " % pic["name"]
-						if pic["quality"] == True: #choose the first quality picture
-							picture = pic["name"]
-							break
-					if picture == None: #no quality pictures, but do not log - we'll choose a random one
-						pass
-						#log(msg)
+
 					if pic_author == None and author_list != "":
 						log(u"* [COM] '''E''': ''[%s]'' În lista de imagini sunt trecuți mai multi autori: %s" % (code, author_list))
-				allPages.extend(pages_commons[code])
+				allPages.extend(files_commons[code])
 			if code in files_local:
 				allPages.extend(files_local[code])
+				pictures.extend(files_local[code])
 			if code in categories_commons:
 				allPages.extend(categories_commons[code])
 				if len(categories_commons[code]) > 1:
@@ -721,27 +796,9 @@ def main():
 			articleText = addRanData(code, monument, ran_data, articleText)
 	
 		#monument name and link
-		if article != None and article["name"] != None and article["name"] != "":
-			if monument[articleField].find("[[") == -1:
-				link = u"[[" + article["name"] + "|" + monument[articleField] + "]]"
-				#pywikibot.output(link)
-				articleText = updateTableData(monument["source"], code, articleField, link, monument, text=articleText)
-			else: # check if the 2 links are the same
-				link = strainu.extractLink(monument[articleField])
-				if link == None:
-					log(u"* [Listă] ''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire - e posibil să existe o problemă de închidere a tagurilor" % code)
-				else:
-					page1 = pywikibot.Page(pywikibot.Link(link, pywikibot.Site()))
-					page2 = pywikibot.Page(pywikibot.Site(), article["name"])
-					if force and page1.title() != page2.title():
-						field = "".join(strainu.stripLinkWithSurroundingText(monument[articleField]))
-						link = u"[[" + article["name"] + "|" + field + "]]"
-						articleText = updateTableData(monument["source"], code, articleField, link, monument, text=articleText)
-					elif page1.title() != page2.title() and \
-					(not page1.isRedirectPage() or page1.getRedirectTarget() != page2) and \
-					(not page2.isRedirectPage() or page2.getRedirectTarget() != page1):
-						log(u"* [WPListă]''W'': ''[%s]'' Câmpul Denumire are o legătură internă către %s, dar articolul despre monument este %s" % (code, page1, page2))
+		articleText = checkUpdateArticleField(monument, article, articleText, force)
 
+		# --- Author ---
 		#author from article
 		if article != None and article["author"] != None and article["author"].strip() != "":
 			#print "Author from article"
@@ -751,12 +808,12 @@ def main():
 				pywikibot.output("Wrong author link: \"%s\"@%s" % (article["author"], article["name"]))
 			elif monument[creatorField].strip() == "":
 				pywikibot.output(author)
-				articleText = updateTableData(monument["source"], code, creatorField, author, monument, text=articleText)
+				articleText, _ = updateTableData(monument["source"], code, creatorField, author, monument, text=articleText)
 			else:
 				a1 = author.strip()
 				a2 = monument[creatorField].strip()
 				if a1 != a2 and strainu.extractLink(a1) != strainu.extractLink(a2) and force:
-					articleText = updateTableData(monument["source"], code, creatorField, a1, monument, text=articleText)
+					articleText, _ = updateTableData(monument["source"], code, creatorField, a1, monument, text=articleText)
 				#	log(u"*''W'': ''[%s]'' Câmpul Creatori este \"%s\", dar articolul despre monument menționează \"%s\"" % (code, a2, a1))
 
 		#add the author(s) extracted from author pages
@@ -776,13 +833,13 @@ def main():
 			if a2 == u"" or authors != a2  and strainu.extractLink(authors) != strainu.extractLink(a2): # if something changed, update the text
 				if force or a2 == u"":
 					pywikibot.output(authors)
-					articleText = updateTableData(monument["source"], code, creatorField, authors, monument, text=articleText)
+					articleText, _ = updateTableData(monument["source"], code, creatorField, authors, monument, text=articleText)
 
 		elif pic_author != None and pic_author.strip() != "":
 			#print "Author from commons"
 			if strainu.stripLink(pic_author) != strainu.stripLink(monument[creatorField]).strip():
 				if force or monument[creatorField].strip() == u"":
-					articleText = updateTableData(monument["source"], code, creatorField, pic_author, monument, text=articleText)
+					articleText, _ = updateTableData(monument["source"], code, creatorField, pic_author, monument, text=articleText)
 
 		#try to find the author in external data
 		elif code in other_data and creatorField in other_data[code]:
@@ -799,72 +856,59 @@ def main():
 			if authors != monument[creatorField]: # if something changed, update the text
 				if force:
 					pywikibot.output(authors)
-					articleText = updateTableData(monument["source"], code, creatorField, authors, monument, text=articleText)
+					articleText, _ = updateTableData(monument["source"], code, creatorField, authors, monument, text=articleText)
 
 		# --- Copyright ---
 		if last_death > 0:
-			articleText = updateTableData(monument["source"], code, u'Copyright', str(last_death), monument, text=articleText)
+			articleText, _ = updateTableData(monument["source"], code, u'Copyright', str(last_death), monument, text=articleText)
 	
 		# --- Choose an image ---
+		if article != None and not isNullorEmpty(article["image"]):
+			#pywikibot.output("We're uploading image " + article["image"] + " from the article")
+			artimage = strainu.extractImageLink(article["image"]).strip()
+			if isNullorEmpty(artimage):
+				pywikibot.output("Wrong article image link: \"%s\"@%s" % (article["image"], article["name"]))
+			if artimage.find(':') < 0:#no namespace
+				artimage = "File:" + artimage
+			pictures.append({"name": artimage, "quality": Quality.article}) #TODO: check for quality nonfree
+		#next option: an image from the RAN database
+		elif code in ran_data:
+			for site in ran_data[code]:
+				if not isNullorEmpty(site[u"Imagine"]):
+					pictures.append({"name": site[u"Imagine"], "quality": Quality.normal}) #TODO: check for quality nonfree
+					break
 
-		#we will only consider other types of image if no picture exists
-		if isNullorEmpty(monument.get(imageField)) or force:
-			#image from Commons, none in the list
-			if picture != None:
-				#pywikibot.output("We're uploading a selected picture from Commons: " + picture)
-				if picture.find(':') < 0:#no namespace
-					picture = "File:" + picture
-				picture, pictureType = chooseImagePicky([{"name": picture}])
-				articleText = updateTableData(monument.get("source"), code, pictureType, picture, monument, text=articleText)
-			elif force:
-				pass# when forced, only upload quality images
-			#use image from article only if none is available (or was selected) 
-			#from commons and we don't have a picture in the list
-			elif article != None and article["image"] != None and article["image"] != "":
-				#pywikibot.output("We're uploading image " + article["image"] + " from the article")
-				artimage = strainu.extractImageLink(article["image"]).strip()
-				if artimage == None or artimage == "":
-					pywikibot.output("Wrong article image link: \"%s\"@%s" % (article["image"], article["name"]))
-				if artimage.find(':') < 0:#no namespace
-					artimage = "File:" + artimage
-				artimage,artimageType = chooseImagePicky([{"name": artimage}])
-				articleText = updateTableData(monument["source"], code, artimageType, artimage, monument, text=articleText)
-			#next option: an image from the RAN database
-			elif code in ran_data:
-				for site in ran_data[code]:
-					if site[u"Imagine"] != u"":
-						ranimage = site[u"Imagine"] # it MUST have the namespace prefix
-						ranimage,ranimageType = chooseImagePicky([{"name": artimage}])
-						articleText = updateTableData(monument["source"], code, 
-											ranimageType, ranimage,
-											monument, text=articleText)
-						break
-			#next option: choose a random image from commons
-			elif (code in pages_commons) and len(pages_commons[code]) > 0:
-				artimage,artimageType = chooseImagePicky(pages_commons[code])
-				if artimage.find(':') < 0:#no namespace
-					artimage = "File:" + artimage
-				articleText = updateTableData(monument["source"], code, artimageType, artimage, monument, text=articleText)
-			#final option: perhaps we have a local image?
-			elif (code in files_local) and len(files_local[code]) > 0:
-				localimage,localimageType = chooseImagePicky(files_local[code])
-				if localimage.find(':') < 0:#nonamespace
-					localimage = "File:" + localimage
-				articleText = updateTableData(monument["source"], code, localimageType, localimage, monument, text=articleText)
-			#bonus option for ensembles: try to get images from the first submonument
-			else:
-				newcode = code.replace(u"-a-", u"-m-") + u".01"
-				if code.find(u"-a-") > -1 and \
-					db_json[index+1][getCfg(_lang, _db).get('idField')] == newcode and \
-					not isNullorEmpty(db_json[index+1].get(imageField)):
-					pywikibot.output(u"Importing image from submonument %s" % newcode)
-					articleText = updateTableData(monument["source"], code, imageField, db_json[index+1].get(imageField), monument, text=articleText)
+		imagelist = sorted(pictures, key=imageListSortKey, reverse=True)
+		#print(imagelist)
+
+		fields = getFields(_lang, _db, Changes.image)
+		#print(fields)
+		if force:
+			missingFields = fields
+		else:
+			missingFields = []
+			for field in fields:
+				if isNullorEmpty(monument.get(field)):
+					missingFields.append(field)
+		images = chooseImagePicky(imagelist, missingFields)
+		for field in images:
+			if not isNullorEmpty(images[field]):
+				articleText, _ = updateTableData(monument.get("source"), code, field, images[field], monument, text=articleText)
+
+		#bonus option for ensembles: try to get images from the first submonument
+		newcode = code.replace(u"-a-", u"-m-") + u".01"
+		if isNullorEmpty(monument.get(imageField)) and \
+			code.find(u"-a-") > -1 and \
+			db_json[index+1][getCfg(_lang, _db).get('idField')] == newcode and \
+			not isNullorEmpty(db_json[index+1].get(imageField)):
+			pywikibot.output(u"Importing image from submonument %s" % newcode)
+			articleText, _ = updateTableData(monument["source"], code, imageField, db_json[index+1].get(imageField), monument, text=articleText)
 
 		# --- Commons category ---
 		if code in categories_commons:
 			cat = categories_commons[code][0]
 			if isNullorEmpty(monument.get("Commons")) or force:
-				articleText = updateTableData(monument["source"], code,
+				articleText, _ = updateTableData(monument["source"], code,
 								"Commons", "commons:" + cat["name"],
 								monument, text=articleText)
 			elif monument.get("Commons") and monument.get("Commons").strip() != ("commons:" + cat["name"].strip()):
@@ -874,7 +918,7 @@ def main():
 			for site in ran_data[code]:
 				if site[u"Commons"] != u"":
 					rancat = site[u"Commons"] #it MUST have the namespace prefix
-					articleText = updateTableData(monument["source"], code, 
+					articleText, _ = updateTableData(monument["source"], code, 
 									"Commons", rancat,
 									monument, text=articleText)
 					break
@@ -938,9 +982,10 @@ def main():
 				#if otherSrc[5:] == monument["CodRan"]:
 				#	ask = False
 				uploadlat = ("Lon" in monument and monument["Lon"] != "")
-				articleText = updateTableData(monument["source"], code, otherFields.get("lat") or latField, str(otherLat), monument,
+				articleText, updated = updateTableData(monument["source"], code, otherFields.get("lat") or latField, str(otherLat), monument,
 								upload = uploadlat, text = articleText, ask = ask, source = otherSrc)
-				articleText = updateTableData(monument["source"], code, otherFields.get("lon") or lonField, str(otherLong), monument,
+				if updated:
+				    articleText, updated = updateTableData(monument["source"], code, otherFields.get("lon") or lonField, str(otherLong), monument,
 								upload = True, text = articleText, ask = ask, source = otherSrc)
 		if len(_differentCoords) > 0:
 			text = u"* ''E'': ''[%s]'' Coordonate diferite între " % code
@@ -953,12 +998,14 @@ def main():
 			for field in entry:
 				#print entry[field]
 				if not isNullorEmpty(entry[field]) and (isNullorEmpty(monument[field]) or force):
-					articleText = updateTableData(monument["source"], code, field, entry[field], monument, text = articleText)
+					articleText, _ = updateTableData(monument["source"], code, field, entry[field], monument, text = articleText)
 	
 	closeLog()
 
 if __name__ == "__main__":
 	try:
+		#import cProfile
+		#cProfile.run('main()', 'profiling/corroborateprofile.txt')
 		main()
 	finally:
 		pywikibot.stopme()

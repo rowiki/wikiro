@@ -1,14 +1,22 @@
-﻿#!/usr/bin/python
+#!/usr/bin/python
 # -*- coding: utf-8  -*-
 
-#
-# (C) Strainu, 2012-2015
-#
-# Distributed under the terms of the GPLv2 license.
-#
-#
+"""
+(C) Strainu, 2012-2019
+
+Distributed under the terms of the GPLv2 license.
+"""
 import re
 import collections
+
+
+class Quality:
+	unfree   =-100
+	normal   =   0
+	article  =  25 # information extracted from articles/wikidata
+	good     =  50
+	featured = 100
+
 
 class Changes:
 	none	= 0x000
@@ -32,6 +40,9 @@ lmi_blacklist = [#all lowercase
 		u'icon',
 		u'inscrip',#incriptie, incription
 		u'fresc',#frescă, fresco
+		u'portal.jpg',#german partial drawings
+		u'motiv',
+		u'CoA',#coat of arms
 	    ]
 
 natura2000_blacklist = [#all lowercase
@@ -40,12 +51,12 @@ natura2000_blacklist = [#all lowercase
 		u'.svg',
 	]
 
-plan = 	[#all lowercase
+plan_w = 	[#all lowercase
 		u'.svg',#svg files are definetely not pictures
 		u'schem',
-		u'plan',#plans are plans
-		u'v1',
-		u'v2',
+		u' plan ',#plans are plans
+		u' v1',
+		u' v2',
 		u'reconstituire',
 		u'3d',
 		u'localizare',
@@ -55,6 +66,19 @@ plan = 	[#all lowercase
 		u'schita',
 		u'schiță',
 		u'schița',
+	]
+
+plan_b = 	[#all lowercase
+		u'prim plan',
+		u'prim-plan',
+		u'plan apropiat',
+		u'plan îndepărtat',
+		u'plan general',
+	]
+
+video = [#all lowercase
+		u'.webm',
+		u'.ogv',
 	]
 
 config = {
@@ -104,8 +128,9 @@ config = {
 						(u'Lon', {'code': Changes.coord, }),
 						(u'OsmLat', {'code': Changes.coord, }),
 						(u'OsmLon', {'code': Changes.coord, }),
-						(u'Imagine', {'code': Changes.image, 'blacklist': lmi_blacklist + plan}),
-						(u'Plan', {'code': Changes.image, 'blacklist': lmi_blacklist}),
+						(u'Imagine', {'code': Changes.image, 'blacklist': lmi_blacklist + plan_w + plan_b + video}),
+						(u'Plan', {'code': Changes.image, 'blacklist': lmi_blacklist + video + plan_b, 'whitelist': plan_w}),
+						(u'Video', {'code': Changes.image, 'blacklist': lmi_blacklist + plan_w + plan_b, 'whitelist': video}),
 						(u'Commons', {'code': Changes.commons, }),
 						(u'Copyright', {'code': Changes.creator, }),
 					]),
@@ -169,7 +194,7 @@ config = {
 						(u'Lond', {'code': Changes.coord, }),
 						(u'Lonm', {'code': Changes.coord, }),
 						(u'Lons', {'code': Changes.coord, }),
-						(u'Imagine', {'code': Changes.image, 'blacklist': lmi_blacklist + plan}),
+						(u'Imagine', {'code': Changes.image, 'blacklist': lmi_blacklist}),
 						(u'Commons', {'code': Changes.commons, }),
 					]),
 			'idField': u'Cod',
