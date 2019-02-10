@@ -1,9 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8  -*-
 
-import httplib, urllib
 import os
+import http
 import json
+from urllib.parse import urlencode, quote_plus
 
 class OverpassRequest:
 	def __init__(self, api = "www.overpass-api.de", base="api", poly=None, filters=None, output=None):
@@ -19,7 +20,7 @@ class OverpassRequest:
 		self._output = output
 		
 	def buildRequest(self, req_type, poly, filters, output):
-		req = unicode("[out:" + output + "];", "utf8")
+		req = "[out:" + output + "];"
 		if type(poly) == str or type(poly) == unicode:
 			p = poly
 		else:
@@ -45,20 +46,20 @@ class OverpassRequest:
 	def makeRequest(self, req=None):
 		if req == None:
 			return None
-		http = httplib.HTTPSConnection(self._api)
-		params = urllib.urlencode({'@data': req})
+		http_obj = http.client.HTTPSConnection(self._api)
+		params = urlencode({'@data': req})
 		headers = {"Content-type": "application/x-www-form-urlencoded",
 				"Accept": "text/plain",
 				"User-Agent": "Strainubot"}
-		http.request("POST", self.base, req, headers)
-		response = http.getresponse()
+		http_obj.request("POST", self.base, req, headers)
+		response = http_obj.getresponse()
 		print(response.status)
 		if response.status == 200:
 			ret = response.read()
-			http.close()
+			http_obj.close()
 			return ret
 		else:
-			http.close()
+			http_obj.close()
 			return None
 		
 	def fetchNode(self, poly=None, filters=None, output=None):
