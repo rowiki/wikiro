@@ -1,17 +1,27 @@
 #!/usr/bin/python
-# -:- coding:utf-8 -:-
+#-*- coding:utf-8 -*-
+
+import json
+import re
+import sys
 
 import pywikibot
-from pywikibot import config as user
 from pywikibot import pagegenerators
 from pywikibot.data import sparql
+from pywikibot import config as user
 
 import fill_wikidata_info as wikidata
 
+sys.path.append("wikiro/robots/python")
+import otherconfig as config
+from geo import mapillary
+
 gallery = []
 stats = {}
+candidates = {}
 fix = False
 always = False
+do_mapillary = True
 
 def getWikiArticle(item):
     try:
@@ -23,15 +33,16 @@ def getWikiArticle(item):
     except Exception as e:
         pywikibot.error(e)
         return None
- 
+
+
 def fix_local_image(img, item):
     global always, fix
 
     if not fix:
         return
-    #check if page exists on commons
+    # check if page exists on commons
     if not img.fileIsShared():
-        #local image, nothing to fix
+        # local image, nothing to fix
         return
     img = pywikibot.FilePage(pywikibot.Site('commons', 'commons'),img.title(with_ns=False))
 
@@ -40,6 +51,41 @@ def fix_local_image(img, item):
     worker.setItem(item)
     worker.addImage(img)
     always = worker.always
+
+
+def find_mapillary_candidates(dic):
+    global candidates, do_mapillary
+    if not do_mapillary:
+        return
+    t = []
+    coord = dic.get("coord")
+    if not coord:
+        return
+    match = re.search(r"\(([0-9\.]+)\s([0-9\.]+)\)", coord)
+    if not match:
+        return
+    lon = match.group(1)
+    lat = match.group(2)
+    res = mapillary.get_images_looking(config.mapillary.get('key'), lat, lon, 50, 10)
+    if not res:
+        return
+    for image_data in res.get("features"):
+        t.append(mapillary.get_image_url(image_data["properties"]["key"], 2048))
+    if len(t):
+        candidates[dic['item']] = t
+        # print(t)
+
+
+def dump_mapillary_data():
+    global candidates
+    global do_mapillary
+
+    if not do_mapillary:
+        return
+
+    with open("mapillary_cities_pictures.json", "w") as f:
+        json.dump(candidates, f)
+
 
 def treat_sparql(dic):
     global gallery
@@ -74,6 +120,7 @@ def treat_sparql(dic):
             stats['total']['wikidata'] += 1
             return
 
+        find_mapillary_candidates(dic)
         if dic.get('page_title'):
             rp = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), dic.get('page_title'))
             #print(rp)
@@ -98,17 +145,18 @@ def treat_sparql(dic):
         print(dic)
         print(e)
         raise
-    
-   
+
+
 def dump_text(gallery):
     #art = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), 'Utilizator:Strainu/wlro')
     text = "<gallery>\n"
     for img in gallery:
         text += img + "\n"
     text += "</gallery>"
-    #print(text)
-    #art.put(text)
+    # print(text)
+    # art.put(text)
     return text
+
 
 def add_text(where, t, overwrite=False):
     try:
@@ -122,6 +170,7 @@ def add_text(where, t, overwrite=False):
         art.put(text, "Actualizare galerie")
     except Exception as e:
         print(e)
+
 
 def generate_stats(county):
     if county == 'total':
@@ -146,7 +195,7 @@ def generate_stats(county):
     for i in range(int(round(missing_percentage))):
         bar += "&nbsp;"
     bar += "</span>"
-    text = table_line % ( name,
+    text = table_line % (name,
             stats[county]['total'],
             stats[county]['wikidata'],
             wikidata_percentage,
@@ -155,8 +204,9 @@ def generate_stats(county):
             stats[county]['missing'],
             missing_percentage,
             bar
-	)
+           )
     return text
+
 
 def main():
     global always, fix
@@ -182,16 +232,17 @@ def main():
     repo = pywikibot.Site().data_repository()
     dependencies = {'endpoint': None, 'entity_url': None, 'repo': repo}
     query_object = sparql.SparqlQuery(**dependencies)
-    query = """SELECT ?item ?itemLabel ?siruta ?image ?upperImage ?page_title ?countyLabel
-WHERE 
+    query = """SELECT ?item ?itemLabel ?siruta ?image ?upperImage ?page_title ?countyLabel ?coord
+WHERE
 {
   ?item wdt:P843 ?siruta.
   ?item wdt:P131* ?county.
   ?county wdt:P31 wd:Q1776764.
+  OPTIONAL { ?item wdt:P625 ?coord. }
   OPTIONAL { ?item wdt:P18 ?image. }
-  OPTIONAL { 
+  OPTIONAL {
     { ?item wdt:P31 wd:Q34842263. } UNION {?item wdt:P31 wd:Q34842776.}
-    ?item wdt:P1376 ?upper.          
+    ?item wdt:P1376 ?upper.
     ?upper wdt:P18 ?upperImage.
   }
   OPTIONAL {?article    schema:about ?item ;
@@ -230,7 +281,8 @@ ORDER BY ?countyLabel ?itemLabel ?siruta"""
         main_text += generate_stats(last_county)
         main_text += generate_stats('total') + "\n|}"
         art = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), 'Utilizator:Strainu/wlro')
-        art.put(main_text, "Actualizare statistici")        
+        art.put(main_text, "Actualizare statistici")
+        dump_mapillary_data()
     except Exception as e:
         print(e)
         raise
