@@ -501,8 +501,6 @@ config = {
 	}
 }
 
-mapillary_key = ""
-
 
 def filterOne(contents, countryconfig):
 	'''

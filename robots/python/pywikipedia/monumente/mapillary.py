@@ -9,9 +9,9 @@ import requests
 import sys
 import concurrent.futures
 
-sys.path.append("wikiro/robots/python/pywikipedia")
-
-import monumente
+sys.path.append("wikiro/robots/python")
+import otherconfig
+import pywikipedia.monumente
 
 
 def buildImageUrls(imageList):
@@ -20,12 +20,14 @@ def buildImageUrls(imageList):
 
     for image_data in imageList:
         ret.append(url.format(image_data["properties"]["key"]))
+    ret = list(set(ret))
+    # print(ret)
     return ret
 
 def getImageList(monument):
     url = "https://a.mapillary.com/v3/images?client_id={api_key}&lookat={lon},{lat}&closeto={lon},{lat}"
-    url = url.format(api_key=monumente.mapillary_key, lat=monument["Lat"], lon=monument["Lon"])
-    #print(url)
+    url = url.format(api_key=otherconfig.mapillary.get('key'), lat=monument["Lat"], lon=monument["Lon"])
+    # print(url)
     r = requests.get(url)
     return r.text
 
@@ -42,8 +44,8 @@ def getData(monument):
     data = json.loads(getImageList(monument))
     if len(data["features"]) == 0:
         return None,None
-    #print(data["features"])
-    #sleep(1)
+    # print(data["features"])
+    # sleep(1)
     return monument["Cod"], buildImageUrls(data["features"])
 
 def readJson(filename, what):
