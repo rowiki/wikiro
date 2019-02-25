@@ -1,6 +1,7 @@
 package org.wikipedia.ro.java.lister.generators;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.prependIfMissing;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
         POSN_INDEX.put("fundaș lateral", "F");
         POSN_INDEX.put("atacant", "A");
         POSN_INDEX.put("mijlocaș", "M");
+        POSN_INDEX.put("mijlocaș defensiv", "M");
+        POSN_INDEX.put("mijlocaș ofensiv", "M");
         POSN_INDEX.put("extremă", "M");
         POSN_INDEX.put("portar", "P");
     }
@@ -117,7 +120,7 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                 int lentPlayerIdx = 0;
                 int middleLentPlayers = lentPlayers.size() / 2;
                 lentPlayersBuilder.append("\n=== Jucători împrumutați ===\n{{Ef start}}\n");
-                for (Map<String, Object> eachResult : lentPlayers) {
+                lentPlayersLoop: for (Map<String, Object> eachResult : lentPlayers) {
                     Item item = (Item) eachResult.get("item");
                     Entity playerEntity = item.getEnt();
                     String posn = (String) eachResult.get("posnLabel");
@@ -147,9 +150,28 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                     Set<Claim> crtTeamClaims =
                         playerEntity.getBestClaims(WikibasePropertyFactory.getWikibaseProperty("P54"));
                     if (null != crtTeamClaims && !crtTeamClaims.isEmpty()) {
-                        String crtTeamId = ((Item) crtTeamClaims.iterator().next().getMainsnak().getData()).getEnt().getId();
+                        Entity crtTeamEntity = ((Item) crtTeamClaims.iterator().next().getMainsnak().getData()).getEnt();
+                        String crtTeamId = prependIfMissing(crtTeamEntity.getId(), "Q");
                         if (StringUtils.equals(crtTeamId, wdEntity.getId())) {
-                            continue;
+                            continue lentPlayersLoop;
+                        }
+
+                        crtTeamEntity = cache.get(crtTeamEntity);
+
+                        Set<Claim> typeClaims =
+                            crtTeamEntity.getBestClaims(WikibasePropertyFactory.getWikibaseProperty("P31"));
+                        for (Claim eachTeamInstanceOfClaim : typeClaims) {
+                            if ("Q2412834".equals(prependIfMissing(
+                                ((Item) eachTeamInstanceOfClaim.getMainsnak().getData()).getEnt().getId(), "Q"))) {
+                                Set<Claim> partOfClaims =
+                                    crtTeamEntity.getBestClaims(WikibasePropertyFactory.getWikibaseProperty("P361"));
+                                for (Claim eachTeamPartOfClaim : partOfClaims) {
+                                    if (StringUtils.equals(wdEntity.getId(), prependIfMissing(
+                                        ((Item) eachTeamPartOfClaim.getMainsnak().getData()).getEnt().getId(), "Q"))) {
+                                        continue lentPlayersLoop;
+                                    }
+                                }
+                            }
                         }
                         crtTeamLink = String.format("{{Ill-wd|%s}}", crtTeamId);
                     } else {
@@ -182,7 +204,6 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
             return "";
         }
 
-        listBuilder.append("{{Ef sfârșit}}\n");
         return listBuilder.toString();
     }
 
