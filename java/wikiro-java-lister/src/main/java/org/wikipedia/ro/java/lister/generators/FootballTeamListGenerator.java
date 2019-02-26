@@ -20,7 +20,9 @@ import org.wikibase.WikibasePropertyFactory;
 import org.wikibase.data.Claim;
 import org.wikibase.data.Entity;
 import org.wikibase.data.Item;
+import org.wikibase.data.Property;
 import org.wikibase.data.Sitelink;
+import org.wikibase.data.Snak;
 import org.wikipedia.ro.java.lister.util.WikidataEntitiesCache;
 import org.wikipedia.ro.model.WikiLink;
 
@@ -70,7 +72,7 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
             Wikibase wd = cache.getWiki();
             List<Map<String, Object>> resultSet = wd.query(currentPlayersQueryString);
             int crtIndex = 0;
-            int middleIndex = resultSet.size() / 2;
+            int middleIndex = 1 + (-1 + resultSet.size()) / 2;
             for (Map<String, Object> eachResult : resultSet) {
                 Item item = (Item) eachResult.get("item");
                 String posn = (String) eachResult.get("posnLabel");
@@ -148,7 +150,24 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                     Set<Claim> crtTeamClaims =
                         playerEntity.getBestClaims(WikibasePropertyFactory.getWikibaseProperty("P54"));
                     if (null != crtTeamClaims && !crtTeamClaims.isEmpty()) {
-                        Entity crtTeamEntity = ((Item) crtTeamClaims.iterator().next().getMainsnak().getData()).getEnt();
+                        
+                        Claim crtTeamClaim = crtTeamClaims.iterator().next();
+                        
+                        boolean isLoan = false;
+                        Map<Property, Set<Snak>> teamClaimQuals = crtTeamClaim.getQualifiers();
+                        Set<Snak> acqTransQuals = teamClaimQuals.get(WikibasePropertyFactory.getWikibaseProperty("P1642"));
+                        if (null != acqTransQuals && !acqTransQuals.isEmpty()) {
+                            for (Snak eachAcqTransQual: acqTransQuals) {
+                                if (StringUtils.equals(prependIfMissing(((Item) eachAcqTransQual.getData()).getEnt().getId(), "Q"), "Q2914547")) {
+                                    isLoan = true;
+                                }
+                            }
+                        }
+                        if (!isLoan) {
+                            continue lentPlayersLoop;
+                        }
+                        
+                        Entity crtTeamEntity = ((Item) crtTeamClaim.getMainsnak().getData()).getEnt();
                         String crtTeamId = prependIfMissing(crtTeamEntity.getId(), "Q");
                         if (StringUtils.equals(crtTeamId, wdEntity.getId())) {
                             continue lentPlayersLoop;
@@ -173,7 +192,7 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                         }
                         crtTeamLink = ill(crtTeamEntity);
                     } else {
-                        continue;
+                        continue lentPlayersLoop;
                     }
 
                     lentPlayersLines.add(new StringBuilder().append("{{Ef jucător|nat=").append(countryName).append("|nume=")
@@ -184,7 +203,7 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                     StringBuilder lentPlayersBuilder = new StringBuilder();
                     lentPlayersBuilder.append("\n=== Jucători împrumutați ===\n{{Ef start}}\n");
                     int lentPlayerIdx = 0;
-                    int middleLentPlayers = lentPlayersLines.size() / 2;
+                    int middleLentPlayers = 1 + (-1 + lentPlayersLines.size() / 2);
 
                     for (String eachLentPlayerLine : lentPlayersLines) {
                         lentPlayersBuilder.append(eachLentPlayerLine).append('\n');
