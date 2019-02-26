@@ -20,7 +20,9 @@ import org.wikibase.WikibasePropertyFactory;
 import org.wikibase.data.Claim;
 import org.wikibase.data.Entity;
 import org.wikibase.data.Item;
+import org.wikibase.data.Sitelink;
 import org.wikipedia.ro.java.lister.util.WikidataEntitiesCache;
+import org.wikipedia.ro.model.WikiLink;
 
 public class FootballTeamListGenerator implements WikidataListGenerator {
     private WikidataEntitiesCache cache = null;
@@ -93,9 +95,8 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                     countryName = defaultString(countryEntity.getLabels().get("ro"), countryEntity.getLabels().get("en"));
                 }
 
-                listBuilder.append("{{Ef jucător|nat=").append(countryName).append("|nume=").append("{{Ill-wd|1=")
-                    .append(playerEntity.getId()).append("}}").append("|poz=").append(defaultString(POSN_INDEX.get(posn)))
-                    .append("}}\n");
+                listBuilder.append("{{Ef jucător|nat=").append(countryName).append("|nume=").append(ill(playerEntity))
+                    .append("|poz=").append(defaultString(POSN_INDEX.get(posn))).append("}}\n");
 
                 crtIndex++;
                 if (crtIndex == middleIndex) {
@@ -104,7 +105,6 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
             }
             listBuilder.append("{{Ef sfârșit}}\n");
 
-            StringBuilder lentPlayersBuilder = new StringBuilder();
             List<Map<String, Object>> allIncludingLentPlayersResultSet = wd.query(contractedPlayersQueryString);
             List<Map<String, Object>> lentPlayers = new ArrayList<Map<String, Object>>();
             for (Map<String, Object> eachResult : allIncludingLentPlayersResultSet) {
@@ -117,9 +117,7 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
             }
 
             if (!lentPlayers.isEmpty()) {
-                int lentPlayerIdx = 0;
-                int middleLentPlayers = lentPlayers.size() / 2;
-                lentPlayersBuilder.append("\n=== Jucători împrumutați ===\n{{Ef start}}\n");
+                List<String> lentPlayersLines = new ArrayList<>();
                 lentPlayersLoop: for (Map<String, Object> eachResult : lentPlayers) {
                     Item item = (Item) eachResult.get("item");
                     Entity playerEntity = item.getEnt();
@@ -173,27 +171,37 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                                 }
                             }
                         }
-                        crtTeamLink = String.format("{{Ill-wd|%s}}", crtTeamId);
+                        crtTeamLink = ill(crtTeamEntity);
                     } else {
                         continue;
                     }
-                    lentPlayersBuilder.append("{{Ef jucător|nat=").append(countryName).append("|nume=").append("{{Ill-wd|1=")
-                        .append(playerEntity.getId()).append("}}").append("|poz=")
-                        .append(defaultString(POSN_INDEX.get(posn))).append("|other=la ").append(defaultString(crtTeamLink))
-                        .append("}}\n");
 
-                    lentPlayerIdx++;
-                    if (lentPlayerIdx == middleLentPlayers) {
-                        lentPlayersBuilder.append("{{Ef mijloc}}\n");
+                    lentPlayersLines.add(new StringBuilder().append("{{Ef jucător|nat=").append(countryName).append("|nume=")
+                        .append(ill(playerEntity)).append("|poz=").append(defaultString(POSN_INDEX.get(posn)))
+                        .append("|other=la ").append(defaultString(crtTeamLink)).append("}}").toString());
+                }
+                if (!lentPlayersLines.isEmpty()) {
+                    StringBuilder lentPlayersBuilder = new StringBuilder();
+                    lentPlayersBuilder.append("\n=== Jucători împrumutați ===\n{{Ef start}}\n");
+                    int lentPlayerIdx = 0;
+                    int middleLentPlayers = lentPlayersLines.size() / 2;
+
+                    for (String eachLentPlayerLine : lentPlayersLines) {
+                        lentPlayersBuilder.append(eachLentPlayerLine).append('\n');
+
+                        lentPlayerIdx++;
+                        if (lentPlayerIdx == middleLentPlayers) {
+                            lentPlayersBuilder.append("{{Ef mijloc}}\n");
+                        }
+                    }
+                    lentPlayersBuilder.append("{{Ef sfârșit}}\n");
+
+                    if (0 != lentPlayersBuilder.length()) {
+                        listBuilder.append(lentPlayersBuilder);
                     }
                 }
-                lentPlayersBuilder.append("{{Ef sfârșit}}\n");
-            }
 
-            if (0 != lentPlayersBuilder.length()) {
-                listBuilder.append(lentPlayersBuilder);
             }
-
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -205,6 +213,21 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
         }
 
         return listBuilder.toString();
+    }
+
+    private String ill(Entity entity) {
+        if (entity.isLoaded()) {
+            Sitelink roSitelink = entity.getSitelinks().get("rowiki");
+            if (null != roSitelink) {
+                String roArticle = roSitelink.getPageName();
+                String label = defaultString(entity.getLabels().get("ro"), entity.getLabels().get("en"));
+                WikiLink wikiLink = new WikiLink();
+                wikiLink.setLabel(label);
+                wikiLink.setTarget(roArticle);
+                return wikiLink.toString();
+            }
+        }
+        return String.format("{{Ill-wd|%s}}", prependIfMissing(entity.getId(), "Q"));
     }
 
 }
