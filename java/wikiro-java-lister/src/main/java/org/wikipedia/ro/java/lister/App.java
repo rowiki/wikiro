@@ -75,6 +75,8 @@ public class App {
 
         try {
             wiki.login(credentials.username, credentials.password);
+            
+            wiki.setMarkBot(true);
 
             String[] listMarkersPresence = wiki.whatTranscludesHere("Utilizator:Andrebot/Listă de la Wikidata");
 
