@@ -36,6 +36,45 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
 
     private static final Map<String, String> POSN_INDEX = new HashMap<String, String>();
 
+    private static final String CURRENT_PLAYERS_QUERY_TEMPLATE =
+        "SELECT distinct ?item ?itemLabel (SAMPLE(?posnLabel) AS ?playingPosition) (sample(?cocLabel) as ?countryCitizenship) (sample(?c4sLabel) as ?countrySport) WHERE {\n"
+            + "  ?item wdt:P31 wd:Q5.                                                       \n"
+            + "  ?item p:P54 ?teamStat.                                                     \n"
+            + "  ?teamStat wikibase:rank wikibase:PreferredRank.                            \n"
+            + "  ?teamStat ps:P54 wd:%s.                                                    \n"
+            + "  ?item wdt:P413 ?posn.                                                      \n"
+            + "  OPTIONAL { ?item wdt:P27 ?coc. }                                           \n"
+            + "  OPTIONAL { ?item wdt:P1532 ?c4s. }                                         \n"
+            + "  MINUS { ?teamStat pq:P582 ?endTime. }                                      \n"
+            + "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"ro,en\".      \n"
+            + "                         ?coc rdfs:label ?cocLabel.                          \n"
+            + "                         ?c4s rdfs:label ?c4sLabel.                          \n"
+            + "                         ?item rdfs:label ?itemLabel.                        \n"
+            + "                         ?posn rdfs:label ?posnLabel. }                      \n"
+            + "}                                                                            \n"
+            + "GROUP BY ?item ?itemLabel                                                    \n"
+            + "ORDER BY ?item                                                                 ";
+
+    private static final String CONTRACTED_PLAYERS_QUERY_TEMPLATE =
+        "SELECT ?item ?itemLabel (SAMPLE(?posnLabel) AS ?playingPosition) (SAMPLE(?cocLabel) AS ?countryCitizenship) (SAMPLE(?c4sLabel) AS ?countrySport) WHERE {\n"
+            + "  ?item wdt:P31 wd:Q5.                                                             \n"
+            + "  ?item p:P54 ?teamStat.                                                           \n"
+            + "  ?teamStat ps:P54 wd:%s.                                                          \n"
+            + "  ?item wdt:P413 ?posn.                                                            \n"
+            + "  OPTIONAL { ?item wdt:P27 ?coc. }                                                 \n"
+            + "  OPTIONAL { ?item wdt:P1532 ?c4s. }                                               \n"
+            + "  MINUS { ?teamStat pq:P582 ?endTime. }                                            \n"
+            + "  SERVICE wikibase:label {                                                         \n"
+            + "    bd:serviceParam wikibase:language \"ro,en\".                                   \n"
+            + "    ?coc rdfs:label ?cocLabel.                                                     \n"
+            + "    ?c4s rdfs:label ?c4sLabel.                                                     \n"
+            + "    ?item rdfs:label ?itemLabel.                                                   \n"
+            + "    ?posn rdfs:label ?posnLabel.                                                   \n"
+            + "  }                                                                                \n"
+            + "}                                                                                  \n"
+            + "GROUP BY ?item ?itemLabel                                                          \n"
+            + "ORDER BY ?item                                                                       ";
+
     static {
         POSN_INDEX.put("fundaș", "F");
         POSN_INDEX.put("fundaș central", "F");
@@ -50,16 +89,9 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
 
     @Override
     public String generateListContent(Entity wdEntity) {
-        String currentPlayersQueryString = "select distinct ?item ?itemLabel ?posnLabel ?endTime " + "{ "
-            + "  ?item wdt:P31 wd:Q5 . " + "  ?item p:P54 ?teamStat . "
-            + "  ?teamStat wikibase:rank wikibase:PreferredRank . " + "  ?teamStat ps:P54 wd:" + wdEntity.getId() + " . "
-            + "  ?item wdt:P413 ?posn . " + "  MINUS {" + "    ?teamStat pq:P582 ?endTime ." + "  }"
-            + "  service wikibase:label { bd:serviceParam wikibase:language \"ro,en\" }" + "} order by ?item";
+        String currentPlayersQueryString = String.format(CURRENT_PLAYERS_QUERY_TEMPLATE, wdEntity.getId());
 
-        String contractedPlayersQueryString = "select distinct ?item ?itemLabel ?posnLabel\n" + "{ "
-            + "  ?item wdt:P31 wd:Q5 . " + "  ?item p:P54 ?teamStat . " + "  ?teamStat ps:P54 wd:" + wdEntity.getId() + " . "
-            + "  ?item wdt:P413 ?posn . " + "  MINUS { " + "    ?teamStat pq:P582 ?endTime . " + "  }"
-            + "  service wikibase:label { bd:serviceParam wikibase:language \"ro,en\" } " + "} order by ?item";
+        String contractedPlayersQueryString = String.format(CONTRACTED_PLAYERS_QUERY_TEMPLATE, wdEntity.getId());
 
         Calendar now = Calendar.getInstance();
         StringBuilder listBuilder = new StringBuilder("{{Updated|{{Dată|").append(now.get(Calendar.YEAR)).append('|')
@@ -75,28 +107,12 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
             int middleIndex = 1 + (-1 + resultSet.size()) / 2;
             for (Map<String, Object> eachResult : resultSet) {
                 Item item = (Item) eachResult.get("item");
-                String posn = (String) eachResult.get("posnLabel");
+                String posn = (String) eachResult.get("playingPosition");
                 Entity playerEntity = item.getEnt();
                 playerEntity = cache.get(playerEntity);
 
-                Claim countryClaim = null;
-                for (String propId : Arrays.asList("P1532", "P27")) {
-                    Set<Claim> countryClaims =
-                        playerEntity.getBestClaims(WikibasePropertyFactory.getWikibaseProperty(propId));
-                    if (null != countryClaims && !countryClaims.isEmpty()) {
-                        countryClaim = countryClaims.iterator().next();
-                        break;
-                    }
-                }
-                presentPlayerIds.add(playerEntity.getId());
-
-                String countryName = "";
-                if (null != countryClaim) {
-                    Entity countryEntity = ((Item) countryClaim.getMainsnak().getData()).getEnt();
-                    countryEntity = cache.get(countryEntity);
-                    countryName = defaultString(countryEntity.getLabels().get("ro"), countryEntity.getLabels().get("en"));
-                }
-
+                String countryName = defaultString(
+                    defaultString((String) eachResult.get("countrySport"), (String) eachResult.get("countryCitizenship")));
                 listBuilder.append("{{Ef jucător|nat=").append(countryName).append("|nume=").append(ill(playerEntity))
                     .append("|poz=").append(defaultString(POSN_INDEX.get(posn))).append("}}\n");
 
@@ -126,39 +142,25 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                     String posn = (String) eachResult.get("posnLabel");
 
                     playerEntity = cache.get(playerEntity);
-
-                    Claim countryClaim = null;
-                    for (String propId : Arrays.asList("P1532", "P27")) {
-                        Set<Claim> countryClaims =
-                            playerEntity.getBestClaims(WikibasePropertyFactory.getWikibaseProperty(propId));
-                        if (null != countryClaims && !countryClaims.isEmpty()) {
-                            countryClaim = countryClaims.iterator().next();
-                            break;
-                        }
-                    }
                     presentPlayerIds.add(playerEntity.getId());
 
-                    String countryName = "";
-                    if (null != countryClaim) {
-                        Entity countryEntity = ((Item) countryClaim.getMainsnak().getData()).getEnt();
-                        countryEntity = cache.get(countryEntity);
-                        countryName =
-                            defaultString(countryEntity.getLabels().get("ro"), countryEntity.getLabels().get("en"));
-                    }
-
+                    String countryName = defaultString(
+                        defaultString((String) eachResult.get("countrySport"), (String) eachResult.get("countryCitizenship")));
                     String crtTeamLink = null;
                     Set<Claim> crtTeamClaims =
                         playerEntity.getBestClaims(WikibasePropertyFactory.getWikibaseProperty("P54"));
                     if (null != crtTeamClaims && !crtTeamClaims.isEmpty()) {
-                        
+
                         Claim crtTeamClaim = crtTeamClaims.iterator().next();
-                        
+
                         boolean isLoan = false;
                         Map<Property, Set<Snak>> teamClaimQuals = crtTeamClaim.getQualifiers();
                         Set<Snak> acqTransQuals = teamClaimQuals.get(WikibasePropertyFactory.getWikibaseProperty("P1642"));
                         if (null != acqTransQuals && !acqTransQuals.isEmpty()) {
-                            for (Snak eachAcqTransQual: acqTransQuals) {
-                                if (StringUtils.equals(prependIfMissing(((Item) eachAcqTransQual.getData()).getEnt().getId(), "Q"), "Q2914547")) {
+                            for (Snak eachAcqTransQual : acqTransQuals) {
+                                if (StringUtils.equals(
+                                    prependIfMissing(((Item) eachAcqTransQual.getData()).getEnt().getId(), "Q"),
+                                    "Q2914547")) {
                                     isLoan = true;
                                 }
                             }
@@ -166,7 +168,7 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                         if (!isLoan) {
                             continue lentPlayersLoop;
                         }
-                        
+
                         Entity crtTeamEntity = ((Item) crtTeamClaim.getMainsnak().getData()).getEnt();
                         String crtTeamId = prependIfMissing(crtTeamEntity.getId(), "Q");
                         if (StringUtils.equals(crtTeamId, wdEntity.getId())) {
