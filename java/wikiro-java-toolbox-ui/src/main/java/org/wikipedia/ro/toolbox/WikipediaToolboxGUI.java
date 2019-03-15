@@ -186,7 +186,7 @@ public class WikipediaToolboxGUI {
             JOptionPane.showMessageDialog(frame, bundle.getString("error.srcwiki.not.specified"),
                 bundle.getString("error.operation.cannot.run"), JOptionPane.ERROR_MESSAGE);
         }
-        sourceWiki = new Wiki(removeEnd(srcwikilang, "wiki") + ".wikipedia.org");
+        sourceWiki = Wiki.createInstance(removeEnd(srcwikilang, "wiki") + ".wikipedia.org");
         final String commitMessage = defaultIfBlank(((JTextField) dataComponentsMap.get("summary")).getText(),
             bundle.getString(actionClass.getAnnotation(Operation.class).labelKey()));
 
@@ -403,7 +403,7 @@ public class WikipediaToolboxGUI {
                         String tw = appendIfMissing(twTF.getText(), "wiki");
                         if (isNoneEmpty(uname, tw)) {
                             String twLang = removeEnd(tw, "wiki");
-                            targetWiki = new Wiki(twLang + ".wikipedia.org");
+                            targetWiki = Wiki.createInstance(twLang + ".wikipedia.org");
                             targetWiki.login(uname, pwd);
                         } else {
                             throw new FailedLoginException(bundle.getString("error.specify.targetwiki.credentials"));

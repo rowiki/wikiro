@@ -3,6 +3,7 @@ package org.wikipedia.ro.toolbox.generators;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.Generator;
@@ -24,10 +25,10 @@ public class TextSearchGenerator implements Generator {
 
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
-            String[][] searchResultsArray = wiki.search(text);
+            Map<String, Object>[] searchResultsArray = wiki.search(text);
             pagesList = new ArrayList<String>();
-            for (String[] eachArray : searchResultsArray) {
-                pagesList.add(eachArray[0]);
+            for (Map<String, Object> eachResultMap : searchResultsArray) {
+                pagesList.add(eachResultMap.get("title").toString());
             }
         }
         return pagesList;

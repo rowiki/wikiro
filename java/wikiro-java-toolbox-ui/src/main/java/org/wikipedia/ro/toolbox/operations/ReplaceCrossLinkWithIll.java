@@ -3,6 +3,7 @@ package org.wikipedia.ro.toolbox.operations;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.equalsAny;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
 import static org.apache.commons.lang3.StringUtils.prependIfMissing;
@@ -19,10 +20,8 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -64,6 +63,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
     public String execute() throws IOException, LoginException, WikibaseException {
         status = new String[] { "status.reading.text", article, targetWikiCode };
         String text = targetWiki.getPageText(article);
+        Pattern namespacepattern = Pattern.compile("((?:Template|Wikipedia):)?(.*)");
 
         status = new String[] { "status.identifying.links" };
         String extLinkRegEx = "\\[\\[\\:(?<lang>.*?)\\:(?<foreigntitle>.*?)(\\|(?<locallabel>.*?))?\\]]";
@@ -87,18 +87,27 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             if (null == roTitle && null == wbEntity) {
                 try {
                     if (null == wbEntity) {
-                        if ("d".equals(lang)) {
+                        if (equalsAny(lowerCase(lang), "s", "wikt")) {
+                            continue;
+                        } else if ("d".equals(lang)) {
                             wbEntity = dataWiki
                                 .getWikibaseItemById(defaultString(dataWiki.resolveRedirect(foreignTitle), foreignTitle));
                         } else {
-                            foreignTitle = capitalize(substringBefore(foreignTitle, "#"));
+                            String fullForeignTitle = substringBefore(foreignTitle, "#");
+                            Matcher namespaceMatcher = namespacepattern.matcher(fullForeignTitle);
+                            namespaceMatcher.matches();
+                            String namespace = defaultString(namespaceMatcher.group(1));
+                            String simpleForeignTitle = namespaceMatcher.group(2);
+                            foreignTitle = capitalize(namespace) + capitalize(simpleForeignTitle);
                             String target = defaultString(sourceWiki.resolveRedirect(foreignTitle), foreignTitle);
                             wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(lang + "wiki", target);
                         }
                     }
                     wikidataItemsCache.put(lang + ":" + foreignTitle, wbEntity);
                     roTitle = wbEntity.getLabels().get("ro");
-                    roArticlesCache.put(lang + ":" + foreignTitle, roTitle);
+                    if (!isBlank(roTitle)) {
+                        roArticlesCache.put(lang + ":" + foreignTitle, roTitle);
+                    }
                 } catch (WikibaseException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -136,7 +145,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
             status = new String[] { "status.analyzing.link", articleTitle };
 
-            Wiki srcWiki = new Wiki(lang + ".wikipedia.org");
+            Wiki srcWiki = Wiki.createInstance(lang + ".wikipedia.org");
             String target = defaultString(srcWiki.resolveRedirect(articleTitle), articleTitle);
             String targetLang = removeEnd(targetWikiCode, "wiki");
             String sourceLang = defaultIfEmpty(lang, removeEnd(sourceWikiCode, "wiki"));
@@ -201,7 +210,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                 continue;
             }
             if (startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:",
-                "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", "imdbname:", "c:file:", "doi:",
+                "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", ":s:", "imdbname:", "c:file:", "doi:",
                 "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:")) {
                 System.out.println("Link to something else! Skipping...");
                 continue;
