@@ -58,7 +58,7 @@ public class Classify {
     }
 
     public void classify() {
-        Wiki rowiki = new Wiki(wikiAddress);
+        Wiki rowiki = Wiki.newSession(wikiAddress);
         Credentials credentials = WikiprojectsUtils.identifyCredentials();
         try {
             rowiki.login(credentials.username, credentials.password);

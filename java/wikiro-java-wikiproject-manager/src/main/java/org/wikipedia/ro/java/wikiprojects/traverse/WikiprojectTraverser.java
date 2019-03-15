@@ -52,7 +52,7 @@ public class WikiprojectTraverser {
 
     public void traverse() throws IOException, LoginException {
 
-        Wiki wiki = new Wiki(wikiAddress);
+        Wiki wiki = Wiki.newSession(wikiAddress);
 
         Credentials credentials = WikiprojectsUtils.identifyCredentials();
 

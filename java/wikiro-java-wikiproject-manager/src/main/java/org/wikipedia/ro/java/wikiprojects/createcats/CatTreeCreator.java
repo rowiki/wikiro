@@ -101,7 +101,7 @@ public class CatTreeCreator {
 
     public void createCats() throws IOException, LoginException {
 
-        Wiki wiki = new Wiki(wikiAddress);
+        Wiki wiki =  Wiki.newSession(wikiAddress);
 
         Credentials credentials = WikiprojectsUtils.identifyCredentials();
 

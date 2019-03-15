@@ -29,7 +29,7 @@ public class WikiprojectCreator {
     }
 
     public void createWikiproject() {
-        Wiki wiki = new Wiki(wikiAddress);
+        Wiki wiki = Wiki.newSession(wikiAddress);
 
         Credentials credentials = WikiprojectsUtils.identifyCredentials();
 
