@@ -1,10 +1,11 @@
 package org.wikipedia.ro.toolbox.generators;
 
+import static org.apache.commons.lang3.StringUtils.prependIfMissing;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.Generator;
 
@@ -27,7 +28,7 @@ public class TransclusionGenerator implements Generator {
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
             String[] transclusions = wiki.whatTranscludesHere(
-                StringUtils.prependIfMissing(template, wiki.namespaceIdentifier(Wiki.TEMPLATE_NAMESPACE)));
+                prependIfMissing(template, wiki.namespaceIdentifier(Wiki.TEMPLATE_NAMESPACE) + ":"));
             pagesList = Arrays.asList(transclusions);
         }
         return pagesList;
