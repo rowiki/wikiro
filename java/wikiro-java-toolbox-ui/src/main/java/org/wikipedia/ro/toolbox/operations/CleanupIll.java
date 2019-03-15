@@ -53,12 +53,13 @@ public class CleanupIll implements WikiOperation {
         Matcher illMatcher = PATTERN_ILL.matcher(pageText);
         StringBuilder replacedTextBuilder = new StringBuilder(pageText);
         int offset = 0;
+        int changesCount = 0;
         while (illMatcher.find()) {
             WikiTemplateParser wtp = new WikiTemplateParser();
             ParseResult<WikiTemplate> parsedIllTemplate = wtp.parse(substring(pageText, illMatcher.start()));
             WikiTemplate illTemplate = parsedIllTemplate.getIdentifiedPart();
 
-            status = new String[] { "status.analyzing.link", illTemplate.getInitialText() };
+            status = new String[] { "status.changes.todo.inarticle", article, String.valueOf(changesCount) };
 
             String newLinkText = null;
             if (StringUtils.equals(illMatcher.group(1), "-wd")) {
@@ -73,6 +74,7 @@ public class CleanupIll implements WikiOperation {
                 replacedTextBuilder.replace(offset + illMatcher.start(), offset + illMatcher.start() + initialTemplateLength,
                     newLinkText);
                 offset += newLinkText.length() - initialTemplateLength;
+                changesCount++;
             }
         }
 
