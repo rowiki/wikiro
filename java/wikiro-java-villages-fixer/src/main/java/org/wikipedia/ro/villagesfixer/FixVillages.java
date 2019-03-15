@@ -122,8 +122,8 @@ public class FixVillages {
     private static Pattern ifPattern = Pattern.compile("\\{\\{\\s*#if");
 
     public static void main(String[] args) throws IOException {
-        Wiki rowiki = new Wiki("ro.wikipedia.org");
-        Wiki commonsWiki = new Wiki("commons.wikimedia.org");
+        Wiki rowiki = Wiki.newSession("ro.wikipedia.org");
+        Wiki commonsWiki = Wiki.newSession("commons.wikimedia.org");
 
         try {
             collator = new RuleBasedCollator(collationDescription);
@@ -808,8 +808,13 @@ public class FixVillages {
 
                         StringBuilder newFirstParagraphBuilder = new StringBuilder();
                         for (int sentenceIdx = 0; sentenceIdx < newFirstParagraphSentences.size(); sentenceIdx++) {
-                            newFirstParagraphBuilder.append(newFirstParagraphSentences.get(sentenceIdx)).append('.')
-                                .append(defaultString(newFirstParagraphRefs.get(sentenceIdx))).append(' ');
+                            String aSentence = newFirstParagraphSentences.get(sentenceIdx);
+                            newFirstParagraphBuilder.append(aSentence);
+                            if (!startsWith(aSentence, "{{") || !endsWith(aSentence, "}}")) {
+                                newFirstParagraphBuilder.append('.')
+                                .append(defaultString(newFirstParagraphRefs.get(sentenceIdx)));
+                            }
+                            newFirstParagraphBuilder.append(' ');
                         }
                         String newFirstParagraph = trim(newFirstParagraphBuilder.toString());
                         pageText = pageText.replace(firstParagraph, newFirstParagraph);
