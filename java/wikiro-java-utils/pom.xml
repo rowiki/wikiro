@@ -4,7 +4,7 @@
 	<groupId>org.wikipedia.ro.java</groupId>
 	<artifactId>wikiro-java-utils</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0</version>
+	<version>1.1</version>
 	<name>wikiro-java-utils</name>
 	<url>http://maven.apache.org</url>
 
@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>org.wikipedia</groupId>
 			<artifactId>wiki-java</artifactId>
-			<version>0.32-SNAPSHOT</version>
+			<version>0.36-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

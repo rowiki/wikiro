@@ -71,6 +71,7 @@ public class WikiTemplateParser extends WikiPartParser<WikiTemplate> {
                         template.setSingleLine(false);
                     }
                 }
+                crtBuilder.append(crtChar);
                 index++;
                 break;
             case '=':

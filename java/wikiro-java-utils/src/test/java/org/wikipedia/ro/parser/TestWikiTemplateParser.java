@@ -107,7 +107,8 @@ public class TestWikiTemplateParser {
         Assert.assertEquals("", parseResult.getUnparsedString());
         Assert.assertFalse(parseResult.getIdentifiedPart().isSingleLine());
 
-        Assert.assertEquals("NonameParam", parseResult.getIdentifiedPart().getParam("1").stream().map(Object::toString).collect(Collectors.joining()));
+        Assert.assertEquals("NonameParam",
+            parseResult.getIdentifiedPart().getParam("1").stream().map(Object::toString).collect(Collectors.joining()));
     }
 
     @Test
@@ -119,18 +120,20 @@ public class TestWikiTemplateParser {
         ParseResult<WikiTemplate> parseResult = sut.parse(text);
         Assert.assertEquals(text, parseResult.getParsedString());
         Assert.assertEquals("", parseResult.getUnparsedString());
-        Assert.assertEquals("nonameparam", parseResult.getIdentifiedPart().getParam("1").stream().map(Object::toString).collect(Collectors.joining()));
+        Assert.assertEquals("nonameparam",
+            parseResult.getIdentifiedPart().getParam("1").stream().map(Object::toString).collect(Collectors.joining()));
         Assert.assertNull(parseResult.getIdentifiedPart().getParam("2"));
-        Assert.assertEquals("arg", parseResult.getIdentifiedPart().getParam("param").stream().map(Object::toString).collect(Collectors.joining()));
+        Assert.assertEquals("arg",
+            parseResult.getIdentifiedPart().getParam("param").stream().map(Object::toString).collect(Collectors.joining()));
 
     }
-    
+
     @Test
     public void testTemplateWithLinkInParam() {
         String text = "{{Template|param=value [[link]] value}}";
-        
+
         WikiTemplateParser sut = new WikiTemplateParser();
-        
+
         ParseResult<WikiTemplate> parseResult = sut.parse(text);
         WikiTemplate templ = parseResult.getIdentifiedPart();
         Assert.assertEquals(text, parseResult.getParsedString());
@@ -140,6 +143,31 @@ public class TestWikiTemplateParser {
         Assert.assertEquals(3, param.size());
         Assert.assertTrue(param.get(1) instanceof WikiLink);
         Assert.assertEquals("link", ((WikiLink) param.get(1)).getTarget());
-        
+
+    }
+
+    @Test
+    public void testTemplateFromRealArticleApcarBaltazar() {
+        String text =
+            "{{citat|... o artă de caracter, care are pretenția să rămâie ca un stil propriu al ei, nu trebuie să se mărginească la recopierea unor elemente de artă, fără a căuta să imprime un carcater deosebit acestor elemente... Stilului românesc care așteaptă, trebuie să aibă la bază unele elemente naționale, cum și unele produse ale unei arte, ce s-a convenit a se numi arta trecutului... Pentru această conlucrare însă a elementului primitiv trebuie ceva mai mult decât aimpla lui alipire la produsele timpurilor moderne... prin urmare, pe un fond național să se așeze o compoziție decorativă nouă, care să corespundă principiilor stricte de artă, o artă așa cum o înțeleg artiștii timpurilor noastre, adică o artă cu proporții, cu armonie și mai presus de toate cu originalitate. În ce privește această ultimă calitate, să ne ferim cât mai mult de nefericitele importațiuni străine, ele înseși fiind uneori produse imperfecte sub raportul decorativ.<ref name=petru32/>|Apcar Baltazar: ''[[s:Spre un stil românesc|Spre un stil românesc]]'', în ziarul ''[[Viața Românească]]'' din [[noiembrie]] [[1908]]}}";
+
+        WikiTemplateParser sut = new WikiTemplateParser();
+
+        ParseResult<WikiTemplate> parseResult = sut.parse(text);
+        WikiTemplate templ = parseResult.getIdentifiedPart();
+        Assert.assertEquals(text, parseResult.getParsedString());
+        Assert.assertEquals(2, templ.getParamNames().size());
+
+        List<WikiPart> param1 = templ.getParam("1");
+        Assert.assertNotNull(param1);
+        Assert.assertEquals(
+            "... o artă de caracter, care are pretenția să rămâie ca un stil propriu al ei, nu trebuie să se mărginească la recopierea unor elemente de artă, fără a căuta să imprime un carcater deosebit acestor elemente... Stilului românesc care așteaptă, trebuie să aibă la bază unele elemente naționale, cum și unele produse ale unei arte, ce s-a convenit a se numi arta trecutului... Pentru această conlucrare însă a elementului primitiv trebuie ceva mai mult decât aimpla lui alipire la produsele timpurilor moderne... prin urmare, pe un fond național să se așeze o compoziție decorativă nouă, care să corespundă principiilor stricte de artă, o artă așa cum o înțeleg artiștii timpurilor noastre, adică o artă cu proporții, cu armonie și mai presus de toate cu originalitate. În ce privește această ultimă calitate, să ne ferim cât mai mult de nefericitele importațiuni străine, ele înseși fiind uneori produse imperfecte sub raportul decorativ.<ref name=petru32/>",
+            param1.stream().map(Object::toString).collect(Collectors.joining()));
+
+        List<WikiPart> param2 = templ.getParam("2");
+        Assert.assertNotNull(param2);
+        Assert.assertEquals(
+            "Apcar Baltazar: ''[[s:Spre un stil românesc|Spre un stil românesc]]'', în ziarul ''[[Viața Românească]]'' din [[noiembrie]] [[1908]]",
+            param2.stream().map(Object::toString).collect(Collectors.joining()));
     }
 }
