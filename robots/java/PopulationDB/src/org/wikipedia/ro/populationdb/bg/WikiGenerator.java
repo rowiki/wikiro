@@ -66,8 +66,8 @@ public class WikiGenerator {
     private static final int MAX_ENUMED_VILLAGES = 12;
     private static final boolean DEBUG = false;
     private static final boolean DEBUG_OBSHTINA = false;
-    private final Wiki rowiki = new Wiki("ro.wikipedia.org");
-    private final Wiki bgwiki = new Wiki("bg.wikipedia.org");
+    private final Wiki rowiki = Wiki.newSession("ro.wikipedia.org");
+    private final Wiki bgwiki = Wiki.newSession("bg.wikipedia.org");
     private final Wikibase dwiki = new Wikibase();
     private final Properties credentials = new Properties();
     private Session ses = null;

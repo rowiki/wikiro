@@ -50,7 +50,7 @@ public class WikiTextGeneratorVillages {
     }
 
     private void init() throws IOException, FailedLoginException {
-        rowiki = new Wiki("ro.wikipedia.org");
+        rowiki = Wiki.newSession("ro.wikipedia.org");
         dwiki = new Wikibase();
         // executor = new WikiEditExecutor(rowiki, dwiki);
         executor = new SysoutExecutor();

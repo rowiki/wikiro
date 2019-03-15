@@ -140,7 +140,7 @@ public class WikiTextGenerator2011 {
             st.setInt(1, countyId);
             final ResultSet rs = st.executeQuery();
 
-            wiki = new Wiki("ro.wikipedia.org");
+            wiki = Wiki.newSession("ro.wikipedia.org");
             final Properties credentials = new Properties();
 
             credentials.load(WikiTextGenerator2011.class.getClassLoader().getResourceAsStream("credentials.properties"));
@@ -519,7 +519,7 @@ public class WikiTextGenerator2011 {
                 if (wiki.exists(new String[] { logTitle })[0]) {
                     final Long lastlogrevid = (Long) wiki.getPageInfo(logTitle).get("lastrevid");
                     final Revision lastLogRev = wiki.getRevision(lastlogrevid);
-                    timeStamp = lastLogRev.getTimestamp();
+                    //timeStamp = lastLogRev.getTimestamp();
                     log = lastLogRev.getText();
                 }
 

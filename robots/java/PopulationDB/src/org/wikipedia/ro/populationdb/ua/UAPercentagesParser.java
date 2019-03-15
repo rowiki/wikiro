@@ -74,7 +74,7 @@ public class UAPercentagesParser {
 					.println("Specified argument is not an existing directory");
 			// System.exit(1);
 		}
-		rowiki = new Wiki("ro.wikipedia.org");
+		rowiki = Wiki.newSession("ro.wikipedia.org");
 		try {
 			final Properties credentials = new Properties();
 			credentials.load(UAPercentagesParser.class.getClassLoader()

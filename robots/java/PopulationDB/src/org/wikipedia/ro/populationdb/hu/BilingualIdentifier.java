@@ -89,7 +89,7 @@ public class BilingualIdentifier {
     }
 
     private void init() throws IOException, FailedLoginException {
-        rowiki = new Wiki("ro.wikipedia.org");
+        rowiki = Wiki.newSession("ro.wikipedia.org");
         final Properties credentials = new Properties();
         credentials.load(BilingualIdentifier.class.getClassLoader().getResourceAsStream("credentials.properties"));
         final String user = credentials.getProperty("Username");

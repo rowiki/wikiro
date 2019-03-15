@@ -161,8 +161,8 @@ public class UAWikiGenerator {
     private Wiki ukwiki;
 
     private void init() throws FailedLoginException, IOException {
-        rowiki = new Wiki("ro.wikipedia.org");
-        ukwiki = new Wiki("uk.wikipedia.org");
+        rowiki = Wiki.newSession("ro.wikipedia.org");
+        ukwiki = Wiki.newSession("uk.wikipedia.org");
         dwiki = new Wikibase();
         executor = new WikiEditExecutor(rowiki, dwiki);
         // executor = new SysoutExecutor();

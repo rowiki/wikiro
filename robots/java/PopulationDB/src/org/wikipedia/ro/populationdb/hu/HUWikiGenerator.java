@@ -1157,8 +1157,8 @@ public class HUWikiGenerator {
     }
 
     private void init() throws FailedLoginException, IOException {
-        rowiki = new Wiki("ro.wikipedia.org");
-        huwiki = new Wiki("hu.wikipedia.org");
+        rowiki = Wiki.newSession("ro.wikipedia.org");
+        huwiki = Wiki.newSession("hu.wikipedia.org");
         dwiki = new Wikibase();
         executor = new WikiEditExecutor(rowiki, dwiki);
         // executor = new SysoutExecutor();

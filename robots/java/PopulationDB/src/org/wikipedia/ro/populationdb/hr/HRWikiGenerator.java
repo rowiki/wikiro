@@ -1007,8 +1007,8 @@ public class HRWikiGenerator {
     }
 
     private void init() throws FailedLoginException, IOException {
-        rowiki = new Wiki("ro.wikipedia.org");
-        hrwiki = new Wiki("hr.wikipedia.org");
+        rowiki = Wiki.newSession("ro.wikipedia.org");
+        hrwiki = Wiki.newSession("hr.wikipedia.org");
         dwiki = new Wikibase();
         executor = new WikiEditExecutor(rowiki, dwiki);
 
