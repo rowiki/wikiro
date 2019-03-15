@@ -7,7 +7,7 @@ import org.wikipedia.ro.model.WikiPart;
 
 public class ParseUtils
 {
-    public String wikipartListToString(List<WikiPart> parts) {
+    public static String wikipartListToString(List<WikiPart> parts) {
         if (null == parts) {
             return null;
         }

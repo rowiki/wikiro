@@ -1,7 +1,12 @@
 package org.wikipedia.ro.utils;
 
+import static org.apache.commons.lang3.StringUtils.lowerCase;
+import static org.apache.commons.lang3.StringUtils.removeEnd;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -38,4 +43,27 @@ public class TextUtils {
         }
         return StringUtils.capitalize(sb.toString());
     }
+    
+    public static String deCamelCaseize(String exceptionClassName) {
+        Pattern deCamelCaseizerPattern = Pattern.compile("(\\p{javaUpperCase})(\\p{javaLowerCase}+)");
+        Matcher deCamelCaseizingMatcher = deCamelCaseizerPattern.matcher(exceptionClassName);
+        StringBuffer sbuf = new StringBuffer();
+        while (deCamelCaseizingMatcher.find()) {
+            deCamelCaseizingMatcher.appendReplacement(sbuf, lowerCase(deCamelCaseizingMatcher.group(0)));
+            sbuf.append(' ');
+        }
+        deCamelCaseizingMatcher.appendTail(sbuf);
+        String deCamelCasizedExceptionName = sbuf.toString();
+        return deCamelCasizedExceptionName;
+    }
+
+    public static String formatError(Exception e) {
+        if (null == e) {
+            return null;
+        }
+        String exceptionClassName = e.getClass().getSimpleName();
+        String simpleExceptionClassName = removeEnd(removeEnd(exceptionClassName, "Error"), "Exception");
+        return String.format("%s: %s", deCamelCaseize(simpleExceptionClassName), e.getMessage());
+    }
+
 }
