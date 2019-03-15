@@ -101,7 +101,7 @@ public class CleanupIll implements WikiOperation {
         if (targetWiki.exists(new String[] { targetPage })[0]) {
             return new WikiLink(targetPage, label).toString();
         } else {
-            Wiki linkSourceWiki = Wiki.createInstance(langId + ".wikipedia.org");
+            Wiki linkSourceWiki = Wiki.newSession(langId + ".wikipedia.org");
             Entity wdItem = dataWiki.getWikibaseItemBySiteAndTitle(langId + "wiki",
                 defaultString(linkSourceWiki.resolveRedirect(sourcePage), sourcePage));
             if (null != wdItem) {

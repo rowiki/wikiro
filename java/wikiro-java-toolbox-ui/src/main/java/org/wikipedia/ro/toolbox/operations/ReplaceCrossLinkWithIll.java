@@ -145,7 +145,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
             status = new String[] { "status.analyzing.link", articleTitle };
 
-            Wiki srcWiki = Wiki.createInstance(lang + ".wikipedia.org");
+            Wiki srcWiki = Wiki.newSession(lang + ".wikipedia.org");
             String target = defaultString(srcWiki.resolveRedirect(articleTitle), articleTitle);
             String targetLang = removeEnd(targetWikiCode, "wiki");
             String sourceLang = defaultIfEmpty(lang, removeEnd(sourceWikiCode, "wiki"));

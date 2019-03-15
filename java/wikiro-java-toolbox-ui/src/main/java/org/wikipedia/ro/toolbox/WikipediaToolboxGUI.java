@@ -19,8 +19,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
@@ -187,7 +191,7 @@ public class WikipediaToolboxGUI {
             JOptionPane.showMessageDialog(frame, bundle.getString("error.srcwiki.not.specified"),
                 bundle.getString("error.operation.cannot.run"), JOptionPane.ERROR_MESSAGE);
         }
-        sourceWiki = Wiki.createInstance(removeEnd(srcwikilang, "wiki") + ".wikipedia.org");
+        sourceWiki = Wiki.newSession(removeEnd(srcwikilang, "wiki") + ".wikipedia.org");
         final String commitMessage = defaultIfBlank(((JTextField) dataComponentsMap.get("summary")).getText(),
             bundle.getString(actionClass.getAnnotation(Operation.class).labelKey()));
 
@@ -363,14 +367,24 @@ public class WikipediaToolboxGUI {
     }
 
     private static JPanel createLoginConfigPanel() {
+        URL resource = WikipediaToolboxGUI.class.getResource("/credentials.properties");
+        Properties loginProps = new Properties();
+        try (InputStream is = resource.openStream()) {
+            loginProps.load(is);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+
         JPanel loginConfigPanel = new JPanel();
         GroupLayout loginConfigLayout = new GroupLayout(loginConfigPanel);
         JLabel usernameLabel = new JLabel(bundle.getString("username"));
         JLabel passwordLabel = new JLabel(bundle.getString("password"));
         JTextField usernameTextField = new JTextField();
         usernameTextField.setPreferredSize(new Dimension(150, 20));
+        usernameTextField.setText(loginProps.getProperty("username"));
         dataComponentsMap.put("username", usernameTextField);
         JTextField passwordTextField = new JPasswordField();
+        passwordTextField.setText(loginProps.getProperty("password"));
         passwordTextField.setPreferredSize(new Dimension(150, 20));
         dataComponentsMap.put("password", passwordTextField);
         JCheckBox botCB = new JCheckBox(bundle.getString("auth.bot"));
@@ -404,7 +418,7 @@ public class WikipediaToolboxGUI {
                         String tw = appendIfMissing(twTF.getText(), "wiki");
                         if (isNoneEmpty(uname, tw)) {
                             String twLang = removeEnd(tw, "wiki");
-                            targetWiki = Wiki.createInstance(twLang + ".wikipedia.org");
+                            targetWiki = Wiki.newSession(twLang + ".wikipedia.org");
                             targetWiki.login(uname, pwd);
                         } else {
                             throw new FailedLoginException(bundle.getString("error.specify.targetwiki.credentials"));
@@ -567,9 +581,9 @@ public class WikipediaToolboxGUI {
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | RuntimeException e1) {
                     e1.printStackTrace();
                     int userOption = JOptionPane.showOptionDialog(frame, TextUtils.formatError(e1),
-                        bundle.getString("error.processing"), JOptionPane.YES_NO_CANCEL_OPTION,
-                        JOptionPane.ERROR_MESSAGE, null, new String[] { bundle.getString("error.abort"),
-                            bundle.getString("error.retry"), bundle.getString("error.ignore") },
+                        bundle.getString("error.processing"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE,
+                        null, new String[] { bundle.getString("error.abort"), bundle.getString("error.retry"),
+                            bundle.getString("error.ignore") },
                         bundle.getString("error.retry"));
                     if (userOption == 0 || userOption == JOptionPane.CLOSED_OPTION) {
                         break;
