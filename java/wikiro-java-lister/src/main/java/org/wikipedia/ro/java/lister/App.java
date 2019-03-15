@@ -65,7 +65,7 @@ public class App {
     private static Map<String, WikidataListGenerator> LIST_GENERATORS = new HashMap<String, WikidataListGenerator>();
 
     public static void main(String[] args) {
-        Wiki wiki = Wiki.createInstance("ro.wikipedia.org");
+        Wiki wiki = Wiki.newSession("ro.wikipedia.org");
         Wikibase wikibase = new Wikibase();
         WikidataEntitiesCache wikidataEntitiesCache = new WikidataEntitiesCache(wikibase);
         LIST_GENERATORS.put("lot-fotbal", new FootballTeamListGenerator(wikidataEntitiesCache));
