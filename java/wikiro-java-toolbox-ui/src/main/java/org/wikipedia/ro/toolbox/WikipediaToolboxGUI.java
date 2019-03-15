@@ -58,6 +58,7 @@ import org.wikipedia.ro.Generator;
 import org.wikipedia.ro.toolbox.generators.PageGenerator;
 import org.wikipedia.ro.toolbox.operations.Operation;
 import org.wikipedia.ro.toolbox.operations.WikiOperation;
+import org.wikipedia.ro.utils.TextUtils;
 
 public class WikipediaToolboxGUI {
 
@@ -564,7 +565,7 @@ public class WikipediaToolboxGUI {
                     targetWiki.edit(actionParams[i], result, commitMessage);
                     timeToStart = System.currentTimeMillis() + throttle;
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | RuntimeException e1) {
-                    int userOption = JOptionPane.showOptionDialog(frame, e1.getMessage(),
+                    int userOption = JOptionPane.showOptionDialog(frame, TextUtils.formatError(e1),
                         bundle.getString("error.processing"), JOptionPane.YES_NO_CANCEL_OPTION,
                         JOptionPane.ERROR_MESSAGE, null, new String[] { bundle.getString("error.abort"),
                             bundle.getString("error.retry"), bundle.getString("error.ignore") },

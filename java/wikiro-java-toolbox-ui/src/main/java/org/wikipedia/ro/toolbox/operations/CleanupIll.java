@@ -2,11 +2,13 @@ package org.wikipedia.ro.toolbox.operations;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.prependIfMissing;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.substring;
+import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.security.auth.login.LoginException;
 
@@ -20,6 +22,7 @@ import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiTemplate;
 import org.wikipedia.ro.parser.ParseResult;
 import org.wikipedia.ro.parser.WikiTemplateParser;
+import static org.wikipedia.ro.utils.ParseUtils.*;
 
 @Operation(useWikibase = true, labelKey = "operation.cleanupIll.label")
 public class CleanupIll implements WikiOperation {
@@ -56,12 +59,12 @@ public class CleanupIll implements WikiOperation {
             ParseResult<WikiTemplate> parsedIllTemplate = wtp.parse(substring(pageText, illMatcher.start()));
             WikiTemplate illTemplate = parsedIllTemplate.getIdentifiedPart();
             
-            status = new String[] { "status.analyzing.link", illTemplate.getInitialTemplateText() };
+            status = new String[] { "status.analyzing.link", illTemplate.getInitialText() };
             
             String newLinkText = null;
             if (StringUtils.equals(illMatcher.group(1), "-wd")) {
-                String wdId = illTemplate.getParam("1").toString();
-                String label = illTemplate.getParam("3").toString();
+                String wdId = wikipartListToString(illTemplate.getParam("1"));
+                String label = wikipartListToString(illTemplate.getParam("3"));
 
                 Entity wdItem = dataWiki.getWikibaseItemById(prependIfMissing(wdId, "Q"));
                 Sitelink targetSitelink = wdItem.getSitelinks().get(targetWikiCode);
@@ -71,10 +74,10 @@ public class CleanupIll implements WikiOperation {
                 }
 
             } else if (null == illMatcher.group(1)) {
-                String langId = illTemplate.getParam("1").toString();
-                String targetPage = illTemplate.getParam("2").toString();
-                String sourcePage = defaultString(illTemplate.getParam("3").toString(), targetPage);
-                String label = illTemplate.getParam("4").toString();
+                String langId = wikipartListToString(illTemplate.getParam("1"));
+                String targetPage = wikipartListToString(illTemplate.getParam("2"));
+                String sourcePage = defaultString(wikipartListToString(illTemplate.getParam("3")), targetPage);
+                String label = wikipartListToString(illTemplate.getParam("4"));
                 
                 if (targetWiki.exists(new String[] {targetPage})[0]) {
                     newLinkText = new WikiLink(targetPage, label).toString();
@@ -89,7 +92,7 @@ public class CleanupIll implements WikiOperation {
             }
             
             if (null != newLinkText) {
-                int initialTemplateLength = illTemplate.getInitialTemplateText().length();
+                int initialTemplateLength = illTemplate.getInitialText().length();
                 replacedTextBuilder.replace(offset + illMatcher.start(), offset + illMatcher.start() + initialTemplateLength, newLinkText);
                 offset += newLinkText.length() - initialTemplateLength;
             }
@@ -102,5 +105,4 @@ public class CleanupIll implements WikiOperation {
     public String[] getStatus() {
         return status;
     }
-
 }
