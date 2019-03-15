@@ -1,5 +1,6 @@
 package org.wikipedia.ro.toolbox.operations;
 
+import static org.apache.commons.lang3.StringUtils.*;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.prependIfMissing;
 import static org.apache.commons.lang3.StringUtils.substring;
@@ -47,6 +48,7 @@ public class CleanupIll implements WikiOperation {
 
     @Override
     public String execute() throws IOException, WikibaseException, LoginException {
+        status = new String[] { "status.changes.todo.inarticle", article, String.valueOf(0), "?" };
 
         String pageText = targetWiki.getPageText(article);
 
@@ -54,12 +56,13 @@ public class CleanupIll implements WikiOperation {
         StringBuilder replacedTextBuilder = new StringBuilder(pageText);
         int offset = 0;
         int changesCount = 0;
+        int instancesFound = 0;
         while (illMatcher.find()) {
             WikiTemplateParser wtp = new WikiTemplateParser();
             ParseResult<WikiTemplate> parsedIllTemplate = wtp.parse(substring(pageText, illMatcher.start()));
             WikiTemplate illTemplate = parsedIllTemplate.getIdentifiedPart();
 
-            status = new String[] { "status.changes.todo.inarticle", article, String.valueOf(changesCount) };
+            status = new String[] { "status.changes.todo.inarticle", article, String.valueOf(changesCount), String.valueOf(instancesFound) };
 
             String newLinkText = null;
             if (StringUtils.equals(illMatcher.group(1), "-wd")) {
@@ -76,6 +79,7 @@ public class CleanupIll implements WikiOperation {
                 offset += newLinkText.length() - initialTemplateLength;
                 changesCount++;
             }
+            instancesFound++;
         }
 
         return replacedTextBuilder.toString();
@@ -84,10 +88,15 @@ public class CleanupIll implements WikiOperation {
     private String extractLinkTextFromOtherWiki(WikiTemplate illTemplate)
         throws IOException, WikibaseException {
         String langId = wikipartListToString(illTemplate.getParam("1"));
-        String targetPage = wikipartListToString(illTemplate.getParam("2"));
-        targetPage = defaultString(targetWiki.resolveRedirect(targetPage), targetPage);
-        String sourcePage = defaultString(wikipartListToString(illTemplate.getParam("3")), targetPage);
-        String label = wikipartListToString(illTemplate.getParam("4"));
+        String baseTargetPage = wikipartListToString(illTemplate.getParam("2"));
+        String label;
+        if (contains(baseTargetPage, "{{!}}")) {
+            baseTargetPage = substringBefore(baseTargetPage, "{{!}}");
+            label = substringAfter(baseTargetPage, "{{!}}");
+        }
+        String targetPage = defaultString(targetWiki.resolveRedirect(baseTargetPage), baseTargetPage);
+        String sourcePage = defaultString(wikipartListToString(illTemplate.getParam("3")), baseTargetPage);
+        label = defaultString(wikipartListToString(illTemplate.getParam("4")), baseTargetPage);
         
         if ("d".equals(langId)) {
             WikiTemplate prospectiveIllWdTemplate = new WikiTemplate();
