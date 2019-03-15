@@ -4,11 +4,11 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.prependIfMissing;
 import static org.apache.commons.lang3.StringUtils.substring;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
+import static org.wikipedia.ro.utils.ParseUtils.wikipartListToString;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import javax.security.auth.login.LoginException;
 
@@ -22,7 +22,6 @@ import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiTemplate;
 import org.wikipedia.ro.parser.ParseResult;
 import org.wikipedia.ro.parser.WikiTemplateParser;
-import static org.wikipedia.ro.utils.ParseUtils.*;
 
 @Operation(useWikibase = true, labelKey = "operation.cleanupIll.label")
 public class CleanupIll implements WikiOperation {
@@ -58,47 +57,76 @@ public class CleanupIll implements WikiOperation {
             WikiTemplateParser wtp = new WikiTemplateParser();
             ParseResult<WikiTemplate> parsedIllTemplate = wtp.parse(substring(pageText, illMatcher.start()));
             WikiTemplate illTemplate = parsedIllTemplate.getIdentifiedPart();
-            
+
             status = new String[] { "status.analyzing.link", illTemplate.getInitialText() };
-            
+
             String newLinkText = null;
             if (StringUtils.equals(illMatcher.group(1), "-wd")) {
-                String wdId = wikipartListToString(illTemplate.getParam("1"));
-                String label = wikipartListToString(illTemplate.getParam("3"));
-
-                Entity wdItem = dataWiki.getWikibaseItemById(prependIfMissing(wdId, "Q"));
-                Sitelink targetSitelink = wdItem.getSitelinks().get(targetWikiCode);
-                if (null != targetSitelink) {
-                    WikiLink link = new WikiLink(targetSitelink.getPageName(), label);
-                    newLinkText =link.toString();
-                }
+                newLinkText = extractLinkTextFromWikidata(illTemplate);
 
             } else if (null == illMatcher.group(1)) {
-                String langId = wikipartListToString(illTemplate.getParam("1"));
-                String targetPage = wikipartListToString(illTemplate.getParam("2"));
-                String sourcePage = defaultString(wikipartListToString(illTemplate.getParam("3")), targetPage);
-                String label = wikipartListToString(illTemplate.getParam("4"));
-                
-                if (targetWiki.exists(new String[] {targetPage})[0]) {
-                    newLinkText = new WikiLink(targetPage, label).toString();
-                } else {
-                    Entity wdItem = dataWiki.getWikibaseItemBySiteAndTitle(langId + "wiki", sourcePage);
-                    Sitelink targetSitelink = wdItem.getSitelinks().get(targetWikiCode);
-                    if (null != targetSitelink) {
-                        WikiLink link = new WikiLink(targetSitelink.getPageName(), label);
-                        newLinkText =link.toString();
-                    }
-                }
+                newLinkText = extractLinkTextFromOtherWiki(illTemplate);
             }
-            
+
             if (null != newLinkText) {
                 int initialTemplateLength = illTemplate.getInitialText().length();
-                replacedTextBuilder.replace(offset + illMatcher.start(), offset + illMatcher.start() + initialTemplateLength, newLinkText);
+                replacedTextBuilder.replace(offset + illMatcher.start(), offset + illMatcher.start() + initialTemplateLength,
+                    newLinkText);
                 offset += newLinkText.length() - initialTemplateLength;
             }
         }
 
         return replacedTextBuilder.toString();
+    }
+
+    private String extractLinkTextFromOtherWiki(WikiTemplate illTemplate)
+        throws IOException, WikibaseException {
+        String langId = wikipartListToString(illTemplate.getParam("1"));
+        String targetPage = wikipartListToString(illTemplate.getParam("2"));
+        targetPage = defaultString(targetWiki.resolveRedirect(targetPage), targetPage);
+        String sourcePage = defaultString(wikipartListToString(illTemplate.getParam("3")), targetPage);
+        String label = wikipartListToString(illTemplate.getParam("4"));
+        
+        if ("d".equals(langId)) {
+            WikiTemplate prospectiveIllWdTemplate = new WikiTemplate();
+            prospectiveIllWdTemplate.setTemplateTitle("Ill-wd");
+            prospectiveIllWdTemplate.setParam("1", sourcePage);
+            prospectiveIllWdTemplate.setParam("2", targetPage);
+            prospectiveIllWdTemplate.setParam("3", label);
+            
+            String wikidataReplacementLink = extractLinkTextFromWikidata(prospectiveIllWdTemplate);
+            return defaultString(wikidataReplacementLink, prospectiveIllWdTemplate.toString());
+        }
+
+        if (targetWiki.exists(new String[] { targetPage })[0]) {
+            return new WikiLink(targetPage, label).toString();
+        } else {
+            Wiki linkSourceWiki = Wiki.createInstance(langId + ".wikipedia.org");
+            Entity wdItem = dataWiki.getWikibaseItemBySiteAndTitle(langId + "wiki",
+                defaultString(linkSourceWiki.resolveRedirect(sourcePage), sourcePage));
+            if (null != wdItem) {
+                Sitelink targetSitelink = wdItem.getSitelinks().get(targetWikiCode);
+                if (null != targetSitelink) {
+                    WikiLink link = new WikiLink(targetSitelink.getPageName(), label);
+                    return link.toString();
+                }
+            }
+        }
+        return null;
+    }
+
+    private String extractLinkTextFromWikidata(WikiTemplate illTemplate)
+        throws IOException, WikibaseException {
+        String wdId = wikipartListToString(illTemplate.getParam("1"));
+        String label = wikipartListToString(illTemplate.getParam("3"));
+
+        Entity wdItem = dataWiki.getWikibaseItemById(prependIfMissing(wdId, "Q"));
+        Sitelink targetSitelink = wdItem.getSitelinks().get(targetWikiCode);
+        if (null != targetSitelink) {
+            WikiLink link = new WikiLink(targetSitelink.getPageName(), label);
+            return link.toString();
+        }
+        return null;
     }
 
     @Override

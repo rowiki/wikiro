@@ -565,6 +565,7 @@ public class WikipediaToolboxGUI {
                     targetWiki.edit(actionParams[i], result, commitMessage);
                     timeToStart = System.currentTimeMillis() + throttle;
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | RuntimeException e1) {
+                    e1.printStackTrace();
                     int userOption = JOptionPane.showOptionDialog(frame, TextUtils.formatError(e1),
                         bundle.getString("error.processing"), JOptionPane.YES_NO_CANCEL_OPTION,
                         JOptionPane.ERROR_MESSAGE, null, new String[] { bundle.getString("error.abort"),
