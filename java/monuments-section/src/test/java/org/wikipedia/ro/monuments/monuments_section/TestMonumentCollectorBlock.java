@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.Document;
+import org.junit.Assert;
 import org.junit.Test;
 import org.wikipedia.ro.monuments.monuments_section.data.Monument;
-
-import junit.framework.Assert;
 
 public class TestMonumentCollectorBlock {
     private static final String MONUMENT_NAME = "Nume monument";

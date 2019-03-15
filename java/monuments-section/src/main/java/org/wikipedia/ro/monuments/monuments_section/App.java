@@ -21,7 +21,7 @@ public class App {
         }
         
         MonumentInCommuneGenerator generator = new MonumentInCommuneGenerator(args[0], args[1]);
-        generator.setMongoClient(new MongoClient());
+        generator.setMongoClient(new MongoClient("localhost", 57017));
 
         System.out.println(generator.generate());
     }
