@@ -566,7 +566,7 @@ public class WikipediaToolboxGUI {
             for (int i = 0; i < actionParams.length; i++) {
                 try {
                     action = actionConstr.newInstance(targetWiki, sourceWiki, dataWiki, actionParams[i]);
-                    setProgress(i);
+                    setProgress(i * 100 / actionParams.length);
                     long crtTime = System.currentTimeMillis();
                     while (crtTime < timeToStart) {
                         crtTime = System.currentTimeMillis();
