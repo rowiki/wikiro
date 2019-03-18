@@ -8,17 +8,21 @@ import static org.apache.commons.lang3.StringUtils.substringBefore;
 import static org.wikipedia.ro.utils.ParseUtils.wikipartListToString;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikibase.data.Entity;
 import org.wikibase.data.Sitelink;
 import org.wikipedia.Wiki;
+import org.wikipedia.Wiki.RequestHelper;
 import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiTemplate;
 import org.wikipedia.ro.parser.ParseResult;
@@ -62,7 +66,8 @@ public class CleanupIll implements WikiOperation {
             ParseResult<WikiTemplate> parsedIllTemplate = wtp.parse(substring(pageText, illMatcher.start()));
             WikiTemplate illTemplate = parsedIllTemplate.getIdentifiedPart();
 
-            status = new String[] { "status.changes.todo.inarticle", article, String.valueOf(changesCount), String.valueOf(instancesFound) };
+            status = new String[] { "status.changes.todo.inarticle", article, String.valueOf(changesCount),
+                String.valueOf(instancesFound) };
 
             String newLinkText = null;
             if (StringUtils.equals(illMatcher.group(1), "-wd")) {
@@ -85,26 +90,25 @@ public class CleanupIll implements WikiOperation {
         return replacedTextBuilder.toString();
     }
 
-    private String extractLinkTextFromOtherWiki(WikiTemplate illTemplate)
-        throws IOException, WikibaseException {
+    private String extractLinkTextFromOtherWiki(WikiTemplate illTemplate) throws IOException, WikibaseException {
         String langId = wikipartListToString(illTemplate.getParam("1"));
         String baseTargetPage = wikipartListToString(illTemplate.getParam("2"));
-        String label;
+        String label = null;
         if (contains(baseTargetPage, "{{!}}")) {
             baseTargetPage = substringBefore(baseTargetPage, "{{!}}");
             label = substringAfter(baseTargetPage, "{{!}}");
         }
         String targetPage = defaultString(targetWiki.resolveRedirect(baseTargetPage), baseTargetPage);
         String sourcePage = defaultString(wikipartListToString(illTemplate.getParam("3")), baseTargetPage);
-        label = defaultString(wikipartListToString(illTemplate.getParam("4")), baseTargetPage);
-        
+        label = defaultString(label, defaultString(wikipartListToString(illTemplate.getParam("4")), baseTargetPage));
+
         if ("d".equals(langId)) {
             WikiTemplate prospectiveIllWdTemplate = new WikiTemplate();
             prospectiveIllWdTemplate.setTemplateTitle("Ill-wd");
             prospectiveIllWdTemplate.setParam("1", sourcePage);
             prospectiveIllWdTemplate.setParam("2", targetPage);
             prospectiveIllWdTemplate.setParam("3", label);
-            
+
             String wikidataReplacementLink = extractLinkTextFromWikidata(prospectiveIllWdTemplate);
             return defaultString(wikidataReplacementLink, prospectiveIllWdTemplate.toString());
         }
@@ -126,16 +130,21 @@ public class CleanupIll implements WikiOperation {
         return null;
     }
 
-    private String extractLinkTextFromWikidata(WikiTemplate illTemplate)
-        throws IOException, WikibaseException {
+    private String extractLinkTextFromWikidata(WikiTemplate illTemplate) throws IOException, WikibaseException {
         String wdId = wikipartListToString(illTemplate.getParam("1"));
         String label = wikipartListToString(illTemplate.getParam("3"));
 
-        Entity wdItem = dataWiki.getWikibaseItemById(prependIfMissing(wdId, "Q"));
-        Sitelink targetSitelink = wdItem.getSitelinks().get(targetWikiCode);
-        if (null != targetSitelink) {
-            WikiLink link = new WikiLink(targetSitelink.getPageName(), label);
-            return link.toString();
+        String qId = prependIfMissing(wdId, "Q");
+        qId = defaultString(dataWiki.resolveRedirect(qId), qId);
+
+        Entity wdItem = dataWiki.getWikibaseItemById(qId);
+        if (null != wdItem) {
+            Map<String, Sitelink> sitelinks = ObjectUtils.defaultIfNull(wdItem.getSitelinks(), Collections.EMPTY_MAP);
+            Sitelink targetSitelink = sitelinks.get(targetWikiCode);
+            if (null != targetSitelink) {
+                WikiLink link = new WikiLink(targetSitelink.getPageName(), label);
+                return link.toString();
+            }
         }
         return null;
     }

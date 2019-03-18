@@ -6,6 +6,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNoneEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.removeEnd;
+import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -55,9 +56,11 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
+import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.wikibase.Wikibase;
 import org.wikipedia.Wiki;
+import org.wikipedia.Wiki.User;
 import org.wikipedia.ro.Generator;
 import org.wikipedia.ro.toolbox.generators.PageGenerator;
 import org.wikipedia.ro.toolbox.operations.Operation;
@@ -576,6 +579,14 @@ public class WikipediaToolboxGUI {
 
                     String result = action.execute();
 
+                    User currentUser = targetWiki.getCurrentUser();
+                    final JTextField unameTF = (JTextField) dataComponentsMap.get("username");
+                    final JPasswordField pwdTF = (JPasswordField) dataComponentsMap.get("password");
+                    String uname = unameTF.getText();
+                    char[] pwd = pwdTF.getPassword();
+                    if (null == currentUser || !StringUtils.equals(substringBefore(uname, "@"), currentUser.getUsername())) {
+                        targetWiki.login(uname, pwd);
+                    }
                     targetWiki.edit(actionParams[i], result, commitMessage);
                     timeToStart = System.currentTimeMillis() + throttle;
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | RuntimeException e1) {

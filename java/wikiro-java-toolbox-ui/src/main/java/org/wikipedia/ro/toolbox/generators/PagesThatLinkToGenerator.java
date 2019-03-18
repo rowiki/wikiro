@@ -25,7 +25,7 @@ public class PagesThatLinkToGenerator implements Generator {
 
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
-            String[] pagesArray = wiki.whatLinksHere(page);
+            String[] pagesArray = wiki.whatLinksHere(page, Wiki.MAIN_NAMESPACE);
             pagesList = Arrays.asList(pagesArray);
         }
         return pagesList;
