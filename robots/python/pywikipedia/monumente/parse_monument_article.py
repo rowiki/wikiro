@@ -112,7 +112,7 @@ def isCoor( ns, ew ):
 			(ew == "E" or ew == "W"))
 
 def parseGeohackLinks(page, conf):
-	trace = Trace(sys._getframe().f_code.co_name)
+	#trace = Trace(sys._getframe().f_code.co_name)
 	output = pywikibot.comms.http.request(page.site, "/w/api.php?action=parse&format=json&page=" +
 			page.title(asUrl=True) + "&prop=externallinks&uselang=ro")
 	#pywikibot.output("<= Retrieved external links")
@@ -222,14 +222,14 @@ def parseGeohackLinks(page, conf):
 	return lat,long
 
 def commaRepl(matchobj):
-	trace = Trace(sys._getframe().f_code.co_name)
+	#trace = Trace(sys._getframe().f_code.co_name)
 	if matchobj.group(1) == "și":
 		return "și "
 	else:
 		return ", "
 
 def formatAuthor(author):
-	trace = Trace(sys._getframe().f_code.co_name)
+	#trace = Trace(sys._getframe().f_code.co_name)
 	ref = ""
 	if author.find("<ref") > -1:
 		ref = "".join(re.findall("<ref.*>", author))#TODO: this is oversimplified
@@ -255,7 +255,7 @@ def formatAuthor(author):
 
 #commons-specific
 def processCreatorTemplate(name, conf):
-	trace = Trace(sys._getframe().f_code.co_name)
+	#trace = Trace(sys._getframe().f_code.co_name)
 	site = pywikibot.Site()
 	creator = pywikibot.Page(site, name)
 	if creator.exists() == False:
@@ -329,7 +329,7 @@ def getWikidataProperty(page, prop):
 	return default_returns.get(prop)
 
 def processArticle(text, page, conf):
-	trace = Trace(sys._getframe().f_code.co_name)
+	#trace = Trace(sys._getframe().f_code.co_name)
 	title = page.title()
 	pywikibot.output('Working on "%s"' % title)
 	global _db
@@ -498,7 +498,7 @@ def processArticle(text, page, conf):
 		fullDict[code] = [dictElem]
 
 def main():
-	trace = Trace(sys._getframe().f_code.co_name)
+	#trace = Trace(sys._getframe().f_code.co_name)
 	PARSE_QUICK = 0
 	PARSE_NORMAL = 1
 	PARSE_EXTENDED = 2
@@ -568,7 +568,7 @@ def main():
 			transGen.append(pagegenerators.ReferringPageGenerator(rowTemplate,
 									onlyTemplateInclusion=True, content=False))
 		combinedGen = pagegenerators.CombinedPageGenerator(transGen)
-		combinedGen = pagegenerators.DuplicateFilterPageGenerator(combinedGen)
+		combinedGen = pagegenerators.DuplicateFilterPageGenerator(combinedGen, key=hash)
 		#filteredGen = transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, u"Category:1690s churches in Romania"))
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(combinedGen,
 									[namespace], site)
@@ -680,7 +680,7 @@ def main():
 
 if __name__ == "__main__":
 	try:
-		#cProfile.run('main()', 'profiling/parseprofile.txt')
+		#cProfile.run('main()', 'profiling_parse.txt')
 		#import pdb
 		#pdb.set_trace()
 		main()
