@@ -238,8 +238,8 @@ public class WikiTableParser extends WikiPartParser<WikiTable> {
                     bracketStack.push(thisAndNextChar);
                     nextIncrement = 2;
                     workingElemBuilder.append(thisAndNextChar);
-                } else if ("}}".equals(thisAndNextChar) && "{{".equals(bracketStack.peek())
-                    || "]]".equals(thisAndNextChar) && "[[".equals(bracketStack.peek())) {
+                } else if (!bracketStack.isEmpty() && ("}}".equals(thisAndNextChar) && "{{".equals(bracketStack.peek())
+                    || "]]".equals(thisAndNextChar) && "[[".equals(bracketStack.peek()))) {
                     bracketStack.pop();
                     nextIncrement = 2;
                     workingElemBuilder.append(thisAndNextChar);

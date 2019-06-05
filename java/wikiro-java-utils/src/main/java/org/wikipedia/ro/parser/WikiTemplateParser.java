@@ -45,7 +45,7 @@ public class WikiTemplateParser extends WikiPartParser<WikiTemplate> {
             templateTextBuilder.append(chars[index]);
             index++;
         }
-        if (chars[index] == '|') {
+        if (index < chars.length && chars[index] == '|') {
             templateTextBuilder.append('|');
             index++;
         }
