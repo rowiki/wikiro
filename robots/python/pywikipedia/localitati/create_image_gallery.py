@@ -21,7 +21,7 @@ stats = {}
 candidates = {}
 fix = False
 always = False
-do_mapillary = True
+do_mapillary = False
 
 def getWikiArticle(item):
     try:
@@ -72,7 +72,7 @@ def find_mapillary_candidates(dic):
     for image_data in res.get("features"):
         t.append(mapillary.get_image_url(image_data["properties"]["key"], 2048))
     if len(t):
-        candidates[dic['item']] = t
+        candidates[dic.get('page_title')] = t
         # print(t)
 
 
@@ -209,12 +209,14 @@ def generate_stats(county):
 
 
 def main():
-    global always, fix
+    global do_mapillary, always, fix
     for arg in pywikibot.handle_args():
         if arg.startswith("-fix"):
             fix = True
         if arg.startswith("-always"):
             always = True
+        if arg.startswith("-mapillary"):
+            do_mapillary = True
     user.mylang = 'wikidata'
     user.family = 'wikidata'
     global gallery
@@ -268,10 +270,12 @@ ORDER BY ?countyLabel ?itemLabel ?siruta"""
             'local': 0,
             'missing': 0
         }
+        print("Working on %d results" % len(data))
         for result in data:
             #print(result)
             if result['countyLabel'] != last_county:
                 if last_county:
+                    dump_mapillary_data()
                     add_text(last_county, dump_text(gallery), True)
                     main_text += generate_stats(last_county)
                 gallery = []
