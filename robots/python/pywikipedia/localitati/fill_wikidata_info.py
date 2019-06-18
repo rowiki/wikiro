@@ -221,10 +221,10 @@ class ItemProcessing:
 class CityData(robot.WorkItem):
     _dataType = u"city"
 
-    def getWikiArticle(self, item):
+    def getWikiArticle(self, item, lang="ro"):
         try:
-            rp = item.getSitelink("rowiki")
-            rp = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), rp)
+            rp = item.getSitelink(lang + "wiki")
+            rp = pywikibot.Page(pywikibot.Site(lang, 'wikipedia'), rp)
             if rp.isRedirectPage():
                 rp = rp.getRedirectTarget()
             return rp
@@ -462,7 +462,7 @@ class ImageProcessing(ItemProcessing, CityData):
         super(ImageProcessing, self).__init__(config, always)
         self._dataType = u"image"
         self._lmi = lmi
-        self._blacklist = ["svg", "location", "josephin", "coa", " jud", "3d", "harta"]
+        self._blacklist = ["svg", "location", "josephin", "coa", " jud", "3d", "harta", "distrikto"]
 
     def addImage(self, _img=None, _type=u"imagine"):
         if not _img:
@@ -491,9 +491,13 @@ class ImageProcessing(ItemProcessing, CityData):
             return
 
         label = self.getWikiArticle(self.item)
+        label_hu = self.getWikiArticle(self.item, "hu")
+        label_de = self.getWikiArticle(self.item, "de")
         if not label:
             return
-        pi = label.page_image()
+        pi = (label and label.page_image()) or \
+             (label_hu and label_hu.page_image()) or \
+             (label_de and label_de.page_image())
         if pi and not any(v in pi.title().lower() for v in self._blacklist):
             print(pi)
             self.addImage(pi)
