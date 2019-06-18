@@ -282,7 +282,9 @@ def fix_date(entry, olddate, newdate, event):
     newline = line
     if newdate and olddate.year != newdate.year:
         newline = line.replace(str(olddate.year), str(newdate.year))
-    print("Trying to move line: " + line)
+    else:
+        return False
+    print("Trying to move line: " + line + "\nto line " + newline)
     r = remove_date_entry(entry, olddate, event, line)
     if r == False:
         return r
@@ -399,7 +401,7 @@ def replace_year_entry(entry, date, event, oldline, newline):
     #print(newline)
     if newtext == text:
         return True
-    return True #set_event_text(None, None, None, date.year, newtext, "Modific intrarea despre [[%s]] din secțiunea '%s'" % (entry, event))
+    return set_event_text(None, None, None, date.year, newtext, "Modific intrarea despre [[%s]] din secțiunea '%s'" % (entry, event))
 
 
 def remove_year_entry(entry, date, event, line):
@@ -443,6 +445,8 @@ def fix_year(entry, olddate, newdate, event):
         o = "%d %s" % (olddate.day, months[olddate.month - 1])
         n = "%d %s" % (newdate.day, months[newdate.month - 1])
         newline = line.replace(o, n)
+    else:
+        return False
     print("Trying to move line: %s\n to line: %s" % (line, newline))
     r = remove_year_entry(entry, olddate, event, line)
     if r == False:
@@ -567,15 +571,15 @@ Scorul este alocat automat pe baza numărului de posibile date de naștere de la
 ! Dată Wikidata
 ! Scor
 """ % (MULTIPLE_DATE_PENALTY, MULTIPLE_SOURCES_BONUS)
-    #day = 4
-    #month = "octombrie"
+    #day = 6
+    #month = "iunie"
     #event = "Nașteri"
     #page = pywikibot.Page(pywikibot.getSite(),  "%d %s" % (day, month))
     #import pdb
     #pdb.set_trace()
-    #treat(page, day, month, event)
+    #treat_date(page, day, month, event)
     #return
-    for year in range(1901, time.localtime().tm_year):
+    for year in range(1, time.localtime().tm_year):
         for suffix in ["", " î.Hr."]:
             page = pywikibot.Page(pywikibot.getSite(),  "%d%s" % (year, suffix))
             if not page.exists():
