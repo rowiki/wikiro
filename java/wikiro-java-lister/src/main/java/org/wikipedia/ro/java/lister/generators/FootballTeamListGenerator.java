@@ -223,6 +223,7 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                 }
 
             }
+            return listBuilder.toString();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -233,7 +234,6 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
             return "";
         }
 
-        return listBuilder.toString();
     }
 
     private String ill(Entity entity) {

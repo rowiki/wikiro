@@ -75,7 +75,7 @@ public class App {
 
         try {
             wiki.login(credentials.username, credentials.password);
-            
+
             wiki.setMarkBot(true);
 
             String[] listMarkersPresence = wiki.whatTranscludesHere("Utilizator:Andrebot/Listă de la Wikidata");
@@ -120,6 +120,9 @@ public class App {
 
                         WikidataListGenerator listGen = LIST_GENERATORS.get(predefinedType);
                         String generatedListContent = listGen.generateListContent(wdEntity);
+                        if (isEmpty(generatedListContent)) {
+                            continue;
+                        }
 
                         String oldListContent = substring(pageText, insertPosition, endReplacePosition);
                         String newPageText = substring(pageText, 0, insertPosition) + generatedListContent
