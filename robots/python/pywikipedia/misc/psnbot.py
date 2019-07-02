@@ -41,6 +41,7 @@ class PSNBot(SingleSiteBot):
 		endtime   = pywikibot.Timestamp.fromtimestampformat("%04d%02d%02d" % (self.year, self.month, 1))
 		lastrev   = None
 		for rev in page.revisions(content=True, starttime=starttime, endtime=endtime):
+			#print(rev)
 			if rev.text.find("{{notabilitate") == -1 and \
 				rev.text.find("notabilitate=") == -1:
 				break
@@ -120,8 +121,16 @@ class PSNBot(SingleSiteBot):
 			self.notify_creator(page, ps_title, tagger, author)
 
 if __name__ == "__main__":
-	cat = pywikibot.Category(pywikibot.getSite(), u"Categorie:Articole despre subiecte cu notabilitate incertă din februarie 2019")
+	month_diff = 4
+	import datetime
+	year = datetime.datetime.now().year
+	month = datetime.datetime.now().month
+	if month <= month_diff:
+		year -= 1
+	month = (month - 1 + 12 - month_diff) % 12
+
+	cat = pywikibot.Category(pywikibot.getSite(), u"Categorie:Articole despre subiecte cu notabilitate incertă din %s 2019" % months[month])
 	generator = pagegenerators.CategorizedPageGenerator(cat)
-	bot = PSNBot(2, 2019, generator)
+	bot = PSNBot(month+1, year, generator)
 	bot.run()
 	
