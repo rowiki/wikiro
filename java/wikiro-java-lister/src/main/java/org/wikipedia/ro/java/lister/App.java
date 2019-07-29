@@ -33,7 +33,7 @@ import org.wikipedia.ro.utils.Credentials;
  */
 public class App {
 
-    public static Credentials identifyCredentials() {
+    public static Credentials identifyCredentials(String userVarName, String passVarName, String target) {
         Credentials credentials = new Credentials();
 
         credentials.username =
@@ -41,13 +41,13 @@ public class App {
 
         Console c = System.console();
         if (isEmpty(credentials.username)) {
-            credentials.username = c.readLine("User name: ");
+            credentials.username = c.readLine(String.format("%s user name: ", target));
             System.setProperty("WIKI_LISTER_USERNAME", credentials.username);
         }
 
         String password = defaultString(System.getenv("WIKI_LISTER_PASSWORD"), System.getProperty("WIKI_LISTER_PASSWORD"));
         if (isEmpty(password)) {
-            c.printf("Password for user %s: ", credentials.username);
+            c.printf("%s password for user %s: ", target, credentials.username);
             credentials.password = c.readPassword();
             System.setProperty("WIKI_LISTER_PASSWORD", new String(credentials.password));
         } else {
@@ -57,9 +57,9 @@ public class App {
     }
 
     private static Pattern LIST_START_PATTERN =
-        Pattern.compile("\\{\\{\\s*[Uu]tilizator:Andrebot/Listă de la Wikidata((?:\\|[^=]+=[^\\|]*?)*?)?\\}\\}");
+        Pattern.compile("\\{\\{\\s*(?:[Ff]ormat:)?Listă populată din Wikidata((?:\\|[^=]+=[^\\|]*?)*?)?\\}\\}");
     private static Pattern LIST_END_PATTERN =
-        Pattern.compile("\\{\\{\\s*[Uu]tilizator:Andrebot/Listă de la Wikidata/sfârșit\\s*\\}\\}");
+        Pattern.compile("\\{\\{\\s*(?:[Ff]ormat:)?Listă populată din Wikidata/sfârșit\\s*\\}\\}");
     private static Pattern UPDATED_TEMPLATE_PATTERN =
         Pattern.compile("\\{\\{[Uu]pdated\\s*\\|\\{\\{[Dd]ată\\s*(\\|[\\d]+)+?\\}{2}\\s*\\}{2}");
     private static Map<String, WikidataListGenerator> LIST_GENERATORS = new HashMap<String, WikidataListGenerator>();
@@ -67,18 +67,22 @@ public class App {
     public static void main(String[] args) {
         Wiki wiki = Wiki.newSession("ro.wikipedia.org");
         Wikibase wikibase = new Wikibase();
+        wikibase.setThrottle(70000);
         WikidataEntitiesCache wikidataEntitiesCache = new WikidataEntitiesCache(wikibase);
         LIST_GENERATORS.put("lot-fotbal", new FootballTeamListGenerator(wikidataEntitiesCache));
         LIST_GENERATORS.put("default", new DefaultListGenerator());
 
-        Credentials credentials = identifyCredentials();
+        Credentials credentials = identifyCredentials("WIKI_LISTER_USERNAME", "WIKI_LISTER_PASSWORD", "Wikipedia");
+        Credentials wdCredentials = identifyCredentials("WIKI_LISTER_WDUSERNAME", "WIKI_LISTER_WDPASSWORD", "Wikidata");
 
         try {
             wiki.login(credentials.username, credentials.password);
+            wikibase.login(wdCredentials.username, wdCredentials.password);
 
             wiki.setMarkBot(true);
-
-            String[] listMarkersPresence = wiki.whatTranscludesHere("Utilizator:Andrebot/Listă de la Wikidata");
+            wikibase.setMarkBot(true);
+            
+            String[] listMarkersPresence = wiki.whatTranscludesHere("Format:Listă populată din Wikidata");
 
             for (String eachTransclusion : listMarkersPresence) {
                 String pageText = wiki.getPageText(eachTransclusion);
