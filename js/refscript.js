@@ -1995,8 +1995,8 @@ if (u.match(/webcitation.org/)) {
 		var W_Newspaper = 'Q Magazine';
 	};
 	if (u.match(/romaniatv.net/)) {
-		var x = d.match(/<h1>.*/)[0];
-		var x = x.replace(/<h1> */, '');
+		var x = d.match(/<h1.*?>.*/)[0];
+		var x = x.replace(/<h1.*?> */, '');
 		var W_Title = x.replace(/<\/h1>.*/, '');
 		var dd = d.replace(/[\r\n]/g, '');
 		var dd = dd.replace(/<\/span>/g, '<\/span>\n');
