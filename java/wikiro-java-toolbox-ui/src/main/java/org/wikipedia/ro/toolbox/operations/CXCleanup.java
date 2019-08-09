@@ -161,7 +161,6 @@ public class CXCleanup implements WikiOperation {
         Pattern selfLinkPattern = Pattern.compile(regEx);
         Matcher selfLinkMatcher = selfLinkPattern.matcher(newText.toString());
 
-        
         newText = new StringBuffer();
         int matchesCount = 0;
         while (selfLinkMatcher.find()) {
@@ -170,7 +169,9 @@ public class CXCleanup implements WikiOperation {
         }
         selfLinkMatcher.appendTail(newText);
 
-        String selfLinkRegEx2 = "\\[//" + removeEnd(sourceWikiCode, "wiki") + ".wikipedia.org/wiki/" + replace(ent.getSitelinks().get(sourceWikiCode).getPageName(), " ", "_") + "#(?<anchor>[^\\s]*?)\\s+(?<label>[^\\]]*?)\\]";
+        String selfLinkRegEx2 = "\\[//" + removeEnd(sourceWikiCode, "wiki") + ".wikipedia.org/wiki/"
+            + replace(ent.getSitelinks().get(sourceWikiCode).getPageName(), " ", "_")
+            + "#(?<anchor>[^\\s]*?)\\s+(?<label>[^\\]]*?)\\]";
         Pattern selfLinkPattern2 = Pattern.compile(selfLinkRegEx2);
         Matcher selfLinkMatcher2 = selfLinkPattern2.matcher(newText.toString());
 
@@ -179,8 +180,7 @@ public class CXCleanup implements WikiOperation {
             selfLinkMatcher2.appendReplacement(newText, "[[#${anchor}|${label}]]");
         }
         selfLinkMatcher2.appendTail(newText);
-        
-        
+
         status = new String[] { "status.removing.supfootnotes" };
         Pattern footnoteBySupPattern = Pattern.compile(
             "\\[\\[#cite_note\\-.*?\\|<sup>(<span(\\s+lang=\".*?\")?\\s+style=\".*?\"\\s*?>\\s*?)?\\[\\d+\\](\\s*</span>\\s*)?</sup>\\]\\]",
@@ -191,7 +191,7 @@ public class CXCleanup implements WikiOperation {
             footnoteBySupMatcher.appendReplacement(newText, "");
         }
         footnoteBySupMatcher.appendTail(newText);
-        
+
         status = new String[] { "status.harvnbizing" };
         Pattern footnoteHarvnbPattern = Pattern.compile(
             "<ref(?:\\s+name=\"([^\"]*)\")?>\\s*\\[\\[#CITEREF(\\p{Alpha}*?)(\\d+)\\|[^\\]]*\\]\\](?:,\\s*(pp?)\\.(?:\\s+|&nbsp;)([\\d–\\-]+))?\\s*</ref>",
@@ -203,15 +203,33 @@ public class CXCleanup implements WikiOperation {
             if (null != footnoteHarvnbMatcher.group(1)) {
                 thisHarvnb.append(" name=\"").append(footnoteHarvnbMatcher.group(1)).append("\"");
             }
-            thisHarvnb.append(">{{Harvnb|").append(footnoteHarvnbMatcher.group(2)).append('|').append(footnoteHarvnbMatcher.group(3));
+            thisHarvnb.append(">{{Harvnb|").append(footnoteHarvnbMatcher.group(2)).append('|')
+                .append(footnoteHarvnbMatcher.group(3));
             if (null != footnoteHarvnbMatcher.group(4) && null != footnoteHarvnbMatcher.group(5)) {
-                thisHarvnb.append('|').append(footnoteHarvnbMatcher.group(4)).append('=').append(footnoteHarvnbMatcher.group(5));
+                thisHarvnb.append('|').append(footnoteHarvnbMatcher.group(4)).append('=')
+                    .append(footnoteHarvnbMatcher.group(5));
             }
             thisHarvnb.append("}}</ref>");
             footnoteHarvnbMatcher.appendReplacement(newText, thisHarvnb.toString());
         }
         footnoteHarvnbMatcher.appendTail(newText);
-        
+
+        Pattern footnoteHarvardCitationsPattern =
+            Pattern.compile("<ref>(\\p{Alnum}+)&nbsp;\\[\\[#CITEREF\\1(\\d+)\\|\\2\\]\\](?:,&#x2002;([^<]*))?</ref>");
+        Matcher footnoteHarvardCitationsMatcher = footnoteHarvardCitationsPattern.matcher(newText.toString());
+        newText = new StringBuffer();
+        while (footnoteHarvardCitationsMatcher.find()) {
+            StringBuilder thisHarvnb = new StringBuilder("<ref");
+            thisHarvnb.append(">{{Harvard citations| last=").append(footnoteHarvardCitationsMatcher.group(1))
+                .append(" |year=").append(footnoteHarvardCitationsMatcher.group(2));
+            thisHarvnb.append(" |nb=yes |loc=");
+            if (null != footnoteHarvardCitationsMatcher.group(3)) {
+                thisHarvnb.append(footnoteHarvardCitationsMatcher.group(3));
+            }
+            thisHarvnb.append("}}</ref>");
+            footnoteHarvardCitationsMatcher.appendReplacement(newText, thisHarvnb.toString());
+        }
+        footnoteHarvardCitationsMatcher.appendTail(newText);
 
         Pattern frenchCommaBetweenRefsPattern = Pattern.compile("\\<sup\\s*class=\"reference cite_virgule\"\\>,\\</sup\\>");
         Matcher frenchCommaBetweenRefsMatcher = frenchCommaBetweenRefsPattern.matcher(newText.toString());
