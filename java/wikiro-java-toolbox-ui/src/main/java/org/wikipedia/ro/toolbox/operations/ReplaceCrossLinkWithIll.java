@@ -198,7 +198,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         Map<String, String> actualForeignTitleMap = new HashMap<>();
         Map<String, Boolean> foreignLinkExistenceMap = new HashMap<>();
         while (innerLinkMatcher.find()) {
-            // first pass - evaluate links existance
+            // first pass - evaluate links existence
 
             String link = innerLinkMatcher.group(1);
             link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());
@@ -258,7 +258,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             System.out.println("Link: " + link);
             String articleLink = removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
-            String linkTitle = innerLinkMatcher.group(3);
+            String linkTitle = defaultString(innerLinkMatcher.group(3), articleTitle);
             if (isBlank(articleTitle)) {
                 System.out.println("Blank! skipping...");
                 continue;
