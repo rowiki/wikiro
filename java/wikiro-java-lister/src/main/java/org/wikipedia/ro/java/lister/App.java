@@ -21,10 +21,10 @@ import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikibase.data.Entity;
 import org.wikipedia.Wiki;
+import org.wikipedia.ro.cache.WikidataEntitiesCache;
 import org.wikipedia.ro.java.lister.generators.DefaultListGenerator;
 import org.wikipedia.ro.java.lister.generators.FootballTeamListGenerator;
 import org.wikipedia.ro.java.lister.generators.WikidataListGenerator;
-import org.wikipedia.ro.java.lister.util.WikidataEntitiesCache;
 import org.wikipedia.ro.utils.Credentials;
 
 /**

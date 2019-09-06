@@ -62,6 +62,7 @@ import org.wikibase.Wikibase;
 import org.wikipedia.Wiki;
 import org.wikipedia.Wiki.User;
 import org.wikipedia.ro.Generator;
+import org.wikipedia.ro.cache.WikidataEntitiesCache;
 import org.wikipedia.ro.toolbox.generators.PageGenerator;
 import org.wikipedia.ro.toolbox.operations.Operation;
 import org.wikipedia.ro.toolbox.operations.WikiOperation;
@@ -75,6 +76,15 @@ public class WikipediaToolboxGUI {
     private static Wikibase dataWiki = new Wikibase("www.wikidata.org");
     private static Map<String, Component> dataComponentsMap = new HashMap<String, Component>();
     private static JFrame frame;
+    
+    private static WikidataEntitiesCache wikidataCache = null;
+    
+    public static WikidataEntitiesCache getWikidataEntitiesCache(Wikibase wikidata) {
+        if (null == wikidataCache) {
+            wikidataCache = new WikidataEntitiesCache(wikidata);
+        }
+        return wikidataCache;
+    }
 
     public static void main(String[] args) {
         bundle = ResourceBundle.getBundle("uitexts.uitexts", new Locale("ro"));

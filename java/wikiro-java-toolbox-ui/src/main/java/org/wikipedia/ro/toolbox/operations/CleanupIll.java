@@ -27,6 +27,7 @@ import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiTemplate;
 import org.wikipedia.ro.parser.ParseResult;
 import org.wikipedia.ro.parser.WikiTemplateParser;
+import org.wikipedia.ro.toolbox.WikipediaToolboxGUI;
 
 @Operation(useWikibase = true, labelKey = "operation.cleanupIll.label")
 public class CleanupIll implements WikiOperation {
@@ -117,7 +118,7 @@ public class CleanupIll implements WikiOperation {
             return new WikiLink(targetPage, label).toString();
         } else {
             Wiki linkSourceWiki = Wiki.newSession(langId + ".wikipedia.org");
-            Entity wdItem = dataWiki.getWikibaseItemBySiteAndTitle(langId + "wiki",
+            Entity wdItem = WikipediaToolboxGUI.getWikidataEntitiesCache(dataWiki).getByArticle(langId + "wiki",
                 defaultString(linkSourceWiki.resolveRedirect(sourcePage), sourcePage));
             if (null != wdItem) {
                 Sitelink targetSitelink = wdItem.getSitelinks().get(targetWikiCode);
@@ -137,9 +138,9 @@ public class CleanupIll implements WikiOperation {
         String qId = prependIfMissing(wdId, "Q");
         qId = defaultString(dataWiki.resolveRedirect(qId), qId);
 
-        Entity wdItem = dataWiki.getWikibaseItemById(qId);
+        Entity wdItem = WikipediaToolboxGUI.getWikidataEntitiesCache(dataWiki).get(qId);
         if (null != wdItem) {
-            Map<String, Sitelink> sitelinks = ObjectUtils.defaultIfNull(wdItem.getSitelinks(), Collections.EMPTY_MAP);
+            Map<String, Sitelink> sitelinks = ObjectUtils.defaultIfNull(wdItem.getSitelinks(), Collections.emptyMap());
             Sitelink targetSitelink = sitelinks.get(targetWikiCode);
             if (null != targetSitelink) {
                 WikiLink link = new WikiLink(targetSitelink.getPageName(), label);

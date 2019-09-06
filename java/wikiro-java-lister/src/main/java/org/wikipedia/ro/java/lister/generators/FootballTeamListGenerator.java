@@ -23,7 +23,7 @@ import org.wikibase.data.Item;
 import org.wikibase.data.Property;
 import org.wikibase.data.Sitelink;
 import org.wikibase.data.Snak;
-import org.wikipedia.ro.java.lister.util.WikidataEntitiesCache;
+import org.wikipedia.ro.cache.WikidataEntitiesCache;
 import org.wikipedia.ro.model.WikiLink;
 
 public class FootballTeamListGenerator implements WikidataListGenerator {
