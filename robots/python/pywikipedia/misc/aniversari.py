@@ -165,8 +165,8 @@ def get_event_text(page, day, month, year, event):
         if page.isRedirectPage():
             page = page.getRedirectTarget()
     section = get_section_index(page, event)
-    #if not section:
-    #    return ""
+    if not section:
+        return ""
     #print("Section: %s" % section)
     page.site.loadrevisions(page=page, content=True,section=section)
     text = page.get()
@@ -438,6 +438,9 @@ def add_year_entry(entry, date, event, line):
     return r
 
 def fix_year(entry, olddate, newdate, event):
+    # if the difference is too big, better leave a human to handle it
+    if newdate and olddate and math.fabs(newdate.year - olddate.year) > SCORE_LIMIT:
+        return False
     pywikibot.output("Fixing " + entry)
     line = get_year_line(olddate, event, entry)
     newline = line
