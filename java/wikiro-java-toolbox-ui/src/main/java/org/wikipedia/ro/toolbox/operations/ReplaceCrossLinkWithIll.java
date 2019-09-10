@@ -91,7 +91,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                             continue;
                         } else if ("d".equals(lang)) {
                             wbEntity = dataWiki
-                                .getWikibaseItemById(defaultString(dataWiki.resolveRedirect(foreignTitle), foreignTitle));
+                                .getWikibaseItemById(WikipediaToolboxGUI.getCachedRedirect(dataWiki, foreignTitle));
                         } else {
                             String fullForeignTitle = substringBefore(foreignTitle, "#");
                             Matcher namespaceMatcher = namespacepattern.matcher(fullForeignTitle);
@@ -99,7 +99,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                             String namespace = defaultString(namespaceMatcher.group(1));
                             String simpleForeignTitle = namespaceMatcher.group(2);
                             foreignTitle = capitalize(namespace) + capitalize(simpleForeignTitle);
-                            String target = defaultString(sourceWiki.resolveRedirect(foreignTitle), foreignTitle);
+                            String target = WikipediaToolboxGUI.getCachedRedirect(sourceWiki, foreignTitle);
                             wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(lang + "wiki", target);
                         }
                     }
@@ -145,7 +145,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             status = new String[] { "status.analyzing.link", articleTitle };
 
             Wiki srcWiki = Wiki.newSession(lang + ".wikipedia.org");
-            String target = defaultString(srcWiki.resolveRedirect(articleTitle), articleTitle);
+            String target = WikipediaToolboxGUI.getCachedRedirect(srcWiki, articleTitle);
             String targetLang = removeEnd(targetWikiCode, "wiki");
             String sourceLang = defaultIfEmpty(lang, removeEnd(sourceWikiCode, "wiki"));
 

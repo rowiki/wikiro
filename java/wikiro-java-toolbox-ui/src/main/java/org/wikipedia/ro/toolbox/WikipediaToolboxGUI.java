@@ -62,6 +62,7 @@ import org.wikibase.Wikibase;
 import org.wikipedia.Wiki;
 import org.wikipedia.Wiki.User;
 import org.wikipedia.ro.Generator;
+import org.wikipedia.ro.cache.Cache;
 import org.wikipedia.ro.cache.WikidataEntitiesCache;
 import org.wikipedia.ro.toolbox.generators.PageGenerator;
 import org.wikipedia.ro.toolbox.operations.Operation;
@@ -84,6 +85,15 @@ public class WikipediaToolboxGUI {
             wikidataCache = new WikidataEntitiesCache(wikidata);
         }
         return wikidataCache;
+    }
+    
+    private static Map<Wiki, Cache<String, IOException>> redirectCaches = new HashMap<>();
+    
+    public static String getCachedRedirect(final Wiki wiki, String s) throws IOException {
+        if (!redirectCaches.containsKey(wiki)) {
+            redirectCaches.put(wiki, new Cache<>(key -> StringUtils.defaultString(wiki.resolveRedirect(key), key)));
+        }
+        return redirectCaches.get(wiki).get(s);
     }
 
     public static void main(String[] args) {
