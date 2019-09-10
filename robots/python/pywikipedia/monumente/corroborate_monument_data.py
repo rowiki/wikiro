@@ -57,7 +57,7 @@ Example: "python corroborate_monument_data.py -lang:ro -db:lmi -updateArticle"
 
 Command-line arguments:
 
--addRan         [ro specific] Add RAN codes and use RAN db to update monuments
+-addRan         [RO specific] Add RAN codes and use RAN db to update monuments
 
 -code           The LMI code we want to work on. Can also be a code prefix.
 
@@ -316,11 +316,7 @@ def readRan(filename):
 	"""
 	This function is specific to ('ro','lmi'). We need to find a way to remove the need for it
 	"""
-	f = open(filename, "r+")
-	pywikibot.output("Reading archeological monuments file...")
-	ran = json.load(f)
-	pywikibot.output("...done")
-	f.close();
+	ran = readJson(filename, "archeological monuments")
 	
 	db = {}
 	for site in ran:
@@ -397,7 +393,7 @@ def parseOtherCoords(code, other_data, fields):
 		except ValueError:
 			pass
 	#print fields
-	if fields["prefix"]:
+	if fields.get("prefix"):
 		otherSrc = u"%s (date externe)" % fields["prefix"]
 	return (otherLat, otherLong, otherSrc, updateCoord, fields)
 	
@@ -405,13 +401,17 @@ def addRanData(code, monument, ran_data, articleText):
 	if code in ran_data:
 		sites = []
 		for site in ran_data[code]:
-			sites.append(site[u"Cod"])
+			c = site[u"Cod"]
+			#submonuments need to be left alone, main monuments stripped
+			if code.find(".") == -1:
+				c = ".".join(c.split(".")[0:2])
+			sites.append(c)
 		sites = list(set(sites))
 		sites.sort()
 		#print sites
 		sites = ", ".join(sites)
 		articleText, _ = updateTableData(monument["source"], code, "CodRan", sites, \
-								 text=articleText, ask=False)
+							monument, text=articleText, ask=False)
 	return articleText
 
 def getBestField(image, fields, type):
@@ -680,7 +680,7 @@ def main():
 	other_data = readOtherData(otherFile)
 	
 	checkNewMonuments(other_data, db_json)
-	
+
 	if addRan:
 		ran_data = readRan("ro_ran_db.json")
 
@@ -938,11 +938,12 @@ def main():
 		if code in ran_data:
 			otherCoords.append(parseRanCoords(code, ran_data[code]))
 		if code in other_data:
-			#print other_data[code]
-			otherCoords.append(parseOtherCoords(code, other_data[code], {"prefix": other_data[code].get("Source")}))
+			#print(other_data[code])
+			otherCoords.append(parseOtherCoords(code, other_data[code], {"lat": u"Lat", "lon": u"Lon", "prefix": other_data[code].get("Source")}))
 			otherCoords.append(parseOtherCoords(code, other_data[code], {"lat": u"OsmLat", "lon": u"OsmLon", "prefix": u"OSM"}))
 
 		for (otherLat, otherLong, otherSrc, otherValid, otherFields) in otherCoords:
+			#print(otherLat, otherLong, otherSrc, otherValid, otherFields)
 			if (otherLat > 0 and strainu.getSec(otherLat) == 0) and \
 				(otherLong > 0 and strainu.getSec(otherLong) == 0):
 				if not otherSrc:
