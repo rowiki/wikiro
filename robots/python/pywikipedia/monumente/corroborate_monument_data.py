@@ -73,10 +73,11 @@ Command-line arguments:
                 the fields from the config
 
 -force          Force the update of the fields even if we already have a value.
-		Implies -aggresive
+                Implies -aggresive
 
--aggresive	Apply more aggresive algorithms for filling a field. Currently
-		this applies to getting images from the first submonument
+-aggresive      Apply more aggresive algorithms for filling a field. Currently
+                this applies to getting images from the first submonuments and
+                to using articles/categories/images with more than one code
 
 -updateArticle  Update the link to the article if available
 
@@ -331,13 +332,15 @@ def readRan(filename):
 			db[lmi].append(site)
 	return db
 	
-def parseArticleCoords(code, allPages):
+def parseArticleCoords(code, allPages, aggresive):
 	artLat = 0
 	artLon = 0
 	artSrc = None
 	updateCoord = False
 	global _differentCoords
 	for page in allPages:
+		if not useDataFromPage(page, aggresive):
+			continue
 		if page["lat"] != 0 and page["long"] != 0:
 			if artLat != 0: #this also means artLong != 0
 				if math.fabs(artLat - page["lat"]) > _coordVariance or \
@@ -580,7 +583,7 @@ def needDataFromFile(monument):
 	#print(fields)
 	return any([isNullorEmpty(monument.get(field)) for field in fields])
 
-def checkUpdateArticleField(monument, article, articleText, force):
+def checkUpdateArticleField(monument, article, articleText, force, aggresive):
 	"""
 	This function determines if there are any errors in the article field and
 	updates the field if needed
@@ -593,10 +596,16 @@ def checkUpdateArticleField(monument, article, articleText, force):
 	:type articleText: string
 	:param force: Whether to force-update the field
 	:type force: bool
+	:param aggresive: Whether to use unsafe data
+	:type aggresive: bool
 
 	:return: The new list text
 	:rtype: string
 	"""
+	if (not useDataFromPage(article, aggresive) or
+		isNullorEmpty(article["name"]) or
+		_changes and Changes.article == Changes.none):
+		return articleText
 	articleField = getFields(_lang, _db, Changes.article)
 	code = monument[getCfg(_lang, _db).get('idField')]
 	#print(articleField)
@@ -605,28 +614,46 @@ def checkUpdateArticleField(monument, article, articleText, force):
 		exit(1)
 	articleField, _ = articleField.popitem()
 
-	if article != None and article["name"] != None and article["name"] != "":
-		if monument[articleField].find("[[") == -1:
-			link = u"[[" + article["name"] + "|" + monument[articleField] + "]]"
-			#pywikibot.output(link)
-			articleText, _ = updateTableData(monument["source"], code, articleField, link, monument, text=articleText)
-		else: # check if the 2 links are the same
-			link = strainu.extractLink(monument[articleField])
-			if link == None:
-				log(u"* [Listă] ''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire - e posibil să existe o problemă de închidere a tagurilor" % code)
-			else:
-				page1 = pywikibot.Page(pywikibot.Link(link, pywikibot.Site()))
-				page2 = pywikibot.Page(pywikibot.Site(), article["name"])
-				if force and page1.title() != page2.title():
-					field = "".join(strainu.stripLinkWithSurroundingText(monument[articleField]))
-					link = u"[[" + article["name"] + "|" + field + "]]"
-					articleText, _ = updateTableData(monument["source"], code, articleField, link, monument, text=articleText)
-				elif page1.title() != page2.title() and \
-				(not page1.isRedirectPage() or page1.getRedirectTarget() != page2) and \
-				(not page2.isRedirectPage() or page2.getRedirectTarget() != page1):
-					log(u"* [WPListă]''W'': ''[%s]'' Câmpul Denumire are o legătură internă către %s, dar articolul despre monument este %s" % (
-						code, page1, page2))
+	if monument[articleField].find("[[") == -1:
+		link = u"[[" + article["name"] + "|" + monument[articleField] + "]]"
+		#pywikibot.output(link)
+		articleText, _ = updateTableData(monument["source"], code, articleField, link, monument, text=articleText)
+	else: # check if the 2 links are the same
+		link = strainu.extractLink(monument[articleField])
+		if link == None:
+			log(u"* [Listă] ''W'': ''[%s]'' De verificat legătura internă din câmpul Denumire - e posibil să existe o problemă de închidere a tagurilor" % code)
+		else:
+			page1 = pywikibot.Page(pywikibot.Link(link, pywikibot.Site()))
+			page2 = pywikibot.Page(pywikibot.Site(), article["name"])
+			if force and page1.title() != page2.title():
+				field = "".join(strainu.stripLinkWithSurroundingText(monument[articleField]))
+				link = u"[[" + article["name"] + "|" + field + "]]"
+				articleText, _ = updateTableData(monument["source"], code, articleField, link, monument, text=articleText)
+			elif page1.title() != page2.title() and \
+			(not page1.isRedirectPage() or page1.getRedirectTarget() != page2) and \
+			(not page2.isRedirectPage() or page2.getRedirectTarget() != page1):
+				log(u"* [WPListă]''W'': ''[%s]'' Câmpul Denumire are o legătură internă către %s, dar articolul despre monument este %s" % (
+					code, page1, page2))
 	return articleText
+
+def useDataFromPage(page, aggresive):
+	"""
+	Decide whether to use image, coordinates and other informations from
+	the page in question.
+
+	:param page: The data about the article associated with that code
+	:type page: dict
+	:param aggresive: True if we should use even low-quality data
+	:type aggresive: bool
+
+	:return: True if the data should be used
+	:rtype: bool
+	"""
+	if page == None:
+		return False
+	if page.get("quality") < 0 and not aggresive:
+		return False
+	return True
 
 def main():
 	otherFile = "other_monument_data.csv"
@@ -724,7 +751,7 @@ def main():
 
 		code = getCodeForMonument(monument, codePrefix)
 		if codePrefix and not code.startswith(codePrefix):
-			return None
+			continue
 		pywikibot.output(code)
 
 		allPages = list()
@@ -804,11 +831,12 @@ def main():
 			articleText = addRanData(code, monument, ran_data, articleText)
 	
 		#monument name and link
-		articleText = checkUpdateArticleField(monument, article, articleText, force)
+		articleText = checkUpdateArticleField(monument, article, articleText, force, aggresive)
 
 		# --- Author ---
 		#author from article
-		if article != None and article["author"] != None and article["author"].strip() != "":
+		if useDataFromPage(article, aggresive) and \
+			not isNullorEmpty(article["author"]):
 			#print "Author from article"
 			#author = strainu.stripLink(article["author"]).strip()
 			author = article["author"].strip()
@@ -871,7 +899,8 @@ def main():
 			articleText, _ = updateTableData(monument["source"], code, u'Copyright', str(last_death), monument, text=articleText)
 	
 		# --- Choose an image ---
-		if article != None and not isNullorEmpty(article["image"]):
+		if useDataFromPage(article, aggresive) and \
+			not isNullorEmpty(article["image"]):
 			#pywikibot.output("We're uploading image " + article["image"] + " from the article")
 			artimage = strainu.extractImageLink(article["image"]).strip()
 			if isNullorEmpty(artimage):
@@ -942,7 +971,7 @@ def main():
 			long = 0
 			
 		otherCoords = []
-		otherCoords.append(parseArticleCoords(code, allPages))
+		otherCoords.append(parseArticleCoords(code, allPages, aggresive))
 		if code in ran_data:
 			otherCoords.append(parseRanCoords(code, ran_data[code]))
 		if code in other_data:
