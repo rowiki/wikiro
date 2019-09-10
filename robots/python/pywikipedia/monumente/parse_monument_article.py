@@ -328,6 +328,17 @@ def getWikidataProperty(page, prop):
 			print(("Wikidata Exception " + repr(e)))
 	return default_returns.get(prop)
 
+def addElementToOutput(code, dictElem, title):
+	global fullDict
+	if code in fullDict:
+		for elem in fullDict[code]:
+			if elem['name'] == title:
+				fullDict[code].remove(elem)
+				break
+		fullDict[code].append(dictElem)
+	else:
+		fullDict[code] = [dictElem]
+
 def processArticle(text, page, conf):
 	#trace = Trace(sys._getframe().f_code.co_name)
 	title = page.title()
@@ -363,9 +374,9 @@ def processArticle(text, page, conf):
 		code = getWikidataProperty(page, options.get('wikidata').get(_db))
 	#print code
 	if qualityRegexp != None and re.search(qualityRegexp, text) != None:
-		quality = True
+		quality = 10
 	else:
-		quality = False
+		quality = 0
 	
 	try:		
 		coor = page.coordinates(True)
@@ -438,8 +449,11 @@ def processArticle(text, page, conf):
 			if dictElem['code'] == None and key == _db and box[key] in _dict:
 				infoCodes = re.findall(conf[_db]['codeRegexpCompiled'], _dict[box[key]])
 				#print(infoCodes)
-				if len(infoCodes) != 1 and checkMultipleMonuments([res[0] for res in infoCodes]): # more or less than one code is marked; just ignore
-					invalidCount(len(codes), title, _db, [res[0] for res in codes])#count comes from the first search
+				if len(infoCodes) > 1 and checkMultipleMonuments([res[0] for res in infoCodes]): # more than one code is marked - try to use the data everywhere
+					dictElem['code'] = [res[0] for res in codes] # for now, put everything in the dict; we'll split later
+					dictElem['quality'] = -10 # quality indicates the likeliness of using the data
+				elif len(infoCodes) == 0:
+					invalidCount(len(codes), title, _db, [res[0] for res in codes]) # codes comes from the first search
 					return
 				else:
 					code = dictElem['code'] = infoCodes[0][0]
@@ -454,8 +468,12 @@ def processArticle(text, page, conf):
 
 	#print dictElem['code']
 	if dictElem['code'] == None:
-		invalidCount(len(codes), title, _db, [res[0] for res in codes])#count comes from the first search
-		return
+		if len(codes) > 1:
+			dictElem['code'] = [res[0] for res in codes] # for now, put everything in the dict; we'll split later
+			dictElem['quality'] = -5 # quality indicates the likeliness of using the data
+		else:
+			invalidCount(len(codes), title, _db, [res[0] for res in codes])#codes comes from the first search
+			return
 
 	if dictElem.get('image') == None:
 	# if there are images in the article, try an image from Wikidata
@@ -487,15 +505,14 @@ def processArticle(text, page, conf):
 		for param in conf[_db]['codeTemplateParams']:
 			if param in tlcont:
 				dictElem[param] = tlcont[param]
-		
-	if code in fullDict:
-		for elem in fullDict[code]:
-			if elem['name'] == title:
-				fullDict[code].remove(elem)
-				break
-		fullDict[code].append(dictElem)
+
+	if type(dictElem['code']) == list:
+		for code in dictElem['code']:
+			de = dictElem.copy()
+			de['code'] = code
+			addElementToOutput(code, de, title)
 	else:
-		fullDict[code] = [dictElem]
+		addElementToOutput(code, dictElem, title)
 
 def main():
 	#trace = Trace(sys._getframe().f_code.co_name)
