@@ -111,9 +111,9 @@ class PSNBot(SingleSiteBot):
 		tagger = self.get_tagger(page)
 		author = self.get_initial_author(page)
 
-		answer = False
+		answer = True
 		print(ps_page.title(), tagger, author)
-		answer = pywikibot.input_yn("Nominate for deletion %s?" % page.title())
+		#answer = pywikibot.input_yn("Nominate for deletion %s?" % page.title())
 		if answer:
 			self.create_nomination(page, ps_page, ps_title, tagger)
 			self.update_list(ps_page)
