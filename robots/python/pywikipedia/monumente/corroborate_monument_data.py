@@ -72,7 +72,11 @@ Command-line arguments:
                 a JSON or a CSV file. The JSON keys or CSV columns must match
                 the fields from the config
 
--force          Force the update of the fields even if we already have a value
+-force          Force the update of the fields even if we already have a value.
+		Implies -aggresive
+
+-aggresive	Apply more aggresive algorithms for filling a field. Currently
+		this applies to getting images from the first submonument
 
 -updateArticle  Update the link to the article if available
 
@@ -450,7 +454,7 @@ def chooseImagePicky(files, fields):
 	This function picks a single image of type 'field' from e list of files.
 
 	:param files: a list of files in the format of the json returned by
-		parse_monument_articole
+		parse_monument_article
 	:type files: list of dicts
 	:param fields: the fields that we're searching an image for
 	:type fields: list
@@ -629,6 +633,7 @@ def main():
 	addRan = False
 	force = False
 	codePrefix = None
+	aggresive = False
 	global _changes, _db, _differentCoords
 	
 	for arg in pywikibot.handleArgs():
@@ -640,6 +645,7 @@ def main():
 			_db = arg [len('-db:'):]
 		if arg.startswith('-force'):
 			force = True
+			aggresive = True
 		if arg.startswith('-updateArticle'):
 			_changes = _changes | Changes.article
 		if arg.startswith('-updateImage'):
@@ -650,6 +656,8 @@ def main():
 			_changes = _changes | Changes.creator
 		if arg.startswith('-updateCommons'):
 			_changes = _changes | Changes.commons
+		if arg.startswith('-aggresive'):
+			aggresive = True
 		for prefixParam in ['-code:', '-county:']:
 			if arg.startswith(prefixParam):
 				codePrefix = arg [len(prefixParam):]
@@ -669,12 +677,12 @@ def main():
 		if answer != 'y':
 			return
 	
-	db_json =				readJson("_".join(filter(None, [_lang, _db, "db.json"])), "database")
-	pages_local =			readJson("_".join(filter(None, [_lang, _db, "pages.json"])), _lang + ".wp pages")
-	authors_local =			readJson("_".join(filter(None, [_lang, _db, "authors.json"])), _lang + ".wp authors")
-	files_local =			readJson("_".join(filter(None, [_lang, _db,  pywikibot.Site().namespace(6), "pages.json"])), _lang + ".wp files")
+	db_json =		readJson("_".join(filter(None, [_lang, _db, "db.json"])), "database")
+	pages_local =		readJson("_".join(filter(None, [_lang, _db, "pages.json"])), _lang + ".wp pages")
+	authors_local =		readJson("_".join(filter(None, [_lang, _db, "authors.json"])), _lang + ".wp authors")
+	files_local =		readJson("_".join(filter(None, [_lang, _db,  pywikibot.Site().namespace(6), "pages.json"])), _lang + ".wp files")
 	categories_commons =	readJson("_".join(filter(None, ["commons", _db, "Category_pages.json"])), "commons categories")
-	files_commons =			readJson("_".join(filter(None, ["commons", _db, "File_pages.json"])), "commons images")
+	files_commons =		readJson("_".join(filter(None, ["commons", _db, "File_pages.json"])), "commons images")
 
 	ran_data = {}
 	other_data = readOtherData(otherFile)
@@ -897,7 +905,7 @@ def main():
 
 		#bonus option for ensembles: try to get images from the first submonument
 		newcode = code.replace(u"-a-", u"-m-") + u".01"
-		if isNullorEmpty(monument.get(imageField)) and \
+		if aggresive and isNullorEmpty(monument.get(imageField)) and \
 			code.find(u"-a-") > -1 and \
 			db_json[index+1][getCfg(_lang, _db).get('idField')] == newcode and \
 			not isNullorEmpty(db_json[index+1].get(imageField)):
