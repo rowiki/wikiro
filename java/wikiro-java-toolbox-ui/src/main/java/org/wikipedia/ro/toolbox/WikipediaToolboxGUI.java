@@ -266,7 +266,7 @@ public class WikipediaToolboxGUI {
             public void propertyChange(PropertyChangeEvent evt) {
                 if ("progress".equals(evt.getPropertyName())) {
                     int progress = (Integer) evt.getNewValue();
-                    actionProgressBar.setValue(progress);
+                    actionProgressBar.setValue(progress * articleList.size() / 100);
                 }
             }
         });
