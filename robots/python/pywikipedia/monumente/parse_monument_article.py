@@ -636,7 +636,7 @@ def main():
 					#on quick parse, we just use the previous values, even 
 					# if the page has changed 
 					if parse_type == PARSE_QUICK:
-						pywikibot.output('Skipping "%s"' % page.title())
+						# pywikibot.output('Skipping "%s"' % page.title())
 						continue #fullDict already contains the relevant information
 					else:
 						content = reworkedDict[pageTitle]
