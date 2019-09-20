@@ -137,7 +137,7 @@ class ItemProcessing:
                         print(val)
                         raise ValueError("Local image given")
                     while val.isRedirectPage():
-                        val = val.getRedirectTarget()
+                        val = pywikibot.FilePage(val.getRedirectTarget())
                     desc = val.title()
                 else:
                     val = desc = elem
@@ -228,6 +228,9 @@ class CityData(robot.WorkItem):
             if rp.isRedirectPage():
                 rp = rp.getRedirectTarget()
             return rp
+        except pywikibot.NoPage:
+            # most entries will not have a page, so ignore
+            return None
         except Exception as e:
             pywikibot.error(e)
             return None
