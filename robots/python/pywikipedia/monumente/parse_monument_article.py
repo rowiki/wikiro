@@ -318,7 +318,7 @@ def getWikidataProperty(page, prop):
 			#print(target)
 			if isinstance(target, pywikibot.Coordinate):
 				#Bug: https://www.mail-archive.com/wikidata-tech@lists.wikimedia.org/msg00714.html
-				if (target.precision or 1.0 / 3600) < _coordVariance:
+				if (target.precision or 1.0 / 3600) <= _coordVariance:
 					return target.lat, target.lon
 				else:
 					return 0,0
@@ -378,29 +378,30 @@ def processArticle(text, page, conf):
 	else:
 		quality = 0
 	
+	# -- coordinates --
+	lat = lon = 0
 	try:		
 		coor = page.coordinates(True)
-		if coor:
+		if coor and coor.precision <= _coordVariance:
 			#print(coor)
 			lat = coor.lat
-			long = coor.lon
-		else:
-			lat, long = parseGeohackLinks(page, conf)
+			lon = coor.lon
+		elif not coor:
+			lat, lon = parseGeohackLinks(page, conf)
 	except KeyError as e:
 		print(("KeyError " + repr(e)))
-		lat, long = parseGeohackLinks(page, conf)
+		lat, lon = parseGeohackLinks(page, conf)
 	except Exception as e:
-		print(("Exception " + repr(e)))
-		lat = long = 0
+		print(("Exception while retrieving coord from page: " + repr(e)))
 	if lat == 0:
 		try:
-			lat, long = getWikidataProperty(page, "P625")
-		except:
-			print("Coord exception")
+			lat, lon = getWikidataProperty(page, "P625")
+		except Exception as e:
+			print("Exception while retrieving coords from Wikidata: " + repr(e))
 
 	dictElem = {'name': title,
 		    'project': user.mylang,
-		    'lat': lat, 'long': long,
+		    'lat': lat, 'long': lon,
 		    'quality': quality,
 		    'lastedit': pywikibot.Timestamp.fromISOformat(page._timestamp).totimestampformat(),
 		    'code': code,
