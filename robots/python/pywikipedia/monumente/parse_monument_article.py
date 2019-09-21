@@ -604,7 +604,8 @@ def main():
 		reworkedDict = {}
 		filename = "_".join([_f for _f in [lang, _db, namespaceName, "pages.json"] if _f])
 		tempfile = "." + filename
-		if parse_type != PARSE_FULL:
+		reuse_data = (parse_type == PARSE_QUICK) or (incremental and os.path.exists(tempfile))
+		if parse_type != PARSE_FULL or reuse_data:
 			try:
 				if incremental and os.path.exists(tempfile):
 					f = open(tempfile, "r+")
@@ -615,9 +616,10 @@ def main():
 				f.close();
 			except:
 				jsonFile = {}
-			if parse_type == PARSE_QUICK:
-				fullDict = jsonFile
+			if reuse_data:
+				#fullDict = jsonFile
 				pywikibot.output("Importing %d values from input file" % len(jsonFile))
+
 			#pre-calculate as much as possible of the information we'll need
 			vallist = list(jsonFile.values()) # extract list of values
 			valCount = len(vallist)
@@ -633,25 +635,20 @@ def main():
 			content = None
 			try:
 				pageTitle = page.title()
-				if pageTitle in reworkedDict:
-					#on quick parse, we just use the previous values, even 
-					# if the page has changed 
-					if parse_type == PARSE_QUICK:
-						# pywikibot.output('Skipping "%s"' % page.title())
-						continue #fullDict already contains the relevant information
-					else:
-						content = reworkedDict[pageTitle]
-				useCache = False
+				content = reworkedDict.get(pageTitle)
+
+				#on quick parse, we just use the previous values, even
+				# if the page has changed
+				useCache = reuse_data and content
+
 				#on normal parse, we first check if the page has changed
-				if content and (parse_type == PARSE_NORMAL or parse_type == PARSE_EXTENDED):
+				if not useCache and content and \
+				   (parse_type == PARSE_NORMAL or \
+				   parse_type == PARSE_EXTENDED):
 					if 'lastedit' in content:
 						lastedit = content['lastedit']
 					else:
 						lastedit = 0
-					if 'code' in content:
-						code = content['code']
-					else:
-						code = 0
 					# if we preloaded the page, we already have the time
 					if parse_type == PARSE_NORMAL:
 						pageEdit = page.editTime().totimestampformat()
@@ -659,7 +656,12 @@ def main():
 						pageEdit = pywikibot.Timestamp.fromISOformat(page._timestamp).totimestampformat()
 					if int(pageEdit) <= int(lastedit):
 						useCache = True
+
 				if useCache:
+					if 'code' in content:
+						code = content['code']
+					else:
+						code = 0
 					if code in fullDict:
 						fullDict[code].append(content)
 					else:
@@ -686,7 +688,7 @@ def main():
 					else:
 						fullDict[code] = [content]
 				continue
-		print(count)
+		print("Processed %d pages" % count)
 		#print fullDict
 		f = open(filename, "w+")
 		json.dump(fullDict, f, indent = 2)
