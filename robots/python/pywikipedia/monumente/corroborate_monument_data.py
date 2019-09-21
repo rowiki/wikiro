@@ -343,8 +343,8 @@ def parseArticleCoords(code, allPages, aggresive):
 			continue
 		if page["lat"] != 0 and page["long"] != 0:
 			if artLat != 0: #this also means artLong != 0
-				if math.fabs(artLat - page["lat"]) > _coordVariance or \
-					math.fabs(artLon - page["long"]) > _coordVariance:
+				if not fieldsAreEqual(Changes.coord, artLat, page["lat"]) or \
+				   not fieldsAreEqual(Changes.coord, artLon, page["long"]):
 					if page["name"] not in _differentCoords:
 						_differentCoords[page["name"]] = [page["lat"], page["long"]]
 					if artSrc[5:] not in _differentCoords:
@@ -375,8 +375,8 @@ def parseRanCoords(code, ran_data):
 			ranLon = float(site[u"Lon"])
 			ranCod = site[u"Cod"]
 			updateCoord = True
-		elif math.fabs(ranLat - float(site["Lat"])) > _coordVariance or \
-			 math.fabs(ranLon - float(site["Lon"])) > _coordVariance:
+		elif not fieldsAreEqual(Changes.coord, ranLat, site["Lat"]) or \
+		     not fieldsAreEqual(Changes.coord, ranLon, site["Lon"]):
 				if site["Cod"] not in _differentCoords:
 					_differentCoords[site["Cod"]] = [float(site["Lat"]), float(site["Lon"])]
 				if ranCod not in _differentCoords:
@@ -520,6 +520,17 @@ def computeCopyrightField(creators):
 			last_death = year
 	return last_death
 
+def fieldsAreEqual(_type, value, otherValue):
+	"""
+	Compare two values depending on the type of field
+	"""
+	try:
+		if _type == Changes.coord:
+			return math.fabs(float(value) - float(otherValue)) < _coordVariance
+	except ValueError: #if not a number, declare them unequal
+		return False
+	return value == otherValue
+
 def hasDependencyCycles(field, value, type, monument):
 	"""
 	This function checks if the value already exists in another field of
@@ -536,7 +547,7 @@ def hasDependencyCycles(field, value, type, monument):
 		#print "*" + field
 		if fields[otherField]['code'] & type and \
 			field != otherField and \
-			monument.get(otherField) == value:
+			fieldsAreEqual(type, value, monument.get(otherField)):
 			pywikibot.output(u"Dependency cycle detected:\nmonument[%s]=%s\nmonument[%s]=%s" % (field, value, otherField, monument.get(otherField)))
 			return True
 	return False
@@ -1002,8 +1013,8 @@ def main():
 				otherValid and \
 				otherLat != 0 and \
 				( \
-				 math.fabs(otherLat - lat) > _coordVariance or \
-				 math.fabs(otherLong - long) > _coordVariance \
+				 not fieldsAreEqual(Changes.coord, otherLat,  lat) or \
+				 not fieldsAreEqual(Changes.coord, otherLong, long) \
 				):
 					if otherSrc not in _differentCoords:
 						_differentCoords[otherSrc[5:]] = [otherLat, otherLong]
