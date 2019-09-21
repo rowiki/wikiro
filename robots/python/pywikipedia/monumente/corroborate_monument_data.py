@@ -923,7 +923,7 @@ def main():
 		elif code in ran_data:
 			for site in ran_data[code]:
 				if not isNullorEmpty(site[u"Imagine"]):
-					pictures.append({"name": site[u"Imagine"], "quality": Quality.normal}) #TODO: check for quality nonfree
+					pictures.append({"name": site[u"Imagine"], "quality": Quality.unknown}) #TODO: check for quality nonfree
 					break
 
 		imagelist = sorted(pictures, key=imageListSortKey, reverse=True)

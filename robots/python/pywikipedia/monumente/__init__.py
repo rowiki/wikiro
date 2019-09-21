@@ -9,13 +9,14 @@ Distributed under the terms of the GPLv2 license.
 import re
 import collections
 
-
 class Quality:
-	unfree   =-100
-	normal   =   0
-	article  =  25 # information extracted from articles/wikidata
-	good     =  50
-	featured = 100
+	unfree   		=-100
+	multi_codes_in_box	= -50 # Several codes in the infobox (is this even possible?)
+	multi_codes_in_page	= -25 # Several codes in the page, not enough info in the infobox
+	unknown			=   0 # unknown image quality (i.e. from another list)
+	normal   		=  10
+	article  		=  25 # information extracted from articles/wikidata
+	featured     		= 100 # this includes both good and featured pages
 
 
 class Changes:

@@ -67,6 +67,7 @@ from pywikibot import config as user
 sys.path.append('wikiro/robots/python/pywikipedia')
 import strainu_functions as strainu
 import monumente
+from monumente import Quality
 
 options = monumente.config
 
@@ -345,12 +346,6 @@ def processArticle(text, page, conf):
 	pywikibot.output('Working on "%s"' % title)
 	global _db
 
-	#skip pictures under copyright (not available on commons)
-	#TODO: rowp-specific
-	tl = strainu.extractTemplate(text, "Material sub drepturi de autor")
-	if tl != None:
-		pywikibot.output("Skipping page containing copyrighted material")
-		return
 	if re.search(errorRegexp, text) != None:
 		log("*''E'': [[:%s]] a fost marcat de un editor ca având o eroare în" \
 			" codul %s" % (title, _db))
@@ -373,10 +368,17 @@ def processArticle(text, page, conf):
 	if not code:
 		code = getWikidataProperty(page, options.get('wikidata').get(_db))
 	#print code
+
+	# -- quality --
 	if qualityRegexp != None and re.search(qualityRegexp, text) != None:
-		quality = 10
+		quality = Quality.featured
 	else:
-		quality = 0
+		quality = Quality.normal
+	#pictures under copyright (not available on commons) are the worse
+	#TODO: rowp-specific
+	tl = strainu.extractTemplate(text, "Material sub drepturi de autor")
+	if tl != None:
+		quality = Quality.unfree
 	
 	# -- coordinates --
 	lat = lon = 0
@@ -452,7 +454,7 @@ def processArticle(text, page, conf):
 				#print(infoCodes)
 				if len(infoCodes) > 1 and checkMultipleMonuments([res[0] for res in infoCodes]): # more than one code is marked - try to use the data everywhere
 					dictElem['code'] = [res[0] for res in codes] # for now, put everything in the dict; we'll split later
-					dictElem['quality'] = -10 # quality indicates the likeliness of using the data
+					dictElem['quality'] = Quality.multi_codes_in_box # quality indicates the likeliness of using the data
 				elif len(infoCodes) == 0:
 					invalidCount(len(codes), title, _db, [res[0] for res in codes]) # codes comes from the first search
 					return
@@ -471,7 +473,7 @@ def processArticle(text, page, conf):
 	if dictElem['code'] == None:
 		if len(codes) > 1:
 			dictElem['code'] = [res[0] for res in codes] # for now, put everything in the dict; we'll split later
-			dictElem['quality'] = -5 # quality indicates the likeliness of using the data
+			dictElem['quality'] = Quality.multi_codes_in_page # quality indicates the likeliness of using the data
 		else:
 			invalidCount(len(codes), title, _db, [res[0] for res in codes])#codes comes from the first search
 			return
