@@ -273,6 +273,17 @@ class CityData(robot.WorkItem):
     def description(self):
         return u"Updating %s data on Wikidata" % self._dataType
 
+class CityDataCached(CityData):
+    _cache = {}
+
+    def clearCache(self):
+        self._cache = {}
+
+    def getWikiArticle(self, item, lang="ro"):
+        if (item, lang) not in self._cache:
+            self._cache[(item, lang)] = super(CityDataCached, self).getWikiArticle(item, lang)
+
+        return  self._cache[(item, lang)]
 
 class CommonsProcessing(ItemProcessing, CityData):
     def __init__(self, config, always=False):
@@ -460,7 +471,7 @@ class URLProcessing(ItemProcessing, CityData):
         self.addSite(self.getInfoboxElement(item, element=u"website"))
 
 
-class ImageProcessing(ItemProcessing, CityData):
+class ImageProcessing(ItemProcessing, CityDataCached):
     def __init__(self, config, lmi=None, always=False):
         super(ImageProcessing, self).__init__(config, always)
         self._dataType = u"image"
@@ -474,6 +485,7 @@ class ImageProcessing(ItemProcessing, CityData):
 
     def doWork(self, page, item):
         self.setItem(item)
+        self.clearCache()
         if self.getUniqueClaim(u"imagine", canBeNull=True):
             return
         self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
@@ -700,7 +712,7 @@ def readJson(filename, what):
         pywikibot.error("Failed to read " + filename + ". Trying to do without it.")
         return {}
 
-if __name__ == "__main__":
+def main():
     pywikibot.handle_args()
     user.mylang = 'wikidata'
     user.family = 'wikidata'
@@ -724,3 +736,12 @@ if __name__ == "__main__":
     # bot.workers.append(CoordProcessing(config))
 
     bot.run()
+
+
+if __name__ == "__main__":
+    try:
+        #import cProfile
+        #cProfile.run('main()', 'profiling/fillwikidatainfo.txt')
+        main()
+    finally:
+        pywikibot.stopme()
