@@ -199,8 +199,21 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 	rawCode = None
 	my_params = {}
 	rowTemplate = getCfg(_lang, _db).get('rowTemplate')
-	
-	templates = pywikibot.textlib.extract_templates_and_params(text, strip=True)
+
+	# `extract_templates_and_params` takes forever for large monument lists
+	# `find` works much faster and allows us to reduce the time needed for
+	# worse case scenarios from 3s to 0.5s.
+	# There are cases where the search will not be perfect, but as long as
+	# we don't hit the else case, we should be good.
+	index = text.find(code)
+	if index > 0:
+		small_text = text[index-21:]
+		index = small_text.find("}}\n{{")
+		small_text = small_text[:index + 3]
+	else:
+		small_text = text
+
+	templates = pywikibot.textlib.extract_templates_and_params(small_text, strip=True)
 	for (template, params) in templates:
 		if template == rowTemplate:
 			#params = { k.strip(): v for k,v in params.items() }
