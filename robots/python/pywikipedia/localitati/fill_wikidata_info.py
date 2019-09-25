@@ -95,7 +95,7 @@ class ItemProcessing:
                 # don't bother about those yet
                 oldValue = set(v.getTarget() for v in self.item.claims[prop])
                 if not force:
-                    pywikibot.output(u"Wikidata already has %s: %s" % (key, str(oldValue)))
+                    pywikibot.output(u"Wikidata has %s: %s" % (key, str(oldValue)))
                     return False
             if not isinstance(data[key], list):
                 data[key] = [data[key]]
@@ -120,8 +120,7 @@ class ItemProcessing:
                         val = pywikibot.FilePage(commons, u"File:" + sf.stripNamespace(elem))
 
                     if not val.exists() or not val.fileIsShared():
-                        print(val)
-                        raise ValueError("Local image given")
+                        raise ValueError("Local image given: %s", val.title())
                     while val.isRedirectPage():
                         val = pywikibot.FilePage(val.getRedirectTarget())
                     desc = val.title()
@@ -153,6 +152,8 @@ class ItemProcessing:
                 return True
         except pywikibot.bot.QuitKeyboardInterrupt:
             raise
+        except ValueError as e:
+            print(e)
         except Exception as e:
             print("key", key)
             print("data", data)
