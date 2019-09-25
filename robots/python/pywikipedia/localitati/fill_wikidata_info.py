@@ -46,20 +46,6 @@ config = {
     }
 }
 
-
-def sortFromName(self, name):
-    return name.replace(u"ș", u"sș").\
-        replace(u"ț", u"tț").\
-        replace(u"Ș", u"SȘ").\
-        replace(u"Ț", u"TȚ").\
-        replace(u"ă", u"aă").\
-        replace(u"Ă", u"AĂ").\
-        replace(u"â", u"aâ").\
-        replace(u"Â", u"AÂ").\
-        replace(u"î", u"iî").\
-        replace(u"Î", u"IÎ")
-
-
 class ItemProcessing:
     def __init__(self, config, always=False, item=None):
         self.config = config
@@ -408,7 +394,7 @@ class CountyProcessing(ItemProcessing, CityData):
                 continue
             text = u"[[Category:%s County]]\n" % self.label
             for newcat in cats[template]:
-                text += u"[[%s|%s]]" % (newcat, sortFromName(self.label))
+                text += u"[[%s|%s]]" % (newcat, self.label)
             print(text)
             answer = self.userConfirm("Create category %s?" % page.title())
             if answer:
