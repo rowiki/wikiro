@@ -205,9 +205,14 @@ def stripLinkWithSurroundingText(text):
         return [text[:start], text[sep+1:end], text[end+2:]]
 
 def extractImageLink(text):
+    """
+    Extract the filename from a media link
+
+    The returned value should have its namespace set.
+    """
     start = text.find("[[")
-    end = text.rfind("]]")
-    sep = text.find("|")
+    end = text.rfind("]]", start)
+    sep = text.find("|",start)
     
     if start < 0 and end < 0:
         return text

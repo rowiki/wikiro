@@ -926,9 +926,10 @@ def main():
 		if useDataFromPage(article, aggresive) and \
 			not isNullorEmpty(article["image"]):
 			#pywikibot.output("We're uploading image " + article["image"] + " from the article")
-			artimage = strainu.extractImageLink(article["image"]).strip()
+			artimage = strainu.extractImageLink(article["image"])
 			if isNullorEmpty(artimage):
 				pywikibot.output("Wrong article image link: \"%s\"@%s" % (article["image"], article["name"]))
+			artimage = artimage.strip()
 			if artimage.find(':') < 0:#no namespace
 				artimage = "File:" + artimage
 			pictures.append({"name": artimage, "quality": Quality.article}) #TODO: check for quality nonfree
