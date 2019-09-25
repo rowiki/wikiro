@@ -384,7 +384,7 @@ def processArticle(text, page, conf):
 	lat = lon = 0
 	try:		
 		coor = page.coordinates(True)
-		if coor and coor.precision <= _coordVariance:
+		if coor and coor.precision and coor.precision <= _coordVariance:
 			#print(coor)
 			lat = coor.lat
 			lon = coor.lon
