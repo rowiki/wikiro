@@ -42,7 +42,7 @@ class PSNBot(SingleSiteBot):
 		lastrev   = None
 		for rev in page.revisions(content=True, starttime=starttime, endtime=endtime):
 			#print(rev)
-			if rev.text.find("{{notabilitate") == -1 and \
+			if rev.text and rev.text.find("{{notabilitate") == -1 and \
 				rev.text.find("notabilitate=") == -1:
 				break
 			lastrev = rev
