@@ -1,11 +1,11 @@
 package org.wikipedia.ro.java.lister.generators;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.prependIfMissing;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -144,8 +144,8 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                     playerEntity = cache.get(playerEntity);
                     presentPlayerIds.add(playerEntity.getId());
 
-                    String countryName = defaultString(
-                        defaultString((String) eachResult.get("countrySport"), (String) eachResult.get("countryCitizenship")));
+                    String countryName = defaultString(defaultString((String) eachResult.get("countrySport"),
+                        (String) eachResult.get("countryCitizenship")));
                     String crtTeamLink = null;
                     Set<Claim> crtTeamClaims =
                         playerEntity.getBestClaims(WikibasePropertyFactory.getWikibaseProperty("P54"));
@@ -248,7 +248,8 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                 return wikiLink.toString();
             }
         }
-        return String.format("{{Ill-wd|%s}}", prependIfMissing(entity.getId(), "Q"));
+        return String.format("{{Ill-wd|%s|3=%s}}", prependIfMissing(entity.getId(), "Q"),
+            defaultIfEmpty(entity.getLabels().get("ro"), entity.getLabels().get("en")));
     }
 
 }
