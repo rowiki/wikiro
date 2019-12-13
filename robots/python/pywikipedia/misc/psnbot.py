@@ -44,6 +44,7 @@ class PSNBot(SingleSiteBot):
 			#print(rev)
 			if rev.text and rev.text.find("{{notabilitate") == -1 and \
 				rev.text.find("notabilitate=") == -1 and \
+				rev.text.find("notabilitate =") == -1 and \
 				rev.text.find("{{Notabilitate") == -1:
 				break
 			lastrev = rev
