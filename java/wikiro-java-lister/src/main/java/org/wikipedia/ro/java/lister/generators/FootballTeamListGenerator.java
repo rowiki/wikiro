@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -37,12 +38,16 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
     private static final Map<String, String> POSN_INDEX = new HashMap<String, String>();
 
     private static final String CURRENT_PLAYERS_QUERY_TEMPLATE =
-        "SELECT distinct ?item ?itemLabel (SAMPLE(?posnLabel) AS ?playingPosition) (sample(?cocLabel) as ?countryCitizenship) (sample(?c4sLabel) as ?countrySport) WHERE {\n"
+        "SELECT distinct ?item ?itemLabel (SAMPLE(?posnLabel) AS ?playingPosition) (sample(?cocLabel) as ?countryCitizenship) (sample(?c4sLabel) as ?countrySport) (sample(?sportnumber) as ?sprtno) WHERE {\n"
             + "  ?item wdt:P31 wd:Q5.                                                       \n"
             + "  ?item p:P54 ?teamStat.                                                     \n"
             + "  ?teamStat wikibase:rank wikibase:PreferredRank.                            \n"
             + "  ?teamStat ps:P54 wd:%s.                                                    \n"
             + "  ?item wdt:P413 ?posn.                                                      \n"
+            + "  OPTIONAL {?item p:P1618 ?sportnumberStat.                                  \n"
+            + "            ?sportnumberStat wikibase:rank wikibase:PreferredRank.           \n" 
+            + "            ?sportnumberStat pq:P642 wd:%1$s.                                \n" 
+            +"             ?sportnumberStat ps:P1618 ?sportnumber. }                        \n"
             + "  OPTIONAL { ?item wdt:P27 ?coc. }                                           \n"
             + "  OPTIONAL { ?item wdt:P1532 ?c4s. }                                         \n"
             + "  MINUS { ?teamStat pq:P582 ?endTime. }                                      \n"
@@ -113,7 +118,8 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
 
                 String countryName = defaultString(
                     defaultString((String) eachResult.get("countrySport"), (String) eachResult.get("countryCitizenship")));
-                listBuilder.append("{{Ef jucător|nat=").append(countryName).append("|nume=").append(ill(playerEntity))
+                Object playerNumber = Optional.ofNullable(eachResult.get("sprtno")).orElse("");
+                listBuilder.append("{{Ef jucător|nat=").append(countryName).append("|nr=").append(playerNumber).append("|nume=").append(ill(playerEntity))
                     .append("|poz=").append(defaultString(POSN_INDEX.get(posn))).append("}}\n");
 
                 crtIndex++;
