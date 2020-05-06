@@ -327,7 +327,7 @@ public class FixVillages {
                     Map<String, String> urbanSettlements = new HashMap<>();
 
                     Set<Claim> capitalClaims = communeWikibaseItem.getClaims().get(new Property("P36"));
-                    Claim capitalClaim = new ArrayList<Claim>(capitalClaims).get(0);
+                    Claim capitalClaim = capitalClaims.stream().findFirst().get();
                     Entity capitalEntity = dwiki.getWikibaseItemById(((Item) capitalClaim.getMainsnak().getData()).getEnt());
 
                     Pattern communeLinkPattern =
@@ -1651,7 +1651,7 @@ public class FixVillages {
     }
 
     private static String getHistoricalRegionLink(String settlement, String commune, String county) {
-        if (Arrays.asList("Iași", "Vaslui", "Galați").contains(trim(county))) {
+        if (Arrays.asList("Iași", "Vaslui").contains(trim(county))) {
             return MOLDOVA_LINK;
         }
         if (Arrays.asList("Constanța", "Tulcea").contains(trim(county))) {
@@ -1715,6 +1715,17 @@ public class FixVillages {
             }
             return MOLDOVA_LINK;
         }
+        if ("Galați".equalsIgnoreCase(trim(county))) {
+            if ("Nămoloasa".equalsIgnoreCase(trim(commune))) {
+                if (null == settlement) {
+                    return "la limita între regiunile istorice " + join(Arrays.asList(MOLDOVA_LINK, MUNTENIA_LINK), " și ");
+                } else if ("Crângeni".equals(settlement)) {
+                    return MUNTENIA_LINK;
+                }
+            }
+            return MOLDOVA_LINK;
+        }
+
         // Muntenia-Oltenia
         if ("Teleorman".equalsIgnoreCase(trim(county))) {
             if ("Islaz".equalsIgnoreCase(commune)) {
