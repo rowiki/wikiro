@@ -149,13 +149,13 @@ public class App {
                         if (!StringUtils.equals(trim(newListUpdatedBuilder.toString()),
                             trim(oldListUpdatedBuilder.toString()))) {
 
+                            wiki.setMarkBot(true);
                             wiki.edit(eachTransclusion, newPageText, "Robot: actualizat listă");
                         }
                     }
                 }
             }
 
-            wiki.setMarkBot(true);
         } catch (IOException | WikibaseException | LoginException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
