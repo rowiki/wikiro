@@ -222,7 +222,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         for (int idx = 0; idx < localLinksArray.length; idx++) {
             actualLocalTitleMap.put(localLinksArray[idx], defaultString(localResolvedRedirects[idx], localLinksArray[idx]));
         }
-        localLinksArray = actualLocalTitleMap.values().stream().collect(Collectors.toList())
+        localLinksArray = actualLocalTitleMap.values().stream().filter(x -> !isNotReplaceableLink(x)).collect(Collectors.toList())
             .toArray(new String[actualForeignTitleMap.size()]);
         boolean[] localExistanceArray = targetWiki.exists(localLinksArray);
         for (int idx = 0; idx < localLinksArray.length; idx++) {
@@ -261,9 +261,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                 System.out.println("Blank! skipping...");
                 continue;
             }
-            if (startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:",
-                "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", "imdbname:", "c:file:", "doi:",
-                "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:", "oeis:")) {
+            if (isNotReplaceableLink(articleLink)) {
                 System.out.println("Link to something else! Skipping...");
                 continue;
             }
@@ -321,6 +319,12 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
         return anotherNewText.toString();
 
+    }
+
+    private boolean isNotReplaceableLink(String articleLink) {
+        return startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:",
+            "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", "imdbname:", "c:file:", "doi:",
+            "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:", "oeis:", "special:");
     }
 
     public String[] getStatus() {
