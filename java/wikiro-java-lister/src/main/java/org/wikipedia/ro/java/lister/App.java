@@ -24,6 +24,7 @@ import org.wikipedia.Wiki;
 import org.wikipedia.ro.cache.WikidataEntitiesCache;
 import org.wikipedia.ro.java.lister.generators.DefaultListGenerator;
 import org.wikipedia.ro.java.lister.generators.FootballTeamListGenerator;
+import org.wikipedia.ro.java.lister.generators.SettlementListsGenerator;
 import org.wikipedia.ro.java.lister.generators.WikidataListGenerator;
 import org.wikipedia.ro.utils.Credentials;
 
@@ -70,6 +71,7 @@ public class App {
         wikibase.setThrottle(70000);
         WikidataEntitiesCache wikidataEntitiesCache = new WikidataEntitiesCache(wikibase);
         LIST_GENERATORS.put("lot-fotbal", new FootballTeamListGenerator(wikidataEntitiesCache));
+        LIST_GENERATORS.put("comune-sate", new SettlementListsGenerator(wikidataEntitiesCache));
         LIST_GENERATORS.put("default", new DefaultListGenerator());
 
         Credentials credentials = identifyCredentials("WIKI_LISTER_USERNAME", "WIKI_LISTER_PASSWORD", "Wikipedia");
