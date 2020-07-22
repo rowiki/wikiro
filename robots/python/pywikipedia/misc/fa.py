@@ -43,32 +43,42 @@ if __name__ == "__main__":
 	text = u"local featuredPages = {\n"
 
 	text += u"--Categorie:Articole de calitate\n"
+	text += u"[AC] = {\n"
 	cat = pywikibot.Category(pywikibot.getSite(), u"Categorie:Articole de calitate")
 	gen = pagegenerators.PreloadingGenerator(pagegenerators.CategorizedPageGenerator(cat))
 	text += printCombo(gen)
+	text += u"},\n"
 
 	text += u"--Categorie:Articole bune\n"
+	text += u"[AB] = {\n"
 	cat = pywikibot.Category(pywikibot.getSite(), u"Categorie:Articole bune")
 	gen = pagegenerators.PreloadingGenerator(pagegenerators.CategorizedPageGenerator(cat))
 	text += printCombo(gen)
+	text += u"},\n"
 
 	text += u"--Categorie:Liste de calitate\n"
+	text += u"[LC] = {\n"
 	cat = pywikibot.Category(pywikibot.getSite(), u"Categorie:Liste de calitate")
 	gen = pagegenerators.PreloadingGenerator(pagegenerators.CategorizedPageGenerator(cat))
 	text += printCombo(gen)
+	text += u"},\n"
 
 	text += u"""}
 
-local keys, i = {}, 0
+local fp, j = {}, 0
 for k,_ in pairs(featuredPages) do
-    i= i+1
-    keys[i] = k
+	for k1,v1 in pairs(featuredPages[k]) do
+	j = j + 1
+	fp[k1] = v1
+    end
 end
 
 return {
-	featuredPages=featuredPages,
-	keys=keys,
-	len=i,
+	all=fp,
+	ac=featuredPages["AC"],
+	ab=featuredPages["AB"],
+	ab=featuredPages["LC"],
+	len=j,
 	}"""
 
 	page = pywikibot.Page(pywikibot.getSite(), title=u"Modul:Pagina principală/articole")
