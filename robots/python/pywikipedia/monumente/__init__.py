@@ -299,6 +299,53 @@ config = {
 				'east':  29.7,
 			},
 		},
+		'cfr':#database we work on
+		{
+			#where to search for information
+			'project' : 'wikipedia',
+			'lang' : 'ro',
+			'namespaces': [0],
+			#'namespaces': [6],
+			'listNamespaces': [0],
+			'pagePrefix': {
+				'Lista stațiilor de cale ferată din România',
+			},
+			'codeRegexp' : None,
+			'codeRegexpCompiled': None,
+			'templateRegexpCompiled': None,
+			'codeTemplate': [],
+			'codeTemplateParams':
+			[
+			],
+			#list params
+			'headerTemplate' : u'Început tabel stații CFR',
+			'rowTemplate' : u'Element tabel stații CFR',
+			'footerTemplate' : u'Început tabel stații CFR',
+			'fields' : collections.OrderedDict([
+						(u'Nr', {'code': Changes.all, }),
+						(u'Stație', {'code': Changes.article, }),
+						(u'Grad', {'code': Changes.all, }),
+						(u'Secție', {'code': Changes.all, }),
+						(u'Trafic', {'code': Changes.all, }),
+						(u'Lat', {'code': Changes.coord, }),
+						(u'Lon', {'code': Changes.coord, }),
+						(u'Foto', {'code': Changes.image, 'blacklist': []}),
+						(u'Administrator', {'code': Changes.all, }),
+						(u'Regională', {'code': Changes.all, }),
+						(u'Linie', {'code': Changes.all, }),
+						(u'Commons', {'code': Changes.commons, }),
+					]),
+			'idField': u'Stație',
+			'keepEmptyFields': False,
+			#coordinates params
+			'geolimits': {
+				'north': 48.3,
+				'south': 43.6,
+				'west':  20.27,
+				'east':  29.7,
+			},
+		},
+
 		'infoboxes':
 		[
 		{
