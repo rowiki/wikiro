@@ -126,6 +126,7 @@ def treat_sparql(dic):
             #print(rp)
             pi = rp.page_image()
             if pi and " map" not in pi.title() and \
+                      "Map." not in pi.title() and \
                       "harta" not in pi.title().lower() and \
                       "3D" not in pi.title() and \
                       "Josephinische" not in pi.title() and \
@@ -179,7 +180,7 @@ def generate_stats(county):
         name = "[[/" + county + "|" + county + "]]"
     table_line = """
 |-
-| %s || %d || %d (%.2f%%) || %d (%.2f%%) || %d (%.2f%%) || %s"""
+| %s || %d || data-sort-value="%f" | %d (%.2f%%) || data-sort-value="%f" | %d (%.2f%%) || data-sort-value="%f" | %d (%.2f%%) || %s"""
     wikidata_percentage = float(stats[county]['wikidata']) * 100.0 / stats[county]['total']
     local_percentage = float(stats[county]['local']) * 100.0 / stats[county]['total']
     missing_percentage = float(stats[county]['missing']) * 100.0 / stats[county]['total']
@@ -197,10 +198,13 @@ def generate_stats(county):
     bar += "</span>"
     text = table_line % (name,
             stats[county]['total'],
+            wikidata_percentage,
             stats[county]['wikidata'],
             wikidata_percentage,
+            local_percentage,
             stats[county]['local'],
             local_percentage,
+            missing_percentage,
             stats[county]['missing'],
             missing_percentage,
             bar
