@@ -8,7 +8,7 @@
 #
 import pywikibot
 
-from pywikibot import i18n, config, pagegenerators, textlib, weblib
+from pywikibot import i18n, config, pagegenerators, textlib
 from pywikibot.bot import SingleSiteBot
 
 
