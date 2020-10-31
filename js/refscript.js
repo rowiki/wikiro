@@ -1010,7 +1010,7 @@ if (u.match(/webcitation.org/)) {
 					continue;
 				W_Authors = ld.author;
 				//ld.date is an ISO 8601 date, we only need YYYY-MM-DD
-				W_Date = ld.datePublished.split("T")[0]
+				W_Date = convertISO8601Date(ld.datePublished)
 			}
 		}
 	};
