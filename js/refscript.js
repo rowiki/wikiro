@@ -1,4 +1,4 @@
-var Manifest = '   RefScript version 43 (2017-11-18). This program is in the Public Domain. You can use it as you wish.   ';
+var Manifest = '   RefScript version 44 (2020-10-31). This program is in the Public Domain. You can use it as you wish.   ';
 var Tips = '  Pentru scurtarea scriptului, stergeţi între crestinortodox.ro şi youtube.com  -  sau folosiţi bookmarklet-ul din secţiunea care urmează după aceasta';
 function toTitleCase(str) {
 	var str = str.toLowerCase();
@@ -20,11 +20,12 @@ function filterList(list, func) {
 	}
 	return outlist;
 }
+/// Convert an ISO 8601 timestamp to a YYYY-MM-DD date
 function convertISO8601Date(isoDate) {
     var dateRegex = /(\d{4})\-(\d{2})\-(\d{2})T[\d\:\+\-]+/g;
     var dateMatcher = dateRegex.exec(isoDate);
     if (dateMatcher) {
-        return [dateMatcher[3], dateMatcher[2], dateMatcher[1]].join('.');
+        return [dateMatcher[1], dateMatcher[2], dateMatcher[3]].join('-');
     }
 	return isoDate;
 }
@@ -369,10 +370,10 @@ var W_Title = '';
 var W_Newspaper = '';
 var W_Source = '';
 var sItalic = '\'\'';
-var today = new Date();
-var dd = today.getDate();
-var mm = today.getMonth() + 1;
-var yyyy = today.getFullYear();
+var today_date = new Date();
+var dd = today_date.getDate();
+var mm = today_date.getMonth() + 1;
+var yyyy = today_date.getFullYear();
 var zdd = dd;
 if (zdd < 10) {
 	var zdd = '0' + zdd
@@ -2232,7 +2233,9 @@ var W_Ref_Name = f_process_REF_Name();
 var ref1 = '<ref name=' + dq + W_Ref_Name + W_Ref_Date + dq + '>';
 var ref2 = ', accesat la ' + today + '</ref>';
 var sr = ref1 + s + ref2;
-var ref = '{{Citation | url=' + document.URL + '| title=' + W_Title + '| newspaper=' + W_Newspaper + '| date= ' + W_Date + '| accessdate=' + today
+var ref = '{{Citation | url=' + document.URL + '| title=' + W_Title;
+ref = ref + '| newspaper=' + W_Newspaper + '| date= ' + W_Date;
+ref = ref + '| accessdate=' + W_Ref_Date;
 
 if (W_AuthorsList.length > 0) {
 	for (var authIdx = 0; authIdx < W_AuthorsList.length; authIdx++) {
