@@ -999,16 +999,20 @@ if (u.match(/webcitation.org/)) {
 	};
 	if (u.match(/wall-street.ro/)) {
 		var W_Title = document.title;
-		var x = d.match(/title=.Arhiva.*/)[0];
-		var x = x.replace(/<\/a>/, '');
-		var W_Date = x.replace(/.*>/g, '');
-		var x = d.match(/<div class=.article-author-date.>[^]*<a href.*title=.Arhiva/)[0];
-		var x = x.replace(/<a href.*title=.Arhiva.*/, '');
-		var x = x.replace(/<\/a>.*/, '');
-		var x = x.replace(/.*>/g, '');
-		var x = x.replace(/<div class=.article-author-date.>/, '');
-		var W_Authors = x.replace(/[ |\t|\n]*,[ |\t|\n]*$/, '');
 		var W_Newspaper = 'wall-street.ro';
+		var W_Date = "";
+		var W_Authors = "";
+		var wsLd = document.getElementsByTagName('script');
+		for (var wsIdx = 0; wsIdx < wsLd.length; wsIdx++) {
+			if (wsLd[wsIdx].getAttribute('type') === 'application/ld+json') {
+				var ld = JSON.parse(wsLd[wsIdx].innerHTML);
+				if (!ld)
+					continue;
+				W_Authors = ld.author;
+				//ld.date is an ISO 8601 date, we only need YYYY-MM-DD
+				W_Date = ld.datePublished.split("T")[0]
+			}
+		}
 	};
 	if (u.match(/[^s]fin.ro/)) {
 		var x = document.title;
