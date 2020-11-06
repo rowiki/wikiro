@@ -30,10 +30,14 @@ public class WikiTableCell extends WikiTableElement {
         }
 
         if (null != subParts && 0 < subParts.size()) {
-            sbuild.append(' ');
+            StringBuilder subPartsBuilder = new StringBuilder();
             for (WikiPart eachSubPart : subParts) {
-                sbuild.append(eachSubPart);
+                subPartsBuilder.append(eachSubPart);
             }
+            if (!Character.isWhitespace(subPartsBuilder.charAt(0))) {
+                sbuild.append(' ');
+            }
+            sbuild.append(subPartsBuilder);
         }
 
         return sbuild.toString();

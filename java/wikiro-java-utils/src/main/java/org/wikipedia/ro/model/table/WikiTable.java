@@ -8,7 +8,7 @@ public class WikiTable extends WikiTableElement {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("\n{|");
+        StringBuilder builder = new StringBuilder("{|");
         if (null != attribs) {
             builder.append(' ').append(attribs.stream().map(eachPart -> eachPart.toString()).collect(Collectors.joining()));
         }
