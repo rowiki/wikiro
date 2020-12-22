@@ -46,6 +46,14 @@ public class WikidataEntitiesCache {
         return get(ent.getId());
     }
 
+    public void invalidate(Entity ent) {
+        invalidate(ent.getId());
+    }
+
+    public void invalidate(String id) {
+        qIdIndex.remove(id);
+    }
+    
     public Wikibase getWiki() {
         return wikidata;
     }
