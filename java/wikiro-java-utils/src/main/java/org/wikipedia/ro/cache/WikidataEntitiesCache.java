@@ -57,4 +57,9 @@ public class WikidataEntitiesCache {
     public Wikibase getWiki() {
         return wikidata;
     }
+
+    public Entity refresh(Entity ent) throws IOException, WikibaseException {
+        invalidate(ent);
+        return get(ent);
+    }
 }
