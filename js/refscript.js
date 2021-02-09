@@ -2234,7 +2234,7 @@ var ref1 = '<ref name=' + dq + W_Ref_Name + W_Ref_Date + dq + '>';
 var ref2 = ', accesat la ' + today + '</ref>';
 var sr = ref1 + s + ref2;
 var ref = '{{Citation | url=' + document.URL + '| title=' + W_Title;
-ref = ref + '| newspaper=' + W_Newspaper + '| date= ' + W_Date;
+ref = ref + '| newspaper=' + W_Newspaper + '| date= ' + W_DateYMD;
 ref = ref + '| accessdate=' + W_Ref_Date;
 
 if (W_AuthorsList.length > 0) {
