@@ -246,7 +246,7 @@ function f_process_Date_YMD(P_Date) {
 	var P_Date = P_Date.replace(/ octombrie /, '-10-');
 	var P_Date = P_Date.replace(/ noiembrie /, '-11-');
 	var P_Date = P_Date.replace(/ decembrie /, '-12-');
-	var P_Date = P_Date.replace(/(.*)-(.*)-(.*)/, '$3-$2-$1');
+	var P_Date = P_Date.replace(/(.{1,2})-(.{1,2})-(.{4})/, '$3-$2-$1');
 	var P_Date = P_Date.replace(/(.*)-(.)$/, '$1-0$2');
 	var P_Date = P_Date.replace(/^ */, '');
 	return P_Date;
