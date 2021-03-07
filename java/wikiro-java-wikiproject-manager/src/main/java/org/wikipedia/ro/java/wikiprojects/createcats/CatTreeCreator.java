@@ -29,12 +29,12 @@ import javax.security.auth.login.LoginException;
 
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.utils.ArticleClass;
-import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
 import org.wikipedia.ro.java.wikiprojects.utils.DefaultImportanceClass;
 import org.wikipedia.ro.java.wikiprojects.utils.ImportanceClass;
 import org.wikipedia.ro.java.wikiprojects.utils.NumberedImportanceClass;
 import org.wikipedia.ro.java.wikiprojects.utils.QualityClass;
-import org.wikipedia.ro.java.wikiprojects.utils.CredentialUtils;
+import org.wikipedia.ro.utils.CredentialUtils;
+import org.wikipedia.ro.utils.Credentials;
 
 public class CatTreeCreator {
 

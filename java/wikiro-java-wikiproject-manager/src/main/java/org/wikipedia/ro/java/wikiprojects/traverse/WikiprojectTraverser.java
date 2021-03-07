@@ -1,7 +1,8 @@
 package org.wikipedia.ro.java.wikiprojects.traverse;
 
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.prependIfMissing;
 import static org.apache.commons.lang3.StringUtils.removeStart;
 
@@ -17,13 +18,13 @@ import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.commons.lang3.StringUtils;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.model.WikiprojectsModel;
-import org.wikipedia.ro.java.wikiprojects.utils.QualityClass;
 import org.wikipedia.ro.java.wikiprojects.utils.ArticleClass;
-import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
 import org.wikipedia.ro.java.wikiprojects.utils.DefaultImportanceClass;
 import org.wikipedia.ro.java.wikiprojects.utils.ImportanceClass;
 import org.wikipedia.ro.java.wikiprojects.utils.NumberedImportanceClass;
-import org.wikipedia.ro.java.wikiprojects.utils.CredentialUtils;
+import org.wikipedia.ro.java.wikiprojects.utils.QualityClass;
+import org.wikipedia.ro.utils.CredentialUtils;
+import org.wikipedia.ro.utils.Credentials;
 
 public class WikiprojectTraverser {
     private String wikiprojectName;

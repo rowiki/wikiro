@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
@@ -30,8 +29,8 @@ import javax.security.auth.login.LoginException;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.WikiprojectsHierarchy;
 import org.wikipedia.ro.java.wikiprojects.model.WikiprojectsModel;
-import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
-import org.wikipedia.ro.java.wikiprojects.utils.CredentialUtils;
+import org.wikipedia.ro.utils.CredentialUtils;
+import org.wikipedia.ro.utils.Credentials;
 
 public class StubClassifier {
 

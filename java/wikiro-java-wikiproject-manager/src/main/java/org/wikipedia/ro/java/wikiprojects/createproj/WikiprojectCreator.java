@@ -6,11 +6,10 @@ import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.WordUtils;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.createcats.CatTreeCreator;
-import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
-import org.wikipedia.ro.java.wikiprojects.utils.CredentialUtils;
+import org.wikipedia.ro.utils.CredentialUtils;
+import org.wikipedia.ro.utils.Credentials;
 
 public class WikiprojectCreator {
     private String wikiprojectName;

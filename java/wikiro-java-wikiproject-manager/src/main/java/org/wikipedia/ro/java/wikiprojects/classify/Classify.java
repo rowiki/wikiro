@@ -31,8 +31,8 @@ import org.wikibase.data.Property;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.WikiprojectsHierarchy;
 import org.wikipedia.ro.java.wikiprojects.model.WikiprojectsModel;
-import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
-import org.wikipedia.ro.java.wikiprojects.utils.CredentialUtils;
+import org.wikipedia.ro.utils.CredentialUtils;
+import org.wikipedia.ro.utils.Credentials;
 import org.wikipedia.ro.utils.PageUtils;
 
 public class Classify {
