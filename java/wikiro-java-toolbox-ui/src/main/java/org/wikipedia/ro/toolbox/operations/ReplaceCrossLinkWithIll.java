@@ -200,7 +200,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
             String link = innerLinkMatcher.group(1);
             link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());
-            System.out.println("Link: " + link);
+            System.out.println("First pass: Link: " + link);
             String articleLink = removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
             if (isBlank(articleTitle)) {
@@ -253,7 +253,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
             String link = innerLinkMatcher.group(1);
             link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());
-            System.out.println("Link: " + link);
+            System.out.println("Second pass: Link: " + link);
             String articleLink = removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
             String linkTitle = defaultString(innerLinkMatcher.group(3), articleTitle);
