@@ -23,7 +23,7 @@ import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
 import org.wikipedia.ro.java.wikiprojects.utils.DefaultImportanceClass;
 import org.wikipedia.ro.java.wikiprojects.utils.ImportanceClass;
 import org.wikipedia.ro.java.wikiprojects.utils.NumberedImportanceClass;
-import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
+import org.wikipedia.ro.java.wikiprojects.utils.CredentialUtils;
 
 public class WikiprojectTraverser {
     private String wikiprojectName;
@@ -54,7 +54,7 @@ public class WikiprojectTraverser {
 
         Wiki wiki = Wiki.newSession(wikiAddress);
 
-        Credentials credentials = WikiprojectsUtils.identifyCredentials();
+        Credentials credentials = CredentialUtils.identifyCredentials();
 
         try {
             wiki.login(credentials.username, credentials.password);

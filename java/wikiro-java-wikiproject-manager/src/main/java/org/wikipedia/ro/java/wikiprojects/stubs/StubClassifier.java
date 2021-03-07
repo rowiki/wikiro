@@ -31,7 +31,7 @@ import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.WikiprojectsHierarchy;
 import org.wikipedia.ro.java.wikiprojects.model.WikiprojectsModel;
 import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
-import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
+import org.wikipedia.ro.java.wikiprojects.utils.CredentialUtils;
 
 public class StubClassifier {
 
@@ -58,7 +58,7 @@ public class StubClassifier {
     public void classifyStubs() {
 
         Wiki rowiki = Wiki.newSession(wikiAddress);
-        Credentials credentials = WikiprojectsUtils.identifyCredentials();
+        Credentials credentials = CredentialUtils.identifyCredentials();
         try {
             rowiki.login(credentials.username, credentials.password);
             rowiki.setMarkBot(true);

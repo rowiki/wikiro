@@ -10,7 +10,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.createcats.CatTreeCreator;
 import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
-import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
+import org.wikipedia.ro.java.wikiprojects.utils.CredentialUtils;
 
 public class WikiprojectCreator {
     private String wikiprojectName;
@@ -31,7 +31,7 @@ public class WikiprojectCreator {
     public void createWikiproject() {
         Wiki wiki = Wiki.newSession(wikiAddress);
 
-        Credentials credentials = WikiprojectsUtils.identifyCredentials();
+        Credentials credentials = CredentialUtils.identifyCredentials();
 
         try {
             wiki.login(credentials.username, credentials.password);

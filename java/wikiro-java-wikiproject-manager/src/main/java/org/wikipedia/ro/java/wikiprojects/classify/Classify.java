@@ -32,7 +32,7 @@ import org.wikipedia.Wiki;
 import org.wikipedia.ro.java.wikiprojects.WikiprojectsHierarchy;
 import org.wikipedia.ro.java.wikiprojects.model.WikiprojectsModel;
 import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
-import org.wikipedia.ro.java.wikiprojects.utils.WikiprojectsUtils;
+import org.wikipedia.ro.java.wikiprojects.utils.CredentialUtils;
 import org.wikipedia.ro.utils.PageUtils;
 
 public class Classify {
@@ -59,7 +59,7 @@ public class Classify {
 
     public void classify() {
         Wiki rowiki = Wiki.newSession(wikiAddress);
-        Credentials credentials = WikiprojectsUtils.identifyCredentials();
+        Credentials credentials = CredentialUtils.identifyCredentials();
         try {
             rowiki.login(credentials.username, credentials.password);
             rowiki.setMarkBot(true);
