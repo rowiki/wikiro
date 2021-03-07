@@ -1,4 +1,4 @@
-package org.wikipedia.ro.toolbox.operations;
+package org.wikipedia.ro.legacyoperations;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.prependIfMissing;

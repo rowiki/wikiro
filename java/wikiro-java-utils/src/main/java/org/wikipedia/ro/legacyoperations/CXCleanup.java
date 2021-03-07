@@ -1,4 +1,4 @@
-package org.wikipedia.ro.toolbox.operations;
+package org.wikipedia.ro.legacyoperations;
 
 import static org.apache.commons.lang3.StringUtils.removeEnd;
 import static org.apache.commons.lang3.StringUtils.replace;

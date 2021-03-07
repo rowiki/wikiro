@@ -1,4 +1,4 @@
-package org.wikipedia.ro.toolbox.operations;
+package org.wikipedia.ro.legacyoperations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

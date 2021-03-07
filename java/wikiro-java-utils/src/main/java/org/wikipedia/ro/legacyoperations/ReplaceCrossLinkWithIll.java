@@ -1,4 +1,4 @@
-package org.wikipedia.ro.toolbox.operations;
+package org.wikipedia.ro.legacyoperations;
 
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
@@ -36,7 +36,7 @@ import org.wikibase.data.Sitelink;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiTemplate;
-import org.wikipedia.ro.toolbox.WikipediaToolboxGUI;
+import org.wikipedia.ro.utils.WikidataCacheManager;
 
 @Operation(labelKey = "operation.insertill.label", useWikibase = true)
 public class ReplaceCrossLinkWithIll implements WikiOperation {
@@ -83,7 +83,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             status = new String[] { "status.analyzing.link", foreignTitle };
 
             String roTitle = roArticlesCache.get(lang + ":" + foreignTitle);
-            Entity wbEntity = WikipediaToolboxGUI.getWikidataEntitiesCache(dataWiki).getByArticle(lang + "wiki", foreignTitle);
+            Entity wbEntity = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).getByArticle(lang + "wiki", foreignTitle);
             if (null == roTitle && null == wbEntity) {
                 try {
                     if (null == wbEntity) {
@@ -91,7 +91,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                             continue;
                         } else if ("d".equals(lang)) {
                             wbEntity = dataWiki
-                                .getWikibaseItemById(WikipediaToolboxGUI.getCachedRedirect(dataWiki, foreignTitle));
+                                .getWikibaseItemById(WikidataCacheManager.getCachedRedirect(dataWiki, foreignTitle));
                         } else {
                             String fullForeignTitle = substringBefore(foreignTitle, "#");
                             Matcher namespaceMatcher = namespacepattern.matcher(fullForeignTitle);
@@ -99,7 +99,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                             String namespace = defaultString(namespaceMatcher.group(1));
                             String simpleForeignTitle = namespaceMatcher.group(2);
                             foreignTitle = capitalize(namespace) + capitalize(simpleForeignTitle);
-                            String target = WikipediaToolboxGUI.getCachedRedirect(sourceWiki, foreignTitle);
+                            String target = WikidataCacheManager.getCachedRedirect(sourceWiki, foreignTitle);
                             wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(lang + "wiki", target);
                         }
                     }
@@ -145,13 +145,13 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             status = new String[] { "status.analyzing.link", articleTitle };
 
             Wiki srcWiki = Wiki.newSession(lang + ".wikipedia.org");
-            String target = WikipediaToolboxGUI.getCachedRedirect(srcWiki, articleTitle);
+            String target = WikidataCacheManager.getCachedRedirect(srcWiki, articleTitle);
             String targetLang = removeEnd(targetWikiCode, "wiki");
             String sourceLang = defaultIfEmpty(lang, removeEnd(sourceWikiCode, "wiki"));
 
             String roLabel = null;
             String roArticle = roArticlesCache.get(sourceLang + ":" + target);
-            Entity wbEntity = WikipediaToolboxGUI.getWikidataEntitiesCache(dataWiki).getByArticle(sourceLang + "wiki", target);
+            Entity wbEntity = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).getByArticle(sourceLang + "wiki", target);
             if (null == roArticle && null == wbEntity) {
                 try {
                     wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(sourceLang + "wiki", target);
@@ -280,7 +280,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             String roArticle = roArticlesCache.get(sourceLang + ":" + foreignArticleTitle);
 
             if (foreignLinkExistenceMap.get(foreignArticleTitle)) {
-                Entity wbEntity = WikipediaToolboxGUI.getWikidataEntitiesCache(dataWiki).getByArticle(sourceLang + "wiki", foreignArticleTitle);
+                Entity wbEntity = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).getByArticle(sourceLang + "wiki", foreignArticleTitle);
                 if (null == roArticle && null == wbEntity) {
                     try {
                         wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(sourceWikiCode, foreignArticleTitle);

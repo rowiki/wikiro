@@ -64,9 +64,9 @@ import org.wikipedia.Wiki.User;
 import org.wikipedia.ro.Generator;
 import org.wikipedia.ro.cache.Cache;
 import org.wikipedia.ro.cache.WikidataEntitiesCache;
+import org.wikipedia.ro.legacyoperations.Operation;
+import org.wikipedia.ro.legacyoperations.WikiOperation;
 import org.wikipedia.ro.toolbox.generators.PageGenerator;
-import org.wikipedia.ro.toolbox.operations.Operation;
-import org.wikipedia.ro.toolbox.operations.WikiOperation;
 import org.wikipedia.ro.utils.TextUtils;
 
 public class WikipediaToolboxGUI {
@@ -78,24 +78,6 @@ public class WikipediaToolboxGUI {
     private static Map<String, Component> dataComponentsMap = new HashMap<String, Component>();
     private static JFrame frame;
     
-    private static WikidataEntitiesCache wikidataCache = null;
-    
-    public static WikidataEntitiesCache getWikidataEntitiesCache(Wikibase wikidata) {
-        if (null == wikidataCache) {
-            wikidataCache = new WikidataEntitiesCache(wikidata);
-        }
-        return wikidataCache;
-    }
-    
-    private static Map<Wiki, Cache<String, IOException>> redirectCaches = new HashMap<>();
-    
-    public static String getCachedRedirect(final Wiki wiki, String s) throws IOException {
-        if (!redirectCaches.containsKey(wiki)) {
-            redirectCaches.put(wiki, new Cache<>(key -> StringUtils.defaultString(wiki.resolveRedirect(key), key)));
-        }
-        return redirectCaches.get(wiki).get(s);
-    }
-
     public static void main(String[] args) {
         bundle = ResourceBundle.getBundle("uitexts.uitexts", new Locale("ro"));
         // TODO Auto-generated method stub
@@ -158,7 +140,7 @@ public class WikipediaToolboxGUI {
         hGroup.addGroup(actionChoiceLayout.createParallelGroup().addComponent(actionDropDown).addComponent(summaryTF));
         actionChoiceLayout.setHorizontalGroup(hGroup);
 
-        Reflections refl = new Reflections("org.wikipedia.ro.toolbox.operations");
+        Reflections refl = new Reflections("org.wikipedia.ro.legacyoperations");
         Set<Class<?>> operationClasses = refl.getTypesAnnotatedWith(Operation.class);
         List<Class<?>> sortedOperationClasses = new ArrayList<Class<?>>(operationClasses);
         Collections.sort(sortedOperationClasses, new Comparator<Class<?>>() {
