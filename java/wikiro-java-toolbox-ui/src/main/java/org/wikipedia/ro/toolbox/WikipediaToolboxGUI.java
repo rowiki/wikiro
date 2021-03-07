@@ -597,18 +597,21 @@ public class WikipediaToolboxGUI {
                         Thread.sleep(500l);
                     }
 
+                    String initText = targetWiki.getPageText(actionParams[i]);
                     String result = action.execute();
 
-                    User currentUser = targetWiki.getCurrentUser();
-                    final JTextField unameTF = (JTextField) dataComponentsMap.get("username");
-                    final JPasswordField pwdTF = (JPasswordField) dataComponentsMap.get("password");
-                    String uname = unameTF.getText();
-                    char[] pwd = pwdTF.getPassword();
-                    if (null == currentUser || !StringUtils.equals(substringBefore(uname, "@"), currentUser.getUsername())) {
-                        targetWiki.login(uname, pwd);
+                    if (!StringUtils.equals(initText, result)) {
+                        User currentUser = targetWiki.getCurrentUser();
+                        final JTextField unameTF = (JTextField) dataComponentsMap.get("username");
+                        final JPasswordField pwdTF = (JPasswordField) dataComponentsMap.get("password");
+                        String uname = unameTF.getText();
+                        char[] pwd = pwdTF.getPassword();
+                        if (null == currentUser || !StringUtils.equals(substringBefore(uname, "@"), currentUser.getUsername())) {
+                            targetWiki.login(uname, pwd);
+                        }
+                        targetWiki.edit(actionParams[i], result, commitMessage);
+                        timeToStart = System.currentTimeMillis() + throttle;
                     }
-                    targetWiki.edit(actionParams[i], result, commitMessage);
-                    timeToStart = System.currentTimeMillis() + throttle;
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | RuntimeException e1) {
                     e1.printStackTrace();
                     int userOption = JOptionPane.showOptionDialog(frame, TextUtils.formatError(e1),
