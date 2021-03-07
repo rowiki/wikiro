@@ -5,8 +5,6 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import java.io.Console;
 
-import org.wikipedia.ro.java.wikiprojects.utils.Credentials;
-
 public class CredentialUtils {
     public static Credentials identifyCredentials() {
         Credentials credentials = new Credentials();
