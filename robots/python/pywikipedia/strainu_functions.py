@@ -93,7 +93,7 @@ def tl2Dict(template):
             intern[count] = text2
     _dict = {}
     _keyList = []
-    #print intern
+    #print(intern)
     template = re.sub(r'(\r|\n)', '', template)
     template = template[0:len(template)-2]#get rid of '}}'
     params = template.split('|')
@@ -131,7 +131,7 @@ def tl2Dict(template):
             count = int(match)
             value = value.replace('%s%d%s' % (marker, count, marker), intern[count])
             _dict[key] = value
-    #print _dict
+    #print(_dict)
     return (_dict, _keyList)
     
 #from [[a|b]] get b

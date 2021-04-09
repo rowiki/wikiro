@@ -5,6 +5,7 @@ import json
 import csv
 import codecs
 import collections
+import sys
 
 def csvToJson( inFile, outFile=None, field=u"Cod", delimiter=","):
     out = None
@@ -49,7 +50,10 @@ def csvToTemplate(inFile, outFile, templateName, pre=None, post=None):
 def unicodeCsvReader(utf8_data, dialect=csv.excel, **kwargs):
     csv_reader = csv.reader(utf8_data, dialect=dialect, **kwargs)
     for row in csv_reader:
-        yield [unicode(cell, 'utf-8') for cell in row]
+        if sys.version_info >= (3,0):
+            yield row
+        else:
+            yield [unicode(cell,'utf-8') for cell in row]
 
 
 if __name__ == "__main__":

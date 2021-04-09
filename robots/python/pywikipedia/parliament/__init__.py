@@ -39,7 +39,7 @@ def niceDate(date):
 def allCommas(s):
 	s = s.replace(u"ţ", u"ț");
 	s = s.replace(u"Ţ", u"Ț");
- 	s = s.replace(u"ş", u"ș");
+	s = s.replace(u"ş", u"ș");
 	s = s.replace(u"Ş", u"Ș");
 	return s;
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import requests
 import re
 import codecs
@@ -11,6 +11,7 @@ import json
 
 sys.path.append("wikiro/robots/python/pywikipedia")
 import strainu_functions
+import csvUtils as csv_utils
 import parliament
 from parliament import group, person
 import pywikibot
@@ -26,9 +27,9 @@ invalid_group = u"Deputați neafiliați"
 def extractElectoralDistrict(bf):
 	res = bf.find('div', attrs={'class':'boxStiri'})
 	txt = res.findAll('div', attrs={'class':'boxDep clearfix'})[0].p.text
-	match = re.search(ur"circumscripţia electorală nr\.([0-9]+)([A-ZȘȚÂĂÎŞŢ]*,)((.|\s)*?[0-9]+)", txt)
+	match = re.search(r"circumscripţia electorală nr\.([0-9]+)([A-ZȘȚÂĂÎŞŢ]*,)((.|\s)*?[0-9]+)", txt)
 	if match:
-		print match.groups()
+		print(match.groups())
 		return parliament.allCommas(u" ".join([match.group(1), match.group(2).title(), match.group(3).strip()]))
 	else:
 		return u""
@@ -47,22 +48,27 @@ def extractBirthdate(bf):
 		return u""
 
 def extractLegislatures(bf):
-	llist = bf.findAll('div', text=u"Alte legislaturi")[0].parent.parent.nextSibling.next
+	llist = bf.findAll('div', text=u"Alte legislaturi")[0].nextSibling.next
 	ret = {}
-	for i in llist:
-		element = str(i.next.next)
-		chamber = element[:element.find(' ')]
+	#print(llist)
+	if not llist:
+		return ret
+	for element in str(llist).split("<li>"):
+		#print("element", element)
+		chamber = element[element.find('>')+1:]
+		chamber = chamber[:chamber.find(' ')]
 		begin = element[element.find('-')+2:element.find('-')+6]
+		#print(chamber, begin)
 		if chamber == "Deputat":
 			ret[begin] = 2
 		elif chamber == "Senator":
 			ret[begin] = 1
-	print ret
+	print(ret)
 	return ret
 
 def ParliamentCsv(csvName):
 	with open(csvName, "r") as f:
-		reader = strainu_functions.unicode_csv_reader(f, delimiter=';', quotechar="'")
+		reader = csv_utils.unicodeCsvReader(f, delimiter=';', quotechar="'")
 		for row in reader:
 			name = row[0]
 			people[name] = parliament.person.ElectedPerson()
@@ -72,15 +78,16 @@ def ParliamentCsv(csvName):
 			people[name].district = row[3]
 			people[name].wiki = row[4]
 			people[name].index = row[5]
+			people[name].party = row[6]
 			try:
-				js = json.loads(row[6])
+				js = json.loads(row[7])
 			except ValueError:
 				js = {}
 			people[name].legislatures = js
 
 def ElectionsCsv(csvName):
 	with open(csvName, "r") as f:
-		reader = strainu_functions.unicode_csv_reader(f)
+		reader = csv_utils.unicodeCsvReader(f)
 		for row in reader:
 			name = row[0]
 			if name not in people:
@@ -97,7 +104,7 @@ def ElectionsCsv(csvName):
 
 def MovesCsv(csvName):
 	with open(csvName, "r") as f:
-		reader = strainu_functions.unicode_csv_reader(f)
+		reader = csv_utils.unicodeCsvReader(f)
 		for row in reader:
 			name = row[0]
 			if name not in people:
@@ -115,7 +122,7 @@ def MovesCsv(csvName):
 
 def DemisionsCsv(csvName):
 	with open(csvName, "r") as f:
-		reader = strainu_functions.unicode_csv_reader(f)
+		reader = csv_utils.unicodeCsvReader(f)
 		for row in reader:
 			name = row[0]
 			if name not in people:
@@ -145,7 +152,7 @@ def scrollThroughPages():
 			prev_legislatures = {}
 			if new_man == False:
 				#TODO: also try these ones
-				print u"Parlamentarul a fost și în alte legislaturi"
+				print(u"Parlamentarul a fost și în alte legislaturi")
 				prev_legislatures = extractLegislatures(parsed_html)
 			wiki = u""
 			name = parsed_html.find('div', attrs={'class':'boxTitle'}).h1.next.title()
@@ -153,21 +160,21 @@ def scrollThroughPages():
 			page = pywikibot.Page(pywikibot.getSite(), name)
 			try:
 				if page.exists():
-					print u"ro.wp are deja articol"
+					print(u"ro.wp are deja articol")
 					wiki = page.title()
-				print name
-				print extractBirthdate(parsed_html)
+				print(name)
+				print(extractBirthdate(parsed_html))
 				text = name + u";" + extractBirthdate(parsed_html) + u";" + str(camera) + u";\'" + extractElectoralDistrict(parsed_html) + u"\';\'" + wiki + \
-				u"\';\'" + str(om) + "\';\'" + json.dumps(prev_legislatures) + "\'\n"
-				print text
+				u"\';\'" + str(om) + "\';\'" + str(parties) + "\';\'" + json.dumps(prev_legislatures) + "\'\n"
+				print(text)
 				f.write(text)
 			except:
 				continue
 			count[camera] += 1
 	f.close()
 
-	print u"Senatori: %d" % count[1]
-	print u"Deputați: %d" % count[2]
+	print(u"Senatori: %d" % count[1])
+	print(u"Deputați: %d" % count[2])
 
 if __name__ == "__main__":
 	#scrollThroughPages()
@@ -176,9 +183,9 @@ if __name__ == "__main__":
 	MovesCsv("parliament/migrari.csv")
 	DemisionsCsv("parliament/demisii.csv")
 	
-	print "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+	print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 	for person in people:
-		print person
+		print(person)
 		if people[person].wiki != u"":
 			page = pywikibot.Page(pywikibot.getSite(), people[person].wiki)
 			if page.isRedirectPage():
@@ -188,9 +195,9 @@ if __name__ == "__main__":
 			for cat in page.categories():
 				if cat.title() in catl:
 					catl.remove(cat.title())
-			print catl
+			print(catl)
 			if art.find(u"{{Infocaseta") > -1 or art.find(u"{{Infobox") > -1 or art.find(u"Cutie") > -1:
-				print u"Există deja o infocasetă în articol"
+				print(u"Există deja o infocasetă în articol")
 				if len(catl) == 0:
 					continue
 			else:
@@ -205,28 +212,28 @@ if __name__ == "__main__":
 			art = people[person].generateArticle()
 			page = pywikibot.Page(pywikibot.getSite(), people[person].name)
 			if page.exists():
-				print u"Există deja articolul %s" % page.title()
+				print(u"Există deja articolul %s" % page.title())
 				continue
 
-		print art
+		print(art)
 		
 		answer = pywikibot.inputChoice(u"Upload page %s" % people[person].name, ['Yes', 'No', 'Rename'], ['y', 'n', 'r'], 'n')
 		if answer == 'y':
 			try:
 				page.put(art, "Completez articolul despre un parlamentar")
 			except pywikibot.exceptions.PageSaveRelatedError as e:
-				print "Eroare la salvarea paginii" + str(e)
+				print("Eroare la salvarea paginii" + str(e))
 				pass
 		elif answer == 'r':
 			newname = pywikibot.input(u"Insert new article name")
 			page = pywikibot.Page(pywikibot.getSite(), newname)
 			try:
 				if page.exists():
-					print u"Există deja articolul %s" % page.title()
+					print(u"Există deja articolul %s" % page.title())
 					continue
 				page.put(art, "Completez articolul despre un parlamentar")
 			except pywikibot.exceptions.PageSaveRelatedError as e:
-				print "Eroare la salvarea paginii" + str(e)
+				print("Eroare la salvarea paginii" + str(e))
 				pass
 		#print u"----"
 		#pass

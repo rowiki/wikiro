@@ -5,7 +5,7 @@ Read & parse file
 
 '''
 import sys, time, warnings, json, re
-sys.path.append(".")
+sys.path.append("wikiro/robots/python")
 from geo import overpass
 
 import strainu_functions

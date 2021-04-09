@@ -83,10 +83,10 @@ class DiacriticsBot:
         
         #transrule = string.maketrans("şţŞŢ", "șțȘȚ")
         #page_cap = pywikibot.Page(self.site, page_t.translate(transrule))
-        new_page_t = string.replace(page_t, u'ş', u'ș')
-        new_page_t = string.replace(new_page_t, u'ţ', u'ț')
-        new_page_t = string.replace(new_page_t, u'Ş', u'Ș')
-        new_page_t = string.replace(new_page_t, u'Ţ', u'Ț')
+        new_page_t = page_t.replace(u'ş', u'ș')
+        new_page_t = new_page_t.replace(u'ţ', u'ț')
+        new_page_t = new_page_t.replace(u'Ş', u'Ș')
+        new_page_t = new_page_t.replace(u'Ţ', u'Ț')
         page_mod = pywikibot.Page(self.site, new_page_t)
         
         if new_page_t == page_t:
