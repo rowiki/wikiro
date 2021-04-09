@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import requests
 import re
 
@@ -36,7 +36,7 @@ class GroupMembership(object):
 		if value in parties:
 			self.party = parties[value]
 		else:
-			print "Could not find %s" % value
+			print("Could not find %s" % value)
 			self.party = None
 		self._name = value
 

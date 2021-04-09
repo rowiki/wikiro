@@ -35,7 +35,14 @@ def extractElectoralDistrict(bf):
 		return u""
 
 def extractParties(bf):
-	pass
+	res = bf.findAll('h3', text=u"Formaţiunea politică:")
+	if res and len(res):
+		res = res[0].parent
+	else:
+		return u""
+	txt = res.findAll('tr', attrs={'valign':'top'})[0].next.next.text
+	print("Partid", txt)
+	return txt
 
 def extractCommisions(bf):
 	pass
@@ -132,11 +139,11 @@ def DemisionsCsv(csvName):
 
 def scrollThroughPages():
 	count = [0,0,0]
-	f = codecs.open("parliament/parliament_2016.csv", "w+", "utf8")
+	f = codecs.open("parliament/parliament_2020.csv", "w+", "utf8")
 	for camera in [1,2]:
-		for om in range(1,500):
-			url = 'http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%d&leg=2016&cam=%d&idl=1' % (om, camera)
-			print url
+		for om in range(1,350):
+			url = 'http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%d&leg=2020&cam=%d' % (om, camera)
+			print(url)
 			try:
 				r = requests.get(url)
 			except:
@@ -146,14 +153,16 @@ def scrollThroughPages():
 			html = r.text
 			parsed_html = BeautifulSoup(html)
 			if parsed_html.find('div', attrs={'class':'profile-pic-dep'}).img['src'] == u"/img/judete/judet.jpg":
-				print u"Camera %d s-a terminat" % camera
-				break
+				continue
+			#	print(u"Camera %d s-a terminat" % camera)
+			#	break
 			new_man = len(parsed_html.findAll('div', text=u"Alte legislaturi")) == 0
 			prev_legislatures = {}
 			if new_man == False:
 				#TODO: also try these ones
 				print(u"Parlamentarul a fost și în alte legislaturi")
 				prev_legislatures = extractLegislatures(parsed_html)
+			parties = extractParties(parsed_html)
 			wiki = u""
 			name = parsed_html.find('div', attrs={'class':'boxTitle'}).h1.next.title()
 			name = parliament.allCommas(name)
@@ -177,8 +186,10 @@ def scrollThroughPages():
 	print(u"Deputați: %d" % count[2])
 
 if __name__ == "__main__":
-	#scrollThroughPages()
-	ParliamentCsv("parliament/parliament_2016.csv")
+	scrollThroughPages()
+
+#def bla():
+	ParliamentCsv("parliament/parliament_2020.csv")
 	ElectionsCsv("parliament/alegeri.csv")
 	MovesCsv("parliament/migrari.csv")
 	DemisionsCsv("parliament/demisii.csv")

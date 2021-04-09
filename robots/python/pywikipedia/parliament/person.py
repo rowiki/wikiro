@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import requests
 import re
 
@@ -17,8 +17,8 @@ chambers = {
 }
 
 chamber_link = {
-	1: u"[[Legislatura 2016-2020 (Senat)]]",
-	2: u"[[Legislatura 2016-2020 (Camera Deputaților)]]",
+	1: u"[[Legislatura 2020-2024 (Senat)]]",
+	2: u"[[Legislatura 2020-2024 (Camera Deputaților)]]",
 }
 
 category = {
@@ -37,6 +37,7 @@ class ElectedPerson(object):
 		self.wiki = u""
 		self.index = -1
 		self.legislatures = {}
+		self.party = u""
 
 	def addGroup(self, group):
 		self.groups.append(group)
@@ -46,20 +47,15 @@ class ElectedPerson(object):
 		self.groups[-1].end = endDate
 
 	def generateInfobox(self):
-		elections = [u"2016", u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
-		text = u"""{{Infocaseta Om politic
-| nume = %s
-| functia = %s
-| început = %s
-| sfârșit = %s
-| circumscripția = %s
-| partid = %s
-| data_nașterii = %s
+		elections = [u"2020", u"2016", u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
+		text = u"""{{Infocaseta Om politic}}
 """
+		return text
+
 		function = u""
 		if self.chamber in chambers:
 			function = chambers[self.chamber].replace(u'|d', u'|D').replace(u'|s', u'|S')
-		begin = u"2016-12-21"
+		begin = u"2020-12-21"
 		if len(self.groups) > 0:
 			begin = self.groups[0].start
 		for y in range(1, len(elections)):
@@ -80,7 +76,7 @@ class ElectedPerson(object):
 
 		text = text % (self.name, function, parliament.niceDate(begin), end, district, party, birthdate)
 		index = 2
-		print begin
+		print(begin)
 		t = u""
 		last_chamber = 0
 		for y in range(1, len(elections)):
@@ -105,15 +101,15 @@ class ElectedPerson(object):
 		return text
 	
 	def generateCategoriesList(self):
-		elections = [u"2016", u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
+		elections = [u"2020", u"2016", u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
 		cat = [u"Categorie:Politicieni români în viață"]
 		if self.chamber in category:
-			cat.append(category[self.chamber] % (u"2016", u"2020"))
+			cat.append(category[self.chamber] % (u"2020", u"2024"))
 		for y in range (1, len(elections)):
 			year = elections[y]
 			if year in self.legislatures:	
 				cat.append(category[self.legislatures[year]] % (year, elections[y-1]))
-		print cat
+		print(cat)
 		return cat
 
 	def generateCategories(self):
@@ -124,7 +120,7 @@ class ElectedPerson(object):
 		return cats
 
 	def generateArticle(self):
-		firstParagraph = u"""'''%s''' (n. {{Data nașterii|%s}}) este un %s român, ales în %d%s%s. %s
+		firstParagraph = u"""'''%s''' ({{Date biografice}}) este un %s român, ales în %d%s%s. %s
 
 """
 		mandateEnd = u"""Mandatul său a încetat pe %s."""
@@ -133,28 +129,31 @@ class ElectedPerson(object):
 * [[Parlamentul României]]
 
 == Legături externe ==
-* [http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%s&leg=2016&cam=%s&idl=1 Activitatea parlamentară]
+* [http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%s&leg=2020&cam=%s&idl=1 Activitatea parlamentară]
 
 """
 		text = self.generateInfobox()
 		function = u""
 		if self.chamber in chambers:
 			function = chambers[self.chamber]
-		begin = 2016
+		begin = 2020
 		group = u""
-		groupprefix = u""
+		groupprefix = u" din partea "
 		if len(self.groups) > 0:
 			begin = int(self.groups[0].start[0:4])
 			group = self.groups[0].party[1]
-			groupprefix = u" din partea "
+		elif self.party != u"":
+			group = self.party
+		else:
+			groupprefix = u""
 		end = u""
 		if len(self.groups) > 0 and self.groups[-1].end != None:
 			end = mandateEnd % parliament.niceDate(self.groups[-1].end)
-		#print end
+		#print(end)
 		if function != u"" and end != u"":
 			function = u"fost " + function
 		birthdate = self.birthdate.replace(u"-", u"|")
-		text = text + firstParagraph % (self.name, birthdate, function, begin, groupprefix, group, end)
+		text = text + firstParagraph % (self.name, function, begin, groupprefix, group, end)
 
 		if len(self.groups) > 3:
 			grouptext = u"În timpului mandatului, a făcut parte din următoarele grupuri parlamentare: "
