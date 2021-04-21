@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.security.auth.login.FailedLoginException;
 
 import org.wikibase.Wikibase;
+import org.wikibase.WikibaseException;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.utils.Credentials;
 
@@ -52,7 +53,7 @@ public abstract class AbstractExecutable {
         wiki.login(dwikiCreds.username, dwikiCreds.password);
     }
 
-    protected abstract void execute();
+    protected abstract void execute() throws IOException, WikibaseException;
 
     public void doExecution() {
 
@@ -62,7 +63,7 @@ public abstract class AbstractExecutable {
             execute();
             
             
-        } catch (FailedLoginException | IOException e) {
+        } catch (FailedLoginException | IOException | WikibaseException e) {
             e.printStackTrace();
             wiki.logout();
             dwiki.logout();
