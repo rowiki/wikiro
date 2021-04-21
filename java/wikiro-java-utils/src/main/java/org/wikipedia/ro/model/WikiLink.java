@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jdk.nashorn.internal.ir.Labels;
+
 public class WikiLink extends WikiPart {
     private String target = null;
     private List<WikiPart> labelStructure = new ArrayList<>();
@@ -74,13 +76,20 @@ public class WikiLink extends WikiPart {
     @Override
     public String toString() {
         StringBuilder sbuild = new StringBuilder("[[");
-        sbuild.append(target);
         if (!labelStructure.isEmpty()) {
             String labelStr = partsListToString(labelStructure);
-            if (null != labelStr && !labelStr.equals(target)) {
-                sbuild.append("|");
+            if (null != labelStr && (!labelStr.substring(1).equals(target.substring(1))
+                || !labelStr.substring(0, 1).toUpperCase().equals(target.substring(0, 1).toUpperCase()))) {
+                sbuild.append(target)
+                 .append("|")
+                 .append(labelStr);
+            } else if (null == labelStr){
+                sbuild.append(target);
+            } else {
                 sbuild.append(labelStr);
             }
+        } else {
+            sbuild.append(target);
         }
         sbuild.append("]]");
         return sbuild.toString();
