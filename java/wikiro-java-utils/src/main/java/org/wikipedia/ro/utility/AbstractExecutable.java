@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import javax.security.auth.login.FailedLoginException;
+import javax.security.auth.login.LoginException;
 
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
@@ -50,10 +51,12 @@ public abstract class AbstractExecutable {
         Credentials wikiCreds = identifyCredentials("rowiki");
         wiki.login(wikiCreds.username, wikiCreds.password);
         Credentials dwikiCreds = identifyCredentials("dwiki");
-        wiki.login(dwikiCreds.username, dwikiCreds.password);
+        dwiki.login(dwikiCreds.username, dwikiCreds.password);
+        wiki.setMarkBot(true);
+        dwiki.setMarkBot(true);
     }
 
-    protected abstract void execute() throws IOException, WikibaseException;
+    protected abstract void execute() throws IOException, WikibaseException, LoginException;
 
     public void doExecution() {
 
@@ -63,7 +66,7 @@ public abstract class AbstractExecutable {
             execute();
             
             
-        } catch (FailedLoginException | IOException | WikibaseException e) {
+        } catch (LoginException | IOException | WikibaseException e) {
             e.printStackTrace();
             wiki.logout();
             dwiki.logout();
