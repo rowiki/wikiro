@@ -1,10 +1,11 @@
 package org.wikipedia.ro.monuments.monuments_section;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.Objects;
 
 import org.wikipedia.ro.monuments.monuments_section.data.Monument;
-
-import com.google.common.base.Joiner;
 
 public class Utils {
     public static String capitalize(String s) {
@@ -27,9 +28,9 @@ public class Utils {
         if (1 == stringList.size()) {
             return stringList.get(0);
         }
-
-        return Joiner.on(separator).join(stringList.subList(0, stringList.size() - 1)).concat(conjunction)
-            .concat(stringList.get(stringList.size() - 1));
+	String firstConjunctedPart = stringList.stream().limit(stringList.size() - 1).collect(Collectors.joining(separator));
+	String secondConjunctedPart = stringList.stream().skip(stringList.size() - 1).collect(Collectors.joining());
+        return Stream.of(firstConjunctedPart, secondConjunctedPart).filter(Objects::nonNull).filter(s -> !s.isEmpty()).collect(Collectors.joining(conjunction));
     }
 
     public static void printMonumentsList(final List<Monument> monumentsList) {
