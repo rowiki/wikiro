@@ -209,7 +209,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             }
             if (startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:",
                 "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", ":s:", "imdbname:", "c:file:", "doi:",
-                "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:", "oeis:")) {
+                "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:", "oeis:", "wikt:")) {
                 System.out.println("Link to something else! Skipping...");
                 continue;
             }
@@ -324,7 +324,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
     private boolean isNotReplaceableLink(String articleLink) {
         return startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:",
             "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", "imdbname:", "c:file:", "doi:",
-            "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:", "oeis:", "special:");
+            "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:", "oeis:", "special:", "wikt:");
     }
 
     public String[] getStatus() {
