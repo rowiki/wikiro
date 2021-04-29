@@ -24,6 +24,7 @@ import org.wikibase.data.CommonsMedia;
 import org.wikibase.data.Entity;
 import org.wikibase.data.Item;
 import org.wikibase.data.Property;
+import org.wikibase.data.Quantity;
 import org.wikipedia.ro.cache.WikidataEntitiesCache;
 import org.wikipedia.ro.utils.LinkUtils;
 import org.wikipedia.ro.utils.TextUtils;
@@ -33,6 +34,7 @@ public class SettlementListsGenerator implements WikidataListGenerator {
     private static final Property PROP_INSTANCE_OF = WikibasePropertyFactory.getWikibaseProperty("P31");
     private static final Property PROP_IMG = WikibasePropertyFactory.getWikibaseProperty("P18");
     private static final Property PROP_CONTAINS_SETTL = WikibasePropertyFactory.getWikibaseProperty("P1383");
+    private static final Property PROP_POP = WikibasePropertyFactory.getWikibaseProperty("P1082");
 
     private final static List<String> COUNTRY_IDS = new ArrayList<>();
 
@@ -75,12 +77,24 @@ public class SettlementListsGenerator implements WikidataListGenerator {
                 
                 communesStr.append("\n");
                 communesStr.append("\n|uat").append(communeIdx).append("link=").append(LinkUtils.createLinkViaWikidata(communeEnt, null));
+                communesStr.append("\n|uat").append(communeIdx).append("name=").append(eachResult.get("communeLabel"));
                 String img = (String) eachResult.get("img");
                 if (null != img) {
                     Matcher imgMatcher = COMMONS_IMG_PATTERN.matcher(img);
                     if (imgMatcher.matches()) {
                         communesStr.append("\n|uat").append(communeIdx).append("image=").append(URLDecoder.decode(imgMatcher.group(1), StandardCharsets.UTF_8.name()));
                     }
+                }
+                String coa = (String) eachResult.get("coA");
+                if (null != coa) {
+                    Matcher coaMatcher = COMMONS_IMG_PATTERN.matcher(coa);
+                    if (coaMatcher.matches()) {
+                        communesStr.append("\n|uat").append(communeIdx).append("coa=").append(URLDecoder.decode(coaMatcher.group(1), StandardCharsets.UTF_8.name()));
+                    }
+                }
+                String population = (String) eachResult.get("pop");
+                if (null != population) {
+                    communesStr.append("\n|uat").append(communeIdx).append("population=").append(population);
                 }
                 int typeIndex = 0;
                 Set<Claim> typesClaims = SetUtils.emptyIfNull(communeEnt.getBestClaims(PROP_INSTANCE_OF));
@@ -127,6 +141,16 @@ public class SettlementListsGenerator implements WikidataListGenerator {
                         if (imgOpt.isPresent()) {
                             communesStr.append(String.format("\n|uat%dsettlement%dimage=%s", communeIdx, settlementIndex, imgOpt.get()));
                         }
+                        Optional<Double> popOpt = Optional.ofNullable(settlementEnt.getBestClaims(PROP_POP)).map(Collection::stream).orElse(Stream.empty())
+                            .filter(c -> "value".equals(c.getMainsnak().getSnaktype()))
+                            .findFirst()
+                            .map(Claim::getValue)
+                            .map(Quantity.class::cast)
+                            .map(Quantity::getAmount);
+                        if (popOpt.isPresent()) {
+                            communesStr.append(String.format("\n|uat%dsettlement%dpopulation=%d", communeIdx, settlementIndex, Math.round(popOpt.get())));
+                        }
+                           
                     }
                 }
                 

@@ -13,7 +13,9 @@ public class TestSettlementsListGenerator {
 
     @Test
     public void testGenerate() throws IOException, WikibaseException {
-        String countyId = "Q179559";
+        // String countyId = "Q188665"; // Prahova
+        // String countyId = "Q185586"; //Timiș
+        String countyId = "Q188505"; //Constanța
         
         Wikibase wikibase = new Wikibase();
         wikibase.setThrottle(70000);
