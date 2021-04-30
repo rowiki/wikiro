@@ -80,9 +80,13 @@ public class TranslationManager extends AbstractExecutable
                 wiki.edit(talkPage, talkText, "Robot: adăugat format {{Pagină tradusă}}");
                 try
                 {
+                    String notReplacedText = wiki.getPageText(newPage);
                     ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
                     String replacedText = rcl.execute();
-                    wiki.edit(newPage, replacedText, "Robot: înlocuit legături roșii sau spre alte wikiuri cu Ill");
+                    if (!notReplacedText.equals(replacedText))
+                    {
+                        wiki.edit(newPage, replacedText, "Robot: înlocuit legături roșii sau spre alte wikiuri cu Ill");
+                    }
                 }
                 catch (Throwable e)
                 {
@@ -106,9 +110,12 @@ public class TranslationManager extends AbstractExecutable
             {
                 try
                 {
+                    String notReplacedText = wiki.getPageText(eachNewPageLink);
                     CleanupIll illCleanup = new CleanupIll(wiki, wiki, dwiki, eachNewPageLink);
-                    String linkNewText = illCleanup.execute();
-                    wiki.edit(eachNewPageLink, linkNewText, "Robot: înlocuit formate Ill redundante");
+                    String replacedText = illCleanup.execute();
+                    if (!notReplacedText.equals(replacedText)) {
+                        wiki.edit(eachNewPageLink, replacedText, "Robot: înlocuit formate Ill redundante");
+                    }
                 }
                 catch (Throwable e)
                 {
