@@ -139,7 +139,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         StringBuffer anotherNewText = new StringBuffer();
         while (wlAsExtLinkMatcher.find()) {
             String lang = wlAsExtLinkMatcher.group(2);
-            String articleTitle = wlAsExtLinkMatcher.group(3);
+            String articleTitle = URLDecoder.decode(wlAsExtLinkMatcher.group(3), "UTF-8");
             String linkTitle = wlAsExtLinkMatcher.group(4);
 
             status = new String[] { "status.analyzing.link", articleTitle };
