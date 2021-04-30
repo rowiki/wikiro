@@ -58,6 +58,21 @@ public class TranslationManager extends AbstractExecutable
 
                 String talkText = null;
                 String newPage = Optional.ofNullable(wiki.resolveRedirect(rev.getTitle())).orElse(rev.getTitle());
+                try
+                {
+                    String notReplacedText = wiki.getPageText(newPage);
+                    ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
+                    String replacedText = rcl.execute();
+                    if (!notReplacedText.equals(replacedText))
+                    {
+                        wiki.edit(newPage, replacedText, "Robot: înlocuit legături roșii sau spre alte wikiuri cu Ill");
+                    }
+                }
+                catch (Throwable e)
+                {
+                    System.err.printf("Failed to replace cross-links and red links with Ill-wd in page %s%n", newPage);
+                    e.printStackTrace();
+                }
                 String talkPage = wiki.getTalkPage(newPage);
                 if (wiki.exists(new String[] { talkPage })[0])
                 {
@@ -78,21 +93,6 @@ public class TranslationManager extends AbstractExecutable
 
                 talkText = Stream.of(translTextTemplate.toString(), talkText).filter(Objects::nonNull).collect(Collectors.joining("\n"));
                 wiki.edit(talkPage, talkText, "Robot: adăugat format {{Pagină tradusă}}");
-                try
-                {
-                    String notReplacedText = wiki.getPageText(newPage);
-                    ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
-                    String replacedText = rcl.execute();
-                    if (!notReplacedText.equals(replacedText))
-                    {
-                        wiki.edit(newPage, replacedText, "Robot: înlocuit legături roșii sau spre alte wikiuri cu Ill");
-                    }
-                }
-                catch (Throwable e)
-                {
-                    System.err.printf("Failed to replace cross-links and red links with Ill-wd in page %s%n", newPage);
-                    e.printStackTrace();
-                }
             }
 
         }
