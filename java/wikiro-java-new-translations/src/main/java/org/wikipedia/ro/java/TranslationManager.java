@@ -81,7 +81,8 @@ public class TranslationManager extends AbstractExecutable
                 try
                 {
                     ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
-                    rcl.execute();
+                    String replacedText = rcl.execute();
+                    wiki.edit(newPage, replacedText, "Robot: înlocuit legături roșii sau spre alte wikiuri cu Ill");
                 }
                 catch (Throwable e)
                 {
@@ -106,7 +107,8 @@ public class TranslationManager extends AbstractExecutable
                 try
                 {
                     CleanupIll illCleanup = new CleanupIll(wiki, wiki, dwiki, eachNewPageLink);
-                    illCleanup.execute();
+                    String linkNewText = illCleanup.execute();
+                    wiki.edit(eachNewPageLink, linkNewText, "Robot: înlocuit formate Ill redundante");
                 }
                 catch (Throwable e)
                 {
