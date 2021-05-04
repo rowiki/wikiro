@@ -57,7 +57,7 @@ public class TranslationManager extends AbstractExecutable
                 String langTitle = commentMatcher.group(3);
 
                 String talkText = null;
-                String newPage = Optional.ofNullable(wiki.resolveRedirect(rev.getTitle())).orElse(rev.getTitle());
+                String newPage = wiki.getRevision(rev.getID()).getTitle();
                 try
                 {
                     String notReplacedText = wiki.getPageText(newPage);
@@ -104,7 +104,7 @@ public class TranslationManager extends AbstractExecutable
         List<Revision> recentNewPages = wiki.newPages(helper);
         for (Revision eachNewPage : recentNewPages)
         {
-            String eachNewPageTitle = Optional.ofNullable(wiki.resolveRedirect(eachNewPage.getTitle())).orElse(eachNewPage.getTitle());
+            String eachNewPageTitle = wiki.getRevision(eachNewPage.getID()).getTitle();
             String[] newPageLinks = wiki.whatLinksHere(eachNewPageTitle, Wiki.MAIN_NAMESPACE);
             for (String eachNewPageLink : newPageLinks)
             {
