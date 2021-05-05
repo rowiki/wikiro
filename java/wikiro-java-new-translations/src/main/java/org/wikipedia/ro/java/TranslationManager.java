@@ -29,7 +29,7 @@ import org.wikipedia.ro.utility.AbstractExecutable;
 public class TranslationManager extends AbstractExecutable
 {
     Pattern commentPattern = Pattern.compile("\\[\\[:(\\w+):Special:Redirect/revision/(\\d+)\\|([^\\]]+)\\]\\]");
-    Pattern translPagePattern = Pattern.compile("\\{\\{\\s*[Pp]agină tradusă");
+    Pattern translPagePattern = Pattern.compile("\\{\\{\\s*[Pp]agină[_\\s]tradusă");
 
     @Override
     protected void execute() throws IOException, WikibaseException, LoginException
