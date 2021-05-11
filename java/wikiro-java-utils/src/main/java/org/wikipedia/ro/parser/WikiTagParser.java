@@ -59,12 +59,12 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
         while (!isFinishedReading && idx < wikiText.length()) {
             char crtChar = wikiText.charAt(idx);
             switch (state) {
-            case -1:
+            case STATE_INITIAL:
                 if ('<' == crtChar) {
-                    state = 0;
+                    state = STATE_READING_TAG_NAME;
                 }
                 break;
-            case 0:
+            case STATE_READING_TAG_NAME:
                 if (Character.isWhitespace(crtChar) && 0 < tagNameBuilder.length()) {
                     state = STATE_READING_ATTRIB_NAME;
                     tagUC.setTagName(tagNameBuilder.toString().trim().toLowerCase());
@@ -81,7 +81,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                     tagNameBuilder.append(crtChar);
                 }
                 break;
-            case 2:
+            case STATE_READING_ATTRIB_NAME:
                 if (!Character.isWhitespace(crtChar) && !"=/>".contains(String.valueOf(crtChar))) {
                     attrNameBuilder.append(crtChar);
                 } else if ('=' == crtChar && 0 < attrNameBuilder.length()) {
@@ -100,7 +100,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                     isFinishedReading = true;
                 }
                 break;
-            case 4:
+            case STATE_READING_ATTRIB_VALUE:
                 boolean isPartOfAttrName = true;
                 if ('\'' == crtChar || '"' == crtChar) {
                     if (!attrValueBracketing.isEmpty() && String.valueOf(crtChar).equals(attrValueBracketing.peek())) {
@@ -120,7 +120,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                         return null;
                     }
                 }
-                if ((Character.isWhitespace(crtChar) || '>' == crtChar) && attrValueBracketing.isEmpty()
+                if ((Character.isWhitespace(crtChar) || '>' == crtChar || '/' == crtChar) && attrValueBracketing.isEmpty()
                     && 0 < attrValueBuilder.length()) {
                     AggregatingParser attrValueParser = new AggregatingParser();
                     List<ParseResult<WikiPart>> parsedValues = attrValueParser.parse(attrValueBuilder.toString());
@@ -131,6 +131,8 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                     isPartOfAttrName = false;
                     if ('>' == crtChar) {
                         isFinishedReading = true;
+                    } else if ('/' == crtChar) {
+                        state = STATE_READING_END_OF_TAG;
                     } else {
                         state = STATE_READING_ATTRIB_NAME;
                     }
