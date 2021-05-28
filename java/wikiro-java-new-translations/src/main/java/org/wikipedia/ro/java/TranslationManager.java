@@ -34,13 +34,13 @@ public class TranslationManager extends AbstractExecutable
     @Override
     protected void execute() throws IOException, WikibaseException, LoginException
     {
+        LocalDate lastVisit = findLastVisit();
         RequestHelper helper = wiki.new RequestHelper();
         helper.inNamespaces(Wiki.MAIN_NAMESPACE);
         helper.taggedWith("contenttranslation");
 
         LocalDate now = LocalDate.now();
-        LocalDate threeDaysAgo = now.minusDays(3);
-        helper.withinDateRange(threeDaysAgo.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
+        helper.withinDateRange(lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
 
         Map<String, Boolean> filter = new HashMap<>();
         filter.put("new", Boolean.TRUE);
@@ -99,7 +99,7 @@ public class TranslationManager extends AbstractExecutable
 
         helper = wiki.new RequestHelper();
         helper.inNamespaces(Wiki.MAIN_NAMESPACE);
-        helper.withinDateRange(threeDaysAgo.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
+        helper.withinDateRange(lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
 
         List<Revision> recentNewPages = wiki.newPages(helper);
         for (Revision eachNewPage : recentNewPages)
@@ -124,6 +124,29 @@ public class TranslationManager extends AbstractExecutable
                 }
             }
         }
+        
+        wiki.edit("Utilizator:Andrebot/dată-vizitare-pagini-noi", now.toString(), "Robot: actualizare dată vizitare pagini noi");
 
+    }
+
+    private LocalDate findLastVisit() throws IOException
+    {
+        RequestHelper rh = wiki.new RequestHelper();
+        rh.byUser("Andrebot");
+        rh.limitedTo(1);
+        List<Revision> revs = wiki.getPageHistory("Utilizator:Andrebot/dată-vizitare-pagini-noi", rh);
+        
+        rh.byUser("Andrei Stroe");
+        revs.addAll(wiki.getPageHistory("Utilizator:Andrebot/dată-vizitare-pagini-noi", rh));
+        
+        revs.sort((r1, r2) -> r2.getTimestamp().compareTo(r1.getTimestamp()));
+        
+        Optional<Revision> latestRevOpt = revs.stream().findFirst();
+        if (!latestRevOpt.isPresent()) {
+            return LocalDate.now().minusDays(3);
+        }
+        
+        String strText = latestRevOpt.get().getText();
+        return LocalDate.parse(strText);
     }
 }
