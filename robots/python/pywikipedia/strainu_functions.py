@@ -4,7 +4,7 @@
 #
 # (C) Strainu, 2012-2015
 #
-# Distributed under the terms of the GPLv2 license.
+# Distributed under the terms of the MIT license.
 #
 #
 
@@ -390,6 +390,9 @@ def linkedImages(page):
         except:
             raise
     return result
+
+def isNullorEmpty(s):
+	return bool(not s or s.strip() == u"")
 
 # --------------- CSV functions -------------------
 
