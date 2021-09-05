@@ -525,7 +525,7 @@ def main():
 	PARSE_FULL = 3
 	lang = 'ro'
 	textfile = ''
-	parse_type = PARSE_EXTENDED
+	parse_type = PARSE_NORMAL
 	preload = True
 	incremental = False
 	namespaces = None
@@ -589,7 +589,7 @@ def main():
 									onlyTemplateInclusion=True, content=False))
 		combinedGen = pagegenerators.CombinedPageGenerator(transGen)
 		combinedGen = pagegenerators.DuplicateFilterPageGenerator(combinedGen, key=hash)
-		#filteredGen = transGen = pagegenerators.CategorizedPageGenerator(catlib.Category(site, u"Category:1690s churches in Romania"))
+		#combinedGen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(site, u"Categorie:Imagini încărcate în cadrul Wiki Loves Monuments 2020"))
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(combinedGen,
 									[namespace], site)
 		if preload:
@@ -668,7 +668,7 @@ def main():
 						fullDict[code].append(content)
 					else:
 						fullDict[code] = [content]
-					#pywikibot.output('Skipping "%s"' % page.title())
+					pywikibot.output('Skipping "%s"' % page.title())
 					#continue
 				elif page.exists() and not page.isRedirectPage():
 					print((page.title()))
