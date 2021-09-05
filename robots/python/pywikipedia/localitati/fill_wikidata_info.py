@@ -27,6 +27,8 @@ config = {
         u'Coord': ('P625', False, 'globe-coordinate'),
         u'imagine': ('P18', True, 'commonsMedia'),
         u'hartă': ('P242', False, 'commonsMedia'),
+        u'colaj': ('P2716', True, 'commonsMedia'),
+        u'video': ('P10', True, 'commonsMedia'),
         u'Țară': ('P17', False, 'wikibase-item'),
         u'Commons': ('P373', False, 'string'),
         u'SIRUTA': ('P843', False, 'string'),
@@ -194,6 +196,12 @@ class ItemProcessing:
         if sProp not in self.item.claims:
             return None
         return [self.item.claims[sProp][i].getTarget() for i in range(len(self.item.claims[sProp]))]
+
+    def hasClaim(self, name):
+        sProp, _, _ = self.config["properties"][name]
+        if sProp not in self.item.claims:
+            return False
+        return True
 
     def searchSirutaInWD(self, siruta):
         query = "SELECT ?item WHERE { ?item wdt:P843 \"%d\" .     SERVICE wikibase:label { bd:serviceParam wikibase:language \"ro\" }}" % siruta
@@ -473,42 +481,58 @@ class ImageProcessing(ItemProcessing, CityDataCached):
     def doWork(self, page, item):
         self.setItem(item)
         self.clearCache()
-        if self.getUniqueClaim(u"imagine", canBeNull=True):
+        if self.hasClaim(u"imagine") or self.hasClaim(u"colaj"):
             return
-        self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
-        self.addImage(self.getInfoboxElement(item, element=u"hartă"), _type=u"hartă")
-        if "P31" in item.claims:
-            isa = set(v.getTarget().title() for v in item.claims["P31"])
-            if "Q532" not in isa:
-                self.addImage(self.getInfoboxElement(item, element=u"stemă"), _type=u"stemă")
-                self.addImage(self.getInfoboxElement(item, element=u"drapel"), _type=u"drapel")
-            if self.getUniqueClaim(u"imagine", canBeNull=True):
-                return
-            if "P1376" in item.claims and ("Q34842263" in isa or "Q34842776" in isa):
-                parent = item.claims["P1376"][0].getTarget()
-                parent.get() #if we have the data, this is a no-op
-                if "P18" in parent.claims:
-                    self.addImage(parent.claims["P18"][0].getTarget(), _type=u"imagine")
-        if self.getUniqueClaim(u"imagine", canBeNull=True):
-            return
+#        self.addImage(self.getInfoboxElement(item, element=u"imagine"), _type=u"imagine")
+#        #self.addImage(self.getInfoboxElement(item, element=u"hartă"), _type=u"hartă")
+#        if "P31" in item.claims:
+#            isa = set(v.getTarget().title() for v in item.claims["P31"])
+#            #if "Q532" not in isa:
+#            #    self.addImage(self.getInfoboxElement(item, element=u"stemă"), _type=u"stemă")
+#            #    self.addImage(self.getInfoboxElement(item, element=u"drapel"), _type=u"drapel")
+#            if self.hasClaim(u"imagine"):
+#                return
+#            if "P1376" in item.claims and ("Q34842263" in isa or "Q34842776" in isa):
+#                parent = item.claims["P1376"][0].getTarget()
+#                parent.get() #if we have the data, this is a no-op
+#                if "P18" in parent.claims:
+#                    self.addImage(parent.claims["P18"][0].getTarget(), _type=u"imagine")
+#        if self.hasClaim(u"imagine"):
+#            return
+#
+#        label = self.getWikiArticle(self.item)
+#        label_hu = self.getWikiArticle(self.item, "hu")
+#        label_de = self.getWikiArticle(self.item, "de")
+#        if not label:
+#            return
+#        pi = (label and label.page_image()) or \
+#             (label_hu and label_hu.page_image()) or \
+#             (label_de and label_de.page_image())
+#        if pi and not any(v in pi.title().lower() for v in self._blacklist):
+#            print(pi)
+#            self.addImage(pi)
+#
+#        label = label.title()
+#        for monument in self._lmi or []:
+#            if len(monument["Imagine"]) and monument["Localitate"].find(u"[[" + label + u"|") > -1:
+#                self.addImage(monument["Imagine"])
+#                break
+#        if self.hasClaim(u"imagine"):
+#            return
 
-        label = self.getWikiArticle(self.item)
-        label_hu = self.getWikiArticle(self.item, "hu")
-        label_de = self.getWikiArticle(self.item, "de")
-        if not label:
-            return
-        pi = (label and label.page_image()) or \
-             (label_hu and label_hu.page_image()) or \
-             (label_de and label_de.page_image())
-        if pi and not any(v in pi.title().lower() for v in self._blacklist):
-            print(pi)
-            self.addImage(pi)
+        #check items in this area
+        if "P6" in item.claims:
+            query = "SELECT ?item WHERE {  ?item wdt:P131 wd:%s.  SERVICE wikibase:label { bd:serviceParam wikibase:language \"ro\" . ?item rdfs:label ?label  }  ?item wdt:P18 ?_image.}" % item.title() 
+            print(query)
+            query_object = sparql.SparqlQuery()
+            data = query_object.get_items(query, result_type=set)
+            print(data)
+            for image_item in data:
+                image_item_page = pywikibot.ItemPage(pywikibot.Site(), image_item)
+                image_item_page.get()
+                if "P18" in image_item_page.claims:
+                    self.addImage(image_item_page.claims["P18"][0].getTarget(), _type=u"imagine")
 
-        label = label.title()
-        for monument in self._lmi or []:
-            if len(monument["Imagine"]) and monument["Localitate"].find(u"[[" + label + u"|") > -1:
-                self.addImage(monument["Imagine"])
-                break
 
 
 class SIRUTAProcessing(ItemProcessing, CityData):
