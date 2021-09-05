@@ -207,7 +207,7 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 	# we don't hit the else case, we should be good.
 	index = text.find(code)
 	if index > 0:
-		small_text = text[index-21:]
+		small_text = text[text.rfind('{{', 0, index):]
 		index = small_text.find("}}\n{{")
 		small_text = small_text[:index + 3]
 	else:
@@ -455,6 +455,7 @@ def getBestField(image, fields, type):
 		#TODO: order of fields matters; it shouldn't
 		for skip in (allFields.get(field).get('blacklist') or []):
 			if search.find(skip) != -1:
+				#pywikibot.output(skip)
 				break
 		else:
 			wl = allFields.get(field).get('whitelist')
@@ -754,6 +755,11 @@ def main():
 		if fields[field]['code'] == Changes.image:
 			imageField = field
 			break
+	commonsField = u"Commons"
+	for field in fields:
+		if fields[field]['code'] == Changes.commons:
+			commonsField = field
+			break
 	latField = None
 	lonField = None
 	for field in fields:
@@ -832,6 +838,7 @@ def main():
 						log(u"* [COM] '''E''': ''[%s]'' În lista de imagini sunt trecuți mai multi autori: %s" % (code, author_list))
 				allPages.extend(files_commons[code])
 			if code in files_local:
+				#pywikibot.output(files_local[code])
 				allPages.extend(files_local[code])
 				pictures.extend(files_local[code])
 			if code in categories_commons:
@@ -969,9 +976,9 @@ def main():
 		# --- Commons category ---
 		if code in categories_commons:
 			cat = categories_commons[code][0]
-			if isNullorEmpty(monument.get("Commons")) or force:
+			if isNullorEmpty(monument.get(commonsField)) or force:
 				articleText, _ = updateTableData(monument["source"], code,
-								"Commons", "commons:" + cat["name"],
+								commonsField, "commons:" + cat["name"],
 								monument, text=articleText)
 			elif monument.get("Commons") and monument.get("Commons").strip() != ("commons:" + cat["name"].strip()):
 				log(u"* [COM] ''E'': ''[%s]'' Există mai multe categorii pentru acest cod: <span lang=\"x-sic\">[[:%s]] și [[:%s]]</span>" % (code, "commons:" + cat["name"], monument["Commons"]))
