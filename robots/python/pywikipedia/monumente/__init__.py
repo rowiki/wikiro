@@ -43,7 +43,7 @@ lmi_blacklist = [#all lowercase
 		u'fresc',#frescă, fresco
 		u'portal.jpg',#german partial drawings
 		u'motiv',
-		u'coa',#coat of arms
+		u' coa',#coat of arms
 	    ]
 
 natura2000_blacklist = [#all lowercase
