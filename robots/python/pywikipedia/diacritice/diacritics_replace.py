@@ -74,12 +74,15 @@ class DiacriticsReplaceBot:
         turkish_phrases = turkish_regexp.findall(text)
         interwiki_regexp  = re.compile(u"(\[\[:?([a-z]{2,3}|fișier|imagine|media|simple|roa-rup|be-x-old|zh-(yue|classical|min-nan)|bat-smg|cbk-zam|nds-nl|map-bms|cbk-zam|fişier|file|image):(.*?)\]\])", re.I);
         interwiki_phrases = interwiki_regexp.findall(text)
-        template_regexp  = re.compile(u"(\{\{(proiecte surori|sisterlinks|commons|commonscat|wikicitat|wikimanuale|wikisursă|wikitravel|wikiştiri|wikţionar|WikimediaPentruPortale|titlu corect|wikisource|lang|lang-tr|lang-tt|lang-az|lang-ku)\|((.|\n|\r)*?)\}\})", re.I);
+        template_regexp  = re.compile(u"(\{\{(proiecte surori|sisterlinks|commons|commonscat|wikicitat|wikimanuale|wikisursă|wikitravel|wikiştiri|wikţionar|WikimediaPentruPortale|titlu corect|wikisource|lang|lang-tr|lang-tt|lang-az|lang-ku|tr|tt|az|ku)\|((.|\n|\r)*?)\}\})", re.I);
         template_phrases = template_regexp.findall(text)
         
+        go = False
         new_text = text.replace(u'ş', u'ș')
-        new_text = new_text.replace(u'ţ', u'ț')
         new_text = new_text.replace(u'Ş', u'Ș')
+        if new_text == text:
+            go = True
+        new_text = new_text.replace(u'ţ', u'ț')
         new_text = new_text.replace(u'Ţ', u'Ț')
         
         #print "turkish"
@@ -108,13 +111,16 @@ class DiacriticsReplaceBot:
                 new_text = new_text.replace(mixed_phrases[i][0], template_phrases[i][0], 1)
                 
         if new_text == text:
-            pywikibot.output(u"Weird, no diacritics in the page, skipping...")
+            #pywikibot.output(u"Weird, no diacritics in the page, skipping...")
             return
 
         pywikibot.showDiff(text, new_text)
             
         if not self.acceptall:
-            choice = pywikibot.inputChoice(
+            if go:
+                choice = 'y'
+            else:
+                choice = pywikibot.inputChoice(
                     u'Do you want to replace the diacritics?',
                     ['Yes', 'No', 'All', 'Quit'], ['y', 'N', 'a', 'q'], 'N')
             if choice == 'a':
@@ -145,7 +151,7 @@ def main():
             return
 
     gen = genFactory.getCombinedGenerator()
-    preloadingGen = pagegenerators.PreloadingGenerator(gen)
+    preloadingGen = pagegenerators.PreloadingGenerator(gen, 500)
     bot = DiacriticsReplaceBot(preloadingGen, acceptall, titlecase)
     bot.run()
 
