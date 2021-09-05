@@ -185,7 +185,7 @@ def buildArticle(monument):
 {Artist}
 }}}}
 
-'''{{{{subst:PAGENAME}}}}''' este un {Tip} aflat pe teritoriul {Localitate2}{Artist2}.<ref>[http://patrimoniu.gov.ro/ro/monumente-istorice/lista-monumentelor-istorice Institutul Național al Patrimoniului - Lista Monumentelor Istorice]</ref>{Ran2}
+'''{{{{subst:PAGENAME}}}}''' este un {Tip} aflat pe teritoriul {Localitate2}{Artist2}.<ref>[https://patrimoniu.ro/monumente-istorice/lista-monumentelor-istorice Institutul Național al Patrimoniului - Lista Monumentelor Istorice]</ref>{Ran2}
 
 """
     tip = splitCode(monument[u"Cod"])[2]
@@ -419,7 +419,8 @@ def addSuffix(text, monument, images):
     """
     com = u""
     if monument[u"Commons"] != u"":
-        com = u"\n{{Commonscat|" + monument["Commons"].replace("commons:Category:", "") + u"}}\n"
+        com = u"\n==Legături externe=="
+        com += u"\n* {{Commonscat-inline|" + monument["Commons"].replace("commons:Category:", "") + u"}}\n"
     img = []
     if monument["Cod"] in images:
         img = images[monument["Cod"]]
