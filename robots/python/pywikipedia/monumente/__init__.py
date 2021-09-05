@@ -27,6 +27,7 @@ class Changes:
 	creator = 0x080
 	commons = 0x100
 	other	= 0x200
+	wikidata= 0x400
 	all	= 0xFFF
 
 
@@ -241,9 +242,9 @@ config = {
 							(u'subtip', {'code': Changes.all, }),
 							(u'imagine', {'code': Changes.image, 'blacklist': []}),
 							(u'categorie', {'code': Changes.commons, }),
-				            (u'q', {'code': Changes.all, }),
-	                        (u'wikilink', {'code': Changes.all, }),
-	                        (u'numar', {'code': Changes.all, }),
+							(u'q', {'code': Changes.wikidata, }),
+							(u'wikilink', {'code': Changes.article, }),
+							(u'numar', {'code': Changes.all, }),
 						]),
 			'idField': u'ID',
 			'keepEmptyFields': True,
