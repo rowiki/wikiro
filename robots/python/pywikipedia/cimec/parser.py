@@ -25,9 +25,31 @@ class CimecParser:
 		self.total = sys.maxsize
 		self.db = {}
 
-	def parse_item(self, k):
+	def enhance_page_item_key(self, key):
+		return key.replace(':', '')
+
+	def enhance_page_item_value(self, value):
+		return value
+
+	def parse_single_data_row(self, row):
+		cols = [div for div in row.find_all('div') if div['class'][0].find('col') == 0]
+		if len(cols) != 2:
+			return None, None
+		label = cols[0].find('b')
+		if not label:
+			return None, None
+		label = label.text.strip()
+		label = self.enhance_page_item_key(label)
+
+		text = cols[1].text.strip()
+		text = self.enhance_page_item_value(text)
+		return label, text
+
+
+	def parse_item_page(self, k):
 		url = self.config['item_url'].format(k)
 		print('Parsing ', url)
+		r = None
 		try:
 			r = requests.get(url)
 		except:
@@ -37,6 +59,13 @@ class CimecParser:
 		html = r.text
 		parsed_html = BeautifulSoup(html, 'html.parser')
 		rows = parsed_html.find_all('div', attrs={'class':'row'})
+		data = {}
+		for row in rows:
+			key, value = self.parse_single_data_row(row)
+			if key:
+				data[key] = value
+
+		print(data)
 
 
 	def parse_total_number(self, parsed_html):
