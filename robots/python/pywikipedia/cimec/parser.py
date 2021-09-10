@@ -98,6 +98,9 @@ class CimecParser:
 
 	def parse(self, start, filename, useCache=False):
 		retry_list = []
+		if start > 1:
+			with open(filename, 'r') as f:
+				self.db = json.loads(f.read())
 		while self.total and start < self.total:
 			success = self.parse_list(start)
 			if success == False:
