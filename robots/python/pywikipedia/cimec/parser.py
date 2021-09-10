@@ -66,7 +66,7 @@ class CimecParser:
 			line = {}
 			for col in row.find_all('td'):
 				#print(col.attrs['data-title'])
-				line[col.attrs['data-title']] = self.enhance_table_cell(col.text.strip())
+				line[col.attrs['data-title']] = self.enhance_table_cell(col)
 			key, line = self.enhance_table_line(line)
 			if not key:
 				key = offset
@@ -77,13 +77,14 @@ class CimecParser:
 
 		return True
 
-	def enhance_table_cell(self, text):
-		new_text = text.replace(u'ş', u'ș')
-		new_text = new_text.replace(u'ţ', u'ț')
-		new_text = new_text.replace(u'Ş', u'Ș')
-		new_text = new_text.replace(u'Ţ', u'Ț')
-		new_text = new_text.replace(u'ã', u'ă')
-		return new_text
+	def enhance_table_cell(self, tag):
+		text = tag.text.strip()
+		text = text.replace(u'ş', u'ș')
+		text = text.replace(u'ţ', u'ț')
+		text = text.replace(u'Ş', u'Ș')
+		text = text.replace(u'Ţ', u'Ț')
+		text = text.replace(u'ã', u'ă')
+		return text
 
 	def enhance_table_line(self, line):
 		# enhancement is specific per site
