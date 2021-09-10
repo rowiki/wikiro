@@ -39,6 +39,14 @@ class CimecParser:
 		rows = parsed_html.find_all('div', attrs={'class':'row'})
 
 
+	def parse_total_number(self, parsed_html):
+		total = parsed_html.find('div', attrs={'class':'rezultate'})
+		if total:
+			total = total.text.strip()
+			total = total[total.find("din"):]
+			self.total = int(''.join(filter(str.isdigit, total)))
+			print('Total', self.total)
+
 	def parse_list(self, offset):
 		page = int(offset / 50 + 1)
 		url = self.config['list_url'].format(offset, page)
@@ -46,16 +54,14 @@ class CimecParser:
 		try:
 			r = requests.get(url)
 		except:
+			print('Request failed:', url)
+			sleep(5)
 			return False
 
 		html = r.text
 		parsed_html = BeautifulSoup(html, 'html.parser')
-		total = parsed_html.find('div', attrs={'class':'rezultate'})
-		if total:
-			total = total.text.strip()
-			total = total[total.find("din"):]
-			self.total = int(''.join(filter(str.isdigit, total)))
-			print('Total', self.total)
+		self.parse_total_number(parsed_html)
+
 		table = parsed_html.find(id='myTable')
 		if table:
 			table = table.tbody
