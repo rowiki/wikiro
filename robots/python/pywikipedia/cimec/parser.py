@@ -1,27 +1,15 @@
 from bs4 import BeautifulSoup
+import wikiro.robots.python.pywikipedia.cimec as cimec
 import json
 import requests
 import sys
+import time
 
-config = {
-	'clasate':
-	{
-		'list_url': 'http://clasate.cimec.ro/Lista.asp?start={}&pageno={}',
-		'item_url': 'http://clasate.cimec.ro/Detaliu.asp?k={}',
-		'page_size': 50,
-	},
-	'ghidulmuzeelor':
-	{
-		'list_url': 'http://ghidulmuzeelor.cimec.ro/Filtru-Domenii.asp?start={}&pageno={}',
-		'item_url': 'http://ghidulmuzeelor.cimec.ro/id.asp?k={}',
-		'page_size': 20,
-	},
-}
 class CimecParser:
 	def __init__(self, site):
-		if site not in config:
+		if site not in cimec.config:
 			raise Exception("Trying to parse invalid site %s" % site)
-		self.config = config[site]
+		self.config = cimec.config[site]
 		self.total = sys.maxsize
 		self.db = {}
 
@@ -29,7 +17,7 @@ class CimecParser:
 		return key.replace(':', '')
 
 	def enhance_page_item_value(self, value):
-		return value
+		return self.replace_diacritics(value)
 
 	def parse_single_data_row(self, row):
 		cols = [div for div in row.find_all('div') if div['class'][0].find('col') == 0]
@@ -53,8 +41,9 @@ class CimecParser:
 		try:
 			r = requests.get(url)
 		except:
-			print(r.status_code)
-			return {}
+			print('Request failed:', url)
+			time.sleep(5)
+			return None
 	
 		html = r.text
 		parsed_html = BeautifulSoup(html, 'html.parser')
@@ -65,7 +54,8 @@ class CimecParser:
 			if key:
 				data[key] = value
 
-		print(data)
+		#print('Details', data)
+		return data
 
 
 	def parse_total_number(self, parsed_html):
@@ -76,15 +66,45 @@ class CimecParser:
 			self.total = int(''.join(filter(str.isdigit, total)))
 			print('Total', self.total)
 
-	def parse_list(self, offset):
-		page = int(offset / 50 + 1)
+	def merge_info(self, line, page):
+		for key, value in page.items():
+			if line.get(key) and value != line[key]:
+				line[key + '_2'] = value
+			else:
+				line[key] = value
+		return line
+
+	def parse_row(self, row, default_key, parseDetails=True):
+		line = {}
+		for col in row.find_all('td'):
+			#print(col.attrs['data-title'])
+			line[col.attrs['data-title']] = self.enhance_table_cell(col)
+		key, line = self.enhance_table_line(line)
+		if not key:
+			key = default_key
+
+		if parseDetails:
+			details = self.parse_item_page(line['key'])
+			if details == None:
+				return False
+			print('Merging for key', key)
+			self.db[key] = self.merge_info(line, details)
+			#time.sleep(1)
+		else:
+			self.db[key] = line
+		print('Key', key)
+		print('Line', self.db[key])
+		return True
+
+	def parse_list(self, offset, parseDetails=True):
+		page = int(offset / self.config['page_size'] + 1)
 		url = self.config['list_url'].format(offset, page)
 		print('Parsing ', url)
 		try:
 			r = requests.get(url)
 		except:
 			print('Request failed:', url)
-			sleep(5)
+			time.sleep(5)
 			return False
 
 		html = r.text
@@ -97,23 +117,25 @@ class CimecParser:
 		else:
 			return False
 		rows = table.find_all('tr')
+		retry = []
 		for row in rows:
-			line = {}
-			for col in row.find_all('td'):
-				#print(col.attrs['data-title'])
-				line[col.attrs['data-title']] = self.enhance_table_cell(col)
-			key, line = self.enhance_table_line(line)
-			if not key:
-				key = offset
+			done = self.parse_row(row, offset, parseDetails)
+			if not done:
+				retry.append((offset, row))
 			offset += 1
-			print('Key', key)
-			print('Line', line)
-			self.db[key] = line
 
+		#retry once for now
+		for offset, row in retry:
+			done = self.parse_row(row, offset, parseDetails)
+			if not done:
+				return False
 		return True
 
 	def enhance_table_cell(self, tag):
 		text = tag.text.strip()
+		return self.replace_diacritics(text)
+
+	def replace_diacritics(self, text):
 		text = text.replace(u'ş', u'ș')
 		text = text.replace(u'ţ', u'ț')
 		text = text.replace(u'Ş', u'Ș')
@@ -125,13 +147,13 @@ class CimecParser:
 		# enhancement is specific per site
 		return None, line
 
-	def parse(self, start, filename, useCache=False):
+	def parse(self, start, filename, useCache=False, parseDetails=True):
 		retry_list = []
-		if start > 1:
+		if useCache:
 			with open(filename, 'r') as f:
 				self.db = json.loads(f.read())
 		while self.total and start < self.total:
-			success = self.parse_list(start)
+			success = self.parse_list(start, parseDetails)
 			if success == False:
 				retry_list.append(start)
 			start += self.config['page_size']
@@ -147,4 +169,5 @@ class CimecParser:
 
 if __name__ == '__main__':
 	parser = CimecParser('clasate')
-	parser.parse(1, 'clasate.json')
+	#parser.parse(1, 'clasate.json')
+	parser.parse_item_page('70224FCA28D44E3DB19503580579F37F')
