@@ -60,7 +60,7 @@ public class TranslationManager extends AbstractExecutable
                 String newPage = wiki.getRevision(rev.getID()).getTitle();
                 try
                 {
-                    String notReplacedText = wiki.getPageText(newPage);
+                    String notReplacedText = wiki.getPageText(List.of(newPage)).stream().findFirst().orElse("");
                     ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
                     String replacedText = rcl.execute();
                     if (!notReplacedText.equals(replacedText))
@@ -74,9 +74,9 @@ public class TranslationManager extends AbstractExecutable
                     e.printStackTrace();
                 }
                 String talkPage = wiki.getTalkPage(newPage);
-                if (wiki.exists(new String[] { talkPage })[0])
+                if (wiki.exists(List.of(talkPage))[0])
                 {
-                    talkText = wiki.getPageText(talkPage);
+                    talkText = wiki.getPageText(List.of(talkPage)).stream().findFirst().orElse("");
                     Matcher translPageMatcher = translPagePattern.matcher(talkText);
                     if (translPageMatcher.find())
                     {
@@ -110,7 +110,7 @@ public class TranslationManager extends AbstractExecutable
             {
                 try
                 {
-                    String notReplacedText = wiki.getPageText(eachNewPageLink);
+                    String notReplacedText = wiki.getPageText(List.of(eachNewPageLink)).stream().findFirst().orElse("");
                     CleanupIll illCleanup = new CleanupIll(wiki, wiki, dwiki, eachNewPageLink);
                     String replacedText = illCleanup.execute();
                     if (!notReplacedText.equals(replacedText)) {

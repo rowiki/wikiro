@@ -111,7 +111,7 @@ public class CatTreeCreator {
             wiki.setMarkBot(true);
 
             String mainCat = "Categorie:Articole din domeniul proiectului " + wikiprojectName;
-            if (!wiki.exists(new String[] { mainCat })[0]) {
+            if (!wiki.exists(List.of(mainCat))[0]) {
                 StringBuilder sbuild = new StringBuilder("[[Categorie:Articole din domeniul proiectelor|");
                 sbuild.append(wikiprojectName);
                 sbuild.append("]]");
@@ -134,7 +134,7 @@ public class CatTreeCreator {
                     parentQualCat = prependIfMissing(parentQualCat, "Categorie:");
                 }
 
-                if (null != catToCreate && !wiki.exists(new String[] { catToCreate })[0]) {
+                if (null != catToCreate && !wiki.exists(List.of(catToCreate))[0]) {
                     String catKey = defaultIfNull(classKeys.get(eachQualClass), lowerCase(eachQualClass.name()));
                     StringBuilder sbuild = new StringBuilder();
                     sbuild.append("[[").append(mainCat).append('|').append(catKey).append("]]").append("\n[[")
@@ -152,7 +152,7 @@ public class CatTreeCreator {
                 unclassifiedCategories[unclassifiedIdx] =
                     unclassifiedPrefix + wikiprojectName + " (" + unclassifiedTypes[unclassifiedIdx] + ")";
                 String unclassifiedCat = unclassifiedCategories[unclassifiedIdx];
-                if (null != unclassifiedCat && !wiki.exists(new String[] { unclassifiedCat })[0]) {
+                if (null != unclassifiedCat && !wiki.exists(List.of(unclassifiedCat))[0]) {
                     StringBuilder sbuild = new StringBuilder();
                     sbuild.append("[[").append(mainCat).append('|').append("neclasificate, ")
                         .append(unclassifiedTypes[unclassifiedIdx]).append("]]").append("\n[[")

@@ -1,6 +1,7 @@
 package org.wikipedia.ro.java.wikiprojects.createproj;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
@@ -56,14 +57,14 @@ public class WikiprojectCreator {
                     + "}}</includeonly><noinclude>{{Proiect " + this.wikiprojectName
                     + "|clasament=format|importanță=mare}}</noinclude>\n" };
 
-            boolean[] projectPagesExistance = wiki.exists(projPageTitles);
+            boolean[] projectPagesExistance = wiki.exists(List.of(projPageTitles));
             for (int i = 0; i < projPageTitles.length; i++) {
                 if (!projectPagesExistance[i]) {
                     wiki.edit(projPageTitles[i], projPageDefaultTexts[i], "Robot: creare pagină proiect");
                 }
             }
             
-            String wikiprojDataTxt = wiki.getPageText("Modul:Wikiproject/data");
+            String wikiprojDataTxt = wiki.getPageText(List.of("Modul:Wikiproject/data")).stream().findFirst().orElse("");
             int startOfProjects = StringUtils.indexOf(wikiprojDataTxt, "local projects = {");
             if (0 <= startOfProjects) {
                 if (0 > StringUtils.indexOf(wikiprojDataTxt, "[" + this.wikiprojectName + "] = ", startOfProjects)) {

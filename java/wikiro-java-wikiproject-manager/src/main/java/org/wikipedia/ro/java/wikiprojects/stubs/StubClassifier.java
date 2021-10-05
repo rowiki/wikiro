@@ -80,9 +80,9 @@ public class StubClassifier {
             while (catIdx < visitableCategories.size()) {
                 String crtCat = visitableCategories.get(catIdx);
                 System.out.printf("Parcurg categorie %s [ %d/%d ] %n", crtCat, (1 + catIdx), visitableCategories.size());
-                stubs.addAll(Arrays.asList(rowiki.getCategoryMembers(crtCat, Wiki.MAIN_NAMESPACE)));
+                stubs.addAll(rowiki.getCategoryMembers(crtCat, Wiki.MAIN_NAMESPACE));
 
-                String[] subCats = rowiki.getCategoryMembers(crtCat, Wiki.CATEGORY_NAMESPACE);
+                List<String> subCats = rowiki.getCategoryMembers(crtCat, Wiki.CATEGORY_NAMESPACE);
                 for (String eachSubCat : subCats) {
                     String eachSubCatName = removeStart(eachSubCat, "Categorie:");
                     if (startsWithIgnoreCase(eachSubCatName, "cioturi")) {
@@ -100,11 +100,11 @@ public class StubClassifier {
                 String stubTalkPage = rowiki.getTalkPage(eachStub);
                 System.out.printf("Vizitez ciot %s [ %d/%d ] %n", eachStub, (1 + stubIdx), stubList.size());
                 String subproj = getSubproject(eachStub, rowiki);
-                boolean talkExists = rowiki.exists(new String[] { stubTalkPage })[0];
+                boolean talkExists = rowiki.exists(List.of(stubTalkPage))[0];
                 String newTalk = "";
                 String talk = null;
                 if (talkExists) {
-                    talk = rowiki.getPageText(stubTalkPage);
+                    talk = rowiki.getPageText(List.of(stubTalkPage)).stream().findFirst().orElse("");
                     WikiprojectsModel projModel = WikiprojectsModel.fromTalkPage(talk);
                     if (isBlank(projModel.getQualClass())) {
                         projModel.setQualClass("ciot");

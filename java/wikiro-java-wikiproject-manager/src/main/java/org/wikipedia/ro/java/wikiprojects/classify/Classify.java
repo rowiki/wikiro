@@ -75,11 +75,11 @@ public class Classify {
 
             Set<String> pagesToRun = new LinkedHashSet<String>();
             for (String eachCat : categories) {
-                pagesToRun.addAll(Arrays.asList(rowiki.getCategoryMembers(eachCat, Wiki.MAIN_NAMESPACE)));
+                pagesToRun.addAll(rowiki.getCategoryMembers(eachCat, Wiki.MAIN_NAMESPACE));
             }
             for (String eachRecCat : recursiveCategories) {
                 System.out.printf("Analyzing category %s in depth %d%n", eachRecCat, depth);
-                pagesToRun.addAll(Arrays.asList(rowiki.getCategoryMembers(eachRecCat, depth, false, Wiki.MAIN_NAMESPACE)));
+                pagesToRun.addAll(rowiki.getCategoryMembers(eachRecCat, depth, false, Wiki.MAIN_NAMESPACE));
             }
 
             Wikibase dwiki = new Wikibase("www.wikidata.org");
@@ -95,10 +95,10 @@ public class Classify {
 
                 System.out.printf("Working on page %s [ %d/%d ]%n", eachArticleInCat, idx, pagesToRun.size());
                 String eachTalkPageOfArticleInCat = rowiki.getTalkPage(eachArticleInCat);
-                String talkPageText = rowiki.getPageText(eachTalkPageOfArticleInCat);
+                String talkPageText = rowiki.getPageText(List.of(eachTalkPageOfArticleInCat)).stream().findFirst().orElse("");
                 WikiprojectsModel projectModel = WikiprojectsModel.fromTalkPage(talkPageText);
 
-                String articleText = rowiki.getPageText(eachArticleInCat);
+                String articleText = rowiki.getPageText(List.of(eachArticleInCat)).stream().findFirst().orElse("");
                 Matcher faMatcher = faPattern.matcher(articleText);
                 if (faMatcher.find()) {
                     projectModel.setQualClass("AC");
@@ -197,7 +197,7 @@ public class Classify {
 
             List<String> templatesToRun = new ArrayList<>();
             for (String eachTmplCat : tmplCats) {
-                templatesToRun.addAll(Arrays.asList(rowiki.getCategoryMembers(eachTmplCat, Wiki.TEMPLATE_NAMESPACE)));
+                templatesToRun.addAll(rowiki.getCategoryMembers(eachTmplCat, Wiki.TEMPLATE_NAMESPACE));
             }
             int tmplIdx = 0;
             for (String eachTmpl : templatesToRun) {
@@ -205,7 +205,7 @@ public class Classify {
                 System.out.printf("Running on template %s [ %d/%d ]%n", eachTmpl, tmplIdx, templatesToRun.size());
 
                 String tmplTalkPageTitle = rowiki.getTalkPage(eachTmpl);
-                String tmplTalkPageText = rowiki.getPageText(tmplTalkPageTitle);
+                String tmplTalkPageText = rowiki.getPageText(List.of(tmplTalkPageTitle)).stream().findFirst().orElse("");
                 WikiprojectsModel projectModel = WikiprojectsModel.fromTalkPage(tmplTalkPageText);
                 projectModel.setQualClass("format");
 

@@ -10,6 +10,7 @@ import static org.apache.commons.lang3.StringUtils.trim;
 import java.io.Console;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,10 +85,10 @@ public class App {
             wiki.setMarkBot(true);
             wikibase.setMarkBot(true);
             
-            String[] listMarkersPresence = wiki.whatTranscludesHere("Format:Listă populată din Wikidata");
+            List<String> listMarkersPresence = wiki.whatTranscludesHere(List.of("Format:Listă populată din Wikidata"), Wiki.ALL_NAMESPACES).stream().findFirst().orElse(List.of());
 
             for (String eachTransclusion : listMarkersPresence) {
-                String pageText = wiki.getPageText(eachTransclusion);
+                String pageText = wiki.getPageText(List.of(eachTransclusion)).stream().findFirst().orElse("");
 
                 Matcher listStartMatcher = LIST_START_PATTERN.matcher(pageText);
                 if (listStartMatcher.find()) {

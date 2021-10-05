@@ -8,6 +8,7 @@ import static org.apache.commons.lang3.StringUtils.removeStart;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -64,7 +65,7 @@ public class WikiprojectTraverser {
 
             String pagesBigcat = "Articole din domeniul proiectului " + wikiprojectName;
 
-            String[] pages = wiki.getCategoryMembers(pagesBigcat);
+            List<String> pages = wiki.getCategoryMembers(pagesBigcat);
 
             for (String eachPage : pages) {
                 int namespace = wiki.namespace(eachPage);
@@ -76,7 +77,7 @@ public class WikiprojectTraverser {
                     prependIfMissing(removeStart(eachPage, wiki.namespaceIdentifier(namespace) + ":"),
                         wiki.namespaceIdentifier(classificationNamespace) + ":");
 
-                String classificationText = wiki.getPageText(classificationPage);
+                String classificationText = wiki.getPageText(List.of(classificationPage)).stream().findFirst().orElse("");
 
                 QualityClass qualClass = null;
                 ImportanceClass impClass = null;
