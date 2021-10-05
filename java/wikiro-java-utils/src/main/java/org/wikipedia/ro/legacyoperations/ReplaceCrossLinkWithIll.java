@@ -63,7 +63,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
     public String execute() throws IOException, LoginException, WikibaseException {
         status = new String[] { "status.reading.text", article, targetWikiCode };
-        String text = targetWiki.getPageText(article);
+        String text = targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("");
         Pattern namespacepattern = Pattern.compile("((?:Template|Wikipedia):)?(.*)");
 
         status = new String[] { "status.identifying.links" };
@@ -218,34 +218,31 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                 localLinks.add(articleTitle);
             }
         }
-        String[] localLinksArray = localLinks.toArray(new String[localLinks.size()]);
-        String[] localResolvedRedirects = targetWiki.resolveRedirects(localLinksArray);
-        for (int idx = 0; idx < localLinksArray.length; idx++) {
-            actualLocalTitleMap.put(localLinksArray[idx], defaultString(localResolvedRedirects[idx], localLinksArray[idx]));
+        List<String> localResolvedRedirects = targetWiki.resolveRedirects(localLinks);
+        for (int idx = 0; idx < localLinks.size(); idx++) {
+            actualLocalTitleMap.put(localLinks.get(idx), defaultString(localResolvedRedirects.get(idx), localLinks.get(idx)));
         }
-        localLinksArray = actualLocalTitleMap.values().stream().filter(x -> !isNotReplaceableLink(x)).collect(Collectors.toList())
-            .toArray(new String[actualForeignTitleMap.size()]);
-        boolean[] localExistanceArray = targetWiki.exists(localLinksArray);
-        for (int idx = 0; idx < localLinksArray.length; idx++) {
-            localLinkExistenceMap.put(localLinksArray[idx], Boolean.valueOf(localExistanceArray[idx]));
+        localLinks = actualLocalTitleMap.values().stream().filter(x -> !isNotReplaceableLink(x)).collect(Collectors.toList());
+        boolean[] localExistanceArray = targetWiki.exists(localLinks);
+        for (int idx = 0; idx < localLinks.size(); idx++) {
+            localLinkExistenceMap.put(localLinks.get(idx), Boolean.valueOf(localExistanceArray[idx]));
         }
 
-        String[] nonExistingLinksArray = localLinkExistenceMap.keySet().stream()
-            .filter(key -> !localLinkExistenceMap.get(key)).collect(Collectors.toList()).toArray(new String[0]);
-        if (0 < nonExistingLinksArray.length) {
-            String[] actualForeignTitlesArray = sourceWiki.resolveRedirects(nonExistingLinksArray);
-            for (int idx = 0; idx < nonExistingLinksArray.length; idx++) {
-                actualForeignTitleMap.put(nonExistingLinksArray[idx],
-                    defaultString(actualForeignTitlesArray[idx], nonExistingLinksArray[idx]));
+        List<String> nonExistingLinks = localLinkExistenceMap.keySet().stream()
+            .filter(key -> !localLinkExistenceMap.get(key)).collect(Collectors.toList());
+        if (!nonExistingLinks.isEmpty()) {
+            List<String> actualForeignTitles = sourceWiki.resolveRedirects(nonExistingLinks);
+            for (int idx = 0; idx < nonExistingLinks.size(); idx++) {
+                actualForeignTitleMap.put(nonExistingLinks.get(idx),
+                    defaultString(actualForeignTitles.get(idx), nonExistingLinks.get(idx)));
             }
         }
 
-        nonExistingLinksArray = actualForeignTitleMap.values().stream().collect(Collectors.toList())
-            .toArray(new String[actualForeignTitleMap.size()]);
-        if (0 < nonExistingLinksArray.length) {
-            boolean[] foreignLinkExistenceArray = sourceWiki.exists(nonExistingLinksArray);
+        nonExistingLinks = actualForeignTitleMap.values().stream().collect(Collectors.toList());
+        if (!nonExistingLinks.isEmpty()) {
+            boolean[] foreignLinkExistenceArray = sourceWiki.exists(nonExistingLinks);
             for (int idx = 0; idx < foreignLinkExistenceArray.length; idx++) {
-                foreignLinkExistenceMap.put(nonExistingLinksArray[idx], Boolean.valueOf(foreignLinkExistenceArray[idx]));
+                foreignLinkExistenceMap.put(nonExistingLinks.get(idx), Boolean.valueOf(foreignLinkExistenceArray[idx]));
             }
         }
         innerLinkMatcher.reset();

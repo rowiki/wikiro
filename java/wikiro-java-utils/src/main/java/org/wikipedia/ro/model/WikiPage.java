@@ -105,7 +105,7 @@ public class WikiPage {
     }
 
     public WikiPage load() throws IOException {
-        setText(wiki.getPageText(title));
+        setText(wiki.getPageText(List.of(title)).stream().findFirst().get());
         return this;
     }
 

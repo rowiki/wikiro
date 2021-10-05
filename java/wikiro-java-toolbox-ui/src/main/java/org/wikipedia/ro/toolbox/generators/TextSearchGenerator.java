@@ -25,7 +25,7 @@ public class TextSearchGenerator implements Generator {
 
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
-            Map<String, Object>[] searchResultsArray = wiki.search(text);
+            List<Map<String, Object>> searchResultsArray = wiki.search(text, wiki.ALL_NAMESPACES);
             pagesList = new ArrayList<String>();
             for (Map<String, Object> eachResultMap : searchResultsArray) {
                 pagesList.add(eachResultMap.get("title").toString());

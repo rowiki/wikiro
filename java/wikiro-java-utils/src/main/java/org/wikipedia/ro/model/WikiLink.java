@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jdk.nashorn.internal.ir.Labels;
-
 public class WikiLink extends WikiPart {
     private String target = null;
     private List<WikiPart> labelStructure = new ArrayList<>();

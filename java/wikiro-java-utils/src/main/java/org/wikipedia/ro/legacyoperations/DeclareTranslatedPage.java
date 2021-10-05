@@ -1,10 +1,16 @@
 package org.wikipedia.ro.legacyoperations;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.startsWith;
+import static org.apache.commons.lang3.StringUtils.substringAfter;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
+import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import javax.security.auth.login.LoginException;
 
@@ -41,7 +47,7 @@ public class DeclareTranslatedPage implements WikiOperation {
         status = new String[] { "status.reading.talkpage" };
         String talkPageText = "";
         try {
-            talkPageText = trim(defaultString(targetWiki.getPageText(article)));
+            talkPageText = trim(defaultString(targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("")));
         } catch (FileNotFoundException e) {
             System.out.println("Page not found: " + article + " - " + e.getMessage());
         }
@@ -60,9 +66,9 @@ public class DeclareTranslatedPage implements WikiOperation {
         String sourceArticle = wbentity.getSitelinks().get(sourceWikiCode).getPageName();
 
         status = new String[] { "status.last.revision.src" };
-        String lastRevId = sourceWiki.getPageInfo(sourceArticle).get("lastrevid").toString();
+        Optional<String> lastRevId = sourceWiki.getPageInfo(List.of(sourceArticle)).stream().findFirst().map(m -> m.get("lastrevid")).map(Objects::toString);
         status = new String[] { "status.last.revision.target" };
-        String targetLastRevId = targetWiki.getPageInfo(articlePage).get("lastrevid").toString();
+        Optional<String> targetLastRevId = targetWiki.getPageInfo(List.of(articlePage)).stream().findFirst().map(m -> m.get("lastrevid")).map(Objects::toString);
         StringBuilder template = new StringBuilder("{{Pagină tradusă|");
         template.append(substringBefore(sourceWiki.getDomain(), "."));
         template.append('|');
@@ -71,8 +77,12 @@ public class DeclareTranslatedPage implements WikiOperation {
             template.append("|small=no");
         }
         template.append('|');
-        template.append("|version=").append(lastRevId);
-        template.append("|insertversion=").append(targetLastRevId);
+        if (lastRevId.isPresent()) {
+            template.append("|version=").append(lastRevId.get());
+        }
+        if (targetLastRevId.isPresent()) {
+            template.append("|insertversion=").append(targetLastRevId.get());
+        }
         template.append("}}\n");
         template.append(talkPageText);
 

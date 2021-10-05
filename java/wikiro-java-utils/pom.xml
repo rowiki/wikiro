@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>org.wikipedia</groupId>
 			<artifactId>wiki-java</artifactId>
-			<version>0.36-SNAPSHOT</version>
+			<version>0.37-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

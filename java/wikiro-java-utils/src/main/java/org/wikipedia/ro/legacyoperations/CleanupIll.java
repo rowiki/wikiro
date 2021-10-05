@@ -10,6 +10,7 @@ import static org.wikipedia.ro.utils.ParseUtils.wikipartListToString;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,7 +56,7 @@ public class CleanupIll implements WikiOperation {
     public String execute() throws IOException, WikibaseException, LoginException {
         status = new String[] { "status.changes.todo.inarticle", article, String.valueOf(0), "?" };
 
-        String pageText = targetWiki.getPageText(article);
+        String pageText = targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("");
 
         Matcher illMatcher = PATTERN_ILL.matcher(pageText);
         StringBuilder replacedTextBuilder = new StringBuilder(pageText);
@@ -114,7 +115,7 @@ public class CleanupIll implements WikiOperation {
             return defaultString(wikidataReplacementLink, prospectiveIllWdTemplate.toString());
         }
 
-        if (targetWiki.exists(new String[] { targetPage })[0]) {
+        if (targetWiki.exists(List.of(targetPage))[0]) {
             return new WikiLink(targetPage, label).toString();
         } else {
             Wiki linkSourceWiki = Wiki.newSession(langId + ".wikipedia.org");

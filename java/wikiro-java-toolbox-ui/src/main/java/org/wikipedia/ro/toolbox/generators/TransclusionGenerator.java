@@ -27,13 +27,12 @@ public class TransclusionGenerator implements Generator {
 
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
-            String[] transclusions = wiki.whatTranscludesHere(
-                prependIfMissing(template, wiki.namespaceIdentifier(Wiki.TEMPLATE_NAMESPACE) + ":"));
-            pagesList = Arrays.asList(transclusions);
+            pagesList = wiki.whatTranscludesHere(
+                List.of(prependIfMissing(template, wiki.namespaceIdentifier(Wiki.TEMPLATE_NAMESPACE) + ":")),
+                Wiki.ALL_NAMESPACES).stream().findFirst().orElse(List.of());
         }
         return pagesList;
     }
-
 
     public String getTemplate() {
         return template;

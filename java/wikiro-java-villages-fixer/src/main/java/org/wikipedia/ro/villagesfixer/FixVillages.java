@@ -111,7 +111,7 @@ public class FixVillages {
     // Pattern sentencePattern = Pattern.compile(
     // "(([^\\.]*(\\(.*?\\)))*.*?)(((\\.|$)\\s*((\\<ref[^\\/]*?\\>.*?\\<\\/ref\\>)|(\\<ref[^>]*\\/\\>))*)|((\\<ref[^\\/]*?\\>.*?\\<\\/ref\\>)|(\\<ref[^>]*\\/\\>))*\\s*(\\.|$))\\s*");
     private static Pattern manuallyFormatedNumberPattern =
-        Pattern.compile("(?<!(?:ormatnum\\:\\d{0,9}))\\d+(?:\\.\\s*\\d+)+");
+        Pattern.compile("(?<!(?:ormatnum[\\:\\|]\\d{0,9}))\\d+(?:\\.\\s*\\d+)+");
     private static Pattern sentencePattern = Pattern.compile(
         "((?:'''.*?''')?(?:(?:\\[\\[.*?\\]\\])|(\\(.*?\\))|(?:\\<ref[^\\>]*(?:(?:\\/\\>)|(?:\\>.*?\\<\\/ref\\>)))|[^\\[\\]\\.])*+(?:(?:\\<ref[^\\>]*+\\>(?:.*?\\</ref\\>)?)|(?:\\[\\[.*?\\]\\])|[^\\[\\]\\.])*?)(((\\.|$)\\s*((\\<ref[^\\/]*?\\>.*?\\<\\/ref\\>)|(\\<ref[^>]*\\/\\>))*)|((\\<ref[^\\/]*?\\>.*?\\<\\/ref\\>)|(\\<ref[^>]*\\/\\>))*+\\s*(\\.|$))\\s*");
     private static Pattern fullLocationPattern =
@@ -654,7 +654,7 @@ public class FixVillages {
                     StringBuffer formattedNumberBuf = new StringBuffer();
                     while (numberMatcher.find()) {
                         numberMatcher.appendReplacement(formattedNumberBuf,
-                            "{{formatnum:" + numberMatcher.group(0).replaceAll("[\\.|\\s]", "") + "}}");
+                            "{{formatnum|" + numberMatcher.group(0).replaceAll("[\\.|\\s]", "") + "}}");
                     }
                     numberMatcher.appendTail(formattedNumberBuf);
                     workingFirstParagraph = formattedNumberBuf.toString();
@@ -1283,7 +1283,7 @@ public class FixVillages {
             StringBuffer formattedNumberBuf = new StringBuffer();
             while (numberMatcher.find()) {
                 numberMatcher.appendReplacement(formattedNumberBuf,
-                    "{{formatnum:" + numberMatcher.group(0).replaceAll("[\\.|\\s]", "") + "}}");
+                    "{{formatnum|" + numberMatcher.group(0).replaceAll("[\\.|\\s]", "") + "}}");
             }
             numberMatcher.appendTail(formattedNumberBuf);
             workingFirstParagraph = formattedNumberBuf.toString();

@@ -579,7 +579,7 @@ public class WikipediaToolboxGUI {
                         Thread.sleep(500l);
                     }
 
-                    String initText = targetWiki.getPageText(actionParams[i]);
+                    String initText = targetWiki.getPageText(List.of(actionParams[i])).stream().findFirst().orElse("");
                     String result = action.execute();
 
                     if (!StringUtils.equals(initText, result)) {

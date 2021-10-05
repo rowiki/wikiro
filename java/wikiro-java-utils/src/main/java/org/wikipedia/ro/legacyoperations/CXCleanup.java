@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.replace;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,7 +57,7 @@ public class CXCleanup implements WikiOperation {
         Entity ent = dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, article);
         String translation = removeEnd(sourceWikiCode, "wiki") + ":" + ent.getSitelinks().get(sourceWikiCode).getPageName();
         status = new String[] { "status.reading.text", article, targetWikiCode };
-        String text = targetWiki.getPageText(article);
+        String text = targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("");
 
         text = replace(text, "Wikipedia:WikiProject_Medicine/Translation_task_force/RTT/Simple_", "");
         text = replace(text, "&#x20;", " ");

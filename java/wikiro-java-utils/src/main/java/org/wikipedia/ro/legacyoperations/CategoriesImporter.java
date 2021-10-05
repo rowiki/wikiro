@@ -59,7 +59,7 @@ public class CategoriesImporter implements WikiOperation {
 
     public String execute() throws IOException, LoginException {
         status = new String[] { "status.searching.wikibase.item.by.article", article, targetWikiCode };
-        StringBuffer articleBuilder = new StringBuffer(targetWiki.getPageText(article));
+        StringBuffer articleBuilder = new StringBuffer(targetWiki.getPageText(List.of(article)).stream().findFirst().orElse(""));
         Entity articleItem = null;
         try {
             articleItem = dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, article);
@@ -75,10 +75,9 @@ public class CategoriesImporter implements WikiOperation {
         }
         String sourceWikiArticle = sitelink.getPageName();
         status = new String[] { "status.reading.categories", sourceWikiArticle, sourceWikiCode };
-        String[] sourceCategories = sourceWiki.getCategories(sourceWikiArticle);
+        List<String> sourceCategories = sourceWiki.getCategories(List.of(sourceWikiArticle), sourceWiki.new RequestHelper(), false).stream().findFirst().orElse(List.of());
         status = new String[] { "status.reading.categories", article, targetWikiCode };
-        String[] targetCategories = targetWiki.getCategories(article);
-        List<String> targetCategoriesList = Arrays.asList(targetCategories);
+        List<String> targetCategoriesList = targetWiki.getCategories(List.of(article), targetWiki.new RequestHelper(), false).stream().findFirst().orElse(List.of());
         List<String> categoriesToAdd = new ArrayList<String>();
         for (String eachSourceCat : sourceCategories) {
             String sourceCatFullPageName =

@@ -1,9 +1,6 @@
 package org.wikipedia.ro.toolbox.generators;
 
-import static org.apache.commons.lang3.StringUtils.prependIfMissing;
-
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 import org.wikipedia.Wiki;
@@ -27,9 +24,7 @@ public class PagesInCategoryGenerator implements Generator {
 
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
-            String[] pagesArray = wiki
-                .getCategoryMembers(prependIfMissing(page, wiki.namespaceIdentifier(Wiki.CATEGORY_NAMESPACE) + ":"));
-            pagesList = Arrays.asList(pagesArray);
+            pagesList = wiki.getCategoryMembers(page, Wiki.CATEGORY_NAMESPACE);
         }
         return pagesList;
     }

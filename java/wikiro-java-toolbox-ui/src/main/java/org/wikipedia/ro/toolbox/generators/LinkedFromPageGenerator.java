@@ -26,8 +26,7 @@ public class LinkedFromPageGenerator implements Generator {
 
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
-            String[] pagesArray = wiki.getLinksOnPage(page);
-            pagesList = Arrays.asList(pagesArray);
+            pagesList = wiki.getLinksOnPage(page);
         }
         return pagesList;
     }

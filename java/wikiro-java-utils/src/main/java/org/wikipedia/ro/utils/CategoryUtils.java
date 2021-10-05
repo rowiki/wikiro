@@ -3,6 +3,7 @@ package org.wikipedia.ro.utils;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,12 +15,12 @@ public class CategoryUtils {
     }
 
     public static boolean isInCategoryTree(final String pageTitle, final Wiki wiki, final int depth, final String category) {
-        String[] cats = null;
+        List<String> cats = null;
         boolean categoriesRead = false;
 
         do {
             try {
-                cats = wiki.getCategories(pageTitle);
+                cats = wiki.getCategories(List.of(pageTitle), wiki.new RequestHelper(), false).stream().findFirst().orElse(List.of());
                 categoriesRead = true;
             } catch (final IOException e) {
                 e.printStackTrace();
@@ -42,12 +43,12 @@ public class CategoryUtils {
 
     public static boolean isInAnyCategoryTree(final String pageTitle, final Wiki wiki, final int depth,
                                               final String... categories) {
-        String[] cats = null;
+        List<String> cats = null;
         boolean categoriesRead = false;
 
         do {
             try {
-                cats = wiki.getCategories(pageTitle);
+                cats = wiki.getCategories(List.of(pageTitle), wiki.new RequestHelper(), false).stream().findFirst().orElse(List.of());
                 categoriesRead = true;
             } catch (final IOException e) {
                 e.printStackTrace();
