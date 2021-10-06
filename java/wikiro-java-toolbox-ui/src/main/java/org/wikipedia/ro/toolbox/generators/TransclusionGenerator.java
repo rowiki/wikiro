@@ -28,8 +28,7 @@ public class TransclusionGenerator implements Generator {
     public List<String> getGeneratedTitles() throws IOException {
         if (null == pagesList) {
             pagesList = wiki.whatTranscludesHere(
-                List.of(prependIfMissing(template, wiki.namespaceIdentifier(Wiki.TEMPLATE_NAMESPACE) + ":")),
-                Wiki.ALL_NAMESPACES).stream().findFirst().orElse(List.of());
+                List.of(prependIfMissing(template, wiki.namespaceIdentifier(Wiki.TEMPLATE_NAMESPACE) + ":"))).stream().findFirst().orElse(List.of());
         }
         return pagesList;
     }
