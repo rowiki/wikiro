@@ -85,7 +85,7 @@ public class App {
             wiki.setMarkBot(true);
             wikibase.setMarkBot(true);
             
-            List<String> listMarkersPresence = wiki.whatTranscludesHere(List.of("Format:Listă populată din Wikidata"), Wiki.ALL_NAMESPACES).stream().findFirst().orElse(List.of());
+            List<String> listMarkersPresence = wiki.whatTranscludesHere(List.of("Format:Listă populată din Wikidata")).stream().findFirst().orElse(List.of());
 
             for (String eachTransclusion : listMarkersPresence) {
                 String pageText = wiki.getPageText(List.of(eachTransclusion)).stream().findFirst().orElse("");
