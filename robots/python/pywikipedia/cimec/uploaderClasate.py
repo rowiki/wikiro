@@ -246,6 +246,31 @@ class ClasateUploader(uploader.CimecUploader):
 		for entry in database:
 			#if database[entry]["key"] != "638D1E677C3D42BD9ACEA527B4FD2481":
 			#	continue
+			for key in database[entry]:
+				database[entry][key] = self.replace_diacritics(database[entry][key])
+
+			# already uploaded, continue
+			if "Fișier" in database[entry]:
+				continue
+				try:
+					body = self.build_description_page(database[entry])
+					page = pywikibot.Page(pywikibot.Site(), database[entry]["Fișier"])
+					if body == page.get():
+						continue
+					pywikibot.showDiff(page.get(), body)
+					answer = self.always or pywikibot.input_choice("Upload?", [("Yes", "Y"), ("No", "N"), ("Always", "A")])
+					if answer == 'a':
+						self.always = 'y'
+						answer = 'y'
+					if answer != 'y':
+						continue
+						page.put(body, "Actualizez descrierea imaginii ")
+				except pywikibot.exceptions.NoPageError:
+					del database[entry]["Fișier"]
+				except pywikibot.exceptions.IsRedirectPageError:
+					continue # Likely a duplicate, don't bother
+				continue
+			# no picture, continue
 			f = self.get_local_path(database[entry])
 			if f == None:
 				continue
@@ -255,24 +280,51 @@ class ClasateUploader(uploader.CimecUploader):
 			print(filename)
 			print(body)
 			#continue
-			answer = pywikibot.input_choice("Upload?", [("Yes", "Y"), ("No", "N")])
+
+			if filename[5:9].lower() in ["foto"]:
+				ignore = ['bad-prefix']
+				print("Ignoring invalid prefix for " + filename[:4])
+			else:
+				ignore = False
+
+			answer = self.always or pywikibot.input_choice("Upload?", [("Yes", "Y"), ("No", "N"), ("Always", "A")])
+			if answer == 'a':
+				self.always = 'y'
+				answer = 'y'
 			if answer != 'y':
 				continue
-			imagepage = pywikibot.FilePage(pywikibot.Site(), filename)  # normalizes filename
-			imagepage.text = body
+			try:
+				imagepage = pywikibot.FilePage(pywikibot.Site(), filename)  # normalizes filename
+				imagepage.text = body
+			except pywikibot.exceptions.InvalidTitleError as e:
+				#TODO: handle
+				print(e)
+				continue
 
 			pywikibot.output('Uploading file to {0}...'.format(pywikibot.Site()))
 			try:
 				success = imagepage.upload(f,
-						ignore_warnings=False,
+						ignore_warnings=ignore,
                                    		chunk_size=0,
                                        		_file_key=None, _offset=0,
                                        		comment="Imagine Cimec nouă")
-			except pywikibot.data.api.APIError as error:
+			except pywikibot.exceptions.APIError as error:
 				if error.code == 'uploaddisabled':
 					pywikibot.error(
 						'Upload error: Local file uploads are disabled on %s.'
 						% site)
+				elif error.code == 'exists':
+					database[entry]["Fișier"] = filename
+					pywikibot.output("File %s already exists, ignoring" % filename)
+					continue
+				elif error.code == 'duplicate':
+					pywikibot.output(error.message)
+					target = 'File:' + error.message[error.message.find('[') + 2:error.message.find(']') - 1]
+					print(target)
+					page = pywikibot.Page(pywikibot.Site(), filename)
+					page.put("#redirect [[%s]]" % target, "Redirecționez spre imaginea duplicat")
+					database[entry]["Fișier"] = filename
+					continue
 				else:
 					pywikibot.error('Upload error: ', exc_info=True)
 					continue
@@ -284,16 +336,18 @@ class ClasateUploader(uploader.CimecUploader):
 					# No warning, upload complete.
 					pywikibot.output('Upload of %s successful.' % filename)
 					database[entry]["Fișier"] = filename
-					self.create_redirects(imagepage, data)
-					self.build_talk_page(imagepage, data)
-					with open("clasate2.json", 'w') as f:
+					self.build_talk_page(imagepage, database[entry])
+					self.create_redirects(imagepage, database[entry])
+					with open("clasate.json", 'w') as f:
 						json.dump(database, f, indent=2)
 				else:
 					pywikibot.output('Upload aborted.')
 
 	def upload_images(self, filename):
-		with open(filename, 'r') as f:
+		with open(filename, 'r', encoding="utf-8") as f:
 			db = json.loads(f.read())
+			#wqimport pdb
+			#pdb.set_trace()
 			self.upload(db)
 
 def generate_categories():
