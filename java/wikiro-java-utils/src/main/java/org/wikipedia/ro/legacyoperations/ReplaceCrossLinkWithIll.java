@@ -200,7 +200,8 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             // first pass - evaluate links existence
 
             String link = innerLinkMatcher.group(1);
-            link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());
+            //link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());'
+            link = replace(link, "_", " ");
             System.out.println("First pass: Link: " + link);
             String articleLink = removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
@@ -250,7 +251,8 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             // second pass - actually perform changes with data already collected in an optimized way
 
             String link = innerLinkMatcher.group(1);
-            link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());
+            //link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());
+            link = replace(link, "_", " ");
             System.out.println("Second pass: Link: " + link);
             String articleLink = removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
@@ -282,19 +284,18 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                 if (null == roArticle && null == wbEntity) {
                     try {
                         wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(sourceWikiCode, foreignArticleTitle);
-                        if (null != wbEntity) {
-                            roLabel = wbEntity.getLabels().get("ro");
-                            Sitelink roSitelink = wbEntity.getSitelinks().get(targetWikiCode);
-                            if (null != roSitelink) {
-                                roArticle = roSitelink.getPageName();
-                                roArticlesCache.put(sourceLang + ":" + foreignArticleTitle, roArticle);
-                            }
-                        }
-
                     } catch (WikibaseException e) {
                         e.printStackTrace();
                     } catch (Throwable th) {
                         th.printStackTrace();
+                    }
+                }
+                if (null != wbEntity) {
+                    roLabel = wbEntity.getLabels().get("ro");
+                    Sitelink roSitelink = wbEntity.getSitelinks().get(targetWikiCode);
+                    if (null != roSitelink) {
+                        roArticle = roSitelink.getPageName();
+                        roArticlesCache.put(sourceLang + ":" + foreignArticleTitle, roArticle);
                     }
                 }
                 if (null != roArticle) {
