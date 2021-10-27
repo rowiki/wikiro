@@ -1,11 +1,13 @@
 package org.wikipedia.ro.villagesfixer;
 
+import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.StringUtils.appendIfMissing;
 import static org.apache.commons.lang3.StringUtils.contains;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.endsWith;
+import static org.apache.commons.lang3.StringUtils.endsWithAny;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -56,7 +58,6 @@ import java.util.stream.Stream;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.wikibase.Wikibase;
@@ -138,8 +139,8 @@ public class FixVillages {
         }
 
         Wikibase dwiki = new Wikibase();
-        String[] countyCategoryMembers = rowiki.getCategoryMembers("Category:Județe din România", Wiki.CATEGORY_NAMESPACE);
-        List<String> countyCategoryMembersList = Arrays.asList(countyCategoryMembers);
+        List<String> countyCategoryMembersList =
+            rowiki.getCategoryMembers("Category:Județe din România", Wiki.CATEGORY_NAMESPACE);
         List<String> countyNames = new ArrayList<>();
         for (String eachArticleName : countyCategoryMembersList) {
             String countyNameNoCat = removeStart(eachArticleName, "Categorie:");
@@ -234,22 +235,22 @@ public class FixVillages {
                     .map(StringData::getValue).orElse("");
 
                 countyTouched = true;
-                String[] categoryMembers =
+                List<String> categoryMembers =
                     rowiki.getCategoryMembers("Category:Orașe din județul " + eachCounty, Wiki.MAIN_NAMESPACE);
                 List<String> categoryMembersList = new ArrayList<>();
-                categoryMembersList.addAll(Arrays.asList(categoryMembers));
-                categoryMembersList.addAll(Arrays
-                    .asList(rowiki.getCategoryMembers("Category:Comune din județul " + eachCounty, Wiki.MAIN_NAMESPACE)));
+                categoryMembersList.addAll(categoryMembers);
+                categoryMembersList
+                    .addAll(rowiki.getCategoryMembers("Category:Comune din județul " + eachCounty, Wiki.MAIN_NAMESPACE));
 
-                String[] subcategories =
+                List<String> subcategories =
                     rowiki.getCategoryMembers("Category:Orașe din județul " + eachCounty, Wiki.CATEGORY_NAMESPACE);
                 List<String> subcategoriesList = new ArrayList<>();
-                subcategoriesList.addAll(Arrays.asList(subcategories));
-                subcategoriesList.addAll(Arrays.asList(
-                    rowiki.getCategoryMembers("Category:Comune din județul " + eachCounty, Wiki.CATEGORY_NAMESPACE)));
+                subcategoriesList.addAll(subcategories);
+                subcategoriesList
+                    .addAll(rowiki.getCategoryMembers("Category:Comune din județul " + eachCounty, Wiki.CATEGORY_NAMESPACE));
                 for (String eachSubcat : subcategoriesList) {
                     String catTitle = removeStart(eachSubcat, "Categorie:");
-                    String[] subarticles = rowiki.getCategoryMembers(eachSubcat, Wiki.MAIN_NAMESPACE);
+                    List<String> subarticles = rowiki.getCategoryMembers(eachSubcat, Wiki.MAIN_NAMESPACE);
                     for (String eachSubarticle : subarticles) {
                         if (StringUtils.equals(eachSubarticle, catTitle)) {
                             categoryMembersList.add(eachSubarticle);
@@ -257,9 +258,9 @@ public class FixVillages {
                     }
                 }
 
-                String[] settlementCategories = new String[] { "Categorie:Localități urbane din județul " + eachCounty,
+                List<String> settlementCategories = List.of("Categorie:Localități urbane din județul " + eachCounty,
                     "Categorie:Sate din județul " + eachCounty,
-                    "Categorie:Subunități administrative ale județului " + eachCounty };
+                    "Categorie:Subunități administrative ale județului " + eachCounty);
                 String[] settlementCategoriesContent = new String[] {
                     "[[Categorie:Localități din județul " + eachCounty + "]]\n[[Categorie:Localități urbane din România|"
                         + eachCounty + "]]",
@@ -269,9 +270,9 @@ public class FixVillages {
                         + "]]\n[[Categorie:Subunități administrative ale județelor României|" + eachCounty + "]]", };
                 boolean[] categories = rowiki.exists(settlementCategories);
 
-                for (int catIdx = 0; catIdx < settlementCategories.length; catIdx++) {
+                for (int catIdx = 0; catIdx < settlementCategories.size(); catIdx++) {
                     if (!categories[catIdx]) {
-                        rowiki.edit(settlementCategories[catIdx], settlementCategoriesContent[catIdx],
+                        rowiki.edit(settlementCategories.get(catIdx), settlementCategoriesContent[catIdx],
                             "Creare categorii cu localități și subunități administrative pentru județul " + eachCounty);
                     }
                 }
@@ -370,7 +371,7 @@ public class FixVillages {
                     int templateAnalysisStart = 0;
 
                     String rocommunearticle = communeWikibaseItem.getSitelinks().get("rowiki").getPageName();
-                    String pageText = rowiki.getPageText(rocommunearticle);
+                    String pageText = rowiki.getPageText(List.of(rocommunearticle)).stream().findFirst().orElse("");
                     String initialPageText = pageText;
 
                     String sirutaFromWd = null;
@@ -499,9 +500,9 @@ public class FixVillages {
                         } else if (coatOfArmsMatcher.matches()) {
                             String coatOfArmsImageName = coatOfArmsMatcher.group(8);
                             Property coatOfArmsImageWikidataProperty = new Property("P94");
-                            if (commonsWiki.exists(new String[] { "File:" + coatOfArmsImageName })[0]
-                                && !ArrayUtils.contains(commonsWiki.getCategories("File:" + coatOfArmsImageName),
-                                    "Category:Coat of arms placeholders")) {
+                            if (commonsWiki.exists(List.of("File:" + coatOfArmsImageName))[0]
+                                && !commonsWiki.getCategories(List.of("File:" + coatOfArmsImageName),
+                                    commonsWiki.new RequestHelper(), false).stream().map(l -> l.contains("Category:Coat of arms placeholders")).findFirst().orElse(false)) {
                                 Set<Claim> coatOfArmsFromWd = communeClaims.get(coatOfArmsImageWikidataProperty);
                                 if (null == coatOfArmsFromWd || coatOfArmsFromWd.isEmpty()) {
                                     dwiki.addClaim(communeWikibaseItem.getId(),
@@ -527,7 +528,7 @@ public class FixVillages {
                         List<WikiPart> nativeNameInTemplateParts = initialTemplate.getParam("nume_nativ");
                         if (null != nativeNameInTemplateParts && !nativeNameInTemplateParts.isEmpty()) {
                             String nativeNameInTemplateString =
-                                nativeNameInTemplateParts.stream().map(WikiPart::toString).collect(Collectors.joining());
+                                nativeNameInTemplateParts.stream().map(WikiPart::toString).collect(joining());
                             String[] nativeNamesArray = nativeNameInTemplateString.split("<br\\s*/?\\s*>");
                             int matchedNativeNames = 0;
                             for (String eachNativeName : nativeNamesArray) {
@@ -556,38 +557,40 @@ public class FixVillages {
                             initialTemplate.removeParam("imagine");
                         } else if (imageMatcher.matches()) {
                             String imageName = URLDecoder.decode(imageMatcher.group(8), StandardCharsets.UTF_8.name());
-                            Property imageWikidataProperty = new Property("P18");
-                            if (commonsWiki.exists(new String[] { "File:" + imageName})[0]) {
-                                String imageClaimId = null;
-                                boolean captionQualifierFound = false;
-                                if (!communeClaims.containsKey(imageWikidataProperty)) {
-                                    imageClaimId = dwiki.addClaim(communeWikibaseItem.getId(),
-                                        new Claim(imageWikidataProperty, new CommonsMedia(imageName)));
-                                    initialTemplate.removeParam("imagine");
-                                } else {
-                                    Optional<Claim> possibleImageClaim =
-                                        communeClaims.get(imageWikidataProperty).stream().findFirst();
-                                    if (possibleImageClaim.isPresent() && StringUtils.equals(
-                                        replace(possibleImageClaim.map(Claim::getValue).map(CommonsMedia.class::cast)
-                                            .map(CommonsMedia::getFileName).get(), " ", "_"),
-                                        replace(imageName, " ", "_"))) {
-                                        Claim imageClaim = possibleImageClaim.get();
-                                        imageClaimId = imageClaim.getId();
-                                        captionQualifierFound = (null != imageClaim.getQualifiers().get(captionProp));
+                            if (endsWithAny(lowerCase(imageName), "jpg", "jpeg", "png")) {
+                                Property imageWikidataProperty = new Property("P18");
+                                if (commonsWiki.exists(List.of("File:" + imageName))[0]) {
+                                    String imageClaimId = null;
+                                    boolean captionQualifierFound = false;
+                                    if (!communeClaims.containsKey(imageWikidataProperty)) {
+                                        imageClaimId = dwiki.addClaim(communeWikibaseItem.getId(),
+                                            new Claim(imageWikidataProperty, new CommonsMedia(imageName)));
                                         initialTemplate.removeParam("imagine");
+                                    } else {
+                                        Optional<Claim> possibleImageClaim =
+                                            communeClaims.get(imageWikidataProperty).stream().findFirst();
+                                        if (possibleImageClaim.isPresent() && StringUtils.equals(
+                                            replace(possibleImageClaim.map(Claim::getValue).map(CommonsMedia.class::cast)
+                                                .map(CommonsMedia::getFileName).get(), " ", "_"),
+                                            replace(imageName, " ", "_"))) {
+                                            Claim imageClaim = possibleImageClaim.get();
+                                            imageClaimId = imageClaim.getId();
+                                            captionQualifierFound = (null != imageClaim.getQualifiers().get(captionProp));
+                                            initialTemplate.removeParam("imagine");
+                                        }
                                     }
-                                }
-                                String communeImageCaption =
-                                    defaultIfEmpty(initialTemplate.getParams().get("imagine_descriere"),
-                                        initialTemplate.getParams().get("descriere"));
-                                communeImageCaption = replace(communeImageCaption, "'''", "");
+                                    String communeImageCaption =
+                                        defaultIfEmpty(initialTemplate.getParams().get("imagine_descriere"),
+                                            initialTemplate.getParams().get("descriere"));
+                                    communeImageCaption = replace(communeImageCaption, "'''", "");
 
-                                if (isNotEmpty(communeImageCaption) && null != imageClaimId && !captionQualifierFound) {
-                                    dwiki.addQualifier(imageClaimId, captionProp.getId(),
-                                        new LanguageString("ro", communeImageCaption));
+                                    if (isNotEmpty(communeImageCaption) && null != imageClaimId && !captionQualifierFound) {
+                                        dwiki.addQualifier(imageClaimId, captionProp.getId(),
+                                            new LanguageString("ro", communeImageCaption));
+                                    }
+                                    initialTemplate.removeParam("descriere");
+                                    initialTemplate.removeParam("imagine_descriere");
                                 }
-                                initialTemplate.removeParam("descriere");
-                                initialTemplate.removeParam("imagine_descriere");
                             }
                         }
                     } else {
@@ -922,7 +925,8 @@ public class FixVillages {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
-            System.out.printf("Stopped at %s%n", Stream.of(crtSettlementName, crtCommuneName, crtCountyName).filter(Objects::nonNull).collect(Collectors.joining(", ")));
+            System.out.printf("Stopped at %s%n", Stream.of(crtSettlementName, crtCommuneName, crtCountyName)
+                .filter(Objects::nonNull).collect(joining(", ")));
             if (null != dwiki) {
                 dwiki.logout();
             }
@@ -931,14 +935,16 @@ public class FixVillages {
 
     private static void removePopBlankParams(WikiTemplate initialTemplate) {
         Pattern popBlankNumberExtractor = Pattern.compile("population_blank(\\d+)_title");
-        List<String> blankPopParamNames = initialTemplate.getParamNames().stream().filter(name -> name.startsWith("population_blank")).collect(Collectors.toList());
-        Set<Integer> blankPopIndexesToRemove = blankPopParamNames.stream().filter(name -> name.endsWith("_title")).filter(name -> initialTemplate.getParam(name).toString().contains("Recensământul anterior")).map(name -> {
-            Matcher m = popBlankNumberExtractor.matcher(name);
-            if (m.matches()) {
-                return Integer.parseInt(m.group(1));
-            }
-            return 0;
-        }).collect(Collectors.toSet());
+        List<String> blankPopParamNames = initialTemplate.getParamNames().stream()
+            .filter(name -> name.startsWith("population_blank")).collect(Collectors.toList());
+        Set<Integer> blankPopIndexesToRemove = blankPopParamNames.stream().filter(name -> name.endsWith("_title"))
+            .filter(name -> initialTemplate.getParam(name).toString().contains("Recensământul anterior")).map(name -> {
+                Matcher m = popBlankNumberExtractor.matcher(name);
+                if (m.matches()) {
+                    return Integer.parseInt(m.group(1));
+                }
+                return 0;
+            }).collect(Collectors.toSet());
         blankPopIndexesToRemove.stream().forEach(idx -> {
             initialTemplate.removeParam(String.format("population_blank%d", idx));
             initialTemplate.removeParam(String.format("population_blank%d_title", idx));
@@ -1002,7 +1008,7 @@ public class FixVillages {
             String rovillagearticle = villageEntity.getSitelinks().get("rowiki").getPageName();
             mapToAdd.put(villageName, rovillagearticle);
 
-            String pageText = rowiki.getPageText(rovillagearticle);
+            String pageText = rowiki.getPageText(List.of(rovillagearticle)).stream().findFirst().orElse("");
             String initialPageText = pageText;
             pageText = commentedEol.matcher(pageText).replaceAll("");
 
@@ -1061,7 +1067,7 @@ public class FixVillages {
                         List<WikiPart> nativeNameInTemplateParts = initialTemplate.getParam("nume_nativ");
                         if (null != nativeNameInTemplateParts && !nativeNameInTemplateParts.isEmpty()) {
                             String nativeNameInTemplateString =
-                                nativeNameInTemplateParts.stream().map(x -> x.toString()).collect(Collectors.joining());
+                                nativeNameInTemplateParts.stream().map(x -> x.toString()).collect(joining());
                             String[] nativeNamesArray = nativeNameInTemplateString.split("<br\\s*/?\\s*>");
                             int matchedNativeNames = 0;
                             for (String eachNativeName : nativeNamesArray) {
@@ -1183,7 +1189,7 @@ public class FixVillages {
                     String imageName = imageMatcher.group(8);
                     imageName = URLDecoder.decode(imageName, "UTF-8");
                     Property imageWikidataProperty = new Property("P18");
-                    if (commonsWiki.exists(new String[] { "File:" + imageName })[0]) {
+                    if (commonsWiki.exists(List.of("File:" + imageName))[0]) {
                         String imageClaimId = null;
                         boolean captionQualifierFound = false;
                         if (!villageEntity.getClaims().containsKey(imageWikidataProperty)) {
@@ -1902,11 +1908,29 @@ public class FixVillages {
                     return MOLDOVA_LINK;
                 }
             }
+            if ("Cârlibaba".equalsIgnoreCase(trim(commune))) {
+                if (null == settlement) {
+                    return "la limita între regiunile istorice " + Stream.of(BUCOVINA_LINK, TRANSYLVANIA_LINK).collect(joining(" și "));
+                }
+                if (Arrays.asList("Șesuri", "Cârlibaba Nouă").contains(trim(settlement))) {
+                    return TRANSYLVANIA_LINK;
+                }
+                return BUCOVINA_LINK;
+            }
             if ("Cornu Luncii".equalsIgnoreCase(trim(commune))) {
                 if (Arrays.asList("Dumbrava", "Păiseni", "Sasca Mare", "Sasca Mică", "Sasca Nouă", "Șinca")
                     .contains(trim(settlement))) {
                     return MOLDOVA_LINK;
                 }
+            }
+            if ("Coșna".equalsIgnoreCase(trim(commune))) {
+                if (Arrays.asList("Podu Coșnei", "Românești", "Valea Bancului").contains(trim(settlement))) {
+                    return BUCOVINA_LINK;
+                }
+                if (null == settlement) {
+                    return "la limita între regiunile istorice " + Stream.of(BUCOVINA_LINK, TRANSYLVANIA_LINK).collect(joining(" și "));
+                }
+                return TRANSYLVANIA_LINK;
             }
             if ("Dorna-Arini".equalsIgnoreCase(trim(commune))) {
                 if (!"Gheorghițeni".equalsIgnoreCase(trim(settlement))) {
