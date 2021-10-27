@@ -2,10 +2,11 @@ package org.wikipedia.ro.utils;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
 import org.wikibase.Wikibase;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.cache.Cache;
@@ -25,7 +26,7 @@ public class WikidataCacheManager {
     
     public static String getCachedRedirect(final Wiki wiki, String s) throws IOException {
         if (!redirectCaches.containsKey(wiki)) {
-            redirectCaches.put(wiki, new Cache<>(key -> wiki.resolveRedirects(List.of(key)).stream().findFirst().orElse(key)));
+            redirectCaches.put(wiki, new Cache<>(key -> wiki.resolveRedirects(Stream.ofNullable(key).filter(Objects::nonNull).collect(Collectors.toList())).stream().findFirst().orElse(key)));
         }
         return redirectCaches.get(wiki).get(s);
     }
