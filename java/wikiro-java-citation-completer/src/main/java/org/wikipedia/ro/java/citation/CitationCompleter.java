@@ -365,19 +365,19 @@ public class CitationCompleter extends AbstractExecutable
                 }
                 JsonObject ldJsonObject = ldJsonData.get();
                 JsonElement dateElement = ldJsonObject.get("dateCreated");
-                if (dateElement.isJsonPrimitive()) {
+                if (null != dateElement && dateElement.isJsonPrimitive()) {
                     retParams.put("date", extractDate(dateElement.getAsString()));
                 }
                 JsonElement authorElement = ldJsonObject.get("author");
-                if (authorElement.isJsonObject()) {
+                if (null != authorElement && authorElement.isJsonObject()) {
                     retParams.put("author1", authorElement.getAsJsonObject().get("name").getAsString());
                 }
                 JsonElement publisherElement = ldJsonObject.get("publisher");
-                if (publisherElement.isJsonObject()) {
+                if (null != publisherElement && publisherElement.isJsonObject()) {
                     retParams.put("publisher", publisherElement.getAsJsonObject().get("name").getAsString());
                 }
                 JsonElement titleElement = ldJsonObject.get("headline");
-                if (titleElement.isJsonPrimitive()) {
+                if (null != titleElement && titleElement.isJsonPrimitive()) {
                     retParams.put("title", titleElement.getAsString());
                 }
             }
