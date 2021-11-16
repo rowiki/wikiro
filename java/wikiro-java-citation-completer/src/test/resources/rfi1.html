@@ -1,0 +1,1026 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">
+<html lang="ro" dir="ltr"
+  xmlns:fb="http://ogp.me/ns/fb#"
+  xmlns:og="http://ogp.me/ns#">
+<head profile="http://www.w3.org/1999/xhtml/vocab">
+  <meta charset="utf-8"><script type="text/javascript">(window.NREUM||(NREUM={})).init={ajax:{deny_list:["bam.eu01.nr-data.net"]}};(window.NREUM||(NREUM={})).loader_config={licenseKey:"NRJS-17411d228d0a84efb02",applicationID:"49942687"};window.NREUM||(NREUM={}),__nr_require=function(t,e,n){function r(n){if(!e[n]){var i=e[n]={exports:{}};t[n][0].call(i.exports,function(e){var i=t[n][1][e];return r(i||e)},i,i.exports)}return e[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var i=0;i<n.length;i++)r(n[i]);return r}({1:[function(t,e,n){function r(){}function i(t,e,n,r){return function(){return s.recordSupportability("API/"+e+"/called"),o(t+e,[u.now()].concat(c(arguments)),n?null:this,r),n?void 0:this}}var o=t("handle"),a=t(10),c=t(11),f=t("ee").get("tracer"),u=t("loader"),s=t(4),d=NREUM;"undefined"==typeof window.newrelic&&(newrelic=d);var p=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],l="api-",v=l+"ixn-";a(p,function(t,e){d[e]=i(l,e,!0,"api")}),d.addPageAction=i(l,"addPageAction",!0),d.setCurrentRouteName=i(l,"routeName",!0),e.exports=newrelic,d.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(t,e){var n={},r=this,i="function"==typeof e;return o(v+"tracer",[u.now(),t,n],r),function(){if(f.emit((i?"":"no-")+"fn-start",[u.now(),r,i],n),i)try{return e.apply(this,arguments)}catch(t){throw f.emit("fn-err",[arguments,this,t],n),t}finally{f.emit("fn-end",[u.now()],n)}}}};a("actionText,setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(t,e){m[e]=i(v,e)}),newrelic.noticeError=function(t,e){"string"==typeof t&&(t=new Error(t)),s.recordSupportability("API/noticeError/called"),o("err",[t,u.now(),!1,e])}},{}],2:[function(t,e,n){function r(t){if(NREUM.init){for(var e=NREUM.init,n=t.split("."),r=0;r<n.length-1;r++)if(e=e[n[r]],"object"!=typeof e)return;return e=e[n[n.length-1]]}}e.exports={getConfiguration:r}},{}],3:[function(t,e,n){var r=!1;try{var i=Object.defineProperty({},"passive",{get:function(){r=!0}});window.addEventListener("testPassive",null,i),window.removeEventListener("testPassive",null,i)}catch(o){}e.exports=function(t){return r?{passive:!0,capture:!!t}:!!t}},{}],4:[function(t,e,n){function r(t,e){var n=[a,t,{name:t},e];return o("storeMetric",n,null,"api"),n}function i(t,e){var n=[c,t,{name:t},e];return o("storeEventMetrics",n,null,"api"),n}var o=t("handle"),a="sm",c="cm";e.exports={constants:{SUPPORTABILITY_METRIC:a,CUSTOM_METRIC:c},recordSupportability:r,recordCustom:i}},{}],5:[function(t,e,n){function r(){return c.exists&&performance.now?Math.round(performance.now()):(o=Math.max((new Date).getTime(),o))-a}function i(){return o}var o=(new Date).getTime(),a=o,c=t(12);e.exports=r,e.exports.offset=a,e.exports.getLastTimestamp=i},{}],6:[function(t,e,n){function r(t){return!(!t||!t.protocol||"file:"===t.protocol)}e.exports=r},{}],7:[function(t,e,n){function r(t,e){var n=t.getEntries();n.forEach(function(t){"first-paint"===t.name?p("timing",["fp",Math.floor(t.startTime)]):"first-contentful-paint"===t.name&&p("timing",["fcp",Math.floor(t.startTime)])})}function i(t,e){var n=t.getEntries();if(n.length>0){var r=n[n.length-1];if(f&&f<r.startTime)return;p("lcp",[r])}}function o(t){t.getEntries().forEach(function(t){t.hadRecentInput||p("cls",[t])})}function a(t){if(t instanceof g&&!y){var e=Math.round(t.timeStamp),n={type:t.type};e<=l.now()?n.fid=l.now()-e:e>l.offset&&e<=Date.now()?(e-=l.offset,n.fid=l.now()-e):e=l.now(),y=!0,p("timing",["fi",e,n])}}function c(t){"hidden"===t&&(f=l.now(),p("pageHide",[f]))}if(!("init"in NREUM&&"page_view_timing"in NREUM.init&&"enabled"in NREUM.init.page_view_timing&&NREUM.init.page_view_timing.enabled===!1)){var f,u,s,d,p=t("handle"),l=t("loader"),v=t(9),m=t(3),g=NREUM.o.EV;if("PerformanceObserver"in window&&"function"==typeof window.PerformanceObserver){u=new PerformanceObserver(r);try{u.observe({entryTypes:["paint"]})}catch(h){}s=new PerformanceObserver(i);try{s.observe({entryTypes:["largest-contentful-paint"]})}catch(h){}d=new PerformanceObserver(o);try{d.observe({type:"layout-shift",buffered:!0})}catch(h){}}if("addEventListener"in document){var y=!1,w=["click","keydown","mousedown","pointerdown","touchstart"];w.forEach(function(t){document.addEventListener(t,a,m(!1))})}v(c)}},{}],8:[function(t,e,n){function r(t,e){if(!i)return!1;if(t!==i)return!1;if(!e)return!0;if(!o)return!1;for(var n=o.split("."),r=e.split("."),a=0;a<r.length;a++)if(r[a]!==n[a])return!1;return!0}var i=null,o=null,a=/Version\/(\S+)\s+Safari/;if(navigator.userAgent){var c=navigator.userAgent,f=c.match(a);f&&c.indexOf("Chrome")===-1&&c.indexOf("Chromium")===-1&&(i="Safari",o=f[1])}e.exports={agent:i,version:o,match:r}},{}],9:[function(t,e,n){function r(t){function e(){t(c&&document[c]?document[c]:document[o]?"hidden":"visible")}"addEventListener"in document&&a&&document.addEventListener(a,e,i(!1))}var i=t(3);e.exports=r;var o,a,c;"undefined"!=typeof document.hidden?(o="hidden",a="visibilitychange",c="visibilityState"):"undefined"!=typeof document.msHidden?(o="msHidden",a="msvisibilitychange"):"undefined"!=typeof document.webkitHidden&&(o="webkitHidden",a="webkitvisibilitychange",c="webkitVisibilityState")},{}],10:[function(t,e,n){function r(t,e){var n=[],r="",o=0;for(r in t)i.call(t,r)&&(n[o]=e(r,t[r]),o+=1);return n}var i=Object.prototype.hasOwnProperty;e.exports=r},{}],11:[function(t,e,n){function r(t,e,n){e||(e=0),"undefined"==typeof n&&(n=t?t.length:0);for(var r=-1,i=n-e||0,o=Array(i<0?0:i);++r<i;)o[r]=t[e+r];return o}e.exports=r},{}],12:[function(t,e,n){e.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(t,e,n){function r(){}function i(t){function e(t){return t&&t instanceof r?t:t?u(t,f,a):a()}function n(n,r,i,o,a){if(a!==!1&&(a=!0),!l.aborted||o){t&&a&&t(n,r,i);for(var c=e(i),f=m(n),u=f.length,s=0;s<u;s++)f[s].apply(c,r);var p=d[w[n]];return p&&p.push([b,n,r,c]),c}}function o(t,e){y[t]=m(t).concat(e)}function v(t,e){var n=y[t];if(n)for(var r=0;r<n.length;r++)n[r]===e&&n.splice(r,1)}function m(t){return y[t]||[]}function g(t){return p[t]=p[t]||i(n)}function h(t,e){l.aborted||s(t,function(t,n){e=e||"feature",w[n]=e,e in d||(d[e]=[])})}var y={},w={},b={on:o,addEventListener:o,removeEventListener:v,emit:n,get:g,listeners:m,context:e,buffer:h,abort:c,aborted:!1};return b}function o(t){return u(t,f,a)}function a(){return new r}function c(){(d.api||d.feature)&&(l.aborted=!0,d=l.backlog={})}var f="nr@context",u=t("gos"),s=t(10),d={},p={},l=e.exports=i();e.exports.getOrSetContext=o,l.backlog=d},{}],gos:[function(t,e,n){function r(t,e,n){if(i.call(t,e))return t[e];var r=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(t,e,{value:r,writable:!0,enumerable:!1}),r}catch(o){}return t[e]=r,r}var i=Object.prototype.hasOwnProperty;e.exports=r},{}],handle:[function(t,e,n){function r(t,e,n,r){i.buffer([t],r),i.emit(t,e,n)}var i=t("ee").get("handle");e.exports=r,r.ee=i},{}],id:[function(t,e,n){function r(t){var e=typeof t;return!t||"object"!==e&&"function"!==e?-1:t===window?0:a(t,o,function(){return i++})}var i=1,o="nr@id",a=t("gos");e.exports=r},{}],loader:[function(t,e,n){function r(){if(!T++){var t=P.info=NREUM.info,e=g.getElementsByTagName("script")[0];if(setTimeout(u.abort,3e4),!(t&&t.licenseKey&&t.applicationID&&e))return u.abort();f(O,function(e,n){t[e]||(t[e]=n)});var n=a();c("mark",["onload",n+P.offset],null,"api"),c("timing",["load",n]);var r=g.createElement("script");0===t.agent.indexOf("http://")||0===t.agent.indexOf("https://")?r.src=t.agent:r.src=v+"://"+t.agent,e.parentNode.insertBefore(r,e)}}function i(){"complete"===g.readyState&&o()}function o(){c("mark",["domContent",a()+P.offset],null,"api")}var a=t(5),c=t("handle"),f=t(10),u=t("ee"),s=t(8),d=t(6),p=t(2),l=t(3),v=p.getConfiguration("ssl")===!1?"http":"https",m=window,g=m.document,h="addEventListener",y="attachEvent",w=m.XMLHttpRequest,b=w&&w.prototype,E=!d(m.location);NREUM.o={ST:setTimeout,SI:m.setImmediate,CT:clearTimeout,XHR:w,REQ:m.Request,EV:m.Event,PR:m.Promise,MO:m.MutationObserver};var x=""+location,O={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1212.min.js"},M=w&&b&&b[h]&&!/CriOS/.test(navigator.userAgent),P=e.exports={offset:a.getLastTimestamp(),now:a,origin:x,features:{},xhrWrappable:M,userAgent:s,disabled:E};if(!E){t(1),t(7),g[h]?(g[h]("DOMContentLoaded",o,l(!1)),m[h]("load",r,l(!1))):(g[y]("onreadystatechange",i),m[y]("onload",r)),c("mark",["firstbyte",a.getLastTimestamp()],null,"api");var T=0}},{}],"wrap-function":[function(t,e,n){function r(t,e){function n(e,n,r,f,u){function nrWrapper(){var o,a,s,p;try{a=this,o=d(arguments),s="function"==typeof r?r(o,a):r||{}}catch(l){i([l,"",[o,a,f],s],t)}c(n+"start",[o,a,f],s,u);try{return p=e.apply(a,o)}catch(v){throw c(n+"err",[o,a,v],s,u),v}finally{c(n+"end",[o,a,p],s,u)}}return a(e)?e:(n||(n=""),nrWrapper[p]=e,o(e,nrWrapper,t),nrWrapper)}function r(t,e,r,i,o){r||(r="");var c,f,u,s="-"===r.charAt(0);for(u=0;u<e.length;u++)f=e[u],c=t[f],a(c)||(t[f]=n(c,s?f+r:r,i,f,o))}function c(n,r,o,a){if(!v||e){var c=v;v=!0;try{t.emit(n,r,o,e,a)}catch(f){i([f,n,r,o],t)}v=c}}return t||(t=s),n.inPlace=r,n.flag=p,n}function i(t,e){e||(e=s);try{e.emit("internal-error",t)}catch(n){}}function o(t,e,n){if(Object.defineProperty&&Object.keys)try{var r=Object.keys(t);return r.forEach(function(n){Object.defineProperty(e,n,{get:function(){return t[n]},set:function(e){return t[n]=e,e}})}),e}catch(o){i([o],n)}for(var a in t)l.call(t,a)&&(e[a]=t[a]);return e}function a(t){return!(t&&t instanceof Function&&t.apply&&!t[p])}function c(t,e){var n=e(t);return n[p]=t,o(t,n,s),n}function f(t,e,n){var r=t[e];t[e]=c(r,n)}function u(){for(var t=arguments.length,e=new Array(t),n=0;n<t;++n)e[n]=arguments[n];return e}var s=t("ee"),d=t(11),p="nr@original",l=Object.prototype.hasOwnProperty,v=!1;e.exports=r,e.exports.wrapFunction=c,e.exports.wrapInPlace=f,e.exports.argsToArray=u},{}]},{},["loader"]);</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="fb:pages" content="187935071639" />
+    <meta name="cXenseParse:pageclass" content="article"/><meta name="cXenseParse:url" content="https://www.rfi.ro/social-139810-europa-plus-prins-guvern-producatori-albanezi-lactate-bio"/>  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta property="fb:app_id" content="150155028414923" />
+<link rel="shortcut icon" href="https://www.rfi.ro/sites/default/files/rfi-logo-16x16.png" type="image/png" />
+<meta name="drupal_parsely_version" id="drupal_parsely_version" content="0.1" />
+<script type="application/ld+json" content="Parsely metadata">{"@context":"http:\/\/schema.org","@type":"NewsArticle","articleId":"139810","author":{"@type":"Person","name":"Ana Maria Florea-Harrison","url":"https:\/\/www.rfi.ro\/autori\/ana-maria-florea-harrison"},"dateCreated":"2021-11-15T16:16:28Z","headline":"Europa Plus: Cum i-a prins guvernul cu m\u00e2\u021ba \u00een sac pe produc\u0103torii albanezi de lactate BIO","url":"https:\/\/www.rfi.ro\/social-139810-europa-plus-prins-guvern-producatori-albanezi-lactate-bio","keywords":["Europa PLUS","Albania","lapte","kosovo","Muntenegru","Bosnia-Her\u0163egovina"],"articleSection":"Social","image ":{"@type":"ImageObject","url":"https:\/\/www.rfi.ro\/sites\/default\/files\/articol\/lapte_0.jpg","width":"960","height":"640"},"publisher":{"@type":"Organization","name":"RFI","url":"https:\/\/www.rfi.ro\/","logo":{"@type":"ImageObject","url":"https:\/\/www.rfi.ro\/sites\/all\/themes\/rfi\/assets\/img\/logo-rfi-romania-baseline.png","width":165,"height":99}}}</script>
+<meta name="description" content="Albanezii au aflat cu stupoare că lactatele vândute drept BIO la ei în țară, conțin de fapt lapte praf, după ce guvernul a anunțat că va impune o taxă pe laptele praf din import. Văzându-și amenințate profiturile, producătorii au recunoscut cu jumătate de..." />
+<meta name="robots" content="follow, index" />
+<meta name="generator" content="Drupal 7 (http://drupal.org)" />
+<link rel="canonical" href="https://www.rfi.ro/social-139810-europa-plus-prins-guvern-producatori-albanezi-lactate-bio" />
+<link rel="shortlink" href="https://www.rfi.ro/node/139810" />
+<meta property="og:site_name" content="RFI România: Actualitate, informaţii, ştiri în direct" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.rfi.ro/social-139810-europa-plus-prins-guvern-producatori-albanezi-lactate-bio" />
+<meta property="og:title" content="Europa Plus: Cum i-a prins guvernul cu mâța în sac pe producătorii albanezi de lactate BIO" />
+<meta property="og:description" content="Albanezii au aflat cu stupoare că lactatele vândute drept BIO la ei în țară, conțin de fapt lapte praf, după ce guvernul a anunțat că va impune o taxă pe laptele praf din import. Văzându-și amenințate profiturile, producătorii au recunoscut cu jumătate de..." />
+<meta property="og:updated_time" content="2021-11-16T10:20:22+02:00" />
+<meta property="og:image" content="https://www.rfi.ro/sites/default/files/articol/lapte_0.jpg" />
+<meta property="article:published_time" content="2021-11-15T18:16:28+02:00" />
+<meta property="article:modified_time" content="2021-11-16T10:20:22+02:00" />
+  <title>Europa Plus: Cum i-a prins guvernul cu mâța în sac pe producătorii albanezi de lactate BIO | RFI România: Actualitate, informaţii, ştiri în direct</title>
+  <!-- CookiePro Cookies Consent Notice start for rfi.ro -->
+    <script src="https://cookie-cdn.cookiepro.com/scripttemplates/otSDKStub.js" type="text/javascript" charset="UTF-8" data-domain-script="7a10b32d-978a-43ed-a38b-d1f07e046223" ></script>
+    <script type="text/javascript">
+        function OptanonWrapper() { }
+    </script>
+  <!-- CookiePro Cookies Consent Notice end for rfi.ro -->
+  <link type="text/css" rel="stylesheet" href="https://www.rfi.ro/sites/default/files/css/css_lQaZfjVpwP_oGNqdtWCSpJT1EMqXdMiU84ekLLxQnc4.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://www.rfi.ro/sites/default/files/css/css_fe23PLoDhMi_Mzqy7BHa62Kfhuy3g0GhRTOEkc7LqSc.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://www.rfi.ro/sites/default/files/css/css_pYgC747CMvegQzEZ0_Kvw0C9ih63vPiuVsCduMNR5CU.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://www.rfi.ro/sites/default/files/css/css_XjYNSRJSxKbygQw_agonUGWwfZBwtkZrAmjpAucsDeU.css" media="all" />
+<link type="text/css" rel="stylesheet" href="https://www.rfi.ro/sites/default/files/css/css_mrfxqWrgLqJccLd0Xzdz-rypZowZIsE9bdnpRD0SB_c.css" media="all" />
+  <!-- HTML5 element support for IE6-8 -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script type="text/javascript" src="https://www.rfi.ro/sites/default/files/js/js__hh6B0owIJkGrzB_6MrcJ0IcHogrKoZlo7tH1a0DJjU.js"></script>
+<script type="text/javascript" src="https://www.rfi.ro/sites/default/files/js/js_TuFAst2Iiu4i5ikfI2Dj9tp9w7Az_wSZ1xysr_lvxQw.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+document.createElement( "picture" );
+//--><!]]>
+</script>
+<script type="text/javascript" src="https://www.rfi.ro/sites/default/files/js/js_d9Kk4L3nuQbPNeyFMalmdHpvGlD2hfKjNOOzzpVUDHw.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+document.createElement( "picture" );
+//--><!]]>
+</script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+document.createElement( "picture" );
+//--><!]]>
+</script>
+<script type="text/javascript" src="https://www.rfi.ro/sites/default/files/js/js_9ZUtLK3-O3K5GltwQ09GIQoNCq0NNBcFmfJctjW12Mk.js"></script>
+<script type="text/javascript" src="https://www.rfi.ro/sites/default/files/js/js_ue1dd6bjXMEQXPSfFoPR-aKfhTGoVSTflrKllmoWD0Q.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"bootstrap","theme_token":"k5fj9VDWSTNhCFwceDRgDfiC5Y0MaU39_jQzzyKK9g0","css":{"modules\/system\/system.base.css":1,"misc\/ui\/jquery.ui.core.css":1,"misc\/ui\/jquery.ui.theme.css":1,"misc\/ui\/jquery.ui.slider.css":1,"sites\/all\/modules\/contrib\/simplenews\/simplenews.css":1,"sites\/all\/modules\/contrib\/date\/date_api\/date.css":1,"sites\/all\/modules\/contrib\/date\/date_popup\/themes\/datepicker.1.7.css":1,"sites\/all\/modules\/contrib\/date\/date_repeat_field\/date_repeat_field.css":1,"sites\/all\/modules\/contrib\/domain\/domain_nav\/domain_nav.css":1,"modules\/field\/theme\/field.css":1,"sites\/all\/modules\/contrib\/office_hours\/office_hours.css":1,"sites\/all\/modules\/contrib\/picture\/picture_wysiwyg.css":1,"sites\/all\/modules\/contrib\/simpleads\/simpleads.css":1,"sites\/all\/modules\/contrib\/ckeditor\/css\/ckeditor.css":1,"sites\/all\/modules\/contrib\/ctools\/css\/ctools.css":1,"sites\/all\/modules\/contrib\/panels\/css\/panels.css":1,"sites\/all\/modules\/contrib\/node_embed\/plugins\/node_embed\/node_embed.css":1,"sites\/all\/modules\/custom\/tremend_player\/css\/jquery-ui.css":1,"sites\/all\/modules\/contrib\/jplayer\/theme\/jplayer.css":1,"sites\/all\/themes\/rfi\/assets\/css\/base.css":1,"sites\/all\/themes\/rfi\/assets\/css\/lg.css":1,"sites\/all\/themes\/rfi\/assets\/css\/quiz.css":1},"js":{"sites\/all\/modules\/contrib\/picture\/picturefill2\/picturefill.min.js":1,"sites\/all\/modules\/contrib\/picture\/picture.min.js":1,"sites\/all\/modules\/contrib\/jplayer\/jplayer_protect\/jplayer-protect.js":1,"sites\/all\/modules\/contrib\/jplayer\/theme\/jplayer.js":1,"sites\/all\/themes\/rfi\/js\/bootstrap.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/jquery\/1.7\/jquery.min.js":1,"misc\/jquery-extend-3.4.0.js":1,"misc\/jquery-html-prefilter-3.5.0-backport.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.core.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.widget.min.js":1,"sites\/all\/libraries\/jplayer\/jquery.jplayer.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.mouse.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.slider.min.js":1,"misc\/form.js":1,"0":1,"sites\/all\/modules\/contrib\/simpleads\/simpleads.js":1,"1":1,"2":1,"public:\/\/languages\/ro_-6DWZBpDwuh17cbFJN4tt23J5lmvK4c46iOYd8B30hY.js":1,"sites\/all\/libraries\/colorbox\/jquery.colorbox-min.js":1,"sites\/all\/modules\/contrib\/colorbox\/js\/colorbox.js":1,"sites\/all\/modules\/custom\/tremend_player\/js\/jquery.cookie.js":1,"sites\/all\/libraries\/jplayer\/jquery.jplayer.js":1,"sites\/all\/modules\/custom\/tremend_player\/js\/tremend_player.js":1,"misc\/collapse.js":1,"sites\/all\/modules\/contrib\/field_group\/field_group.js":1,"sites\/all\/themes\/rfi\/assets\/js\/plugins\/bootstrap\/carousel.js":1,"sites\/all\/themes\/rfi\/assets\/js\/jquery.colorbox.js":1,"sites\/all\/themes\/rfi\/assets\/js\/scripts.js":1,"sites\/all\/themes\/rfi\/js\/tremend_custom.js":1,"sites\/all\/themes\/rfi\/js\/mobile-detect.js":1}},"colorbox":{"opacity":"0.85","current":"{current} of {total}","previous":"\u00ab Prev","next":"Next \u00bb","close":"\u00cenchidere","maxWidth":"98%","maxHeight":"98%","fixed":true,"mobiledetect":true,"mobiledevicewidth":"480px","specificPagesDefaultValue":"admin*\nimagebrowser*\nimg_assist*\nimce*\nnode\/add\/*\nnode\/*\/edit\nprint\/*\nprintpdf\/*\nsystem\/ajax\nsystem\/ajax\/*"},"jplayerInstances":{"jplayer-node-139810-field-audio-1637058863":{"files":[{"mp3":"https:\/\/www.rfi.ro\/sites\/default\/files\/revista_presei_europa_plus_grup_4_4.mp3"}],"solution":"html, flash","supplied":"mp3","preload":"auto","volume":0.5,"muted":false,"autoplay":false,"repeat":"none","backgroundColor":"000000","continuous":"0"}},"jPlayer":{"swfPath":"\/sites\/all\/libraries\/jplayer\/jquery.jplayer.swf","showHour":false,"showMin":true,"showSec":true,"padHour":false,"padMin":true,"padSec":true,"sepHour":":","sepMin":":","sepSec":"","protect":1},"simpleads":{"url":{"ckeditor":"\/simpleads\/dashboard\/ckeditor"},"modulepath":"sites\/all\/modules\/contrib\/simpleads"},"better_exposed_filters":{"views":{"jurnale":{"displays":{"block_1":{"filters":[]}}},"article":{"displays":{"block_8":{"filters":[]},"block_7":{"filters":[]},"block_13":{"filters":[]}}},"ultimele_articole_din_blog":{"displays":{"block":{"filters":[]}}}}},"field_group":{"div":"default","html-element":"full","fieldset":"full"},"urlIsAjaxTrusted":{"\/social-139810-europa-plus-prins-guvern-producatori-albanezi-lactate-bio":true},"bootstrap":{"anchorsFix":1,"anchorsSmoothScrolling":1,"popoverEnabled":1,"popoverOptions":{"animation":1,"html":0,"placement":"right","selector":"","trigger":"click","title":"","content":"","delay":0,"container":"body"},"tooltipEnabled":1,"tooltipOptions":{"animation":1,"html":0,"placement":"auto left","selector":"","trigger":"hover focus","delay":0,"container":"body"}}});
+//--><!]]>
+</script>
+
+    <!-- Cxense SATI script begin -->
+    <script type="text/javascript">
+        window.cX = window.cX || {}; cX.callQueue = cX.callQueue || [];
+        cX.callQueue.push(['setSiteId', '1136227972865927393']);
+        cX.callQueue.push(['sendPageViewEvent']);
+    </script>
+    <script type="text/javascript" async src="//code3.adtlgc.com/js/sati_init.js"></script>
+    <script type="text/javascript">
+        (function(d,s,e,t){e=d.createElement(s);e.type='text/java'+s;e.async='async';
+            e.src='http'+('https:'===location.protocol?'s://s':'://')+'cdn.cxense.com/cx.js';
+            t=d.getElementsByTagName(s)[0];t.parentNode.insertBefore(e,t);})(document,'script');
+    </script>
+    <!-- Cxense SATI script end -->
+
+    <!-- BRAT -->
+
+    <script type="text/javascript">
+        var springq = springq || [];
+        springq.push({
+            "s":"rfiro",
+            "cp":"rfi.ro/social-139810-europa-plus-prins-guvern-producatori-albanezi-lactate-bio/articol",
+            "url": document.location.href
+        });
+    </script>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-3253190-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+    <script type="text/javascript">
+        var md = new MobileDetect(window.navigator.userAgent);
+        if(md.phone() != null && md.tablet() != null) {
+            md_code = "<!-- Begin comScore CMC v.1.0.1 --> \r\n<script type=\"text\/javascript\"> \r\n\/\/ <![CDATA[ \r\nvar ns_ss_domaine=window.location.host.replace(\/^www\\.\/g,\'\').replace(\/^m\\.\/g,\'\').replace(\/\\.?rfi\\.ro\/g,\'\'), ns_pagepath=document.location.pathname.replace(\/[\\\/_-]+\/g, \'-\').replace(\/(^\\-)|(\\-$)\/g, \'\').trim();ns_ss_domaine=(ns_ss_domaine!=\"\"?ns_ss_domaine+\".\":\"\");\r\nfunction sitestat(u){var d=document,l=d.location;ns_pixelUrl=u+\"&ns__t=\"+(new Date().getTime());u=ns_pixelUrl+\"&ns_c=\"+((d.characterSet)?d.characterSet:d.defaultCharset)+\"&ns_ti=\"+escape(d.title)+\"&ns_jspageurl=\"+escape(l&&l.href?l.href:d.URL)+\"&ns_referrer=\"+escape(d.referrer);(d.images)?new Image().src=u:d.write(\'<\'+\'p><img src=\"\'+u+\'\" height=\"1\" width=\"1\" alt=\"*\"><\'+\'\/p>\');}; \r\nsitestat(\"https:\/\/fr.sitestat.com\/aef\/f24-mcd-rfi\/s?\"+ns_ss_domaine+(ns_pagepath!=\"\"?ns_pagepath:\"defaut\")+\"&aef_libelle_contenu_page=\"+escape(document.title)+\"&aef_marque=rfi&aef_type_environnement=site_mobile&aef_nom_environnement=rfi_site-mobile&aef_rep_global=rfi-romania&aef_rep1=defaut&aef_rep2=defaut&aef_rep3=defaut&aef_langue=roumain&aef_version_environnement=tremend_v1.0&aef_acces=gratuit&aef_user_connection=visiteur\"); \r\n\/\/ ]]> \r\n<\/script> \r\n<noscript><p><img src=\"https:\/\/fr.sitestat.com\/aef\/f24-mcd-rfi\/s?defaut&aef_libelle_contenu_page=defaut&aef_marque=rfi&aef_type_environnement=site_mobile&aef_nom_environnement=rfi_site-mobile&aef_rep_global=rfi&aef_rep1=rfi-romania&aef_rep2=defaut&aef_rep3=defaut&aef_langue=roumain&aef_version_environnement=tremend_v1.0&aef_acces=gratuit&aef_user_connection=visiteur\" height=\"1\" width=\"1\" alt=\"*\"><\/p><\/noscript> \r\n<!-- End comScore CMC -->";
+        } else {
+            md_code = "<!-- Begin comScore CMC v.1.0.1 --> \r\n<script type=\"text\/javascript\"> \r\n\/\/ <![CDATA[ \r\nvar ns_ss_domaine=window.location.host.replace(\/^www\\.\/g,\'\').replace(\/^m\\.\/g,\'\').replace(\/\\.?rfi\\.ro\/g,\'\'), ns_pagepath=document.location.pathname.replace(\/[\\\/_-]+\/g, \'-\').replace(\/(^\\-)|(\\-$)\/g, \'\').trim();ns_ss_domaine=(ns_ss_domaine!=\"\"?ns_ss_domaine+\".\":\"\");\r\nfunction sitestat(u){var d=document,l=d.location;ns_pixelUrl=u+\"&ns__t=\"+(new Date().getTime());u=ns_pixelUrl+\"&ns_c=\"+((d.characterSet)?d.characterSet:d.defaultCharset)+\"&ns_ti=\"+escape(d.title)+\"&ns_jspageurl=\"+escape(l&&l.href?l.href:d.URL)+\"&ns_referrer=\"+escape(d.referrer);(d.images)?new Image().src=u:d.write(\'<\'+\'p><img src=\"\'+u+\'\" height=\"1\" width=\"1\" alt=\"*\"><\'+\'\/p>\');}; \r\nsitestat(\"https:\/\/fr.sitestat.com\/aef\/f24-mcd-rfi\/s?\"+ns_ss_domaine+(ns_pagepath!=\"\"?ns_pagepath:\"defaut\")+\"&aef_libelle_contenu_page=\"+escape(document.title)+\"&aef_marque=rfi&aef_type_environnement=site&aef_nom_environnement=rfi_site&aef_rep_global=rfi-romania&aef_rep1=defaut&aef_rep2=defaut&aef_rep3=defaut&aef_langue=roumain&aef_version_environnement=tremend_v1.0&aef_acces=gratuit&aef_user_connection=visiteur\"); \r\n\/\/ ]]> \r\n<\/script> \r\n<noscript><p><img src=\"https:\/\/fr.sitestat.com\/aef\/f24-mcd-rfi\/s?defaut&aef_libelle_contenu_page=defaut&aef_marque=rfi&aef_type_environnement=site&aef_nom_environnement=rfi_site&aef_rep_global=rfi&aef_rep1=rfi-romania&aef_rep2=defaut&aef_rep3=defaut&aef_langue=roumain&aef_version_environnement=tremend_v1.0&aef_acces=gratuit&aef_user_connection=visiteur\" height=\"1\" width=\"1\" alt=\"*\"><\/p><\/noscript> \r\n<!-- End comScore CMC -->";
+        }
+        document.write(md_code);
+    </script>
+    <script>
+        var _prum = [['id', '584fe93a1e2072d4cd1001f2'],
+            ['mark', 'firstbyte', (new Date()).getTime()]];
+        (function()
+        { var s = document.getElementsByTagName('script')[0] , p = document.createElement('script'); p.async = 'async'; p.src = '//rum-static.pingdom.net/prum.min.js'; s.parentNode.insertBefore(p, s); }
+        )();
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-W9DW5JQ');</script>
+    <!-- End Google Tag Manager -->
+
+
+</head>
+<body class="html not-front not-logged-in no-sidebars page-node page-node- page-node-139810 node-type-article domain-www-rfi-ro i18n-ro" >
+  <!--  SATI - update RFIR-317 - START  -->
+  <script>
+    var ad = document.createElement('div');
+    ad.id = 'AdSense';
+    ad.className = 'AdSense';
+    ad.style.display = 'block';
+    ad.style.position = 'absolute';
+    ad.style.top = '-1px';
+    ad.style.height = '1px';
+    document.body.appendChild(ad);
+  </script>
+  <!--  SATI - update RFIR-317 END  -->
+  <div id="skip-link">
+    <a href="#main-content" class="element-invisible element-focusable">Mergi la conţinutul principal</a>
+  </div>
+    <header class="main-header">
+
+	<!-- top search bar -->
+			  <div class="region region-header-search">
+    <section id="block-search-form" class="block block-search hidden clearfix">
+
+      
+  <form class="form-search content-search" action="/social-139810-europa-plus-prins-guvern-producatori-albanezi-lactate-bio" method="post" id="search-block-form" accept-charset="UTF-8"><div><div>
+      <h2 class="element-invisible">Formular de căutare</h2>
+    <div class="input-group"><input title="Introduceţi termenii doriţi pentru căutare." placeholder="Căutare" class="form-control form-text" type="text" id="edit-search-block-form--2" name="search_block_form" value="" size="15" maxlength="128" /><span class="input-group-btn"><button type="submit" class="btn btn-default">Căutare</button></span></div><button class="element-invisible btn btn-primary form-submit" id="edit-submit" name="op" value="Căutare" type="submit">Căutare</button>
+<input type="hidden" name="form_build_id" value="form-C0xDVt4QrnP9kr8c-wn_2U6p7GAQvmB1Gzp6gMKPl6w" />
+<input type="hidden" name="form_id" value="search_block_form" />
+</div>
+</div></form>
+</section> <!-- /.block -->
+  </div>
+		<!-- //top search bar -->
+
+	<!-- top navigation -->
+	<div class="top-menu">
+		<div class="container">
+			<div class="top-menu-wrapper">
+				<div class="column-left">
+
+					<!-- top menu left -->
+											  <div class="region region-header-top">
+    <section id="block-menu-menu-top-menu" class="block block-menu clearfix">
+
+        <h2 class="block-title">Top menu</h2>
+    
+  <ul class="menu nav"><li class="first leaf"><a href="/emisiunile-rfi-ro">Emisiuni</a></li>
+<li class="leaf"><a href="/program">Program</a></li>
+<li class="expanded dropdown"><a href="/" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Bloguri RFI <span class="caret"></span></a><ul class="dropdown-menu"><li class="first leaf"><a href="https://generatia30.rfi.ro/" name="RFI la 30 de ani in Romania" target="_blank">GENERAŢIA 30</a></li>
+<li class="leaf"><a href="http://rural.rfi.ro/">RURAL</a></li>
+<li class="leaf"><a href="http://muzica.rfi.ro/ " target="_blank">MUZICA</a></li>
+<li class="leaf"><a href="http://gastronomie.rfi.ro/" target="_blank">GASTRONOMIE</a></li>
+<li class="leaf"><a href="https://webdoc.rfi.ro/" title="Documentare realizate de RFI Romania">DOCUMENTARE</a></li>
+<li class="last leaf"><a href="https://podcast.rfi.ro/" title="Podcast RFI Romania">PODCAST</a></li>
+</ul></li>
+<li class="last expanded dropdown"><a href="/" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Site-uri France Médias Monde <span class="caret"></span></a><ul class="dropdown-menu"><li class="first leaf"><a href="https://www.rfi.fr/" target="_blank">RFI.FR</a></li>
+<li class="leaf"><a href="https://musique.rfi.fr" target="_blank">RFI MUSIQUE</a></li>
+<li class="leaf"><a href="https://www.france24.com/" target="_blank">FRANCE 24</a></li>
+<li class="leaf"><a href="https://www.mc-doualiya.com/ " target="_blank">MONTE CARLO DOUALIYA</a></li>
+<li class="leaf"><a href="https://www.francemediasmonde.com/ro/" target="_blank">FRANCE MÉDIAS MONDE</a></li>
+<li class="leaf"><a href="https://academie.france24-mcd-rfi.com/fr/" target="_blank">ACADÉMIE</a></li>
+<li class="leaf"><a href="https://www.cfi.fr/en" target="_blank">CFI</a></li>
+<li class="leaf"><a href="https://observers.france24.com/" target="_blank">LES OBSERVATEURS</a></li>
+<li class="leaf"><a href="http://atelier.rfi.fr/ " target="_blank">ATELIER DES MÉDIAS</a></li>
+<li class="last leaf"><a href="https://www.mondoblog.org/ " target="_blank">MONDOBLOG</a></li>
+</ul></li>
+</ul>
+</section> <!-- /.block -->
+  </div>
+										<!-- //top menu left -->
+
+				</div>
+				<div class="column-right">
+					<div class="column-right-wrapper">
+
+						<!-- social icons -->
+						<div class="column-right-menu social-icons">
+							<ul class="column-right-wrapper social-icons-wrapper">
+								<li class="column-right-item social-icon-container">
+									<a href="https://www.facebook.com/RFI.Romania.FM" target="_blank">
+										<i class="fa fa-facebook"></i>
+									</a>
+								</li>
+								<li class="column-right-item social-icon-container">
+									<a href="https://twitter.com/RFI_Romania" target="_blank">
+										<i class="fa fa-twitter"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<!-- //social icons -->
+
+						<!-- top right icons -->
+						<div class="column-right-menu header-top-right-menu">
+							<ul class="column-right-wrapper header-top-right-wrapper">
+								<li class="column-right-item header-top-right-item">
+									<a href="/newsletter-rfi"  class="newsletter">
+										<i class="fa fa-envelope">&nbsp;</i>Newsletter
+									</a>
+								</li>
+								<li class="column-right-item header-top-right-item">
+                                    									<a href="rss" class="rss">
+										<i class="fa fa-rss">&nbsp;</i>RSS
+									</a>
+								</li>
+								<li class="column-right-item header-top-right-item" id="showSearch">
+									<a href="#">
+										<i class="fa fa-search">&nbsp;</i>Cauta in site
+									</a>
+								</li>
+                                <li class="column-right-item header-top-right-item hidden" id="hideSearch">
+									<a href="#">
+										<i class="fa fa-search">&nbsp;</i>Cauta in site
+									</a>
+                                </li>
+								<li class="column-right-item header-top-right-item">
+									<a href="/content/rfi-16-limbi-straine" class="rfi12lang">
+										RFI in 12 limbi straine
+									</a>
+								</li>
+							</ul>
+						</div>
+						<!-- //top right icons -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- //top navigation -->
+
+	<!-- logo/player container -->
+	<div class="logo-player-container">
+		<div class="container">
+			<div class="wrapper">
+				<div class="logo-container">
+
+                    <a href="/" class="logo-img">
+                        <img src="https://www.rfi.ro/sites/all/themes/rfi/assets/img/logo-rfi-romania-baseline.png" width="81" height="99" alt="RFI România: Actualitate, informaţii, ştiri în direct">
+                    </a>
+
+					
+				</div>
+
+                                      <div class="region region-header">
+    <section id="block-tremend-player-player" class="block block-tremend-player clearfix">
+
+      
+          <div class="radio-player">
+        <div class="top-stream">
+            <span class="play-mp3-strem pointer" data-track="https://asculta.rfi.ro:8443/live.aac"
+                  data-track_title='pulsar' data-pause_title="RFI Direct"><i
+                    class="fa fa-triangle-right"></i> Direct</span>
+            <span class="play-mp3 pointer" data-track="https://www.rfi.ro/sites/default/files/2021_11_16_10_jurnal.mp3"
+                  data-track_title='Jurnalul de marți, 16 noiembrie 2021, 10h00'><i class="fa fa-triangle-right"></i> Jurnale</span>
+            <span class="play-mp3-strem pointer" data-track="https://rfimonde64.ice.infomaniak.ch/rfimonde-64.mp3"
+                  data-track_title='Direct Monde'><i class="fa fa-triangle-right"></i> Direct Monde</span>
+        </div>
+        <div id="container" style="width: 300px; padding: 10px 30px" class="top-player">
+            <div id="jplayer-PlayerContainer"></div>
+            <div id="Mp3Container" style="display: none;"></div>
+
+            <div class="pl-sound">
+                <div class="pl-volume">
+                    <div id="volume" style="display: none;">
+                        <div id="volume-range"></div>
+                    </div>
+                </div>
+                <span class="player-visualizer-off" id="player-visualizer"></span>
+            </div>
+            <div class="pl-current-block">
+                <div class="pl-current-seek">
+                    <div class="pl-current">
+                        <span class="play-btn"></span>
+                        <span class="pause-btn" style="display:none"></span>
+                        <strong>
+                            Ascultaţi
+                        </strong>
+                        <span id="current_program_infos" data-retry_in=""></span>
+                    </div>
+                    <div id="seek-range" style="display:none"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="time-player" style="margin-top: 30px; ">
+            <span id="player-time" style="display: none; color: #f6931f; font-weight: bold;"></span>
+        </div>
+    </div>
+
+</section> <!-- /.block -->
+<section id="block-views-jurnale-block-1" class="block block-views clearfix">
+
+      
+  <div class="view view-jurnale view-id-jurnale view-display-id-block_1 view-dom-id-8f3c7c6f1476272fb03489ce32b09d52">
+        
+  
+  
+      <div class="view-content">
+          <div class="interviews-container">
+        <div class="interview-buttons">
+                            <span class="interview-button play-mp3 pointer" data-track_title="Emanuel Ungureanu, deputat USR, despre certificatul verde obligatoriu la locul de muncă" data-url="https://www.rfi.ro/invitatul-diminetii-139814-emanuel-ungureanu-usr-certificat-verde-obligatoriu" data-track="https://www.rfi.ro/sites/default/files/emanuel_ungureanu_usr_certificat_verde_obligatoriu_loc_munca.mp3"><i class="fa fa-volume-up"></i> Asculta interviu</span>
+                        <span class="interview-button separator">|</span>
+            <a href="/invitatul-diminetii" class="interview-button all-link">Toti invitatii <!-- i class="fa fa-angle-down"></i --></a>
+        </div>
+        <div class="last-interview-container">
+                            <div class="interview-content left-content">
+                    <a href="/invitatul-diminetii-139814-emanuel-ungureanu-usr-certificat-verde-obligatoriu" class="active">Emanuel Ungureanu, deputat USR, despre certificatul verde...</a>                </div>
+                        <div class="interview-content right-content">
+                                <a href="/invitatul-diminetii-139814-emanuel-ungureanu-usr-certificat-verde-obligatoriu"><img src="https://www.rfi.ro/sites/default/files/styles/invitatul_diminetii_-_top/public/emanuel_ungureanu_slujbe_biserici_scoli_suspendate_coronavirus.jpg?itok=_-gtWVm-" /></a>
+                            </div>
+        </div>
+    </div>
+    </div>
+  
+  
+  
+  
+  
+  
+</div>
+</section> <!-- /.block -->
+  </div>
+                			</div>
+		</div>
+	</div>
+	<!-- //logo/player container -->
+
+	<!-- main navigation -->
+	<nav id="navbar" role="navigation" class="navbar sticky-off navbar-inverse">
+		<div class="container">
+
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#top-menu">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+
+							<div class="navbar-collapse collapse" id="top-menu">
+					  <div class="region region-navigation">
+    <section id="block-menu-menu-rfi-general-menu" class="block block-menu clearfix">
+
+        <h2 class="block-title"> </h2>
+    
+  <ul class="menu nav"><li class="first leaf"><a href="/" title=""></a></li>
+<li class="expanded dropdown"><a href="http://www.rfi.ro/ultimele-24h" title="Cele mai importante informații din ultimele 24 de ore" data-target="#" class="dropdown-toggle" data-toggle="dropdown">Actualitate <span class="caret"></span></a><ul class="dropdown-menu"><li class="first leaf"><a href="/romania">Romania</a></li>
+<li class="leaf"><a href="/r-moldova">R. Moldova</a></li>
+<li class="leaf"><a href="/franta">Franta</a></li>
+<li class="leaf"><a href="/europa">Europa</a></li>
+<li class="leaf"><a href="/international">International</a></li>
+<li class="last leaf"><a href="/parlamentul-european">Parlament EU</a></li>
+</ul></li>
+<li class="leaf"><a href="/politica" title="Ştiri politice din ultimele 24 de ore. Ştiri despre partide, Parlament, Presedinţie, Guvern.">Politică</a></li>
+<li class="leaf"><a href="/economie" title="Informații de ultimă oră din economia internă și externă. Află cele mai noi știri din Economie pe noul rfi.ro">Economie</a></li>
+<li class="leaf"><a href="/social" title="Știri despre învățământ, sănătate, greve, proteste, probleme sociale, mediu, biserica, minorități în articolele din categoria Social.">Social</a></li>
+<li class="leaf"><a href="/mediu" title="Află cele mai noi știri din Mediu numai pe noul rfi.ro">Mediu</a></li>
+<li class="leaf"><a href="/cultura" title="Află cele mai noi știri din Cultură numai pe noul rfi.ro.">Cultură</a></li>
+<li class="leaf"><a href="/justitie" title="Vezi principalele stirile din categoria Justiție">Justiție</a></li>
+<li class="leaf"><a href="/stiinta" title="Stiri si articole stiinta si tehnologie">Ştiinţă</a></li>
+<li class="leaf"><a href="/stiri-muzica">Muzică</a></li>
+<li class="leaf"><a href="/sport" title="Sport - articole cu stiri si informatii sportive de ultima ora">Sport</a></li>
+<li class="last leaf"><a href="/diverse" title="Vezi principalele stirile din categoria Diverse">Diverse</a></li>
+</ul>
+</section> <!-- /.block -->
+  </div>
+				</div>
+			            </div>
+
+		</div>
+	</nav>
+	<!-- //main navigation -->
+
+</header>
+<div class="under-menu-wrapper">
+    <div class="under-menu" id="under_menu">
+          <div class="region region-under-menu">
+    <section id="block-block-21" class="block block-block clearfix">
+
+      
+  <!-- .zontera.com Ad Tag rfi.ro, top :BEGIN-->
+<div class="zc_top" id="zc_site_top"><div class="z_top" id="z_site_top"></div></div>
+<script type="text/javascript">(function(){if(!window.ZTRADS)ZTRADS={};ZTRADS.z_site_top={
+params:{pub:"496447293437401",site:"rfi.ro",section:"site",zone:"top",size:"0x0"},
+    custom:{
+      isVisibleWhen:{minWidth:1200, maxWidth:5000}
+    }
+//,custom:{zIndexLevels:{normal:10, html3rdParty:12, expandable:20, peel:30000, sticky:50, underline:999000, floating:1999888777, toolbar:2000000000, background:-100000, debug:2100000000}}
+};})();</script>
+<!-- .zontera.com Ad Tag  :END-->
+<!-- .zontera.com Ad Tag rfi.ro, top :BEGIN-->
+<div class="zc_top" id="zc_site_top"><div class="z_top" id="z_site_top"></div></div>
+<script type="text/javascript">(function(){if(!window.ZTRADS)ZTRADS={};ZTRADS.z_site_top={
+params:{pub:"496447293437401",site:"rfi.ro",section:"site",zone:"top",size:"0x0"},
+    custom:{
+      isVisibleWhen:{minWidth:1200, maxWidth:5000}
+    }
+//,custom:{zIndexLevels:{normal:10, html3rdParty:12, expandable:20, peel:30000, sticky:50, underline:999000, floating:1999888777, toolbar:2000000000, background:-100000, debug:2100000000}}
+};})();</script>
+<!-- .zontera.com Ad Tag  :END-->
+
+<!-- .zontera.com Ad Tag rfi.ro, rectangle_tableta :BEGIN-->
+<div class="zc_rectangle_tableta" id="zc_site_rectangle_tableta"><div class="z_rectangle_tableta" id="z_site_rectangle_tableta"></div></div>
+<script type="text/javascript">(function(){if(!window.ZTRADS)ZTRADS={};ZTRADS.z_site_rectangle_tableta={
+params:{pub:"496447293437401",site:"rfi.ro",section:"site",zone:"rectangle_tableta",size:"0x0"},
+    custom:{
+      isVisibleWhen:{minWidth:768, maxWidth:1199}
+    }
+//,custom:{zIndexLevels:{normal:10, html3rdParty:12, expandable:20, peel:30000, sticky:50, underline:999000, floating:1999888777, toolbar:2000000000, background:-100000, debug:2100000000}}
+};})();</script>
+<!-- .zontera.com Ad Tag  :END-->
+
+
+<!-- .zontera.com Ad Tag rfi.ro, rectangle_mobil_2 :BEGIN-->
+<div class="zc_rectangle_mobil_2" id="zc_site_rectangle_mobil_2"><div class="z_rectangle_mobil_2" id="z_site_rectangle_mobil_2"></div></div>
+<script type="text/javascript">(function(){if(!window.ZTRADS)ZTRADS={};ZTRADS.z_site_rectangle_mobil_2={
+params:{pub:"496447293437401",site:"rfi.ro",section:"site",zone:"rectangle_mobil_2",size:"0x0", custom:{isVisibleWhen:{ maxWidth:767}}}
+};})();</script>
+<!-- .zontera.com Ad Tag  :END-->
+
+<br>
+<br>
+</section> <!-- /.block -->
+  </div>
+    </div>
+</div>
+<div class="main-container container">
+
+	<header role="banner" id="page-header" class="page-header-container">
+		
+		<a id="main-content"></a>
+
+		        <div class = "breadcrumb nav-breadcrumb"><a href="/" class="mr10 fl">RFI România: Actualitate, informaţii, ştiri în direct</a>»<a href="/stiri" class="mr10 fl">Ştiri</a>»<a href="/social" class="mr10 fl">Social</a>»<a href="/social-139810-europa-plus-prins-guvern-producatori-albanezi-lactate-bio" class="mr10 fl active">Europa Plus: Cum i-a prins guvernul cu mâța în sac pe producătorii albanezi de lactate BIO</a></div>        					<h1 class="page-header">Social</h1>
+		                <a href="rss" class="rss"><i class="fa fa-rss">&nbsp;</i></a>
+
+		
+	</header> <!-- /#page-header -->
+
+	<div class="content-wrapper">
+	  <div class="row">
+
+	    	    <section class="col-md-8">
+
+	      
+	      	      	        	      
+	      	      	        <div class="region region-content">
+    <section id="block-block-8" class="block block-block social-buttons clearfix">
+
+      
+  <!-- Go to www.addthis.com/dashboard to customize your tools --><div class="addthis_inline_share_toolbox_sg1f"> </div>
+
+</section> <!-- /.block -->
+<section id="block-system-main" class="block block-system clearfix">
+
+      
+  <div  class="ds-1col node node-article node-promoted view-mode-full clearfix">
+
+  
+  <div class="group-article-left field-group-html-element"><div class="field field-name-post-date field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even">15 Noiembrie 2021</div></div></div><div class="field field-name-title field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"><h2>Europa Plus: Cum i-a prins guvernul cu mâța în sac pe producătorii albanezi de lactate BIO</h2></div></div></div><div class="field field-name-field-autori field-type-taxonomy-term-reference field-label-hidden"><div class="field-items"><div class="field-item even"><a href="/autori/ana-maria-florea-harrison">Ana Maria Florea-Harrison</a></div></div></div><div class="group-image-description field-group-fieldset"><div class="field field-name-field-image field-type-image field-label-hidden"><div class="field-items"><div class="field-item even"><div id="file-242954" class="file file-image file-image-jpeg">
+
+        <h2 class="element-invisible"><a href="/file/laptejpg-3">lapte.jpg</a></h2>
+    
+  
+  <div class="content">
+    <img src="https://www.rfi.ro/sites/default/files/styles/inside_content/public/articol/lapte_0.jpg?itok=VY3Tj0Lt" width="740" height="493" alt="" /><div class="field field-name-field-image-source field-type-text field-label-above"><div class="field-label">Image source:&nbsp;</div><div class="field-items"><div class="field-item even">pixabay.com</div></div></div>  </div>
+
+  
+</div>
+</div></div></div></div><div class="field field-name-field-teaser field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><ul><li><strong>Albanezii au aflat cu stupoare că lactatele vândute drept BIO la ei în țară, conțin de fapt lapte praf, după ce guvernul a anunțat că va impune o taxă pe laptele praf din import. Văzându-și amenințate profiturile, producătorii au recunoscut cu jumătate de gură că lactatele BIO albaneze, nu sunt tocmai BIO. </strong></li>
+<li><strong>Presa kosovară laudă pelicula <em>Stupul</em>, câștigătoare a trei premii la Festivalul Sundance și nominalizată la cateoria <em>Cel mai bun film străin</em> la Premiile Oscar. </strong></li>
+</ul></div></div></div><div class="group-article field-group-fieldset"><div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p>Cum și-au dat seama albanezii că mănâncă lactate BIO care au, de fapt în compoziție, lapte praf? Acesta este subiectul unui articol din <strong><a href="http://kohajone.com/skandali-me-qumeshtin-pluhur-po-e-hame-per-bio-si-mashtrohen-qytetaret-me-etiketat/" target="_blank"><span style="color:#0000CD;"><em>kohajone.com</em></span></a></strong>.</p>
+<p>„Pachetul de taxe propus de guvern a dezvăluit un mare adevăr despre industria produselor lactate din Albania. Produsele servite cetățenilor ca<em> bio,</em> au de fapt o compoziție ridicată de lapte praf. Aceasta variază de la un produs la altul și de la o companie la alta. Toate acestea se întâmplă în timp ce companiile scriu pe ambalaj că produsele conțin 100% lapte de vacă,” scrie publicația.</p>
+<p>Cum s-a aflat tărășenia?  Ministerul de Finanțe de la Tirana a prevăzut aplicarea unei taxe de 100 de leka albaneze (aproxmativ 0,04 RON, n.r.,) pe fiecare litru de lapte pudră de import. Ministerul spune că Albania importă aproximativ  o mie de tone de lapte praf, iar acestă taxă ar aduce la buget  100 de milioane de leka (aproximativ 4 milioane de RON.) În acest moment, companiile de lactate au început să se îngrijoreze.</p>
+<p>„În cadrul discuțiilor din cadrul Comitetului Economic, producătorii de lactate au recunoscut cu jumătate de gură că ar folosi doar 2% lapte praf în lactatele vândute consumatorilor ca produse 100 % naturale. În astfel de cazuri, legea impune producătorilor să marcheze întreaga compoziție pe etichetă.”</p>
+<p>„În concluzie, din toate acestea am aflat că albanezii consumă 1.000 de tone de lapte praf pe an. Dacă ar fi să raportăm această cifră la numărul de rezidenți, atunci se estimează că fiecare dintre noi, adulți, copii sau vârstnici, consumăm în cel mai bun caz, în medie, 500-700 de grame de lapte praf pe an,” concluzionează <em>kohajone.com.</em></p>
+<p> </p>
+<h2><strong>Inundațiile de lângă Sarajevo lasă în urmă noroi, apă și frică</strong></h2>
+<p>Acesta este titlul articolului publicat pe site-ul postului Europa Liberă, secțiunea în limba bosniacă, <strong><a href="https://www.slobodnaevropa.org/a/bih-sarajevo-otes-poplave/31551431.html" target="_blank"><span style="color:#0000CD;"><em>www.slobodnaevropa.org</em></span></a></strong>. Publicația se referă la ce s-a întâmplat la o distanță de 20 de kilometri de capitală când, „pe 5 noiembrie, a fost declarată starea de urgență în Pale și Trnovo. În Istočna Ilidža a fost declarată stare de dezastru natural.”</p>
+<p>„Apa era în hol, poate de doi-trei centimetri, dar după ce am deschis ușa, a năvălit înăuntru. În zece minute, apa a ajuns la un metru înălțime în casă. Am luat copiii în brațe și am urcat la etaj. Toată mobila, mașina, ceasul de perete au rămas jos...”, povestește Mišel, una din persoanele afectate.</p>
+<p>„Nimeni nu ne-a vizitat sau nu ne-a întrebat dacă suntem vii sau morți. Nu le pasă de oameni. Nu există viață aici până la vară, doar apă. Dar o să supraviețuim, important este că am rămas în viață”, a spus bărbatul.</p>
+<p> </p>
+<h2><strong>Filmul kosovar <em>Stupul </em>a avut premiera la Washington</strong></h2>
+<p>Premiera de la Washington a filmului kosovar <em>Zgjoi</em> -  <em>Stupul</em>  este prezentată de publicația <strong><a href="https://www.botasot.info/filma-kultura/1702759/filmi-zgjoi-jepetpremiere-ne-uashington-flet-aktorja-yllka-gashi/" target="_blank"><span style="color:#0000CD;"><em>www.botasot.info</em></span></a></strong><em>.</em> Pelicula a câștiat deja trei premii la <em>Festivalul Sundance</em> și este nominalizată la Oscar, în categoria <em>Cel mai bun film străin.</em>  </p>
+<p>„Filmul <em>Stupul </em>spune povestea lui Fahrije Hoti, o femeie din satul Krusha e Madhe din Kosovo care, în ciuda suferinței prin care trece după ce și-a pierdut soțul, dispărut alături de alți 225 de bărbați din sat în timpul războiului din Kosovo, a reușit să deschidă, împreună cu alte femei din sat o afacere. Povestea sa este despre speranța în viitor și se ridică deasupra mentalității patriarhale a societății”, scrie sursa citată.</p>
+<p>Așteptările sunt mari, având în vedere succesul filmului de până acum la festivalurile internaționale.</p>
+<p>„La fiecare festival unde a participat în competiția oficială, filmul a revenit cu cel puțin un premiu. Nu ne-am așteptat la acestă reacție a criticilor de film. Noi am spus mereu că e un film autentic despre Kosovo și nu știam dacă pubicul străin se va identifica cu el.  Dar am avut sentimentul și intuiția că va fi un film de succes pentru că s-a lucrat cu multă pasiune și dăruire”, declară actrița din rolul principal, Yllka Gashi.</p>
+<p> </p>
+<h2><strong><em>După iarnă</em></strong><em>, </em><strong>propunerea muntenegreană la Oscar</strong></h2>
+<p>Publicația <strong><a href="https://www.vijesti.me/kultura/572734/crnogorski-kandidat-za-oskara-trenutak-kad-prestaje-zezanje-a-pocinje-zivot" target="_blank"><span style="color:#0000CD;"><em>www.vijesti.me</em></span></a></strong> scrie despre pelicula muntenegreană nominalizată la categoria <em>Cel mai bun străin</em>  a premiilor Oscar, institulată <em>After the Winter</em> <em>- După iarnă</em>. Premiera filmului produs de Ivan Đurović a avut loc săptămâna trecută în Muntenegru.</p>
+<p>Potrivit lui Durociv, „toată lumea se va identifica cu un aspect al filmului” care prezintă povestea a cinci prieteni, în vârstă de treizeci de ani, care trăiesc în ceea ce a rămas din fosta Iugoslavie și încearcă să-și păstreze prieteniile, chiar dacă sunt despărțiți de kilometri...</p>
+<p>„Acest film este mărturia unei generații născute la sfârșitul anilor 80 care își dorește să trăiască normal, să se distreze, să facă ceea ce îi place și să trăiască din asta... Ei nu sunt interesați de războaie și masacre, de diviziunile dintre oameni,” spune producătorul filmului.</p>
+<p> </p>
+<p><em>Au participat la realizarea Revistei Presei Europa Plus:</em></p>
+<p><em>Nikolina MANOJLOVIC, Muntenegru     </em></p>
+<p><em>Denis LICI, Albania          </em></p>
+<p><em>Fitore QORRAJ, Kosovo</em></p>
+<p><em>Naida MLINAREVIC, Bosnia</em></p>
+<p> </p>
+<p>Alte articole din seria Europa Plus a RFI România: <strong><a href="https://www.rfi.ro/tag/europa-plus"><span style="color:#0000CD;">https://www.rfi.ro/tag/europa-plus</span></a></strong></p>
+<p><strong>Proiect în parteneriat cu Agenția Universitară a Francofoniei</strong></p>
+</div></div></div><div class="field field-name-zontera-com-after-article field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"><section id="block-block-29" class="block block-block clearfix">
+
+      
+  <!-- .zontera.com Ad Tag rfi.ro, rectangle_mobil :BEGIN--><div class="zc_rectangle_mobil" id="zc_homepage_rectangle_mobil" style="margin: 20px 0">
+<div class="z_rectangle_mobil" id="z_homepage_rectangle_mobil"> </div>
+</div>
+<script type="text/javascript">
+<!--//--><![CDATA[// ><!--
+(function(){if(!window.ZTRADS)ZTRADS={};ZTRADS.z_homepage_rectangle_mobil={
+params:{pub:"496447293437401",site:"rfi.ro",section:"homepage",zone:"rectangle_mobil",size:"0x0"},
+    custom:{
+      isVisibleWhen:{maxWidth:767}
+    }
+//,custom:{zIndexLevels:{normal:10, html3rdParty:12, expandable:20, peel:30000, sticky:50, underline:999000, floating:1999888777, toolbar:2000000000, background:-100000, debug:2100000000}}
+};})();
+//--><!]]>
+</script><!-- .zontera.com Ad Tag  :END-->
+</section> <!-- /.block -->
+</div></div></div></div><fieldset  class="collapsible group-audio-article field-group-fieldset panel panel-default form-wrapper">
+        <div id="" class="panel-collapse collapse fade in">
+    <div class="panel-body">
+        <div class="field field-name-field-attachment-title field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even">Revista Europa Plus din 15 noiembrie 2021</div></div></div><div class="field field-name-field-audio field-type-file field-label-hidden"><div class="field-items"><div class="field-item even">
+<div class="jp-audio">
+  <div class="jp-type-single">
+    <div id="jplayer-node-139810-field-audio-1637058863" class="jp-jplayer"></div>
+    <div id="jplayer-node-139810-field-audio-1637058863_interface" class="jp-interface">
+            <ul class="jp-controls">
+        <li><a href="#" class="jp-play" tabindex="1">play</a></li>
+        <li><a href="#" class="jp-pause" tabindex="1">pause</a></li>
+        <li><a href="#" class="jp-stop" tabindex="1">stop</a></li>
+        <li><a href="#" class="jp-mute" tabindex="1">mute</a></li>
+        <li><a href="#" class="jp-unmute" tabindex="1">unmute</a></li>
+              </ul>
+      
+      <div class="jp-progress">
+        <div class="jp-seek-bar">
+          <div class="jp-play-bar"></div>
+        </div>
+      </div>
+      
+      <div class="jp-volume-bar">
+        <div class="jp-volume-bar-value"></div>
+      </div>
+      
+      <div class="jp-current-time"></div>
+      <div class="jp-duration"></div>
+    </div>
+    
+    <div id="jplayer-node-139810-field-audio-1637058863_playlist" class="jp-playlist">
+              <ul><li class="first jp-playlist-first last jp-playlist-last" oncontextmenu="return false;"><a href="https://www.rfi.ro/sites/default/files/revista_presei_europa_plus_grup_4_4.mp3" id="jplayer-node-139810-field-audio-1637058863_item_0" tabindex="1" onclick="return(false);">revista_presei_europa_plus_grup_4.mp3</a></li>
+</ul>          </div>
+  </div>
+</div>
+</div></div></div>  </div>
+      </div>
+  </fieldset>
+<div class="field field-name-social-buttons field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"><!-- Go to www.addthis.com/dashboard to customize your tools --><div class="addthis_inline_share_toolbox_sg1f"> </div>
+</div></div></div><div class="field field-name-field-tags field-type-taxonomy-term-reference field-label-above"><div class="field-label">Tags:&nbsp;</div><div class="field-items"><div class="field-item even"><a href="/tag/europa-plus">Europa PLUS</a></div><div class="field-item odd"><a href="/tag/albania">Albania</a></div><div class="field-item even"><a href="/tag/lapte">lapte</a></div><div class="field-item odd"><a href="/tag/kosovo">kosovo</a></div><div class="field-item even"><a href="/tag/muntenegru">Muntenegru</a></div><div class="field-item odd"><a href="/tag/bosnia-hertegovina">Bosnia-Herţegovina</a></div></div></div></div></div>
+
+
+</section> <!-- /.block -->
+<section id="block-facebook-comments-facebook-comments" class="block block-facebook-comments clearfix">
+
+      
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ro_RO/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, "script", "facebook-jssdk"));</script>
+<div class="fb-comments " data-href="https://www.rfi.ro/social-139810-europa-plus-prins-guvern-producatori-albanezi-lactate-bio" data-num-posts="5" data-width="100%" data-colorscheme="light"></div>
+
+</section> <!-- /.block -->
+  </div>
+
+	    </section>
+
+                  <div class="sidebar group-sidebar">
+                <div class="region region-sidebar">
+    <section id="block-bean-taxonomy-sidebar" class="block block-bean clearfix">
+
+      
+  <div class="entity entity-bean bean-bean-sidebar clearfix">
+        <div class="content">
+    <div class="field field-name-field-sidebar-blocks field-type-blockreference field-label-hidden"><div class="field-items"><div class="field-item even"><section id="block-simpleads-ad-groups-30637" class="block block-simpleads clearfix">
+
+      
+  <div class="header">
+  <div class="ad-link"></div>
+</div>
+<div class="adslist">
+  <script type="text/javascript">
+    _simpelads_load('.simpleads-30637', 30637, 4);
+  </script>
+    <div class="simpleads-30637"></div>
+
+    
+</div>
+
+</section> <!-- /.block --></div><div class="field-item odd"><section id="block-bean-revista-presei-hp" class="block block-bean clearfix">
+
+        <h2 class="block-title">Revista Presei</h2>
+    
+  <div  class="ds-1col entity entity-bean bean-bean-full-width view-mode-default clearfix">
+
+  
+  <div class="group-top-full field-group-html-element"><div class="field field-name-field-top-block field-type-blockreference field-label-hidden"><div class="field-items"><div class="field-item even"><section id="block-views-article-block-8" class="block block-views clearfix">
+
+        <h2 class="block-title">Presa Românească</h2>
+    
+  <div class="view view-article view-id-article view-display-id-block_8 view-dom-id-5af9ffcb583564501063c87f4b7d6ffb">
+        
+  
+  
+      <div class="view-content">
+        <div class="views-row views-row-1 views-row-odd views-row-first views-row-last">
+    <div  class="ds-1col node node-article node-promoted view-mode-article_type_b clearfix">
+
+  
+  <div class="field field-name-field-image field-type-image field-label-hidden"><div class="field-items"><div class="field-item even"><a href="/presa-romaneasca-139805-pnl-psd-roata-mare-la-guvern-adevarul"><picture >
+<!--[if IE 9]><video style="display: none;"><![endif]-->
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_small/public/articol/ion-m-ionita_0_2_1_0_0_1.jpg?itok=e2K1DrG_&amp;timestamp=1630992238 1x" media="(min-width: 992px)" />
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_large/public/articol/ion-m-ionita_0_2_1_0_0_1.jpg?itok=p20VWpFg&amp;timestamp=1630992238 1x" media="(min-width: 615px) and (max-width: 991px)" />
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_medium/public/articol/ion-m-ionita_0_2_1_0_0_1.jpg?itok=Lr-CAhao&amp;timestamp=1630992238 1x" media="(max-width: 614px)" />
+<!--[if IE 9]></video><![endif]-->
+<img  src="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_medium/public/articol/ion-m-ionita_0_2_1_0_0_1.jpg?itok=Lr-CAhao&amp;timestamp=1630992238" alt="" title="" />
+</picture></a></div></div></div><div class="group-text field-group-div"><div class="field field-name-trimmed-title-hot field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"><a href=" /presa-romaneasca-139805-pnl-psd-roata-mare-la-guvern-adevarul ">PNL-PSD, în roata mare, la guvern (Adevărul)</a></div></div></div><div class="field field-name-field-teaser field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><p>Cîțu, de mână cu AUR. Certificatul verde, sacrificat în...</p></div></div></div></div></div>
+
+  </div>
+    </div>
+  
+  
+  
+  
+      <div class="view-footer">
+      <div class="view-more-article"><a href="https://www.rfi.ro/presa-romaneasca" class="cta-button">Vezi toate stirile</a></div>    </div>
+  
+  
+</div>
+</section> <!-- /.block --></div></div></div></div><div class="group-bottom-full field-group-html-element"><div class="field field-name-field-bottom-block field-type-blockreference field-label-hidden"><div class="field-items"><div class="field-item even"><section id="block-views-article-block-7" class="block block-views clearfix">
+
+        <h2 class="block-title">Presa Internațională</h2>
+    
+  <div class="view view-article view-id-article view-display-id-block_7 view-dom-id-0fbb98a65bf9db24ee80cf80f00b6b88">
+        
+  
+  
+      <div class="view-content">
+        <div class="views-row views-row-1 views-row-odd views-row-first views-row-last">
+    <div  class="ds-1col node node-article node-promoted view-mode-article_type_b clearfix">
+
+  
+  <div class="field field-name-field-image field-type-image field-label-hidden"><div class="field-items"><div class="field-item even"><a href="/presa-internationala-139807-izolare-nevaccinati-urma-model-austria"><picture >
+<!--[if IE 9]><video style="display: none;"><![endif]-->
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_small/public/articol/viena.png?itok=34RVS3Co&amp;timestamp=1637046918 1x" media="(min-width: 992px)" />
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_large/public/articol/viena.png?itok=3bKyKsZZ&amp;timestamp=1637046918 1x" media="(min-width: 615px) and (max-width: 991px)" />
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_medium/public/articol/viena.png?itok=TZgVfKKp&amp;timestamp=1637046918 1x" media="(max-width: 614px)" />
+<!--[if IE 9]></video><![endif]-->
+<img  src="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_medium/public/articol/viena.png?itok=TZgVfKKp&amp;timestamp=1637046918" alt="" title="" />
+</picture></a></div></div></div><div class="group-text field-group-div"><div class="field field-name-trimmed-title-hot field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"><a href=" /presa-internationala-139807-izolare-nevaccinati-urma-model-austria ">Izolare pentru nevaccinați. Vor urma și alții modelul Austriei?</a></div></div></div><div class="field field-name-field-teaser field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><p><strong>Confruntată cu o creștere a contaminărilor,</strong>...</p></div></div></div></div></div>
+
+  </div>
+    </div>
+  
+  
+  
+  
+      <div class="view-footer">
+      <div class="view-more-article"><a href="https://www.rfi.ro/presa-internationala" class="cta-button">Vezi toate stirile</a></div>    </div>
+  
+  
+</div>
+</section> <!-- /.block --></div></div></div></div></div>
+
+
+</section> <!-- /.block --></div><div class="field-item even"><section id="block-views-article-block-13" class="block block-views clearfix">
+
+        <h2 class="block-title">Top articole</h2>
+    
+  <div class="view view-article view-id-article view-display-id-block_13 view-dom-id-a48ae8a77b164d85b8b3c63ceaaaf92b">
+        
+  
+  
+      <div class="view-content">
+        <div class="views-row views-row-1 views-row-odd views-row-first">
+    <div  class="ds-1col node node-article node-promoted view-mode-article_type_b clearfix">
+
+  
+  <div class="field field-name-field-image field-type-image field-label-hidden"><div class="field-items"><div class="field-item even"><a href="/informatii-coronavirus"><picture  title="Doctorita cu halat si masca de protecție impotriva coronavirusului care provoaca COVID-19">
+<!--[if IE 9]><video style="display: none;"><![endif]-->
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_small/public/articol/informatii-coronavirus-live-suport-covid.jpg?itok=Sx88IGym&amp;timestamp=1637052847 1x" media="(min-width: 992px)" />
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_large/public/articol/informatii-coronavirus-live-suport-covid.jpg?itok=4p8FzeZy&amp;timestamp=1637052847 1x" media="(min-width: 615px) and (max-width: 991px)" />
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_medium/public/articol/informatii-coronavirus-live-suport-covid.jpg?itok=_LMEbz4B&amp;timestamp=1637052847 1x" media="(max-width: 614px)" />
+<!--[if IE 9]></video><![endif]-->
+<img  src="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_medium/public/articol/informatii-coronavirus-live-suport-covid.jpg?itok=_LMEbz4B&amp;timestamp=1637052847" alt="Doctorita cu halat si masca de protecție" title="Doctorita cu halat si masca de protecție impotriva coronavirusului care provoaca COVID-19" />
+</picture></a></div></div></div><div class="group-text field-group-div"><div class="field field-name-trimmed-title-hot field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"><a href=" /informatii-coronavirus ">Coronavirus România, bilanț 16 noiembrie</a></div></div></div><div class="field field-name-field-teaser field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><p>RFI România vă ține la curent cu ultimele evoluții ale...</p></div></div></div></div></div>
+
+  </div>
+  <div class="views-row views-row-2 views-row-even">
+    <div  class="ds-1col node node-article node-promoted view-mode-article_type_b clearfix">
+
+  
+  <div class="field field-name-field-image field-type-image field-label-hidden"><div class="field-items"><div class="field-item even"><a href="/emisiunile-rfi-ro-72836-cumparaturi-la-paris-orarul-magazinelor"><picture >
+<!--[if IE 9]><video style="display: none;"><![endif]-->
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_small/public/articol/ep11_nathaly_horaires_1_an.jpg?itok=wszyrwIy&amp;timestamp=1429177661 1x" media="(min-width: 992px)" />
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_large/public/articol/ep11_nathaly_horaires_1_an.jpg?itok=f-HLnxC6&amp;timestamp=1429177661 1x" media="(min-width: 615px) and (max-width: 991px)" />
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_medium/public/articol/ep11_nathaly_horaires_1_an.jpg?itok=3MTW1NUp&amp;timestamp=1429177661 1x" media="(max-width: 614px)" />
+<!--[if IE 9]></video><![endif]-->
+<img  src="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_medium/public/articol/ep11_nathaly_horaires_1_an.jpg?itok=3MTW1NUp&amp;timestamp=1429177661" alt="" title="" />
+</picture></a></div></div></div><div class="group-text field-group-div"><div class="field field-name-trimmed-title-hot field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"><a href=" /emisiunile-rfi-ro-72836-cumparaturi-la-paris-orarul-magazinelor ">Cumpărături la Paris: orarul magazinelor</a></div></div></div><div class="field field-name-field-teaser field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><p><strong>Învăţaţi franceza cu Nataly care are 17 ani,</strong>...</p></div></div></div></div></div>
+
+  </div>
+  <div class="views-row views-row-3 views-row-odd views-row-last">
+    <div  class="ds-1col node node-article node-promoted view-mode-article_type_b clearfix">
+
+  
+  <div class="field field-name-field-image field-type-image field-label-hidden"><div class="field-items"><div class="field-item even"><a href="/social-139762-cati-angajatori-ofera-beneficiul-de-400-de-lei-angajatilor-care-muncesc-de-acasa"><picture >
+<!--[if IE 9]><video style="display: none;"><![endif]-->
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_small/public/articol/cristina_tohanean.jpg?itok=vg25o_AF&amp;timestamp=1636955882 1x" media="(min-width: 992px)" />
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_large/public/articol/cristina_tohanean.jpg?itok=BETyZZ8J&amp;timestamp=1636955882 1x" media="(min-width: 615px) and (max-width: 991px)" />
+<source srcset="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_medium/public/articol/cristina_tohanean.jpg?itok=mNa7Qh7E&amp;timestamp=1636955882 1x" media="(max-width: 614px)" />
+<!--[if IE 9]></video><![endif]-->
+<img  src="https://www.rfi.ro/sites/default/files/styles/article_listing_type_b_sidebar_medium/public/articol/cristina_tohanean.jpg?itok=mNa7Qh7E&amp;timestamp=1636955882" alt="" title="" />
+</picture></a></div></div></div><div class="group-text field-group-div"><div class="field field-name-trimmed-title-hot field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"><a href=" /social-139762-cati-angajatori-ofera-beneficiul-de-400-de-lei-angajatilor-care-muncesc-de-acasa ">Câți angajatori oferă beneficiul de 400 de lei angajaților care muncesc de acasă</a></div></div></div><div class="field field-name-field-teaser field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><p>De un an și jumătate cei mai mulți români lucrează de...</p></div></div></div></div></div>
+
+  </div>
+    </div>
+  
+  
+  
+  
+  
+  
+</div>
+</section> <!-- /.block --></div><div class="field-item odd"><section id="block-block-14" class="block block-block clearfix">
+
+      
+  <!-- .zontera.com Ad Tag rfi.ro, rectangle :BEGIN-->
+<div class="zc_rectangle" id="zc_site_rectangle"><div class="z_rectangle" id="z_site_rectangle"></div></div>
+<script type="text/javascript">(function(){if(!window.ZTRADS)ZTRADS={};ZTRADS.z_site_rectangle={
+params:{pub:"496447293437401",site:"rfi.ro",section:"site",zone:"rectangle",size:"0x0"}
+//,custom:{zIndexLevels:{normal:10, html3rdParty:12, expandable:20, peel:30000, sticky:50, underline:999000, floating:1999888777, toolbar:2000000000, background:-100000, debug:2100000000}}
+};})();</script>
+<!-- .zontera.com Ad Tag  :END-->
+<br><br>
+</section> <!-- /.block --></div><div class="field-item even"><section id="block-simpleads-ad-groups-30642" class="block block-simpleads clearfix">
+
+      
+  <div class="header">
+  <div class="ad-link"></div>
+</div>
+<div class="adslist">
+  <script type="text/javascript">
+    _simpelads_load('.simpleads-30642', 30642, 25);
+  </script>
+    <div class="simpleads-30642"></div>
+
+    
+</div>
+
+</section> <!-- /.block --></div><div class="field-item odd"><section id="block-simpleads-ad-groups-30643" class="block block-simpleads clearfix">
+
+      
+  <div class="header">
+  <div class="ad-link"></div>
+</div>
+<div class="adslist">
+  <script type="text/javascript">
+    _simpelads_load('.simpleads-30643', 30643, 24);
+  </script>
+    <div class="simpleads-30643"></div>
+
+    
+</div>
+
+</section> <!-- /.block --></div><div class="field-item even"><section id="block-block-18" class="block block-block clearfix">
+
+      
+  <!-- .zontera.com Ad Tag rfi.ro, interstitial ** :BEGIN-->
+<div class="zc_interstitial" id="zc_site_interstitial"><div class="z_interstitial" id="z_site_interstitial"></div></div>
+<script type="text/javascript">(function(){if(!window.ZTRADS)ZTRADS={};ZTRADS.z_site_interstitial={
+params:{pub:"496447293437401",site:"rfi.ro",section:"site",zone:"interstitial",size:"0x0"}
+//,custom:{zIndexLevels:{normal:10, html3rdParty:12, expandable:20, peel:30000, sticky:50, underline:999000, floating:1999888777, toolbar:2000000000, background:-100000, debug:2100000000}}
+};})();</script>
+<!-- .zontera.com Ad Tag  :END-->
+</section> <!-- /.block --></div></div></div>  </div>
+</div>
+
+</section> <!-- /.block -->
+  </div>
+          </div>  <!-- /#sidebar-second -->
+        
+	    
+	  </div>
+	</div>
+  </div>
+<footer class="footer container">
+    <div class="region region-footer">
+    <section id="block-bean-general-footer-block" class="block block-bean clearfix">
+
+      
+  <div  class="ds-1col entity entity-bean bean-footer-block-bean view-mode-default clearfix">
+
+  
+  <div class="group-left field-group-div"><div class="field field-name-field-footer-left-block field-type-blockreference field-label-hidden"><div class="field-items"><div class="field-item even"><section id="block-bean-footer-left-block" class="block block-bean clearfix">
+
+      
+  <div  class="ds-1col entity entity-bean bean-footer-block-bean-left view-mode-default clearfix">
+
+  
+  <div class="field field-name-field-block-utile field-type-blockreference field-label-hidden"><div class="field-items"><div class="field-item even"><section id="block-menu-menu-utile" class="block block-menu footer-first-group footer-menu-left menu-utile clearfix">
+
+        <h2 class="block-title">Utile</h2>
+    
+  <ul class="menu nav"><li class="first leaf"><a href="/grila-programe-rfi-romania">Grilă programe, frecvenţe FM, radiouri partenere, stream audio</a></li>
+<li class="leaf"><a href="/rss">RSS</a></li>
+<li class="leaf"><a href="https://podcast.rfi.ro/" title="Podcast RFI Romania" target="_blank">Podcast</a></li>
+<li class="leaf"><a href="https://play.google.com/store/apps/details?id=com.rfi.romania&amp;hl=ro" target="_blank">Descarcă aplicația Android</a></li>
+<li class="leaf"><a href="https://itunes.apple.com/ro/app/rfi-rom%C3%A2nia/id1336035799?mt=8" target="_blank">Descarcă aplicația iOS</a></li>
+<li class="leaf"><a href="/radiouri-locale-partenere">Radiouri locale partenere</a></li>
+<li class="leaf"><a href="/sitemap">Plan site (autori, categorii, zone)</a></li>
+<li class="leaf"><a href="https://www.rfi.ro/live" title="Online radio" rel="next" accesskey="l">RFI România - Direct</a></li>
+<li class="leaf"><a href="https://tunein.com/radio/RFI-Romania-935-s8821/" target="_blank">RFI România - Ascultă cu TuneIn</a></li>
+<li class="last leaf"><a href="https://www.rfi.ro/video/france-24-direct" title="Canalul TV de stiri France 24 in direct pe YouTube">France 24 - Direct</a></li>
+</ul>
+</section> <!-- /.block --></div></div></div></div>
+
+
+</section> <!-- /.block --></div></div></div></div><div class="group-right field-group-div"><div class="field field-name-field-footer-right-block field-type-blockreference field-label-hidden"><div class="field-items"><div class="field-item even"><section id="block-bean-footer-right-block" class="block block-bean clearfix">
+
+      
+  <div  class="ds-1col entity entity-bean bean-footer-block-bean-right view-mode-default clearfix">
+
+  
+  <div class="group-2column field-group-div"><div class="field field-name-field-block-parteneri field-type-blockreference field-label-hidden"><div class="field-items"><div class="field-item even"><section id="block-menu-menu-parteneri" class="block block-menu footer-second-group footer-menu-right menu-parteneri clearfix">
+
+        <h2 class="block-title">Parteneri</h2>
+    
+  <ul class="menu nav"><li class="first leaf"><a href="http://www.ambafrance-ro.org/" target="_blank">Ambasada Frantei</a></li>
+<li class="leaf"><a href="http://www.arcub.ro" target="_blank">ARCUB</a></li>
+<li class="leaf"><a href="http://www.institutfrancais.ro/" target="_blank">Institutul Cultural Francez</a></li>
+<li class="leaf"><a href="http://www.mnar.arts.ro/Home" title="Muzeul Național de Artă al României" target="_blank">Muzeul Național de Artă al României</a></li>
+<li class="leaf"><a href="https://www.auf.org/">AUF</a></li>
+<li class="last leaf"><a href="http://www.muzeultaranuluiroman.ro/" target="_blank">Muzeul Taranului Roman</a></li>
+</ul>
+</section> <!-- /.block --></div></div></div><div class="field field-name-field-block-logo field-type-blockreference field-label-hidden"><div class="field-items"><div class="field-item even"><section id="block-bean-footer-logo" class="block block-bean clearfix">
+
+      
+  <div  class="ds-1col entity entity-bean bean-footer-logo view-mode-default clearfix">
+
+  
+  <div class="field field-name-field-image field-type-image field-label-hidden"><div class="field-items"><div class="field-item even"><img src="https://www.rfi.ro/sites/default/files/styles/large/public/logo-rfi-bottom_2_0.png?itok=xaw7Ujys" width="207" height="249" alt="" /></div></div></div><div class="field field-name-icons field-type-ds field-label-hidden"><div class="field-items"><div class="field-item even"><a href="https://www.facebook.com/RFI.Romania.FM" target="_blank" class="fa fa-facebook"></a>
+<a href=" https://twitter.com/RFI_Romania" target="_blank" class="fa fa-twitter"></a></div></div></div></div>
+
+
+</section> <!-- /.block --></div></div></div></div><div class="field field-name-field-block-despre-rfi field-type-blockreference field-label-hidden"><div class="field-items"><div class="field-item even"><section id="block-menu-menu-despre-rfi" class="block block-menu footer-third-group footer-menu-bottom menu-despre-rfi clearfix">
+
+        <h2 class="block-title">Despre RFI</h2>
+    
+  <ul class="menu nav"><li class="first leaf"><a href="/eveniment">Eveniment RFI</a></li>
+<li class="leaf"><a href="https://www.francemediasmonde.com/ro/legal-notice">Termeni şi condiţii</a></li>
+<li class="leaf"><a href="https://www.rfi.ro/sites/default/files/carta_deontologica.pdf">Carta Deontologică</a></li>
+<li class="leaf"><a href="https://www.rfi.ro/sitemap">Echipa</a></li>
+<li class="leaf"><a href="/contact-rfi-ro">Contact</a></li>
+<li class="leaf"><a href="https://www.rfi.ro/content/contacte-cna">Contact CNA</a></li>
+<li class="last leaf"><a href="https://generatia30.rfi.ro/" name="RFI la 30 de ani in Romania">GENERAŢIA 30</a></li>
+</ul>
+</section> <!-- /.block --></div></div></div><div class="field field-name-field-blockdetails field-type-blockreference field-label-hidden"><div class="field-items"><div class="field-item even"><section id="block-bean-copyright-block-0" class="block block-bean clearfix">
+
+      
+  <div  class="ds-1col entity entity-bean bean-footer-copyright view-mode-default clearfix">
+
+  
+  <div class="group-left field-group-html-element"><div class="field field-name-field-left-text field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><p><a href="http://www.brat.ro/sati/site/rfi-ro/trafic-total/" target="_blank">Frecventare site cerificata de SATI</a></p>
+</div></div></div></div><div class="group-right field-group-html-element"><div class="field field-name-field-right-text field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><p>© 2021 Copyright RFI România – Toate drepturile rezervate<br />
+Programele radioului pot fi ascultate în FM la Bucureşti 93.5 MHz, Craiova 94 MHz, Cluj 91.7 MHz, Iaşi 97.9 MHz, Timişoara 96,9 MHz, Sibiu 89 MHz şi Chişinău 107.3 MHz</p>
+</div></div></div></div></div>
+
+
+</section> <!-- /.block --></div></div></div></div>
+
+
+</section> <!-- /.block --></div></div></div></div></div>
+
+
+</section> <!-- /.block -->
+  </div>
+    <div class="group-left">
+          <div class="region region-footer-left">
+    <section id="block-block-10" class="block block-block clearfix">
+
+      
+  <p><a href="https://www.rfi.fr" target="_blank" title="RFI"><img alt="RFI" src="https://www.rfi.ro/sites/default/files/rfi-logo.png?version=20150504102347" /></a> <a href="https://www.france24.com/" target="_blank" title="France 24"><img alt="France 24" src="https://www.rfi.ro/sites/default/files/france24-logo.png?version=20150504102347" /></a> <a href="https://www.mc-doualiya.com/" target="_blank" title="MCD"><img alt="MCD" src="https://www.rfi.ro/sites/default/files/mcd-logo.png?version=20150504102347" /></a> <a href="https://www.francemediasmonde.com/ro/" target="_blank" title="France Médias Monde"><img alt="France Medias Monde logo" src="/sites/default/files/f-m-m-logo.png" style="width: 59px; height: 49px;" /></a> </p>
+
+</section> <!-- /.block -->
+  </div>
+        </div>
+    <div class="group-right">
+            </div>
+</footer>
+
+<script type="text/javascript" src="https://tms.fmm.io/rfi/ro.js" async></script>
+
+<!-- end of page -->
+<script type="text/javascript"> (function() {
+        var scr = document.createElement('script');
+        scr.type = 'text/javascript'; scr.async = true;
+        scr.src = '//rfi.ro/sites/all/themes/rfi/js/spring.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(scr, s);
+    })();
+</script>
+<!-- end tracking code-->
+
+<!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript">
+    var addthis_config = {
+        ui_language: "ro",
+        pubid: "ra-54f05fbf26f37fb7"
+    }
+</script>
+<script type="text/javascript">
+    var addthisScript = document.createElement('script');
+    addthisScript.setAttribute('src', 'https://s7.addthis.com/js/300/addthis_widget.js#domready=1')
+    addthisScript.setAttribute('async', 'async')
+    document.body.appendChild(addthisScript)
+</script>
+    <div class="region region-page-bottom">
+    
+<!-- START Parse.ly Include: Standard -->
+<div id="parsely-root" style="display: none">
+  <div id="parsely-cfg" data-parsely-site="rfi.ro"></div>
+</div>
+<script>
+(function(s, p, d) {
+  var h=d.location.protocol, i=p+"-"+s,
+    e=d.getElementById(i), r=d.getElementById(p+"-root"),
+    u=h==="https:"?"d1z2jf7jlzjs58.cloudfront.net"
+    :"static."+p+".com";
+  if (e) return;
+  e = d.createElement(s); e.id = i; e.async = true;
+  e.src = h+"//"+u+"/p.js"; r.appendChild(e);
+})("script", "parsely", document);
+</script>
+<!-- END Parse.ly Include: Standard -->  </div>
+<script type="text/javascript" src="https://www.rfi.ro/sites/default/files/js/js_7Ukqb3ierdBEL0eowfOKzTkNu-Le97OPm-UqTS5NENU.js"></script>
+<script type="text/javascript" src="https://www.rfi.ro/sites/default/files/js/js_0lFBSyAsEhN7EqJf5lk14VzoHs3e9HPGooo80BCZS8Y.js"></script>
+<script type="text/javascript" src="https://www.rfi.ro/sites/default/files/js/js_B2uv6dkjoYobfQVyuXdchgrpnnx4oM0TkP_bDVf8Qrg.js"></script>
+  <!-- .zontera.com Body End Code  :BEGIN-->
+  <script type="text/javascript" src="//core.zontera.com/adv/b.js"></script>
+  <script type="text/javascript">(function(){var o,k;if(!window.ZTRANB)for(k in ZTRADS)
+  {o=document.getElementById("zc"+k.substring(1));if(o)o.style.display='none';}})()</script>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <div><script type="text/javascript">try{ZTRADW()}catch(r){}</script></div>
+  <!-- .zontera.com Body End Code  :END-->
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W9DW5JQ"
+                    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <!--  SATI - update RFIR-317 - START  -->
+  <script type="text/javascript">
+    cX.callQueue.push(['invoke', function () {
+        console.log(document.getElementById('AdSense').clientHeight);
+        let isAdBlockDetected = !document.getElementById('AdSense').clientHeight ? 'Yes' : 'No';
+        console.log('HasAdBlock : ' + isAdBlockDetected);
+        cX.setEventAttributes({origin: 'brt-adblock', persistedQueryId: 'fcadb0c22bec63a3e94af5a65644fc6b869880e0'});
+        cX.sendEvent('adBlockerDetection', {adBlockerDetected: isAdBlockDetected});
+        document.getElementById('status').innerHTML = isAdBlockDetected;
+    }]);
+  </script>
+  <!--  SATI - update RFIR-317 - END  -->
+  <button id="ot-sdk-btn" style="position: fixed; bottom: 0; left: 15px; border: 0; background-color: #e20000; color: white; padding: 7px 10px;" onclick="Optanon.ToggleInfoDisplay();">Modifică Setările</button>
+<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.eu01.nr-data.net","licenseKey":"NRJS-17411d228d0a84efb02","applicationID":"49942687","transactionName":"MhBSZQoZWhJRVBAMXQtacVIMEVsPH1MXOlcdAUJQCydaDlRSOxVTAhBvRxEdQw==","queueTime":0,"applicationTime":254,"atts":"HldRE0IDSRw=","errorBeacon":"bam.eu01.nr-data.net","agent":""}</script></body>
+</html>
+
+<!-- Build version: 2.2.0 -->

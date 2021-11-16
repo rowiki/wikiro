@@ -35,6 +35,7 @@ import javax.security.auth.login.LoginException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.wikibase.WikibaseException;
 import org.wikipedia.Wiki;
@@ -44,7 +45,12 @@ import org.wikipedia.ro.java.citation.data.Creator;
 import org.wikipedia.ro.java.citation.data.Zotero;
 import org.wikipedia.ro.utility.AbstractExecutable;
 
+import com.apicatalog.jsonld.JsonLdError;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class CitationCompleter extends AbstractExecutable
 {
@@ -276,16 +282,8 @@ public class CitationCompleter extends AbstractExecutable
             Elements articlePubTimeElems = doc.select("meta[property=article:published_time]");
             if (null != articlePubTimeElems && !articlePubTimeElems.isEmpty())
             {
-                try
-                {
-                    publicationDate = articlePubTimeElems.first().attr("content");
-                    OffsetDateTime publicationDateTime = OffsetDateTime.parse(publicationDate);
-                    publicationDate = DateTimeFormatter.ofPattern("uuuu-MM-dd").format(publicationDateTime);
-                }
-                catch (DateTimeParseException dpe)
-                {
-                    dpe.printStackTrace();
-                }
+                publicationDate = articlePubTimeElems.first().attr("content");
+                publicationDate = extractDate(publicationDate);
             }
             Elements articleAuthorElems = doc.select("meta[property=article:author]");
             if (null != articleAuthorElems && !articleAuthorElems.isEmpty())
@@ -327,6 +325,7 @@ public class CitationCompleter extends AbstractExecutable
             {
                 retParams.put("language", language);
             }
+            populateMapFromJsonLd(doc, retParams);
 
         }
         catch (IOException e)
@@ -335,6 +334,67 @@ public class CitationCompleter extends AbstractExecutable
             e.printStackTrace();
         }
         return retParams;
+    }
+
+    private String extractDate(String publicationDate)
+    {
+        try
+        {
+            OffsetDateTime publicationDateTime = OffsetDateTime.parse(publicationDate);
+            publicationDate = DateTimeFormatter.ofPattern("uuuu-MM-dd").format(publicationDateTime);
+        }
+        catch (DateTimeParseException dpe)
+        {
+            dpe.printStackTrace();
+        }
+        return publicationDate;
+    }
+
+    public void populateMapFromJsonLd(Document doc, Map<String, String> retParams)
+    {
+        Elements ldJsonElements = doc.select("script[type=application/ld+json]");
+        if (!ldJsonElements.isEmpty())
+        {
+            for (Element ldJsonEl : ldJsonElements)
+            {
+                JsonElement parsedLdJson = JsonParser.parseString(ldJsonEl.html());
+                Optional<JsonObject> ldJsonData = extractJsonObject(parsedLdJson);
+                
+                if (ldJsonData.isEmpty()) {
+                    continue;
+                }
+                JsonObject ldJsonObject = ldJsonData.get();
+                JsonElement dateElement = ldJsonObject.get("dateCreated");
+                if (dateElement.isJsonPrimitive()) {
+                    retParams.put("date", extractDate(dateElement.getAsString()));
+                }
+                JsonElement authorElement = ldJsonObject.get("author");
+                if (authorElement.isJsonObject()) {
+                    retParams.put("author1", authorElement.getAsJsonObject().get("name").getAsString());
+                }
+                JsonElement publisherElement = ldJsonObject.get("publisher");
+                if (publisherElement.isJsonObject()) {
+                    retParams.put("publisher", publisherElement.getAsJsonObject().get("name").getAsString());
+                }
+                JsonElement titleElement = ldJsonObject.get("headline");
+                if (titleElement.isJsonPrimitive()) {
+                    retParams.put("title", titleElement.getAsString());
+                }
+            }
+        }
+    }
+
+    private Optional<JsonObject> extractJsonObject(JsonElement parsedLdJson)
+    {
+        Optional<JsonObject> ldJsonData = Optional.empty();
+        if (parsedLdJson.isJsonArray()) {
+            JsonArray metadataJsonArray = parsedLdJson.getAsJsonArray();
+            JsonElement jsonElement = metadataJsonArray.get(0);
+            ldJsonData = Optional.ofNullable(jsonElement.getAsJsonObject());
+        } else if (parsedLdJson.isJsonObject()) {
+            ldJsonData = Optional.ofNullable(parsedLdJson.getAsJsonObject());
+        }
+        return ldJsonData;
     }
 
     private LocalDate findLastVisit() throws IOException
