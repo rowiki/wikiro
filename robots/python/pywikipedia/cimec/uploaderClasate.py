@@ -15,6 +15,7 @@ from uploader import LicenseLevel
 class ClasateUploader(uploader.CimecUploader):
 	def __init__(self, site):
 		super().__init__(site)
+		self.always = False
 
 	def find_author_data(self, author, offset = 0, filters={'P31':'Q5'}):
 		#["neidentificat", "necunoscut", "N/A"]
@@ -120,16 +121,21 @@ class ClasateUploader(uploader.CimecUploader):
 
 	def build_name(self, data):
 		title = data.get("Titlu") or data.get("Categorie")
+		title = title.replace("\r", "").replace("\n", " ").replace("\t", " ")
 		domain = "(" + data.get("Domeniu") + ")"
 		name = "_".join([title, domain, \
 			data["Clasare Ordin"], data["Clasare Dată"], 
 			data["Clasare categorie"], data["key"]])
-		name = name.replace("\r", "").replace("\n", " ")
-		return "File:" + name + ".jpg"
+		if len(name) > 210:
+			diff = len(name) - 210
+			new_title = title[:-diff] + "(...)"
+			name = name.replace(title, new_title)
+		name = "File:" + name + ".jpg"
+		return name
 
 	def get_local_path(self, data):
 		img_name = data["Foto"].split("/")[-1]
-		img_path = os.path.join("AIRM", img_name)
+		img_path = os.path.join("..", "Desktop", "clasate.cimec", img_name)
 		if os.path.exists(img_path):
 			return img_path
 		else:
@@ -139,7 +145,7 @@ class ClasateUploader(uploader.CimecUploader):
 		img_name = data["Foto"].split("/")[-1]
 		img_name = "File:"+img_name
 		text = "#redirect [[" + target.title() + "]]"
-		page = pywikibot.Page(wsite, img_name)
+		page = pywikibot.Page(self.wsite, img_name)
 		page.put(text, "Redirecționare către imagine Cimec")
 
 	def build_info_description(self, data):
@@ -247,6 +253,8 @@ class ClasateUploader(uploader.CimecUploader):
 			#if database[entry]["key"] != "638D1E677C3D42BD9ACEA527B4FD2481":
 			#	continue
 			for key in database[entry]:
+				if type(database[entry][key]) != str:
+					continue
 				database[entry][key] = self.replace_diacritics(database[entry][key])
 
 			# already uploaded, continue
@@ -277,13 +285,13 @@ class ClasateUploader(uploader.CimecUploader):
 			database[entry] = self.process_authors(database[entry])
 			filename = self.build_name(database[entry])
 			body = self.build_description_page(database[entry])
-			print(filename)
-			print(body)
+			pywikibot.output(filename)
+			pywikibot.output(body)
 			#continue
 
 			if filename[5:9].lower() in ["foto"]:
 				ignore = ['bad-prefix']
-				print("Ignoring invalid prefix for " + filename[:4])
+				pywikibot.output("Ignoring invalid prefix for " + filename[:4])
 			else:
 				ignore = False
 
@@ -298,7 +306,7 @@ class ClasateUploader(uploader.CimecUploader):
 				imagepage.text = body
 			except pywikibot.exceptions.InvalidTitleError as e:
 				#TODO: handle
-				print(e)
+				pywikibot.output(e)
 				continue
 
 			pywikibot.output('Uploading file to {0}...'.format(pywikibot.Site()))

@@ -39,6 +39,14 @@ class CimecUploader:
 		page = pywikibot.FilePage(filename)
 		return page.exists()
 
+	def replace_diacritics(self, text):
+		text = text.replace(u'ş', u'ș')
+		text = text.replace(u'ţ', u'ț')
+		text = text.replace(u'Ş', u'Ș')
+		text = text.replace(u'Ţ', u'Ț')
+		text = text.replace(u'ã', u'ă')
+		return text
+
 	def get_copyright_status(self, data):
 		"""
 		Gets the copyright status of the object itself and the image of
