@@ -95,11 +95,11 @@ def treat_sparql(dic):
     try:
         table_template = """|- class="{css}"
 | {siruta} 
-| class="uat-list link" | [[{name}]] 
-| class="uat-list image" | [[File:{file}|faracadru|200px]]<br/>{{{{Plain link|1={upload}|2=Încarcă imagine}}}}"""
+| class="uat-list link" | {name} 
+| class="uat-list image" data-sort-value="{sortkey}" | [[File:{file}|faracadru|150px]]<br/>{{{{Plain link|1={upload}|2=Încarcă imagine}}}}"""
         name = dic['itemLabel']
-        img = dic['image']
-        upperImg = dic['upperImage']
+        img = dic['images']
+        upperImg = dic['upperImages']
         siruta = dic['siruta']
         linkLabel = name + " (" + siruta + ")"
         county = dic.get('countyLabel')
@@ -121,6 +121,11 @@ def treat_sparql(dic):
                 'local': 0,
                 'missing': 0
             }
+        article = ""
+        if dic.get('page_title') != None:
+            article = "[[" + dic['page_title'] + "]]"
+        else:
+            article = name
         stats[county]['total'] += 1
         stats['total']['total'] += 1
         upload_link = '//commons.wikimedia.org/w/index.php?title=Special:UploadWizard&campaign=wlro&uselang=ro&id=' + siruta + '&categories=' + cats
@@ -130,9 +135,10 @@ def treat_sparql(dic):
             table.append(
 	        table_template.format(css=css,
                                       siruta=siruta,
-                                      name=(dic.get('page_title') or name),
+                                      name=article,
                                       file=imgl.title,
-                                      upload=upload_link))
+                                      upload=upload_link,
+				      sortkey=True))
             stats[county]['wikidata'] += 1
             stats['total']['wikidata'] += 1
             return
@@ -142,9 +148,10 @@ def treat_sparql(dic):
             table.append(
 	        table_template.format(css=css,
                                       siruta=siruta,
-                                      name=(dic.get('page_title') or name),
+                                      name=article,
                                       file=imgl.title,
-                                      upload=upload_link))
+                                      upload=upload_link,
+				      sortkey=True))
             stats[county]['wikidata'] += 1
             stats['total']['wikidata'] += 1
             return
@@ -167,9 +174,10 @@ def treat_sparql(dic):
                 table.append(
 	            table_template.format(css=css,
                                           siruta=siruta,
-                                          name=(dic.get('page_title') or name),
+                                          name=article,
                                           file=pi.title().replace('Fișier:',''),
-                                          upload=upload_link))
+                                          upload=upload_link,
+					  sortkey=True))
                 stats[county]['local'] += 1
                 stats['total']['local'] += 1
                 fix_local_image(pi, rp.data_item())
@@ -178,9 +186,10 @@ def treat_sparql(dic):
         table.append(
 	        table_template.format(css=css,
                                       siruta=siruta,
-                                      name=(dic.get('page_title') or name),
+                                      name=article,
                                       file="Replace this image - temple.JPG",
-                                      upload=upload_link))
+                                      upload=upload_link,
+				      sortkey=False))
         stats[county]['missing'] += 1
         stats['total']['missing'] += 1
     except Exception as e:
@@ -190,12 +199,14 @@ def treat_sparql(dic):
 
 def dump_table(table):
     text = """<templatestyles src="Wikipedia:Wiki Loves România/styles.css" />
-Pentru a încărca o imagine, faceți clic pe legătura de sub imagine  și veți fi dus la asistentul de încărcare de unde puteți încărca noi imagini cu localitatea respectivă. Puteți încărca imagini chiar dacă există deja o imagine pentru localitatea respectivă.
+Pentru a încărca o imagine, selectați județul în care se află localitatea, apoi căutați-o după nume sau cod [[SIRUTA]] și apăsați pe legătura "Încarcă imagine".
+* Puteți încărca imagini chiar dacă există deja o imagine pentru localitatea respectivă. 
+* Pentru a găsi localitățile fără imagini, sortați coloana "Imagine" de la triunghiurile din partea dreaptă. Liniile fără imagine vor fi grupate împreună.
     
 {| class="wikitable sortable center"
 ! Cod SIRUTA
 ! Nume
-! class="unsortable" | Imagine
+! Imagine
 """
     for line in table:
         text += line + "\n"
@@ -280,7 +291,7 @@ def main():
     global gallery
     global table
     gallery = []
-    main_text = """{| class=\"wikitable sortable\"
+    main_text = """{| id=\"tabel_imagini\" class=\"wikitable sortable\"
 ! Județ
 ! Total
 ! Wikidata
@@ -293,7 +304,7 @@ def main():
     repo = pywikibot.Site().data_repository()
     dependencies = {'endpoint': None, 'entity_url': None, 'repo': repo}
     query_object = sparql.SparqlQuery(**dependencies)
-    query = """SELECT ?item ?itemLabel ?mayor ?siruta ?image ?upperImage ?page_title ?countyLabel ?coord ?commons
+    query = """SELECT ?item ?itemLabel ?mayor ?siruta (SAMPLE(?image) AS ?images) (SAMPLE(?upperImage) AS ?upperImages) ?page_title ?countyLabel ?coord ?commons
     WHERE
     {
       ?item wdt:P843 ?siruta.
@@ -312,7 +323,8 @@ def main():
                             schema:isPartOf <https://ro.wikipedia.org/>;  schema:name ?page_title  . }
       SERVICE wikibase:label { bd:serviceParam wikibase:language 'ro'. }
    }
-   ORDER BY ?countyLabel ?siruta ?itemLabel"""
+   GROUP BY ?item ?itemLabel ?mayor ?siruta ?page_title ?countyLabel ?coord ?commons
+   ORDER BY ?countyLabel xsd:integer(?siruta) ?itemLabel"""
     data = query_object.select(query)
     if not data:
         return
@@ -349,7 +361,12 @@ def main():
         main_text += generate_stats(last_county)
         main_text += generate_stats('total') + "\n|}"
         art = pywikibot.Page(pywikibot.Site('ro', 'wikipedia'), 'Wikipedia:Wiki Loves România#Situația_la_zi')
-        #art.put(main_text, "Actualizare statistici")
+        text = art.get()
+        idx_begin = text.find("{| id=\"tabel_imagini\"")
+        idx_end = text.find("|}", idx_begin) + 2
+        to_replace = text[idx_begin:idx_end]
+        text = text.replace(to_replace, main_text)
+        art.put(text, "Actualizare statistici")
         dump_mapillary_data()
     except Exception as e:
         print(e)
