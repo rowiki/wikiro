@@ -150,7 +150,7 @@ def processDatabase(countryconfig, dbname="lmi"):
 		rowTemplate = '%s:%s' % (site.namespace(10), countryconfig.get('rowTemplate'))
 	rowTemplate = pywikibot.Page(site, rowTemplate)
 
-	transGen = pagegenerators.ReferringPageGenerator(rowTemplate, onlyTemplateInclusion=True)
+	transGen = rowTemplate.getReferences()
 	filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen, countryconfig.get('listNamespaces'))
 	pregenerator = pagegenerators.PreloadingGenerator(filteredGen)
 
@@ -164,13 +164,13 @@ def processDatabase(countryconfig, dbname="lmi"):
 			continue
 		if page.exists() and not page.isRedirectPage():
 			# Do some checking
-			monuments_counts[page.title()] = processText(page.permalink(), countryconfig, page.get(), page.title(True))
+			monuments_counts[page.title()] = processText(page.permalink(), countryconfig, page.get(), page.title(with_ns=True))
 
 	writeOutput("_".join([countryconfig.get('lang'), dbname, "db.json"]))
 
 def update(database):
 	if database:
-		lang = pywikibot.Site().language()
+		lang = pywikibot.Site().lang
 		if not getCfg(lang, database):
 			pywikibot.output('I have no config for database "%s" in language "%s"' % (database, lang))
 			return False
@@ -242,9 +242,9 @@ searchbuttonlabel=Căutare în liste
 		str(counties[prev_county]["count"]) + "}}\n|-\n"
 	section = section.replace("județul București", "București")
 	section += "|}\n\n"
-	page = pywikibot.Page(pywikibot.getSite(), "Lista_monumentelor_istorice_din_România#Lista_monumentelor_pe_jude.C8.9B")
+	page = pywikibot.Page(pywikibot.Site(), "Lista_monumentelor_istorice_din_România#Lista_monumentelor_pe_jude.C8.9B")
 	page.get()
-	pywikibot.getSite().editpage(page,text=section, section=1)
+	pywikibot.Site().editpage(page,text=section, section=1)
 	pywikibot.output("Saved the monument counts per county")
 	monuments_counts = {}
 	print(total_count)
@@ -258,7 +258,7 @@ def main():
 	database = None
 	textfile = ''
 
-	for arg in pywikibot.handleArgs():
+	for arg in pywikibot.handle_args():
 		if arg.startswith('-db:'):
 			database = arg [len('-db:'):]
 			

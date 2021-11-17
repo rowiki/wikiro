@@ -688,7 +688,7 @@ def main():
 	aggresive = False
 	global _changes, _db, _differentCoords
 	
-	for arg in pywikibot.handleArgs():
+	for arg in pywikibot.handle_args():
 		if arg.startswith('-import:'):
 			otherFile = arg [len('-import:'):]
 		if arg.startswith('-addRan'):

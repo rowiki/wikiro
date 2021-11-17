@@ -63,6 +63,7 @@ import re
 import pywikibot
 from pywikibot import pagegenerators
 from pywikibot import config as user
+from pywikibot.tools import filter_unique
 
 sys.path.append('wikiro/robots/python/pywikipedia')
 import strainu_functions as strainu
@@ -115,9 +116,9 @@ def isCoor( ns, ew ):
 def parseGeohackLinks(page, conf):
 	#trace = Trace(sys._getframe().f_code.co_name)
 	output = pywikibot.comms.http.request(page.site, "/w/api.php?action=parse&format=json&page=" +
-			page.title(asUrl=True) + "&prop=externallinks&uselang=ro")
+			page.title(as_url=True) + "&prop=externallinks&uselang=ro")
 	#pywikibot.output("<= Retrieved external links")
-	linksdb = json.loads(output)
+	linksdb = output.json()
 	#print linksdb
 	try:
 		title = linksdb["parse"]["title"]
@@ -535,7 +536,7 @@ def main():
 	global qualityRegexp
 	global _db
 
-	for arg in pywikibot.handleArgs():
+	for arg in pywikibot.handle_args():
 		if arg.startswith('-lang:'):
 			lang = arg [len('-lang:'):]
 			user.mylang = lang
@@ -585,10 +586,9 @@ def main():
 		for template in langOpt.get(_db).get('codeTemplate'):
 			rowTemplate = pywikibot.Page(site, '%s:%s' % (site.namespace(10), \
 								template))
-			transGen.append(pagegenerators.ReferringPageGenerator(rowTemplate,
-									onlyTemplateInclusion=True, content=False))
+			transGen.append(rowTemplate.getReferences(follow_redirects=False,content=False))
 		combinedGen = pagegenerators.CombinedPageGenerator(transGen)
-		combinedGen = pagegenerators.DuplicateFilterPageGenerator(combinedGen, key=hash)
+		combinedGen = filter_unique(combinedGen, key=hash)
 		#combinedGen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(site, u"Categorie:Imagini încărcate în cadrul Wiki Loves Monuments 2020"))
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(combinedGen,
 									[namespace], site)
