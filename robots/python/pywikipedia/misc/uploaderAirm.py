@@ -5,7 +5,7 @@ import os
 import pywikibot
 import re
 import time
-import uploader
+import wikiro.robots.python.pywikipedia.cimec.uploader as uploader
 
 def custom_sort(filename):
 	print(filename)
@@ -68,8 +68,8 @@ class AIRMUploader:
 		return (LicenseLevel.fop, LicenseLevel.ccbysa4)
 
 	def build_name(self, data, i, fbid):
-		#y,m,d = data["img"][i]
-		y,m,d = data["img"]
+		y,m,d = data["img"][i]
+		#y,m,d = data["img"]
 		# yyyy-mm or yyyy-mm-dd
 		if m != '':
 			y = y[:4]
@@ -90,15 +90,15 @@ class AIRMUploader:
 		pass
 
 	def build_info_description(self, data):
-		#return "{{ro|[[:ro:%s|%s]]}} {{Monument ocrotit de stat|%s}}" % (data["nume"], data["nume"], data["cod"])
-		return "{{en|%s}} {{Monument ocrotit de stat|%s}}" % ( data["nume"], data["cod"])
+		return "{{ro|[[:ro:%s|%s]]}} {{Monument ocrotit de stat|%s}}" % (data["nume"], data["nume"], data["cod"])
+		#return "{{en|%s}} {{Monument ocrotit de stat|%s}}" % ( data["nume"], data["cod"])
 
 	def build_info_source(self, data):
 		return data["fb"]
 
 	def build_info_date(self, data, idx):
-		#y,m,d = data["img"][idx]
-		y,m,d = data["img"]
+		y,m,d = data["img"][idx]
+		#y,m,d = data["img"]
 		print(y,m,d, y[0].isdigit())
 		# yyyy-mm or yyyy-mm-dd
 		if y[0].isdigit():
@@ -188,12 +188,12 @@ class AIRMUploader:
 
 			e["imgno"] = 0
 			e["img"] = {}
-			#dates = re.findall("(NA|anii [0-9]{4}|[0-9]{4}-?([0-9]{2})?-?([0-9]{2})?)\s\(([0-9]{1,3})\)", 
-			#			entry)
-			#for date, month, day, count in dates:
-			#	for i in range(e["imgno"], e["imgno"] + int(count)):
-			#		e["img"][i+1] = [date, month, day]
-			#	e["imgno"] += int(count)
+			dates = re.findall("(NA|anii [0-9]{4}|[0-9]{4}-?([0-9]{2})?-?([0-9]{2})?)\s\(([0-9]{1,3})\)", 
+						entry)
+			for date, month, day, count in dates:
+				for i in range(e["imgno"], e["imgno"] + int(count)):
+					e["img"][i+1] = [date, month, day]
+				e["imgno"] += int(count)
 
 			data.append(e)
 		print(data)
@@ -205,7 +205,7 @@ class AIRMUploader:
 		Upload images for the whole database
 		"""
 		#pages = [u"Chișinău", u"Mansions", u"Churches", u"Miscellaneous"]
-		pages = [u"Collections"]
+		pages = [u"Miscellaneous"]
 		for entry in pages:
 			upload_all = False
 			lst = self.parse_page(entry)
@@ -225,36 +225,38 @@ class AIRMUploader:
 					exit(6)
 
 				idx = 0
-				#fls = len([name for name in os.listdir(folder_name)])
-				#if fls != e["imgno"]:
-				#	print('Folder', folder_name, 'Expected files',e["imgno"], 'Actual', fls)
-				#	#exit(7)
-				#	continue
+				fls = len([name for name in os.listdir(folder_name)])
+				if fls != e["imgno"]:
+					print('Folder', folder_name, 'Expected files',e["imgno"], 'Actual', fls)
+					#exit(7)
+					continue
 				upload_folder = upload_all
 				files = [y for y in os.listdir(folder_name)]
 				files.sort(key=custom_sort)
 				print(files)
 				for f1 in files:
 					print('f1', f1)
-					f2 = os.path.join(folder_name, f1)
-					files2 = [y for y in os.listdir(f2)]
-					files2.sort(key=custom_sort)
-					for f in files2:
-						date = f1.split("-")
-						if len(date) < 3:
-							for i in range(3-len(date)):
-								date.append('')
-						else:
-							date[0] = f1
-						print('date', date)
-						e["img"] = date
+					if f1: # just so the indent matches
+					#f2 = os.path.join(folder_name, f1)
+					#files2 = [y for y in os.listdir(f2)]
+					#files2.sort(key=custom_sort)
+					#for f in files2:
+						#date = f1.split("-")
+						#if len(date) < 3:
+						#	for i in range(3-len(date)):
+						#		date.append('')
+						#else:
+						#	date[0] = f1
+						#print('date', date)
+						#e["img"] = date
+						f=f1
 						fbid = [w for w in f[:-4].split('_') if w.isdigit()]
 						if len(fbid) != 1:
 							print('fbid', fbid, 'from f', f)
 							exit(8)
 						fbid = fbid[0]
-						#f = os.path.join(folder_name, f)
-						f = os.path.join(f2, f)
+						f = os.path.join(folder_name, f)
+						#f = os.path.join(f2, f)
 						idx += 1
 						filename = self.build_name(e, idx, fbid)
 						body = self.build_description_page(e, idx)
