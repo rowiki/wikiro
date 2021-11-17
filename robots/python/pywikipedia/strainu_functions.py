@@ -381,11 +381,11 @@ def linkedImages(page):
                     pywikibot.output("Page %s contains invalid link to [[%s]]."
                                  % (page.title(), title))
                     continue
-                if not page2.isImage():
+                if not page2.is_filepage():
                     continue
-                if page2.title(withSection=False) and page2 not in result:
+                if page2.title(with_section=False) and page2 not in result:
                     result.append(page2)
-        except pywikibot.NoUsername:
+        except pywikibot.exceptions.NoUsernameException:
             continue
         except:
             raise
