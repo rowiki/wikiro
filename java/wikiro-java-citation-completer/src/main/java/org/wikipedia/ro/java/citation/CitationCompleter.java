@@ -45,7 +45,6 @@ import org.wikipedia.ro.java.citation.data.Creator;
 import org.wikipedia.ro.java.citation.data.Zotero;
 import org.wikipedia.ro.utility.AbstractExecutable;
 
-import com.apicatalog.jsonld.JsonLdError;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
