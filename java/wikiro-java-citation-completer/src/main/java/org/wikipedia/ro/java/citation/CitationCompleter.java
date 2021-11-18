@@ -101,6 +101,7 @@ public class CitationCompleter extends AbstractExecutable
             while (refUrlMatcher.find())
             {
                 String url = refUrlMatcher.group(1);
+                System.out.println("Found bare URL ref: " + url);
 
                 Map<String, String> citationFromPage = completeCitationFromUrl(url);
 
@@ -357,42 +358,59 @@ public class CitationCompleter extends AbstractExecutable
         {
             for (Element ldJsonEl : ldJsonElements)
             {
-                JsonElement parsedLdJson = JsonParser.parseString(ldJsonEl.html());
-                Optional<JsonObject> ldJsonData = extractJsonObject(parsedLdJson);
-                
-                if (ldJsonData.isEmpty()) {
+                String ldJson = ldJsonEl.html();
+                System.out.println("Found json:" + ldJson);
+                Optional<JsonObject> ldJsonData = extractJsonObject(ldJson);
+
+                if (ldJsonData.isEmpty())
+                {
                     continue;
                 }
                 JsonObject ldJsonObject = ldJsonData.get();
                 JsonElement dateElement = ldJsonObject.get("dateCreated");
-                if (null != dateElement && dateElement.isJsonPrimitive()) {
+                if (null != dateElement && dateElement.isJsonPrimitive())
+                {
                     retParams.put("date", extractDate(dateElement.getAsString()));
                 }
                 JsonElement authorElement = ldJsonObject.get("author");
-                if (null != authorElement && authorElement.isJsonObject()) {
+                if (null != authorElement && authorElement.isJsonObject())
+                {
                     retParams.put("author1", authorElement.getAsJsonObject().get("name").getAsString());
                 }
                 JsonElement publisherElement = ldJsonObject.get("publisher");
-                if (null != publisherElement && publisherElement.isJsonObject()) {
+                if (null != publisherElement && publisherElement.isJsonObject())
+                {
                     retParams.put("publisher", publisherElement.getAsJsonObject().get("name").getAsString());
                 }
                 JsonElement titleElement = ldJsonObject.get("headline");
-                if (null != titleElement && titleElement.isJsonPrimitive()) {
+                if (null != titleElement && titleElement.isJsonPrimitive())
+                {
                     retParams.put("title", titleElement.getAsString());
                 }
             }
         }
     }
 
-    private Optional<JsonObject> extractJsonObject(JsonElement parsedLdJson)
+    private Optional<JsonObject> extractJsonObject(String ldJson)
     {
         Optional<JsonObject> ldJsonData = Optional.empty();
-        if (parsedLdJson.isJsonArray()) {
-            JsonArray metadataJsonArray = parsedLdJson.getAsJsonArray();
-            JsonElement jsonElement = metadataJsonArray.get(0);
-            ldJsonData = Optional.ofNullable(jsonElement.getAsJsonObject());
-        } else if (parsedLdJson.isJsonObject()) {
-            ldJsonData = Optional.ofNullable(parsedLdJson.getAsJsonObject());
+        try
+        {
+            JsonElement parsedLdJson = JsonParser.parseString(ldJson);
+            if (parsedLdJson.isJsonArray())
+            {
+                JsonArray metadataJsonArray = parsedLdJson.getAsJsonArray();
+                JsonElement jsonElement = metadataJsonArray.get(0);
+                ldJsonData = Optional.ofNullable(jsonElement.getAsJsonObject());
+            }
+            else if (parsedLdJson.isJsonObject())
+            {
+                ldJsonData = Optional.ofNullable(parsedLdJson.getAsJsonObject());
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
         return ldJsonData;
     }
