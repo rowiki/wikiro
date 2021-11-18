@@ -374,7 +374,11 @@ public class CitationCompleter extends AbstractExecutable
                 JsonElement authorElement = ldJsonObject.get("author");
                 if (null != authorElement && authorElement.isJsonObject())
                 {
-                    retParams.put("author1", authorElement.getAsJsonObject().get("name").getAsString());
+                    Optional<String> authorName = Optional.ofNullable(authorElement.getAsJsonObject().get("name")).map(JsonElement::getAsString);
+                    if (authorName.isPresent())
+                    {
+                        retParams.put("author1", authorName.get());
+                    }
                 }
                 JsonElement publisherElement = ldJsonObject.get("publisher");
                 if (null != publisherElement && publisherElement.isJsonObject())
