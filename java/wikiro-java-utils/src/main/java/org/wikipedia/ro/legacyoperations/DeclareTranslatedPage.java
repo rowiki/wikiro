@@ -47,10 +47,12 @@ public class DeclareTranslatedPage implements WikiOperation {
         status = new String[] { "status.reading.talkpage" };
         String talkPageText = "";
         try {
-            talkPageText = trim(defaultString(targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("")));
+            if (targetWiki.exists(List.of(article))[0]) {
+                talkPageText = trim(defaultString(targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("")));
+            }
         } catch (FileNotFoundException e) {
             System.out.println("Page not found: " + article + " - " + e.getMessage());
-        }
+        } 
         boolean small = false;
         if (talkPageText.length() > 0) {
             small = true;
