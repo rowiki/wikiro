@@ -113,7 +113,8 @@ public class CitationCompleter extends AbstractExecutable
                 {
                     citationParams.put("url", url);
                     String assembledCitation = assembleCitation(citationParams);
-                    refUrlMatcher.appendReplacement(sb, String.format("<ref>%s</ref>", assembledCitation.replaceAll("\\\\", "\\\\").replaceAll("\\$", "\\$")));
+                    System.out.printf("Found ref: %s%n", assembledCitation);
+                    refUrlMatcher.appendReplacement(sb, String.format("<ref>%s</ref>", Matcher.quoteReplacement(assembledCitation)));
                     citationsChanged++;
                 }
             }
@@ -383,7 +384,7 @@ public class CitationCompleter extends AbstractExecutable
                 JsonElement publisherElement = ldJsonObject.get("publisher");
                 if (null != publisherElement && publisherElement.isJsonObject())
                 {
-                    retParams.put("publisher", publisherElement.getAsJsonObject().get("name").getAsString());
+                    retParams.put("publisher", Optional.ofNullable(publisherElement.getAsJsonObject().get("name")).map(JsonElement::getAsString).orElse(null));
                 }
                 JsonElement titleElement = ldJsonObject.get("headline");
                 if (null != titleElement && titleElement.isJsonPrimitive())
