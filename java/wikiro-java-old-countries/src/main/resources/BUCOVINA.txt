@@ -1,0 +1,14 @@
+//JUDEȚE
+Q181209 (Suceava)
+//COMUNE
+
+//LOCALITĂȚI
+Q12148201 (Rogojești BT)
+Q2284218 (Cândești BT)
+Q3761128 (Podu Coșnei, Coșna SV)
+Q12148771 (Românești, Coșna SV)
+Q6271035 (Valea Bancului, Coșna SV)
+Q2604493 (Cornu Luncii, Cornu Luncii SV)
+Q12081684 (Băișești, Cornu Luncii SV)
+Q12084842 (Brăiești, Cornu Luncii SV)
+Q12171150 (Șaru Bucovinei, Șaru Dornei SV)
