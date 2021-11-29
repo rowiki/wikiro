@@ -1,0 +1,16 @@
+#Orașe, comune
+Q570213 (Turnu Măgurele TR)
+Q12724903 (Lița TR)
+Q16427610 (Ciuperceni TR)
+Q202351 (Giurgiu GR)
+Q5092240 (Malu GR)
+Q5116912 (Oinacu GR)
+Q5091784 (Slobozia GR)
+Q5092161 (Gostinu GR)
+
+#Localități
+Q12081716 (Bălanu GR)
+Q12098920 (Ghizdaru GR)
+Q12093619 (Vieru GR)
+Q12170133 (Cetatea GR)
+Q12147567 (Remuș GR)
