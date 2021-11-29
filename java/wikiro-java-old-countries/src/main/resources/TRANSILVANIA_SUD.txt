@@ -1,0 +1,45 @@
+//JUDEȚE
+Q45868 (Alba)
+Q182614 (Brașov)
+Q191071 (Hunedoara)
+Q184797 (Sibiu)
+
+//COMUNE, ORAȘE
+Q5065411 (Silivașu de Câmpie BN)
+Q16426308 (Dobârlău CV)
+Q16426315 (Hăghig CV)
+Q292769 (Întorsura Buzăului CV)
+Q5064539 (Sita Buzăului CV)
+Q5052812 (Dârjiu HR)
+Q16426709 (Secuieni HR)
+
+Q5064259 (Nadeș MS)
+Q5064277 (Zagăr MS)
+Q5065023 (Coroisânmartin MS)
+Q5057545 (Suplac MS)
+Q5057229 (Iclănzel MS)
+Q5057457 (Grebenișu de Câmpie MS)
+Q12080772 (Band MS) - excepții la Transilvania de Sud
+Q5059255 (Pogăceaua MS)
+
+//LOCALITĂȚI
+Q820765 (Țagu, Budești BN)
+Q820734 (Țăgșoru, Budești BN)
+Q755208 (Fântânița, Miceștii de Câmpie BN)
+Q536832 (Visuia, Miceștii de Câmpie BN)
+Q302194 (Araci, Vâlcele CV)
+Q830618 (Ariușd, Vâlcele CV)
+Q594197 (Dobolii de Jos, Ilieni CV)
+Q1125158 (Băcel, Chichiș CV)
+Q580096 (Uilac, Săcel HR)
+Q221991 (Jacodu, Vețca MS)
+Q250633 (Senereuș, Bălăușeri MS)
+Q575840 (Filitelnic, Bălăușeri MS)
+Q726043 (Cerghid, Ungheni MS)
+Q726318 (Cerghizel, Ungheni MS)
+Q1246568 (Recea, Ungheni MS)
+Q3893093 (Șăușa, Ungheni MS)
+Q714474 (Vidrasău, Ungheni MS)
+Q784942 (Valea Sânmărtinului, Râciu MS)
+Q955087 (Ulieș, Râciu MS)
+

@@ -1,0 +1,21 @@
+//JUDEȚE
+Q181513 (Bistrița-Năsăud)
+Q182624 (Cluj)
+Q188959 (Covasna)
+Q190702 (Harghita)
+Q188813 (Maramureș)
+Q190711 (Mureș)
+// Q165459 (Satu Mare) - la Crișana Nord ...
+Q190690 (Sălaj)
+
+//COMUNE, ORAȘE
+Q16427480 (Coșna SV)
+
+//LOCALITĂȚI
+Q830462 (Drăușeni, Cața BV)
+Q714028 (Ionești, Cața BV)
+Q651529 (Jimbor, Homorod BV)
+Q669297 (Petecu, Ulieș HR)
+Q1096385 (Band, Band MS)
+Q714347 (Țiptelnic, Band MS)
+Q12109966 (Cârlibaba Nouă, Cârlibaba SV)
