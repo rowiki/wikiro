@@ -1,0 +1,21 @@
+//COMUNE, ORAȘE
+Q188478 (Brăila)
+Q13542083 (Cazasu)
+Q2716329 (Chiscani)
+Q3697460 (Frecăței)
+Q12724818 (Gropeni)
+Q2716399 (Mărașu)
+Q4682631 (Tichilești)
+Q5087569 (Tufești)
+Q2535661 (Ulmu)
+Q8272840 (Unirea)
+Q8272907 (Vădeni)
+Q13570140 (Viziru)
+
+//LOCALITĂȚI
+Q12162255 (Traian)
+Q12148689 (Romanu)
+Q12153368 (Scorțaru Vechi)
+Q12159361 (Silistraru)
+Q2780040 (Siliștea)
+Q12162753 (Tudor Vladimirescu)
