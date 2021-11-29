@@ -1,0 +1,9 @@
+//JUDEȚE -- regulă generală
+Q191065 (Dolj)
+Q190406 (Gorj)
+Q191717 (Mehedinți)
+Q188945 (Olt)
+Q186838 (Vâlcea)
+
+//COMUNE -- excepție de la regula județului enunțată la alte regiuni
+Q12724880 (Islaz TR)
