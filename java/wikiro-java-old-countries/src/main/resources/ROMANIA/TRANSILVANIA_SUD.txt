@@ -5,6 +5,7 @@ Q191071 (Hunedoara)
 Q184797 (Sibiu)
 
 //COMUNE, ORAȘE
+// -- frontiera
 Q5065411 (Silivașu de Câmpie BN)
 Q16426308 (Dobârlău CV)
 Q16426315 (Hăghig CV)
@@ -13,16 +14,29 @@ Q5064539 (Sita Buzăului CV)
 Q5052812 (Dârjiu HR)
 Q16426709 (Secuieni HR)
 
+Q16426166 (Cătina CJ) - excepții la Transilvania de Nord
+Q12724941 (Mociu CJ)
+Q16426161 (Căianu CJ) - excepții la Transilvania de Nord
+Q16426185 (Cojocna CJ) - excepții la Transilvania de Nord
+Q16426195 (Feleacu CJ)
+Q16426178 (Ciurila CJ)
+Q12725199 (Săvădisla CJ)
+Q12724716 (Călățele CJ)
+Q13580249 (Săcuieu CJ)
+
 Q5064259 (Nadeș MS)
 Q5064277 (Zagăr MS)
 Q5065023 (Coroisânmartin MS)
 Q5057545 (Suplac MS)
 Q5057229 (Iclănzel MS)
 Q5057457 (Grebenișu de Câmpie MS)
-Q12080772 (Band MS) - excepții la Transilvania de Sud
+Q12080772 (Band MS) - excepții la Transilvania de Nord
 Q5059255 (Pogăceaua MS)
 
+// -- restul
+
 //LOCALITĂȚI
+// -- frontiera
 Q820765 (Țagu, Budești BN)
 Q820734 (Țăgșoru, Budești BN)
 Q755208 (Fântânița, Miceștii de Câmpie BN)
@@ -32,6 +46,17 @@ Q830618 (Ariușd, Vâlcele CV)
 Q594197 (Dobolii de Jos, Ilieni CV)
 Q1125158 (Băcel, Chichiș CV)
 Q580096 (Uilac, Săcel HR)
+
+Q1029287 (Geaca, Geaca CJ)
+Q3889979 (Legii, Geaca CJ)
+Q655555 (Someșu Cald, Gilău CJ)
+Q280270 (Someșu Rece, Gilău CJ)
+Q724645 (Dângău Mic, Căpușu Mare CJ)
+Q720656 (Dângău Mare, Căpușu Mare CJ)
+Q730739 (Bica, Mănăstireni CJ)
+Q1077544 (Mănăstireni, Mănăstireni CJ)
+Q724052 (Mănășturu Românesc, Mănăstireni CJ)
+
 Q221991 (Jacodu, Vețca MS)
 Q250633 (Senereuș, Bălăușeri MS)
 Q575840 (Filitelnic, Bălăușeri MS)
@@ -42,4 +67,4 @@ Q3893093 (Șăușa, Ungheni MS)
 Q714474 (Vidrasău, Ungheni MS)
 Q784942 (Valea Sânmărtinului, Râciu MS)
 Q955087 (Ulieș, Râciu MS)
-
+// -- restul

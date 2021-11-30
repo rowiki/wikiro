@@ -9,9 +9,13 @@ Q190711 (Mureș)
 Q190690 (Sălaj)
 
 //COMUNE, ORAȘE
+// -- frontiera
 Q16427480 (Coșna SV)
 
+// -- restul
+
 //LOCALITĂȚI
+// -- frontiera
 Q830462 (Drăușeni, Cața BV)
 Q714028 (Ionești, Cața BV)
 Q651529 (Jimbor, Homorod BV)
@@ -19,3 +23,11 @@ Q669297 (Petecu, Ulieș HR)
 Q1096385 (Band, Band MS)
 Q714347 (Țiptelnic, Band MS)
 Q12109966 (Cârlibaba Nouă, Cârlibaba SV)
+Q753473 (Copru, Cătina CJ)
+Q753500 (Feldioara, Cătina CJ)
+Q752200 (Bărăi, Căianu CJ)
+Q722493 (Vaida-Cămăraș, Căianu CJ)
+Q267692 (Cojocna, Cojocna CJ)
+Q721236 (Cara, Cojocna CJ)
+
+// -- restul
