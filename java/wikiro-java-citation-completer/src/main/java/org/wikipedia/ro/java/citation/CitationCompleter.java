@@ -375,7 +375,10 @@ public class CitationCompleter extends AbstractExecutable
                 JsonElement authorElement = ldJsonObject.get("author");
                 if (null != authorElement && authorElement.isJsonObject())
                 {
-                    Optional<String> authorName = Optional.ofNullable(authorElement.getAsJsonObject()).map(x -> x.get("name")).map(JsonElement::getAsString);
+                    Optional<String> authorName = Optional.ofNullable(authorElement.getAsJsonObject())
+                        .map(x -> x.get("name"))
+                        .filter(x -> !x.isJsonNull())
+                        .map(JsonElement::getAsString);
                     if (authorName.isPresent())
                     {
                         retParams.put("author1", authorName.get());
@@ -384,7 +387,12 @@ public class CitationCompleter extends AbstractExecutable
                 JsonElement publisherElement = ldJsonObject.get("publisher");
                 if (null != publisherElement && publisherElement.isJsonObject())
                 {
-                    retParams.put("publisher", Optional.ofNullable(publisherElement.getAsJsonObject().get("name")).map(JsonElement::getAsString).orElse(null));
+                    retParams.put("publisher",
+                        Optional.ofNullable(publisherElement.getAsJsonObject())
+                            .map(x -> x.get("name"))
+                            .filter(x -> !x.isJsonNull())
+                            .map(JsonElement::getAsString)
+                            .orElse(null));
                 }
                 JsonElement titleElement = ldJsonObject.get("headline");
                 if (null != titleElement && titleElement.isJsonPrimitive())
