@@ -15,8 +15,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.wikibase.WikibaseException;
 import org.wikipedia.Wiki;
 import org.wikipedia.Wiki.RequestHelper;
@@ -26,8 +29,16 @@ import org.wikipedia.ro.legacyoperations.ReplaceCrossLinkWithIll;
 import org.wikipedia.ro.model.WikiTemplate;
 import org.wikipedia.ro.utility.AbstractExecutable;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.ConsoleAppender;
+
 public class TranslationManager extends AbstractExecutable
 {
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(TranslationManager.class);
     Pattern commentPattern = Pattern.compile("\\[\\[:(\\w+):Special:Redirect/revision/(\\d+)\\|([^\\]]+)\\]\\]");
     Pattern translPagePattern = Pattern.compile("\\{\\{\\s*[Pp]agină[_\\s]tradusă");
 
@@ -70,8 +81,7 @@ public class TranslationManager extends AbstractExecutable
                 }
                 catch (Throwable e)
                 {
-                    System.err.printf("Failed to replace cross-links and red links with Ill-wd in page %s%n", newPage);
-                    e.printStackTrace();
+                    LOG.error("Failed to replace cross-links and red links with Ill-wd in page {}", newPage, e);
                 }
                 String talkPage = wiki.getTalkPage(newPage);
                 if (wiki.exists(List.of(talkPage))[0])
@@ -119,8 +129,7 @@ public class TranslationManager extends AbstractExecutable
                 }
                 catch (Throwable e)
                 {
-                    System.err.printf("Failed to cleanup redundant Ill templates in page %s that links to %s%n", eachNewPageLink, eachNewPageTitle);
-                    e.printStackTrace();
+                    LOG.error("Failed to cleanup redundant Ill templates in page {} that links to {}", eachNewPageLink, eachNewPageTitle, e);
                 }
             }
         }
@@ -128,6 +137,47 @@ public class TranslationManager extends AbstractExecutable
         wiki.edit("Utilizator:Andrebot/dată-vizitare-pagini-noi", now.toString(), "Robot: actualizare dată vizitare pagini noi");
 
     }
+    
+    
+
+    @Override
+    protected void init() throws FailedLoginException, IOException
+    {
+        initLogging();
+        super.init();
+    }
+
+    private void initLogging()
+    {
+        LoggerContext logbackContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        
+        PatternLayoutEncoder ple = new PatternLayoutEncoder();
+
+        ple.setPattern("%date %level %logger{10} [%file:%line] %msg%n");
+        ple.setContext(logbackContext);
+        ple.start();
+
+        ConsoleAppender<ILoggingEvent> appender = new ConsoleAppender<>();
+        appender.setContext(logbackContext);
+        appender.setName("console");
+        appender.setEncoder(ple);
+        appender.start();
+        
+        Logger roWikiLog = logbackContext.getLogger("org.wikipedia.ro");
+        roWikiLog.setAdditive(false);
+        roWikiLog.setLevel(Level.INFO);
+        roWikiLog.addAppender(appender);
+        
+        Logger wikiLog =  logbackContext.getLogger("main");
+        wikiLog.setAdditive(false);
+        wikiLog.setLevel(Level.WARN);
+        wikiLog.addAppender(appender);
+
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();        
+    }
+
+
 
     private LocalDate findLastVisit() throws IOException
     {
