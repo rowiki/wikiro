@@ -12,7 +12,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Assert;
 import org.junit.Test;
-import org.wikipedia.ro.java.citation.CitationCompleter;
+import org.wikipedia.ro.java.citation.handlers.DefaultCitationHandler;
 
 public class TestJsonLdCitation
 {
@@ -22,7 +22,7 @@ public class TestJsonLdCitation
         Document document = Jsoup.parse(new File(rfiHtmlFileURL.toURI()), StandardCharsets.UTF_8.toString());
         
         Map<String, String> params = new HashMap<>();
-        new CitationCompleter().populateMapFromJsonLd(document, params);
+        new DefaultCitationHandler().populateMapFromJsonLd(document, params);
         
         Assert.assertEquals("Europa Plus: Cum i-a prins guvernul cu m\u00e2\u021ba \u00een sac pe produc\u0103torii albanezi de lactate BIO", params.get("title"));
         Assert.assertEquals("Ana Maria Florea-Harrison", params.get("author1"));

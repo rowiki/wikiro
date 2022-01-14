@@ -255,7 +255,7 @@ public class DefaultCitationHandler implements Handler
         return retParams;
     }
 
-    private void populateMapFromJsonLd(Document doc, Map<String, String> retParams)
+    public void populateMapFromJsonLd(Document doc, Map<String, String> retParams)
     {
         Elements ldJsonElements = doc.select("script[type=application/ld+json]");
         if (!ldJsonElements.isEmpty())
