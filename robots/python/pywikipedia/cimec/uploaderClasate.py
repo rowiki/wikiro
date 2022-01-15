@@ -11,6 +11,7 @@ import time
 import uploader
 from uploader import LicenseLevel
 
+author_cache = {}
 
 class ClasateUploader(uploader.CimecUploader):
 	def __init__(self, site):
@@ -19,28 +20,41 @@ class ClasateUploader(uploader.CimecUploader):
 
 	def find_author_data(self, author, offset = 0, filters={'P31':'Q5'}):
 		#["neidentificat", "necunoscut", "N/A"]
-		repo = pywikibot.Site('wikidata', 'wikidata')
-		params = {'action': 'query',
+		if author in author_cache:
+			item = author_cache[author]
+			if not item:
+				return None, None
+		else:
+			repo = pywikibot.Site('wikidata', 'wikidata')
+			params = {'action': 'query',
 			'list': 'search',
 			'format': 'json',
 			'srsearch': author,
 			'sroffset': offset}
-		request = api.Request(site=repo, **params)
-		result = request.submit()
-		result = [ItemPage(repo, r['title']) for r in result['query']['search']]
-		for p in filters:
-			result = [r for r in result if not r.isRedirectPage() and p in r.get()['claims']]
-			result = [r for r in result if r.get()['claims'][p][0].target.id == filters[p]]
-		print('Query', author)
-		print('Result',result)
-		if len(result) != 1:
-			return None, None
-		item = result[0]
-		if 'P570' in item.get()['claims']:
-			death = result[0].get()['claims']['P570'][0].getTarget()
+			request = api.Request(site=repo, **params)
+			result = request.submit()
+			result = [ItemPage(repo, r['title']) for r in result['query']['search']]
+			for p in filters:
+				result = [r for r in result if not r.isRedirectPage() and p in r.get()['claims']]
+				result = [r for r in result if r.get()['claims'][p][0].target.id == filters[p]]
+			print('Query', author)
+			print('Result',result)
+			if len(result) != 1:
+				author_cache[author] = None
+				return None, None
+			item = result[0]
+			author_cache[author] = item
+
+		claims = item.get()['claims']
+		if 'P570' in claims:
+			death = claims['P570'][0].getTarget()
 			if death:
 				print('Death', death.year)
 				return item, death.year
+		elif 'P7763' in claims:
+			copystatus = claims['P570'][0].getTarget()
+			if copystatus.id == '71887839':
+				return item, 'no'
 		return item, None
 
 	def filter_tentative_names(self, names):
@@ -57,18 +71,21 @@ class ClasateUploader(uploader.CimecUploader):
 			ret.append(name.strip())
 		return ret
 
-	def process_authors(self, data):	
-		if not data.get("Autor"):
+	def process_authors(self, data):
+		if not data.get("Autor") or data["Autor"].find("[[") > -1:
+			#print(data)
 			return data
 		#poor man's version to check if we're handling a person
 		if data["Autor"][0].isupper():
 			orig_authors = data["Autor"].split(';')
 			authors = self.filter_tentative_names(orig_authors)
 			i = 0
-			final_auth = orig_authors
+			final_auth = [x.strip() for x in orig_authors]
 
+			print(authors)
 			for author in authors:
-				if author.strip() == "":
+				author = author.strip()
+				if author == "":
 					continue
 				item, year = self.find_author_data(author)
 				if year:
@@ -77,12 +94,12 @@ class ClasateUploader(uploader.CimecUploader):
 					link = ":d:" + item.title()
 					try:
 						link = ":ro:" + item.getSitelink(pywikibot.Site('ro','wikipedia'))
-					except pywikibot.NoPage:
+					except pywikibot.exceptions.NoPageError:
 						pass
 					final_auth[i] = "[[" + link + "|" + orig_authors[i] + "]]"
 				i += 1
 			data["Autor"] = "; ".join(final_auth)
-
+		
 		return data
 
 
@@ -104,9 +121,11 @@ class ClasateUploader(uploader.CimecUploader):
 		img = LicenseLevel.ccbysa4
 		date = data.get("Datare")
 		year = data.get("Copyright")
-		if year and year + 70 >= int(time.strftime("%Y", time.localtime())):
+		if type(year) == 'string' and year.lower() in ['no', 'nu']:
+			year = 0
+		if (year and year + 70 >= int(time.strftime("%Y", time.localtime()))):
 			obj = LicenseLevel.fop
-		elif date and (date.find("XX") > -1 or re.search("19[0-9][0-9]", date)):
+		elif (not year and date and (date.find("XX") > -1 or re.search("19[0-9][0-9]", date))):
 			obj = LicenseLevel.fop
 
 		if data["Domeniu"] in ["Documente", "Carte veche și manuscris"]:
@@ -130,12 +149,21 @@ class ClasateUploader(uploader.CimecUploader):
 			diff = len(name) - 210
 			new_title = title[:-diff] + "(...)"
 			name = name.replace(title, new_title)
-		name = "File:" + name + ".jpg"
+		name = name.replace("1/2", "jumătate de")
+		name = name.replace("/", "-")
+		name = name.replace("[", "(")
+		name = name.replace("]", ")")
+		name = name.replace(":", "")
+		extension = ".jpg"
+		if data.get("Foto"):
+			extension = data["Foto"][data["Foto"].rfind("."):]
+		name = "File:" + name + extension
 		return name
 
 	def get_local_path(self, data):
 		img_name = data["Foto"].split("/")[-1]
-		img_path = os.path.join("..", "Desktop", "clasate.cimec", img_name)
+		#img_path = os.path.join("..", "Desktop", "clasate.cimec", img_name)
+		img_path = os.path.join(".", "clasate_cimec", img_name)
 		if os.path.exists(img_path):
 			return img_path
 		else:
@@ -145,7 +173,9 @@ class ClasateUploader(uploader.CimecUploader):
 		img_name = data["Foto"].split("/")[-1]
 		img_name = "File:"+img_name
 		text = "#redirect [[" + target.title() + "]]"
-		page = pywikibot.Page(self.wsite, img_name)
+		page = pywikibot.Page(target.site, img_name)
+		if page.exists():
+			return
 		page.put(text, "Redirecționare către imagine Cimec")
 
 	def build_info_description(self, data):
@@ -153,7 +183,7 @@ class ClasateUploader(uploader.CimecUploader):
 		if "Descriere" in data:
 			desc = data["Descriere"].replace("\n","\n\n")
 		else:
-			for key in data.keys():
+			for key in sorted(data.keys()):
 				if key.find("Descriere") > -1 or \
 				   key.find("Legend") > -1:
 					desc += "<br/>'''{}:''' {}\n".format(key, data[key])
@@ -192,7 +222,10 @@ class ClasateUploader(uploader.CimecUploader):
 			text += "{{{{{}}}}}\n".format(LicenseLevel.get_wiki_tl(obj))
 			text += "{{{{{}}}}}\n".format(LicenseLevel.get_wiki_tl(img))
 		else: #obj should be PD-old
-			text += "{{{{{}}}}}\n".format(LicenseLevel.get_wiki_tl(img))
+			if img & LicenseLevel.ccx > 0:
+				text += "{{{{{}}}}}\n".format(LicenseLevel.get_wiki_tl(img))
+			else:
+				text += "{{{{{}}}}}\n".format(LicenseLevel.get_wiki_tl(obj))
 			text += "{{tlc}}\n"
 		return text
 			
@@ -234,7 +267,7 @@ class ClasateUploader(uploader.CimecUploader):
 		text += "\n== Licențiere ==\n"
 		text += self.build_license_section(data) + "\n"
 		text += self.build_categories(data)
-		return text
+		return text.strip().replace("\r\n","\n")
 
 	def build_talk_page(self, page, data):
 		url = cimec.config[self.site]['item_url'].format(data["key"])
@@ -257,22 +290,31 @@ class ClasateUploader(uploader.CimecUploader):
 					continue
 				database[entry][key] = self.replace_diacritics(database[entry][key])
 
+			database[entry] = self.process_authors(database[entry])
 			# already uploaded, continue
 			if "Fișier" in database[entry]:
-				continue
+				if database[entry]["Domeniu"] in ["Numismatică", "Medalistică"]:
+					continue
+				print(database[entry]["Fișier"])
 				try:
 					body = self.build_description_page(database[entry])
 					page = pywikibot.Page(pywikibot.Site(), database[entry]["Fișier"])
 					if body == page.get():
 						continue
 					pywikibot.showDiff(page.get(), body)
-					answer = self.always or pywikibot.input_choice("Upload?", [("Yes", "Y"), ("No", "N"), ("Always", "A")])
+					if page.get().find("{{Cc-by-4.0}}") > -1:
+						answer = 'y'
+					elif page.get().find("{{DP-Ro}}") > -1 and body.find("{{DP-70}}") > -1:
+						answer = 'y'
+					else:
+						answer = self.always or \
+							pywikibot.input_choice("Upload?", [("Yes", "Y"), ("No", "N"), ("Always", "A")])
 					if answer == 'a':
 						self.always = 'y'
 						answer = 'y'
 					if answer != 'y':
 						continue
-						page.put(body, "Actualizez descrierea imaginii ")
+					page.put(body, "Actualizez descrierea imaginii ")
 				except pywikibot.exceptions.NoPageError:
 					del database[entry]["Fișier"]
 				except pywikibot.exceptions.IsRedirectPageError:
@@ -282,7 +324,6 @@ class ClasateUploader(uploader.CimecUploader):
 			f = self.get_local_path(database[entry])
 			if f == None:
 				continue
-			database[entry] = self.process_authors(database[entry])
 			filename = self.build_name(database[entry])
 			body = self.build_description_page(database[entry])
 			pywikibot.output(filename)
@@ -313,6 +354,7 @@ class ClasateUploader(uploader.CimecUploader):
 			try:
 				success = imagepage.upload(f,
 						ignore_warnings=ignore,
+						report_success=True,
                                    		chunk_size=0,
                                        		_file_key=None, _offset=0,
                                        		comment="Imagine Cimec nouă")
@@ -321,7 +363,7 @@ class ClasateUploader(uploader.CimecUploader):
 					pywikibot.error(
 						'Upload error: Local file uploads are disabled on %s.'
 						% site)
-				elif error.code == 'exists':
+				elif error.code in ['exists', 'fileexists-shared-forbidden']:
 					database[entry]["Fișier"] = filename
 					pywikibot.output("File %s already exists, ignoring" % filename)
 					continue
@@ -333,6 +375,14 @@ class ClasateUploader(uploader.CimecUploader):
 					page.put("#redirect [[%s]]" % target, "Redirecționez spre imaginea duplicat")
 					database[entry]["Fișier"] = filename
 					continue
+				elif error.code == 'verification-error':
+					if error.info.find("does not match the detected MIME") == -1:
+						pywikibot.error('Upload error: ', exc_info=True)
+						continue
+					extension = error.info[error.info.rfind('/')+1:error.info.rfind(')')]
+					f2 = f + "." + extension
+					print("Moving file for subsequent run from", f, "to", f2)
+					os.rename(f, f2)
 				else:
 					pywikibot.error('Upload error: ', exc_info=True)
 					continue
@@ -350,6 +400,8 @@ class ClasateUploader(uploader.CimecUploader):
 						json.dump(database, f, indent=2)
 				else:
 					pywikibot.output('Upload aborted.')
+		with open("clasate.json", 'w') as f:
+			json.dump(database, f, indent=2)
 
 	def upload_images(self, filename):
 		with open(filename, 'r', encoding="utf-8") as f:
@@ -358,52 +410,69 @@ class ClasateUploader(uploader.CimecUploader):
 			#pdb.set_trace()
 			self.upload(db)
 
-def generate_categories():
-	counties = {
-"B": u"municipiul București",
-"AB": u"județul Alba",
-"AR": u"județul Arad",
-"AG": u"județul Argeș",
-"BC": u"județul Bacău",
-"BH": u"județul Bihor",
-"BN": u"județul Bistrița-Năsăud",
-"BT": u"județul Botoșani",
-"BV": u"județul Brașov",
-"BR": u"județul Brăila",
-"BZ": u"județul Buzău",
-"CS": u"județul Caraș-Severin",
-"CL": u"județul Călărași",
-"CJ": u"județul Cluj",
-"CT": u"județul Constanța",
-"CV": u"județul Covasna",
-"DB": u"județul Dâmbovița",
-"DJ": u"județul Dolj",
-"GL": u"județul Galați",
-"GR": u"județul Giurgiu",
-"GJ": u"județul Gorj",
-"HR": u"județul Harghita",
-"HD": u"județul Hunedoara",
-"IL": u"județul Ialomița",
-"IS": u"județul Iași",
-"IF": u"județul Ilfov",
-"MM": u"județul Maramureș",
-"MH": u"județul Mehedinți",
-"MS": u"județul Mureș",
-"NT": u"județul Neamț",
-"OT": u"județul Olt",
-"PH": u"județul Prahova",
-"SM": u"județul Satu Mare",
-"SJ": u"județul Sălaj",
-"SB": u"județul Sibiu",
-"SV": u"județul Suceava",
-"TR": u"județul Teleorman",
-"TM": u"județul Timiș",
-"TL": u"județul Tulcea",
-"VS": u"județul Vaslui",
-"VL": u"județul Vâlcea",
-"VN": u"județul Vrancea",
-}
+	def create_all_redirects(self, filename):
+		with open(filename, 'r', encoding="utf-8") as f:
+			db = json.loads(f.read())
+			count = 0
+			for entry in db:
+				count += 1
+				if count % 100 == 0:
+					print("Count", count)
+				site = pywikibot.Site()
+				if not db[entry].get("Fișier"):
+					continue
+				if not db[entry].get("Foto") or db[entry]["Foto"].find("placeholder") > -1:
+					continue
 
+				img_name = db[entry]["Foto"].split("/")[-1]
+				img_name = "File:"+img_name
+				page = pywikibot.Page(site, img_name)
+				if page.exists():
+					continue
+				imagepage = pywikibot.FilePage(site, db[entry]["Fișier"])
+				while imagepage.isRedirectPage():
+					imagepage = imagepage.getRedirectTarget()
+				if not imagepage.file_is_shared():
+					continue
+				if True:#imagepage.file_is_shared():
+					site = pywikibot.Site('commons', 'commons')
+					imagepage = pywikibot.FilePage(site, db[entry]["Fișier"])
+					#print("commons:", db[entry]["Foto"], imagepage.title())
+				while imagepage.isRedirectPage():
+					imagepage = imagepage.getRedirectTarget()
+				try:
+					self.create_redirects(imagepage, db[entry])
+				except Exception:
+					print(db[entry]['Fișier'])
+					continue
+
+	def fix_all_image_fields(self, filename):
+		with open(filename, 'r', encoding="utf-8") as f:
+			db = json.loads(f.read())
+		count = 0
+		for entry in db.copy():
+			count += 1
+			if count % 1000 == 0:
+				print("Count", count)
+			data = db[entry]
+			if data.get("Fișier"):
+				continue
+			img_name = data["Foto"].split("/")[-1]
+			img_name = "File:"+img_name
+			if img_name.find("placeholder") > -1:
+				continue
+			imagepage = pywikibot.FilePage(pywikibot.Site(), img_name)
+			if imagepage.exists() and imagepage.isRedirectPage():
+				imagepage = imagepage.getRedirectTarget()
+				db[entry]["Fișier"] = imagepage.title()
+				print(db[entry]["Fișier"])
+		
+		with open("2" + filename, 'w') as f:
+			json.dump(db, f, indent=2)
+
+
+def generate_categories():
+	
 	domains = [
 	"arheologie",
 	"artă decorativă",
@@ -435,3 +504,5 @@ if __name__ == '__main__':
 	#generate_categories()
 	uploader = ClasateUploader('clasate')
 	uploader.upload_images('clasate.json')
+	#uploader.create_all_redirects('clasate.json')
+	#uploader.fix_all_image_fields('clasate.json')

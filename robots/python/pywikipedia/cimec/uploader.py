@@ -5,9 +5,13 @@ import json
 import pywikibot
 
 class LicenseLevel:
-	pd_old = 0x000
+	pd     = 0x000
 	pd_no  = 0x001
+	pd_old = 0x002
 	cc0    = 0x008
+	ccby   = 0x010
+	ccbysa = 0x020
+	ccx    = 0x030
 	ccby3  = 0x013
 	ccbysa3= 0x023
 	ccby4  = 0x014
