@@ -732,7 +732,7 @@ def main():
     lmiDb = readJson("ro_lmi_db.json", "monument database")
     page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
     #page = pywikibot.Page(pywikibot.Site(), "Q16898095", ns=0)
-    generator = pagegenerators.ReferringPageGenerator(page)
+    generator = page.getReferences(follow_redirects=True, content=False)
     bot = robot.WikidataBot(site=True, generator=generator)
 
     # bot.workers.append(CountyProcessing(config))
