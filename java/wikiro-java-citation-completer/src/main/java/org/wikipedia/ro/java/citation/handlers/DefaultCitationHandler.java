@@ -263,7 +263,7 @@ public class DefaultCitationHandler implements Handler
             for (Element ldJsonEl : ldJsonElements)
             {
                 String ldJson = ldJsonEl.html();
-                System.out.println("Found json:" + ldJson);
+                LOG.info("Found json: {}", ldJson);
                 Optional<JsonObject> ldJsonData = extractJsonObject(ldJson);
 
                 if (ldJsonData.isEmpty())
