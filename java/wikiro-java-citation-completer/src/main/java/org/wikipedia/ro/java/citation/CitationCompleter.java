@@ -83,12 +83,19 @@ public class CitationCompleter extends AbstractExecutable
                 String url = refUrlMatcher.group(1);
                 LOG.info("Found bare URL ref: {}", url);
                 
-                Handler urlHandler = handlerFactory.getHandler(url);
-                Optional<String> citationByHandler = urlHandler.processCitationParams(url);
+                List<Handler> handlersForUrl = handlerFactory.getHandlers(url);
+                Optional<String> foundCitation = Optional.empty();
+                for (Handler urlHandler: handlersForUrl) {
+                    Optional<String> citationByHandler = urlHandler.processCitationParams(url);
+                    if (citationByHandler.isPresent()) {
+                        foundCitation = citationByHandler;
+                        break;
+                    }
+                }
 
-                if (citationByHandler.isPresent()) {
-                    LOG.info("Found ref: {}", citationByHandler.get());
-                    refUrlMatcher.appendReplacement(sb, String.format("<ref>%s</ref>", Matcher.quoteReplacement(citationByHandler.get())));
+                if (foundCitation.isPresent()) {
+                    LOG.info("Found ref: {}", foundCitation.get());
+                    refUrlMatcher.appendReplacement(sb, String.format("<ref>%s</ref>", Matcher.quoteReplacement(foundCitation.get())));
                     citationsChanged++;
                 }
             }

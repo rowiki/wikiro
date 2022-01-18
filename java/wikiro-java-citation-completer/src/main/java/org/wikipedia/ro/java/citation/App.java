@@ -48,6 +48,8 @@ public class App
         wikiLog.setAdditive(false);
         wikiLog.setLevel(Level.WARN);
         wikiLog.addAppender(appender);
+        
+        logbackContext.setPackagingDataEnabled(true);
 
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
