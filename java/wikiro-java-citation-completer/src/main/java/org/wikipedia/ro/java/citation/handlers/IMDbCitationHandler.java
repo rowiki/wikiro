@@ -20,7 +20,7 @@ public class IMDbCitationHandler implements Handler
     public static final Logger LOG = LoggerFactory.getLogger(IMDbCitationHandler.class);
 
     public static final Pattern IMDB_PATTERN = Pattern
-        .compile("^https?:\\/\\/(?:(?:www|m)\\.)?imdb\\.com\\/(?:(?:search\\/)?title(?:\\?companies=|\\/)|name\\/|event\\/|news\\/|company\\/)(\\w{2}\\d+)");
+        .compile("^https?:\\/\\/(?:(?:www|m)\\.)?imdb\\.com\\/(?:(?:search\\/)?title(?:\\?companies=|\\/)|name\\/|event\\/|news\\/|company\\/)(\\w{2}\\d+)", Pattern.CASE_INSENSITIVE);
 
     private static final Pattern TITLE_ID_PATTERN = Pattern.compile("tt(\\d{7,8})|(?:/characters\\/nm\\d{7,8})?");
     private static final Pattern NAME_ID_PATTERN = Pattern.compile("nm(\\d{7,8})");
