@@ -32,10 +32,10 @@ import org.wikipedia.ro.utility.AbstractExecutable;
 public class CitationCompleter extends AbstractExecutable
 {
     private static final Logger LOG = LoggerFactory.getLogger(CitationCompleter.class);
-    
+
     public static final Pattern REF_URL_PATTERN = Pattern
         .compile("\\<ref\\>\\s*(https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*))\\s*\\</ref\\>");
- 
+
     @Override
     protected void execute() throws IOException, WikibaseException, LoginException
     {
@@ -48,7 +48,7 @@ public class CitationCompleter extends AbstractExecutable
 
         List<Revision> recentChanges = wiki.recentChanges(helper);
         long[] revIds = recentChanges.stream().mapToLong(Revision::getID).toArray();
-        
+
         HandlerFactory handlerFactory = HandlerFactory.createHandlerFactory();
 
         final Set<String> pageTitles = new LinkedHashSet<>();
@@ -82,19 +82,22 @@ public class CitationCompleter extends AbstractExecutable
             {
                 String url = refUrlMatcher.group(1);
                 LOG.info("Found bare URL ref: {}", url);
-                
+
                 List<Handler> handlersForUrl = handlerFactory.getHandlers(url);
                 Optional<String> foundCitation = Optional.empty();
-                for (Handler urlHandler: handlersForUrl) {
+                for (Handler urlHandler : handlersForUrl)
+                {
                     Optional<String> citationByHandler = urlHandler.processCitationParams(url);
-                    if (citationByHandler.isPresent()) {
+                    LOG.info("{} found citation: {}", urlHandler.getClass().getName(), citationByHandler.isEmpty() ? "<empty>" : citationByHandler.get());
+                    if (citationByHandler.isPresent())
+                    {
                         foundCitation = citationByHandler;
                         break;
                     }
                 }
 
-                if (foundCitation.isPresent()) {
-                    LOG.info("Found ref: {}", foundCitation.get());
+                if (foundCitation.isPresent())
+                {
                     refUrlMatcher.appendReplacement(sb, String.format("<ref>%s</ref>", Matcher.quoteReplacement(foundCitation.get())));
                     citationsChanged++;
                 }
@@ -108,7 +111,6 @@ public class CitationCompleter extends AbstractExecutable
         }
         wiki.edit("Utilizator:Andrebot/dată-vizitare-pagini-editate", now.toString(), "Robot: actualizare dată vizitare pagini editate");
     }
-
 
     private LocalDate findLastVisit() throws IOException
     {

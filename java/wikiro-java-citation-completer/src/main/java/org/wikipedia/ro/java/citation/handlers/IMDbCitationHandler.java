@@ -38,11 +38,13 @@ public class IMDbCitationHandler implements Handler
         Matcher baseURIMatch = IMDB_PATTERN.matcher(baseURI);
         if (!baseURIMatch.find())
         {
+            LOG.warn("URI {} failed to match regex {}", baseURI, IMDB_PATTERN.pattern());
             return Optional.empty();
         }
         String imdbId = baseURIMatch.group(1);
         if (StringUtils.isEmpty(imdbId))
         {
+            LOG.warn("IMDb ID not identified in URI {} by regex {}.", baseURI, IMDB_PATTERN.pattern());
             return Optional.empty();
         }
 
@@ -67,7 +69,7 @@ public class IMDbCitationHandler implements Handler
                 }
             }
         }
-
+        LOG.warn("Neither title, nor name regexes match any ID in text {}", imdbId);
         return Optional.empty();
     }
 
