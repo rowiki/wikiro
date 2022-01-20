@@ -1,1 +1,0 @@
-<includeonly><span lang="{{{1}}}" xml:lang="{{{1}}}">{{{2}}}</span></includeonly>

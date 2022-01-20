@@ -1,7 +1,0 @@
-'''Pärnu''' este un oraş în [[Estonia]].
-{{IsIn|Estonia}}
-{{ciot}}[[de:Pärnu]]
-[[en:Pärnu]]
-[[fi:Pärnu]]
-[[fr:Pärnu]]
-[[ru:Пярну]]

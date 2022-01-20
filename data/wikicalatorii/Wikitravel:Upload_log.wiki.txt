@@ -1,4 +1,0 @@
-Below is a list of the most recent file uploads.
-All times shown are server time (UTC).
-&lt;ul>
-&lt;/ul>
