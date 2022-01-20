@@ -1,3 +1,0 @@
-
-&lt;tr>&lt;td align="right">&lt;a href="/ro/wiki/wiki.phtml?title=Special:Allpages&amp;amp;from=Aachen" class='internal' title ="Special:Allpages">Aachen&lt;/a>&lt;/td>&lt;td> către &lt;/td>&lt;td align="left">Ţările de Jos&lt;/td>&lt;/tr>
-&lt;/table>

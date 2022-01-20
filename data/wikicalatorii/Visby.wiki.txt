@@ -1,8 +1,0 @@
-'''Visby''' este un oraş în [[Suedia]].
-
-{{ciot}}
-
-[[en:Visby]]
-[[fi:Visby]]
-[[nl:Visby]]
-[[sv:Visby]]

@@ -1,3 +1,0 @@
-{| align="center" class="boilerplate metadata" id="cleanup" style="width:80%; background-color:#FFFFF0; border:1px solid #EA0; padding:0.5em;"
-| &lt;center>Acest articol este scris parţial sau integral în '''[[limba {{{limba}}}]]'''.&lt;br>Poţi contribui realizând [[:WikiPedia:Cum să traduc un articol|traducerea]] textului.&lt;/center>
-|}

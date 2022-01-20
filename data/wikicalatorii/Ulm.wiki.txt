@@ -1,3 +1,0 @@
-'''Ulm''' este un oraş în [[Germania]].In acest oras sa nascut Albert Enstein.
-{{IsIn|Germania}}
-{{ciot}}

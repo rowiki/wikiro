@@ -1,4 +1,0 @@
-|-
-| colspan="2" style="text-align: center; border-bottom: 1px solid #C9AFFF; border-top: 1px solid #C9AFFF; background-color: #ddddff" | '''{{{heading}}}'''
-|-
-| colspan="2" style="text-align: center; padding: 2px" | {{{image}}}

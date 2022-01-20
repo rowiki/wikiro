@@ -1,3 +1,0 @@
-'''Haga''' este un oraş în [[Ţările de Jos]].
-{{IsIn|Ţările_de_Jos}}
-{{ciot}}

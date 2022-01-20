@@ -1,3 +1,0 @@
-'''Quito''' este capitala [[Ecuador|Ecuadorului]].
-{{IsIn|Ecuador}}
-{{ciot}}

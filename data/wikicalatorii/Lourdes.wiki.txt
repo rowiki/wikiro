@@ -1,8 +1,0 @@
-'''Lourdes''' este un oraş în [[Franţa]].
-{{IsIn|Franţa}}
-{{ciot}}
-
-[[de:Lourdes]]
-[[en:Lourdes]]
-[[fr:Lourdes]]
-[[nl:Lourdes]]
