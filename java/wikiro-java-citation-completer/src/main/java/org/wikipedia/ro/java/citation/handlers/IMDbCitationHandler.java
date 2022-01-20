@@ -36,7 +36,7 @@ public class IMDbCitationHandler implements Handler
         URI citationURI = URI.create(url);
         String baseURI = String.format("%s://%s%s", citationURI.getScheme(), citationURI.getAuthority(), StringUtils.defaultString(citationURI.getPath()));
         Matcher baseURIMatch = IMDB_PATTERN.matcher(baseURI);
-        if (!baseURIMatch.matches())
+        if (!baseURIMatch.find())
         {
             return Optional.empty();
         }
