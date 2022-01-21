@@ -26,8 +26,6 @@ public class IMDbCitationHandler implements Handler
     private static final Pattern NAME_ID_PATTERN = Pattern.compile("nm(\\d{7,8})");
     //private static final Pattern COMPANY_ID_PATTERN = Pattern.compile("co\\d{7}");
 
-    public static String rapidApiKey = System.getenv("WIKI_IMDB_RAPID_API_KEY");
-    
     private ImdbClientApi imdbApi = new ImdbClientApi();
 
     @Override
