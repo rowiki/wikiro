@@ -1,6 +1,7 @@
 package org.wikipedia.ro.java.citation.handlers;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 
@@ -13,6 +14,12 @@ import org.wikipedia.ro.java.citation.clientapi.ImdbClientApi;
 
 public class TestImdbCitationHandler
 {
+    @BeforeClass
+    public static void beforeClass()
+    {
+        System.setProperty("WIKI_IMDB_RAPID_API_KEY", "bogusapikey");
+    }
+
     @Test
     public void testGetTitleFromImdb() throws IOException
     {
@@ -49,9 +56,9 @@ public class TestImdbCitationHandler
         IMDbCitationHandler sut = mock(IMDbCitationHandler.class);
         when(sut.processCitationParams(anyString())).thenCallRealMethod();
         when(sut.getTitleFromImdb(anyString())).thenReturn(Optional.of("Gigi Bobo"));
-        
+
         Optional<String> actualResult = sut.processCitationParams("https://www.imdb.com/title/tt0121955");
-        
+
         Assert.assertTrue("ImdbCitationHandler should have a result", actualResult.isPresent());
         Assert.assertEquals("Unexpected assembled citation", "{{Titlu IMDb|id=0121955|titlu=Gigi Bobo}}", actualResult.get());
     }
@@ -62,9 +69,9 @@ public class TestImdbCitationHandler
         IMDbCitationHandler sut = mock(IMDbCitationHandler.class);
         when(sut.processCitationParams(anyString())).thenCallRealMethod();
         when(sut.getNameFromImdb(anyString())).thenReturn(Optional.of("Gigi Bobo"));
-        
+
         Optional<String> actualResult = sut.processCitationParams("https://www.imdb.com/name/nm0532235");
-        
+
         Assert.assertTrue("ImdbCitationHandler should have a result", actualResult.isPresent());
         Assert.assertEquals("Unexpected assembled citation", "{{Nume IMDb|id=0532235|name=Gigi Bobo}}", actualResult.get());
     }
