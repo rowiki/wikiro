@@ -159,20 +159,13 @@ public class DefaultCitationHandler implements Handler
             }
             return ret;
         }
-        catch (URISyntaxException e)
+        catch (URISyntaxException |IOException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.warn("Failed to create citation for URL {}. Skipping...", e);
         }
         catch (InterruptedException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
         return Collections.emptyMap();
     }
