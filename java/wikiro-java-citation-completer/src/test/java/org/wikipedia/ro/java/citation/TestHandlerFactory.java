@@ -3,6 +3,7 @@ package org.wikipedia.ro.java.citation;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.wikipedia.ro.java.citation.handlers.DefaultCitationHandler;
 import org.wikipedia.ro.java.citation.handlers.Handler;
@@ -10,6 +11,12 @@ import org.wikipedia.ro.java.citation.handlers.IMDbCitationHandler;
 
 public class TestHandlerFactory
 {
+    @BeforeClass
+    public static void beforeClass()
+    {
+        System.setProperty("WIKI_IMDB_RAPID_API_KEY", "bogusapikey");
+    }
+
     @Test
     public void testRandomCitation()
     {
