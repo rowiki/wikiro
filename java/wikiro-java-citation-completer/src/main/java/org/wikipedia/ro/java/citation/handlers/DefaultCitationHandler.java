@@ -242,8 +242,7 @@ public class DefaultCitationHandler implements Handler
         }
         catch (IOException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.warn("Could not fill in citation from plain URL {}", e);
         }
         return retParams;
     }
@@ -318,7 +317,7 @@ public class DefaultCitationHandler implements Handler
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            LOG.warn("Error extracting json object from json {}", ldJson, e);
         }
         return ldJsonData;
     }

@@ -6,8 +6,13 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Utils
 {
+    private static final Logger LOG = LoggerFactory.getLogger(Utils.class);
+    
     private Utils() {
         
     }
@@ -34,7 +39,7 @@ public class Utils
         }
         catch (DateTimeParseException dpe)
         {
-            dpe.printStackTrace();
+            LOG.debug("Could not extract date from string \"{}\"", publicationDate, dpe);
         }
         return publicationDate;
     }
