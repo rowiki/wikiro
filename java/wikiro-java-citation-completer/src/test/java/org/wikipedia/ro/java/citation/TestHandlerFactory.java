@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.wikipedia.ro.java.citation.handlers.DefaultCitationHandler;
+import org.wikipedia.ro.java.citation.handlers.GoogleBooksHandler;
 import org.wikipedia.ro.java.citation.handlers.Handler;
 import org.wikipedia.ro.java.citation.handlers.IMDbCitationHandler;
 
@@ -37,5 +38,17 @@ public class TestHandlerFactory
 
         Assert.assertEquals("There should be two handlers", 2, actualHandlers.size());
         Assert.assertTrue("The Imdb handler should be first", actualHandlers.get(0) instanceof IMDbCitationHandler);
+    }
+    
+    @Test
+    public void testGoogleBooksCitation()
+    {
+        HandlerFactory sut = HandlerFactory.createHandlerFactory();
+        
+        List<Handler> actualHandlers = sut.getHandlers("https://books.google.ro/books?id=OfywzQEACAAJ&hl=ro&sa=X&redir_esc=y");
+
+        Assert.assertEquals("There should be two handlers", 2, actualHandlers.size());
+        Assert.assertTrue("The Google Books handler should be first", actualHandlers.get(0) instanceof GoogleBooksHandler);
+        
     }
 }
