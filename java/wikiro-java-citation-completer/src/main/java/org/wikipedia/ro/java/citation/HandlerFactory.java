@@ -1,19 +1,17 @@
 package org.wikipedia.ro.java.citation;
 
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wikipedia.ro.java.citation.handlers.DefaultCitationHandler;
 import org.wikipedia.ro.java.citation.handlers.GoogleBooksHandler;
 import org.wikipedia.ro.java.citation.handlers.Handler;
 import org.wikipedia.ro.java.citation.handlers.IMDbCitationHandler;
+import org.wikipedia.ro.java.citation.handlers.YoutubeHandler;
 
 public class HandlerFactory
 {
@@ -35,6 +33,10 @@ public class HandlerFactory
         
         if (GoogleBooksHandler.GOOGLE_BOOKS_PATTERN.matcher(URI.create(url).getHost()).matches()) {
             handlerList.add(new GoogleBooksHandler());
+        }
+        
+        if (YoutubeHandler.YOUTUBE_PATTERN.matcher(URI.create(url).getHost()).find()) {
+            handlerList.add(new YoutubeHandler());
         }
 
         handlerList.add(new DefaultCitationHandler());
