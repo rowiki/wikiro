@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wikipedia.ro.java.citation.handlers.ConvertDateFromTimestampProcessingStep;
 import org.wikipedia.ro.java.citation.handlers.DefaultCitationHandler;
 import org.wikipedia.ro.java.citation.handlers.GoogleBooksHandler;
 import org.wikipedia.ro.java.citation.handlers.Handler;
 import org.wikipedia.ro.java.citation.handlers.IMDbCitationHandler;
+import org.wikipedia.ro.java.citation.handlers.RemoveParamsProcessingStep;
 import org.wikipedia.ro.java.citation.handlers.YoutubeHandler;
 
 public class HandlerFactory
@@ -30,16 +33,31 @@ public class HandlerFactory
         {
             handlerList.add(new IMDbCitationHandler());
         }
-        
-        if (GoogleBooksHandler.GOOGLE_BOOKS_PATTERN.matcher(URI.create(url).getHost()).matches()) {
+
+        URI srcURI = URI.create(url);
+        if (GoogleBooksHandler.GOOGLE_BOOKS_PATTERN.matcher(srcURI.getHost()).matches())
+        {
             handlerList.add(new GoogleBooksHandler());
         }
-        
-        if (YoutubeHandler.YOUTUBE_PATTERN.matcher(URI.create(url).getHost()).find()) {
+
+        if (YoutubeHandler.YOUTUBE_PATTERN.matcher(srcURI.getHost()).find())
+        {
             handlerList.add(new YoutubeHandler());
         }
 
-        handlerList.add(new DefaultCitationHandler());
+        DefaultCitationHandler defaultCitationHandler = new DefaultCitationHandler();
+
+        if ("adevarul.ro".equals(srcURI.getHost()))
+        {
+            defaultCitationHandler.addProcessingStep(new ConvertDateFromTimestampProcessingStep());
+            defaultCitationHandler.addProcessingStep(new RemoveParamsProcessingStep("language"));
+        }
+        if (StringUtils.equalsAnyIgnoreCase(srcURI.getHost(), "cinemagia.ro"))
+        {
+            defaultCitationHandler.addProcessingStep(new RemoveParamsProcessingStep("author1"));
+        }
+
+        handlerList.add(defaultCitationHandler);
         LOG.info("Returning {} loggers, first is {}", handlerList.size(), handlerList.stream().findFirst().map(Object::getClass).map(Class::getName).orElse("none"));
         return handlerList;
     }

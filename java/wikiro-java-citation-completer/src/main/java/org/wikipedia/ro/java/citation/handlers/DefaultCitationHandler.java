@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,7 +42,14 @@ public class DefaultCitationHandler implements Handler
     private static final Logger LOG = LoggerFactory.getLogger(DefaultCitationHandler.class);
     
     private static final Pattern LOCALE_PATTERN = Pattern.compile("([^_\\-]+)(?:[_\\-](\\w+))?");
+    
+    private Set<ProcessingStep> additionalProcessingSteps = new LinkedHashSet<>(); 
 
+    public DefaultCitationHandler addProcessingStep(ProcessingStep step) {
+        additionalProcessingSteps.add(step);
+        return this;
+    }
+    
     @Override
     public Optional<String> processCitationParams(String url)
     {
@@ -53,6 +62,7 @@ public class DefaultCitationHandler implements Handler
 
         if (!citationParams.isEmpty())
         {
+            additionalProcessingSteps.stream().forEach(step -> step.processParams(citationParams));
             citationParams.put("url", url);
             return Optional.of(assembleCitation(citationParams));
         }
