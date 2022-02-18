@@ -60,6 +60,8 @@ import javax.security.auth.login.LoginException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
+import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikibase.WikibasePropertyFactory;
@@ -94,7 +96,15 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.ConsoleAppender;
+
 public class FixVillages {
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(FixVillages.class);
     private static final String CRISANA_LINK = "[[Crișana]]";
     private static final String BANAT_LINK = "[[Banat]]";
     private static final String TRANSYLVANIA_LINK = "[[Transilvania]]";
@@ -129,6 +139,7 @@ public class FixVillages {
     private static String crtSettlementName = null, crtCommuneName = null, crtCountyName = null;
 
     public static void main(String[] args) throws IOException {
+        initLogging();
         Wiki rowiki = Wiki.newSession("ro.wikipedia.org");
         Wiki commonsWiki = Wiki.newSession("commons.wikimedia.org");
 
@@ -500,9 +511,11 @@ public class FixVillages {
                         } else if (coatOfArmsMatcher.matches()) {
                             String coatOfArmsImageName = coatOfArmsMatcher.group(8);
                             Property coatOfArmsImageWikidataProperty = new Property("P94");
-                            if (commonsWiki.exists(List.of("File:" + coatOfArmsImageName))[0]
-                                && !commonsWiki.getCategories(List.of("File:" + coatOfArmsImageName),
-                                    commonsWiki.new RequestHelper(), false).stream().map(l -> l.contains("Category:Coat of arms placeholders")).findFirst().orElse(false)) {
+                            if (commonsWiki.exists(List.of("File:" + coatOfArmsImageName))[0] && !commonsWiki
+                                .getCategories(List.of("File:" + coatOfArmsImageName), commonsWiki.new RequestHelper(),
+                                    false)
+                                .stream().map(l -> l.contains("Category:Coat of arms placeholders")).findFirst()
+                                .orElse(false)) {
                                 Set<Claim> coatOfArmsFromWd = communeClaims.get(coatOfArmsImageWikidataProperty);
                                 if (null == coatOfArmsFromWd || coatOfArmsFromWd.isEmpty()) {
                                     dwiki.addClaim(communeWikibaseItem.getId(),
@@ -902,31 +915,18 @@ public class FixVillages {
                     }
                     if (communeChanged) {
                         long sleeptime = 10 + Math.round(20 * Math.random());
-                        System.out.printf("Sleeping %ds%n", sleeptime);
+                        LOG.info("Sleeping {0}s", sleeptime);
                         Thread.sleep(1000l * sleeptime);
                     }
                 }
             }
-        } catch (
-
-        WikibaseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (FailedLoginException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (WikibaseException | LoginException | ParseException e) {
+            LOG.error("Error filling in villages", e);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (LoginException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         } finally {
-            System.out.printf("Stopped at %s%n", Stream.of(crtSettlementName, crtCommuneName, crtCountyName)
-                .filter(Objects::nonNull).collect(joining(", ")));
+            LOG.info("Stopped at {0}",
+                Stream.of(crtSettlementName, crtCommuneName, crtCountyName).filter(Objects::nonNull).collect(joining(", ")));
             if (null != dwiki) {
                 dwiki.logout();
             }
@@ -1408,7 +1408,7 @@ public class FixVillages {
 
         if (villageChanged) {
             long sleeptime = 10 + Math.round(10 * Math.random());
-            System.out.printf("Sleeping %ds%n", sleeptime);
+            LOG.info("Sleeping {}s", sleeptime);
             Thread.sleep(1000l * sleeptime);
         }
         return communeChanged;
@@ -1910,7 +1910,8 @@ public class FixVillages {
             }
             if ("Cârlibaba".equalsIgnoreCase(trim(commune))) {
                 if (null == settlement) {
-                    return "la limita între regiunile istorice " + Stream.of(BUCOVINA_LINK, TRANSYLVANIA_LINK).collect(joining(" și "));
+                    return "la limita între regiunile istorice "
+                        + Stream.of(BUCOVINA_LINK, TRANSYLVANIA_LINK).collect(joining(" și "));
                 }
                 if (Arrays.asList("Șesuri", "Cârlibaba Nouă").contains(trim(settlement))) {
                     return TRANSYLVANIA_LINK;
@@ -1928,7 +1929,8 @@ public class FixVillages {
                     return BUCOVINA_LINK;
                 }
                 if (null == settlement) {
-                    return "la limita între regiunile istorice " + Stream.of(BUCOVINA_LINK, TRANSYLVANIA_LINK).collect(joining(" și "));
+                    return "la limita între regiunile istorice "
+                        + Stream.of(BUCOVINA_LINK, TRANSYLVANIA_LINK).collect(joining(" și "));
                 }
                 return TRANSYLVANIA_LINK;
             }
@@ -1953,5 +1955,34 @@ public class FixVillages {
             return BUCOVINA_LINK;
         }
         return null;
+    }
+
+    private static void initLogging() {
+        LoggerContext logbackContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+        PatternLayoutEncoder ple = new PatternLayoutEncoder();
+
+        ple.setPattern("%date %level %logger{10} [%file:%line] %msg%n");
+        ple.setContext(logbackContext);
+        ple.start();
+
+        ConsoleAppender<ILoggingEvent> appender = new ConsoleAppender<>();
+        appender.setContext(logbackContext);
+        appender.setName("console");
+        appender.setEncoder(ple);
+        appender.start();
+
+        Logger roWikiLog = logbackContext.getLogger("org.wikipedia.ro");
+        roWikiLog.setAdditive(false);
+        roWikiLog.setLevel(Level.INFO);
+        roWikiLog.addAppender(appender);
+
+        Logger wikiLog = logbackContext.getLogger("main");
+        wikiLog.setAdditive(false);
+        wikiLog.setLevel(Level.WARN);
+        wikiLog.addAppender(appender);
+
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();
     }
 }
