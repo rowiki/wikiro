@@ -988,7 +988,7 @@ public class FixVillages {
             removeEnd(removeEnd(villageEntity.getLabels().get("ro"), ", " + eachCounty), "(" + communeName + ")"),
             "Comuna "));
         crtSettlementName = villageName;
-        LOG.info("Processing settlement {}, UAT {}, county{}; settlement type: {}", crtSettlementName, crtCommuneName, crtCountyName, villageType);
+        LOG.info("Processing settlement {}, UAT {}, county {}; settlement type: {}", crtSettlementName, crtCommuneName, crtCountyName, villageType);
 
         String villageRelationWithCommune = "în comuna";
         if (!"comună".equalsIgnoreCase(communeType)) {
