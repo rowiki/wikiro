@@ -168,7 +168,7 @@ public class TranslationManager extends AbstractExecutable
         roWikiLog.setLevel(Level.INFO);
         roWikiLog.addAppender(appender);
         
-        Logger wikiLog =  logbackContext.getLogger("main");
+        Logger wikiLog =  logbackContext.getLogger("wiki");
         wikiLog.setAdditive(false);
         wikiLog.setLevel(Level.WARN);
         wikiLog.addAppender(appender);
