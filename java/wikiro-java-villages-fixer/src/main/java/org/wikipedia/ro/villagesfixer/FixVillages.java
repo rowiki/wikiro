@@ -100,7 +100,9 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.jul.LevelChangePropagator;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.LoggerContextListener;
 import ch.qos.logback.core.ConsoleAppender;
 
 public class FixVillages {
@@ -222,8 +224,13 @@ public class FixVillages {
                 datapassword = sysConsole.readPassword();
             }
 
+            LOG.info("Logging in to ro wiki with username: {}", rowpusername);
             rowiki.login(rowpusername, rowppassword);
+            LOG.info("Logging in to wikibase with username: {}", datausername);
             dwiki.login(datausername, datapassword);
+            
+            LOG.info("Login successful");
+            
             WikidataEntitiesCache wdcache = new WikidataEntitiesCache(dwiki);
             rowiki.setMarkBot(true);
             dwiki.setMarkBot(true);
@@ -238,6 +245,7 @@ public class FixVillages {
                     continue;
                 }
                 crtCountyName = eachCounty;
+                LOG.info("Starting up county {}", crtCountyName);
 
                 Entity countyEnt = wdcache.getByArticle("rowiki", StringUtils.prependIfMissing(crtCountyName, "Județul "));
                 Set<Claim> regPlate = countyEnt.getBestClaims(regPlateProp);
@@ -310,6 +318,7 @@ public class FixVillages {
                     String communeName = trim(substringBefore(
                         removeStart(removeEnd(removeEnd(eachCommuneArticle, ", " + eachCounty), ", România"), "Comuna "),
                         "("));
+                    LOG.info("Working on commune {}, county {}", communeName, crtCountyName);
                     crtCommuneName = communeName;
                     if (!communeTouched && countyStart.equals(eachCounty) && !communeName.equals(communeStart)) {
                         continue;
@@ -563,7 +572,6 @@ public class FixVillages {
                     }
 
                     String communeImage = initialTemplate.getParams().get("imagine");
-                    String siruta = null;
                     if (isNotEmpty(communeImage)) {
                         Matcher imageMatcher = imageInInfoboxPattern.matcher(communeImage);
                         if (contains(communeImage, "{{#property:P18}}")) {
@@ -709,7 +717,7 @@ public class FixVillages {
 
                     List<Entry<String, String>> urbanSettlementsEntryList = new ArrayList<>(urbanSettlements.entrySet());
                     List<Entry<String, String>> villagesEntryList = new ArrayList<>(villages.entrySet());
-                    if (urbanSettlementsEntryList.size() + villagesEntryList.size() > 0) {
+                    if (!urbanSettlementsEntryList.isEmpty() || !villagesEntryList.isEmpty()) {
                         String intro = null;
 
                         if (1 == villagesEntryList.size() && urbanSettlementsEntryList.isEmpty()) {
@@ -718,8 +726,8 @@ public class FixVillages {
                             if ("comună".equals(communeType)) {
                                 intro = intro + String.format(", formată numai din satul de reședință%s",
                                     StringUtils.equals(communeName, villagesEntryList.get(0).getKey()) ? " cu același nume"
-                                        : (", [[" + villagesEntryList.get(0).getValue() + '|'
-                                            + villagesEntryList.get(0).getKey()) + "]]");
+                                        : String.format(", [[%s|%s]]", villagesEntryList.get(0).getValue(),
+                                            villagesEntryList.get(0).getKey()));
                             }
                         } else {
                             StringBuilder villagesList = new StringBuilder();
@@ -980,6 +988,7 @@ public class FixVillages {
             removeEnd(removeEnd(villageEntity.getLabels().get("ro"), ", " + eachCounty), "(" + communeName + ")"),
             "Comuna "));
         crtSettlementName = villageName;
+        LOG.info("Processing settlement {}, UAT {}, county{}; settlement type: {}", crtSettlementName, crtCommuneName, crtCountyName, villageType);
 
         String villageRelationWithCommune = "în comuna";
         if (!"comună".equalsIgnoreCase(communeType)) {
@@ -1977,11 +1986,20 @@ public class FixVillages {
         roWikiLog.setLevel(Level.INFO);
         roWikiLog.addAppender(appender);
 
-        Logger wikiLog = logbackContext.getLogger("main");
+        Logger wikiLog = logbackContext.getLogger("wiki");
         wikiLog.setAdditive(false);
         wikiLog.setLevel(Level.WARN);
         wikiLog.addAppender(appender);
 
+        Logger mongoLog = logbackContext.getLogger("org.mongodb");
+        mongoLog.setAdditive(false);
+        mongoLog.setLevel(Level.WARN);
+        mongoLog.addAppender(appender);
+
+        LevelChangePropagator levelChangePropagator = new LevelChangePropagator();
+        levelChangePropagator.setResetJUL(true);
+        logbackContext.addListener(levelChangePropagator);
+        
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
     }
