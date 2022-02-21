@@ -923,7 +923,7 @@ public class FixVillages {
                     }
                     if (communeChanged) {
                         long sleeptime = 10 + Math.round(20 * Math.random());
-                        LOG.info("Sleeping {0}s", sleeptime);
+                        LOG.info("Sleeping {}s", sleeptime);
                         Thread.sleep(1000l * sleeptime);
                     }
                 }
@@ -933,7 +933,7 @@ public class FixVillages {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
-            LOG.info("Stopped at {0}",
+            LOG.info("Stopped at {}",
                 Stream.of(crtSettlementName, crtCommuneName, crtCountyName).filter(Objects::nonNull).collect(joining(", ")));
             if (null != dwiki) {
                 dwiki.logout();
