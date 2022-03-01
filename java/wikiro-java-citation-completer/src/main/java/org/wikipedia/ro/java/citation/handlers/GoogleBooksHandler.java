@@ -30,7 +30,7 @@ import com.google.api.services.books.model.Volume.VolumeInfo;
 public class GoogleBooksHandler implements Handler
 {
     private static final Logger LOG = LoggerFactory.getLogger(GoogleBooksHandler.class);
-    public static final Pattern GOOGLE_BOOKS_PATTERN = Pattern.compile("books\\.google\\.\\w+");
+    public static final Pattern GOOGLE_BOOKS_PATTERN = Pattern.compile("books\\.google\\.[\\w\\.]+");
 
     @Override
     public Optional<String> processCitationParams(String url)
