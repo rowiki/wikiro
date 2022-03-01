@@ -17,10 +17,12 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -273,11 +275,12 @@ public class DefaultCitationHandler implements Handler
                     continue;
                 }
                 JsonObject ldJsonObject = ldJsonData.get();
-                JsonElement dateElement = ldJsonObject.get("dateCreated");
-                if (null != dateElement && dateElement.isJsonPrimitive())
-                {
-                    retParams.put("date", extractDate(dateElement.getAsString()));
-                }
+                Stream.of("dateCreated", "datePublished").map(param -> ldJsonObject.get(param))
+                    .filter(Objects::nonNull)
+                    .filter(JsonElement::isJsonPrimitive)
+                    .map(de -> extractDate(de.getAsString()))
+                    .findFirst()
+                    .ifPresent(d -> retParams.put("date", d));
                 JsonElement authorElement = ldJsonObject.get("author");
                 if (null != authorElement && authorElement.isJsonObject())
                 {

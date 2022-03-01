@@ -27,6 +27,17 @@ public class TestJsonLdCitation
         Assert.assertEquals("Europa Plus: Cum i-a prins guvernul cu m\u00e2\u021ba \u00een sac pe produc\u0103torii albanezi de lactate BIO", params.get("title"));
         Assert.assertEquals("Ana Maria Florea-Harrison", params.get("author1"));
         Assert.assertEquals("2021-11-15", params.get("date"));
-        Assert.assertEquals("Ana Maria Florea-Harrison", params.get("author1"));
+    }
+
+    @Test
+    public void testRealGspCitationPage() throws IOException, URISyntaxException {
+        URL rfiHtmlFileURL = getClass().getClassLoader().getResource("gsp1.html");
+        Document document = Jsoup.parse(new File(rfiHtmlFileURL.toURI()), StandardCharsets.UTF_8.toString());
+        
+        Map<String, String> params = new HashMap<>();
+        new DefaultCitationHandler().populateMapFromJsonLd(document, params);
+        
+        Assert.assertEquals("Singurul român din F1: \"Sezonul viitor vom fi decisivi\"", params.get("title"));
+        Assert.assertEquals("2010-12-20", params.get("date"));
     }
 }
