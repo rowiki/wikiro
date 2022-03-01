@@ -39,7 +39,7 @@ public class GoogleBooksHandler implements Handler
         try
         {
             URI gbUri = URI.create(url);
-            if (!GOOGLE_BOOKS_PATTERN.matcher(gbUri.getHost()).matches())
+            if (!GOOGLE_BOOKS_PATTERN.matcher(gbUri.getHost() + gbUri.getPath()).matches())
             {
                 return Optional.empty();
             }
