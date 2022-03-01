@@ -35,7 +35,7 @@ public class HandlerFactory
         }
 
         URI srcURI = URI.create(url);
-        if (GoogleBooksHandler.GOOGLE_BOOKS_PATTERN.matcher(srcURI.getHost()).matches())
+        if (GoogleBooksHandler.GOOGLE_BOOKS_PATTERN.matcher(srcURI.getHost() + srcURI.getPath()).matches())
         {
             handlerList.add(new GoogleBooksHandler());
         }

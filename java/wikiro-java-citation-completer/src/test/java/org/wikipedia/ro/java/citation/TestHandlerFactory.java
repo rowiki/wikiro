@@ -1,5 +1,6 @@
 package org.wikipedia.ro.java.citation;
 
+import java.net.URI;
 import java.util.List;
 
 import org.junit.Assert;
@@ -45,10 +46,26 @@ public class TestHandlerFactory
     {
         HandlerFactory sut = HandlerFactory.createHandlerFactory();
         
-        List<Handler> actualHandlers = sut.getHandlers("https://books.google.ro/books?id=OfywzQEACAAJ&hl=ro&sa=X&redir_esc=y");
+        String gbUrl = "https://books.google.ro/books?id=OfywzQEACAAJ&hl=ro&sa=X&redir_esc=y";
+        List<Handler> actualHandlers = sut.getHandlers(gbUrl);
+
+        Assert.assertEquals("There should be two handlers", 2, actualHandlers.size());
+        Assert.assertTrue("The Google Books handler should be first", actualHandlers.get(0) instanceof GoogleBooksHandler);
+
+        Assert.assertEquals("Expected to find id from URL", "OfywzQEACAAJ", new GoogleBooksHandler().findBookId(URI.create(gbUrl)).orElse(null));
+    }
+    
+    @Test
+    public void testGoogleBooksCoUkCitation()
+    {
+        HandlerFactory sut = HandlerFactory.createHandlerFactory();
+        
+        String gbUrl = "https://www.google.co.uk/books/edition/2006/mlugG4vfmw8C?hl=en&gbpv=1&dq=ionel+pantea+1941&pg=PA346&printsec=frontcover";
+        List<Handler> actualHandlers = sut.getHandlers(gbUrl);
 
         Assert.assertEquals("There should be two handlers", 2, actualHandlers.size());
         Assert.assertTrue("The Google Books handler should be first", actualHandlers.get(0) instanceof GoogleBooksHandler);
         
+        Assert.assertEquals("Expected to find id from URL", "mlugG4vfmw8C", new GoogleBooksHandler().findBookId(URI.create(gbUrl)).orElse(null));
     }
 }

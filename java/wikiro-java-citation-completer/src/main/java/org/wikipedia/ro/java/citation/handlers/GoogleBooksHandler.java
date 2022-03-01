@@ -3,6 +3,7 @@ package org.wikipedia.ro.java.citation.handlers;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,7 +31,7 @@ import com.google.api.services.books.model.Volume.VolumeInfo;
 public class GoogleBooksHandler implements Handler
 {
     private static final Logger LOG = LoggerFactory.getLogger(GoogleBooksHandler.class);
-    public static final Pattern GOOGLE_BOOKS_PATTERN = Pattern.compile("books\\.google\\.[\\w\\.]+");
+    public static final Pattern GOOGLE_BOOKS_PATTERN = Pattern.compile("(?:www|books)\\.google\\.[\\w\\.]+/books.*");
 
     @Override
     public Optional<String> processCitationParams(String url)
@@ -44,8 +45,8 @@ public class GoogleBooksHandler implements Handler
             }
             List<NameValuePair> urlParams = URLEncodedUtils.parse(gbUri, StandardCharsets.UTF_8);
 
-            Optional<String> idParam = urlParams.stream().filter(u -> "id".equalsIgnoreCase(u.getName())).findFirst().map(NameValuePair::getValue);
-
+            Optional<String> idParam = findBookId(gbUri);
+            
             if (idParam.isEmpty())
             {
                 return Optional.empty();
@@ -93,10 +94,10 @@ public class GoogleBooksHandler implements Handler
                     }
                 }
                 citationParams.put("url", String.format("{{Google books|%s}}",
-                    gbooksParams.entrySet().stream().map(e -> String.format("%s=%s", e.getKey(), e.getValue())).collect(Collectors.joining("|"))));
+                    gbooksParams.entrySet().stream().map(e -> String.join("=", e.getKey(), e.getValue())).collect(Collectors.joining("|"))));
 
                 return Optional.of(String.format("{{Citation|%s}}",
-                        citationParams.entrySet().stream().filter(e -> StringUtils.isNotBlank(e.getValue())).map(e -> String.format("%s=%s", e.getKey(), e.getValue())).collect(Collectors.joining("|"))
+                        citationParams.entrySet().stream().filter(e -> StringUtils.isNotBlank(e.getValue())).map(e -> String.join("=", e.getKey(), e.getValue())).collect(Collectors.joining("|"))
                     ));
             }
         }
@@ -105,6 +106,18 @@ public class GoogleBooksHandler implements Handler
             LOG.error("Error filling in Google Books reference", e);
         }
         return Optional.empty();
+    }
+
+    public Optional<String> findBookId(URI gbUri)
+    {
+        List<NameValuePair> urlParams = URLEncodedUtils.parse(gbUri, StandardCharsets.UTF_8);
+        Optional<String> idParam = urlParams.stream().filter(u -> "id".equalsIgnoreCase(u.getName())).findFirst().map(NameValuePair::getValue);
+
+        if (idParam.isEmpty())
+        {
+            idParam = Optional.ofNullable(Paths.get(gbUri.getPath()).getFileName().toString());
+        }
+        return idParam;
     }
 
 }
