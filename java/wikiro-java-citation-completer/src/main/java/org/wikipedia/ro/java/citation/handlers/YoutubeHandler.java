@@ -24,6 +24,7 @@ import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeRequestInitializer;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoListResponse;
+import com.google.api.services.youtube.model.VideoSnippet;
 
 public class YoutubeHandler implements Handler
 {
@@ -64,9 +65,13 @@ public class YoutubeHandler implements Handler
                 {
                     return Optional.empty();
                 }
-                Video video = ytVideoList.getItems().stream().findFirst().get();
+                Optional<String> videoTitle = ytVideoList.getItems().stream().findFirst().map(Video::getSnippet).map(VideoSnippet::getTitle);
 
-                String title = video.getSnippet().getTitle();
+                if (videoTitle.isEmpty())
+                {
+                    return Optional.empty();
+                }
+                String title = videoTitle.get();
 
                 Map<String, String> citationParams = new HashMap<String, String>();
                 citationParams.put("title", title);
