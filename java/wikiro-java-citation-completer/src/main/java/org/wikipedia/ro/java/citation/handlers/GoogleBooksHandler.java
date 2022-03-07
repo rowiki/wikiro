@@ -65,7 +65,7 @@ public class GoogleBooksHandler implements Handler
             Map<String, String> citationParams = new HashMap<>();
             citationParams.put("title", Stream.of(volumeInfo.getTitle(), volumeInfo.getSubtitle()).filter(Objects::nonNull).collect(Collectors.joining(": ")));
             citationParams.put("language", volumeInfo.getLanguage());
-            if (!Optional.ofNullable(volumeInfo.getAuthors()).map(Collection::isEmpty).orElse(false))
+            if (!Optional.ofNullable(volumeInfo.getAuthors()).map(Collection::isEmpty).orElse(true))
             {
                 for (int idx = 0; idx < volumeInfo.getAuthors().size(); idx++)
                 {
