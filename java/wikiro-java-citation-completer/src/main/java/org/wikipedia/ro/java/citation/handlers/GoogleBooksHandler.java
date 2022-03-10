@@ -76,6 +76,7 @@ public class GoogleBooksHandler implements Handler
             citationParams.put("data", volumeInfo.getPublishedDate());
             citationParams.put("publisher", volumeInfo.getPublisher());
 
+            Optional<String> pageNo = Optional.empty();
             if (citationParams.entrySet().stream().anyMatch(e -> StringUtils.isNotBlank(e.getValue())))
             {
                 Map<String, String> gbooksParams = new HashMap<>();
@@ -86,7 +87,8 @@ public class GoogleBooksHandler implements Handler
                 {
                     if (StringUtils.startsWith(pgString.get(), "PA"))
                     {
-                        gbooksParams.put("page", StringUtils.removeStart(pgString.get(), "PA"));
+                        pageNo = Optional.of(StringUtils.removeStart(pgString.get(), "PA"));
+                        gbooksParams.put("page", pageNo.get());
                     }
                     else
                     {
@@ -99,6 +101,11 @@ public class GoogleBooksHandler implements Handler
                 return Optional.of(String.format("{{Citation|%s}}",
                         citationParams.entrySet().stream().filter(e -> StringUtils.isNotBlank(e.getValue())).map(e -> String.join("=", e.getKey(), e.getValue())).collect(Collectors.joining("|"))
                     ));
+            }
+            
+            if (pageNo.isPresent())
+            {
+                citationParams.put("p", pageNo.get());
             }
         }
         catch (GeneralSecurityException | IOException e)
