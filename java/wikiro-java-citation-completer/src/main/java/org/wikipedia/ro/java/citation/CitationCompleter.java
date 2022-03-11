@@ -46,7 +46,7 @@ public class CitationCompleter extends AbstractExecutable
         LocalDate now = LocalDate.now();
         helper.withinDateRange(lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
 
-        List<Revision> recentChanges = wiki.recentChanges(helper);
+        List<Revision> recentChanges = wiki.recentChanges(helper, "edit");
         long[] revIds = recentChanges.stream().mapToLong(Revision::getID).toArray();
 
         HandlerFactory handlerFactory = HandlerFactory.createHandlerFactory();
