@@ -98,15 +98,15 @@ public class GoogleBooksHandler implements Handler
                 citationParams.put("url", String.format("{{Google books|%s}}",
                     gbooksParams.entrySet().stream().map(e -> String.join("=", e.getKey(), e.getValue())).collect(Collectors.joining("|"))));
 
+                if (pageNo.isPresent())
+                {
+                    citationParams.put("p", pageNo.get());
+                }
                 return Optional.of(String.format("{{Citation|%s}}",
                         citationParams.entrySet().stream().filter(e -> StringUtils.isNotBlank(e.getValue())).map(e -> String.join("=", e.getKey(), e.getValue())).collect(Collectors.joining("|"))
                     ));
             }
             
-            if (pageNo.isPresent())
-            {
-                citationParams.put("p", pageNo.get());
-            }
         }
         catch (GeneralSecurityException | IOException e)
         {
