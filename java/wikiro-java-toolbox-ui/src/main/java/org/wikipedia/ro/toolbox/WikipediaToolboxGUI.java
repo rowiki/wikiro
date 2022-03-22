@@ -13,6 +13,9 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -62,8 +65,6 @@ import org.wikibase.Wikibase;
 import org.wikipedia.Wiki;
 import org.wikipedia.Wiki.User;
 import org.wikipedia.ro.Generator;
-import org.wikipedia.ro.cache.Cache;
-import org.wikipedia.ro.cache.WikidataEntitiesCache;
 import org.wikipedia.ro.legacyoperations.Operation;
 import org.wikipedia.ro.legacyoperations.WikiOperation;
 import org.wikipedia.ro.toolbox.generators.PageGenerator;
@@ -107,8 +108,14 @@ public class WikipediaToolboxGUI {
         JPanel actionConfigPanel = createActionConfigPanel();
         panel.add(actionConfigPanel, BorderLayout.SOUTH);
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setLocation((int) (screenSize.getWidth() - 400) / 2, (int) (screenSize.getHeight() - 400) / 2);
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice defaultScreenDevice = ge.getDefaultScreenDevice();
+        if (null == defaultScreenDevice) {
+            throw new RuntimeException("No screen found");
+        }
+        Rectangle screenBounds = defaultScreenDevice.getDefaultConfiguration().getBounds();
+        
+        frame.setLocation((int) (screenBounds.getWidth() - 400) / 2 + screenBounds.x, (int) (screenBounds.getHeight() - 400) / 2 + screenBounds.y);
         frame.pack();
         frame.setVisible(true);
     }
