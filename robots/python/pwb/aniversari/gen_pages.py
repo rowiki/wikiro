@@ -43,7 +43,7 @@ MULTIPLE_SOURCES_BONUS = 1
 SCORE_LIMIT = 5
 
 def get_section_index(page, name):
-    req = pywikibot.getSite()._simple_request(action='parse', prop='sections', page=page)
+    req = pywikibot.Site()._simple_request(action='parse', prop='sections', page=page)
     json = req.submit()
     #print(json)
     if not json or 'parse' not in json or 'sections' not in json['parse']:
@@ -170,9 +170,9 @@ def get_event_text(page, day, month, year, event):
         month = months[month - 1]
     if not page:
         if year:
-            page = pywikibot.Page(pywikibot.getSite(),  "%d" % year)
+            page = pywikibot.Page(pywikibot.Site(),  "%d" % year)
         else:
-            page = pywikibot.Page(pywikibot.getSite(),  "%d %s" % (day, month))
+            page = pywikibot.Page(pywikibot.Site(),  "%d %s" % (day, month))
         if not page.exists():
             pywikibot.error("ERROR get_event_text")
             return ""
@@ -192,9 +192,9 @@ def set_event_text(page, day, month, year, text, comment):
         month = months[month - 1]
     if not page:
         if year:
-            page = pywikibot.Page(pywikibot.getSite(),  "%d" % year)
+            page = pywikibot.Page(pywikibot.Site(),  "%d" % year)
         else:
-            page = pywikibot.Page(pywikibot.getSite(),  "%d %s" % (day, month))
+            page = pywikibot.Page(pywikibot.Site(),  "%d %s" % (day, month))
     try:
         page.put(text, comment)
     except pywikibot.PageNotSaved:
@@ -282,7 +282,7 @@ def treat_date(page, day, month, event):
     print(title)
     ret = ""
     people = copy.deepcopy(get_line_elements(page, day, month, None, event))
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     for person in people:
         link = pywikibot.Page(site, person)
         if not link.exists():
@@ -707,7 +707,7 @@ def split_year_to_month(page, year, month):
     try:
         month_s = months[month-1]
         print("month_s", month_s)
-        mpage = pywikibot.Page(pywikibot.getSite(), "{} {}".format(month_s, year))
+        mpage = pywikibot.Page(pywikibot.Site(), "{} {}".format(month_s, year))
     except Exception as e:
         #TODO
         print("Cannot get month page", e)
@@ -768,7 +768,7 @@ def split_year_to_month_manual(page, year, month, ev_list, start_index, end_inde
 
 def use_wikidata():
     for year in range(1980, 1+time.localtime().tm_year):
-        page = pywikibot.Page(pywikibot.getSite(),  "%d" % (year))
+        page = pywikibot.Page(pywikibot.Site(),  "%d" % (year))
         if not page.exists():
             continue
         if page.isRedirectPage():
@@ -778,7 +778,7 @@ def use_wikidata():
 
 def split_years():
     for year in range(1980, 1+time.localtime().tm_year):
-        page = pywikibot.Page(pywikibot.getSite(),  "%d" % (year))
+        page = pywikibot.Page(pywikibot.Site(),  "%d" % (year))
         if not page.exists():
             continue
         if page.isRedirectPage():

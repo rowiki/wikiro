@@ -52,7 +52,7 @@ class DiacriticsBot:
         self.generator = generator
         self.acceptall = acceptall
         self.titlecase = titlecase
-        self.site = pywikibot.getSite()
+        self.site = pywikibot.Site()
         self.done = False
 
     def run(self):
@@ -91,7 +91,7 @@ class DiacriticsBot:
         
         if new_page_t == page_t:
             pywikibot.output(u'%s does not contain diacritics, skipping...\n'
-                             % page_mod.aslink())
+                             % page_mod.title(as_link=True))
         else:            
             pywikibot.output(u'[[%s]] will be created' % page_mod.title())
             if not self.acceptall:
@@ -114,10 +114,10 @@ def main():
     acceptall = False
     titlecase = False
 
-    for arg in pywikibot.handleArgs():
+    for arg in pywikibot.handle_args():
         if arg == '-always':
             acceptall = True
-        elif genFactory.handleArg(arg):
+        elif genFactory.handle_arg(arg):
             pass
         else:
             pywikibot.showHelp(u'diacritics_redirects')
