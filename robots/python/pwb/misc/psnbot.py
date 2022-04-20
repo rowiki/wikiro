@@ -22,6 +22,11 @@ def month_name(month):
 def next_month(month):
 	return (month % 12) + 1
 
+def next_year(year, month):
+	if month == 12:
+		return year + 1
+	return year
+
 class PSNBot(SingleSiteBot):
 	def __init__(self, month, year, generator):
 		super(PSNBot, self).__init__(
@@ -33,12 +38,12 @@ class PSNBot(SingleSiteBot):
 
 	"""Returns the username of the initial author of the page"""
 	def get_initial_author(self, page):
-		user, date = page.getCreator()
-		return user
+		return page.oldest_revision.user
 
 	def get_tagger(self, page):
-		starttime = pywikibot.Timestamp.fromtimestampformat("%04d%02d%02d" % (self.year, next_month(self.month), 1))
+		starttime = pywikibot.Timestamp.fromtimestampformat("%04d%02d%02d" % (next_year(self.year, self.month), next_month(self.month), 1))
 		endtime   = pywikibot.Timestamp.fromtimestampformat("%04d%02d%02d" % (self.year, self.month, 1))
+		print(starttime, endtime)
 		lastrev   = None
 		for rev in page.revisions(content=True, starttime=starttime, endtime=endtime):
 			#print(rev)
@@ -79,7 +84,7 @@ class PSNBot(SingleSiteBot):
 		page.save("Nominalizez pentru ștergere din cauza posibilei lipse de notabilitate")
 		
 	def create_nomination(self, page, ps_page, ps_title, tagger):
-		text = "{{subst:formular ștergere|%s|%s|3=%s}}--~~~~" % (page.title(), ps_title, self.prepare_psn(tagger))
+		text = "{{subst:formular ștergere|%s|%s|3=%s}}--Mesaj livrat de un [[Utilizator:PȘNBot|robot]]. ~~~~~" % (page.title(), ps_title, self.prepare_psn(tagger))
 		ps_page.text = text
 		ps_page.save("Creez o propunere nouă de ștergere")
 
@@ -101,7 +106,7 @@ class PSNBot(SingleSiteBot):
 		diff = (this_year - self.year) * 12 + (this_month - self.month)
 		if diff <= 0:
 			raise ValueError("Invalid month provided")
-		author_page.text = text + "\n{{subst:au-pșn|%s|%s|luni=%d|nominator=%s}}--~~~~" % (page.title(), ps_title, diff, tagger)
+		author_page.text = text + "\n{{subst:au-pșn|%s|%s|luni=%d|nominator=%s}}--Mesaj livrat de un [[Utilizator:PȘNBot|robot]]. ~~~~~" % (page.title(), ps_title, diff, tagger)
 		author_page.save("Pagină nominalizată pentru ștergere")
 
 	def treat(self, page):
@@ -131,7 +136,7 @@ if __name__ == "__main__":
 		year -= 1
 	month = (month - 1 + 12 - month_diff) % 12
 
-	cat = pywikibot.Category(pywikibot.getSite(), u"Categorie:Articole despre subiecte cu notabilitate incertă din %s 2019" % months[month])
+	cat = pywikibot.Category(pywikibot.Site(), u"Categorie:Articole despre subiecte cu notabilitate incertă din %s %d" % (months[month],year))
 	generator = pagegenerators.CategorizedPageGenerator(cat)
 	bot = PSNBot(month+1, year, generator)
 	bot.run()
