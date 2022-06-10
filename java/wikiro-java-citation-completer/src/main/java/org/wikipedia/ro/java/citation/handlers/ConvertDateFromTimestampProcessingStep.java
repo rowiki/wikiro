@@ -1,11 +1,8 @@
 package org.wikipedia.ro.java.citation.handlers;
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
