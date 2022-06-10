@@ -119,6 +119,9 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
                 String countryName = defaultString(
                     defaultString((String) eachResult.get("countrySport"), (String) eachResult.get("countryCitizenship")));
                 Object playerNumber = Optional.ofNullable(eachResult.get("sprtno")).orElse("");
+                if (!playerNumber.toString().matches("\\d+")) {
+                    playerNumber = "";
+                }
                 listBuilder.append("{{Ef jucător|nat=").append(countryName).append("|nr=").append(playerNumber).append("|nume=").append(ill(playerEntity))
                     .append("|poz=").append(defaultString(POSN_INDEX.get(posn))).append("}}\n");
 
