@@ -211,7 +211,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             }
             if (startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:",
                 "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", ":s:", "imdbname:", "c:", "doi:",
-                "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:", "oeis:", "wikt:", "wikiquote:")) {
+                "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:", "oeis:", "wikt:", "wikiquote:", "WP:")) {
                 System.out.println("Link to something else! Skipping...");
                 continue;
             }
