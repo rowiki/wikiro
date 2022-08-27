@@ -7,46 +7,21 @@
 # Distributed under the terms of the MIT license.
 #
 import pywikibot
+
+from pywikibot import config as user
 from pywikibot import pagegenerators
 from pywikibot.data import sparql
-from pywikibot import config as user
 
-import sys
 import json
+import sys
 
 import sirutalib
 
-sys.path.append("wikiro/robots/python/pwb")
-import strainu_functions as sf
-from wikidata import robot_romania as robot
-import postal_codes
+import wikiro.robots.python.pwb.postal_codes as postal_codes
+import wikiro.robots.python.pwb.strainu_functions as sf
 
-config = {
-    'properties': {
-        u'Denumire': ('', None, 'label'),
-        u'Coord': ('P625', False, 'globe-coordinate'),
-        u'imagine': ('P18', True, 'commonsMedia'),
-        u'hartă': ('P242', False, 'commonsMedia'),
-        u'colaj': ('P2716', True, 'commonsMedia'),
-        u'video': ('P10', True, 'commonsMedia'),
-        u'Țară': ('P17', False, 'wikibase-item'),
-        u'Commons': ('P373', False, 'string'),
-        u'SIRUTA': ('P843', False, 'string'),
-        u'este un/o': ('P31', False, 'wikibase-item'),
-        u'subdiviziuni': ('P150', False, 'wikibase-item'),
-        u'localități componente': ('P1383', False, 'wikibase-item'),
-        u'fus orar': ('P421', False, 'wikibase-item'),
-        u'primar': ('P6', False, 'wikibase-item'),
-        u'codp': ('P281', True, 'string'),
-        u'SIRUTASUP': ('P131', False, 'wikibase-item'),
-        u'ISO3166-2': ('P300', False, 'string'),
-        u'populație': ('P1082', False, 'quantity'),
-        u'reședință pentru': ('P1376', False, 'wikibase-item'),
-        u'site': ('P856', False, 'url'),
-        u'stemă': ('P94', False, 'commonsMedia'),
-        u'drapel': ('P41', False, 'commonsMedia'),
-    }
-}
+from wikiro.robots.python.pwb.localitati import config
+from wikiro.robots.python.pwb.wikidata import robot_romania as robot
 
 class ItemProcessing:
     def __init__(self, config, always=False, item=None):
