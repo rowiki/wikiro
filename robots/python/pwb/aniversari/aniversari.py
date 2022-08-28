@@ -29,7 +29,7 @@ MULTIPLE_SOURCES_BONUS = 1
 SCORE_LIMIT = 5
 
 def get_section_index(page, name):
-    req = pywikibot.getSite()._simple_request(action='parse', prop='sections', page=page)
+    req = pywikibot.Site()._simple_request(action='parse', prop='sections', page=page)
     json = req.submit()
     #print(json)
     if not json or 'parse' not in json or 'sections' not in json['parse']:
@@ -156,9 +156,9 @@ def get_event_text(page, day, month, year, event):
         month = months[month - 1]
     if not page:
         if year:
-            page = pywikibot.Page(pywikibot.getSite(),  "%d" % year)
+            page = pywikibot.Page(pywikibot.Site(),  "%d" % year)
         else:
-            page = pywikibot.Page(pywikibot.getSite(),  "%d %s" % (day, month))
+            page = pywikibot.Page(pywikibot.Site(),  "%d %s" % (day, month))
         if not page.exists():
             pywikibot.error("ERROR get_event_text")
             return ""
@@ -178,9 +178,9 @@ def set_event_text(page, day, month, year, text, comment):
         month = months[month - 1]
     if not page:
         if year:
-            page = pywikibot.Page(pywikibot.getSite(),  "%d" % year)
+            page = pywikibot.Page(pywikibot.Site(),  "%d" % year)
         else:
-            page = pywikibot.Page(pywikibot.getSite(),  "%d %s" % (day, month))
+            page = pywikibot.Page(pywikibot.Site(),  "%d %s" % (day, month))
     try:
         page.put(text, comment)
     except pywikibot.PageNotSaved:
@@ -305,7 +305,7 @@ def treat_date(page, day, month, event):
     print(title)
     ret = ""
     people = copy.deepcopy(get_line_elements(page, day, month, None, event))
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     for person in people:
         link = pywikibot.Page(site, person)
         if not link.exists():
@@ -474,7 +474,7 @@ def treat_year(page, year, suffix, event):
     print(title)
     ret = ""
     people = copy.deepcopy(get_line_elements(page, None, None, year, event))
-    site = pywikibot.getSite()
+    site = pywikibot.Site()
     for person in people:
         link = pywikibot.Page(site, person)
         if not link.exists():
@@ -577,14 +577,14 @@ Scorul este alocat automat pe baza numărului de posibile date de naștere de la
     #day = 6
     #month = "iunie"
     #event = "Nașteri"
-    #page = pywikibot.Page(pywikibot.getSite(),  "%d %s" % (day, month))
+    #page = pywikibot.Page(pywikibot.Site(),  "%d %s" % (day, month))
     #import pdb
     #pdb.set_trace()
     #treat_date(page, day, month, event)
     #return
     for year in range(1, time.localtime().tm_year):
         for suffix in ["", " î.Hr."]:
-            page = pywikibot.Page(pywikibot.getSite(),  "%d%s" % (year, suffix))
+            page = pywikibot.Page(pywikibot.Site(),  "%d%s" % (year, suffix))
             if not page.exists():
                 continue
             if page.isRedirectPage():
@@ -595,7 +595,7 @@ Scorul este alocat automat pe baza numărului de posibile date de naștere de la
                 text += treat_year(page, year, suffix, event)
     for month in months:
         for day in range(1,32):
-            page = pywikibot.Page(pywikibot.getSite(),  "%d %s" % (day, month))
+            page = pywikibot.Page(pywikibot.Site(),  "%d %s" % (day, month))
             if not page.exists():
                 continue
             if page.isRedirectPage():
@@ -604,7 +604,7 @@ Scorul este alocat automat pe baza numărului de posibile date de naștere de la
                 text += treat_date(page, day, month, event)
 
 
-    page = pywikibot.Page(pywikibot.getSite(), "Proiect:Aniversări/Erori")
+    page = pywikibot.Page(pywikibot.Site(), "Proiect:Aniversări/Erori")
     page.put(text + "|}", "Actualizare nepotriviri")
 
 if __name__ == "__main__":
