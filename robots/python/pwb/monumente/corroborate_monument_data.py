@@ -686,6 +686,7 @@ def main():
 	force = False
 	codePrefix = None
 	aggresive = False
+	check_new_monuments = False
 	global _changes, _db, _differentCoords
 	
 	for arg in pywikibot.handle_args():
@@ -698,6 +699,8 @@ def main():
 		if arg.startswith('-force'):
 			force = True
 			aggresive = True
+		if arg.startwith('-checkNew'):
+			check_new_monuments = True
 		if arg.startswith('-updateArticle'):
 			_changes = _changes | Changes.article
 		if arg.startswith('-updateImage'):
@@ -739,7 +742,8 @@ def main():
 	ran_data = {}
 	other_data = readOtherData(otherFile)
 	
-	checkNewMonuments(other_data, db_json)
+	if check_new_monuments:
+		checkNewMonuments(other_data, db_json)
 
 	if addRan:
 		ran_data = readRan("ro_ran_db.json")

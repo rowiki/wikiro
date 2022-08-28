@@ -52,13 +52,16 @@ Command line options:
 		Default: normal
 '''
 
-import sys, os
-import time, datetime
-import warnings
-import json
-import string
 import cProfile
+import datetime
+import itertools
+import json
+import os
 import re
+import string
+import sys
+import time
+import warnings
 
 import pywikibot
 from pywikibot import pagegenerators
@@ -587,7 +590,7 @@ def main():
 			rowTemplate = pywikibot.Page(site, '%s:%s' % (site.namespace(10), \
 								template))
 			transGen.append(rowTemplate.getReferences(follow_redirects=False,content=False))
-		combinedGen = pagegenerators.CombinedPageGenerator(transGen)
+		combinedGen = itertools.chain(*transGen)
 		combinedGen = filter_unique(combinedGen, key=hash)
 		#combinedGen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(site, u"Categorie:Imagini încărcate în cadrul Wiki Loves Monuments 2020"))
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(combinedGen,
