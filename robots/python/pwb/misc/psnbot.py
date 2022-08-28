@@ -8,6 +8,8 @@ Run using:
 """
 import os
 import datetime
+from enum import Enum
+from typing import Generator
 
 import pywikibot
 from pywikibot import pagegenerators
@@ -27,14 +29,24 @@ def next_year(year, month):
 		return year + 1
 	return year
 
+class ProcessType(Enum):
+	ALL = 1
+	ONE = 3
+
+
 class PSNBot(SingleSiteBot):
-	def __init__(self, month, year, generator):
+	def __init__(self, month, year, generator: Generator, processor: ProcessType):
 		super(PSNBot, self).__init__(
 	            generator=generator, site=pywikibot.Site())
 		self.month = month
 		self.year = year
 		self.generator = generator
 		self.psp = "Wikipedia:Pagini de șters"
+		self.counter['proposed'] = 0
+		if processor == ProcessType.ONE:
+			self.limit = 1
+		else:
+			self.limit = None
 
 	"""Returns the username of the initial author of the page"""
 	def get_initial_author(self, page):
@@ -114,6 +126,9 @@ class PSNBot(SingleSiteBot):
 		if self.deletion_proposed(page):
 			return False
 
+		if self.limit is not None and self.counter['proposed'] >= self.limit:
+			return False
+
 		ps_page, ps_title = self.get_proposal_page(page)
 		tagger = self.get_tagger(page)
 		author = self.get_initial_author(page)
@@ -126,10 +141,20 @@ class PSNBot(SingleSiteBot):
 			self.update_list(ps_page)
 			self.update_article(page, ps_title, tagger)
 			self.notify_creator(page, ps_title, tagger, author)
+			self.counter['proposed'] += 1
 
-if __name__ == "__main__":
+def main():
 	month_diff = 4
-	import datetime
+
+	processor = ProcessType.ALL
+	for arg in pywikibot.handle_args():
+		if arg.startswith("-all"):
+			processor = ProcessType.ALL
+		if arg.startswith("-one"):
+			processor = ProcessType.ONE
+		if arg.startswith("-months:"):
+			month_diff = int(arg[len("-months:"):])
+
 	year = datetime.datetime.now().year
 	month = datetime.datetime.now().month
 	if month <= month_diff:
@@ -138,6 +163,8 @@ if __name__ == "__main__":
 
 	cat = pywikibot.Category(pywikibot.Site(), u"Categorie:Articole despre subiecte cu notabilitate incertă din %s %d" % (months[month],year))
 	generator = pagegenerators.CategorizedPageGenerator(cat)
-	bot = PSNBot(month+1, year, generator)
+	bot = PSNBot(month+1, year, generator, processor)
 	bot.run()
 	
+if __name__ == "__main__":
+	main()
