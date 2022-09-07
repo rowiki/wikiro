@@ -1092,7 +1092,7 @@ if (u.match(/webcitation.org/)) {
 	if (u.match(/hotnews.ro/)) {
 		var hnLdJsonElement = document.querySelector('script[type="application/ld+json"]');
 		if (hnLdJsonElement) {
-			var hnLdJsonObj = JSON.parse(rfiLdJsonElement.innerText);
+			var hnLdJsonObj = JSON.parse(hnLdJsonElement.innerText);
 			
 			var hnGraph = hnLdJsonObj['@graph'];
 			if (hnGraph) {
