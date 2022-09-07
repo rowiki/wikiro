@@ -1090,36 +1090,21 @@ if (u.match(/webcitation.org/)) {
 		var W_Newspaper = 'Contributors.ro';
 	};
 	if (u.match(/hotnews.ro/)) {
-		var x = document.title;
-		var x = x.replace(/ - Arhiva.*/, '');
-		var x = x.replace(/\(de.*/, '');
-		var W_Title = x.replace(/ - HotNews.ro/, '');
-		var x = d.match(/class=.data..*/)[0];
-		var x = x.replace(/<\/span>.*/, '');
-		var x = x.replace(/.*>/, '');
-		var x = x.replace(/,/, ';');
-		var x = x.replace(/,.*/, '');
-		var W_Date = x.replace(/.*;/, '');
-		var x = document.title;
-		if (x.match(/\(de .*\)/)) {
-			var x = x.match(/\(de.*\)/)[0];
-			var x = x.replace(/\)/, '');
-			var W_Authors = x.replace(/\(de /, '');
-		} else {
-			if (d.match(/class=.autor.>[^]*class=.categoria/)) {
-				var x = d.match(/class=.autor.>[^]*class=.categoria/)[0];
-				var x = x.replace(/<\/a>/, '\n');
-				var x = x.match(/href=..*/)[0];
-				var W_Authors = x.replace(/.*>/, '');
-			} else {
-				if (d.match(/<div class=.autor.> de <a rel=.nofollow. href=./)) {
-					var x = d.match(/<div class=.autor.> de <a rel=.nofollow. href=..*<\/a>/)[0];
-					var x = x.replace(/<\/a>/, '\n');
-					var x = x.match(/href=..*/)[0];
-					var W_Authors = x.replace(/.*>/, '');
-				};
-			};
-		};
+		var hnLdJsonElement = document.querySelector('script[type="application/ld+json"]');
+		if (hnLdJsonElement) {
+			var hnLdJsonObj = JSON.parse(rfiLdJsonElement.innerText);
+			
+			var hnGraph = hnLdJsonObj['@graph'];
+			if (hnGraph) {
+				for (i = 0; i < hnGraph.length; i++) {
+					if (hnGraph[i]['@type'] == 'NewsArticle') {
+						W_Title = hnGraph[i].headline;
+						W_Author = hnGraph[i].author.name;
+						W_Date = hnGraph[i].datePublished.split(" ")[0];
+					}
+				}
+			}
+		}	
 		var W_Newspaper = 'HotNews.ro';
 	};
 	if (u.match(/mediafax.ro/)) {
