@@ -2220,7 +2220,16 @@ var ref2 = ', accesat la ' + today + '</ref>';
 var sr = ref1 + s + ref2;
 var ref = '{{Citation | url=' + document.URL + '| title=' + W_Title;
 ref = ref + '| newspaper=' + W_Newspaper + '| date= ' + W_DateYMD;
-ref = ref + '| accessdate=' + W_Ref_Date;
+
+function join(t, a, s) {
+   function format(m) {
+      let f = new Intl.DateTimeFormat('en', m);
+      return f.format(t);
+   }
+   return a.map(format).join(s);
+}
+var a = [{year: "numeric"}, {month: "numeric"}, {day: "numeric"}];
+ref = ref + '| accessdate=' + join(new Date(), a, '-');
 
 if (W_AuthorsList.length > 0) {
 	for (var authIdx = 0; authIdx < W_AuthorsList.length; authIdx++) {
