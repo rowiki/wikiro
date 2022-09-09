@@ -36,8 +36,8 @@ public class Utils
         dateStr = StringUtils.substringBefore(dateStr, " ");
         try
         {
-            OffsetDateTime publicationDateTime = OffsetDateTime.parse(dateStr);
-            dateStr = DateTimeFormatter.ofPattern("uuuu-MM-dd").format(publicationDateTime);
+            OffsetDateTime inputDateTime = OffsetDateTime.parse(dateStr);
+            dateStr = DateTimeFormatter.ofPattern("uuuu-MM-dd").format(inputDateTime);
         }
         catch (DateTimeParseException dpe)
         {
