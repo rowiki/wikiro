@@ -89,7 +89,7 @@
 			<version>4.2.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.andreistroe</groupId>
+			<groupId>com.github.andreistroe.schemaorg-java</groupId>
 			<artifactId>schemaorg-java</artifactId>
 			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
