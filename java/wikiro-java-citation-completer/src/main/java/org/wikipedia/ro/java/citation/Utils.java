@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,18 +31,19 @@ public class Utils
         }
     }
 
-    public static String extractDate(String publicationDate)
+    public static String extractDate(String dateStr)
     {
+        dateStr = StringUtils.substringBefore(dateStr, " ");
         try
         {
-            OffsetDateTime publicationDateTime = OffsetDateTime.parse(publicationDate);
-            publicationDate = DateTimeFormatter.ofPattern("uuuu-MM-dd").format(publicationDateTime);
+            OffsetDateTime publicationDateTime = OffsetDateTime.parse(dateStr);
+            dateStr = DateTimeFormatter.ofPattern("uuuu-MM-dd").format(publicationDateTime);
         }
         catch (DateTimeParseException dpe)
         {
-            LOG.debug("Could not extract date from string \"{}\"", publicationDate, dpe);
+            LOG.debug("Could not extract date from string \"{}\"", dateStr, dpe);
         }
-        return publicationDate;
+        return dateStr;
     }
 
 }

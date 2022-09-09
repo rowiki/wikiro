@@ -40,4 +40,16 @@ public class TestJsonLdCitation
         Assert.assertEquals("Singurul român din F1: \"Sezonul viitor vom fi decisivi\"", params.get("title"));
         Assert.assertEquals("2010-12-20", params.get("date"));
     }
+    
+    @Test
+    public void testRealHotnewsCitationPage() throws IOException, URISyntaxException {
+        URL rfiHtmlFileURL = getClass().getClassLoader().getResource("hotnews.html");
+        Document document = Jsoup.parse(new File(rfiHtmlFileURL.toURI()), StandardCharsets.UTF_8.toString());
+        
+        Map<String, String> params = new HashMap<>();
+        new DefaultCitationHandler().populateMapFromJsonLd(document, params);
+        
+        Assert.assertEquals("HARTĂ INTERACTIVĂ Autostrada spre sudul Litoralului. Pe unde va trece „Alternativa Techirghiol”, noul drum care va ocoli aglomerația din Eforie / Nod spectaculos cu A4 și A2", params.get("title"));
+        Assert.assertEquals("2022-09-03", params.get("date"));
+    }
 }

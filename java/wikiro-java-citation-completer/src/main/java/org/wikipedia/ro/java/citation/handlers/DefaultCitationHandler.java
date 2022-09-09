@@ -17,12 +17,10 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -30,14 +28,24 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wikipedia.ro.java.citation.SchemaorgUtils;
 import org.wikipedia.ro.java.citation.data.Creator;
 import org.wikipedia.ro.java.citation.data.Zotero;
 
+import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import com.google.schemaorg.JsonLdSerializer;
+import com.google.schemaorg.JsonLdSyntaxException;
+import com.google.schemaorg.SchemaOrgType;
+import com.google.schemaorg.core.NewsArticle;
+import com.google.schemaorg.core.Person;
+import com.google.schemaorg.core.Thing;
+import com.google.schemaorg.core.datatype.Text;
 
 public class DefaultCitationHandler implements Handler
 {
@@ -268,46 +276,8 @@ public class DefaultCitationHandler implements Handler
             {
                 String ldJson = ldJsonEl.html();
                 LOG.info("Found json: {}", ldJson);
-                Optional<JsonObject> ldJsonData = extractJsonObject(ldJson);
-
-                if (ldJsonData.isEmpty())
-                {
-                    continue;
-                }
-                JsonObject ldJsonObject = ldJsonData.get();
-                Stream.of("dateCreated", "datePublished").map(param -> ldJsonObject.get(param))
-                    .filter(Objects::nonNull)
-                    .filter(JsonElement::isJsonPrimitive)
-                    .map(de -> extractDate(de.getAsString()))
-                    .findFirst()
-                    .ifPresent(d -> retParams.put("date", d));
-                JsonElement authorElement = ldJsonObject.get("author");
-                if (null != authorElement && authorElement.isJsonObject())
-                {
-                    Optional<String> authorName = Optional.ofNullable(authorElement.getAsJsonObject())
-                        .map(x -> x.get("name"))
-                        .filter(x -> !x.isJsonNull())
-                        .map(JsonElement::getAsString);
-                    if (authorName.isPresent())
-                    {
-                        retParams.put("author1", authorName.get());
-                    }
-                }
-                JsonElement publisherElement = ldJsonObject.get("publisher");
-                if (null != publisherElement && publisherElement.isJsonObject())
-                {
-                    retParams.put("publisher",
-                        Optional.ofNullable(publisherElement.getAsJsonObject())
-                            .map(x -> x.get("name"))
-                            .filter(x -> !x.isJsonNull())
-                            .map(JsonElement::getAsString)
-                            .orElse(null));
-                }
-                JsonElement titleElement = ldJsonObject.get("headline");
-                if (null != titleElement && titleElement.isJsonPrimitive())
-                {
-                    retParams.put("title", titleElement.getAsString());
-                }
+                
+                SchemaorgUtils.extractFromJsonSchema(ldJson, retParams);
             }
         }
     }
