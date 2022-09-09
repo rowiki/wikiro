@@ -120,17 +120,12 @@ public class SchemaorgUtils
                     {
                         continue;
                     }
+                    String jsonLdId;
                     try
                     {
-                        String jsonLdId = Thing.class.cast(maybePublisher).getJsonLdId();
-                        for (SchemaOrgType indexedObj: graph)
-                        {
-                            String crtId = indexedObj.getProperty("@id").stream().filter(Text.class::isInstance).findFirst().map(Text.class::cast).map(Text::getValue).orElse(null);
-                            if (StringUtils.equals(crtId, jsonLdId) && Organization.class.isInstance(indexedObj))
-                            {
-                                publisherNames = Organization.class.cast(indexedObj).getNameList();
-                            }
-                        }
+                        jsonLdId = Thing.class.cast(maybePublisher).getJsonLdId();
+                        Organization o = findObjectByIdInGraph(jsonLdId, Organization.class, graph);
+                        publisherNames = o.getNameList();
                     }
                     catch (SchemaOrgException e)
                     {
@@ -156,4 +151,16 @@ public class SchemaorgUtils
         }
     }
 
+    private static <T> T findObjectByIdInGraph(String id, Class<T> clazz, List<SchemaOrgType> graph)
+    {
+        for (SchemaOrgType indexedObj : graph)
+        {
+            String crtId = indexedObj.getProperty("@id").stream().filter(Text.class::isInstance).findFirst().map(Text.class::cast).map(Text::getValue).orElse(null);
+            if (StringUtils.equals(crtId, id) && clazz.isInstance(indexedObj))
+            {
+                return clazz.cast(indexedObj);
+            }
+        }
+        return null;
+    }
 }
