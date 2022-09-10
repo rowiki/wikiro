@@ -3,15 +3,12 @@ package org.wikipedia.ro.java.citation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.graph.Graph;
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.schemaorg.JsonLdSerializer;
 import com.google.schemaorg.JsonLdSyntaxException;
