@@ -52,6 +52,6 @@ public class TestJsonLdCitation
         Assert.assertEquals("HARTĂ INTERACTIVĂ Autostrada spre sudul Litoralului. Pe unde va trece „Alternativa Techirghiol”, noul drum care va ocoli aglomerația din Eforie / Nod spectaculos cu A4 și A2", params.get("title"));
         Assert.assertEquals("2022-09-03", params.get("date"));
         Assert.assertEquals("Victor Cozmei", params.get("author1"));
-        Assert.assertEquals("HotNews.ro", params.get("publisher1"));
+        Assert.assertEquals("HotNews.ro", params.get("publisher"));
     }
 }
