@@ -3,6 +3,7 @@ package org.wikipedia.ro.java.citation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -130,10 +131,8 @@ public class SchemaorgUtils
                     }
                 }
             }
-            for (int i = 0; i < publisherNames.size(); i++)
-            {
-                retParams.put(String.format("publisher%d", 1 + i), ((Text) publisherNames.get(i)).getValue()); 
-            }
+            retParams.put("publisher", 
+                publisherNames.stream().map(Text.class::cast).map(Text::getValue).collect(Collectors.joining(", ")));
         }
         
         ImmutableList<SchemaOrgType> headlineList = article.getHeadlineList();
