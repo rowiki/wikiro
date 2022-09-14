@@ -1,6 +1,7 @@
 package org.wikipedia.ro.java.citation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import com.google.schemaorg.JsonLdSerializer;
 import com.google.schemaorg.JsonLdSyntaxException;
 import com.google.schemaorg.SchemaOrgException;
 import com.google.schemaorg.SchemaOrgType;
+import com.google.schemaorg.core.Article;
 import com.google.schemaorg.core.NewsArticle;
 import com.google.schemaorg.core.Organization;
 import com.google.schemaorg.core.Person;
@@ -35,16 +37,16 @@ public class SchemaorgUtils
             List<Thing> thing = SERIALIZER.deserialize(ldJson);
             if ("http://schema.org/NewsArticle".equals(thing.get(0).getFullTypeName())) {
                 NewsArticle article = (NewsArticle) thing.get(0);
-                extractFromNewsArticle(retParams, article, null);
+                extractFromArticle(retParams, article, null);
             }
             else if ("http://schema.org/Thing".equals(thing.get(0).getFullTypeName()))
             {
                 ImmutableList<SchemaOrgType> graph = thing.get(0).getProperty("@graph");
                 for (SchemaOrgType sot: graph)
                 {
-                    if ("http://schema.org/NewsArticle".equals(sot.getFullTypeName()))
+                    if (Arrays.asList("http://schema.org/NewsArticle", "http://schema.org/Article").contains(sot.getFullTypeName()))
                     {
-                        extractFromNewsArticle(retParams, (NewsArticle) sot, graph);
+                        extractFromArticle(retParams, (Article) sot, graph);
                     }
                 }
             }
@@ -56,7 +58,7 @@ public class SchemaorgUtils
         }
     }
 
-    private static void extractFromNewsArticle(Map<String, String> retParams, NewsArticle article, List<SchemaOrgType> graph)
+    private static void extractFromArticle(Map<String, String> retParams, Article article, List<SchemaOrgType> graph)
     {
         ImmutableList<SchemaOrgType> datePubList = article.getDatePublishedList();
         if (null != datePubList)
