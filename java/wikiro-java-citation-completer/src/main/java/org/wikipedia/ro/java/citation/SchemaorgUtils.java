@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -35,13 +36,18 @@ public class SchemaorgUtils
         {
             //ldJson = pruneLdJson(ldJson);
             List<Thing> thing = SERIALIZER.deserialize(ldJson);
-            if ("http://schema.org/NewsArticle".equals(thing.get(0).getFullTypeName())) {
+            Optional<Thing> firstThing = thing.stream().findFirst();
+            if (!firstThing.isPresent())
+            {
+                return;
+            }
+            if ("http://schema.org/NewsArticle".equals(firstThing.get().getFullTypeName())) {
                 NewsArticle article = (NewsArticle) thing.get(0);
                 extractFromArticle(retParams, article, null);
             }
-            else if ("http://schema.org/Thing".equals(thing.get(0).getFullTypeName()))
+            else if ("http://schema.org/Thing".equals(firstThing.get().getFullTypeName()))
             {
-                ImmutableList<SchemaOrgType> graph = thing.get(0).getProperty("@graph");
+                ImmutableList<SchemaOrgType> graph = firstThing.get().getProperty("@graph");
                 for (SchemaOrgType sot: graph)
                 {
                     if (Arrays.asList("http://schema.org/NewsArticle", "http://schema.org/Article").contains(sot.getFullTypeName()))
