@@ -118,7 +118,7 @@ public class SchemaorgUtils
                     x.addAll(l2);
                     return x;
                 });
-            if (publisherNames.isEmpty() && !graph.isEmpty())
+            if (publisherNames.isEmpty() && null != graph && !graph.isEmpty())
             {
                 for (SchemaOrgType maybePublisher: publisherList)
                 {
