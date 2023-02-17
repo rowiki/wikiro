@@ -18,6 +18,8 @@ import java.util.regex.Pattern;
 import javax.security.auth.login.LoginException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikibase.data.Entity;
@@ -29,12 +31,19 @@ import org.wikipedia.ro.java.lister.generators.SettlementListsGenerator;
 import org.wikipedia.ro.java.lister.generators.WikidataListGenerator;
 import org.wikipedia.ro.utils.Credentials;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.ConsoleAppender;
+
 /**
  * Hello world!
  *
  */
 public class App {
-
+    
     public static Credentials identifyCredentials(String userVarName, String passVarName, String target) {
         Credentials credentials = new Credentials();
 
@@ -65,6 +74,7 @@ public class App {
     private static Pattern UPDATED_TEMPLATE_PATTERN =
         Pattern.compile("\\{\\{[Uu]pdated\\s*\\|\\{\\{[Dd]ată\\s*(\\|[\\d]+)+?\\}{2}\\s*\\}{2}");
     private static Map<String, WikidataListGenerator> LIST_GENERATORS = new HashMap<String, WikidataListGenerator>();
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
         Wiki wiki = Wiki.newSession("ro.wikipedia.org");
@@ -88,6 +98,7 @@ public class App {
             List<String> listMarkersPresence = wiki.whatTranscludesHere(List.of("Format:Listă populată din Wikidata")).stream().findFirst().orElse(List.of());
 
             for (String eachTransclusion : listMarkersPresence) {
+                LOG.info("Found template on page {}", eachTransclusion);
                 String pageText = wiki.getPageText(List.of(eachTransclusion)).stream().findFirst().orElse("");
 
                 Matcher listStartMatcher = LIST_START_PATTERN.matcher(pageText);
@@ -165,5 +176,37 @@ public class App {
         } finally {
             wiki.logout();
         }
+    }
+    
+    private static void initLogging()
+    {
+        LoggerContext logbackContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        
+        PatternLayoutEncoder ple = new PatternLayoutEncoder();
+
+        ple.setPattern("%date %level %logger{10} [%file:%line] %msg%n");
+        ple.setContext(logbackContext);
+        ple.start();
+
+        ConsoleAppender<ILoggingEvent> appender = new ConsoleAppender<>();
+        appender.setContext(logbackContext);
+        appender.setName("console");
+        appender.setEncoder(ple);
+        appender.start();
+        
+        Logger roWikiLog = logbackContext.getLogger("org.wikipedia.ro");
+        roWikiLog.setAdditive(false);
+        roWikiLog.setLevel(Level.INFO);
+        roWikiLog.addAppender(appender);
+        
+        Logger wikiLog =  logbackContext.getLogger("wiki");
+        wikiLog.setAdditive(false);
+        wikiLog.setLevel(Level.WARN);
+        wikiLog.addAppender(appender);
+        
+        logbackContext.setPackagingDataEnabled(true);
+
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();
     }
 }

@@ -1,6 +1,7 @@
 package org.wikipedia.ro.java.citation;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -34,7 +35,16 @@ public class HandlerFactory
             handlerList.add(new IMDbCitationHandler());
         }
 
-        URI srcURI = URI.create(url);
+        URI srcURI = null;
+        
+        try {
+            srcURI = new URI(url);
+        }
+        catch (URISyntaxException e)
+        {
+            LOG.info("Bad URI {}: {}", url, e.getMessage());
+            return handlerList;
+        }
         if (GoogleBooksHandler.GOOGLE_BOOKS_PATTERN.matcher(srcURI.getHost() + srcURI.getPath()).matches())
         {
             handlerList.add(new GoogleBooksHandler());

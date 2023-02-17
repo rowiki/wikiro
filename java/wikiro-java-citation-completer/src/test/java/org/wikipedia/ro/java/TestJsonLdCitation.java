@@ -40,4 +40,33 @@ public class TestJsonLdCitation
         Assert.assertEquals("Singurul român din F1: \"Sezonul viitor vom fi decisivi\"", params.get("title"));
         Assert.assertEquals("2010-12-20", params.get("date"));
     }
+    
+    @Test
+    public void testRealHotnewsCitationPage() throws IOException, URISyntaxException {
+        URL htnHtmlFileURL = getClass().getClassLoader().getResource("hotnews.html");
+        Document document = Jsoup.parse(new File(htnHtmlFileURL.toURI()), StandardCharsets.UTF_8.toString());
+        
+        Map<String, String> params = new HashMap<>();
+        new DefaultCitationHandler().populateMapFromJsonLd(document, params);
+        
+        Assert.assertEquals("HARTĂ INTERACTIVĂ Autostrada spre sudul Litoralului. Pe unde va trece „Alternativa Techirghiol”, noul drum care va ocoli aglomerația din Eforie / Nod spectaculos cu A4 și A2", params.get("title"));
+        Assert.assertEquals("2022-09-03", params.get("date"));
+        Assert.assertEquals("Victor Cozmei", params.get("author1"));
+        Assert.assertEquals("HotNews.ro", params.get("publisher"));
+    }
+    
+    @Test
+    public void testRealAdevarulCitationPage() throws IOException, URISyntaxException {
+        URL advHtmlFileURL = getClass().getClassLoader().getResource("adevarul.html");
+        Document document = Jsoup.parse(new File(advHtmlFileURL.toURI()), StandardCharsets.UTF_8.toString());
+        
+        Map<String, String> params = new HashMap<>();
+        new DefaultCitationHandler().populateMapFromJsonLd(document, params);
+        
+        Assert.assertEquals("Cum a ajuns geniul comediei românești să se numească Birlic. Ultima dorință înainte de a se stinge ...", params.get("title"));
+        Assert.assertEquals("2022-08-21", params.get("date"));
+        Assert.assertEquals("Ionela Stănilă", params.get("author1"));
+        Assert.assertEquals("Adevărul", params.get("publisher"));
+    }
+   
 }
