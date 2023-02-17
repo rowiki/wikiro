@@ -17,8 +17,9 @@ import sys
 
 import sirutalib
 
-import wikiro.robots.python.pwb.postal_codes as postal_codes
+import wikiro.robots.python.pwb.localitati.postal_codes as postal_codes
 import wikiro.robots.python.pwb.strainu_functions as sf
+import wikiro.robots.python.pwb.csvUtils as csvUtils
 
 from wikiro.robots.python.pwb.localitati import config
 from wikiro.robots.python.pwb.wikidata import robot_romania as robot
@@ -396,6 +397,93 @@ class CountyProcessing(ItemProcessing, CityData):
         # self.createCountySubcategories()
         self.checkISOCodes()
 
+class PopulationProcessing(ItemProcessing, CityData):
+    def __init__(self, config, siruta=None, census=None, year="2021", always=False):
+        super(PopulationProcessing, self).__init__(config, always)
+        self._dataType = u"population"
+        self.sirutaDb = siruta
+        self.censusDb = census
+        self.year = year
+
+        if not self.validateCensus(year):
+            raise Exception(f"Invalid census year {year}")
+       
+    def validateCensus(self, year):
+        year = int(year)
+        if year in self.config["censuses"]:
+            return True
+        print(f"{year} was not a census year.")
+        return False
+
+    def addPopulation(self):
+        try:
+            prop, _, _ = self.config["properties"][u"populație"]
+            census_date = pywikibot.WbTime(year=self.year,
+                    month=self.config["censuses"][self.year]["month"],
+                    day=self.config["censuses"][self.year]["day"])
+            if prop in self.item.claims:
+                claims = self.item.claims[prop]
+                for claim in claims:
+                    #print claim.qualifiers
+                    if claim.has_qualifier('P585', census_date):
+                        print(f"{self.item.labels['ro']} already has population for {self.year}")
+                        return
+            siruta_prop, _, _ = self.config["properties"]["SIRUTA"]
+            if siruta_prop in self.item.claims:
+                claims = self.item.claims[prop]
+                siruta = str(int(claims[0].getTarget().amount))
+                if siruta not in self.censusDb:
+                    #print(f"SIRUTA {siruta} does not exist in the population database")
+                    return
+                #print(self.censusDb[siruta])
+                pop = self.censusDb[siruta]["Locuitori"]
+                print(f"Population: {pop}", flush=True)
+            else:
+                print(f"Item does not have SIRUTA")
+                return
+
+            yearclaim = pywikibot.Claim(self.item.repo, prop) #Population
+            target = pywikibot.WbQuantity(amount=pop)
+            yearclaim.setTarget(target)
+
+            date = pywikibot.Claim(self.item.repo, u'P585')#Date of publication
+            date.setTarget(census_date)
+
+            method = pywikibot.Claim(self.item.repo, u'P459')#Method
+            target = pywikibot.ItemPage(self.item.repo, u"Q39825")
+            method.setTarget(target)
+            method2 = pywikibot.Claim(self.item.repo, u'P459')#Method
+            target = pywikibot.ItemPage(self.item.repo, u"Q747810")
+            method2.setTarget(target)
+            method3 = pywikibot.Claim(self.item.repo, u'P459')#Method
+            target = pywikibot.ItemPage(self.item.repo, self.config["censuses"][self.year]["q"])
+            method3.setTarget(target)
+
+            #criteria = pywikibot.Claim(item.repo, u'P1013')#Criteria
+            #target = pywikibot.ItemPage(item.repo, u"Q15917105")
+            #criteria.setTarget(target)
+
+            answer = self.userConfirm(f"Update element {self.item.labels['ro']} with population for year {self.year}?")
+            if answer:
+                self.item.addClaim(yearclaim)
+                yearclaim.addQualifier(date)
+                yearclaim.addQualifier(method)
+                yearclaim.addQualifier(method2)
+                yearclaim.addQualifier(method3)
+                #yearclaim.addQualifier(criteria)
+                print(f"Updated element {self.item.labels['ro']} for year {year}")
+            else:
+                pass
+        except Exception as e:
+            print(e)
+            print(f"Could not update {self.item.labels['ro']}")
+
+
+        pass
+
+    def doWork(self, page, item):
+        self.setItem(item)
+        self.addPopulation()
 
 class PostCodeProcessing(ItemProcessing, CityData):
     def __init__(self, config, siruta=None, postCode=None, always=False):
@@ -698,6 +786,18 @@ def readJson(filename, what):
         pywikibot.error("Failed to read " + filename + ". Trying to do without it.")
         return {}
 
+def readCsv(filename, key, what):
+    try:
+        f = open(filename, "r+")
+        pywikibot.output("Reading " + what + " file...")
+        db = csvUtils.csvToJson(filename, field=key)
+        pywikibot.output("...done")
+        f.close()
+        return db
+    except IOError:
+        pywikibot.error("Failed to read " + filename + ". Trying to do without it.")
+        return {}
+
 def main():
     pywikibot.handle_args()
     user.mylang = 'wikidata'
@@ -705,6 +805,8 @@ def main():
     sirutaDb = sirutalib.SirutaDatabase()
     #postCodes = postal_codes.PostalCodes("codp_B.csv", "codp_50k.csv", "codp_1k.csv")
     lmiDb = readJson("ro_lmi_db.json", "monument database")
+    populationDb = readCsv("populatie_2021.csv", "SIRUTA", "population")
+
     page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
     #page = pywikibot.Page(pywikibot.Site(), "Q16898095", ns=0)
     generator = page.getReferences(follow_redirects=True, content=False)
@@ -714,13 +816,13 @@ def main():
     # bot.workers.append(PostCodeProcessing(config, siruta=sirutaDb, postCode=postCodes))
     # bot.workers.append(URLProcessing(config))
     # bot.workers.append(DiacriticsProcessing(config))
-    bot.workers.append(ImageProcessing(config, lmi=lmiDb))
+    # bot.workers.append(ImageProcessing(config, lmi=lmiDb))
     # bot.workers.append(CommonsProcessing(config))
     # bot.workers.append(SIRUTAProcessing(config, siruta=sirutaDb))
     # bot.workers.append(RelationsProcessing(config, siruta=sirutaDb))
     # bot.workers.append(TimezoneProcessing(config))
     # bot.workers.append(CoordProcessing(config))
-
+    bot.workers.append(PopulationProcessing(config, sirutaDb, populationDb, 2021))
     bot.run()
 
 
