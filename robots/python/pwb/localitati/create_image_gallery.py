@@ -12,9 +12,8 @@ from pywikibot import config as user
 
 import fill_wikidata_info as wikidata
 
-sys.path.append("wikiro/robots/python")
-import otherconfig as config
-from geo import mapillary
+import wikiro.robots.python.otherconfig as config
+from wikiro.robots.python.geo import mapillary
 
 gallery = []
 table = []
@@ -96,7 +95,7 @@ def treat_sparql(dic):
         table_template = """|- class="{css}"
 | {siruta} 
 | class="uat-list link" | {name} 
-| class="uat-list image" data-sort-value="{sortkey}" | [[File:{file}|faracadru|150px]]<br/>{{{{Plain link|1={upload}|2=Încarcă imagine}}}}"""
+| class="uat-list image" data-sort-value="{sortkey}" | [[File:{file}|faracadru|150px]]<br/>{{{{Plain link|1={upload}|2=Încarcă imagini}}}}"""
         name = dic['itemLabel']
         img = dic['images']
         upperImg = dic['upperImages']

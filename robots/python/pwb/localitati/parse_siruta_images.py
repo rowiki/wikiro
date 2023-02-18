@@ -1,13 +1,16 @@
 ﻿#!/usr/bin/python
 # -*- coding: utf-8  -*-
 
-import sys, os
-import time, datetime
-import warnings
-import json
-import string
 import cProfile
+import datetime
+import itertools
+import json
+import os
 import re
+import string
+import sys
+import time
+import warnings
 
 import pywikibot
 from pywikibot import pagegenerators
@@ -147,7 +150,7 @@ def parse_images():
 			rowTemplate = pywikibot.Page(site, '%s:%s' % (site.namespace(10), \
 								template))
 			transGen.append(rowTemplate.getReferences(follow_redirects=False, content=False))
-		combinedGen = pagegenerators.CombinedPageGenerator(transGen)
+		combinedGen = itertools.chain(*transGen)
 		combinedGen = filter_unique(combinedGen, key=hash)
 		#combinedGen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(site, u"Categorie:Imagini încărcate în cadrul Wiki Loves Monuments 2020"))
 		filteredGen = pagegenerators.NamespaceFilterPageGenerator(combinedGen,
@@ -193,8 +196,8 @@ def parse_wikidata():
     WHERE
     {
       ?item wdt:P843 ?siruta .
-      # MINUS {?item wdt:P18 ?image . }
-      # MINUS {?item wdt:P2716 ?colaj . }
+      MINUS {?item wdt:P18 ?image . }
+      MINUS {?item wdt:P2716 ?colaj . }
       MINUS {?item wdt:P373 ?colaj . }
    }"""
 	data = query_object.select(query)
@@ -314,7 +317,7 @@ def main():
 
 	for siruta in images_db:
 		if siruta in wikidata_db:
-			#add_wikidata_image(wikidata_db[siruta], images_db[siruta])
+			add_wikidata_image(wikidata_db[siruta], images_db[siruta])
 			create_commons_category(siruta, wikidata_db[siruta], images_db[siruta])
 
 if __name__ == "__main__":
