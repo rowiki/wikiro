@@ -64,8 +64,9 @@ import time
 import warnings
 
 import pywikibot
-from pywikibot import pagegenerators
 from pywikibot import config as user
+from pywikibot import pagegenerators
+from pywikibot import textlib
 from pywikibot.tools import filter_unique
 
 sys.path.append('wikiro/robots/python/pwb')
@@ -267,7 +268,7 @@ def processCreatorTemplate(name, conf):
 		return ""
 	while creator.isRedirectPage():
 		creator = creator.getRedirectTarget()
-	tls = pywikibot.extract_templates_and_params(creator.get(), strip=True)
+	tls = textlib.extract_templates_and_params(creator.get(), strip=True)
 	for (template,params) in tls:
 		#print(params)
 		if template != "Creator":

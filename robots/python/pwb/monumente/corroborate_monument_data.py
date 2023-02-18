@@ -115,6 +115,7 @@ _db = 'lmi'
 _log = _lang + _db + "_link.err.log"
 _differentCoords = {}
 _fieldsWithAliases = None
+_doAllChanges = False
 
 def initLog():
 	global _flog, _log;
@@ -253,10 +254,22 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
 	pywikibot.output(new)
 	pywikibot.showDiff(orig, new)
 	
-	if ask:
+	global _doAllChanges
+	proposeAll = False
+	if _doAllChanges:
+		ask = False
+	elif _changes != Changes.all:
+		proposeAll = True
+	
+	if ask and proposeAll:
+		answer = pywikibot.input(u"Upload change? ([y]es/[n]o/[a]ll/[l]og)")
+	elif ask:
 		answer = pywikibot.input(u"Upload change? ([y]es/[n]o/[l]og)")
 	else:
 		answer = 'y'
+
+	if answer == 'a':
+		_doAllChanges = True
 
 	updated = False
 	if answer == 'y':
@@ -699,7 +712,7 @@ def main():
 		if arg.startswith('-force'):
 			force = True
 			aggresive = True
-		if arg.startwith('-checkNew'):
+		if arg.startswith('-checkNew'):
 			check_new_monuments = True
 		if arg.startswith('-updateArticle'):
 			_changes = _changes | Changes.article
@@ -1053,8 +1066,6 @@ def main():
 								u"\tLatitude: " + str(otherLat) + "\n" 
 								u"\tLongitude: " + str(otherLong))
 				ask = True
-				#if otherSrc[5:] == monument["CodRan"]:
-				#	ask = False
 				uploadlat = ("Lon" in monument and monument["Lon"] != "")
 				articleText, updated = updateTableData(monument["source"], code, otherFields.get("lat") or latField, str(otherLat), monument,
 								upload = uploadlat, text = articleText, ask = ask, source = otherSrc)
