@@ -1,0 +1,8 @@
+//JUDEȚE
+Q165459 (Satu Mare)
+Q179588 (Bihor)
+
+//COMUNE
+
+
+//LOCALITĂȚI

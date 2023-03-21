@@ -1,0 +1,8 @@
+//JUDEȚE
+Q185586 (Timiș)
+Q187925 (Caraș-Severin)
+
+//COMUNE
+
+
+//LOCALITĂȚI
