@@ -59,6 +59,7 @@ Q12724772 (Frata CJ)
 Q12725169 (Suatu CJ)
 Q12724718 (Cămărașu CJ)
 
+Q5064736 (Băuțar CS)
 //LOCALITĂȚI
 // -- frontiera
 Q820765 (Țagu, Budești BN)
