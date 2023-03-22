@@ -3,6 +3,25 @@ Q185586 (Timiș)
 Q187925 (Caraș-Severin)
 
 //COMUNE
+Q12724751 (Dubova MH)
+Q16426938 (Eșelnița MH)
+Q16426969 (Svinița MH)
+Q750243 (Orșova MH)
 
+Q5060807 (Bata AR)
+Q5061643 (Birchiș AR)
+Q5056303 (Fântânele AR)
+Q5056375 (Felnac AR)
+Q5061620 (Frumușeni AR)
+Q5063328 (Șagu AR)
+Q5060148 (Secusigiu AR)
+Q5054704 (Șiștarovăț AR)
 
 //LOCALITĂȚI
+Q2032005 (Sălciva, Zam HD)
+Q827318 (Pojoga, Zam HD)
+Q755803 (Lalașinț, Bârzava AR)
+Q678178 (Belotinț, Conop AR)
+Q221579 (Chelmac, Conop AR)
+Q611661 (Căprioara, Săvârșin AR)
+Q756221 (Valea Mare, Săvârșin AR)
