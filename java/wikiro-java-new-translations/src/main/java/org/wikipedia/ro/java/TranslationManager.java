@@ -25,6 +25,7 @@ import org.wikipedia.Wiki;
 import org.wikipedia.Wiki.RequestHelper;
 import org.wikipedia.Wiki.Revision;
 import org.wikipedia.ro.legacyoperations.CleanupIll;
+import org.wikipedia.ro.legacyoperations.ReindexFootnotes;
 import org.wikipedia.ro.legacyoperations.ReplaceCrossLinkWithIll;
 import org.wikipedia.ro.model.WikiTemplate;
 import org.wikipedia.ro.utility.AbstractExecutable;
@@ -74,9 +75,12 @@ public class TranslationManager extends AbstractExecutable
                     String notReplacedText = wiki.getPageText(List.of(newPage)).stream().findFirst().orElse("");
                     ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
                     String replacedText = rcl.execute();
+                    ReindexFootnotes rfn = new ReindexFootnotes(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, replacedText);
+                    replacedText = rfn.execute();
+                    
                     if (!notReplacedText.equals(replacedText))
                     {
-                        wiki.edit(newPage, replacedText, "Robot: înlocuit legături roșii sau spre alte wikiuri cu Ill");
+                        wiki.edit(newPage, replacedText, "Robot: înlocuit legături roșii sau spre alte wikiuri cu Ill și reindexat note de subsol");
                     }
                 }
                 catch (Throwable e)
