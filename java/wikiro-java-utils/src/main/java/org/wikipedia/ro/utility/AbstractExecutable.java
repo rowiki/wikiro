@@ -25,7 +25,7 @@ public abstract class AbstractExecutable {
 
         credentials.username = Optional.ofNullable(System.getenv("WIKI_USERNAME_" + upperCase(target)))
             .orElse(System.getProperty("WIKI_USERNAME_" + upperCase(target)));
-
+        
         Console c = System.console();
         if (isEmpty(credentials.username)) {
             credentials.username = c.readLine(String.format("%s user name: ", target));
@@ -54,6 +54,14 @@ public abstract class AbstractExecutable {
         dwiki.login(dwikiCreds.username, dwikiCreds.password);
         wiki.setMarkBot(true);
         dwiki.setMarkBot(true);
+        
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                if (null != wiki) wiki.logout();
+                if (null != dwiki) dwiki.logout();
+            }
+        });
     }
 
     protected abstract void execute() throws IOException, WikibaseException, LoginException;
