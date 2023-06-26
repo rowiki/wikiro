@@ -85,8 +85,8 @@ public class ReindexFootnotes implements WikiOperation {
             }
             thisRefMatcher.appendTail(sbuild);
             crtText = sbuild.toString();
-            LOG.log(Level.INFO, "Reindexed footnotes, changed size by {0} characters", Integer.valueOf(crtText.length() - pageText.length()));
         }
+        LOG.log(Level.INFO, "Reindexed footnotes, changed size by {0} characters", Integer.valueOf(crtText.length() - pageText.length()));
         return crtText;
     }
 
