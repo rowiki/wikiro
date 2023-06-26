@@ -75,8 +75,8 @@ public class TranslationManager extends AbstractExecutable
                     String notReplacedText = wiki.getPageText(List.of(newPage)).stream().findFirst().orElse("");
                     ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
                     String replacedText = rcl.execute();
-                    ReindexFootnotes rfn = new ReindexFootnotes(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, replacedText);
-                    replacedText = rfn.execute();
+                    ReindexFootnotes rfn = new ReindexFootnotes(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
+                    replacedText = rfn.processText(replacedText);
                     
                     if (!notReplacedText.equals(replacedText))
                     {
