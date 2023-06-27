@@ -15,6 +15,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikibase.WikibasePropertyFactory;
@@ -28,6 +30,7 @@ import org.wikipedia.ro.cache.WikidataEntitiesCache;
 import org.wikipedia.ro.model.WikiLink;
 
 public class FootballTeamListGenerator implements WikidataListGenerator {
+    private static final Logger LOG = LoggerFactory.getLogger(FootballTeamListGenerator.class);
     private WikidataEntitiesCache cache = null;
 
     public FootballTeamListGenerator(WikidataEntitiesCache cache) {
@@ -46,8 +49,8 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
             + "  ?item wdt:P413 ?posn.                                                      \n"
             + "  OPTIONAL {?item p:P1618 ?sportnumberStat.                                  \n"
             + "            ?sportnumberStat wikibase:rank wikibase:PreferredRank.           \n" 
-            + "            ?sportnumberStat pq:P642 wd:%1$s.                                \n" 
-            +"             ?sportnumberStat ps:P1618 ?sportnumber. }                        \n"
+            + "            ?sportnumberStat (pq:P642|pq:P54) wd:%1$s.                       \n" 
+            + "            ?sportnumberStat ps:P1618 ?sportnumber. }                        \n"
             + "  OPTIONAL { ?item wdt:P27 ?coc. }                                           \n"
             + "  OPTIONAL { ?item wdt:P1532 ?c4s. }                                         \n"
             + "  MINUS { ?teamStat pq:P582 ?endTime. }                                      \n"
@@ -107,6 +110,8 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
 
         try {
             Wikibase wd = cache.getWiki();
+            LOG.info("Querying players for team {}", wdEntity.getId());
+            LOG.info("Query: {}", currentPlayersQueryString);
             List<Map<String, Object>> resultSet = wd.query(currentPlayersQueryString);
             int crtIndex = 0;
             int middleIndex = 1 + (-1 + resultSet.size()) / 2;
