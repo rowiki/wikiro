@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,17 +71,27 @@ public class TranslationManager extends AbstractExecutable
 
                 String talkText = null;
                 String newPage = wiki.getRevision(rev.getID()).getTitle();
+                List<String> opsDone = new ArrayList<String>();
                 try
                 {
                     String notReplacedText = wiki.getPageText(List.of(newPage)).stream().findFirst().orElse("");
                     ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
                     String replacedText = rcl.execute();
-                    ReindexFootnotes rfn = new ReindexFootnotes(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
-                    replacedText = rfn.processText(replacedText);
-                    
-                    if (!notReplacedText.equals(replacedText))
+                    if (!replacedText.equals(replacedText))
                     {
-                        wiki.edit(newPage, replacedText, "Robot: înlocuit legături roșii sau spre alte wikiuri cu Ill și reindexat note de subsol");
+                        opsDone.add("înlocuit legături roșii sau spre alte wikiuri cu Ill");
+                    }
+                    
+                    ReindexFootnotes rfn = new ReindexFootnotes(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
+                    String reindexedFnText = rfn.processText(replacedText);
+                    if (!reindexedFnText.equals(replacedText))
+                    {
+                        opsDone.add("reindexat note de subsol");
+                    }
+                    
+                    if (!opsDone.isEmpty())
+                    {
+                        wiki.edit(newPage, reindexedFnText, "Robot: " + opsDone.stream().collect(Collectors.joining("; ")));
                     }
                 }
                 catch (Throwable e)
