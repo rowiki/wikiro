@@ -60,6 +60,52 @@ public class TranslationManager extends AbstractExecutable
         helper.filterBy(filter);
 
         List<Revision> recentTranslations = wiki.newPages(helper);
+        processTranslations(recentTranslations);
+        
+        helper = wiki.new RequestHelper();
+        helper.inNamespaces(Wiki.MAIN_NAMESPACE);
+        helper.taggedWith("contenttranslation");
+
+        now = LocalDate.now();
+        helper.withinDateRange(lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
+        List<Revision> editedTranslations = wiki.recentChanges(helper, "edit");
+        processTranslations(editedTranslations);
+
+        helper = wiki.new RequestHelper();
+        helper.inNamespaces(Wiki.MAIN_NAMESPACE);
+        helper.withinDateRange(lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
+
+        List<Revision> recentNewPages = wiki.newPages(helper);
+        for (Revision eachNewPage : recentNewPages)
+        {
+            String eachNewPageTitle = wiki.getRevision(eachNewPage.getID()).getTitle();
+            String[] newPageLinks = wiki.whatLinksHere(eachNewPageTitle, Wiki.MAIN_NAMESPACE);
+            for (String eachNewPageLink : newPageLinks)
+            {
+                try
+                {
+                    String notReplacedText = wiki.getPageText(List.of(eachNewPageLink)).stream().findFirst().orElse("");
+                    CleanupIll illCleanup = new CleanupIll(wiki, wiki, dwiki, eachNewPageLink);
+                    String replacedText = illCleanup.execute();
+                    if (!notReplacedText.equals(replacedText)) {
+                        wiki.edit(eachNewPageLink, replacedText, "Robot: înlocuit formate Ill redundante");
+                    }
+                }
+                catch (Throwable e)
+                {
+                    LOG.error("Failed to cleanup redundant Ill templates in page {} that links to {}", eachNewPageLink, eachNewPageTitle, e);
+                }
+            }
+        }
+        
+        wiki.edit("Utilizator:Andrebot/dată-vizitare-pagini-noi", now.toString(), "Robot: actualizare dată vizitare pagini noi");
+
+    }
+
+
+
+    private void processTranslations(List<Revision> recentTranslations) throws IOException, LoginException
+    {
         for (Revision rev : recentTranslations)
         {
             Matcher commentMatcher = commentPattern.matcher(rev.getComment());
@@ -121,36 +167,6 @@ public class TranslationManager extends AbstractExecutable
             }
 
         }
-
-        helper = wiki.new RequestHelper();
-        helper.inNamespaces(Wiki.MAIN_NAMESPACE);
-        helper.withinDateRange(lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
-
-        List<Revision> recentNewPages = wiki.newPages(helper);
-        for (Revision eachNewPage : recentNewPages)
-        {
-            String eachNewPageTitle = wiki.getRevision(eachNewPage.getID()).getTitle();
-            String[] newPageLinks = wiki.whatLinksHere(eachNewPageTitle, Wiki.MAIN_NAMESPACE);
-            for (String eachNewPageLink : newPageLinks)
-            {
-                try
-                {
-                    String notReplacedText = wiki.getPageText(List.of(eachNewPageLink)).stream().findFirst().orElse("");
-                    CleanupIll illCleanup = new CleanupIll(wiki, wiki, dwiki, eachNewPageLink);
-                    String replacedText = illCleanup.execute();
-                    if (!notReplacedText.equals(replacedText)) {
-                        wiki.edit(eachNewPageLink, replacedText, "Robot: înlocuit formate Ill redundante");
-                    }
-                }
-                catch (Throwable e)
-                {
-                    LOG.error("Failed to cleanup redundant Ill templates in page {} that links to {}", eachNewPageLink, eachNewPageTitle, e);
-                }
-            }
-        }
-        
-        wiki.edit("Utilizator:Andrebot/dată-vizitare-pagini-noi", now.toString(), "Robot: actualizare dată vizitare pagini noi");
-
     }
     
     
