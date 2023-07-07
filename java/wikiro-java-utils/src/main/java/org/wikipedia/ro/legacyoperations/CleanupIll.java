@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +34,7 @@ import org.wikipedia.ro.utils.WikidataCacheManager;
 
 @Operation(useWikibase = true, labelKey = "operation.cleanupIll.label")
 public class CleanupIll implements WikiOperation {
+    private static final Logger LOG = Logger.getLogger(CleanupIll.class.getCanonicalName());
 
     private String[] status = new String[] { "status.not.inited" };
     private Wiki targetWiki;
@@ -139,15 +142,21 @@ public class CleanupIll implements WikiOperation {
         String qId = prependIfMissing(wdId, "Q");
         qId = WikidataCacheManager.getCachedRedirect(dataWiki, qId);
 
-        Entity wdItem = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).get(qId);
-        if (null != wdItem) {
-            Map<String, Sitelink> sitelinks = ObjectUtils.defaultIfNull(wdItem.getSitelinks(), Collections.emptyMap());
-            Sitelink targetSitelink = sitelinks.get(targetWikiCode);
-            if (null != targetSitelink) {
-                WikiLink link = new WikiLink(targetSitelink.getPageName(), label);
-                return link.toString();
+        try {
+            Entity wdItem = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).get(qId);
+            if (null != wdItem) {
+                Map<String, Sitelink> sitelinks = ObjectUtils.defaultIfNull(wdItem.getSitelinks(), Collections.emptyMap());
+                Sitelink targetSitelink = sitelinks.get(targetWikiCode);
+                if (null != targetSitelink) {
+                    WikiLink link = new WikiLink(targetSitelink.getPageName(), label);
+                    return link.toString();
+                }
             }
+        } catch (WikibaseException e) {
+            LOG.log(Level.WARNING, "Cannot find text for link to item '{0}' and label '{1}'", new Object[] { wdId, label });
+            LOG.log(Level.WARNING, "Stack trace:", e);
         }
+
         return null;
     }
 
