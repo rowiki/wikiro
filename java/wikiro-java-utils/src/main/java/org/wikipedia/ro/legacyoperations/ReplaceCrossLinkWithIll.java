@@ -17,12 +17,13 @@ import static org.apache.commons.lang3.StringUtils.trim;
 
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ import org.wikipedia.ro.utils.WikidataCacheManager;
 
 @Operation(labelKey = "operation.insertill.label", useWikibase = true)
 public class ReplaceCrossLinkWithIll implements WikiOperation {
-
+    private static final Logger LOG = Logger.getLogger(ReplaceCrossLinkWithIll.class.getCanonicalName());
     private Wiki targetWiki;
     private Wiki sourceWiki;
     private Wikibase dataWiki;
@@ -128,10 +129,10 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                 extLinkMatcher.appendReplacement(newText,
                     startsWith(foreignTitle, "Special:") ? extLinkMatcher.group(0) : replacedString);
             }
-            System.out.println(extLinkMatcher.group(0) + " ---> " + replacedString);
+            LOG.log(Level.INFO, "{0} ---> {1}", new Object[] { extLinkMatcher.group(0), replacedString});
             countMatches++;
         }
-        System.out.println(countMatches + " found");
+        LOG.log(Level.INFO, "{0} found", countMatches);
         extLinkMatcher.appendTail(newText);
 
         String wlAsExtLinkRegEx = "\\[(https?\\:)?//([^\\.]+)\\.wikipedia.org/wiki/([^\\s]+)\\s+([^\\]]+)\\]";
@@ -180,10 +181,10 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             }
             wlAsExtLinkMatcher.appendReplacement(anotherNewText,
                 startsWith(articleTitle, "Special:") ? wlAsExtLinkMatcher.group(0) : replacedString);
-            System.out.println(wlAsExtLinkMatcher.group(0) + " ---> " + replacedString);
+            LOG.log(Level.INFO, "{0} ---> {1}", new Object[] {wlAsExtLinkMatcher.group(0), replacedString});
             countMatches++;
         }
-        System.out.println(countMatches + " found");
+        LOG.log(Level.INFO, "{0} found", countMatches);
         wlAsExtLinkMatcher.appendTail(anotherNewText);
 
         String innerLinkRegEx = "\\[\\[([^:][^\\|\\]\\[]+?)(\\|(([^\\|\\]\\[]*?)|(\\{\\{[^\\}]*\\}\\})))?\\]\\]";
@@ -202,15 +203,15 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             String link = innerLinkMatcher.group(1);
             //link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());'
             link = replace(link, "_", " ");
-            System.out.println("First pass: Link: " + link);
+            LOG.log(Level.INFO, "First pass: Link: {0}", link);
             String articleLink = removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
             if (isBlank(articleTitle)) {
-                System.out.println("Blank! skipping...");
+                LOG.log(Level.INFO, "Blank article title in link '{}'! skipping...", innerLinkMatcher.group(0));
                 continue;
             }
             if (isNotReplaceableLink(articleLink)) {
-                System.out.println("Link to something else! Skipping...");
+                LOG.log(Level.INFO, "{0} links to something else! Skipping...", articleLink);
                 continue;
             }
             if (!localLinks.contains(articleTitle)) {
@@ -251,23 +252,23 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             String link = innerLinkMatcher.group(1);
             //link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());
             link = replace(link, "_", " ");
-            System.out.println("Second pass: Link: " + link);
+            LOG.log(Level.INFO, "Second pass: Link: {0}", link);
             String articleLink = removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
             String linkTitle = defaultString(innerLinkMatcher.group(3), articleTitle);
             if (isBlank(articleTitle)) {
-                System.out.println("Blank! skipping...");
+                LOG.log(Level.INFO, "Article title blank in link '{0}'! skipping...", innerLinkMatcher.group(0));
                 continue;
             }
             if (isNotReplaceableLink(articleLink)) {
-                System.out.println("Link to something else! Skipping...");
+                LOG.log(Level.INFO, "'{0}' links to something else! Skipping...", articleLink);
                 continue;
             }
             String actualLocalArticleTitle = actualLocalTitleMap.get(articleTitle);
             status = new String[] { "status.analyzing.link", actualLocalArticleTitle };
 
             if (localLinkExistenceMap.get(actualLocalArticleTitle)) {
-                System.out.println("Already exists! skipping...");
+                LOG.log(Level.INFO, "'{0}' already exists! skipping...", actualLocalArticleTitle);
                 continue;
             }
             String foreignArticleTitle = actualForeignTitleMap.get(articleTitle);
