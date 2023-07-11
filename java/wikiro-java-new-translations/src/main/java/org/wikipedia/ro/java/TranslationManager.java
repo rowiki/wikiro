@@ -60,6 +60,7 @@ public class TranslationManager extends AbstractExecutable
         helper.filterBy(filter);
 
         List<Revision> recentTranslations = wiki.newPages(helper);
+        LOG.info("Found {} new pages translated to process", recentTranslations.size());
         processTranslations(recentTranslations);
         
         helper = wiki.new RequestHelper();
@@ -69,6 +70,7 @@ public class TranslationManager extends AbstractExecutable
         now = LocalDate.now();
         helper.withinDateRange(lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
         List<Revision> editedTranslations = wiki.recentChanges(helper, "edit");
+        LOG.info("Found {} edited translations to process", editedTranslations.size());
         processTranslations(editedTranslations);
 
         helper = wiki.new RequestHelper();
