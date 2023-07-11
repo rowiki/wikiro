@@ -58,7 +58,7 @@ public class CleanupIll implements WikiOperation {
     @Override
     public String execute() throws IOException, WikibaseException, LoginException {
         status = new String[] { "status.changes.todo.inarticle", article, String.valueOf(0), "?" };
-
+        LOG.log(Level.INFO, "Cleaning up Ill templates in article ''{0}''", article);
         String pageText = targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("");
 
         Matcher illMatcher = PATTERN_ILL.matcher(pageText);
@@ -153,7 +153,7 @@ public class CleanupIll implements WikiOperation {
                 }
             }
         } catch (WikibaseException e) {
-            LOG.log(Level.WARNING, "Cannot find text for link to item '{0}' and label '{1}'", new Object[] { wdId, label });
+            LOG.log(Level.WARNING, "Cannot find text for link to item ''{0}'' and label ''{1}''", new Object[] { wdId, label });
             LOG.log(Level.WARNING, "Stack trace:", e);
         }
 

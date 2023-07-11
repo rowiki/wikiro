@@ -64,7 +64,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
     public String execute() throws IOException, LoginException, WikibaseException {
         status = new String[] { "status.reading.text", article, targetWikiCode };
-        LOG.log(Level.INFO, "Replacing cross links with Ill in article '{0}'", article);
+        LOG.log(Level.INFO, "Replacing cross links with Ill in article ''{0}''", article);
         String text = targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("");
         Pattern namespacepattern = Pattern.compile("((?:Template|Wikipedia):)?(.*)");
 
@@ -208,11 +208,11 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             String articleLink = removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
             if (isBlank(articleTitle)) {
-                LOG.log(Level.INFO, "Blank article title in link '{}'! skipping...", innerLinkMatcher.group(0));
+                LOG.log(Level.INFO, "Blank article title in link ''{0}''! skipping...", innerLinkMatcher.group(0));
                 continue;
             }
             if (isNotReplaceableLink(articleLink)) {
-                LOG.log(Level.INFO, "{0} links to something else! Skipping...", articleLink);
+                LOG.log(Level.INFO, "''{0}'' links to something else! Skipping...", articleLink);
                 continue;
             }
             if (!localLinks.contains(articleTitle)) {
@@ -258,18 +258,18 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
             String linkTitle = defaultString(innerLinkMatcher.group(3), articleTitle);
             if (isBlank(articleTitle)) {
-                LOG.log(Level.INFO, "Article title blank in link '{0}'! skipping...", innerLinkMatcher.group(0));
+                LOG.log(Level.INFO, "Article title blank in link ''{0}''! skipping...", innerLinkMatcher.group(0));
                 continue;
             }
             if (isNotReplaceableLink(articleLink)) {
-                LOG.log(Level.INFO, "'{0}' links to something else! Skipping...", articleLink);
+                LOG.log(Level.INFO, "''{0}'' links to something else! Skipping...", articleLink);
                 continue;
             }
             String actualLocalArticleTitle = actualLocalTitleMap.get(articleTitle);
             status = new String[] { "status.analyzing.link", actualLocalArticleTitle };
 
             if (localLinkExistenceMap.get(actualLocalArticleTitle)) {
-                LOG.log(Level.INFO, "'{0}' already exists! skipping...", actualLocalArticleTitle);
+                LOG.log(Level.INFO, "''{0}'' already exists! skipping...", actualLocalArticleTitle);
                 continue;
             }
             String foreignArticleTitle = actualForeignTitleMap.get(articleTitle);

@@ -123,7 +123,7 @@ public class TranslationManager extends AbstractExecutable
                     String notReplacedText = wiki.getPageText(List.of(newPage)).stream().findFirst().orElse("");
                     ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
                     String replacedText = rcl.execute();
-                    if (!replacedText.equals(replacedText))
+                    if (!replacedText.equals(notReplacedText))
                     {
                         opsDone.add("înlocuit legături roșii sau spre alte wikiuri cu Ill");
                     }
