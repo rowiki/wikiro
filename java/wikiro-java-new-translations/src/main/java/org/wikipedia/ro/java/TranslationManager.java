@@ -100,8 +100,8 @@ public class TranslationManager extends AbstractExecutable
             }
         }
         
+        LOG.info("Finished visiting articles. Setting new reference date.");
         wiki.edit("Utilizator:Andrebot/dată-vizitare-pagini-noi", now.toString(), "Robot: actualizare dată vizitare pagini noi");
-
     }
 
 
