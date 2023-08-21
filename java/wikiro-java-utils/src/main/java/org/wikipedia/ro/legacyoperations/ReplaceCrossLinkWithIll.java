@@ -136,7 +136,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         LOG.log(Level.INFO, "{0} found", countMatches);
         extLinkMatcher.appendTail(newText);
 
-        String wlAsExtLinkRegEx = "\\[(https?\\:)?//([^\\.]+)\\.wikipedia.org/wiki/([^\\s]+)\\s+([^\\]]+)\\]";
+        String wlAsExtLinkRegEx = "\\[(https?\\:)?//([^\\.]+)(?:\\.m)?\\.wikipedia.org/wiki/([^\\s]+)\\s+([^\\]]+)\\]";
         Pattern wlAsExtLinkPattern = Pattern.compile(wlAsExtLinkRegEx);
         Matcher wlAsExtLinkMatcher = wlAsExtLinkPattern.matcher(newText.toString());
         StringBuffer anotherNewText = new StringBuffer();
