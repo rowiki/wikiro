@@ -1,7 +1,8 @@
 package org.wikipedia.ro.villagesfixer;
 
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
 import static java.util.stream.Collectors.joining;
-import static org.apache.commons.lang3.StringUtils.appendIfMissing;
 import static org.apache.commons.lang3.StringUtils.contains;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
@@ -50,14 +51,16 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.collections4.keyvalue.DefaultMapEntry;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.Document;
 import org.slf4j.LoggerFactory;
@@ -89,12 +92,11 @@ import org.wikipedia.ro.parser.WikiTextParser;
 import org.wikipedia.ro.utils.LinkUtils;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.Block;
-import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -102,7 +104,6 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.jul.LevelChangePropagator;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.classic.spi.LoggerContextListener;
 import ch.qos.logback.core.ConsoleAppender;
 
 public class FixVillages {
@@ -117,6 +118,7 @@ public class FixVillages {
         + "< a, A < ă, Ă < â, Â‚ < b, B < c, C < d, D < e, E < f, F < g, G < h, H < i, I"
         + "< î, Î < j, J < k, K < l, L < m, M < n, N < o, O < p, P < q, Q < r, R"
         + "< s, S < ș, Ș < t, T < ț, Ț < u, U < v, V < w, W < x, X < y, Y < z, Z";
+    private static final Map<String, String> colors = new HashMap<>();
     private static RuleBasedCollator collator = null;
     private static Exception exception;
 
@@ -138,7 +140,49 @@ public class FixVillages {
     private static Pattern numberRangePattern = Pattern.compile("(\\d+)((?:[–\\-]|(?:&ndash;))(\\d+))?");
     private static Pattern ifPattern = Pattern.compile("\\{\\{\\s*#if");
 
+    private static Pattern demographyChartsPattern =
+        Pattern.compile("<div style=\"float:left\">\\{\\{Pie chart(.*)</div>", Pattern.DOTALL);
+    private static Pattern demographyTextPattern = Pattern.compile(
+        "Conform \\[\\[Recensământul populației din 2011 \\(România\\)\\|recensământului efectuat în 2011\\]\\], populația(.*)<ref name=\"insse_2011_rel\">.*</ref>");
+
     private static String crtSettlementName = null, crtCommuneName = null, crtCountyName = null;
+
+    static {
+        colors.put("români", "#8080ff");
+        colors.put("romi", "#80ffff");
+        colors.put("maghiari", "#80ff80");
+        colors.put("germani", "#ff80ff");
+        colors.put("turci", "#ff8080");
+        colors.put("tătari", "#9f3f3f");
+        colors.put("ucraineni", "#ffff80");
+        colors.put("sârbi", "#c03f3f");
+        colors.put("cehi", "#ff5555");
+        colors.put("slovaci", "#3f3fc0");
+        colors.put("ruși lipoveni", "#ffafaf");
+        colors.put("croați", "#c0c03f");
+        colors.put("polonezi", "#5555ff");
+        colors.put("bulgari", "#3fc03f");
+        colors.put("altele", "#555555");
+        colors.put("necunoscută", "#9f9f9f");
+
+        colors.put("ortodocși", "#8080ff");
+        colors.put("romano-catolici", "#ffff80");
+        colors.put("penticostali", "#3fc03f");
+        colors.put("greco-catolici", "#ff80ff");
+        colors.put("baptiști", "#80ffff");
+        colors.put("musulmani", "#ff8080");
+        colors.put("reformați", "#80ff80");
+        colors.put("creștini de rit vechi", "#c0c03f");
+        colors.put("atei", "#c0c0c0");
+        colors.put("agnostici", "#c0adad");
+        colors.put("făra religie", "#adbac0");
+        colors.put("martori ai lui Iehova", "#3f3fc0");
+        colors.put("unitarieni", "#3fc0c0");
+        colors.put("creștini după evanghelie", "#ffff55");
+        colors.put("evanghelici luterani", "#ffa600");
+        colors.put("ortodocși sârbi", "#c03f3f");
+        colors.put("adventiști", "#ffafaf");
+    }
 
     public static void main(String[] args) throws IOException {
         initLogging();
@@ -228,9 +272,9 @@ public class FixVillages {
             rowiki.login(rowpusername, rowppassword);
             LOG.info("Logging in to wikibase with username: {}", datausername);
             dwiki.login(datausername, datapassword);
-            
+
             LOG.info("Login successful");
-            
+
             WikidataEntitiesCache wdcache = new WikidataEntitiesCache(dwiki);
             rowiki.setMarkBot(true);
             dwiki.setMarkBot(true);
@@ -324,7 +368,7 @@ public class FixVillages {
                         continue;
                     }
                     communeTouched = true;
-                    String communeType = null;
+                    CommuneType communeType = null;
                     Set<Claim> instanceOfClaims = communeWikibaseItem.getClaims().get(instanceOfProp);
                     if (null == instanceOfClaims) {
                         continue;
@@ -332,13 +376,13 @@ public class FixVillages {
                     for (Claim eachInstanceOfClaim : instanceOfClaims) {
                         Item instanceType = (Item) eachInstanceOfClaim.getMainsnak().getData();
                         if (removeStartIgnoreCase(instanceType.getEnt().getId(), "Q").equals("640364")) {
-                            communeType = "municipiu";
+                            communeType = CommuneType.MUNICIPIU;
                             break;
                         } else if (removeStartIgnoreCase(instanceType.getEnt().getId(), "Q").equals("16858213")) {
-                            communeType = "oraș";
+                            communeType = CommuneType.ORAS;
                             break;
                         } else if (removeStartIgnoreCase(instanceType.getEnt().getId(), "Q").equals("659103")) {
-                            communeType = "comună";
+                            communeType = CommuneType.COMUNA;
                             break;
                         }
                     }
@@ -347,7 +391,7 @@ public class FixVillages {
                         continue;
                     }
 
-                    String communeDescr = String.format("%s din județul %s, România", communeType, eachCounty);
+                    String communeDescr = String.format("%s din județul %s, România", communeType.getTypeName(), eachCounty);
                     boolean communeChanged = false;
                     if (!StringUtils.equals(communeWikibaseItem.getDescriptions().get("ro"), communeDescr)) {
                         dwiki.setDescription(communeWikibaseItem.getId(), "ro", communeDescr);
@@ -698,11 +742,11 @@ public class FixVillages {
                         qualifier = qualifierMatcher.group(1);
                     }
                     String communeTypeLink = "";
-                    if ("comună".equals(communeType)) {
+                    if (communeType == CommuneType.COMUNA) {
                         communeTypeLink = "o [[Comunele României|comună]]";
-                    } else if ("oraș".equals(communeType)) {
+                    } else if (communeType == CommuneType.ORAS) {
                         communeTypeLink = "un [[Lista orașelor din România|oraș]]";
-                    } else if ("municipiu".equals(communeType)) {
+                    } else if (communeType == CommuneType.MUNICIPIU) {
                         communeTypeLink = "un [[Municipiile României|municipiu]]";
                         if (prependIfMissing(countyCapitalId, "Q")
                             .equals(prependIfMissing(communeWikibaseItem.getId(), "Q"))) {
@@ -723,7 +767,7 @@ public class FixVillages {
                         if (1 == villagesEntryList.size() && urbanSettlementsEntryList.isEmpty()) {
                             intro = String.format("'''%s'''%s este %s %s, %s, [[România]]", communeName, qualifier,
                                 communeTypeLink, countyLink, getHistoricalRegionLink(null, communeName, eachCounty));
-                            if ("comună".equals(communeType)) {
+                            if (communeType == CommuneType.COMUNA) {
                                 intro = intro + String.format(", formată numai din satul de reședință%s",
                                     StringUtils.equals(communeName, villagesEntryList.get(0).getKey()) ? " cu același nume"
                                         : String.format(", [[%s|%s]]", villagesEntryList.get(0).getValue(),
@@ -879,17 +923,17 @@ public class FixVillages {
                         Matcher countyCategoryMatcher = countyCategoryPattern.matcher(pageText);
                         if (countyCategoryMatcher.find()) {
                             pageText = countyCategoryMatcher
-                                .replaceAll("[[Categorie:" + (communeType.equals("comună") ? "Comune" : "Orașe")
+                                .replaceAll("[[Categorie:" + (communeType == CommuneType.COMUNA ? "Comune" : "Orașe")
                                     + " din județul " + eachCounty + '|' + sortingKey + "]]");
                         }
 
                         List<String> desiredCommuneCategories = new ArrayList<>();
-                        if (communeType.equals("oraș")) {
+                        if (communeType == CommuneType.ORAS) {
                             desiredCommuneCategories.add("Orașe din județul " + eachCounty);
                             if (urbanSettlements.containsKey(communeName)) {
                                 desiredCommuneCategories.add("Localități urbane din județul " + eachCounty);
                             }
-                        } else if (communeType.equals("municipiu")) {
+                        } else if (communeType == CommuneType.MUNICIPIU) {
                             desiredCommuneCategories.add("Municipii din România");
                             if (urbanSettlements.containsKey(communeName)) {
                                 desiredCommuneCategories.add("Localități urbane din județul " + eachCounty);
@@ -906,6 +950,9 @@ public class FixVillages {
 
                         pageText = rewritePoliticsAndAdministrationSection(pageText, countySymbol, communeName, communeType,
                             sirutaFromWd, communeWikibaseItem, wdcache);
+
+                        pageText =
+                            rewriteDemographySection(pageText, eachCounty, communeName, communeType, communeWikibaseItem);
 
                         communeNativeLabelClaims = communeWikibaseItem.getClaims(nativeLabelProp);
                         if (null == communeNativeLabelClaims || communeNativeLabelClaims.isEmpty()) {
@@ -941,6 +988,124 @@ public class FixVillages {
         }
     }
 
+    private static String rewriteDemographySection(String pageText, String countySymbol, String communeName,
+                                                   CommuneType communeType, Entity communeWikibaseItem) {
+        MongoClient client = MongoClients.create("mongodb://localhost:57017");
+        MongoDatabase db = client.getDatabase("recensamant2021");
+        MongoCollection<BasicDBObject> ethnCollection = db.getCollection("etnie", BasicDBObject.class);
+        MongoCollection<BasicDBObject> rellCollection = db.getCollection("religie", BasicDBObject.class);
+
+        String commIndex = String.format(communeType.getPopDataKeyFormat(), communeName.toUpperCase());
+
+        FindIterable<BasicDBObject> ethnDataIter =
+            ethnCollection.find(and(eq("county", countySymbol.toUpperCase()), eq("name", commIndex)));
+        FindIterable<BasicDBObject> rellDataIter =
+            rellCollection.find(and(eq("county", countySymbol.toUpperCase()), eq("name", commIndex)));
+        if (null == ethnDataIter || null == ethnDataIter.first() || null == rellDataIter || null == rellDataIter.first()) {
+            LOG.warn("No population data found for {}", commIndex);
+            return pageText;
+        }
+        BasicDBObject ethnData = ethnDataIter.first();
+        BasicDBObject rellData = rellDataIter.first();
+        String pieChartEthn = buildPieChart(communeName, communeType, ethnData, DemoStatType.ETNIC);
+        String pieChartRelg = buildPieChart(communeName, communeType, rellData, DemoStatType.RELIGIOS);
+
+        String demogText = buildDemographyText(communeName, communeType, ethnData, rellData, communeWikibaseItem);
+
+        return pageText;
+    }
+
+    private static String buildDemographyText(String communeName, CommuneType communeType, BasicDBObject ethnData,
+                                              BasicDBObject rellData, Entity communeWikibaseItem) {
+        String demogIntro = buildDemographyIntro(communeName, communeType, ethnData.getLong("total"), communeWikibaseItem);
+        String demogEthnPhrase = buildPhrase(ethnData);
+        String demogRellPhrase = buildPhrase(rellData);
+        return String.join(" ", demogIntro, demogEthnPhrase, demogRellPhrase);
+    }
+
+    private static String buildPhrase(BasicDBObject ethnData) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private static String buildDemographyIntro(String communeName, CommuneType communeType, Long totalPopulation,
+                                               Entity communeWikibaseItem) {
+        long population2011 = -1l;
+        Set<Claim> popClaims = communeWikibaseItem.getClaims(WikibasePropertyFactory.getWikibaseProperty("P1082"));
+        for (Claim eachPopClaim : popClaims) {
+            Map<Property, Set<Snak>> qualifiers = ObjectUtils.defaultIfNull(eachPopClaim.getQualifiers(), Collections.emptyMap());
+            Set<Snak> pointsInTime = qualifiers.get(WikibasePropertyFactory.getWikibaseProperty("P585"));
+            if (pointsInTime.stream().map(Snak::getData).filter(Objects::nonNull).filter(d -> d instanceof Time).map(Time.class::cast).map(Time::getYear).anyMatch(y -> y == 2011)) {
+                population2011 = Math.round(((Quantity) eachPopClaim.getMainsnak().getData()).getAmount());
+            }
+        }
+        
+        String firstPart = String.format("Conform [[Recensământul Populației și Locuințelor 2021 (România)|recensământului efectuat în 2021]], populația %s %s se ridică la {{plural|%d|locuitor|locuitori|de locuitori}}", communeType.getTypeNameGen(), communeName, totalPopulation);
+        String comparison = (totalPopulation == population2011 ? ", la fel ca la "
+                                                : (totalPopulation > population2011 ? ", în creștere față de ": ", în scădere față de "))
+            + "[[Recensământul populației din 2011 (România)|recensământul anterior din 2011]]";
+        if (totalPopulation != population2011) {
+            comparison += String.format(", când se înregistraseră {{plural|%d|locuitor|locuitori|de locuitori}}", population2011);
+        }
+        comparison += ".<ref name=\"insse_2011_nat\">{{Citat recensământ România 2011|tabel=8}}</ref>";
+        return firstPart + comparison;
+    }
+
+    private static String buildPieChart(String communeName, CommuneType communeType, BasicDBObject ethnData,
+                                        DemoStatType demoType) {
+        Integer totalPop = ethnData.getInt("total");
+        NumberFormat nf = NumberFormat.getInstance(new Locale("ro"));
+
+        StringBuilder ethnChartBuilder =
+            new StringBuilder("{{Pie chart\n|thumb=left\n|caption=Componența ").append(demoType.getAdjective()).append(" a ")
+                .append(communeType.getTypeNameGen()).append(' ').append(communeName);
+        TreeSet<Entry<String, Integer>> sortedElems = new TreeSet<>(new Comparator<Entry<String, Integer>>() {
+
+            @Override
+            public int compare(Entry<String, Integer> arg0, Entry<String, Integer> arg1) {
+                if (arg0.getKey().equals("necunoscută") && arg1.getKey().equals("altele")) {
+                    return 1;
+                }
+                if (arg1.getKey().equals("necunoscută") && arg0.getKey().equals("altele")) {
+                    return -1;
+                }
+                if (arg0.getKey().equals("altele")) {
+                    return 1;
+                }
+                if (arg0.getKey().equals("necunoscută")) {
+                    return 1;
+                }
+                return arg1.getValue() - arg0.getValue();
+            }
+        });
+        ethnData.computeIfAbsent("altele", (k) -> Integer.valueOf(0));
+        for (Entry<String, Object> ent : ethnData.entrySet()) {
+            if (!List.of("name", "county", "total", "_id").contains(ent.getKey())) {
+                sortedElems.add(new DefaultMapEntry(ent.getKey(), (Integer) ent.getValue()));
+            }
+        }
+        int rowIdx = 1;
+        double others = 0.0;
+        for (Map.Entry<String, Integer> ent : sortedElems) {
+            double percentage = 100.0 * ent.getValue() / totalPop;
+            if (percentage < 1.0 && !List.of("altele", "necunoscută").contains(ent.getKey())) {
+                others += percentage;
+            } else {
+                String key = StringUtils.capitalize(ent.getKey());
+                if ("altele".equals(ent.getKey())) {
+                    percentage += others;
+                    key = "Alte " + demoType.getPlural();
+                }
+                ethnChartBuilder.append("\n|label").append(rowIdx).append('=').append(key).append("|value").append(rowIdx)
+                    .append('=').append(nf.format(percentage)).append("|color").append(rowIdx).append('=')
+                    .append(colors.computeIfAbsent(ent.getKey(), (k) -> "#ffffff"));
+                rowIdx++;
+            }
+        }
+        ethnChartBuilder.append("}}");
+        return ethnChartBuilder.toString();
+    }
+
     private static void removePopBlankParams(WikiTemplate initialTemplate) {
         Pattern popBlankNumberExtractor = Pattern.compile("population_blank(\\d+)_title");
         List<String> blankPopParamNames = initialTemplate.getParamNames().stream()
@@ -965,7 +1130,7 @@ public class FixVillages {
                                              Property sirutaProp, Property nativeLabelProp, Entity meterEnt,
                                              Entity squareKmEnt, Set<Snak> roWpReference, String eachCounty,
                                              Pattern countyLinkPattern, Entity communeWikibaseItem, String communeName,
-                                             String communeType, boolean communeChanged, Map<String, String> villages,
+                                             CommuneType communeType, boolean communeChanged, Map<String, String> villages,
                                              Map<String, String> urbanSettlements, Entity capitalEntity,
                                              Pattern communeLinkPattern, Claim eachCompositeVillageClaim)
         throws IOException, WikibaseException, ParseException, UnsupportedEncodingException, LoginException,
@@ -988,12 +1153,13 @@ public class FixVillages {
             removeEnd(removeEnd(villageEntity.getLabels().get("ro"), ", " + eachCounty), "(" + communeName + ")"),
             "Comuna "));
         crtSettlementName = villageName;
-        LOG.info("Processing settlement {}, UAT {}, county {}; settlement type: {}", crtSettlementName, crtCommuneName, crtCountyName, villageType);
+        LOG.info("Processing settlement {}, UAT {}, county {}; settlement type: {}", crtSettlementName, crtCommuneName,
+            crtCountyName, villageType);
 
         String villageRelationWithCommune = "în comuna";
-        if (!"comună".equalsIgnoreCase(communeType)) {
-            villageRelationWithCommune = String.format("a%s %slui", "localitate componentă".equals(villageType) ? "" : "l",
-                appendIfMissing(communeType, "u"));
+        if (communeType != CommuneType.COMUNA) {
+            villageRelationWithCommune = String.format("a%s %s", "localitate componentă".equals(villageType) ? "" : "l",
+                communeType.getTypeNameGen());
         }
 
         String villageDescr =
@@ -1323,12 +1489,11 @@ public class FixVillages {
 
             String villageIndefArticle = startsWith(villageType, "localitate") ? "o" : "un";
             String communeLink = communeWikibaseItem.getSitelinks().get("rowiki").getPageName();
-            String articulatedCommuneType = "comuna";
-            String genitiveCommuneType = "comunei";
+            String communeTypeForIntro = communeType.getTypeNameAcc();
+            String genitiveCommuneType = communeType.getTypeNameGen();
             String in = "în";
-            if (!"comună".equals(communeType)) {
-                genitiveCommuneType = appendIfMissing(communeType, "u") + "lui";
-                articulatedCommuneType = genitiveCommuneType;
+            if (communeType != CommuneType.COMUNA) {
+                communeTypeForIntro = genitiveCommuneType;
                 if ("sat".equalsIgnoreCase(villageType)) {
                     in = "ce aparține";
                 } else {
@@ -1336,7 +1501,7 @@ public class FixVillages {
                 }
             }
             String villageIntro = String.format("este %s %s %s [[%s|%s %s]] din [[județul %s]], %s, [[România]]",
-                villageIndefArticle, villageType, in, communeLink, articulatedCommuneType,
+                villageIndefArticle, villageType, in, communeLink, communeTypeForIntro,
                 StringUtils.equals(communeName, villageName) ? "cu același nume" : communeName, eachCounty,
                 getHistoricalRegionLink(villageName, communeName, eachCounty));
 
@@ -1488,7 +1653,7 @@ public class FixVillages {
     }
 
     private static String rewritePoliticsAndAdministrationSection(String pageText, String countySymbol, String communeName,
-                                                                  String communeType, String siruta, Entity communeItem,
+                                                                  CommuneType communeType, String siruta, Entity communeItem,
                                                                   WikidataEntitiesCache wdcache)
         throws IOException, WikibaseException {
         String communeNameRegexForMongo = replace(communeName, "ș", "(ș|ş)");
@@ -1515,26 +1680,19 @@ public class FixVillages {
             }
         }
 
-        communeType = endsWith(communeType, "ă") ? appendIfMissing(removeEnd(communeType, "ă"), "a")
-            : appendIfMissing(appendIfMissing(communeType, "u"), "l");
-
-        MongoClient mongoClient = new MongoClient("localhost", 57017);
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:57017");
         MongoDatabase electionsDb = mongoClient.getDatabase("elections2020");
         MongoCollection<Document> electionsColl = electionsDb.getCollection("cl");
-        FindIterable<Document> electionResultsItrble = electionsColl.find(Filters.eq("siruta", siruta));
+        FindIterable<Document> electionResultsItrble = electionsColl.find(eq("siruta", siruta));
         electionResultsItrble.sort(new BasicDBObject("seats", -1));
 
         final List<Object[]> electionResults = new ArrayList<Object[]>();
-        electionResultsItrble.forEach(new Block<Document>() {
-
-            @Override
-            public void apply(Document t) {
-                Object[] crtResult = new Object[3];
-                crtResult[0] = t.getString("shortName");
-                crtResult[1] = t.getString("fullName");
-                crtResult[2] = t.get("seats");
-                electionResults.add(crtResult);
-            }
+        electionResultsItrble.forEach(t -> {
+            Object[] crtResult = new Object[3];
+            crtResult[0] = t.getString("shortName");
+            crtResult[1] = t.getString("fullName");
+            crtResult[2] = t.get("seats");
+            electionResults.add(crtResult);
         });
 
         mongoClient.close();
@@ -1580,7 +1738,7 @@ public class FixVillages {
         }
         String section = String.format(
             "%n<!-- secțiune administrație -->%s %s este administrat%s de un primar și un consiliu local compus din %d consilieri. Primarul, {{Date înlănțuite de la Wikidata|P6}}, %s {{Date înlănțuite de la Wikidata|P6|P102}}, este în funcție din {{Date înlănțuite de la Wikidata|P6|_P580}}. Începând cu [[Alegeri locale în România, 2020|alegerile locale din 2020]], consiliul local are următoarea componență pe partide politice:<ref>{{Citat web|url=https://prezenta.roaep.ro/locale27092020/data/json/sicpv/pv/pv_%s_final.json|format=Json|titlu=Rezultatele finale ale alegerilor locale din 2020 |publisher=Autoritatea Electorală Permanentă|accessdate=2020-11-02}}</ref><!--sfârșit secțiune administrație-->%n%s",
-            StringUtils.capitalize(communeType), communeName, "Comuna".equalsIgnoreCase(communeType) ? "ă" : "",
+            StringUtils.capitalize(communeType.getTypeNameAcc()), communeName, communeType.isFeminine() ? "ă" : "",
             mandatesCount, partyIntro, StringUtils.lowerCase(countySymbol), councillorsTemplate);
 
         if (replacePosition >= 0) {
@@ -1999,7 +2157,7 @@ public class FixVillages {
         LevelChangePropagator levelChangePropagator = new LevelChangePropagator();
         levelChangePropagator.setResetJUL(true);
         logbackContext.addListener(levelChangePropagator);
-        
+
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
     }
