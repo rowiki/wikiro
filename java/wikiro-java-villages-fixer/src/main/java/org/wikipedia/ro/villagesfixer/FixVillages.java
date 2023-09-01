@@ -51,6 +51,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -977,8 +978,8 @@ public class FixVillages {
         }
         BasicDBObject ethnData = ethnDataIter.first();
         BasicDBObject rellData = rellDataIter.first();
-        String pieChartEthn = buildPieChart(communeName, communeType, ethnData, DemoStatType.ETNIC);
-        String pieChartRelg = buildPieChart(communeName, communeType, rellData, DemoStatType.RELIGIOS);
+        String pieChartEthn = buildPieChart(communeName, communeType, ethnData, DemoStatType.ETNIC, null);
+        String pieChartRelg = buildPieChart(communeName, communeType, rellData, DemoStatType.RELIGIOS, "clear: none;");
 
         String demogText = buildDemographyText(communeName, communeType, ethnData, rellData, communeWikibaseItem, countySymbol, wdcache);
 
@@ -1096,7 +1097,7 @@ public class FixVillages {
     }
 
     private static String buildPieChart(String communeName, CommuneType communeType, BasicDBObject ethnData,
-                                        DemoStatType demoType) {
+                                        DemoStatType demoType, String style) {
         Integer totalPop = ethnData.getInt("total");
         NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
         nf.setMaximumFractionDigits(2);
@@ -1104,6 +1105,10 @@ public class FixVillages {
         StringBuilder ethnChartBuilder =
             new StringBuilder("{{Pie chart\n|thumb=left\n|caption=Componența ").append(demoType.getAdjective()).append(" a ")
                 .append(communeType.getTypeNameGen()).append(' ').append(communeName);
+        if (StringUtils.isNotBlank(style)) {
+            ethnChartBuilder.append("\n|style=").append(style);
+        }
+        
         TreeSet<Entry<String, Integer>> sortedElems = new TreeSet<>(new DemoEntryComparator());
         ethnData.computeIfAbsent("altele", (k) -> Integer.valueOf(0));
         for (Entry<String, Object> ent : ethnData.entrySet()) {
@@ -1112,30 +1117,40 @@ public class FixVillages {
             }
         }
         int rowIdx = 1;
-        double others = 0.0;
-        for (Map.Entry<String, Integer> ent : sortedElems) {
+
+        Map<String, Double> printableList = new HashMap<>();
+        double totalPrintablePercentage = 0.0;
+        for (Map.Entry<String, Integer> ent : sortedElems)
+        {
             double percentage = 100.0 * ent.getValue() / totalPop;
-            if (percentage < 1.0 && !List.of("altele", "necunoscută").contains(ent.getKey())) {
-                others += percentage;
-            } else {
-                DemographicGroup group = DemographicGroup.fromId(ent.getKey());
-                String key = StringUtils.capitalize(ent.getKey());
-                String color = "#ffffff";
-                if (null == group) {
-                    LOG.warn("Unknown group {}", ent.getKey());
-                } else {
-                    key = StringUtils.capitalize(group.getId());
-                    color = group.getColor();
-                }
-                if (DemographicGroup.OTHERS == group) {
-                    percentage += others;
-                    key = "Alte " + demoType.getPlural();
-                }
-                ethnChartBuilder.append("\n|label").append(rowIdx).append('=').append(key).append("|value").append(rowIdx)
-                    .append('=').append(nf.format(percentage)).append("|color").append(rowIdx).append('=')
-                    .append(color);
-                rowIdx++;
+            if (percentage >= 1.0 && !"altele".equalsIgnoreCase(ent.getKey()) || "necunoscută".equalsIgnoreCase(ent.getKey())) {
+                printableList.put(ent.getKey(), percentage);
+                totalPrintablePercentage += percentage;
             }
+        }
+        printableList.put("altele", 100.0 - totalPrintablePercentage);
+        
+        for (Map.Entry<String, Integer> ent : sortedElems) {
+            if (!printableList.containsKey(ent.getKey())) {
+                continue;
+            }
+            double percentage = printableList.get(ent.getKey());
+            DemographicGroup group = DemographicGroup.fromId(ent.getKey());
+            String key = StringUtils.capitalize(ent.getKey());
+            String color = "#ffffff";
+            if (null == group) {
+                LOG.warn("Unknown group {}", ent.getKey());
+            } else {
+                key = StringUtils.capitalize(group.getId());
+                color = group.getColor();
+            }
+            if (DemographicGroup.OTHERS == group) {
+                key = "Alte " + demoType.getPlural();
+            }
+            ethnChartBuilder.append("\n|label").append(rowIdx).append('=').append(key).append("|value").append(rowIdx)
+                .append('=').append(nf.format(percentage)).append("|color").append(rowIdx).append('=')
+                .append(color);
+            rowIdx++;
         }
         ethnChartBuilder.append("}}");
         return ethnChartBuilder.toString();
