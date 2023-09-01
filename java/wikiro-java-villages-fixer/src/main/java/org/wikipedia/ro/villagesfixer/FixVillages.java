@@ -980,7 +980,7 @@ public class FixVillages {
         String pieChartEthn = buildPieChart(communeName, communeType, ethnData, DemoStatType.ETNIC, null);
         String pieChartRelg = buildPieChart(communeName, communeType, rellData, DemoStatType.RELIGIOS, "clear: none;");
 
-        String chartsText = String.format("<div style=\"float:left\">%s%s%n</div>%n", pieChartEthn, pieChartRelg);
+        String chartsText = String.format("<div style=\"float:left\">%s%s%n</div>", pieChartEthn, pieChartRelg);
         String demogText = buildDemographyText(communeName, communeType, ethnData, rellData, communeWikibaseItem, countySymbol, wdcache);
 
         StringBuilder chartsBuilder = new StringBuilder();
