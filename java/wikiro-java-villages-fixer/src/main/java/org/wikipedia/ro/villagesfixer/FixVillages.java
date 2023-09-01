@@ -981,10 +981,25 @@ public class FixVillages {
         String pieChartEthn = buildPieChart(communeName, communeType, ethnData, DemoStatType.ETNIC, null);
         String pieChartRelg = buildPieChart(communeName, communeType, rellData, DemoStatType.RELIGIOS, "clear: none;");
 
+        String chartsText = String.format("<div style=\"float:left\">%s%s%n</div>%n", pieChartEthn, pieChartRelg);
         String demogText = buildDemographyText(communeName, communeType, ethnData, rellData, communeWikibaseItem, countySymbol, wdcache);
 
-        LOG.info("Text pentru demografie: {}", String.format("<div style=\"float:left\">%s%s</div>%n%s", pieChartEthn, pieChartRelg, demogText));
-        return pageText;
+        StringBuilder chartsBuilder = new StringBuilder();
+        Matcher chartsMatcher = demographyChartsPattern.matcher(pageText);
+        while (chartsMatcher.find()) {
+            chartsMatcher.appendReplacement(chartsBuilder, Matcher.quoteReplacement(chartsText));
+        }
+        chartsMatcher.appendTail(chartsBuilder);
+        
+        pageText = chartsBuilder.toString();
+        
+        StringBuilder demoTextBuilder = new StringBuilder();
+        Matcher demoTextMatcher = demographyTextPattern.matcher(pageText);
+        while(demoTextMatcher.find()) {
+            demoTextMatcher.appendReplacement(demoTextBuilder, Matcher.quoteReplacement(demogText));
+        }
+        demoTextMatcher.appendTail(demoTextBuilder);
+        return demoTextBuilder.toString();
     }
 
     private static String buildDemographyText(String communeName, CommuneType communeType, BasicDBObject ethnData,
