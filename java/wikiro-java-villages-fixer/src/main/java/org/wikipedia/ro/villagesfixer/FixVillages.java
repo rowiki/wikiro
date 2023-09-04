@@ -523,6 +523,7 @@ public class FixVillages {
                         initialTemplate.removeParam("populatie");
                         initialTemplate.removeParam("recensamant");
                         initialTemplate.removeParam("populație_note_subsol");
+
                     } else {
                         pageText = "{{Infocaseta Așezare}}" + pageText;
                         templateAnalysisStart = "{{Infocaseta Așezare}}".length();
@@ -1098,17 +1099,24 @@ public class FixVillages {
             }
         }
         
-        String firstPart = String.format("Conform [[Recensământul Populației și Locuințelor 2021 (România)|recensământului efectuat în 2021]], populația %s %s se ridică la {{subst:plural|%d|locuitor|locuitori|de locuitori}}", communeType.getTypeNameGen(), communeName, totalPopulation);
+        String firstPart = String.format("Conform [[Recensământul Populației și Locuințelor 2021 (România)|recensământului efectuat în 2021]], populația %s %s se ridică la %s", communeType.getTypeNameGen(), communeName, substPluralRo(totalPopulation, "locuitor", "locuitori", "de locuitori"));
         String comparison = (totalPopulation == population2011 ? ", la fel ca la "
                                                 : (totalPopulation > population2011 ? ", în creștere față de ": ", în scădere față de "))
             + "[[Recensământul populației din 2011 (România)|recensământul anterior din 2011]]";
         if (totalPopulation != population2011) {
-            comparison += String.format(", când se înregistraseră {{subst:plural|%d|locuitor|locuitori|de locuitori}}", population2011);
+            comparison += String.format(", când se înregistrase%s %s", population2011 == 1 ? "" : "ră", substPluralRo(population2011, "locuitor", "locuitori", "de locuitori"));
         }
         comparison += ".<ref name=\"insse_2011_nat\">{{Citat recensământ România 2011|tabel=8}}</ref>";
         return firstPart + comparison;
     }
 
+    private static String substPluralRo(long number, String singular, String plural, String qualifiedPlural) {
+        if (number == 1) {
+            return "1 " + singular;
+        }
+        return String.format("%s %s", RO_NUMBER_FORMAT.format(number), number % 100 > 0 || number % 100 < 20 ? qualifiedPlural: plural); 
+    }
+    
     private static String buildPieChart(String communeName, CommuneType communeType, BasicDBObject ethnData,
                                         DemoStatType demoType, String style) {
         Integer totalPop = ethnData.getInt("total");
