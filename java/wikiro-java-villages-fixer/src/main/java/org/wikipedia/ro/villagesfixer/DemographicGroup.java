@@ -37,10 +37,11 @@ public enum DemographicGroup {
     RIT_VECHI_ROMANI("creștini de rit vechi", "Q1997209", "#c0c03f"),
     ATEI("atei", "Q7066", "#c0c0c0"),
     AGNOSTICI("agnostici", "Q288928", "#c0adad"),
-    FARA_RELIGIE("făra religie", "Q58721", "#adbac0"),
+    FARA_RELIGIE("fără religie", "Q58721", "#adbac0"),
     MARTORI_IEHOVA("martori ai lui Iehova", "Q35269", "#3f3fc0"),
     UNITARIENI("unitarieni", "Q106687", "#3fc0c0"),
     CRESTINI_EVANGHELIE("creștini după evanghelie", "Q685812", "#ffff55"),
+    EVANGHELICI("evanghelici", "Q5415664", "#d5fff3"),
     EVANGHELICI_LUTERANI("evanghelici luterani", "Q490692", "#ffa600"),
     ORTODOCSI_SR("ortodocși sârbi", "Q188814", "#c03f3f"),
     ADVENTISTI("adventiști", "Q215168", "#ffafaf");

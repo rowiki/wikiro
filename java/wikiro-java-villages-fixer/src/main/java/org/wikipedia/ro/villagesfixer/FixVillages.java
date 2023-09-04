@@ -143,10 +143,8 @@ public class FixVillages {
     private static Pattern numberRangePattern = Pattern.compile("(\\d+)((?:[–\\-]|(?:&ndash;))(\\d+))?");
     private static Pattern ifPattern = Pattern.compile("\\{\\{\\s*#if");
 
-    private static Pattern demographyChartsPattern =
-        Pattern.compile("<div style=\"float:left\">\\{\\{Pie chart(.*?)</div>", Pattern.DOTALL);
-    private static Pattern demographyTextPattern = Pattern.compile(
-        "Conform \\[\\[Recensământul (.*)<ref name=\"insse_20\\d1_rel\">.*</ref>");
+    private static Pattern DEMOGRAPHY_TEXT_PATTERN = Pattern.compile(
+        "<div style=\"float:left\">\\{\\{Pie chart(.*?)</div>\\s*Conform (.*)<ref name=\"insse_20\\d1_rel\">.*?</ref>", Pattern.DOTALL);
 
     private static String crtSettlementName = null, crtCommuneName = null, crtCountyName = null;
 
@@ -520,7 +518,11 @@ public class FixVillages {
 
                         }
                         removePopBlankParams(initialTemplate);
-
+                        initialTemplate.removeParam("populație");
+                        initialTemplate.removeParam("recensământ");
+                        initialTemplate.removeParam("populatie");
+                        initialTemplate.removeParam("recensamant");
+                        initialTemplate.removeParam("populație_note_subsol");
                     } else {
                         pageText = "{{Infocaseta Așezare}}" + pageText;
                         templateAnalysisStart = "{{Infocaseta Așezare}}".length();
@@ -979,26 +981,20 @@ public class FixVillages {
         BasicDBObject rellData = rellDataIter.first();
         String pieChartEthn = buildPieChart(communeName, communeType, ethnData, DemoStatType.ETNIC, null);
         String pieChartRelg = buildPieChart(communeName, communeType, rellData, DemoStatType.RELIGIOS, "clear: none;");
-
-        String chartsText = String.format("<div style=\"float:left\">%s%s%n</div>", pieChartEthn, pieChartRelg);
         String demogText = buildDemographyText(communeName, communeType, ethnData, rellData, communeWikibaseItem, countySymbol, wdcache);
 
-        StringBuilder chartsBuilder = new StringBuilder();
-        Matcher chartsMatcher = demographyChartsPattern.matcher(pageText);
-        while (chartsMatcher.find()) {
-            chartsMatcher.appendReplacement(chartsBuilder, Matcher.quoteReplacement(chartsText));
+        String chartsText = String.format("<div style=\"float:left\">%s%s%n</div>%n%s", pieChartEthn, pieChartRelg, demogText);
+
+        StringBuilder demoBuilder = new StringBuilder();
+        Matcher demoMatcher = DEMOGRAPHY_TEXT_PATTERN.matcher(pageText);
+        while (demoMatcher.find()) {
+            demoMatcher.appendReplacement(demoBuilder, Matcher.quoteReplacement(chartsText));
         }
-        chartsMatcher.appendTail(chartsBuilder);
+        demoMatcher.appendTail(demoBuilder);
         
-        pageText = chartsBuilder.toString();
+        pageText = demoBuilder.toString();
         
-        StringBuilder demoTextBuilder = new StringBuilder();
-        Matcher demoTextMatcher = demographyTextPattern.matcher(pageText);
-        while(demoTextMatcher.find()) {
-            demoTextMatcher.appendReplacement(demoTextBuilder, Matcher.quoteReplacement(demogText));
-        }
-        demoTextMatcher.appendTail(demoTextBuilder);
-        return demoTextBuilder.toString();
+        return pageText;
     }
 
     private static String buildDemographyText(String communeName, CommuneType communeType, BasicDBObject ethnData,
@@ -1056,10 +1052,13 @@ public class FixVillages {
                     .append(" și ")
                     .append(minoritiesDescriptions.get(minoritiesDescriptions.size() - 1));
             }
+            if (null != unknPop) {
             phraseBuilder.append(", iar despre ")
                 .append(RO_NUMBER_FORMAT.format(unknPop.doubleValue() / totPop.doubleValue() * 100.))
                 .append("% nu se cunoaște apartenența ")
-                .append(demoType.getAdjective())
+                .append(demoType.getAdjective());
+            }
+            phraseBuilder
                 .append(".<ref name=\"insse_2021_")
                 .append(demoType.getSingular().substring(0, 3))
                 .append("\">{{Citat recensământ România 2021|tabel=")
