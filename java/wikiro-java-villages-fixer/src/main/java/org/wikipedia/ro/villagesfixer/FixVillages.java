@@ -1114,7 +1114,7 @@ public class FixVillages {
         if (number == 1) {
             return "1 " + singular;
         }
-        return String.format("%s %s", RO_NUMBER_FORMAT.format(number), number % 100 > 0 || number % 100 < 20 ? qualifiedPlural: plural); 
+        return String.format("%s %s", RO_NUMBER_FORMAT.format(number), number % 100 > 0 && number % 100 < 20 ? plural: qualifiedPlural); 
     }
     
     private static String buildPieChart(String communeName, CommuneType communeType, BasicDBObject ethnData,
