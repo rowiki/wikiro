@@ -1038,13 +1038,13 @@ public class FixVillages {
                 Entry<String, Integer> singleMinority = sortedElems.stream().skip(1).findFirst().get();
                 DemographicGroup singleMinorityDemGroup = DemographicGroup.fromId(singleMinority.getKey());
                 String linkToSingleMinority = createLinkToDemGroup(wdcache, singleMinorityDemGroup);
-                phraseBuilder.append(" cu o minoritate de ")
+                phraseBuilder.append(", cu o minoritate de ")
                     .append(linkToSingleMinority)
                     .append(" (")
                     .append(RO_NUMBER_FORMAT.format(singleMinority.getValue() / totPop.doubleValue() * 100.))
                     .append("%)");
             } else if (1 < sortedElems.stream().skip(1).filter(e -> e.getValue() * 100 > totPop.longValue()).count()) {
-                phraseBuilder.append(" cu minorități de ");
+                phraseBuilder.append(", cu minorități de ");
                 List<String> minoritiesDescriptions = sortedElems.stream().skip(1).filter(e -> e.getValue() * 100 > totPop.longValue())
                     .map(e -> String.format("%s (%s%%)", createLinkToDemGroup(wdcache, DemographicGroup.fromId(e.getKey())), RO_NUMBER_FORMAT.format(e.getValue() / totPop.doubleValue() * 100.)))
                     .toList();
