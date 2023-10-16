@@ -41,7 +41,7 @@ public enum DemographicGroup {
     MARTORI_IEHOVA("martori ai lui Iehova", "Q35269", "#3f3fc0"),
     UNITARIENI("unitarieni", "Q106687", "#3fc0c0"),
     CRESTINI_EVANGHELIE("creștini după evanghelie", "Q685812", "#ffff55"),
-    EVANGHELICI("evanghelici", "Q5415664", "#d5fff3"),
+    EVANGHELICI("evanghelici augustani", "Q5415664", "#d5fff3"),
     EVANGHELICI_LUTERANI("evanghelici luterani", "Q490692", "#ffa600"),
     ORTODOCSI_SR("ortodocși sârbi", "Q188814", "#c03f3f"),
     ADVENTISTI("adventiști", "Q215168", "#ffafaf");
