@@ -1054,7 +1054,7 @@ public class FixVillages {
                     .append(minoritiesDescriptions.get(minoritiesDescriptions.size() - 1));
             }
             if (null != unknPop) {
-            phraseBuilder.append(", iar despre ")
+            phraseBuilder.append(", iar pentru ")
                 .append(RO_NUMBER_FORMAT.format(unknPop.doubleValue() / totPop.doubleValue() * 100.))
                 .append("% nu se cunoaște apartenența ")
                 .append(demoType.getAdjective());
@@ -1104,7 +1104,7 @@ public class FixVillages {
                                                 : (totalPopulation > population2011 ? ", în creștere față de ": ", în scădere față de "))
             + "[[Recensământul populației din 2011 (România)|recensământul anterior din 2011]]";
         if (totalPopulation != population2011) {
-            comparison += String.format(", când se înregistrase%s %s", population2011 == 1 ? "" : "ră", substPluralRo(population2011, "locuitor", "locuitori", "de locuitori"));
+            comparison += String.format(", când fusese%s înregistra%s %s", population2011 == 1 ? "" : "ră", population2011 == 1 ? "t" : "ți", substPluralRo(population2011, "locuitor", "locuitori", "de locuitori"));
         }
         comparison += ".<ref name=\"insse_2011_nat\">{{Citat recensământ România 2011|tabel=8}}</ref>";
         return firstPart + comparison;
