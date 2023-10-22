@@ -9,6 +9,7 @@ Run using:
 import os
 import datetime
 from enum import Enum
+from pytz import timezone
 from typing import Generator
 
 import pywikibot
@@ -55,6 +56,9 @@ class PSNBot(SingleSiteBot):
 	def get_tagger(self, page):
 		starttime = pywikibot.Timestamp.fromtimestampformat("%04d%02d%02d" % (next_year(self.year, self.month), next_month(self.month), 1))
 		endtime   = pywikibot.Timestamp.fromtimestampformat("%04d%02d%02d" % (self.year, self.month, 1))
+		tz = timezone("Europe/Bucharest")
+		starttime -= tz.localize(starttime).utcoffset()
+		endtime -= tz.localize(endtime).utcoffset()
 		print(starttime, endtime)
 		lastrev   = None
 		for rev in page.revisions(content=True, starttime=starttime, endtime=endtime):
@@ -67,7 +71,7 @@ class PSNBot(SingleSiteBot):
 			lastrev = rev
 
 		if not lastrev:
-			raise Exception("Could not find tagger")
+			raise Exception(f"Could not find tagger for page {page.title()}")
 
 		return lastrev.user
 
@@ -161,6 +165,7 @@ def main():
 		year -= 1
 	month = (month - 1 + 12 - month_diff) % 12
 
+	pywikibot.Site().login()
 	cat = pywikibot.Category(pywikibot.Site(), u"Categorie:Articole despre subiecte cu notabilitate incertă din %s %d" % (months[month],year))
 	generator = pagegenerators.CategorizedPageGenerator(cat)
 	bot = PSNBot(month+1, year, generator, processor)
