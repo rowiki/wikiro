@@ -59,20 +59,23 @@ class PSNBot(SingleSiteBot):
 		tz = timezone("Europe/Bucharest")
 		starttime -= tz.localize(starttime).utcoffset()
 		endtime -= tz.localize(endtime).utcoffset()
-		print(starttime, endtime)
-		lastrev   = None
+		#print(starttime, endtime)
+		revs = []
 		for rev in page.revisions(content=True, starttime=starttime, endtime=endtime):
-			#print(rev)
 			if rev.text and rev.text.find("{{notabilitate") == -1 and \
 				rev.text.find("notabilitate=") == -1 and \
 				rev.text.find("notabilitate =") == -1 and \
 				rev.text.find("{{Notabilitate") == -1:
-				break
-			lastrev = rev
+				continue
+			#print(rev, "\n")
+			revs.append(rev)
+
+		lastrev = revs[-1] # the last revision is the first one chronologically
 
 		if not lastrev:
 			raise Exception(f"Could not find tagger for page {page.title()}")
 
+		#print(lastrev)
 		return lastrev.user
 
 	def get_proposal_page(self, page):
@@ -168,7 +171,9 @@ def main():
 	pywikibot.Site().login()
 	cat = pywikibot.Category(pywikibot.Site(), u"Categorie:Articole despre subiecte cu notabilitate incertă din %s %d" % (months[month],year))
 	generator = pagegenerators.CategorizedPageGenerator(cat)
+	#page = pywikibot.Page(pywikibot.Site(), "Metropola TV")
 	bot = PSNBot(month+1, year, generator, processor)
+	#bot.get_tagger(page)
 	bot.run()
 	
 if __name__ == "__main__":
