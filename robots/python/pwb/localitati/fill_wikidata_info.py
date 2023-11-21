@@ -24,129 +24,8 @@ import wikiro.robots.python.pwb.csvUtils as csvUtils
 from wikiro.robots.python.pwb.localitati import config
 from wikiro.robots.python.pwb.wikidata import robot_romania as robot
 
-class ItemProcessing:
-    def __init__(self, config, always=False, item=None):
-        self.config = config
-        self.always = always
-        self.setItem(item)
 
-    def extractLabel(self):
-        if 'ro' in self.item.labels:
-            return self.item.labels['ro']
-        if 'en' in self.item.labels:
-            return self.item.labels['en']
-        if 'fr' in self.item.labels:
-            return self.item.labels['fr']
-
-    def setItem(self, item):
-        self.item = item
-        if not item:
-            return
-        self.item.get()
-        self.label = self.extractLabel()
-
-    def userConfirm(self, question):
-        """Obtain user response."""
-        if self.always:
-            return True
-
-        choice = pywikibot.input_choice(question,
-                                        [('Yes', 'y'),
-                                         ('No', 'N'),
-                                         ('Always', 'a')],
-                                        default='N')
-
-        if choice == 'n':
-            return False
-
-        if choice == 'a':
-            self.always = True
-
-        return True
-
-    def updateProperty(self, key, data, force=False):
-        try:
-            answer = False
-            oldValue = set([])
-            prop, pref, datatype = self.config["properties"][key]
-            if prop in self.item.claims:
-                # don't bother about those yet
-                oldValue = set(v.getTarget() for v in self.item.claims[prop])
-                if not force:
-                    pywikibot.output(u"Wikidata has %s: %s" % (key, str(oldValue)))
-                    return False
-            if not isinstance(data[key], list):
-                data[key] = [data[key]]
-            claims = []
-            descs = []
-            for elem in data[key]:
-                if datatype == 'wikibase-item':
-                    val = pywikibot.ItemPage(pywikibot.Site(), elem)
-                    desc = val.title()
-                elif datatype == 'globe-coordinate':
-                    val = pywikibot.Coordinate(lat=float(elem[0]),
-                                               lon=float(elem[1]),
-                                               globe='earth',
-                                               precision=0.001)
-                    desc = elem
-                elif datatype == 'commonsMedia':
-                    commons = pywikibot.Site('commons', 'commons')
-                    if isinstance(elem, pywikibot.FilePage):
-                            val = elem
-                            val._link._site = commons
-                    else:
-                        val = pywikibot.FilePage(commons, u"File:" + sf.stripNamespace(elem))
-
-                    if not val.exists() or not val.fileIsShared():
-                        raise ValueError("Local image given: %s", val.title())
-                    while val.isRedirectPage():
-                        val = pywikibot.FilePage(val.getRedirectTarget())
-                    desc = val.title()
-                else:
-                    val = desc = elem
-                claim = pywikibot.Claim(self.item.repo, prop, datatype=datatype)
-                claim.setTarget(val)
-                if pref:
-                    claim.setRank('preferred')
-                claims.append(claim)
-                descs.append(desc)
-
-            cv = set(v.getTarget() for v in claims)
-            rmlist = list(oldValue.difference(cv))
-            addlist = list(cv.difference(oldValue))
-            if not len(addlist) and not len(rmlist):
-                return
-            answer = answer or self.userConfirm("Update element %s with %s \"%s\" (old value \"%s\")?" % (self.label, key, str(list(cv)), str(oldValue)))
-            if answer:
-                if len(rmlist):
-                    print("Removing", rmlist)
-                    rmclaims = [v for v in self.item.claims[prop] if v.getTarget() in rmlist]
-                    self.item.removeClaims(rmclaims)
-                if len(addlist):
-                    print("Adding", addlist)
-                    addclaims = [v for v in claims if v.getTarget() in addlist]
-                    for claim in addclaims:
-                        self.item.addClaim(claim)
-                return True
-        except pywikibot.bot.QuitKeyboardInterrupt:
-            raise
-        except ValueError as e:
-            print(e)
-        except Exception as e:
-            print("key", key)
-            print("data", data)
-            print("config", self.config)
-            pywikibot.error(u"Could not update " + self.label + " because of error " + str(e))
-            import traceback
-            traceback.print_exc()
-            return False
-
-    def isOfType(self, typeName):
-        for claim in (self.item.claims.get(u"P31") or []):
-            if claim.getTarget().title() == typeName:
-                return True
-        return False
-
+class ItemProcessing(robot.ItemUtils):
     def isCounty(self):
         return self.isOfType(u"Q1776764")
 
@@ -156,29 +35,6 @@ class ItemProcessing:
     def isCity(self):
         return self.isOfType(u"Q16858213")
 
-    def getUniqueClaim(self, name, canBeNull=False):
-        sProp, _, _ = self.config["properties"][name]
-        if sProp not in self.item.claims:
-            if not canBeNull:
-                pywikibot.error(u"%s does not have a %s claim" % (self.label, name))
-            return None
-        elif len(self.item.claims[sProp]) > 1:
-            pywikibot.error(u"%s has several '%s' claims" % (self.label, name))
-            return None
-        return self.item.claims[sProp][0].getTarget()
-
-    def getClaim(self, name):
-        sProp, _, _ = self.config["properties"][name]
-        if sProp not in self.item.claims:
-            return None
-        return [self.item.claims[sProp][i].getTarget() for i in range(len(self.item.claims[sProp]))]
-
-    def hasClaim(self, name):
-        sProp, _, _ = self.config["properties"][name]
-        if sProp not in self.item.claims:
-            return False
-        return True
-
     def searchSirutaInWD(self, siruta):
         query = "SELECT ?item WHERE { ?item wdt:P843 \"%d\" .     SERVICE wikibase:label { bd:serviceParam wikibase:language \"ro\" }}" % siruta
         query_object = sparql.SparqlQuery()
@@ -187,6 +43,8 @@ class ItemProcessing:
             pywikibot.error("There are %d items with siruta %d" % (len(data), siruta))
             return
         return data[0]
+
+
 
 
 class CityData(robot.WorkItem):
