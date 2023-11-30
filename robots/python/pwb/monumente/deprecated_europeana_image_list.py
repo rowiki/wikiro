@@ -23,6 +23,7 @@ from the options and extract the following information in a csv file:
 
 '''
 
+import itertools
 import sys
 import time
 import warnings
@@ -34,6 +35,7 @@ import re
 sys.path.append("..")
 from pywikibot import config as user
 from pywikibot import *
+from pywikibot.tools.itertools import filter_unique
 import pywikibot
 sys.path.append("wikiro/robots/python/pwb")
 import strainu_functions as strainu
@@ -68,13 +70,16 @@ def closeLog():
     global _flog
     _flog.close()
 
-def log(list):
-    #wikipedia.output(str(list))
+def log(_list):
+    pywikibot.output(str(_list))
     line = ""
-    for s in list:
-        #s = s.replace( '"', '\\"')
-        s = s.replace(u'"', u'”')
-        line += "\"" + s + "\";"
+    for s in _list:
+        if type(s) == Timestamp:
+            line += "\"" + s.strftime("%Y-%m-%d %H:%M:%S")
+        else:
+            #s = s.replace( '"', '\\"')
+            s = s.replace(u'"', u'”')
+            line += "\"" + s + "\";"
     line = line[:-1] + "\n"
     _flog.write(line)
     
@@ -90,13 +95,14 @@ def geosign(check, plus, minus):
         return 0 #this should really never happen
     
 def parseGeohackLinks(page):
-    #title = page.title()
+    title = page.title()
     #html = page.site.getUrl( "/wiki/" + page.urlname(), True)
-    output = page.site.getUrl("/w/api.php?action=parse&format=json&page=" +
-            page.urlname() + "&prop=externallinks&uselang=ro")
-    linksdb = json.loads(output)
-    title = linksdb["parse"]["title"]
-    links = linksdb["parse"]["externallinks"]
+    #output = page.site.getUrl("/w/api.php?action=parse&format=json&page=" +
+    #        page.urlname() + "&prop=externallinks&uselang=ro")
+    #linksdb = json.loads(output)
+    #title = linksdb["parse"]["title"]
+    #links = linksdb["parse"]["externallinks"]
+    links = page.extlinks()
     global geohackRegexp
     geohack_match = None
     for item in links:
@@ -273,7 +279,9 @@ def processArticle(text, page, conf):
     author = ""
     date = ""
     license = ""
-    history = page.getFileVersionHistory()[0]
+    history = page.get_file_history()
+    history_keys = sorted(history)
+    history = history[history_keys[0]] # get oldest entry in file history
     information = findTemplate(templates, u'Information')
     dateTl = findTemplate(templates, u'Date')
     
@@ -389,26 +397,28 @@ def processArticle(text, page, conf):
             license = extractParam(templates['Information'], "Permission")
             
     #pretty title
-    pretty = page.titleWithoutNamespace()
+    pretty = page.title(with_ns=False)
     pretty = pretty[:pretty.rfind('.')]
     
     try:
         #code, title, pageURL, fileURL, desc_en, desc_ro, quality, author, date, lat, long, license
-        log([code, pretty, urlPrefix + page.urlname(), page.fileUrl(), license, author, date, desc_ro, desc_en, str(lat), str(long), quality])
-    except:
+        log([code, pretty, urlPrefix + page.title(as_url=True), page.get_file_url(), license, author, date, desc_ro, desc_en, str(lat), str(long), quality])
+    except Exception as e:
+        print(e)
         pass
     
 def main():
     user.mylang = "commons"
     user.family = "commons"
     start = None
-    for arg in pywikibot.handleArgs():
+    for arg in pywikibot.handle_args():
         if arg.startswith('-start:'):
             start = arg [len('-start:'):]
         
-    site = pywikibot.getSite(code = user.mylang, fam=user.family)
+    site = pywikibot.Site(code = user.mylang, fam=user.family)
     rowTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), \
                                 options.get('codeTemplate')))
+    print(rowTemplate)
     global _log
     global fullDict
     global qualityRegexp
@@ -419,13 +429,16 @@ def main():
         qReg = qReg + t + "|"
     qReg = qReg[:-1]
     qReg += ")(.*)\}\}"
-    #wikipedia.output(qReg)
+    print(qReg)
     qualityRegexp = re.compile(qReg, re.I)
 
     for namespace in options.get('namespaces'):
-        transGen = pywikibot.pagegenerators.ReferringPageGenerator(rowTemplate, 
-                                    onlyTemplateInclusion=True)
-        filteredGen = pywikibot.pagegenerators.NamespaceFilterPageGenerator(transGen, 
+        transGen = []
+        transGen.append(rowTemplate.getReferences(follow_redirects=False, content=False))
+        print(transGen)
+        combinedGen = itertools.chain(*transGen)
+        combinedGen = filter_unique(combinedGen, key=hash)
+        filteredGen = pywikibot.pagegenerators.NamespaceFilterPageGenerator(combinedGen, 
                                     [namespace], site)
         pregenerator = pywikibot.pagegenerators.PreloadingGenerator(filteredGen, 250)
         
@@ -438,7 +451,7 @@ def main():
                 start = None
                 continue
             if page.exists() and not page.isRedirectPage():
-                image = pywikibot.ImagePage(site, page.title())
+                image = pywikibot.FilePage(site, page.title())
                 # Do some checking
                 processArticle(image.get(), image, options)
                 count += 1
@@ -450,3 +463,5 @@ if __name__ == "__main__":
         main()
     finally:
         pywikibot.stopme()
+else:
+    main()
