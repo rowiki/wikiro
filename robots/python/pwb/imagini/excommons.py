@@ -26,6 +26,10 @@ def save_fop_category():
     for proposal_page in generator:
         for file_page in proposal_page.linkedPages(namespaces=6):
             pywikibot.output(file_page.title())
+            if not file_page.exists():
+                pywikibot.output("File was already deleted, continue...")
+                continue
+
             rowiki = pywikibot.Site('ro','wikipedia')
 
             local_file_page = pywikibot.FilePage(rowiki, file_page.title())
@@ -44,7 +48,6 @@ def save_fop_category():
             template_regex = builder.pattern("delete")
             local_text = re.sub(template_regex, "", local_text)
             print(local_text)
-            return
             
             tmp_file_name = f"{os.getcwd()}/{file_page.title(as_filename=True, with_ns=False)}"
             success = file_page.download(filename=tmp_file_name)
@@ -53,7 +56,7 @@ def save_fop_category():
                 os.remove(tmp_file_name)
                 return
             success = local_file_page.upload(source=tmp_file_name, 
-                        comment=f"File is about to be deleted on Commons, evacuating.", 
+                        comment=f"Evacuez un fișier ce va fi șters de la Commons", 
                         text=local_text, 
                         ignore_warnings=True)
             os.remove(tmp_file_name)
