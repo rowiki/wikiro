@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonSyntaxException;
 import com.google.schemaorg.JsonLdSerializer;
 import com.google.schemaorg.JsonLdSyntaxException;
 import com.google.schemaorg.SchemaOrgException;
@@ -59,7 +58,7 @@ public class SchemaorgUtils
             }
             
         }
-        catch (JsonSyntaxException | JsonLdSyntaxException e)
+        catch (JsonLdSyntaxException | RuntimeException e)
         {
             LOG.error("Error deserializing json", e);
         }
