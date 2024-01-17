@@ -32,20 +32,11 @@ import org.wikipedia.ro.java.citation.SchemaorgUtils;
 import org.wikipedia.ro.java.citation.data.Creator;
 import org.wikipedia.ro.java.citation.data.Zotero;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
-import com.google.schemaorg.JsonLdSerializer;
-import com.google.schemaorg.JsonLdSyntaxException;
-import com.google.schemaorg.SchemaOrgType;
-import com.google.schemaorg.core.NewsArticle;
-import com.google.schemaorg.core.Person;
-import com.google.schemaorg.core.Thing;
-import com.google.schemaorg.core.datatype.Text;
 
 public class DefaultCitationHandler implements Handler
 {
@@ -262,7 +253,7 @@ public class DefaultCitationHandler implements Handler
         }
         catch (IOException e)
         {
-            LOG.warn("Could not fill in citation from plain URL {}", e);
+            LOG.warn("Could not fill in citation from plain URL {}", url, e);
         }
         return retParams;
     }
