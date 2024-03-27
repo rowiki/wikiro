@@ -279,7 +279,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             String roLabel = null;
             String roArticle = roArticlesCache.get(sourceLang + ":" + foreignArticleTitle);
 
-            if (foreignLinkExistenceMap.get(foreignArticleTitle)) {
+            if (Optional.ofNullable(foreignLinkExistenceMap.get(foreignArticleTitle)).orElse(false)) {
                 Entity wbEntity = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).getByArticle(sourceLang + "wiki", foreignArticleTitle);
                 if (null == roArticle && null == wbEntity) {
                     try {
