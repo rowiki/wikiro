@@ -286,14 +286,16 @@ class PopulationProcessing(ItemProcessing, CityData):
                     if claim.has_qualifier('P585', census_date):
                         print(f"{self.item.labels['ro']} already has population for {self.year}")
                         return
+                    if claim.rank == 'preferred':
+                        claim.changeRank('normal')
             siruta_prop, _, _ = self.config["properties"]["SIRUTA"]
             if siruta_prop in self.item.claims:
-                claims = self.item.claims[prop]
-                siruta = str(int(claims[0].getTarget().amount))
+                claims = self.item.claims[siruta_prop]
+                siruta = str(int(claims[0].getTarget()))
                 if siruta not in self.censusDb:
                     #print(f"SIRUTA {siruta} does not exist in the population database")
                     return
-                #print(self.censusDb[siruta])
+                print(siruta, self.censusDb[siruta])
                 pop = self.censusDb[siruta]["Locuitori"]
                 print(f"Population: {pop}", flush=True)
             else:
@@ -303,6 +305,7 @@ class PopulationProcessing(ItemProcessing, CityData):
             yearclaim = pywikibot.Claim(self.item.repo, prop) #Population
             target = pywikibot.WbQuantity(amount=pop)
             yearclaim.setTarget(target)
+            yearclaim.rank = 'preferred'
 
             date = pywikibot.Claim(self.item.repo, u'P585')#Date of publication
             date.setTarget(census_date)
@@ -329,11 +332,15 @@ class PopulationProcessing(ItemProcessing, CityData):
                 yearclaim.addQualifier(method2)
                 yearclaim.addQualifier(method3)
                 #yearclaim.addQualifier(criteria)
-                print(f"Updated element {self.item.labels['ro']} for year {year}")
+                print(f"Updated element {self.item.labels['ro']} for year {self.year}")
             else:
                 pass
+        except pywikibot.bot_choice.QuitKeyboardInterrupt as e:
+            raise e
         except Exception as e:
             print(e)
+            import pdb
+            pdb.set_trace()
             print(f"Could not update {self.item.labels['ro']}")
 
 
@@ -652,7 +659,8 @@ def readCsv(filename, key, what):
         pywikibot.output("...done")
         f.close()
         return db
-    except IOError:
+    except IOError as e:
+        print(e, flush=True)
         pywikibot.error("Failed to read " + filename + ". Trying to do without it.")
         return {}
 
@@ -663,7 +671,7 @@ def main():
     sirutaDb = sirutalib.SirutaDatabase()
     #postCodes = postal_codes.PostalCodes("codp_B.csv", "codp_50k.csv", "codp_1k.csv")
     lmiDb = readJson("ro_lmi_db.json", "monument database")
-    populationDb = readCsv("populatie_2021.csv", "SIRUTA", "population")
+    populationDb = readCsv("populatie_2021_sate.csv", "SIRUTA", "population")
 
     page = pywikibot.Page(pywikibot.Site(), "P843", ns=120)
     #page = pywikibot.Page(pywikibot.Site(), "Q16898095", ns=0)
