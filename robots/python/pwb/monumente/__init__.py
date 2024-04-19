@@ -158,9 +158,9 @@ config = {
 				'Lista siturilor arheologice din județul',
 				'Lista siturilor arheologice din București',
 			},
-			'codeRegexp': "([0-9]{4,6}(\.[0-9][0-9]){1,3})",
-			'codeRegexpCompiled': re.compile("([0-9]{4,6}(\.[0-9][0-9]){1,3})", re.I),
-			'templateRegexpCompiled': re.compile("\{\{codRAN\|([0-9]{4,6}(\.[0-9][0-9]){1,3})", re.I),
+			'codeRegexp': "([0-9]{4,6}(\.[0-9][0-9][0-9]?){1,3})",
+			'codeRegexpCompiled': re.compile("([0-9]{4,6}(\.[0-9][0-9][0-9]?){1,3})", re.I),
+			'templateRegexpCompiled': re.compile("\{\{codRAN\|([0-9]{4,6}(\.[0-9][0-9][0-9]?){1,3})", re.I),
 			'codeTemplate': ["codRAN"],
 			'codeTemplateParams': 
 			[
