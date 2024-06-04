@@ -1,7 +1,9 @@
 #!/usr/bin/python
 #-*- coding:utf-8 -*-
 
+from typing import Any, Generator
 import pywikibot
+from pywikibot.data import sparql
 
 def find_best_claim(claims):
     """Find the first best ranked claim."""
@@ -18,6 +20,13 @@ def find_best_claim(claims):
 def get_labels(item):
         item.get()
         return item.labels.get('ro') or item.labels.get('en') or item.labels.get('fr') or None
+
+def sparql_generator(query, site) -> Generator[Any, Any, None]:
+	repo = site.data_repository()
+	dependencies = {'endpoint': None, 'entity_url': None, 'repo': repo}
+	query_object = sparql.SparqlQuery(**dependencies)
+	for elem in query_object.select(query):
+		yield elem
 
 def wbType_to_string(target, link: bool=True) -> str:
         if type(target) == pywikibot.ItemPage:
