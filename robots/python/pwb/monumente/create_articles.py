@@ -105,7 +105,7 @@ def extractCreator(monument):
             else:
                 tip = u"Arhitect"
         else:
-            tip,artist = (item[:-1].strip() for item in creator.split('('))
+            tip,artist = (item[:-1].strip() for item in creator.rsplit('(', 1))
             artist = artist[:-1]
             
         res.append((tip, artist))
@@ -374,11 +374,11 @@ def cleanupTitle(monument):
         title3 = title[title.find(u"în prezent ")+len(u"în prezent"):]
         #print title3
         ret.add(title3)
-    print(ret)
+    #print(ret)
     ret = set(expandSaints(list(ret)))
-    print(ret)
+    #print(ret)
     ret = addVillageToTitles(ret, village)
-    #print ret
+    #print(ret)
     return generateList(ret)
 
 def generateGallery(imageList, articleImage):
@@ -445,7 +445,7 @@ if __name__ == "__main__":
     f.close()
     f = open("ro_lmi_db.json", "r+")
     pywikibot.output("Reading database file...")
-    db = json.load(f, encoding="utf8")
+    db = json.load(f)
     pywikibot.output("...done")
     f.close()
     f = open("ro_lmi_pages.json", "r+")
@@ -484,7 +484,7 @@ if __name__ == "__main__":
 
         #generate articles for A-grade monuments with pics or 
         #for monuments with external data
-        if monument["Cod"] not in j and (monument[u"Imagine"] == "" or splitCode(monument[u"Cod"])[3] == "B"):
+        if monument["Cod"] not in j and (monument[u"Imagine"] == ""): # or splitCode(monument[u"Cod"])[3] == "B"):
             continue
         if monument["Denumire"].find("[[") > -1:
             continue
@@ -493,6 +493,8 @@ if __name__ == "__main__":
         if monument["Denumire"].find("Casa ") > -1:
             continue
         if monument["Denumire"].find("Cruce") > -1:
+            continue
+        if monument["Denumire"].find("Mormântul") > -1:
             continue
         #pywikibot.output("* [[Cod:LMI:" + monument["Cod"] + "]]: " + monument["Denumire"])
         #continue
@@ -532,6 +534,9 @@ if __name__ == "__main__":
         text += writeSubmonuments(submonuments)
         text += describeSubmonuments(submonuments)
         text = addSuffix(text, monument, images)
+
+        if len(text) < 1000:
+            continue
         
         pywikibot.output(text)
         newtitles = cleanupTitle(monument)
