@@ -164,7 +164,7 @@ public class App {
                             trim(oldListUpdatedBuilder.toString()))) {
 
                             wiki.setMarkBot(true);
-                            wiki.edit(eachTransclusion, newPageText, "Robot: actualizat listă");
+                            wiki.edit(eachTransclusion, newPageText, "Robot: actualizat listă în conformitate cu [[Wikipedia:Wikidata|Wikidata]]");
                         }
                     }
                 }
