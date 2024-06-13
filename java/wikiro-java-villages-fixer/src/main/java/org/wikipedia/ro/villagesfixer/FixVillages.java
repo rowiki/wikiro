@@ -144,7 +144,7 @@ public class FixVillages {
     private static Pattern ifPattern = Pattern.compile("\\{\\{\\s*#if");
 
     private static Pattern DEMOGRAPHY_TEXT_PATTERN = Pattern.compile(
-        "<div style=\"float:left\">\\{\\{Pie chart(.*?)</div>\\s*Conform (.*)<ref name=\"insse_20\\d1_rel\">.*?</ref>", Pattern.DOTALL);
+        "<div style=\"float:(?:left|right)\">\\s*\\{\\{Pie chart(.*?)</div>\\s*Conform (.*)<ref name=\"insse_20\\d1_rel\">.*?</ref>", Pattern.DOTALL);
 
     private static String crtSettlementName = null, crtCommuneName = null, crtCountyName = null;
 
@@ -1094,7 +1094,7 @@ public class FixVillages {
         for (Claim eachPopClaim : popClaims) {
             Map<Property, Set<Snak>> qualifiers = ObjectUtils.defaultIfNull(eachPopClaim.getQualifiers(), Collections.emptyMap());
             Set<Snak> pointsInTime = qualifiers.get(WikibasePropertyFactory.getWikibaseProperty("P585"));
-            if (pointsInTime.stream().map(Snak::getData).filter(Objects::nonNull).filter(d -> d instanceof Time).map(Time.class::cast).map(Time::getYear).anyMatch(y -> y == 2011)) {
+            if (null != pointsInTime && pointsInTime.stream().map(Snak::getData).filter(Objects::nonNull).filter(d -> d instanceof Time).map(Time.class::cast).map(Time::getYear).anyMatch(y -> y == 2011)) {
                 population2011 = Math.round(((Quantity) eachPopClaim.getMainsnak().getData()).getAmount());
             }
         }
