@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -95,7 +96,7 @@ public class Classify {
 
                 System.out.printf("Working on page %s [ %d/%d ]%n", eachArticleInCat, idx, pagesToRun.size());
                 String eachTalkPageOfArticleInCat = rowiki.getTalkPage(eachArticleInCat);
-                String talkPageText = rowiki.getPageText(List.of(eachTalkPageOfArticleInCat)).stream().findFirst().orElse("");
+                String talkPageText = rowiki.getPageText(List.of(eachTalkPageOfArticleInCat)).stream().filter(Objects::nonNull).findFirst().orElse("");
                 WikiprojectsModel projectModel = WikiprojectsModel.fromTalkPage(talkPageText);
 
                 String articleText = rowiki.getPageText(List.of(eachArticleInCat)).stream().findFirst().orElse("");
