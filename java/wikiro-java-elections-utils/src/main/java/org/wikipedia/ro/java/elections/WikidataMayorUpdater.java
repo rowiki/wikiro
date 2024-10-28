@@ -74,6 +74,7 @@ public class WikidataMayorUpdater
     private static final Property WD_PROP_GIVEN_NAME = WikibasePropertyFactory.getWikibaseProperty("P735");
 
     private static final String WD_ENT_ID_2020_ELECTIONS = "Q96251607";
+    private static final String WD_ENT_ID_2024_ELECTIONS = "Q105494567";
     private static final String WD_ENT_ID_PERM_ELECT_AUTH = "Q28726168";
     private static final String WD_ENT_ID_MALE = "Q6581097";
     private static final String WD_ENT_ID_FEMALE = "Q6581072";
@@ -412,7 +413,7 @@ public class WikidataMayorUpdater
             for (Claim bestFormerMayorPosnHeldClaim : bestFormerMayorPosnHeldClaims)
             {
                 Set<Snak> endTimeQuals = bestFormerMayorPosnHeldClaim.getQualifiers().get(WD_PROP_END_TIME);
-                if (null != endTimeQuals && !endTimeQuals.isEmpty() && endTimeQuals.stream().anyMatch(s -> ((Time) s.getData()).getYear() < 2020))
+                if (null != endTimeQuals && !endTimeQuals.isEmpty() && endTimeQuals.stream().anyMatch(s -> ((Time) s.getData()).getYear() < 2024))
                 {
                     continue;
                 }
@@ -537,7 +538,7 @@ public class WikidataMayorUpdater
         }
         Claim crtHeadOfGovtClaim = crtHeadOfGovtOptClaim.get();
         Set<Snak> startTimeQuals = crtHeadOfGovtClaim.getQualifiers().get(WD_PROP_START_TIME);
-        if (startTimeQuals.stream().map(s -> s.getData()).map(Time.class::cast).anyMatch(t -> t.getYear() == 2020l))
+        if (startTimeQuals.stream().map(s -> s.getData()).map(Time.class::cast).anyMatch(t -> t.getYear() == 2024l))
         {
             System.out.printf("   mayor already updated for %s!%n", communeEnt.getLabels().get("ro"));
             return;
@@ -550,7 +551,7 @@ public class WikidataMayorUpdater
         Optional<Claim> latestMayorPositionOpt = crtMayorEnt.getClaims(WD_PROP_POSITION_HELD).stream()
             .filter(c -> ((Item) c.getValue()).getEnt().getId().equals(positionEnt.getId())).filter(c -> !c.getQualifiers().containsKey(WD_PROP_END_TIME))
             .filter(c -> c.getQualifiers().containsKey(WD_PROP_START_TIME))
-            .filter(c -> c.getQualifiers().get(WD_PROP_START_TIME).stream().anyMatch(q -> ((Time) q.getData()).getYear() < 2020)).findFirst();
+            .filter(c -> c.getQualifiers().get(WD_PROP_START_TIME).stream().anyMatch(q -> ((Time) q.getData()).getYear() < 2024)).findFirst();
         if (latestMayorPositionOpt.isPresent())
         {
             Claim latestMayorPosition = latestMayorPositionOpt.get();
@@ -561,7 +562,7 @@ public class WikidataMayorUpdater
         Optional<Claim> alreadySetupNewPositionOpt = crtMayorEnt.getClaims(WD_PROP_POSITION_HELD).stream()
             .filter(c -> ((Item) c.getValue()).getEnt().getId().equals(positionEnt.getId())).filter(c -> !c.getQualifiers().containsKey(WD_PROP_END_TIME))
             .filter(c -> c.getQualifiers().containsKey(WD_PROP_START_TIME))
-            .filter(c -> c.getQualifiers().get(WD_PROP_START_TIME).stream().anyMatch(q -> ((Time) q.getData()).getYear() == 2020)).findFirst();
+            .filter(c -> c.getQualifiers().get(WD_PROP_START_TIME).stream().anyMatch(q -> ((Time) q.getData()).getYear() == 2024)).findFirst();
         if (!alreadySetupNewPositionOpt.isPresent())
         {
             Claim newMayorPosition = new Claim();
@@ -570,7 +571,7 @@ public class WikidataMayorUpdater
             String newMayorPosnClaimId = DWIKI.addClaim(crtMayorEnt.getId(), newMayorPosition);
             newMayorPosition.setId(newMayorPosnClaimId);
             DWIKI.addQualifier(newMayorPosnClaimId, WD_PROP_START_TIME.getId(), FIRST_NOV_2024);
-            DWIKI.addQualifier(newMayorPosnClaimId, WD_PROP_ELECTED_IN.getId(), new Item(new Entity(WD_ENT_ID_2020_ELECTIONS)));
+            DWIKI.addQualifier(newMayorPosnClaimId, WD_PROP_ELECTED_IN.getId(), new Item(new Entity(WD_ENT_ID_2024_ELECTIONS)));
             Optional<Entity> countyEntOpt = communeEnt.getBestClaims(WD_PROP_UAT).stream().findFirst().map(Claim::getValue).map(Item.class::cast).map(Item::getEnt);
             String countyAbbr = countyEntOpt.isPresent()
                 ? WD_ENT_CACHE.get(countyEntOpt.get()).getBestClaims(WikibasePropertyFactory.getWikibaseProperty("P395")).stream().findFirst().map(Claim::getValue)
