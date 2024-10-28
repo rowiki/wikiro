@@ -2,8 +2,11 @@ package org.wikipedia.ro.java.elections;
 
 import org.bson.types.ObjectId;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Mayor
 {
+    @JsonProperty("_id")
     private ObjectId id;
     private String uat;
     private String county;

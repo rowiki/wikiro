@@ -8,11 +8,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,9 +22,12 @@ import java.util.stream.Stream;
 import javax.security.auth.login.FailedLoginException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.mongojack.JacksonMongoCollection;
+import org.mongojack.ObjectMapperConfigurer;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikibase.WikibasePropertyFactory;
@@ -43,6 +44,10 @@ import org.wikibase.data.URLData;
 import org.wikipedia.ro.cache.WikidataEntitiesCache;
 import org.wikipedia.ro.utils.Credentials;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.FindIterable;
@@ -160,9 +165,17 @@ public class WikidataMayorUpdater
         MongoClientSettings clientSettings = MongoClientSettings.builder().applyConnectionString(mongoConnStr).codecRegistry(codecRegistry).build();
 
         MongoClient client = MongoClients.create(clientSettings);
-        MongoDatabase database = client.getDatabase("elections2020");
-        MongoCollection<Mayor> mayorCollection = database.getCollection("mayor", Mayor.class);
-
+        MongoDatabase database = client.getDatabase("elections2024");
+        
+        JsonMapper jsonMapper = JsonMapper.builder()
+            .visibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .build();
+        ObjectMapperConfigurer.configureObjectMapper(jsonMapper);
+        JacksonMongoCollection<Mayor> mayorCollection = JacksonMongoCollection.builder()
+            .withObjectMapper(jsonMapper)
+            .build(database, "mayor", Mayor.class, UuidRepresentation.STANDARD);
+        
         try
         {
             Credentials wdCredentials = identifyCredentials("WIKI_WDUSERNAME", "WIKI_WDPASSWORD", "Wikidata");
