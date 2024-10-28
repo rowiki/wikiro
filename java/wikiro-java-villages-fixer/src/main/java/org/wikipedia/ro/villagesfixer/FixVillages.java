@@ -1752,7 +1752,7 @@ public class FixVillages {
         }
 
         MongoClient mongoClient = MongoClients.create("mongodb://localhost:57017");
-        MongoDatabase electionsDb = mongoClient.getDatabase("elections2020");
+        MongoDatabase electionsDb = mongoClient.getDatabase("elections2024");
         MongoCollection<Document> electionsColl = electionsDb.getCollection("cl");
         FindIterable<Document> electionResultsItrble = electionsColl.find(eq("siruta", siruta));
         electionResultsItrble.sort(new BasicDBObject("seats", -1));
@@ -1808,7 +1808,7 @@ public class FixVillages {
             }
         }
         String section = String.format(
-            "%n<!-- secțiune administrație -->%s %s este administrat%s de un primar și un consiliu local compus din %d consilieri. Primarul, {{Date înlănțuite de la Wikidata|P6}}, %s {{Date înlănțuite de la Wikidata|P6|P102}}, este în funcție din {{Date înlănțuite de la Wikidata|P6|_P580}}. Începând cu [[Alegeri locale în România, 2020|alegerile locale din 2020]], consiliul local are următoarea componență pe partide politice:<ref>{{Citat web|url=https://prezenta.roaep.ro/locale27092020/data/json/sicpv/pv/pv_%s_final.json|format=Json|titlu=Rezultatele finale ale alegerilor locale din 2020 |publisher=Autoritatea Electorală Permanentă|accessdate=2020-11-02}}</ref><!--sfârșit secțiune administrație-->%n%s",
+            "%n<!-- secțiune administrație -->%s %s este administrat%s de un primar și un consiliu local compus din %d consilieri. Primarul, {{Date înlănțuite de la Wikidata|P6}}, %s {{Date înlănțuite de la Wikidata|P6|P102}}, este în funcție din {{Date înlănțuite de la Wikidata|P6|_P580}}. Începând cu [[Alegeri locale în România, 2024|alegerile locale din 2024]], consiliul local are următoarea componență pe partide politice:<ref>{{Citat web|url=https://prezenta.roaep.ro/locale09062024/data/json/sicpv/pv/pv_%s_final.json|format=Json|titlu=Rezultatele finale ale alegerilor locale din 2024 |publisher=Autoritatea Electorală Permanentă|accessdate=2024-10-23}}</ref><!--sfârșit secțiune administrație-->%n%s",
             StringUtils.capitalize(communeType.getTypeNameAcc()), communeName, communeType.isFeminine() ? "ă" : "",
             mandatesCount, partyIntro, StringUtils.lowerCase(countySymbol), councillorsTemplate);
 
