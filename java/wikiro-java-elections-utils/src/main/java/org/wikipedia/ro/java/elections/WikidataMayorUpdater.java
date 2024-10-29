@@ -504,6 +504,7 @@ public class WikidataMayorUpdater
         positionHeldClaim.setValue(new Item(positionEnt));
         String posHeldClaimId = DWIKI.addClaim(newMayor.getId(), positionHeldClaim);
         DWIKI.addQualifier(posHeldClaimId, "P580", FIRST_NOV_2024);
+        DWIKI.addQualifier(posHeldClaimId, "P2715", ELECTION_CLAIM.getValue());
     }
 
     private static List<Snak> createRef(String countyAbbr)
