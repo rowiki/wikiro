@@ -27,4 +27,11 @@ public enum HistoricCountry
     }
 
     String qId;
+
+    public String getqId()
+    {
+        return qId;
+    }
+    
+    
 }
