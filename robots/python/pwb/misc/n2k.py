@@ -82,34 +82,40 @@ class BG_ROLanguagePack(TranslitLanguagePack):
 
     reversed_specific_mapping = (
     u"ьъЪйЙ",
-    u"îaAiI"
+    u"îăĂiI"
     )
 
-    reversed_pre_processor_mapping = {
-            u"ч": "ci",
-            u"к": "chi",
+    reversed_specific_pre_processor_mapping = {
+            "чи": "ci",
+            "че": "ce",
+            "ч": "ci",
+            "кî": "chi",
             "щ": "șt",
-            "ю": "yu",
-            "я": "ya",
+            "ю": "iu",
+            "я": "ia",
+            "Чи": "Ci",
+            "Че": "Ce",
             "Ч": "Ci",
-            "К": "Chi",
+            "Кî": "Chi",
             "Щ": "Șt",
-            "Ю": "Yu",
-            "Я": "Ya"
+            "Ю": "Iu",
+            "Я": "Ia"
     }
 
 
     pre_processor_mapping = {
+    "e": "е",
+    "E": "Е",
     u"ci": u"ч",
-    u"chi": u"к",
+    u"chi": u"кî",
     u"șt": u"щ",
-    u"yu": u"ю",
-    u"ya": u"я",
+    u"iu": u"ю",
+    u"ia": u"я",
     u"Ci": u"Ч",
-    u"Chi": u"К",
+    u"Chi": u"Кî",
     u"Șt": u"Щ",
-    u"Yu": u"Ю",
-    u"Ya": u"Я",
+    u"Iu": u"Ю",
+    u"Ia": u"Я",
     u"Q": u"Я", # Bulgarians typers often use "Q" for "Я". Example: KNQZ => КНЯЗ
     u"q": u"Я", # Bulgarians typers often use "q" for "я". Example: pepelqshka => пепеляшка   
     }
@@ -490,8 +496,7 @@ class Natura2000Articles(SingleSiteBot):
 
 {{{{Control de autoritate}}}}
 
-[[Categorie:Natura 2000]]
-[[Categorie:Arii protejate din {country}]]""".format(country=area.get_country())
+[[Categorie:Natura 2000 în {country}]]""".format(country=area.get_country())
 
     def build_article(self, area: ProtectedArea):
         self.sources = {}
@@ -528,6 +533,8 @@ class Natura2000Articles(SingleSiteBot):
                     if bgname is not None:
                         name = translit(bgname, 'bg', reversed=True)
                         print("translit bg", bgname, name)
+                    if bgname is not None and bgname.find("ъ") == -1:
+                        return False
                 if area.get_country() == "Grecia":
                     grname = page.labels.get('el')
                     if grname is not None:
@@ -589,7 +596,7 @@ class NewNatura2000Articles(Natura2000Articles):
         description = "arie protejată din " + area.get_country()
         new_item.editDescriptions({'ro': description}, summary="Setting description")
         new_item.setSitelink(page, summary="Setting sitelink")
-        
+
         claim = pywikibot.Claim(repo, 'P3425')
         claim.setTarget(area.get_sitecode())
         new_item.addClaim(claim, summary="Add claim P3425")
@@ -672,6 +679,12 @@ if __name__ == '__main__':
     #print(registry.get('bg'))
     #print(registry.get('el'))
     #print(get_available_language_codes())
+    #print(translit("Кресна", 'bg', reversed=True))
+    #print(translit("Сребърна", 'bg', reversed=True))a
+    #while True:
+    #    bgname = pywikibot.input("Bg")
+    #    print(translit(bgname, 'bg', reversed=True))
+
     bot = Natura2000Articles(None)
     bot.generator = n2k_generator()
     #bot = NewNatura2000Articles(None)
