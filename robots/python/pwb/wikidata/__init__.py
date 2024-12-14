@@ -19,11 +19,11 @@ def find_best_claim(claims):
 
 def get_labels(item):
         item.get()
-        return item.labels.get('ro') or item.labels.get('en') or item.labels.get('fr') or None
+        return item.labels.get('ro') or item.labels.get('mul') or item.labels.get('en') or item.labels.get('fr') or None
 
 def sparql_generator(query, site) -> Generator[Any, Any, None]:
 	repo = site.data_repository()
-	dependencies = {'endpoint': None, 'entity_url': None, 'repo': repo}
+	dependencies = {'endpoint': 'https://query-main.wikidata.org/sparql', 'entity_url': 'https://www.wikidata.org/entity', 'repo': None}#repo}
 	query_object = sparql.SparqlQuery(**dependencies)
 	for elem in query_object.select(query):
 		yield elem
