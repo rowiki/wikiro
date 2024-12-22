@@ -17,8 +17,8 @@ chambers = {
 }
 
 chamber_link = {
-	1: u"[[Legislatura 2020-2024 (Senat)]]",
-	2: u"[[Legislatura 2020-2024 (Camera Deputaților)]]",
+	1: u"[[Legislatura 2024-2028 (Senat)]]",
+	2: u"[[Legislatura 2024-2028 (Camera Deputaților)]]",
 }
 
 category = {
@@ -47,7 +47,7 @@ class ElectedPerson(object):
 		self.groups[-1].end = endDate
 
 	def generateInfobox(self):
-		elections = [u"2020", u"2016", u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
+		elections = [u"2024", u"2020", u"2016", u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
 		text = u"""{{Infocaseta Om politic}}
 """
 		return text
@@ -55,7 +55,7 @@ class ElectedPerson(object):
 		function = u""
 		if self.chamber in chambers:
 			function = chambers[self.chamber].replace(u'|d', u'|D').replace(u'|s', u'|S')
-		begin = u"2020-12-21"
+		begin = u"2024-12-20"
 		if len(self.groups) > 0:
 			begin = self.groups[0].start
 		for y in range(1, len(elections)):
@@ -101,10 +101,10 @@ class ElectedPerson(object):
 		return text
 	
 	def generateCategoriesList(self):
-		elections = [u"2020", u"2016", u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
+		elections = [u"2024", u"2020", u"2016", u"2012", u"2008", u"2004", u"2000", u"1996", u"1992", u"1990"]
 		cat = [u"Categorie:Politicieni români în viață"]
 		if self.chamber in category:
-			cat.append(category[self.chamber] % (u"2020", u"2024"))
+			cat.append(category[self.chamber] % (u"2024", u"2028"))
 		for y in range (1, len(elections)):
 			year = elections[y]
 			if year in self.legislatures:	
@@ -129,14 +129,14 @@ class ElectedPerson(object):
 * [[Parlamentul României]]
 
 == Legături externe ==
-* [http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%s&leg=2020&cam=%s&idl=1 Activitatea parlamentară]
+* [http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%s&leg=2024&cam=%s&idl=1 Activitatea parlamentară]
 
 """
 		text = self.generateInfobox()
 		function = u""
 		if self.chamber in chambers:
 			function = chambers[self.chamber]
-		begin = 2020
+		begin = 2024
 		group = u""
 		groupprefix = u" din partea "
 		if len(self.groups) > 0:
