@@ -139,16 +139,17 @@ def DemisionsCsv(csvName):
 
 def scrollThroughPages():
 	count = [0,0,0]
-	f = codecs.open("parliament/parliament_2020.csv", "w+", "utf8")
-	for camera in [1,2]:
+	f = codecs.open("wikiro/robots/python/pwb/parliament/parliament_2024.csv", "w+", "utf8")
+	for camera in [2]:
 		for om in range(1,350):
-			url = 'http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%d&leg=2020&cam=%d' % (om, camera)
+			url = 'https://www.cdep.ro/pls/parlam/structura2015.mp?idm=%d&leg=2024&cam=%d' % (om, camera)
 			print(url)
 			try:
-				r = requests.get(url)
-			except:
+				r = requests.get(url, timeout=5)
+			except Exception as e:
+				print(e)
 				continue
-			#print r.status_code
+			print(r.status_code)
 	
 			html = r.text
 			parsed_html = BeautifulSoup(html)
@@ -189,10 +190,10 @@ if __name__ == "__main__":
 	scrollThroughPages()
 
 #def bla():
-	ParliamentCsv("parliament/parliament_2020.csv")
-	ElectionsCsv("parliament/alegeri.csv")
-	MovesCsv("parliament/migrari.csv")
-	DemisionsCsv("parliament/demisii.csv")
+	ParliamentCsv("wikiro/robots/python/pwb/parliament/parliament_2024.csv")
+	ElectionsCsv("wikiro/robots/python/pwb/parliament/alegeri.csv")
+	MovesCsv("wikiro/robots/python/pwb/parliament/migrari.csv")
+	DemisionsCsv("wikiro/robots/python/pwb/parliament/demisii.csv")
 	
 	print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 	for person in people:

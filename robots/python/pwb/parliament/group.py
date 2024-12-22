@@ -17,7 +17,10 @@ parties = {
 	u"Grupul parlamentar Liberal Conservator (PC-PLR)": (u"[[Partidul Alianța Liberalilor și Democraților|Partidul Alianța Liberalilor și Democraților]]", u"[[Partidul Alianța Liberalilor și Democraților|Partidului Alianța Liberalilor și Democraților]]"), 
 	u"Grupul parlamentar Democrat şi Popular": (u"grupul parlamentar Democrat şi Popular", u"grupului parlamentar Democrat şi Popular"),
 	u"Deputați neafiliați": (u"independent", u"independent"),
-
+    u"Grupul parlamentar POT": (u"[[Partidul Oamenilor Tineri]]", u"[[Partidul Oamenilor Tineri|Partidului Oamenilor Tineri]]"),
+    u"Grupul parlamentar SOS": (u"[[S.O.S. România]]", u"[[S.O.S. România]]"),
+    u"Grupul parlamentar AUR": (u"[[Alianța pentru Unirea Românilor]]", u"[[Alianța pentru Unirea Românilor|Alianței pentru Unirea Românilor]]"),
+    u"Grupul parlamentar al Uniunii Salvați România": (u"[[Uniunea Salvați România]]", u"[[Uniunea Salvați România|Uniunii Salvați România]]"),
 }
 
 class GroupMembership(object):
