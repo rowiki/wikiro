@@ -32,6 +32,7 @@ import static org.apache.commons.lang3.StringUtils.trim;
 import java.io.Console;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
@@ -54,6 +55,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -145,6 +147,7 @@ public class FixVillages {
 
     private static Pattern DEMOGRAPHY_TEXT_PATTERN = Pattern.compile(
         "<div style=\"float:(?:left|right)\">\\s*\\{\\{Pie chart(.*?)</div>\\s*Conform (.*)<ref name=\"insse_20\\d1_rel\">.*?</ref>", Pattern.DOTALL);
+    private static Pattern REF_PATTERN = Pattern.compile("(<ref[^>]*>)(.*?)</ref>");
 
     private static String crtSettlementName = null, crtCommuneName = null, crtCountyName = null;
 
@@ -926,6 +929,8 @@ public class FixVillages {
 
                         pageText =
                             rewriteDemographySection(pageText, eachCounty, communeName, communeType, communeWikibaseItem, wdcache);
+                        
+                        pageText = rereferenceSocec(pageText);
 
                         communeNativeLabelClaims = communeWikibaseItem.getClaims(nativeLabelProp);
                         if (null == communeNativeLabelClaims || communeNativeLabelClaims.isEmpty()) {
@@ -959,6 +964,58 @@ public class FixVillages {
                 dwiki.logout();
             }
         }
+    }
+
+    private static String rereferenceSocec(String pageText) {
+        Matcher refMatcher = REF_PATTERN.matcher(pageText);
+        StringBuilder replacedText = new StringBuilder();
+        while (refMatcher.find()) {
+            String refText = refMatcher.group(2);
+            if (refText.trim().startsWith("{{")) {
+                
+                WikiTemplateParser templateParser = new WikiTemplateParser();
+                ParseResult<WikiTemplate> templateParseRes =
+                    templateParser.parse(refText);
+                WikiTemplate refTemplate = templateParseRes.getIdentifiedPart();
+                
+                String url = refTemplate.getParam("url").toString();
+                URI uri = URI.create(url);
+                String host = uri.getHost();
+                String title = refTemplate.getParams().containsKey("titlu") ? refTemplate.getParams().get("titlu") : refTemplate.getParams().get("title");
+                if ("lcweb2.loc.gov".equals(host) && null != title && title.contains("Anuarul Socec")) {
+                    String newTitle = StringUtils.substringBefore(title, "în Anuarul Socec");
+                    String query = uri.getQuery();
+                    final Map<String, String> queryParams = new HashMap<>();
+                    Arrays.stream(query.split("&")).forEach(qp -> {
+                        String[] kv = qp.split("=");
+                        queryParams.put(kv[0], kv[1]);
+                    });
+                    int recNum = Integer.parseInt(queryParams.get("recNum"));
+                    int sp = recNum + 1;
+                    
+                    String part = sp < 1016 ? "4" : 
+                        sp < 1016 ? "5.1" : 
+                        sp < 1911 ? "5.2" :
+                            "5.3";
+                    int bookPage = sp < 848 ? recNum - 7 :
+                        sp < 1016 ? recNum - 849 : 
+                        sp < 1911 ? recNum - 1015 :
+                            recNum - 1910;
+                    
+                    WikiTemplate newTemplate = new WikiTemplate("Citat Anuarul Socec 1925");
+                    newTemplate.setParam("titlu", newTitle);
+                    newTemplate.setParam("pagină-link", String.valueOf(sp));
+                    newTemplate.setParam("pagină", String.valueOf(bookPage));
+                    newTemplate.setParam("volum", part);
+                    
+                    String newRefText = refMatcher.group(1) + newTemplate.toString() + "</ref>";
+                    refMatcher.appendReplacement(replacedText, Matcher.quoteReplacement(newRefText));
+                }
+            }
+            refMatcher.appendTail(replacedText);
+        }
+            
+        return replacedText.toString();
     }
 
     private static String rewriteDemographySection(String pageText, String countySymbol, String communeName,
