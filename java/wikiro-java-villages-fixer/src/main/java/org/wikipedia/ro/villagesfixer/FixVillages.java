@@ -1019,8 +1019,8 @@ public class FixVillages {
                     refMatcher.appendReplacement(replacedText, Matcher.quoteReplacement(newRefText));
                 }
             }
-            refMatcher.appendTail(replacedText);
         }
+        refMatcher.appendTail(replacedText);
             
         return replacedText.toString();
     }
