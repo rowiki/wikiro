@@ -1,0 +1,69 @@
+{{Pentru|alte localități cu acest nume|Cătina (dezambiguizare)}}
+{{Infocaseta Așezare
+| hartă = Catina jud Buzau.png
+| latd = 45
+| latm = 17
+| lats = 20
+| latNS = N
+| longd = 26
+| longm = 15
+| longs = 20
+| longEV = E
+| pushpin_map = România
+}}'''Cătina''' este o [[Comunele României|comună]] în [[județul Buzău]], [[Muntenia]], [[România]], formată din satele [[Cătina, Buzău|Cătina]] (reședința), [[Corbu (Cătina), Buzău|Corbu]], [[Slobozia, Buzău|Slobozia]], [[Valea Cătinei, Buzău|Valea Cătinei]] și [[Zeletin, Buzău|Zeletin]].
+
+== Așezare ==
+Comuna se află în [[Munții Siriului]], pe valea [[Râul Bâsca Chiojdului|Bâscăi Chiojdului]]. Comuna este străbătută de șoseaua județeană DJ102L care o leagă spre sud de-a lungul râului Bâsca Chiojdului de {{Com|Calvini|Buzău}} și mai departe prin alt drum județean de [[Vălenii de Munte]] și [[Ploiești]], precum și de {{Com|Cislău|Buzău}} și [[Buzău]].<ref>{{Google maps|url=https://www.google.ro/maps/preview#!data=!1m4!1m3!1d27049!2d26.237996!3d45.282202 |title= Comuna Cătina|accessdate=5 September 2013}}</ref>
+
+== Demografie ==
+<div style="float:left">{{Pie chart
+|thumb=left
+|caption=Componența etnică a comunei Cătina
+|label1=Români|value1=85.29|color1=#8080ff
+|label2=Romi|value2=7.56|color2=#80ffff
+|label3=Alte etnii|value3=7.15|color3=#555555}}{{Pie chart
+|thumb=left
+|caption=Componența confesională a comunei Cătina
+|style=clear: none;
+|label1=Ortodocși|value1=91.66|color1=#8080ff
+|label2=Alte religii|value2=0.82|color2=#555555
+|label3=Necunoscută|value3=7.52|color3=#9f9f9f}}
+</div>
+Conform [[Recensământul Populației și Locuințelor 2021 (România)|recensământului efectuat în 2021]], populația comunei Cătina se ridică la 2.182 de locuitori, în scădere față de [[Recensământul populației din 2011 (România)|recensământul anterior din 2011]], când fuseseră înregistrați 2.544 de locuitori.<ref name="insse_2011_nat">{{Citat recensământ România 2011|tabel=8}}</ref> Majoritatea locuitorilor sunt [[români]] (85,29%), cu o minoritate de [[Romii din România|romi]] (7,56%).<ref name="insse_2021_etn">{{Citat recensământ România 2021|tabel=2.2.2}}</ref> Din punct de vedere confesional, majoritatea locuitorilor sunt [[Biserica Ortodoxă Română|ortodocși]] (91,66%), iar pentru 7,52% nu se cunoaște apartenența confesională.<ref name="insse_2021_rel">{{Citat recensământ România 2021|tabel=2.4.2}}</ref>
+
+== Politică și administrație ==
+<!-- secțiune administrație -->Comuna Cătina este administrată de un primar și un consiliu local compus din 11 consilieri. Primarul, {{Date înlănțuite de la Wikidata|P6}}, de la {{Date înlănțuite de la Wikidata|P6|P102}}, este în funcție din {{Date înlănțuite de la Wikidata|P6|_P580}}. Începând cu [[Alegeri locale în România, 2024|alegerile locale din 2024]], consiliul local are următoarea componență pe partide politice:<ref>{{Citat web|url=https://prezenta.roaep.ro/locale09062024/data/json/sicpv/pv/pv_bz_final.json|format=Json|titlu=Rezultatele finale ale alegerilor locale din 2024 |publisher=Autoritatea Electorală Permanentă|accessdate=2024-10-23}}</ref><!--sfârșit secțiune administrație-->
+{{Componență politică
+| eticheta_compoziție = Componența Consiliului
+| eticheta_mandate = Consilieri
+| nume_scurt1 = PSD
+| nume_complet1 = Partidul Social Democrat
+| mandate1 = 7
+| nume_scurt2 = PNL
+| nume_complet2 = Partidul Național Liberal
+| mandate2 = 3
+| nume_scurt3 = AUR
+| nume_complet3 = Alianța pentru Unirea Românilor
+| mandate3 = 1
+}}
+== Istorie ==
+Satul de reședință datează din secolul al XV-lea, ceata de moșneni cătineni fiind atestată printr-un hrisov al lui [[Radu al II-lea Prasnaglava]]. La sfârșitul secolului al XIX-lea, comuna era formată dintr-un număr mare de cătune, dintre care și actualele sate Cătina, Valea Cătinei și Corbu, toate cătunele având împreună o populație de 2240 de locuitori. În comună funcționau 5 biserici (dintre care una remarcată de [[Basil Iorgulescu]] în cătunul Fundu Cătinei) și o școală cu 35 de elevi la Siliștea-Motruna.<ref>{{Citat MDGR|titlu=Cătina, com. rur.|volum=2|pagini=301–302}}</ref> În 1925, comuna avea 8 sate (Cătina, Corbu, Cătunu, Fundu Cătinei, Mordana, Motruna, Săticu și Valea Cătinei), cu 2806 locuitori,<ref>{{Citat web|accessdate=7 martie 2012|publisher=Biblioteca Congresului SUA|titlu=Comuna Cătina în Anuarul Socec al României-mari|url=http://lcweb2.loc.gov/cgi-bin/ampage?collId=gdc3&fileName=scd0001_20030122001ropage.db&recNum=128}}</ref> pentru ca legea din 1931 să menționeze un număr de 13 sate (adăugând în plus și Cepturașu, Moara Enică, Păsăroiu, Roma și Tronari).<ref name="tablou_1931">{{Citat revistă|journal=Monitorul oficial și imprimeriile statului|title=[[:File:1931 - Tablou de regruparea comunelor rurale.pdf|Tablou de regruparea comunelor rurale întocmit conform legii privind modificarea unor dispozițiuni din legea pentru organizarea administrațiunii locale]]|issue=161|date=15 iulie 1931|pages=78}}</ref>
+
+În 1950, comuna a fost inclusă în raionul Cislău al [[Regiunea Buzău|regiunii Buzău]] și apoi (după 1952) al [[Regiunea Ploiești|regiunii Ploiești]]. În timp, satele au fost treptat comasate, ultimul desființat fiind Cătunu, inclus în 1968 în satul Corbu; în plus, comunei i-au fost adăugate și satele Zeletin și Slobozia, transferate de la [[comuna Calvini, Buzău|comuna Calvini]]. În 1968, comuna Cătina a fost inclusă, în componența actuală, în [[județul Buzău]], reînființat.<ref>{{Citat web|url=http://www.monitoruljuridic.ro/act/lege-nr-2-din-16-februarie-1968-republicata-privind-organizarea-administrativa-a-teritoriului-republicii-socialiste-romania-emitent-marea-adunare-nationala-46045.html|title=Legea nr. 2/1968|publisher=Monitoruljuridic.ro|accessdate=29 februarie 2012}}</ref>
+
+== Monumente istorice ==
+Patru obiective de pe teritoriul comunei Cătina sunt incluse în [[lista monumentelor istorice din județul Buzău]], toate clasificate ca monumente de arhitectură de interes local. Trei dintre ele sunt în satul Cătina: casa Nicolae Popescu, de la 1900; gospodăria Constantin Păsăroiu (cu casă, poartă și grajd), de la 1910; și moara de apă datând de la sfârșitul secolului al XIX-lea. În satul Valea Cătinei, se află al patrulea monument, biserica „Intrarea în Biserică a Maicii Domnului”, cu clopotnița, ansamblu datând de la sfârșitul secolului al XVI-lea.
+
+Moara de apă din Cătina și biserica din Valea Cătinei sunt reprezentate și pe stema comunei, alături de o ramură de [[cătină]] ce simbolizează denumirea localității.<ref>{{Citat web|url=http://lege5.ro/Gratuit/gm3tgobrge/hotararea-nr-592-2013-privind-aprobarea-stemei-comunei-catina-judetul-buzau|title=Hotărârea nr. 592/2013 privind aprobarea stemei comunei Cătina, județul Buzău|publisher=Lege5.ro|accessdate=2013-09-18}}</ref>
+
+== Vezi și ==
+* [[Bisericile rupestre din Munții Buzăului]]
+
+== Note ==
+<references />
+
+
+{{Comune-Buzău}}
+{{Comuna Cătina, Buzău}}
+
+[[Categorie:Comune din județul Buzău|Cătina]]

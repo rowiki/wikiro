@@ -966,7 +966,7 @@ public class FixVillages {
         }
     }
 
-    private static String rereferenceSocec(String pageText) {
+    static String rereferenceSocec(String pageText) {
         Matcher refMatcher = REF_PATTERN.matcher(pageText);
         StringBuilder replacedText = new StringBuilder();
         while (refMatcher.find()) {
@@ -978,7 +978,13 @@ public class FixVillages {
                     templateParser.parse(refText);
                 WikiTemplate refTemplate = templateParseRes.getIdentifiedPart();
                 
-                String url = refTemplate.getParam("url").toString();
+                List<WikiPart> urlParam = refTemplate.getParam("url");
+                if (null == urlParam) {
+                    continue;
+                }
+
+                    
+                String url = urlParam.stream().map(Objects::toString).collect(Collectors.joining());
                 URI uri = URI.create(url);
                 String host = uri.getHost();
                 String title = refTemplate.getParams().containsKey("titlu") ? refTemplate.getParams().get("titlu") : refTemplate.getParams().get("title");
@@ -1002,8 +1008,9 @@ public class FixVillages {
                         sp < 1911 ? recNum - 1015 :
                             recNum - 1910;
                     
-                    WikiTemplate newTemplate = new WikiTemplate("Citat Anuarul Socec 1925");
-                    newTemplate.setParam("titlu", newTitle);
+                    WikiTemplate newTemplate = new WikiTemplate();
+                    newTemplate.setTemplateTitle("Citat Anuarul Socec 1925");
+                    newTemplate.setParam("titlu", StringUtils.trim(newTitle));
                     newTemplate.setParam("pagină-link", String.valueOf(sp));
                     newTemplate.setParam("pagină", String.valueOf(bookPage));
                     newTemplate.setParam("volum", part);

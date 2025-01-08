@@ -1,0 +1,98 @@
+{{Infocaseta Așezare
+| hartă = Bicazu Ardelean judetul Neamt.jpg
+| descriere_hartă = Amplasarea în cadrul județului</div>
+| pushpin_map = România
+| lat_d = 46
+| lat_m = 51
+| lat_s = 59
+| lat_NS = N
+| long_d = 25
+| long_m = 57
+| long_s = 55
+| long_EW = E
+| primar = Bîrsan Constantin Ioan
+| secretar = Jolteag Gicuța
+| Activități specifice zonei: = Exploatarea și valorificarea lemnului
+Valorificare calcar ca material de construcții și producere de var
+Agricultură
+Creșterea animalelor
+Agroturism în mod sporadic
+Diferite munci ocazionale
+| Activități economice principale = Comerț
+Prestări servicii
+producție ape minerale
+Producție apă plată
+Carieră de marnă
+prelucrarea lemnului
+2 pensiuni turistice
+| Obiective turistice = Peștera "Jgheabul cu Gaura" Tosorog
+Masivul Ceahlău și alte trasee turistice
+Vîrful Highiș (1503 m)
+Gospodării care se pretează practicării agroturismului montan
+Pansiuni familiare pentru turism: Paleu și Ancuța (centru)
+Biserica din lemn "Sf. Dumitru", cu pictura tempera pe lemn din anul 1829
+2 km față de Bicaz Chei
+}}
+'''Bicazu Ardelean''' (în [[maghiară]] ''Gyergyóbékás''/''Magyarbékás'') este o [[Comunele României|comună]] în [[județul Neamț]], [[Transilvania]], [[România]], formată din satele [[Bicazu Ardelean, Neamț|Bicazu Ardelean]] (reședința), [[Telec, Neamț|Telec]] și [[Ticoș, Neamț|Ticoș]].
+
+Este una dintre puținele comune ale județului aflate în teritoriul regiunii istorice Transilvania.
+
+== Așezare ==
+Comuna se află în vestul județului, pe cursul mediu al [[Râul Bicaz|râului Bicaz]], acolo unde acesta primește apele afluenților [[Râul Jidanul, Bicaz|Pârâul Jidanului]] (cu afluenții Bistra și Toșorog), Ticoș, Floarea, Neagra și [[Râul Secu, Bicaz|Secul Mihlit]]. Este traversat de șoseaua națională [[DN12C]], care leagă [[Piatra Neamț]] de [[Gheorgheni]]<ref>{{Google maps|accessdate=2014-03-18|url=https://www.google.ro/maps/@46.8631974,25.9637147,13z}}</ref> și de [[Calea ferată industrială Bicaz–Bicaz Chei]].
+
+== Demografie ==
+<div style="float:left">{{Pie chart
+|thumb=left
+|caption=Componența etnică a comunei Bicazu Ardelean
+|label1=Români|value1=92.55|color1=#8080ff
+|label2=Romi|value2=1.08|color2=#80ffff
+|label3=Alte etnii|value3=6.37|color3=#555555}}{{Pie chart
+|thumb=left
+|caption=Componența confesională a comunei Bicazu Ardelean
+|style=clear: none;
+|label1=Ortodocși|value1=89.93|color1=#8080ff
+|label2=Baptiști|value2=1.17|color2=#3fc03f
+|label3=Alte religii|value3=2.19|color3=#555555
+|label4=Necunoscută|value4=6.71|color4=#9f9f9f}}
+</div>
+Conform [[Recensământul Populației și Locuințelor 2021 (România)|recensământului efectuat în 2021]], populația comunei Bicazu Ardelean se ridică la 3.236 de locuitori, în scădere față de [[Recensământul populației din 2011 (România)|recensământul anterior din 2011]], când fuseseră înregistrați 4.030 de locuitori.<ref name="insse_2011_nat">{{Citat recensământ România 2011|tabel=8}}</ref> Majoritatea locuitorilor sunt [[români]] (92,55%), cu o minoritate de [[Romii din România|romi]] (1,08%).<ref name="insse_2021_etn">{{Citat recensământ România 2021|tabel=2.2.2}}</ref> Din punct de vedere confesional, majoritatea locuitorilor sunt [[Biserica Ortodoxă Română|ortodocși]] (89,93%), cu o minoritate de [[Baptism|baptiști]] (1,17%), iar pentru 6,71% nu se cunoaște apartenența confesională.<ref name="insse_2021_rel">{{Citat recensământ România 2021|tabel=2.4.2}}</ref>
+
+== Politică și administrație ==
+<!-- secțiune administrație -->Comuna Bicazu Ardelean este administrată de un primar și un consiliu local compus din 13 consilieri. Primarul, {{Date înlănțuite de la Wikidata|P6}}, de la {{Date înlănțuite de la Wikidata|P6|P102}}, este în funcție din {{Date înlănțuite de la Wikidata|P6|_P580}}. Începând cu [[Alegeri locale în România, 2024|alegerile locale din 2024]], consiliul local are următoarea componență pe partide politice:<ref>{{Citat web|url=https://prezenta.roaep.ro/locale09062024/data/json/sicpv/pv/pv_nt_final.json|format=Json|titlu=Rezultatele finale ale alegerilor locale din 2024 |publisher=Autoritatea Electorală Permanentă|accessdate=2024-10-23}}</ref><!--sfârșit secțiune administrație-->
+{{Componență politică
+| eticheta_compoziție = Componența Consiliului
+| eticheta_mandate = Consilieri
+| nume_scurt1 = PNL
+| nume_complet1 = Partidul Național Liberal
+| mandate1 = 9
+| nume_scurt2 = PSD
+| nume_complet2 = Partidul Social Democrat
+| mandate2 = 2
+| nume_scurt3 = AUR
+| nume_complet3 = Alianța pentru Unirea Românilor
+| mandate3 = 1
+| nume_scurt4 = USR
+| nume_complet4 = Uniunea Salvați România
+| mandate4 = 1
+}}
+== Istorie ==
+La sfârșitul secolului al XIX-lea, teritoriul comunei făcea parte din [[Regatul Ungariei]] din [[Austro-Ungaria]], în cadrul căreia era arondată districtului Gheorgheni al [[Comitatul Ciuc|comitatului Ciuc]]; hărțile epocii consemnează în zona comunei satele Tikos, Bisztrapatak și Almásmezõ. În 1918, comuna a fost ocupată de armata României, stat care a revendicat Transilvania, iar în 1920 trecerea la România a fost oficializată prin [[tratatul de la Trianon]]. Astfel, anuarul Socec din 1925 o consemnează cu numele românesc de ''Bicaz'', cu o populație de 6994 de locuitori, în plasa Tulgheș a [[Județul Ciuc|județului Ciuc]],<ref name="Socec_Bcz">{{Citat web|accessdate=2014-03-18|publisher=Biblioteca Congresului SUA|titlu=Comuna Bicaz în Anuarul Socec al României-mari|url=http://lcweb2.loc.gov/cgi-bin/ampage?collId=gdc3&fileName=scd0001_20030122001ropage.db&recNum=1326}}</ref> această comună cuprinzând și teritoriul actualei comune [[Comuna Bicaz-Chei, Neamț|Bicaz-Chei]]. Spre sfârșitul perioadei interbelice, cele două comune s-au diferențiat. După [[Dictatul de la Viena]] din 1940, comuna, împreună cu restul [[Transilvania de Nord|Ardealului de Nord]] a aparținut [[Ungaria în timpul celui de-al Doilea Război Mondial|Ungariei]] până în 1944, când după 23 august a redevenit parte a României.<ref>{{Citat web |url=http://martiriromani.com/Articol.asp?ID=176 |accessdate=2018-07-08 |titlu=copie arhivă |archive-date=2015-05-14 |archive-url=https://web.archive.org/web/20150514091122/http://martiriromani.com/Articol.asp?ID=176 |dead-url=yes }}</ref>
+
+În 1950, comuna Bicazu Ardelean a fost transferată raionului Piatra Neamț din [[regiunea Bacău]]. În 1968, ea a trecut la [[județul Neamț]].<ref name="L3_1968">{{Citat web|url=http://www.lege-online.ro/lr-LEGE-3-1968-(46891).html|title=Legea nr. 3/1968|publisher=Lege-online.ro|accessdate=2014-03-18}}</ref><ref name="L2_1968">{{Citat web|url=http://www.monitoruljuridic.ro/act/lege-nr-2-din-16-februarie-1968-republicata-privind-organizarea-administrativa-a-teritoriului-republicii-socialiste-romania-emitent-marea-adunare-nationala-46045.html|title=Legea nr. 2/1968|publisher=Monitoruljuridic.ro|accessdate=2014-03-18}}</ref>
+
+== Monumente istorice ==
+[[Fișier:Biserica de lemn din Bicazu Ardelean01.jpg|thumb|right|200x200px|Biserica de lemn „Sfântul Dumitru” din Telec, monument istoric de interes național aflat în comună]]
+În comuna Bicazu Ardelean se află [[Cod:LMI:NT-II-m-A-10590|biserica de lemn „Sfântul Dumitru”]] din satul Telec, monument istoric de arhitectură de interes național, datând din 1692. În rest, un singur alt obiectiv din comună este inclus în [[lista monumentelor istorice din județul Neamț]] ca monument de interes local: biserica de lemn „Înălțarea Sfintei Cruci” (secolele al XVIII-lea&ndash;al XX-lea) din Telec.
+
+==Economie==
+În zona Țepeșeni există o carieră de marnă.<ref>Oprea, Constantin Razvan ''[http://old.unibuc.ro/prof/oprea_c_r/docs/2014/dec/03_11_26_50Carpati_elemente_de_umanizare.pdf  Resursele economice și umane ale Carpaților Românești] {{Webarchive|url=https://web.archive.org/web/20181222173420/http://old.unibuc.ro/prof/oprea_c_r/docs/2014/dec/03_11_26_50Carpati_elemente_de_umanizare.pdf |date=2018-12-22 }}'', Note de Curs; old.unibuc.ro; p. 3 (PDF); accesat la 22 decembrie 2018</ref>
+
+==Personalități==
+* [[Mozeș Cahana]] (1897-1974), scriitor și revoluționar maghiar de origine evreiască
+
+== Note ==
+<references />
+
+{{Comune-Neamț}}
+
+[[Categorie:Comune din județul Neamț|Bicazu Ardelean]]
