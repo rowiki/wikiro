@@ -112,6 +112,7 @@ public class TranslationManager extends AbstractExecutable
 
     private void processTranslations(List<Revision> recentTranslations) throws IOException, LoginException
     {
+        int idx = 0;
         for (Revision rev : recentTranslations)
         {
             Matcher commentMatcher = commentPattern.matcher(rev.getComment());
@@ -123,6 +124,8 @@ public class TranslationManager extends AbstractExecutable
 
                 String talkText = null;
                 String newPage = wiki.getRevision(rev.getID()).getTitle();
+                LOG.info("Working on page: \"{}\", {} of {}", newPage, ++idx, recentTranslations.size());
+                
                 List<String> opsDone = new ArrayList<String>();
                 try
                 {
