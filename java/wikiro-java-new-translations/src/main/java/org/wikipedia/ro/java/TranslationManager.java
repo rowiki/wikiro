@@ -84,6 +84,10 @@ public class TranslationManager extends AbstractExecutable
             String[] newPageLinks = wiki.whatLinksHere(eachNewPageTitle, Wiki.MAIN_NAMESPACE);
             for (String eachNewPageLink : newPageLinks)
             {
+                if (null == eachNewPageLink)
+                {
+                    continue;
+                }
                 try
                 {
                     String notReplacedText = wiki.getPageText(List.of(eachNewPageLink)).stream().findFirst().orElse("");
