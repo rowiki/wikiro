@@ -976,6 +976,10 @@ public class FixVillages {
                 WikiTemplateParser templateParser = new WikiTemplateParser();
                 ParseResult<WikiTemplate> templateParseRes =
                     templateParser.parse(refText);
+                if (null == templateParseRes) {
+                    LOG.warn("Could not parse template {}", refText);
+                    continue;
+                }
                 WikiTemplate refTemplate = templateParseRes.getIdentifiedPart();
                 
                 List<WikiPart> urlParam = refTemplate.getParam("url");
@@ -985,7 +989,13 @@ public class FixVillages {
 
                     
                 String url = urlParam.stream().map(Objects::toString).collect(Collectors.joining());
-                URI uri = URI.create(url);
+                URI uri = null;
+                try {
+                    uri = new URI(url);
+                } catch (Exception e) {
+                    LOG.warn("Could not parse URL {}", url);
+                    continue;
+                }
                 String host = uri.getHost();
                 String title = refTemplate.getParams().containsKey("titlu") ? refTemplate.getParams().get("titlu") : refTemplate.getParams().get("title");
                 if ("lcweb2.loc.gov".equals(host) && null != title && title.contains("Anuarul Socec")) {
