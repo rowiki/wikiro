@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup
+import logging
 import requests
 import re
 import codecs
@@ -35,7 +36,7 @@ def extractElectoralDistrict(bf):
 		return u""
 
 def extractParties(bf):
-	res = bf.findAll('h3', text=u"Formaţiunea politică:")
+	res = bf.findAll('h3', string=u"Formaţiunea politică:")
 	if res and len(res):
 		res = res[0].parent
 	else:
@@ -55,7 +56,7 @@ def extractBirthdate(bf):
 		return u""
 
 def extractLegislatures(bf):
-	llist = bf.findAll('div', text=u"Alte legislaturi")[0].nextSibling.next
+	llist = bf.findAll('div', string=u"Alte legislaturi")[0].nextSibling.next
 	ret = {}
 	#print(llist)
 	if not llist:
@@ -140,12 +141,18 @@ def DemisionsCsv(csvName):
 def scrollThroughPages():
 	count = [0,0,0]
 	f = codecs.open("wikiro/robots/python/pwb/parliament/parliament_2024.csv", "w+", "utf8")
-	for camera in [2]:
-		for om in range(1,350):
+	for camera in [1,2]:
+		for om in range(1,340):
 			url = 'https://www.cdep.ro/pls/parlam/structura2015.mp?idm=%d&leg=2024&cam=%d' % (om, camera)
 			print(url)
 			try:
-				r = requests.get(url, timeout=5)
+				#logging.basicConfig()
+				#logging.getLogger().setLevel(logging.DEBUG)
+				#requests_log = logging.getLogger("requests.packages.urllib3")
+				#requests_log.setLevel(logging.DEBUG)
+				#requests_log.propagate = True
+				HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'}
+				r = requests.get(url, headers=HEADERS, timeout=5)
 			except Exception as e:
 				print(e)
 				continue
@@ -157,7 +164,7 @@ def scrollThroughPages():
 				continue
 			#	print(u"Camera %d s-a terminat" % camera)
 			#	break
-			new_man = len(parsed_html.findAll('div', text=u"Alte legislaturi")) == 0
+			new_man = len(parsed_html.findAll('div', string=u"Alte legislaturi")) == 0
 			prev_legislatures = {}
 			if new_man == False:
 				#TODO: also try these ones
@@ -167,7 +174,7 @@ def scrollThroughPages():
 			wiki = u""
 			name = parsed_html.find('div', attrs={'class':'boxTitle'}).h1.next.title()
 			name = parliament.allCommas(name)
-			page = pywikibot.Page(pywikibot.getSite(), name)
+			page = pywikibot.Page(pywikibot.Site(), name)
 			try:
 				if page.exists():
 					print(u"ro.wp are deja articol")
@@ -187,9 +194,8 @@ def scrollThroughPages():
 	print(u"Deputați: %d" % count[2])
 
 if __name__ == "__main__":
-	scrollThroughPages()
+	#scrollThroughPages()
 
-#def bla():
 	ParliamentCsv("wikiro/robots/python/pwb/parliament/parliament_2024.csv")
 	ElectionsCsv("wikiro/robots/python/pwb/parliament/alegeri.csv")
 	MovesCsv("wikiro/robots/python/pwb/parliament/migrari.csv")
@@ -197,12 +203,12 @@ if __name__ == "__main__":
 	
 	print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 	for person in people:
-		print(person)
+		print(person, flush=True)
 		if people[person].wiki != u"":
-			page = pywikibot.Page(pywikibot.getSite(), people[person].wiki)
-			if page.isRedirectPage():
+			page = pywikibot.Page(pywikibot.Site(), people[person].wiki)
+			while page.isRedirectPage():
 				page = page.getRedirectTarget()
-			art = page.get()
+			orig = art = page.get()
 			catl = people[person].generateCategoriesList()
 			for cat in page.categories():
 				if cat.title() in catl:
@@ -210,8 +216,8 @@ if __name__ == "__main__":
 			print(catl)
 			if art.find(u"{{Infocaseta") > -1 or art.find(u"{{Infobox") > -1 or art.find(u"Cutie") > -1:
 				print(u"Există deja o infocasetă în articol")
-				if len(catl) == 0:
-					continue
+				#if len(catl) == 0:
+				#	continue
 			else:
 				art = people[person].generateInfobox() + art
 			index = art.rfind(u"Categorie:")
@@ -221,31 +227,72 @@ if __name__ == "__main__":
 			for cat in catl:
 				art += u"\n[[%s]]" % cat
 		else:
+			orig = ""
 			art = people[person].generateArticle()
-			page = pywikibot.Page(pywikibot.getSite(), people[person].name)
+			page = pywikibot.Page(pywikibot.Site(), people[person].name)
 			if page.exists():
 				print(u"Există deja articolul %s" % page.title())
-				continue
+				art=orig # force skip
 
-		print(art)
+		if orig != art:
+			pywikibot.showDiff(orig, art)
 		
-		answer = pywikibot.inputChoice(u"Upload page %s" % people[person].name, ['Yes', 'No', 'Rename'], ['y', 'n', 'r'], 'n')
-		if answer == 'y':
+			answer = 'y'#pywikibot.input_choice(u"Upload page %s" % people[person].name, [('Yes','y'), ('No','n'), ('Rename','r')], 'n')
+			if answer == 'y':
+				try:
+					page.put(art, "Completez articolul despre un parlamentar")
+				except pywikibot.exceptions.PageSaveRelatedError as e:
+					print("Eroare la salvarea paginii" + str(e))
+					pass
+			elif answer == 'r':
+				newname = pywikibot.input(u"Insert new article name")
+				page = pywikibot.Page(pywikibot.Site(), newname)
+				try:
+					if page.exists():
+						print(u"Există deja articolul %s" % page.title())
+						continue
+					page.put(art, "Completez articolul despre un parlamentar")
+				except pywikibot.exceptions.PageSaveRelatedError as e:
+					print("Eroare la salvarea paginii" + str(e))
+					pass
+
+		repo = pywikibot.Site().data_repository()
+		try:
+			new_item = page.data_item()
+			#continue
+		except:
+			print("Creare item Wikidata")
+			new_item = pywikibot.ItemPage(repo)
+			pass
+
+		
+		if "mul" not in new_item.labels:
+			new_item.editLabels(labels={"mul": page.title()}, summary="Setting labels")
+		if "ro" not in new_item.descriptions:
+			description = "politician român"
+			new_item.editDescriptions({'ro': description}, summary="Setting description")
+		new_item.setSitelink(page, summary="Setting sitelink")
+
+		if 'P39' not in new_item.claims:
+			claim = pywikibot.Claim(repo, 'P39')
+			if people[person].chamber == 1:
+				claim.setTarget(pywikibot.ItemPage(repo, "Q17556530"))
+			if people[person].chamber == 2:
+				claim.setTarget(pywikibot.ItemPage(repo, "Q19938957"))
+			new_item.addClaim(claim, summary="Add claim P39")
+		if 'P31' not in new_item.claims:
+			claim = pywikibot.Claim(repo, 'P31')
+			claim.setTarget(pywikibot.ItemPage(repo, "Q5"))
+			new_item.addClaim(claim, summary="Add claim P31")
+		if 'P569' not in new_item.claims:
 			try:
-				page.put(art, "Completez articolul despre un parlamentar")
-			except pywikibot.exceptions.PageSaveRelatedError as e:
-				print("Eroare la salvarea paginii" + str(e))
+				print(people[person].birthdate)
+				year, month, day = people[person].birthdate.split("-")
+				claim = pywikibot.Claim(repo, 'P569')
+				claim.setTarget(pywikibot.WbTime(year=int(year), month=int(month), day=int(day)))
+				new_item.addClaim(claim, summary="Add claim P569")
+			except Exception as e:
+				print(f"Eroare la data nașterii {e}")
 				pass
-		elif answer == 'r':
-			newname = pywikibot.input(u"Insert new article name")
-			page = pywikibot.Page(pywikibot.getSite(), newname)
-			try:
-				if page.exists():
-					print(u"Există deja articolul %s" % page.title())
-					continue
-				page.put(art, "Completez articolul despre un parlamentar")
-			except pywikibot.exceptions.PageSaveRelatedError as e:
-				print("Eroare la salvarea paginii" + str(e))
-				pass
-		#print u"----"
-		#pass
+
+		print(new_item.getID())
