@@ -552,6 +552,15 @@ class Natura2000Articles(SingleSiteBot):
                 text = f"{{{{Titlu corect|{origname}}}}}\n" + text
 
             ropage = pywikibot.Page(pywikibot.Site(), name)
+            tip = "Natura 2000"
+            if ropage.exists() and ropage.isDisambig():
+                if name.find("(") == -1:
+                    if area.get_sitetype() == "A":
+                        tip = "SPA"
+                    elif area.get_sitetype() == "B":
+                        tip = "SCI"
+                    name = name + " (sit " + tip + ")"
+                    ropage = pywikibot.Page(pywikibot.Site(), name)
             if ropage.exists():
                 print(name, "already exists")
                 return False
@@ -559,7 +568,7 @@ class Natura2000Articles(SingleSiteBot):
             ropage.save("Creez articolul despre " + name)
             description = page.descriptions.get('ro')
             if description is None:
-                description = "arie protejată din " + area.get_country()
+                description = "arie protejată " + tip + " din " + area.get_country()
                 page.editDescriptions({'ro': description})
             import time
             time.sleep(1)
@@ -612,7 +621,7 @@ class NewNatura2000Articles(Natura2000Articles):
         return new_item.getID()
 
     def treat(self, page) -> None:
-        print(page.title())
+        print("*** " + page.title(), flush=True)
         text = self.build_article(self.area)
         print(text)
         page.text = text
@@ -655,10 +664,10 @@ def db_generator():
 """
     #site = pywikibot.Site().data_repository()
     codes = set()
-    for elem in wikidata.sparql_generator(query, pywikibot.Site()):
-        codes.add(elem['code'])
+    #for elem in wikidata.sparql_generator(query, pywikibot.Site()):
+    #    codes.add(elem['code'])
     con = sqlite3.connect("wikiro/data/natura2000")
-    query = """SELECT DISTINCT SITENAME, SITECODE FROM n2k;"""
+    query = """SELECT DISTINCT SITENAME, SITECODE FROM n2k where n2k.COUNTRY_CODE LIKE 'RO';"""
     res = con.execute(query)
     sites = [x for x in res.fetchall()]
     proc = set()
