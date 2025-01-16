@@ -129,7 +129,7 @@ class ElectedPerson(object):
 * [[Parlamentul României]]
 
 == Legături externe ==
-* [http://www.cdep.ro/pls/parlam/structura2015.mp?idm=%s&leg=2024&cam=%s&idl=1 Activitatea parlamentară]
+* [https://www.cdep.ro/pls/parlam/structura2015.mp?idm=%s&leg=2024&cam=%s&idl=1 Activitatea parlamentară]
 
 """
 		text = self.generateInfobox()
@@ -143,7 +143,7 @@ class ElectedPerson(object):
 			begin = int(self.groups[0].start[0:4])
 			group = self.groups[0].party[1]
 		elif self.party != u"":
-			group = self.party
+			group = "{{Partid|România|" + self.party + "}}"
 		else:
 			groupprefix = u""
 		end = u""
