@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +29,8 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.mongojack.JacksonMongoCollection;
 import org.mongojack.ObjectMapperConfigurer;
+import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikibase.WikibasePropertyFactory;
@@ -56,6 +59,14 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.ConsoleAppender;
+import ch.qos.logback.core.FileAppender;
 
 public class WikidataMayorUpdater
 {
@@ -102,6 +113,7 @@ public class WikidataMayorUpdater
     private static Claim ROMANIAN_CLAIM;
 
     private static Claim ELECTION_CLAIM;
+    private static String crtMayorPartyClaim;
 
     public static Credentials identifyCredentials(String userVarName, String passVarName, String target)
     {
@@ -132,6 +144,8 @@ public class WikidataMayorUpdater
 
     public static void init()
     {
+        initLogging();
+        
         DWIKI = new Wikibase();
         HUMAN_ENT = new Entity("Q5");
 
@@ -217,7 +231,11 @@ public class WikidataMayorUpdater
                 claims.stream().map(Claim::getMainsnak).map(Snak::getData).map(Item.class::cast).map(Item::getEnt).forEach(e -> updateMayor(e, mayorCollection));
 
             }
-
+            
+            Entity bucharestEnt = WD_ENT_CACHE.get(new Entity("Q19660"));
+            Set<Claim> sectorClaims = bucharestEnt.getClaims(WikibasePropertyFactory.getWikibaseProperty("P1383"));
+            System.out.printf("----------------- București sectoare ----------------%n");
+            sectorClaims.stream().map(Claim::getMainsnak).map(Snak::getData).map(Item.class::cast).map(Item::getEnt).forEach(e -> updateMayor(e, mayorCollection));
         }
         catch (IOException | WikibaseException | FailedLoginException e)
         {
@@ -301,10 +319,29 @@ public class WikidataMayorUpdater
 
         String expectedMayorName = String.format("%s %s", electedMayor.getFirstName(), electedMayor.getLastName());
         List<Entity> possibleExistingMayorEnts = DWIKI.searchWikibase(expectedMayorName, "ro");
-        Optional<Entity> alreadyExistingMayorOpt = possibleExistingMayorEnts.stream().filter(e -> Objects.equals(expectedMayorName, e.getLabels().get("ro")))
-            .filter(e -> Stream.of("Politician român din %s, județul %s", "Romanian politician from %s, %s County").map(f -> String.format(f, communeLabel, countyLabel))
-                .anyMatch(x -> Optional.ofNullable(e.getDescriptions()).map(y -> y.get("ro")).map(z -> z.equals(x)).orElse(false)))
-            .findFirst();
+        List<Entity> peopleWithMayorsName = possibleExistingMayorEnts.stream().filter(e -> Objects.equals(expectedMayorName, e.getLabels().get("ro"))).toList();
+        Optional<Entity> alreadyExistingMayorOpt = Optional.empty();
+            
+        for (Entity personWithMayorsName: peopleWithMayorsName)
+        {
+            Map<String, String> personWithMayorsNameDescriptions = personWithMayorsName.getDescriptions();
+            if (null != personWithMayorsNameDescriptions)
+            {
+                String personWithMayorsNameDescription = personWithMayorsNameDescriptions.get("ro");
+                if (null != personWithMayorsNameDescription)
+                {
+                    List<String> expectedDescriptions = List.of(
+                        String.format("politician român din %s, județul %s", communeLabel, countyLabel),
+                        String.format("Romanian politician from %s, %s", communeLabel, countyLabel),
+                        String.format("Romanian politician from %s, %s County", communeLabel, countyLabel));
+                    if (expectedDescriptions.stream().anyMatch(personWithMayorsNameDescription::equals))
+                    {
+                        alreadyExistingMayorOpt = Optional.of(personWithMayorsName);
+                        break;
+                    }
+                }
+            }
+        }
         if (alreadyExistingMayorOpt.isPresent())
         {
             System.out.printf("\tNew mayor %s of %s created already!%n", expectedMayorName, communeLabel);
@@ -314,7 +351,8 @@ public class WikidataMayorUpdater
         {
             newMayor = createNewMayorPersonInWd(electedMayor, communeEnt, crtHeadOfGovtOptClaim, countyEntOpt);
         }
-        updatePartyForMayor(electedMayor, newMayor);
+        List<Snak> ref = createRef(countyAbbr);
+        updatePartyForMayor(electedMayor, newMayor, ref);
         setPositionHeldForMayor(communeEnt, newMayor);
 
         Claim mayorClaim = new Claim();
@@ -322,7 +360,6 @@ public class WikidataMayorUpdater
         mayorClaim.setValue(new Item(newMayor));
         final String claimId = DWIKI.addClaim(communeEnt.getId(), mayorClaim);
 
-        List<Snak> ref = createRef(countyAbbr);
         if (null != claimId)
         {
             // mayorClaim.addQualifier(startTimeProp, startTime);
@@ -392,7 +429,7 @@ public class WikidataMayorUpdater
         Set<Claim> bestP39Claims = newMayor.getBestClaims(WD_PROP_POSITION_HELD);
         if (null != bestP39Claims)
         {
-            Optional<Claim> mayorP39Opt = bestP39Claims.stream().findFirst();
+            Optional<Claim> mayorP39Opt = bestP39Claims.stream().filter(c -> c.getQualifiers().get(WD_PROP_END_TIME) == null).findFirst();
             if (mayorP39Opt.isPresent())
             {
                 Claim mayorP39 = mayorP39Opt.get();
@@ -545,7 +582,13 @@ public class WikidataMayorUpdater
             return;
         }
         Entity crtMayorEnt = WD_ENT_CACHE.get(((Item) crtHeadOfGovtClaim.getValue()).getEnt());
-        crtMayorEnt = updatePartyForMayor(electedMayor, crtMayorEnt);
+        Optional<Entity> countyEntOpt = communeEnt.getBestClaims(WD_PROP_UAT).stream().findFirst().map(Claim::getValue).map(Item.class::cast).map(Item::getEnt);
+        String countyAbbr = countyEntOpt.isPresent()
+            ? WD_ENT_CACHE.get(countyEntOpt.get()).getBestClaims(WikibasePropertyFactory.getWikibaseProperty("P395")).stream().findFirst().map(Claim::getValue)
+                .map(StringData.class::cast).map(StringData::getValue).get()
+                : null;
+        List<Snak> ref = createRef(countyAbbr);
+        crtMayorEnt = updatePartyForMayor(electedMayor, crtMayorEnt, ref);
 
         //add new reference to old mayor; add "elected in" (P2715) if not already present
         Entity positionEnt = communeEnt.getBestClaims(WD_PROP_HEAD_OF_GOVT_POSITION).stream().findFirst().map(Claim::getValue).map(Item.class::cast).map(Item::getEnt).orElse(null);
@@ -573,17 +616,12 @@ public class WikidataMayorUpdater
             newMayorPosition.setId(newMayorPosnClaimId);
             DWIKI.addQualifier(newMayorPosnClaimId, WD_PROP_START_TIME.getId(), FIRST_NOV_2024);
             DWIKI.addQualifier(newMayorPosnClaimId, WD_PROP_ELECTED_IN.getId(), new Item(new Entity(WD_ENT_ID_2024_ELECTIONS)));
-            Optional<Entity> countyEntOpt = communeEnt.getBestClaims(WD_PROP_UAT).stream().findFirst().map(Claim::getValue).map(Item.class::cast).map(Item::getEnt);
-            String countyAbbr = countyEntOpt.isPresent()
-                ? WD_ENT_CACHE.get(countyEntOpt.get()).getBestClaims(WikibasePropertyFactory.getWikibaseProperty("P395")).stream().findFirst().map(Claim::getValue)
-                    .map(StringData.class::cast).map(StringData::getValue).get()
-                : null;
-            DWIKI.addReference(newMayorPosnClaimId, createRef(countyAbbr));
+            DWIKI.addReference(newMayorPosnClaimId, ref);
             setClaimRankTo(crtMayorEnt, WD_PROP_POSITION_HELD, newMayorPosnClaimId, Rank.PREFERRED);
         }
     }
 
-    private static Entity updatePartyForMayor(Mayor electedMayor, Entity crtMayorEnt) throws IOException, WikibaseException
+    private static Entity updatePartyForMayor(Mayor electedMayor, Entity crtMayorEnt, List<Snak> ref) throws IOException, WikibaseException
     {
         Optional<Claim> knownMayorPartyOpt = Optional.ofNullable(crtMayorEnt.getBestClaims(WD_PROP_POLITICAL_PARTY)).map(Collection::stream).orElseGet(Stream::empty)
             .filter(c -> "value".equals(c.getMainsnak().getSnaktype())).findFirst();
@@ -605,12 +643,14 @@ public class WikidataMayorUpdater
                 String newMayorPartyClaimId = DWIKI.addClaim(crtMayorEnt.getId(), newMayorParty);
                 crtMayorEnt = setClaimRankTo(crtMayorEnt, WD_PROP_POLITICAL_PARTY, newMayorPartyClaimId, Rank.PREFERRED);
                 DWIKI.addQualifier(newMayorPartyClaimId, WD_PROP_START_TIME.getId(), FIRST_NOV_2024);
+                DWIKI.addReference(newMayorPartyClaimId, ref);
             }
         }
         else
         {
             Claim newMayorParty = new Claim(WD_PROP_POLITICAL_PARTY, new Item(new Entity(electedMayor.getPartyQId())));
-            DWIKI.addClaim(crtMayorEnt.getId(), newMayorParty);
+            String mayorPartyClaimId = DWIKI.addClaim(crtMayorEnt.getId(), newMayorParty);
+            DWIKI.addReference(mayorPartyClaimId, ref);
         }
         return crtMayorEnt;
     }
@@ -635,4 +675,45 @@ public class WikidataMayorUpdater
         return namePartsList1.stream().allMatch(namePartsList2::contains) || namePartsList2.stream().allMatch(namePartsList1::contains);
     }
 
+    private static void initLogging()
+    {
+        LoggerContext logbackContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        
+        PatternLayoutEncoder ple = new PatternLayoutEncoder();
+
+        ple.setPattern("%date %level %logger{10} [%file:%line] %msg%n");
+        ple.setContext(logbackContext);
+        ple.start();
+
+        ConsoleAppender<ILoggingEvent> appender = new ConsoleAppender<>();
+        appender.setContext(logbackContext);
+        appender.setName("consolez");
+        appender.setEncoder(ple);
+        appender.start();
+        
+        FileAppender<ILoggingEvent> fileAppender = new FileAppender<>();
+        fileAppender.setContext(logbackContext);
+        fileAppender.setName("filez");
+        fileAppender.setEncoder(ple);
+        fileAppender.setFile("elections-wiki.log");
+        fileAppender.start();
+        
+        Logger roWikiLog = logbackContext.getLogger("org.wikipedia.ro");
+        roWikiLog.setAdditive(false);
+        roWikiLog.setLevel(Level.INFO);
+        roWikiLog.addAppender(appender);
+        
+        Logger wikiLog =  logbackContext.getLogger("wiki");
+        wikiLog.setAdditive(false);
+        wikiLog.setLevel(Level.INFO);
+        wikiLog.addAppender(fileAppender);
+        
+        Logger mongoLog = logbackContext.getLogger("org.mongodb.driver");
+        mongoLog.setAdditive(false);
+        mongoLog.setLevel(Level.WARN);
+        mongoLog.addAppender(appender);
+
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();        
+    }
 }
