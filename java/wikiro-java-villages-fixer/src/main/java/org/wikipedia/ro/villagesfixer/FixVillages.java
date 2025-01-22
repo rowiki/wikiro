@@ -55,7 +55,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -148,6 +147,7 @@ public class FixVillages {
     private static Pattern DEMOGRAPHY_TEXT_PATTERN = Pattern.compile(
         "<div style=\"float:(?:left|right)\">\\s*\\{\\{Pie chart(.*?)</div>\\s*Conform (.*)<ref name=\"insse_20\\d1_rel\">.*?</ref>", Pattern.DOTALL);
     private static Pattern REF_PATTERN = Pattern.compile("(<ref[^>]*>)(.*?)</ref>");
+    private static final String INTRO_REF = "<ref name=\"lege_290_2018\">{{Cite act|url=https://legislatie.just.ro/Public/DetaliiDocument/208652|year=2018|type=Legea|number=290|legislature=Parlamentul României|chapter=Anexă: Denumirea și componența unităților administrativ-teritoriale pe județe}}</ref>";
 
     private static String crtSettlementName = null, crtCommuneName = null, crtCountyName = null;
 
@@ -888,6 +888,9 @@ public class FixVillages {
                             if (!startsWith(aSentence, "{{") || !endsWith(aSentence, "}}")) {
                                 newFirstParagraphBuilder.append('.')
                                     .append(defaultString(newFirstParagraphRefs.get(sentenceIdx)));
+                            }
+                            if (0 == sentenceIdx) {
+                                newFirstParagraphBuilder.append(INTRO_REF);
                             }
                             newFirstParagraphBuilder.append(' ');
                         }
