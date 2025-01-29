@@ -1,3 +1,0 @@
-'''Narva''' este un oraş în [[Estonia]].
-{{IsIn|Estonia}}
-{{ciot}}

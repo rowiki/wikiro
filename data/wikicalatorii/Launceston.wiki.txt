@@ -1,3 +1,0 @@
-'''Launceston''' este un oraş în [[Australia]].
-{{IsIn|Australia}}
-{{ciot}}

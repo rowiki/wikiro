@@ -1,8 +1,0 @@
-'''Klagenfurt''' este un oraş în [[Austria]].
-{{IsIn|Austria}}
-{{ciot}}
-
-[[de:Klagenfurt]]
-[[en:Klagenfurt]]
-[[ja:クラーゲンフルト]]
-[[nl:Klagenfurt]]

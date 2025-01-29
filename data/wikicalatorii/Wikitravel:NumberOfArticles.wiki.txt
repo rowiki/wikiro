@@ -1,7 +1,0 @@
-___START {{NUMBEROFARTICLES}}
-
-Used for [[:en:User:Jpatokal/StatScript|automatic statistics collection]].  Please do not edit.[[de:Wikitravel:NumberOfArticles]]
-[[fr:Wikitravel:NumberOfArticles]]
-[[ja:Wikitravel:NumberOfArticles]]
-[[nl:Wikitravel:NumberOfArticles]]
-[[sv:Wikitravel:NumberOfArticles]]

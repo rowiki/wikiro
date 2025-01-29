@@ -1,7 +1,0 @@
-
-&lt;tr>&lt;td>&lt;center>'''[[Wikitravel:Babel]]'''&lt;/center>&lt;/td>&lt;/tr>
-&lt;tr>&lt;td>{{User {{{1}}}}}&lt;/td>&lt;/tr>
-&lt;tr>&lt;td>{{User {{{2}}}}}&lt;/td>&lt;/tr>
-&lt;tr>&lt;td>{{User {{{3}}}}}&lt;/td>&lt;/tr>
-&lt;tr>&lt;td>{{User {{{4}}}}}&lt;/td>&lt;/tr>
-&lt;/table>
