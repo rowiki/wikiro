@@ -95,12 +95,13 @@ class YearsArticles(YearsBot):
             year = int(year)
             if space > -1:
                 year = 1-year
+            self.year=year
         except:
             return
 
         text = self.antet(text)
-        text = self.nasteri(text, year)
-        text = self.decese(text, year)
+        text = self.nasteri(text)
+        text = self.decese(text)
         if oldtext != text:
             pywikibot.output(page.title())
             pywikibot.showDiff(oldtext, text)
@@ -112,7 +113,7 @@ class YearsArticles(YearsBot):
 
     def antet(self, text):
         if self.direction == -1:
-            antet = "{{Anul fără cronologie tematică}}{{Anul în alte calendare}}\n"
+            antet = f"{{{{Anul fără cronologie tematică}}}}{{{{Anul în alte calendare|year={self.year-1}}}}}\n"
         else:
             antet = "{{Anul}}{{Anul în alte calendare}}\n"
         loc = text.find("__FARACUPRINS__")
@@ -124,7 +125,7 @@ class YearsArticles(YearsBot):
             text = text.replace(text[:loc], antet)
         return text
 
-    def nasteri(self, text, year):
+    def nasteri(self, text):
         evenimente = text.find("== Nașteri ==\n\n[[Categ")
         if (evenimente == -1):
             evenimente = text.find("== Nașteri ==\n\n*\n\n[[Categ")
@@ -136,9 +137,9 @@ class YearsArticles(YearsBot):
             return text
 
         if self.direction == 1:
-            diff_year = f"""FILTER (?est >= "{str(year)}-01-01T00:00:00Z"^^xsd:dateTime && ?est < "{str(year+1)}-01-01T00:00:00Z"^^xsd:dateTime)"""
+            diff_year = f"""FILTER (?est >= "{str(self.year)}-01-01T00:00:00Z"^^xsd:dateTime && ?est < "{str(self.year+1)}-01-01T00:00:00Z"^^xsd:dateTime)"""
         else:
-            diff_year = f"""FILTER (?est > "{str(year-1)}-01-01T00:00:00Z"^^xsd:dateTime && ?est <= "{str(year)}-01-01T00:00:00Z"^^xsd:dateTime)"""
+            diff_year = f"""FILTER (?est > "{str(self.year-1)}-01-01T00:00:00Z"^^xsd:dateTime && ?est <= "{str(self.year)}-01-01T00:00:00Z"^^xsd:dateTime)"""
 
         oldout = output = "== Nașteri ==\n"
 
@@ -199,7 +200,7 @@ ORDER BY desc(?sitelinks)"""
         return text.replace(oldout, output)
 
 
-    def decese(self, text, year):
+    def decese(self, text):
         evenimente = text.find("== Decese ==\n\n[[Categ")
         if (evenimente == -1):
             evenimente = text.find("== Decese ==\n\n*\n\n[[Categ")
@@ -211,9 +212,9 @@ ORDER BY desc(?sitelinks)"""
             return text
 
         if self.direction == 1:
-            diff_year = f"""FILTER (?est >= "{str(year)}-01-01T00:00:00Z"^^xsd:dateTime && ?est < "{str(year+1)}-01-01T00:00:00Z"^^xsd:dateTime)"""
+            diff_year = f"""FILTER (?est >= "{str(self.year)}-01-01T00:00:00Z"^^xsd:dateTime && ?est < "{str(self.year+1)}-01-01T00:00:00Z"^^xsd:dateTime)"""
         else:
-            diff_year = f"""FILTER (?est > "{str(year-1)}-01-01T00:00:00Z"^^xsd:dateTime && ?est <= "{str(year)}-01-01T00:00:00Z"^^xsd:dateTime)"""
+            diff_year = f"""FILTER (?est > "{str(self.year-1)}-01-01T00:00:00Z"^^xsd:dateTime && ?est <= "{str(self.year)}-01-01T00:00:00Z"^^xsd:dateTime)"""
 
         oldout = output = "== Decese ==\n"
 
@@ -278,5 +279,5 @@ if __name__ == "__main__":
     #bot = YearsCategories(2021, 2099, 1, ns=14, site=pywikibot.Site())
     #bot = DecadesCategories(0, 2090, 10, ns=14, prefix="Anii", site=pywikibot.Site())
     bot = YearsArticles(1, 1888, 1, ns=0, site=pywikibot.Site())
-    bot = YearsArticles(291, 444, 1, suffix="î.Hr.", ns=0, site=pywikibot.Site())
+    bot = YearsArticles(1, 444, 1, suffix="î.Hr.", ns=0, site=pywikibot.Site())
     bot.run()
