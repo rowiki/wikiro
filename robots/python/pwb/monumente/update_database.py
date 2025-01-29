@@ -242,7 +242,7 @@ searchbuttonlabel=Căutare în liste
 		str(counties[prev_county]["count"]) + "}}\n|-\n"
 	section = section.replace("județul București", "București")
 	section += "|}\n\n"
-	page = pywikibot.Page(pywikibot.Site(), "Lista_monumentelor_istorice_din_România#Lista_monumentelor_pe_jude.C8.9B")
+	page = pywikibot.Page(pywikibot.Site(), "Lista_monumentelor_istorice_din_România#Lista_monumentelor_după_județ")
 	page.get()
 	pywikibot.Site().editpage(page,text=section, section=1)
 	pywikibot.output("Saved the monument counts per county")
