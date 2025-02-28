@@ -19,8 +19,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -208,10 +210,15 @@ public class DefaultCitationHandler implements Handler
                 publicationDate = articlePubTimeElems.first().attr("content");
                 publicationDate = extractDate(publicationDate);
             }
-            Elements articleAuthorElems = doc.select("meta[property=article:author]");
-            if (null != articleAuthorElems && !articleAuthorElems.isEmpty())
+            Optional<Elements> articleAuthorElems = Stream.of("meta[property=article:author]", "meta[property=og:article:author]")
+                .map(s -> doc.select(s))
+                .filter(Objects::nonNull)
+                .filter(Predicate.not(Elements::isEmpty)))
+                .findFirst();
+            
+            if (articleAuthorElems.isPresent())
             {
-                articleAuthorElems.forEach(el -> {
+                articleAuthorElems.get().forEach(el -> {
                     authors.add(el.attr("content"));
                 });
             }
