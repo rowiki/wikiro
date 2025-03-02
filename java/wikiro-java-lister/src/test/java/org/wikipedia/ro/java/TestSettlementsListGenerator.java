@@ -24,7 +24,7 @@ public class TestSettlementsListGenerator {
         
         Entity countyEnt = wikibase.getWikibaseItemById(countyId);
         
-        String aradCountyList = sut.generateListContent(countyEnt);
+        String aradCountyList = sut.generateListContent(countyEnt, null);
         
         System.out.println(aradCountyList);
         
