@@ -83,7 +83,7 @@ public class App {
         WikidataEntitiesCache wikidataEntitiesCache = new WikidataEntitiesCache(wikibase);
         LIST_GENERATORS.put("lot-fotbal", new FootballTeamListGenerator(wikidataEntitiesCache));
         LIST_GENERATORS.put("comune-sate", new SettlementListsGenerator(wikidataEntitiesCache));
-        LIST_GENERATORS.put("default", new DefaultListGenerator());
+        LIST_GENERATORS.put("default", new DefaultListGenerator(wiki, wikidataEntitiesCache));
 
         Credentials credentials = identifyCredentials("WIKI_LISTER_USERNAME", "WIKI_LISTER_PASSWORD", "Wikipedia");
         Credentials wdCredentials = identifyCredentials("WIKI_LISTER_WDUSERNAME", "WIKI_LISTER_WDPASSWORD", "Wikidata");
@@ -105,6 +105,7 @@ public class App {
                 if (listStartMatcher.find()) {
                     String qId = null;
                     String predefinedType = "default";
+                    String config = null;
                     int insertPosition = 1 + listStartMatcher.end();
 
                     // --- parse params
@@ -119,6 +120,8 @@ public class App {
                             qId = paramValue;
                         case "tip_predefinit":
                             predefinedType = paramValue;
+                        case "config":
+                            config = paramValue;
                         }
                     }
 
@@ -137,7 +140,7 @@ public class App {
                         }
 
                         WikidataListGenerator listGen = LIST_GENERATORS.get(predefinedType);
-                        String generatedListContent = listGen.generateListContent(wdEntity);
+                        String generatedListContent = listGen.generateListContent(wdEntity, config);
                         if (isEmpty(generatedListContent)) {
                             continue;
                         }

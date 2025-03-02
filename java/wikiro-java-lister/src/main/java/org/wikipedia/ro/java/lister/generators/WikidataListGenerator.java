@@ -4,5 +4,5 @@ import org.wikibase.data.Entity;
 
 public interface WikidataListGenerator
 {
-    String generateListContent(Entity wdEntity);
+    String generateListContent(Entity wdEntity, String configPage);
 }

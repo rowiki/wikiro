@@ -96,7 +96,7 @@ public class FootballTeamListGenerator implements WikidataListGenerator {
     }
 
     @Override
-    public String generateListContent(Entity wdEntity) {
+    public String generateListContent(Entity wdEntity, String configPage) {
         String currentPlayersQueryString = String.format(CURRENT_PLAYERS_QUERY_TEMPLATE, wdEntity.getId());
 
         String contractedPlayersQueryString = String.format(CONTRACTED_PLAYERS_QUERY_TEMPLATE, wdEntity.getId());

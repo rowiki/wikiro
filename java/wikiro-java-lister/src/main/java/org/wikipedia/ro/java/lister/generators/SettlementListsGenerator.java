@@ -59,7 +59,7 @@ public class SettlementListsGenerator implements WikidataListGenerator {
     private static final Pattern COMMONS_IMG_PATTERN = Pattern.compile("^http://commons\\.wikimedia\\.org/wiki/Special:FilePath/(.*+)$");
 
     @Override
-    public String generateListContent(Entity wdEntity) {
+    public String generateListContent(Entity wdEntity, String configPage) {
         String communesQuery = String.format(COMMUNE_QUERY_TEMPLATE, wdEntity.getId());
 
         StringBuilder communesStr = new StringBuilder();
