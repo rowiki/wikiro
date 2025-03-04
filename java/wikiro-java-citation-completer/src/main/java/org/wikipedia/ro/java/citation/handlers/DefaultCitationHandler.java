@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -213,7 +214,7 @@ public class DefaultCitationHandler implements Handler
             Optional<Elements> articleAuthorElems = Stream.of("meta[property=article:author]", "meta[property=og:article:author]")
                 .map(s -> doc.select(s))
                 .filter(Objects::nonNull)
-                .filter(Predicate.not(Elements::isEmpty)))
+                .filter(Predicate.not(Elements::isEmpty))
                 .findFirst();
             
             if (articleAuthorElems.isPresent())
