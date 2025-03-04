@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wikibase.WikibaseException;
@@ -34,7 +35,7 @@ public class CitationCompleter extends AbstractExecutable
     private static final Logger LOG = LoggerFactory.getLogger(CitationCompleter.class);
 
     public static final Pattern REF_URL_PATTERN = Pattern
-        .compile("\\<ref\\>\\s*(https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*))\\s*\\</ref\\>");
+        .compile("\\<ref\\s*(name\\=(?:\"[^\"]\"|\\w+))?\\>\\s*(https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*))\\s*\\</ref\\>");
 
     @Override
     protected void execute() throws IOException, WikibaseException, LoginException
@@ -80,7 +81,9 @@ public class CitationCompleter extends AbstractExecutable
             Matcher refUrlMatcher = REF_URL_PATTERN.matcher(pgdata.getValue());
             while (refUrlMatcher.find())
             {
-                String url = refUrlMatcher.group(1);
+                String refName = refUrlMatcher.group(1);
+                String refNamePart = Optional.ofNullable(refName).map(s -> StringUtils.prependIfMissing(s, " ")).orElse("");
+                String url = refUrlMatcher.group(2);
                 LOG.info("Found bare URL ref: {}", url);
 
                 List<Handler> handlersForUrl = handlerFactory.getHandlers(url);
@@ -98,7 +101,7 @@ public class CitationCompleter extends AbstractExecutable
 
                 if (foundCitation.isPresent())
                 {
-                    refUrlMatcher.appendReplacement(sb, String.format("<ref>%s</ref>", Matcher.quoteReplacement(foundCitation.get())));
+                    refUrlMatcher.appendReplacement(sb, String.format("<ref%s>%s</ref>", Matcher.quoteReplacement(refNamePart), Matcher.quoteReplacement(foundCitation.get())));
                     citationsChanged++;
                 }
             }
