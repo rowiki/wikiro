@@ -66,19 +66,18 @@ public class WikiprojectTraverser {
             String pagesBigcat = "Articole din domeniul proiectului " + wikiprojectName;
 
             List<String> pages = wiki.getCategoryMembers(pagesBigcat);
+            
+            List<String> classificationPages = pages.stream()
+                .filter(page -> Wiki.CATEGORY_NAMESPACE != wiki.namespace(page))
+                .map(page -> {
+                    return prependIfMissing(removeStart(page, wiki.namespaceIdentifier(wiki.namespace(page)) + ":"),
+                            wiki.namespaceIdentifier(wiki.namespace(page)) + ":");
+                })
+                .collect(Collectors.toList());
 
-            for (String eachPage : pages) {
-                int namespace = wiki.namespace(eachPage);
-                if (Wiki.CATEGORY_NAMESPACE == namespace) {
-                    continue;
-                }
-                int classificationNamespace = namespace;
-                String classificationPage =
-                    prependIfMissing(removeStart(eachPage, wiki.namespaceIdentifier(namespace) + ":"),
-                        wiki.namespaceIdentifier(classificationNamespace) + ":");
-
-                String classificationText = wiki.getPageText(List.of(classificationPage)).stream().findFirst().orElse("");
-
+            List<String> classificationTexts = wiki.getPageText(classificationPages);
+            
+            for (String classificationText: classificationTexts) {
                 QualityClass qualClass = null;
                 ImportanceClass impClass = null;
 
