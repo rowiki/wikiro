@@ -55,9 +55,14 @@ public class Graph2ChartMigrator extends AbstractExecutable
         List<String> demoSubpages = wiki.listPages("Format:Grafic demografie/", null, Wiki.ALL_NAMESPACES, -1, -1, false);
         for (String demoSubpage : demoSubpages)
         {
-            migrateOnePage(demoSubpage);
+            //migrateOnePage(demoSubpage);
         }
-        //migrateOnePage("Aluniș");
+        //migrateOnePage("Format:Grafic demografie/Aluniș");
+        //migrateOnePage("Format:Grafic demografie/Alba Iulia");
+        migrateOnePage("Format:Grafic demografie/Peschiera del Garda");
+        //migrateOnePage("Format:Grafic demografie/Bălan");
+        //migrateOnePage("Format:Grafic demografie/Constanța");
+        
     }
 
     private void migrateOnePage(String demographyPage)
@@ -137,6 +142,7 @@ public class Graph2ChartMigrator extends AbstractExecutable
         ChartDataSet ret = new ChartDataSet();
         ret.setLicense("CC0-1.0");
         ret.getDescription().put("ro", String.format("Populația istorică din %s", place));
+        ret.getDescription().put("en", String.format("Historical population of %s", place));
 
         String[] csvLines = csv.split("[\\n\\r]+");
         String[] header = csvLines[0].split(",");
