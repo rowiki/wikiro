@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wikibase.WikibaseException;
@@ -149,7 +150,8 @@ public class Graph2ChartMigrator extends AbstractExecutable
         List<ChartField> chartFields = Arrays.stream(header).map(String::trim).map(x -> {
             ChartField cf = new ChartField();
             cf.setName(x);
-            cf.getTitle().put("ro", x);
+            String xTitle = StringUtils.replace(x, "populatie", "populație");
+            cf.getTitle().put("ro", xTitle);
             cf.setType("number");
             return cf;
         }).collect(Collectors.toList());
