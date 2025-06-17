@@ -89,7 +89,7 @@ public class Graph2ChartMigrator extends AbstractExecutable
 
     private void replaceChartWithGraph(String demographyPage, String chartDefinitionPage) throws IOException, LoginException
     {
-        wiki.edit(demographyPage, "{{#chart:" + chartDefinitionPage + "}}", "Robot: înlocuit [[:mw:Extension:Graph|Graph]] cu [[:mw:Extension:Chart|Chart]]");
+        wiki.edit(demographyPage, "{{#chart:" + chartDefinitionPage.substring("Data:".length()) + "}}", "Robot: înlocuit [[:mw:Extension:Graph|Graph]] cu [[:mw:Extension:Chart|Chart]]");
     }
 
     private String createDataSetPage(String csvContent, String place) throws LoginException, IOException
@@ -107,10 +107,10 @@ public class Graph2ChartMigrator extends AbstractExecutable
 
     private String createChartDefinitionPage(String place, String chartSource) throws LoginException, IOException
     {
-        String chartDefinitionPage = String.format("Data:HistoricalDemography.%s.Chart", place);
+        String chartDefinitionPage = String.format("Data:HistoricalDemography.%s.chart", place);
         Chart demographyChart = new Chart();
         demographyChart.setLicense("CC0-1.0");
-        demographyChart.setSource(chartSource);
+        demographyChart.setSource(chartSource.substring("Data:".length()));
         demographyChart.setVersion(1);
 
         Axis xAxis = new Axis();
