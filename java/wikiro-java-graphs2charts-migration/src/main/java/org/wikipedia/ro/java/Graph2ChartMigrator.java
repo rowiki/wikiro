@@ -146,7 +146,7 @@ public class Graph2ChartMigrator extends AbstractExecutable
 
         String[] csvLines = csv.split("[\\n\\r]+");
         String[] header = csvLines[0].split(",");
-        List<ChartField> chartFields = Arrays.stream(header).map(x -> {
+        List<ChartField> chartFields = Arrays.stream(header).map(String::trim).map(x -> {
             ChartField cf = new ChartField();
             cf.setName(x);
             cf.getTitle().put("ro", x);
