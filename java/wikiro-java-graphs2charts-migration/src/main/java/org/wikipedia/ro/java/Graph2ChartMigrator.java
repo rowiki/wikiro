@@ -159,9 +159,9 @@ public class Graph2ChartMigrator extends AbstractExecutable
         for (int i = 1; i < csvLines.length; i++)
         {
             String[] line = csvLines[i].split(",");
-            if (Arrays.stream(line).filter(x -> x.matches("\\d+")).count() == chartFields.size())
+            if (Arrays.stream(line).map(String::trim).filter(x -> x.matches("\\d+")).count() == chartFields.size())
             {
-                List<Object> lineData = Arrays.stream(line).map(Integer::valueOf).collect(Collectors.toList());
+                List<Object> lineData = Arrays.stream(line).map(String::trim).map(Integer::valueOf).collect(Collectors.toList());
                 dataLines.add(lineData);
             }
         }
