@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -90,7 +89,7 @@ public class Graph2ChartMigrator extends AbstractExecutable
 
     private void replaceChartWithGraph(String demographyPage, String chartDefinitionPage) throws IOException, LoginException
     {
-        wiki.edit(demographyPage, "{{#chart:" + chartDefinitionPage.substring("Data:".length()) + "}}", "Robot: înlocuit [[:mw:Extension:Graph|Graph]] cu [[:mw:Extension:Chart|Chart]]");
+        wiki.edit(demographyPage, "{{#chart:" + chartDefinitionPage.substring("Data:".length()) + "}}", "Înlocuit [[:mw:Extension:Graph|Graph]] cu [[:mw:Extension:Chart|Chart]]");
     }
 
     private String createDataSetPage(String csvContent, String place) throws LoginException, IOException
@@ -101,7 +100,7 @@ public class Graph2ChartMigrator extends AbstractExecutable
         String jsonDataSet = toJson(dataSet);
         
         //save jsonDataSet to commons page targetPage
-        cwiki.edit(targetPage, jsonDataSet, "Bot: imported data from [[:w:ro:Format:Grafic demografie/" + place + "]]");
+        cwiki.edit(targetPage, jsonDataSet, "Imported data from [[:w:ro:Format:Grafic demografie/" + place + "]]");
         
         return targetPage;
     }
@@ -133,7 +132,7 @@ public class Graph2ChartMigrator extends AbstractExecutable
         //System.out.println(jsonDemographyChart);
         
         //save jsonDemographyChart to commons page chartDefinitionPage
-        cwiki.edit(chartDefinitionPage, jsonDemographyChart, "Bot: imported chart from [[:w:ro:Format:Grafic demografie/" + place + "]]");
+        cwiki.edit(chartDefinitionPage, jsonDemographyChart, "Imported chart from [[:w:ro:Format:Grafic demografie/" + place + "]]");
         
         return chartDefinitionPage;
     }
