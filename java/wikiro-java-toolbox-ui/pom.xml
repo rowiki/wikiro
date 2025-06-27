@@ -4,14 +4,14 @@
 	<groupId>org.wikipedia.ro.java</groupId>
 	<artifactId>wikiro-java-toolbox-ui</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1</version>
+	<version>1.2</version>
 	<name>wikiro-java-toolbox-ui</name>
 	<url>http://ro.wikipedia.org</url>
 	<dependencies>
 		<dependency>
 			<groupId>org.wikipedia.ro.java</groupId>
 			<artifactId>wikiro-java-utils</artifactId>
-			<version>1.4</version>
+			<version>1.5</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
