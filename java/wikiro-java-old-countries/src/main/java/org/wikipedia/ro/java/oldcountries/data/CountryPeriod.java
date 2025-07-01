@@ -20,7 +20,6 @@ import static org.wikipedia.ro.java.oldcountries.data.HistoricCountry.UNGARIA_HO
 import static org.wikipedia.ro.java.oldcountries.data.HistoricCountry.UNGARIA_REGAT;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 import org.wikibase.WikibasePropertyFactory;
 import org.wikibase.data.Claim;
@@ -28,7 +27,6 @@ import org.wikibase.data.Entity;
 import org.wikibase.data.Item;
 import org.wikibase.data.Property;
 import org.wikibase.data.Rank;
-import org.wikibase.data.Snak;
 import org.wikibase.data.Time;
 
 public enum CountryPeriod

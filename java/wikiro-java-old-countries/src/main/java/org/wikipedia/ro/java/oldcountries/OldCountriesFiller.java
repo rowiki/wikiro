@@ -42,7 +42,6 @@ import org.wikipedia.ro.java.oldcountries.data.Operation;
 import org.wikipedia.ro.java.oldcountries.data.OperationType;
 import org.wikipedia.ro.java.oldcountries.data.Settlement;
 import org.wikipedia.ro.java.oldcountries.data.UAT;
-import org.wikipedia.ro.java.oldcountries.data.WbObject;
 import org.wikipedia.ro.utility.AbstractExecutable;
 
 import ch.qos.logback.classic.Level;
