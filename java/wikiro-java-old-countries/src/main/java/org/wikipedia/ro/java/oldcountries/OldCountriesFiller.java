@@ -13,7 +13,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,10 +37,12 @@ import org.wikipedia.ro.cache.WikidataEntitiesCache;
 import org.wikipedia.ro.java.oldcountries.data.CountryPeriod;
 import org.wikipedia.ro.java.oldcountries.data.HistoricCountry;
 import org.wikipedia.ro.java.oldcountries.data.HistoricalRegion;
+import org.wikipedia.ro.java.oldcountries.data.InceptedWbObject;
 import org.wikipedia.ro.java.oldcountries.data.Operation;
 import org.wikipedia.ro.java.oldcountries.data.OperationType;
 import org.wikipedia.ro.java.oldcountries.data.Settlement;
 import org.wikipedia.ro.java.oldcountries.data.UAT;
+import org.wikipedia.ro.java.oldcountries.data.WbObject;
 import org.wikipedia.ro.utility.AbstractExecutable;
 
 import ch.qos.logback.classic.Level;
@@ -159,143 +163,174 @@ public class OldCountriesFiller extends AbstractExecutable
                     commune.getSettlements().add(settlement);
                 }
             }
-            //System.out.printf("COMMUNE: %s (%s) COUNTY: %s%n", commune.getName(), commune.getWdId(), commune.getParent().getName());
+            System.out.printf("COMMUNE: %s (%s) COUNTY: %s%n", commune.getName(), commune.getWdId(), commune.getParent().getName());
+            setCountriesForEntity(commune, parent);
             for (Settlement settlement : commune.getSettlements())
             {
-               // System.out.printf("   SETTLEMENT: %s (%s)%n", settlement.getName(), settlement.getWdId());
+                System.out.printf("   SETTLEMENT: %s (%s)%n", settlement.getName(), settlement.getWdId());
                 //    figure out historical region
-                HistoricalRegion reg = findRegionForSettlement(settlement);
-                if (null == reg) {
-                    System.err.printf("No region found for settlement %s (%s)%n", settlement.getName(), settlement.getWdId());
-                    continue;
-                }
-                //System.out.printf("      REGION: %s%n", reg);
-                
-                //    get historical region countries
-                List<CountryPeriod> countries = reg.getCountries();
-                //    merge historical regions with wikidata
-                //System.out.println("      COUNTRIES:");
-                //countries.stream().map(CountryPeriod::toString).map("            "::concat).forEach(System.out::println);
-                
-                Entity settlementEntity = cache.get(settlement.getWdId());
-                Set<Claim> inceptionClaim = settlementEntity.getClaims(WikibasePropertyFactory.getWikibaseProperty("P571"));
-                if (null != inceptionClaim && !inceptionClaim.isEmpty())
-                {
-                    inceptionClaim.stream().map(Claim::getValue).filter(iv -> iv != WikibaseData.UNKNOWN_VALUE && iv != WikibaseData.NO_VALUE).findFirst().map(Time.class::cast)
-                        .ifPresent(inceptionValue -> {
-                            settlement.setInception(inceptionValue.getDate());
-                        });
-                }
-                List<Operation> ops = new ArrayList<>();
-                
-                Set<Claim> countryClaims = settlementEntity.getClaims(WikibasePropertyFactory.getWikibaseProperty("P17"));
-                for (Claim eachCountryClaim: countryClaims) {
-                    if (eachCountryClaim.getValue() == WikibaseData.UNKNOWN_VALUE || eachCountryClaim.getValue() == WikibaseData.NO_VALUE)
-                    {
-                        continue;
-                    }
-                    Set<Snak> startDates = eachCountryClaim.getQualifiers().get(WikibasePropertyFactory.getWikibaseProperty("P580"));
-                    Set<Snak> endDates = eachCountryClaim.getQualifiers().get(WikibasePropertyFactory.getWikibaseProperty("P582"));
-
-                    Time startDate = null;
-                    Time endDate = null;
-                    if (null != startDates && !startDates.isEmpty())
-                    {
-                        startDate = (Time) startDates.stream().findFirst().map(Snak::getData).orElse(null);
-                    }
-                    if (null != endDates && endDates.isEmpty())
-                    {
-                        endDate = (Time) endDates.stream().findFirst().map(Snak::getData).orElse(null);
-                    }
-                    Item countryItem = (Item) eachCountryClaim.getValue();
-                    Entity countryEntity = countryItem.getEnt();
-                    String countryId = StringUtils.prependIfMissing(countryEntity.getId(), "Q");
-
-                    if (countries.stream().map(CountryPeriod::getCountry).map(HistoricCountry::getqId).noneMatch(countryId::equals))
-                    {
-                        Operation op = new Operation();
-                        op.setClaimId(eachCountryClaim.getId());
-                        op.setOldClaim(eachCountryClaim);
-                        op.setNewClaim(null);
-                        op.setType(OperationType.DELETE);
-                        ops.add(op);
-                        continue;
-                    }
-                    
-                    //adjust or fill in current existing claims
-                    for (CountryPeriod countryPeriod : countries)
-                    {
-                        if (countryPeriod.getCountry().getqId().equals(countryId))
-                        {
-                            if (countryPeriod.getStartTime() != null && startDate != null
-                                && Math.abs(Duration.between(countryPeriod.getStartTime().getDate(), startDate.getDate()).get(ChronoUnit.YEARS)) <= YEARS_DIFF_TOLERANCE
-                                || null == startDate && null == endDate
-                                || null == startDate && countryPeriod.getStartTime() != null
-                                || null == endDate && countryPeriod.getEndTime() != null)
-                            {
-                                Claim newClaim = countryPeriod.toWikibaseClaim();
-                                newClaim.setId(eachCountryClaim.getId());
-                                
-                                Operation op = new Operation();
-                                op.setClaimId(eachCountryClaim.getId());
-                                op.setNewClaim(newClaim);
-                                op.setOldClaim(eachCountryClaim);
-                                op.setType(OperationType.UPDATE);
-                                ops.add(op);
-                                continue;
-                            }
-                        }
-                    }
-                }
-                //add claims that were not present
-                for (CountryPeriod countryPeriod: countries)
-                {
-                    if (ops.stream().map(Operation::getNewClaim).filter(Objects::nonNull).map(Claim::getValue).map(Item.class::cast).map(Item::getEnt).map(Entity::getId).noneMatch(countryPeriod.getCountry().getqId()::equals)
-                        && (null == settlement.getInception() || null == countryPeriod.getEndTime() || settlement.getInception().isBefore(countryPeriod.getEndTime().getDate())
-                            ))
-                    {
-                        Claim newClaim = countryPeriod.toWikibaseClaim();
-                        Operation op = new Operation();
-                        op.setClaimId(null);
-                        op.setOldClaim(null);
-                        op.setNewClaim(newClaim);
-                        op.setType(OperationType.CREATE);
-                        ops.add(op);
-                    }
-                }
-            
-                for (Operation op: ops)
-                {
-                    switch (op.getType())
-                    {
-                    case CREATE:
-                        System.out.printf("         CREATE: %s%n", op.getNewClaim());
-                        //dwiki.addClaim(settlement.getWdId(), op.getNewClaim());
-                        break;
-                    case UPDATE:
-                        System.out.printf("         UPDATE CLAIM: %s to %s%n", op.getOldClaim(), op.getNewClaim());
-                        //dwiki.editClaim(op.getNewClaim());
-                        break;
-                    case DELETE:
-                        System.out.printf("         DELETE CLAIM: %s%n", op.getOldClaim());
-                        //dwiki.removeClaim(op.getClaimId());
-                        break;
-                    }
-                }
+                setCountriesForEntity(settlement, commune);
             }
-            UAT uat = new UAT();
-            uat.setName(uatEntity.getLabels().get("ro"));
         }        
         // for each entity
     }
 
-
-    private HistoricalRegion findRegionForSettlement(Settlement settlement)
+    private void setCountriesForEntity(InceptedWbObject settlement, UAT uat) throws IOException, WikibaseException
     {
-        if (REGIONS_MAP.containsKey(settlement.getWdId())) {
-            return REGIONS_MAP.get(settlement.getWdId());
+        HistoricalRegion reg = findRegionByEntityWdIdAndUat(settlement.getWdId(), uat);
+        if (null == reg) {
+            System.err.printf("No region found for settlement %s (%s)%n", settlement.getName(), settlement.getWdId());
+            return;
         }
-        UAT uat = settlement.getUat();
+        //    get historical region countries
+        List<CountryPeriod> countries = reg.getCountries();
+        //    merge historical regions with wikidata
+        
+        Entity settlementEntity = cache.get(settlement.getWdId());
+        Set<Claim> inceptionClaim = settlementEntity.getClaims(WikibasePropertyFactory.getWikibaseProperty("P571"));
+        if (null != inceptionClaim && !inceptionClaim.isEmpty())
+        {
+            inceptionClaim.stream().map(Claim::getValue).filter(iv -> iv != WikibaseData.UNKNOWN_VALUE && iv != WikibaseData.NO_VALUE).findFirst().map(Time.class::cast)
+                .ifPresent(inceptionValue -> {
+                    settlement.setInception(inceptionValue.getDate());
+                });
+        }
+        List<Operation> ops = new ArrayList<>();
+        
+        Set<Claim> countryClaims = settlementEntity.getClaims(WikibasePropertyFactory.getWikibaseProperty("P17"));
+        for (Claim eachCountryClaim: countryClaims) {
+            if (eachCountryClaim.getValue() == WikibaseData.UNKNOWN_VALUE || eachCountryClaim.getValue() == WikibaseData.NO_VALUE)
+            {
+                continue;
+            }
+            Set<Snak> startDates = eachCountryClaim.getQualifiers().get(WikibasePropertyFactory.getWikibaseProperty("P580"));
+            Set<Snak> endDates = eachCountryClaim.getQualifiers().get(WikibasePropertyFactory.getWikibaseProperty("P582"));
+
+            Time endDate = null;
+            Time startDate = null;
+            if (null != startDates && !startDates.isEmpty())
+            {
+                startDate = (Time) startDates.stream().findFirst().map(Snak::getData).orElse(null);
+            }
+            if (null != endDates && endDates.isEmpty())
+            {
+                endDate = (Time) endDates.stream().findFirst().map(Snak::getData).orElse(null);
+            }
+            Item countryItem = (Item) eachCountryClaim.getValue();
+            Entity countryEntity = countryItem.getEnt();
+            String countryId = StringUtils.prependIfMissing(countryEntity.getId(), "Q");
+
+            if (countries.stream().map(CountryPeriod::getCountry).map(HistoricCountry::getqId).noneMatch(countryId::equals))
+            {
+                Operation op = new Operation();
+                op.setClaimId(eachCountryClaim.getId());
+                op.setOldClaim(eachCountryClaim);
+                op.setNewClaim(null);
+                op.setType(OperationType.DELETE);
+                ops.add(op);
+                continue;
+            }
+            
+            //adjust or fill in current existing claims
+            for (CountryPeriod countryPeriod : countries)
+            {
+                if (countryPeriod.getCountry().getqId().equals(countryId))
+                {
+                    Time periodStartTime = countryPeriod.getStartTime();
+                    if (null == startDate && periodStartTime != null)
+                    {
+                        Operation op = new Operation();
+                        op.setType(OperationType.ADD_QUALIFIER);
+                        op.setClaimId(eachCountryClaim.getId());
+                        op.setOldClaim(eachCountryClaim);
+                        op.setQualifierData(periodStartTime);
+                        op.setQualifierProperty(WikibasePropertyFactory.getWikibaseProperty("P580"));
+                    }
+                    if (null == endDate && countryPeriod.getEndTime() != null)
+                    {
+                        Operation op = new Operation();
+                        op.setType(OperationType.ADD_QUALIFIER);
+                        op.setClaimId(eachCountryClaim.getId());
+                        op.setOldClaim(eachCountryClaim);
+                        op.setQualifierData(countryPeriod.getEndTime());
+                        op.setQualifierProperty(WikibasePropertyFactory.getWikibaseProperty("P582"));
+                    }
+                    System.out.printf("---- computing duration between country period start %s to startDate %s%n", Optional.ofNullable(periodStartTime).map(Time::getLocalDateTime).orElse(null), Optional.ofNullable(startDate).map(Time::getLocalDateTime).orElse(null));
+                    
+                    if (periodStartTime != null && startDate != null
+                        && Math.abs(TimeUnit.SECONDS.toDays(Duration.between(periodStartTime.getLocalDateTime(), startDate.getLocalDateTime()).get(ChronoUnit.SECONDS))) <= YEARS_DIFF_TOLERANCE * 365
+                        || null == startDate && null == endDate
+                        || null == startDate && periodStartTime != null
+                        || null == endDate && countryPeriod.getEndTime() != null)
+                    {
+                        Claim newClaim = countryPeriod.toWikibaseClaim();
+                        newClaim.setId(eachCountryClaim.getId());
+                        
+                        Operation op = new Operation();
+                        op.setClaimId(eachCountryClaim.getId());
+                        op.setNewClaim(newClaim);
+                        op.setOldClaim(eachCountryClaim);
+                        op.setType(OperationType.REPLACE);
+                        ops.add(op);
+                        continue;
+                    }
+                }
+            }
+        }
+        //add claims that were not present
+        for (CountryPeriod countryPeriod: countries)
+        {
+            if (ops.stream().map(Operation::getNewClaim).filter(Objects::nonNull).map(Claim::getValue).map(Item.class::cast).map(Item::getEnt).map(Entity::getId).noneMatch(countryPeriod.getCountry().getqId()::equals)
+                && (null == settlement.getInception() || null == countryPeriod.getEndTime() || settlement.getInception().isBefore(countryPeriod.getEndTime().getDate())
+                    ))
+            {
+                Claim newClaim = countryPeriod.toWikibaseClaim();
+                Operation op = new Operation();
+                op.setClaimId(null);
+                op.setOldClaim(null);
+                op.setNewClaim(newClaim);
+                op.setType(OperationType.CREATE);
+                ops.add(op);
+            }
+        }
+         
+        for (Operation op: ops)
+        {
+            switch (op.getType())
+            {
+            case CREATE:
+                System.out.printf("         CREATE: %s with quals: %s%n", op.getNewClaim(), op.getNewClaim().getQualifiers());
+                String claimId = dwiki.addClaim(settlement.getWdId(), op.getNewClaim());
+                for (var eachQualEntry: op.getNewClaim().getQualifiers().entrySet()) {
+                    for (var eachQualSnak: eachQualEntry.getValue()) {
+                        dwiki.addQualifier(claimId, eachQualEntry.getKey().getId(), eachQualSnak.getData());
+                    }
+                }
+                break;
+            case REPLACE:
+                System.out.printf("         REPLACE CLAIM: %s with %s with quals %s%n", op.getOldClaim().getId(), op.getNewClaim(), op.getNewClaim().getQualifiers());
+                dwiki.removeClaim(op.getOldClaim().getId());
+                claimId = dwiki.addClaim(settlement.getWdId(), op.getNewClaim());
+                for (var eachQualEntry: op.getNewClaim().getQualifiers().entrySet()) {
+                    for (var eachQualSnak: eachQualEntry.getValue()) {
+                        dwiki.addQualifier(claimId, eachQualEntry.getKey().getId(), eachQualSnak.getData());
+                    }
+                }
+                break;
+            case DELETE:
+                System.out.printf("         DELETE CLAIM: %s%n", op.getOldClaim());
+                break;
+            case ADD_QUALIFIER:
+                System.out.printf("         EDIT CLAIM: %s ADD QUALIFIER:%s=%s%n", op.getOldClaim(), op.getQualifierProperty(), op.getQualifierData());
+            }
+        }
+    }
+
+    private HistoricalRegion findRegionByEntityWdIdAndUat(String wdId, UAT uat)
+    {
+        if (REGIONS_MAP.containsKey(wdId)) {
+            return REGIONS_MAP.get(wdId);
+        }
         do {
             if (REGIONS_MAP.containsKey(uat.getWdId()))
             {

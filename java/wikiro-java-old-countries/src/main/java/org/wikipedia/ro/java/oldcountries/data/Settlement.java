@@ -8,9 +8,8 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Settlement extends WbObject
+public class Settlement extends InceptedWbObject
 {
-    private LocalDate inception;
     private HistoricalRegion region;
     private List<CountryPeriod> countryPeriods;
     private UAT uat;

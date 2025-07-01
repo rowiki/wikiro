@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UAT extends WbObject
+public class UAT extends InceptedWbObject
 {
     private UAT parent;
     private UATType type;
