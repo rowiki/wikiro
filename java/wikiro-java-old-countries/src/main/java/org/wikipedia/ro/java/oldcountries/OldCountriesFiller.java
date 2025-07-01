@@ -318,9 +318,11 @@ public class OldCountriesFiller extends AbstractExecutable
                 break;
             case DELETE:
                 System.out.printf("         DELETE CLAIM: %s%n", op.getOldClaim());
+                dwiki.removeClaim(op.getOldClaim().getId());
                 break;
             case ADD_QUALIFIER:
                 System.out.printf("         EDIT CLAIM: %s ADD QUALIFIER:%s=%s%n", op.getOldClaim(), op.getQualifierProperty(), op.getQualifierData());
+                dwiki.addQualifier(op.getOldClaim().getId(), op.getQualifierProperty().getId(), op.getQualifierData());
             }
         }
     }
