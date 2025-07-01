@@ -325,6 +325,11 @@ public class OldCountriesFiller extends AbstractExecutable
                 dwiki.addQualifier(op.getOldClaim().getId(), op.getQualifierProperty().getId(), op.getQualifierData());
             }
         }
+        
+        Set<Claim> histRegClaims = settlementEntity.getClaims(WikibasePropertyFactory.getWikibaseProperty("P6885"));
+        if (null == histRegClaims || histRegClaims.isEmpty()) {
+            dwiki.addClaim(settlementEntity.getId(), reg.getHistoricalRegionClaim());
+        }
     }
 
     private HistoricalRegion findRegionByEntityWdIdAndUat(String wdId, UAT uat)
