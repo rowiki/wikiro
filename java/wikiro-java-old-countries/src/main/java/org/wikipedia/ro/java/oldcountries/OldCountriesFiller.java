@@ -127,6 +127,8 @@ public class OldCountriesFiller extends AbstractExecutable
     {
         
         List<Map<String, Object>> resultSet = dwiki.query(allUATsQuery);
+        String startCounty = "Alba";
+
         for (Map<String, Object> result : resultSet)
         {
             Item uatItem = (Item) result.get("item");
@@ -134,6 +136,9 @@ public class OldCountriesFiller extends AbstractExecutable
             
             Item countyItem = (Item) result.get("county");
             Entity countyEntity = cache.get(countyItem.getEnt());
+            if (null != startCounty && StringUtils.compare(startCounty, countyEntity.getLabels().get("ro")) > 0) {
+                continue;
+            }
             UAT parent = countyIndex.computeIfAbsent(countyEntity.getId(), countyId -> new UAT().setName(countyEntity.getLabels().get("ro")).setWdId(countyId));
             UAT commune = new UAT();
             commune.setWdId(uatEntity.getId());
@@ -163,24 +168,28 @@ public class OldCountriesFiller extends AbstractExecutable
                 }
             }
             System.out.printf("COMMUNE: %s (%s) COUNTY: %s%n", commune.getName(), commune.getWdId(), commune.getParent().getName());
-            setCountriesForEntity(commune, parent);
+            double editProb = 0.0d; //Math.random();
+            
+            setCountriesForEntity(commune, parent, editProb < 0.01);
             for (Settlement settlement : commune.getSettlements())
             {
                 System.out.printf("   SETTLEMENT: %s (%s)%n", settlement.getName(), settlement.getWdId());
                 //    figure out historical region
-                setCountriesForEntity(settlement, commune);
+                setCountriesForEntity(settlement, commune, editProb < 0.01);
             }
-        }        
+        }
         // for each entity
     }
 
-    private void setCountriesForEntity(InceptedWbObject settlement, UAT uat) throws IOException, WikibaseException
+    private void setCountriesForEntity(InceptedWbObject settlement, UAT uat, boolean go) throws IOException, WikibaseException
     {
+        System.out.printf("Executing for settlement %s, go: %s%n", settlement.getName(), String.valueOf(go));
         HistoricalRegion reg = findRegionByEntityWdIdAndUat(settlement.getWdId(), uat);
         if (null == reg) {
             System.err.printf("No region found for settlement %s (%s)%n", settlement.getName(), settlement.getWdId());
             return;
         }
+        System.out.printf("Region for settlement %s, is: %s%n", settlement.getName(), reg);
         //    get historical region countries
         List<CountryPeriod> countries = reg.getCountries();
         //    merge historical regions with wikidata
@@ -191,7 +200,7 @@ public class OldCountriesFiller extends AbstractExecutable
         {
             inceptionClaim.stream().map(Claim::getValue).filter(iv -> iv != WikibaseData.UNKNOWN_VALUE && iv != WikibaseData.NO_VALUE).findFirst().map(Time.class::cast)
                 .ifPresent(inceptionValue -> {
-                    settlement.setInception(inceptionValue.getDate());
+                    settlement.setInception(inceptionValue.getLocalDateTime().toLocalDate());
                 });
         }
         List<Operation> ops = new ArrayList<>();
@@ -260,7 +269,8 @@ public class OldCountriesFiller extends AbstractExecutable
                         && Math.abs(TimeUnit.SECONDS.toDays(Duration.between(periodStartTime.getLocalDateTime(), startDate.getLocalDateTime()).get(ChronoUnit.SECONDS))) <= YEARS_DIFF_TOLERANCE * 365
                         || null == startDate && null == endDate
                         || null == startDate && periodStartTime != null
-                        || null == endDate && countryPeriod.getEndTime() != null)
+                        || null == endDate && countryPeriod.getEndTime() != null
+                        || isToOverwrite(((Item) eachCountryClaim.getMainsnak().getData()).getEnt().getId()))
                     {
                         Claim newClaim = countryPeriod.toWikibaseClaim();
                         newClaim.setId(eachCountryClaim.getId());
@@ -279,6 +289,7 @@ public class OldCountriesFiller extends AbstractExecutable
         //add claims that were not present
         for (CountryPeriod countryPeriod: countries)
         {
+            log.info("Setting create statements for P17 in settlement {} incepted in {}", settlement.getName(), settlement.getInception());
             if (ops.stream().map(Operation::getNewClaim).filter(Objects::nonNull).map(Claim::getValue).map(Item.class::cast).map(Item::getEnt).map(Entity::getId).noneMatch(countryPeriod.getCountry().getqId()::equals)
                 && (null == settlement.getInception() || null == countryPeriod.getEndTime() || settlement.getInception().isBefore(countryPeriod.getEndTime().getDate())
                     ))
@@ -299,37 +310,72 @@ public class OldCountriesFiller extends AbstractExecutable
             {
             case CREATE:
                 System.out.printf("         CREATE: %s with quals: %s%n", op.getNewClaim(), op.getNewClaim().getQualifiers());
-                String claimId = dwiki.addClaim(settlement.getWdId(), op.getNewClaim());
-                for (var eachQualEntry: op.getNewClaim().getQualifiers().entrySet()) {
-                    for (var eachQualSnak: eachQualEntry.getValue()) {
-                        dwiki.addQualifier(claimId, eachQualEntry.getKey().getId(), eachQualSnak.getData());
+                if (go) {
+                    String claimId = dwiki.addClaim(settlement.getWdId(), op.getNewClaim());
+                    op.getNewClaim().setId(claimId);
+                    dwiki.editClaim(op.getNewClaim());
+                    /*
+                    for (var eachQualEntry : op.getNewClaim().getQualifiers().entrySet())
+                    {
+                        for (var eachQualSnak : eachQualEntry.getValue())
+                        {
+                            dwiki.addQualifier(claimId, eachQualEntry.getKey().getId(), eachQualSnak.getData());
+                        }
                     }
+                    */
                 }
                 break;
             case REPLACE:
                 System.out.printf("         REPLACE CLAIM: %s with %s with quals %s%n", op.getOldClaim().getId(), op.getNewClaim(), op.getNewClaim().getQualifiers());
-                dwiki.removeClaim(op.getOldClaim().getId());
-                claimId = dwiki.addClaim(settlement.getWdId(), op.getNewClaim());
-                for (var eachQualEntry: op.getNewClaim().getQualifiers().entrySet()) {
-                    for (var eachQualSnak: eachQualEntry.getValue()) {
-                        dwiki.addQualifier(claimId, eachQualEntry.getKey().getId(), eachQualSnak.getData());
+                if (go)
+                {
+                    //dwiki.removeClaim(op.getOldClaim().getId());
+                    //String claimId = dwiki.addClaim(settlement.getWdId(), op.getNewClaim());
+                    if (!Claim.contentEquals(op.getNewClaim(), op.getOldClaim())) {
+                        op.getNewClaim().setId(op.getOldClaim().getId());
+                        dwiki.editClaim(op.getNewClaim());
                     }
+                    else 
+                    {
+                        log.warn("Editing claim {} aborted: no change", op.getOldClaim().getId());
+                    }
+                    /*
+                    for (var eachQualEntry: op.getNewClaim().getQualifiers().entrySet()) {
+                        for (var eachQualSnak: eachQualEntry.getValue()) {
+                            dwiki.addQualifier(claimId, eachQualEntry.getKey().getId(), eachQualSnak.getData());
+                        }
+                    }
+                    */
                 }
                 break;
             case DELETE:
                 System.out.printf("         DELETE CLAIM: %s%n", op.getOldClaim());
-                dwiki.removeClaim(op.getOldClaim().getId());
+                if (go)
+                {
+                    dwiki.removeClaim(op.getOldClaim().getId());
+                }
                 break;
             case ADD_QUALIFIER:
                 System.out.printf("         EDIT CLAIM: %s ADD QUALIFIER:%s=%s%n", op.getOldClaim(), op.getQualifierProperty(), op.getQualifierData());
-                dwiki.addQualifier(op.getOldClaim().getId(), op.getQualifierProperty().getId(), op.getQualifierData());
+                if (go)
+                {
+                    dwiki.addQualifier(op.getOldClaim().getId(), op.getQualifierProperty().getId(), op.getQualifierData());
+                }
             }
         }
         
-        Set<Claim> histRegClaims = settlementEntity.getClaims(WikibasePropertyFactory.getWikibaseProperty("P6885"));
-        if (null == histRegClaims || histRegClaims.isEmpty()) {
-            dwiki.addClaim(settlementEntity.getId(), reg.getHistoricalRegionClaim());
+        if (go)
+        {
+            Set<Claim> histRegClaims = settlementEntity.getClaims(WikibasePropertyFactory.getWikibaseProperty("P6885"));
+            if (null == histRegClaims || histRegClaims.isEmpty()) {
+                dwiki.addClaim(settlementEntity.getId(), reg.getHistoricalRegionClaim());
+            }
         }
+    }
+
+    private boolean isToOverwrite(String id)
+    {
+        return StringUtils.equalsIgnoreCase(StringUtils.removeStart(id, "Q"), "218");
     }
 
     private HistoricalRegion findRegionByEntityWdIdAndUat(String wdId, UAT uat)
