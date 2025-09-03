@@ -127,23 +127,30 @@ public class OldCountriesFiller extends AbstractExecutable
     {
         
         List<Map<String, Object>> resultSet = dwiki.query(allUATsQuery);
-        String startCounty = "Alba";
+        String startCounty = "Buzău";
+        String startCommune = "Mihăilești";
+        String firstFoundCounty = null;
 
         for (Map<String, Object> result : resultSet)
         {
-            Item uatItem = (Item) result.get("item");
-            Entity uatEntity = cache.get(uatItem.getEnt());
             
             Item countyItem = (Item) result.get("county");
             Entity countyEntity = cache.get(countyItem.getEnt());
             if (null != startCounty && StringUtils.compare(startCounty, countyEntity.getLabels().get("ro")) > 0) {
                 continue;
+            } else if (null == firstFoundCounty) {
+                firstFoundCounty = countyEntity.getLabels().get("ro");
             }
+            Item uatItem = (Item) result.get("item");
+            Entity uatEntity = cache.get(uatItem.getEnt());
             UAT parent = countyIndex.computeIfAbsent(countyEntity.getId(), countyId -> new UAT().setName(countyEntity.getLabels().get("ro")).setWdId(countyId));
             UAT commune = new UAT();
             commune.setWdId(uatEntity.getId());
             commune.setName(uatEntity.getLabels().get("ro"));
             commune.setParent(parent);
+            if (firstFoundCounty.equalsIgnoreCase(countyEntity.getLabels().get("ro")) && StringUtils.compare(startCommune, commune.getName()) > 0) {
+                continue;
+            }
             
             Set<Claim> settlementsClaims = uatEntity.getClaims(WikibasePropertyFactory.getWikibaseProperty("P1383"));
             
@@ -167,13 +174,13 @@ public class OldCountriesFiller extends AbstractExecutable
                     commune.getSettlements().add(settlement);
                 }
             }
-            System.out.printf("COMMUNE: %s (%s) COUNTY: %s%n", commune.getName(), commune.getWdId(), commune.getParent().getName());
+            log.info("COMMUNE: {} ({}) COUNTY: {}", commune.getName(), commune.getWdId(), commune.getParent().getName());
             double editProb = 0.0d; //Math.random();
             
             setCountriesForEntity(commune, parent, editProb < 0.01);
             for (Settlement settlement : commune.getSettlements())
             {
-                System.out.printf("   SETTLEMENT: %s (%s)%n", settlement.getName(), settlement.getWdId());
+                log.info("SETTLEMENT: {} ({}), commune {}, county {}", settlement.getName(), settlement.getWdId(), commune.getName(), commune.getParent().getName());
                 //    figure out historical region
                 setCountriesForEntity(settlement, commune, editProb < 0.01);
             }
@@ -291,7 +298,7 @@ public class OldCountriesFiller extends AbstractExecutable
         {
             log.info("Setting create statements for P17 in settlement {} incepted in {}", settlement.getName(), settlement.getInception());
             if (ops.stream().map(Operation::getNewClaim).filter(Objects::nonNull).map(Claim::getValue).map(Item.class::cast).map(Item::getEnt).map(Entity::getId).noneMatch(countryPeriod.getCountry().getqId()::equals)
-                && (null == settlement.getInception() || null == countryPeriod.getEndTime() || settlement.getInception().isBefore(countryPeriod.getEndTime().getDate())
+                && (null == settlement.getInception() || null == countryPeriod.getEndTime() || settlement.getInception().isBefore(countryPeriod.getEndTime().getLocalDateTime().toLocalDate())
                     ))
             {
                 Claim newClaim = countryPeriod.toWikibaseClaim();
