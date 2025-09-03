@@ -17,7 +17,7 @@ import static org.wikipedia.ro.java.oldcountries.data.HistoricCountry.TRANSILVAN
 import static org.wikipedia.ro.java.oldcountries.data.HistoricCountry.UNGARIA_1REP;
 import static org.wikipedia.ro.java.oldcountries.data.HistoricCountry.UNGARIA_EST_REGAT;
 import static org.wikipedia.ro.java.oldcountries.data.HistoricCountry.UNGARIA_HORTHY;
-import static org.wikipedia.ro.java.oldcountries.data.HistoricCountry.UNGARIA_REGAT;
+import static org.wikipedia.ro.java.oldcountries.data.HistoricCountry.*;
 
 import java.time.LocalDate;
 
@@ -46,7 +46,10 @@ public enum CountryPeriod
         new Time(LocalDate.of(1718, 7, 21)), new Time(LocalDate.of(1739, 8, 21))), PRE_AUSTRIAN_OLTENIA(TARA_ROMANEASCA, null, new Time(LocalDate.of(1718, 7, 21))),
 
     POST_OTTOMAN_DOBROGEA(ROMANIA_PRINCIPAT, new Time(LocalDate.of(1878, 7, 1)).setCalendarModelToJulian(),
-        new Time(LocalDate.of(1881, 5, 10)).setCalendarModelToJulian()), OTTOMAN_DOBROGEA(IMP_OTOMAN, null, new Time(LocalDate.of(1878, 7, 1)).setCalendarModelToJulian()),
+        new Time(LocalDate.of(1881, 5, 10)).setCalendarModelToJulian()), OTTOMAN_DOBROGEA(IMP_OTOMAN, new Time(1411l), new Time(LocalDate.of(1878, 7, 1)).setCalendarModelToJulian()),
+        PRE_OTTOMAN_DOBROGEA(DOBRUJA_DESPOTATE, new Time(1356), new Time(1411)), BULG_EMP2_DOBRUJA(BULG_EMP2, new Time(1185l), new Time(1422l)),
+        BIZANTINE_DOBROGEA2(BIZANTINE_EMP, new Time(1018l), new Time(1185l)), BULG_EMP1_DOBRUJA(BULG_EMP1, new Time(681l), new Time(1018l)),
+        BIZANTINE_DOBROGEA1(BIZANTINE_EMP, new Time(330l), new Time(681l)), ROMAN_DOBROGEA(ROMAN_EMP, null, new Time(330l)),
 
     POST_AUT_HU_BUCOVINA(ROMANIA_REGAT, new Time(LocalDate.of(1918, 11, 28)), new Time(LocalDate.of(1947, 12, 30))), AUT_HU_BUCOVINA(AUSTRO_UNGARIA,
         new Time(LocalDate.of(1867, 3, 30)), new Time(LocalDate.of(1918, 11, 28))),

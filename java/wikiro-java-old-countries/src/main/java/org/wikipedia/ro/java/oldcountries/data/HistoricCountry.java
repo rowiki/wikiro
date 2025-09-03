@@ -19,7 +19,13 @@ public enum HistoricCountry
     UNGARIA_1REP("Q516160"),
     UNGARIA_EST_REGAT("Q625380"),
     TRANSILVANIA("Q655621"),
-    UNGARIA_REGAT("Q16056854");
+    UNGARIA_REGAT("Q16056854"),
+    DOBRUJA_DESPOTATE("Q542165"),
+    BULG_EMP2("Q420759"),
+    BIZANTINE_EMP("Q12544"),
+    BULG_EMP1("Q203817"),
+    ROMAN_EMP("Q2277");
+    
     
     private HistoricCountry(String qId)
     {
