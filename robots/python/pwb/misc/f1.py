@@ -55,10 +55,10 @@ class F1Articles(SingleSiteBot):
 
         text = self.article_template.format(nume=label,
                 start = idata['start'],
-                win = idata['win'],
-                pp = idata['pp'],
-                podium = idata['podium'],
-                points = idata['points'],
+                win = idata['win'] or "0",
+                pp = idata['pp'] or "niciuna",
+                podium = idata['podium'] or "0",
+                points = idata['points'] or "0",
                 sort = defaultsort,
                 an=an,
                 data=data)
@@ -66,6 +66,7 @@ class F1Articles(SingleSiteBot):
         text = text.replace("A câștigat {{plural|0|cursă|curse}}", "Nu a câștigat nicio cursă")
         text = text.replace("a terminat de 0 ori pe podium", "nu a terminat niciodată pe podium")
         text = text.replace("a terminat de 1 ori pe podium", "a terminat o singură dată pe podium")
+        text = text.replace("acumulând {{formatnum|0}} puncte", "neacumulând niciun punct")
         return text
 
     def get_defaultsort(self, claims, name) -> str:

@@ -67,7 +67,7 @@ import pywikibot
 from pywikibot import config as user
 from pywikibot import pagegenerators
 from pywikibot import textlib
-from pywikibot.tools import filter_unique
+from pywikibot.tools.itertools import filter_unique
 
 sys.path.append('wikiro/robots/python/pwb')
 import strainu_functions as strainu
