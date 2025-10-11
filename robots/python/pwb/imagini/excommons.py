@@ -6,22 +6,17 @@ along with the corresponding wikitext.
 
 Usage: python excommons.py -lang:commons -family:commons
 """
-import codecs
 import os
-from os import listdir
-from os.path import isfile, join
 import re
-import urllib.request
 
 import pywikibot
-from pywikibot import config as user
 from pywikibot import pagegenerators
 from pywikibot import textlib
 
 
 def save_fop_category():
-    delition_cat = "Category:Romanian_FOP_cases/pending"
-    cat_page =  pywikibot.Category(pywikibot.Site(), delition_cat)
+    deletion_cat = "Category:Romanian_FOP_cases/pending"
+    cat_page =  pywikibot.Category(pywikibot.Site(), deletion_cat)
     generator = pagegenerators.CategorizedPageGenerator(cat_page)
     for proposal_page in generator:
         for file_page in proposal_page.linkedPages(namespaces=6):
@@ -45,25 +40,26 @@ def evacuate_file(file_page, lang, family):
     local_site = pywikibot.Site(lang,family)
 
     local_file_page = pywikibot.FilePage(local_site, file_page.title())
-    if local_file_page.file_is_used == False:
+    if not local_file_page.file_is_used:
         pywikibot.output("File unused, continue...")
         return
-    if local_file_page.file_is_shared() == False:
+    if not local_file_page.file_is_shared():
         if local_file_page.latest_file_info.sha1 == file_page.latest_file_info.sha1:
             pywikibot.output("File is already downloaded, continue...")
         else:
-            pywikibot.warn("File name conflict: name already exists on local wiki, but with different contents")
+            pywikibot.warning("File name conflict: name already exists on local "
+                       "wiki, but with different contents")
         return
 
     local_text = file_page.get() + "\n{{FOP România}}"
-    builder = textlib.MultiTemplateMatchBuilder(rowiki)
+    builder = textlib.MultiTemplateMatchBuilder(pywikibot.Site('ro', 'wikipedia'))
     template_regex = builder.pattern("delete")
     local_text = re.sub(template_regex, "", local_text)
     print(local_text)
             
     tmp_file_name = f"{os.getcwd()}/{file_page.title(as_filename=True, with_ns=False)}"
     success = file_page.download(filename=tmp_file_name)
-    if success == False:
+    if not success:
         pywikibot.error(f"Error downloading {file_page.title()}")
         os.remove(tmp_file_name)
         return
