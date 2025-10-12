@@ -11,6 +11,7 @@ import pywikibot
 from pywikibot import i18n, config, pagegenerators, textlib
 from pywikibot.bot import SingleSiteBot
 
+from wikiro.robots.python.pwb.wikidata import wbType_to_string
 
 """This class contains utility functons for processing Wikidata items.
 """
@@ -39,7 +40,6 @@ class ItemUtils:
         """Obtain user response."""
         if self.always:
             return True
-        print(question)
 
         choice = pywikibot.input_choice(question,
                                         [('Yes', 'y'),
@@ -55,7 +55,35 @@ class ItemUtils:
 
         return True
 
-    def updateProperty(self, key, data, force=False):
+    def update_label(self, lang, value, force=False):
+        try:
+            answer = False
+            old_value = None
+            if lang in self.item.labels:
+                old_value = self.item.labels[lang]
+                if not force:
+                    pywikibot.output(u"Wikidata has label %s: %s" % (lang, str(oldValue)))
+                    return False
+            answer = answer or self.userConfirm(f"Update label in {lang} for {self.label} with value \"{value}\" (old value \"{old_value}\")?")
+            if answer:
+                self.item.labels[lang] = value
+                self.item.editLabels(self.item.labels)
+        except pywikibot.bot.QuitKeyboardInterrupt:
+            raise
+        except ValueError as e:
+            print(e)
+        except Exception as e:
+            print("key", lang)
+            print("data", value)
+            print("config", self.config)
+            pywikibot.error(u"Could not update " + self.label + " because of error " + str(e))
+            import traceback
+            traceback.print_exc()
+            return False
+
+ 
+
+    def updateProperty(self, key, data, force=False, qualifiers=None, sources=None):
         try:
             answer = False
             oldValue = set([])
@@ -63,16 +91,22 @@ class ItemUtils:
             if prop in self.item.claims:
                 # don't bother about those yet
                 oldValue = set(v.getTarget() for v in self.item.claims[prop])
-                if not force:
-                    pywikibot.output(u"Wikidata has %s: %s" % (key, str(oldValue)))
+                if force == False:
+                    #pywikibot.output(u"Wikidata has %s: %s" % (key, str(oldValue)))
                     return False
+            else:
+                print(list(self.item.claims.keys()))
             if not isinstance(data[key], list):
                 data[key] = [data[key]]
             claims = []
             descs = []
+            idx = 0
             for elem in data[key]:
                 if datatype == 'wikibase-item':
-                    val = pywikibot.ItemPage(pywikibot.Site(), elem)
+                    if not isinstance(elem, pywikibot.ItemPage):
+                        val = pywikibot.ItemPage(pywikibot.Site(), elem)
+                    else:
+                        val = elem
                     desc = val.title()
                 elif datatype == 'globe-coordinate':
                     val = pywikibot.Coordinate(lat=float(elem[0]),
@@ -93,21 +127,54 @@ class ItemUtils:
                     while val.isRedirectPage():
                         val = pywikibot.FilePage(val.getRedirectTarget())
                     desc = val.title()
+                elif datatype == 'quantity':
+                    val = elem[0]
+                    if val.find('.') == -1 and val.find(',') > -1:
+                        val = val.replace(',','.')
+                    val = pywikibot.WbQuantity(float(val), 
+                        pywikibot.ItemPage(pywikibot.Site(), elem[1]),
+                        site=self.item.repo)
+                    desc = str(elem[0])
                 else:
                     val = desc = elem
                 claim = pywikibot.Claim(self.item.repo, prop, datatype=datatype)
                 claim.setTarget(val)
                 if pref:
                     claim.setRank('preferred')
+                if qualifiers is not None and key in qualifiers:
+                    quals = qualifiers[key][idx]
+                    if not isinstance(quals, list):
+                        quals = [quals]
+                    for qual in quals:
+                        claim.addQualifier(qual)
+                else:
+                    print("quals", qualifiers)
+                if sources is not None and key in sources:
+                    srcs = sources[key][idx]
+                    if not isinstance(srcs, list):
+                        srcs = [srcs]
+                    claim.addSources(srcs)
+                else:
+                    print("srcs", sources)
                 claims.append(claim)
                 descs.append(desc)
+                idx += 1
 
-            cv = set(v.getTarget() for v in claims)
+            # overwrite
+            if force == True:
+                cv = set(v.getTarget() for v in claims)
+            # add
+            else:
+                cv = set(v.getTarget() for v in claims).union(oldValue)
             rmlist = list(oldValue.difference(cv))
             addlist = list(cv.difference(oldValue))
             if not len(addlist) and not len(rmlist):
+                if datatype == "wikibase-item":
+                    pywikibot.info(f"""Nothing to add or remove in {self.item.title()} for {key}:
+{','.join([wbType_to_string(c) for c in cv])}
+{','.join([wbType_to_string(c) for c in oldValue])}""")
                 return
-            answer = answer or self.userConfirm(f"Update element {self.label} with {key} \"{','.join(cv)}\" (old value \"{','.join(oldValue)}\")?")
+            answer = answer or self.userConfirm(f"Update element {self.label} with {key} \"{','.join([wbType_to_string(c) for c in cv])}\" (old value \"{','.join([wbType_to_string(c) for c in oldValue])}\")?")
             if answer:
                 if len(rmlist):
                     print("Removing", rmlist)
@@ -117,7 +184,7 @@ class ItemUtils:
                     print("Adding", addlist)
                     addclaims = [v for v in claims if v.getTarget() in addlist]
                     for claim in addclaims:
-                        self.item.addClaim(claim)
+                        self.item.addClaim(claim, asynchronous=False)
                 return True
         except pywikibot.bot.QuitKeyboardInterrupt:
             raise
@@ -142,10 +209,10 @@ class ItemUtils:
         sProp, _, _ = self.config["properties"][name]
         if sProp not in self.item.claims:
             if not canBeNull:
-                pywikibot.error(u"%s does not have a %s claim" % (self.label, name))
+                pywikibot.error(f"[[{self.item.title()}|{self.label}]] nu are o declarație '{name}'")
             return None
         elif len(self.item.claims[sProp]) > 1:
-            pywikibot.error(u"%s has several '%s' claims" % (self.label, name))
+            pywikibot.error(f"[[{self.item.title()}|{self.label}]] are mai multe declarații '{name}'")
             return None
         return self.item.claims[sProp][0].getTarget()
 
@@ -219,7 +286,7 @@ class WikidataBot(SingleSiteBot):
                 return item
             return page.data_item()
         except:
-            print(u"Could not obtain wikidata item for " + page.title())
+            pywikibot.error(u"Could not obtain wikidata item for " + page.title())
             return None
 
     def treat(self, page):
@@ -234,7 +301,7 @@ class WikidataBot(SingleSiteBot):
             return
         #if self._treat_counter == 25:
         #    self.quit()
-        print(page.title())
+        #print(page.title())
         
         #TODO:thread this
         for work in self.workers:
