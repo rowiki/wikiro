@@ -48,6 +48,8 @@ def wbType_to_string(target, link: bool=True) -> str:
             r = str(target.amount)
             if r.find('.') > -1:
                     r = r.replace('.',',')
+            if type(target._unit) == pywikibot.ItemPage:
+                    r = r + " " + target._unit.labels.get('ro') or target.unit.title()
             return r
         elif type(target) == pywikibot.WbTime:
             return "-".join(str(target.year), str(target.month), str(target.day))
