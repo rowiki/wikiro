@@ -35,6 +35,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.RuleBasedCollator;
@@ -60,6 +62,8 @@ import java.util.stream.Stream;
 
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.collections4.keyvalue.DefaultMapEntry;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -68,7 +72,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
-import org.wikibase.WikibasePropertyFactory;
+import static org.wikibase.WikibasePropertyFactory.getWikibaseProperty;
 import org.wikibase.data.Claim;
 import org.wikibase.data.CommonsMedia;
 import org.wikibase.data.Entity;
@@ -92,6 +96,8 @@ import org.wikipedia.ro.parser.ParseResult;
 import org.wikipedia.ro.parser.WikiTemplateParser;
 import org.wikipedia.ro.parser.WikiTextParser;
 import org.wikipedia.ro.utils.LinkUtils;
+import org.wikipedia.ro.villagesfixer.model.DMSCoordinates;
+import org.wikipedia.ro.villagesfixer.model.DMSValue;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
@@ -116,7 +122,7 @@ public class FixVillages {
     private static final String MUNTENIA_LINK = "[[Muntenia]]";
     private static final String MOLDOVA_LINK = "[[Moldova Occidentală|Moldova]]";
     private static final String BUCOVINA_LINK = "[[Bucovina]]";
-    
+
     private static final NumberFormat RO_NUMBER_FORMAT = NumberFormat.getInstance(new Locale("ro"));
 
     private static String collationDescription = "<  0 < 1 < 2 < 3 < 4 < 5 < 6 < 7 < 8 < 9 "
@@ -145,9 +151,11 @@ public class FixVillages {
     private static Pattern ifPattern = Pattern.compile("\\{\\{\\s*#if");
 
     private static Pattern DEMOGRAPHY_TEXT_PATTERN = Pattern.compile(
-        "<div style=\"float:(?:left|right)\">\\s*\\{\\{Pie chart(.*?)</div>\\s*Conform (.*)<ref name=\"insse_20\\d1_rel\">.*?</ref>", Pattern.DOTALL);
+        "<div style=\"float:(?:left|right)\">\\s*\\{\\{Pie chart(.*?)</div>\\s*Conform (.*)<ref name=\"insse_20\\d1_rel\">.*?</ref>",
+        Pattern.DOTALL);
     private static Pattern REF_PATTERN = Pattern.compile("(<ref[^>]*>)(.*?)</ref>");
-    private static final String INTRO_REF = "<ref name=\"lege_290_2018\">{{Cite act|url=https://legislatie.just.ro/Public/DetaliiDocument/208652|year=2018|type=Legea|number=290|legislature=Parlamentul României|chapter=Anexă: Denumirea și componența unităților administrativ-teritoriale pe județe}}</ref>";
+    private static final String INTRO_REF =
+        "<ref name=\"lege_290_2018\">{{Cite act|url=https://legislatie.just.ro/Public/DetaliiDocument/208652|year=2018|type=Legea|number=290|legislature=Parlamentul României|chapter=Anexă: Denumirea și componența unităților administrativ-teritoriale pe județe}}</ref>";
 
     private static String crtSettlementName = null, crtCommuneName = null, crtCountyName = null;
 
@@ -177,26 +185,26 @@ public class FixVillages {
             }
         }
 
-        Property captionProp = WikibasePropertyFactory.getWikibaseProperty("P2096");
-        Property imageProp = WikibasePropertyFactory.getWikibaseProperty("P18");
-        Property instanceOfProp = WikibasePropertyFactory.getWikibaseProperty("P31");
-        Property capitalProp = WikibasePropertyFactory.getWikibaseProperty("P36");
-        Property areaProp = WikibasePropertyFactory.getWikibaseProperty("P2046");
-        Property altProp = WikibasePropertyFactory.getWikibaseProperty("P2044");
-        Property mayorProp = WikibasePropertyFactory.getWikibaseProperty("P6");
-        Property webAddrProp = WikibasePropertyFactory.getWikibaseProperty("P856");
-        Property popProp = WikibasePropertyFactory.getWikibaseProperty("P1082");
-        Property pointInTimeProp = WikibasePropertyFactory.getWikibaseProperty("P585");
-        Property sirutaProp = WikibasePropertyFactory.getWikibaseProperty("P843");
-        Property nativeLabelProp = WikibasePropertyFactory.getWikibaseProperty("P1705");
-        Property regPlateProp = WikibasePropertyFactory.getWikibaseProperty("P395");
+        Property captionProp = getWikibaseProperty("P2096");
+        Property imageProp = getWikibaseProperty("P18");
+        Property instanceOfProp = getWikibaseProperty("P31");
+        Property capitalProp = getWikibaseProperty("P36");
+        Property areaProp = getWikibaseProperty("P2046");
+        Property altProp = getWikibaseProperty("P2044");
+        Property mayorProp = getWikibaseProperty("P6");
+        Property webAddrProp = getWikibaseProperty("P856");
+        Property popProp = getWikibaseProperty("P1082");
+        Property pointInTimeProp = getWikibaseProperty("P585");
+        Property sirutaProp = getWikibaseProperty("P843");
+        Property nativeLabelProp = getWikibaseProperty("P1705");
+        Property regPlateProp = getWikibaseProperty("P395");
 
         Entity meterEnt = new Entity("Q11573");
         Entity squareKmEnt = new Entity("Q712226");
 
         Set<Snak> roWpReference = new HashSet<>();
         Snak statedInRoWp = new Snak();
-        statedInRoWp.setProperty(WikibasePropertyFactory.getWikibaseProperty("P143"));
+        statedInRoWp.setProperty(getWikibaseProperty("P143"));
         statedInRoWp.setData(new Item(new Entity("Q199864")));
         roWpReference.add(statedInRoWp);
 
@@ -259,6 +267,7 @@ public class FixVillages {
                 if (!countyTouched && !eachCounty.equals(countyStart)) {
                     continue;
                 }
+                StringBuilder coordinatesStat = new StringBuilder();
                 crtCountyName = eachCounty;
                 LOG.info("Starting up county {}", crtCountyName);
 
@@ -393,11 +402,9 @@ public class FixVillages {
                         "\\[\\[Categor(y|(ie))\\:Orașe din județul " + replace(eachCounty, "-", "\\-") + ".*?\\]\\]");
 
                     for (Claim eachCompositeVillageClaim : compositeVillagesClaims) {
-                        communeChanged = processSettlement(rowiki, commonsWiki, dwiki, captionProp, imageProp,
-                            instanceOfProp, areaProp, altProp, popProp, pointInTimeProp, sirutaProp, nativeLabelProp,
-                            meterEnt, squareKmEnt, roWpReference, eachCounty, countyLinkPattern, communeWikibaseItem,
-                            communeName, communeType, communeChanged, villages, urbanSettlements, capitalEntity,
-                            communeLinkPattern, eachCompositeVillageClaim);
+                        communeChanged = processSettlement(rowiki, commonsWiki, dwiki, meterEnt, squareKmEnt,
+                            roWpReference, eachCounty, countyLinkPattern, communeWikibaseItem, communeName, communeType, communeChanged,
+                            villages, urbanSettlements, capitalEntity, communeLinkPattern, eachCompositeVillageClaim);
                         crtSettlementName = null;
                     }
 
@@ -460,6 +467,10 @@ public class FixVillages {
                         if (initialTemplate.getParamNames().contains("infodoc")) {
                             initialTemplate.setParam("infodoc", initialTemplate.getTemplateTitle());
                         }
+
+                        coordinatesStat.append('\n').append(crtCountyName).append(":").append(crtCommuneName);
+                        verifyCoordinates(initialTemplate, coordinatesStat);
+
                         for (String eachParam : initialTemplate.getParamNames()) {
                             String paramValue = initialTemplate.getParams().get(eachParam);
                             if (startsWithAny(eachParam, "comună", "oraș", "tip_subdiviziune", "nume_subdiviziune")
@@ -930,17 +941,24 @@ public class FixVillages {
                         pageText = rewritePoliticsAndAdministrationSection(pageText, countySymbol, communeName, communeType,
                             sirutaFromWd, communeWikibaseItem, wdcache);
 
-                        pageText =
-                            rewriteDemographySection(pageText, eachCounty, communeName, communeType, communeWikibaseItem, wdcache);
-                        
+                        pageText = rewriteDemographySection(pageText, eachCounty, communeName, communeType,
+                            communeWikibaseItem, wdcache);
+
                         pageText = rereferenceSocec(pageText);
 
                         communeNativeLabelClaims = communeWikibaseItem.getClaims(nativeLabelProp);
+                        LanguageString roNativeName = new LanguageString("ro", communeName);
                         if (null == communeNativeLabelClaims || communeNativeLabelClaims.isEmpty()) {
-                            LanguageString roNativeName = new LanguageString("ro", communeName);
                             Claim roNativeNameClaim = new Claim(nativeLabelProp, roNativeName);
                             dwiki.addClaim(communeWikibaseItem.getId(), roNativeNameClaim);
                         }
+                        Property officialNameProp = getWikibaseProperty("P1448");
+                        Set<Claim> communeOfficialNameClaims = communeWikibaseItem.getClaims(officialNameProp);
+                        if (SetUtils.emptyIfNull(communeOfficialNameClaims).isEmpty()) {
+                            Claim roOfficialNameClaim = new Claim(officialNameProp, roNativeName);
+                            dwiki.addClaim(communeWikibaseItem.getId(), roOfficialNameClaim);
+                        }
+                        
 
                         if (!StringUtils.equals(pageText, initialPageText)) {
                             rowiki.edit(rocommunearticle, pageText,
@@ -955,6 +973,10 @@ public class FixVillages {
                         Thread.sleep(1000l * sleeptime);
                     }
                 }
+                
+                Path coordsLogFile = Path.of(System.getProperty("java.io.tmpdir"), "wki", "coords-" + eachCounty.toLowerCase() + ".log.txt");
+                coordsLogFile.getParent().toFile().mkdirs();
+                Files.writeString(coordsLogFile, coordinatesStat.toString());
             }
         } catch (WikibaseException | LoginException | ParseException e) {
             LOG.error("Error filling in villages", e);
@@ -969,28 +991,158 @@ public class FixVillages {
         }
     }
 
+    private static void verifyCoordinates(WikiTemplate initialTemplate, StringBuilder coordinatesStat) {
+        Set<String> paramNames = initialTemplate.getParamNames();
+
+        if (paramNames.contains("latd") || paramNames.contains("lat_d")) {
+            List<WikiPart> latdParam =
+                Stream.of("latd", "lat_d").map(initialTemplate::getParam).filter(Objects::nonNull).findFirst().get();
+            coordinatesStat.append("\n    ");
+            String latStr = trim(extractStringFromPartList(latdParam));
+            DMSValue lat = null, lon = null;
+            float latf = 0f, lonf = 0f;
+            if (latStr.matches("\\d+")) {
+                lat = extractDMSValue(initialTemplate, latStr, List.of("latm", "lat_m"), List.of("lats", "lat_s"));
+            } else {
+                latf = Float.parseFloat(latStr);
+            }
+            List<WikiPart> longdParam =
+                Stream.of("longd", "long_d").map(initialTemplate::getParam).filter(Objects::nonNull).findFirst().get();
+            String longStr = trim(extractStringFromPartList(longdParam));
+            if (longStr.matches("\\d+")) {
+                lon = extractDMSValue(initialTemplate, longStr, List.of("longm", "long_m"), List.of("longs", "long_s"));
+            } else {
+                lonf = Float.parseFloat(longStr);
+            }
+            if (lon != null) {
+                coordinatesStat.append(lat + " N " + lon + " E");
+            } else {
+                coordinatesStat.append(latf + " N " + lonf + " E");
+            }
+        }
+        if (paramNames.contains("coordonate")) {
+            List<WikiPart> coordParam = initialTemplate.getParam("coordonate");
+            Optional<WikiTemplate> coordTmpl = coordParam.stream().filter(WikiTemplate.class::isInstance).map(WikiTemplate.class::cast).findFirst();
+            if (coordTmpl.isPresent()) {
+                if ("coor dms".equalsIgnoreCase(coordTmpl.get().getTemplateTitle())) {
+                    List<WikiPart> latdParam = coordTmpl.get().getParam("1");
+                    List<WikiPart> latmParam = coordTmpl.get().getParam("2");
+                    List<WikiPart> latsParam = coordTmpl.get().getParam("3");
+                    List<WikiPart> longdParam = coordTmpl.get().getParam("5");
+                    List<WikiPart> longmParam = coordTmpl.get().getParam("6");
+                    List<WikiPart> longsParam = coordTmpl.get().getParam("7");
+                    DMSValue lat = DMSValue.fromDMS(
+                        extractStringFromPartList(latdParam),
+                        extractStringFromPartList(latmParam),
+                        extractStringFromPartList(latsParam));
+                    DMSValue lon = DMSValue.fromDMS(
+                        extractStringFromPartList(longdParam),
+                        extractStringFromPartList(longmParam),
+                        extractStringFromPartList(longsParam));
+                    DMSCoordinates dms = new DMSCoordinates(lat, lon);
+                    coordinatesStat.append("\n    coor dms:").append(dms.getLatitude()).append(" N ").append(dms.getLongitude()).append(" E");
+                } else if ("coor dm".equalsIgnoreCase(coordTmpl.get().getTemplateTitle())) {
+                    List<WikiPart> latdParam = coordTmpl.get().getParam("1");
+                    List<WikiPart> latmParam = coordTmpl.get().getParam("2");
+                    List<WikiPart> longdParam = coordTmpl.get().getParam("4");
+                    List<WikiPart> longmParam = coordTmpl.get().getParam("5");
+                    DMSValue lat = DMSValue.fromDMS(
+                        extractStringFromPartList(latdParam),
+                        extractStringFromPartList(latmParam),
+                        null);
+                    DMSValue lon = DMSValue.fromDMS(
+                        extractStringFromPartList(longdParam),
+                        extractStringFromPartList(longmParam),
+                        null);
+                    DMSCoordinates dms = new DMSCoordinates(lat, lon);
+                    coordinatesStat.append("\n    coor dms:").append(dms.getLatitude()).append(" N ").append(dms.getLongitude()).append(" E");
+                } else if ("coord".equalsIgnoreCase(coordTmpl.get().getTemplateTitle())) {
+                    List<String> params = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8)
+                        .stream()
+                        .map(String::valueOf)
+                        .map(s -> coordTmpl.get().getParam(s))
+                        .map(FixVillages::extractStringFromPartList)
+                        .collect(Collectors.toList());
+                    if (Arrays.asList(3, 4, 5).stream().map(params::get).allMatch(StringUtils::isBlank))
+                    {
+                        float lat = 0f, lon = 0f;
+                        lat = Float.parseFloat(params.get(0));
+                        lon = Float.parseFloat(params.get(1));
+                        coordinatesStat.append("\n    coord:").append(lat).append(" N ").append(lon).append(" E");
+                    } else if (StringUtils.defaultString(params.get(3)).matches("(?i)[NS]")
+                        && StringUtils.defaultString(params.get(7)).matches("(?i)[EVW]")) {
+                        DMSValue lat = DMSValue.fromDMS(params.get(0), params.get(1), params.get(2));
+                        DMSValue lon = DMSValue.fromDMS(params.get(4), params.get(5), params.get(6));
+                        DMSCoordinates dms = new DMSCoordinates(lat, lon);
+                        coordinatesStat.append("\n    coord:").append(dms.getLatitude()).append(" N ").append(dms.getLongitude()).append(" E");
+                    } else if (StringUtils.defaultString(params.get(2)).matches("(?i)[NS]")
+                        && StringUtils.defaultString(params.get(5)).matches("(?i)[EVW]")) {
+                        DMSValue lat = DMSValue.fromDMS(params.get(0), params.get(1), null);
+                        DMSValue lon = DMSValue.fromDMS(params.get(3), params.get(4), null);
+                        DMSCoordinates dms = new DMSCoordinates(lat, lon);
+                        coordinatesStat.append("\n    coord:").append(dms.getLatitude()).append(" N ").append(dms.getLongitude()).append(" E");
+                    } else if (StringUtils.defaultString(params.get(1)).matches("(?i)[NS]")
+                        && StringUtils.defaultString(params.get(3)).matches("(?i)[EVW]")) {
+                        float lat = 0f, lon = 0f;
+                        lat = Float.parseFloat(params.get(0));
+                        lon = Float.parseFloat(params.get(2));
+                        coordinatesStat.append("\n    coord:").append(lat).append(" N ").append(lon).append(" E");
+                    }
+                } else {
+                    coordinatesStat.append("Format necunoscut: " + coordTmpl.get().getTemplateTitle());
+                }
+            }
+        }
+    }
+
+    private static DMSValue extractDMSValue(WikiTemplate initialTemplate, String degStr, List<String> minutesParams, List<String> secondsParams) {
+        DMSValue dms;
+        dms = new DMSValue();
+        dms.setDegrees(Integer.parseInt(degStr));
+        List<WikiPart> minutesParam = minutesParams.stream().map(initialTemplate::getParam).filter(Objects::nonNull).findFirst().orElse(Collections.emptyList());
+        String minutesStr = trim(extractStringFromPartList(minutesParam));
+        if (minutesStr.matches("\\d+")) {
+            dms.setMinutes(extractIntFromPartList(minutesParam));
+            List<WikiPart> secondsParam = secondsParams.stream().map(initialTemplate::getParam)
+                .filter(Objects::nonNull).findFirst().orElse(Collections.emptyList());
+            dms.setSeconds(extractIntFromPartList(secondsParam));
+        } else if (minutesStr.matches("\\d+\\.\\d+")){
+            float latmf = Float.parseFloat(minutesStr);
+            dms.setMinutes((int) latmf);
+            dms.setSeconds((int) (60 * (latmf - dms.getMinutes())));
+        }
+        return dms;
+    }
+
+    private static int extractIntFromPartList(List<WikiPart> parts) {
+        return (int) Float.parseFloat(defaultIfBlank(extractStringFromPartList(parts), "0"));
+    }
+
+    private static String extractStringFromPartList(List<WikiPart> parts) {
+        if (null == parts) return null;
+        return parts.stream().map(WikiPart::toString).collect(joining());
+    }
+
     static String rereferenceSocec(String pageText) {
         Matcher refMatcher = REF_PATTERN.matcher(pageText);
         StringBuilder replacedText = new StringBuilder();
         while (refMatcher.find()) {
             String refText = refMatcher.group(2);
             if (refText.trim().startsWith("{{")) {
-                
+
                 WikiTemplateParser templateParser = new WikiTemplateParser();
-                ParseResult<WikiTemplate> templateParseRes =
-                    templateParser.parse(refText);
+                ParseResult<WikiTemplate> templateParseRes = templateParser.parse(refText);
                 if (null == templateParseRes) {
                     LOG.warn("Could not parse template {}", refText);
                     continue;
                 }
                 WikiTemplate refTemplate = templateParseRes.getIdentifiedPart();
-                
+
                 List<WikiPart> urlParam = refTemplate.getParam("url");
                 if (null == urlParam) {
                     continue;
                 }
 
-                    
                 String url = urlParam.stream().map(Objects::toString).collect(Collectors.joining());
                 URI uri = null;
                 try {
@@ -1000,7 +1152,8 @@ public class FixVillages {
                     continue;
                 }
                 String host = uri.getHost();
-                String title = refTemplate.getParams().containsKey("titlu") ? refTemplate.getParams().get("titlu") : refTemplate.getParams().get("title");
+                String title = refTemplate.getParams().containsKey("titlu") ? refTemplate.getParams().get("titlu")
+                    : refTemplate.getParams().get("title");
                 if ("lcweb2.loc.gov".equals(host) && null != title && title.contains("Anuarul Socec")) {
                     String newTitle = StringUtils.substringBefore(title, "în Anuarul Socec");
                     String query = uri.getQuery();
@@ -1011,35 +1164,32 @@ public class FixVillages {
                     });
                     int recNum = Integer.parseInt(queryParams.get("recNum"));
                     int sp = recNum + 1;
-                    
-                    String part = sp < 1016 ? "4" : 
-                        sp < 1016 ? "5.1" : 
-                        sp < 1911 ? "5.2" :
-                            "5.3";
-                    int bookPage = sp < 848 ? recNum - 7 :
-                        sp < 1016 ? recNum - 849 : 
-                        sp < 1911 ? recNum - 1015 :
-                            recNum - 1910;
-                    
+
+                    String part = sp < 1016 ? "4" : sp < 1016 ? "5.1" : sp < 1911 ? "5.2" : "5.3";
+                    int bookPage =
+                        sp < 848 ? recNum - 7 : sp < 1016 ? recNum - 849 : sp < 1911 ? recNum - 1015 : recNum - 1910;
+
                     WikiTemplate newTemplate = new WikiTemplate();
                     newTemplate.setTemplateTitle("Citat Anuarul Socec 1925");
                     newTemplate.setParam("titlu", StringUtils.trim(newTitle));
                     newTemplate.setParam("pagină-link", String.valueOf(sp));
                     newTemplate.setParam("pagină", String.valueOf(bookPage));
                     newTemplate.setParam("volum", part);
-                    
+
                     String newRefText = refMatcher.group(1) + newTemplate.toString() + "</ref>";
                     refMatcher.appendReplacement(replacedText, Matcher.quoteReplacement(newRefText));
                 }
             }
         }
         refMatcher.appendTail(replacedText);
-            
+
         return replacedText.toString();
     }
 
     private static String rewriteDemographySection(String pageText, String countySymbol, String communeName,
-                                                   CommuneType communeType, Entity communeWikibaseItem, WikidataEntitiesCache wdcache) throws IOException, WikibaseException {
+                                                   CommuneType communeType, Entity communeWikibaseItem,
+                                                   WikidataEntitiesCache wdcache)
+        throws IOException, WikibaseException {
         MongoClient client = MongoClients.create("mongodb://localhost:57017");
         MongoDatabase db = client.getDatabase("recensamant2021");
         MongoCollection<BasicDBObject> ethnCollection = db.getCollection("etnie", BasicDBObject.class);
@@ -1059,9 +1209,11 @@ public class FixVillages {
         BasicDBObject rellData = rellDataIter.first();
         String pieChartEthn = buildPieChart(communeName, communeType, ethnData, DemoStatType.ETNIC, null);
         String pieChartRelg = buildPieChart(communeName, communeType, rellData, DemoStatType.RELIGIOS, "clear: none;");
-        String demogText = buildDemographyText(communeName, communeType, ethnData, rellData, communeWikibaseItem, countySymbol, wdcache);
+        String demogText =
+            buildDemographyText(communeName, communeType, ethnData, rellData, communeWikibaseItem, countySymbol, wdcache);
 
-        String chartsText = String.format("<div style=\"float:left\">%s%s%n</div>%n%s", pieChartEthn, pieChartRelg, demogText);
+        String chartsText =
+            String.format("<div style=\"float:left\">%s%s%n</div>%n%s", pieChartEthn, pieChartRelg, demogText);
 
         StringBuilder demoBuilder = new StringBuilder();
         Matcher demoMatcher = DEMOGRAPHY_TEXT_PATTERN.matcher(pageText);
@@ -1069,21 +1221,24 @@ public class FixVillages {
             demoMatcher.appendReplacement(demoBuilder, Matcher.quoteReplacement(chartsText));
         }
         demoMatcher.appendTail(demoBuilder);
-        
+
         pageText = demoBuilder.toString();
-        
+
         return pageText;
     }
 
     private static String buildDemographyText(String communeName, CommuneType communeType, BasicDBObject ethnData,
-                                              BasicDBObject rellData, Entity communeWikibaseItem, String countySymbol, WikidataEntitiesCache wdcache) {
+                                              BasicDBObject rellData, Entity communeWikibaseItem, String countySymbol,
+                                              WikidataEntitiesCache wdcache) {
         String demogIntro = buildDemographyIntro(communeName, communeType, ethnData.getLong("total"), communeWikibaseItem);
         String demogEthnPhrase = StringUtils.capitalize(buildPhrase(ethnData, DemoStatType.ETNIC, false, wdcache));
-        String demogRellPhrase = "Din punct de vedere confesional, " + buildPhrase(rellData, DemoStatType.RELIGIOS, !ethnData.containsKey("ruși lipoveni"), wdcache);
+        String demogRellPhrase = "Din punct de vedere confesional, "
+            + buildPhrase(rellData, DemoStatType.RELIGIOS, !ethnData.containsKey("ruși lipoveni"), wdcache);
         return String.join(" ", demogIntro, demogEthnPhrase, demogRellPhrase);
     }
 
-    private static String buildPhrase(BasicDBObject ethnData, DemoStatType demoType, boolean forceRo, WikidataEntitiesCache wdcache) {
+    private static String buildPhrase(BasicDBObject ethnData, DemoStatType demoType, boolean forceRo,
+                                      WikidataEntitiesCache wdcache) {
         TreeSet<Entry<String, Integer>> sortedElems = new TreeSet<>(new DemoEntryComparator());
         ethnData.computeIfAbsent("altele", (k) -> Integer.valueOf(0));
         for (Entry<String, Object> ent : ethnData.entrySet()) {
@@ -1106,53 +1261,47 @@ public class FixVillages {
             } else {
                 phraseBuilder.append("cei mai mulți locuitori");
             }
-            phraseBuilder.append(" sunt ")
-                .append(linkToGroup)
-                .append(" (")
-                .append(RO_NUMBER_FORMAT.format(entry.getValue() / totPop.doubleValue() * 100.))
-                .append("%)");
+            phraseBuilder.append(" sunt ").append(linkToGroup).append(" (")
+                .append(RO_NUMBER_FORMAT.format(entry.getValue() / totPop.doubleValue() * 100.)).append("%)");
             if (1 == sortedElems.stream().skip(1).filter(e -> e.getValue() * 100 > totPop.longValue()).count()) {
                 Entry<String, Integer> singleMinority = sortedElems.stream().skip(1).findFirst().get();
                 DemographicGroup singleMinorityDemGroup = DemographicGroup.fromId(singleMinority.getKey());
                 String linkToSingleMinority = createLinkToDemGroup(wdcache, singleMinorityDemGroup);
-                phraseBuilder.append(", cu o minoritate de ")
-                    .append(linkToSingleMinority)
-                    .append(" (")
-                    .append(RO_NUMBER_FORMAT.format(singleMinority.getValue() / totPop.doubleValue() * 100.))
-                    .append("%)");
+                phraseBuilder.append(", cu o minoritate de ").append(linkToSingleMinority).append(" (")
+                    .append(RO_NUMBER_FORMAT.format(singleMinority.getValue() / totPop.doubleValue() * 100.)).append("%)");
             } else if (1 < sortedElems.stream().skip(1).filter(e -> e.getValue() * 100 > totPop.longValue()).count()) {
                 phraseBuilder.append(", cu minorități de ");
-                List<String> minoritiesDescriptions = sortedElems.stream().skip(1).filter(e -> e.getValue() * 100 > totPop.longValue())
-                    .map(e -> String.format("%s (%s%%)", createLinkToDemGroup(wdcache, DemographicGroup.fromId(e.getKey())), RO_NUMBER_FORMAT.format(e.getValue() / totPop.doubleValue() * 100.)))
-                    .toList();
-                
-                phraseBuilder.append(minoritiesDescriptions.stream().limit(minoritiesDescriptions.size() - 1).collect(Collectors.joining(", ")))
-                    .append(" și ")
-                    .append(minoritiesDescriptions.get(minoritiesDescriptions.size() - 1));
+                List<String> minoritiesDescriptions =
+                    sortedElems.stream().skip(1).filter(e -> e.getValue() * 100 > totPop.longValue())
+                        .map(e -> String.format("%s (%s%%)",
+                            createLinkToDemGroup(wdcache, DemographicGroup.fromId(e.getKey())),
+                            RO_NUMBER_FORMAT.format(e.getValue() / totPop.doubleValue() * 100.)))
+                        .toList();
+
+                phraseBuilder
+                    .append(minoritiesDescriptions.stream().limit(minoritiesDescriptions.size() - 1)
+                        .collect(Collectors.joining(", ")))
+                    .append(" și ").append(minoritiesDescriptions.get(minoritiesDescriptions.size() - 1));
             }
             if (null != unknPop) {
-            phraseBuilder.append(", iar pentru ")
-                .append(RO_NUMBER_FORMAT.format(unknPop.doubleValue() / totPop.doubleValue() * 100.))
-                .append("% nu se cunoaște apartenența ")
-                .append(demoType.getAdjective());
+                phraseBuilder.append(", iar pentru ")
+                    .append(RO_NUMBER_FORMAT.format(unknPop.doubleValue() / totPop.doubleValue() * 100.))
+                    .append("% nu se cunoaște apartenența ").append(demoType.getAdjective());
             }
-            phraseBuilder
-                .append(".<ref name=\"insse_2021_")
-                .append(demoType.getSingular().substring(0, 3))
-                .append("\">{{Citat recensământ România 2021|tabel=")
-                .append(demoType.getTabel())
-                .append("}}</ref>");
+            phraseBuilder.append(".<ref name=\"insse_2021_").append(demoType.getSingular().substring(0, 3))
+                .append("\">{{Citat recensământ România 2021|tabel=").append(demoType.getTabel()).append("}}</ref>");
             return phraseBuilder.toString();
         }
         return String.format("Nu există date despre %s." + demoType.getSingular());
     }
 
-    private static String createLinkToDemGroup(WikidataEntitiesCache wdcache, DemographicGroup demGroup){
+    private static String createLinkToDemGroup(WikidataEntitiesCache wdcache, DemographicGroup demGroup) {
         try {
             String linkToGroup;
             Entity demGroupEnt = wdcache.get(demGroup.getqId());
             if (Optional.ofNullable(demGroupEnt).map(Entity::getSitelinks).map(m -> m.containsKey("rowiki")).orElse(false)) {
-                linkToGroup = new WikiLink(demGroupEnt.getSitelinks().get("rowiki").getPageName(), demGroup.getId()).toString();
+                linkToGroup =
+                    new WikiLink(demGroupEnt.getSitelinks().get("rowiki").getPageName(), demGroup.getId()).toString();
             } else {
                 linkToGroup = new WikiTemplate().setTemplateTitle("Ill-wd").setParam("1", demGroup.getqId())
                     .setParam("3", demGroup.getId()).toString();
@@ -1167,21 +1316,27 @@ public class FixVillages {
     private static String buildDemographyIntro(String communeName, CommuneType communeType, Long totalPopulation,
                                                Entity communeWikibaseItem) {
         long population2011 = -1l;
-        Set<Claim> popClaims = communeWikibaseItem.getClaims(WikibasePropertyFactory.getWikibaseProperty("P1082"));
+        Set<Claim> popClaims = communeWikibaseItem.getClaims(getWikibaseProperty("P1082"));
         for (Claim eachPopClaim : popClaims) {
-            Map<Property, Set<Snak>> qualifiers = ObjectUtils.defaultIfNull(eachPopClaim.getQualifiers(), Collections.emptyMap());
-            Set<Snak> pointsInTime = qualifiers.get(WikibasePropertyFactory.getWikibaseProperty("P585"));
-            if (null != pointsInTime && pointsInTime.stream().map(Snak::getData).filter(Objects::nonNull).filter(d -> d instanceof Time).map(Time.class::cast).map(Time::getYear).anyMatch(y -> y == 2011)) {
+            Map<Property, Set<Snak>> qualifiers =
+                ObjectUtils.defaultIfNull(eachPopClaim.getQualifiers(), Collections.emptyMap());
+            Set<Snak> pointsInTime = qualifiers.get(getWikibaseProperty("P585"));
+            if (null != pointsInTime && pointsInTime.stream().map(Snak::getData).filter(Objects::nonNull)
+                .filter(d -> d instanceof Time).map(Time.class::cast).map(Time::getYear).anyMatch(y -> y == 2011)) {
                 population2011 = Math.round(((Quantity) eachPopClaim.getMainsnak().getData()).getAmount());
             }
         }
-        
-        String firstPart = String.format("Conform [[Recensământul Populației și Locuințelor 2021 (România)|recensământului efectuat în 2021]], populația %s %s se ridică la %s", communeType.getTypeNameGen(), communeName, substPluralRo(totalPopulation, "locuitor", "locuitori", "de locuitori"));
+
+        String firstPart = String.format(
+            "Conform [[Recensământul Populației și Locuințelor 2021 (România)|recensământului efectuat în 2021]], populația %s %s se ridică la %s",
+            communeType.getTypeNameGen(), communeName,
+            substPluralRo(totalPopulation, "locuitor", "locuitori", "de locuitori"));
         String comparison = (totalPopulation == population2011 ? ", la fel ca la "
-                                                : (totalPopulation > population2011 ? ", în creștere față de ": ", în scădere față de "))
+            : (totalPopulation > population2011 ? ", în creștere față de " : ", în scădere față de "))
             + "[[Recensământul populației din 2011 (România)|recensământul anterior din 2011]]";
         if (totalPopulation != population2011) {
-            comparison += String.format(", când fusese%s înregistra%s %s", population2011 == 1 ? "" : "ră", population2011 == 1 ? "t" : "ți", substPluralRo(population2011, "locuitor", "locuitori", "de locuitori"));
+            comparison += String.format(", când fusese%s înregistra%s %s", population2011 == 1 ? "" : "ră",
+                population2011 == 1 ? "t" : "ți", substPluralRo(population2011, "locuitor", "locuitori", "de locuitori"));
         }
         comparison += ".<ref name=\"insse_2011_nat\">{{Citat recensământ România 2011|tabel=8}}</ref>";
         return firstPart + comparison;
@@ -1191,9 +1346,10 @@ public class FixVillages {
         if (number == 1) {
             return "1 " + singular;
         }
-        return String.format("%s %s", RO_NUMBER_FORMAT.format(number), number % 100 > 0 && number % 100 < 20 ? plural: qualifiedPlural); 
+        return String.format("%s %s", RO_NUMBER_FORMAT.format(number),
+            number % 100 > 0 && number % 100 < 20 ? plural : qualifiedPlural);
     }
-    
+
     private static String buildPieChart(String communeName, CommuneType communeType, BasicDBObject ethnData,
                                         DemoStatType demoType, String style) {
         Integer totalPop = ethnData.getInt("total");
@@ -1206,7 +1362,7 @@ public class FixVillages {
         if (StringUtils.isNotBlank(style)) {
             ethnChartBuilder.append("\n|style=").append(style);
         }
-        
+
         TreeSet<Entry<String, Integer>> sortedElems = new TreeSet<>(new DemoEntryComparator());
         ethnData.computeIfAbsent("altele", (k) -> Integer.valueOf(0));
         for (Entry<String, Object> ent : ethnData.entrySet()) {
@@ -1218,16 +1374,16 @@ public class FixVillages {
 
         Map<String, Double> printableList = new HashMap<>();
         double totalPrintablePercentage = 0.0;
-        for (Map.Entry<String, Integer> ent : sortedElems)
-        {
+        for (Map.Entry<String, Integer> ent : sortedElems) {
             double percentage = 100.0 * ent.getValue() / totalPop;
-            if (percentage >= 1.0 && !"altele".equalsIgnoreCase(ent.getKey()) || "necunoscută".equalsIgnoreCase(ent.getKey())) {
+            if (percentage >= 1.0 && !"altele".equalsIgnoreCase(ent.getKey())
+                || "necunoscută".equalsIgnoreCase(ent.getKey())) {
                 printableList.put(ent.getKey(), percentage);
                 totalPrintablePercentage += percentage;
             }
         }
         printableList.put("altele", 100.0 - totalPrintablePercentage);
-        
+
         for (Map.Entry<String, Integer> ent : sortedElems) {
             if (!printableList.containsKey(ent.getKey())) {
                 continue;
@@ -1246,8 +1402,7 @@ public class FixVillages {
                 key = "Alte " + demoType.getPlural();
             }
             ethnChartBuilder.append("\n|label").append(rowIdx).append('=').append(key).append("|value").append(rowIdx)
-                .append('=').append(nf.format(percentage)).append("|color").append(rowIdx).append('=')
-                .append(color);
+                .append('=').append(nf.format(percentage)).append("|color").append(rowIdx).append('=').append(color);
             rowIdx++;
         }
         ethnChartBuilder.append("}}");
@@ -1272,15 +1427,12 @@ public class FixVillages {
         });
     }
 
-    private static boolean processSettlement(Wiki rowiki, Wiki commonsWiki, Wikibase dwiki, Property captionProp,
-                                             Property imageProp, Property instanceOfProp, Property areaProp,
-                                             Property altProp, Property popProp, Property pointInTimeProp,
-                                             Property sirutaProp, Property nativeLabelProp, Entity meterEnt,
+    private static boolean processSettlement(Wiki rowiki, Wiki commonsWiki, Wikibase dwiki, Entity meterEnt,
                                              Entity squareKmEnt, Set<Snak> roWpReference, String eachCounty,
                                              Pattern countyLinkPattern, Entity communeWikibaseItem, String communeName,
                                              CommuneType communeType, boolean communeChanged, Map<String, String> villages,
-                                             Map<String, String> urbanSettlements, Entity capitalEntity,
-                                             Pattern communeLinkPattern, Claim eachCompositeVillageClaim)
+                                             Map<String, String> urbanSettlements, Entity capitalEntity, Pattern communeLinkPattern,
+                                             Claim eachCompositeVillageClaim)
         throws IOException, WikibaseException, ParseException, UnsupportedEncodingException, LoginException,
         InterruptedException {
         Item compositeVillage = (Item) eachCompositeVillageClaim.getMainsnak().getData();
@@ -1288,7 +1440,7 @@ public class FixVillages {
         Entity villageEntity = dwiki.getWikibaseItemById(compositeVillage.getEnt());
 
         String villageType = "sat";
-        Set<Claim> villageInstanceOfClaims = villageEntity.getClaims().get(instanceOfProp);
+        Set<Claim> villageInstanceOfClaims = villageEntity.getClaims().get(getWikibaseProperty("P31"));
         for (Claim eachVillageInstanceOfClaim : villageInstanceOfClaims) {
             Item villageTypeItem = (Item) eachVillageInstanceOfClaim.getMainsnak().getData();
             if (removeStart(villageTypeItem.getEnt().getId(), "Q").equals("15921247")) {
@@ -1331,8 +1483,15 @@ public class FixVillages {
             String rovillagearticle = villageEntity.getSitelinks().get("rowiki").getPageName();
             mapToAdd.put(villageName, rovillagearticle);
 
+            Optional<Map<String, Object>> pageInfo = rowiki.getPageInfo(List.of(rovillagearticle)).stream().findFirst();
+            if (!pageInfo.isEmpty() && (Boolean) pageInfo.get().get("redirect")) {
+                LOG.info("Page {} is a redirect, skipping", rovillagearticle);
+                return communeChanged;
+            }
+            
             String pageText = rowiki.getPageText(List.of(rovillagearticle)).stream().findFirst().orElse("");
             String initialPageText = pageText;
+            
             pageText = commentedEol.matcher(pageText).replaceAll("");
 
             WikiTemplate initialTemplate = null;
@@ -1367,10 +1526,10 @@ public class FixVillages {
                 initialTemplate.removeParam("tip_asezare");
                 initialTemplate.removeParam("reședința");
                 if (null != villageEntity.getClaims()) {
-                    Set<Claim> popClaims = villageEntity.getClaims().get(popProp);
+                    Set<Claim> popClaims = villageEntity.getClaims().get(getWikibaseProperty("P1082"));
                     if (null != popClaims && 0 < popClaims.size()) {
                         for (Claim eachPopClaim : popClaims) {
-                            Set<Snak> pointsInTime = eachPopClaim.getQualifiers().get(pointInTimeProp);
+                            Set<Snak> pointsInTime = eachPopClaim.getQualifiers().get(getWikibaseProperty("P585"));
                             if (null != pointsInTime && 0 < pointsInTime.size()) {
                                 for (Snak eachPointInTimeSnak : pointsInTime) {
                                     Time pointInTimeData = (Time) eachPointInTimeSnak.getData();
@@ -1385,7 +1544,7 @@ public class FixVillages {
                         }
                     }
 
-                    Set<Claim> villageNativeLabelClaims = villageEntity.getClaims(nativeLabelProp);
+                    Set<Claim> villageNativeLabelClaims = villageEntity.getClaims(getWikibaseProperty("P1705"));
                     if (null != villageNativeLabelClaims && !villageNativeLabelClaims.isEmpty()) {
                         List<WikiPart> nativeNameInTemplateParts = initialTemplate.getParam("nume_nativ");
                         if (null != nativeNameInTemplateParts && !nativeNameInTemplateParts.isEmpty()) {
@@ -1412,7 +1571,7 @@ public class FixVillages {
                         }
                     }
 
-                    Set<Claim> sirutaClaims = villageEntity.getClaims().get(sirutaProp);
+                    Set<Claim> sirutaClaims = villageEntity.getClaims().get(getWikibaseProperty("P843"));
                     if (null != sirutaClaims && !sirutaClaims.isEmpty()) {
                         for (Claim eachSirutaClaim : sirutaClaims) {
                             if ("statement".equals(eachSirutaClaim.getType())) {
@@ -1449,6 +1608,7 @@ public class FixVillages {
                         }
                     }
                     if (startsWith(eachParam, "suprafață_totală_km2")) {
+                        Property areaProp = getWikibaseProperty("P2046");
                         if (isNotBlank(paramValue) && (!villageEntity.getClaims().containsKey(areaProp)
                             || null == villageEntity.getClaims().get(areaProp))) {
                             Claim areaClaim = extractWdAreaDataFromParam(areaProp, squareKmEnt, paramValue, roWpReference);
@@ -1462,6 +1622,7 @@ public class FixVillages {
                         initialTemplate.removeParam(eachParam);
                     }
                     if (StringUtils.equals(eachParam, "altitudine")) {
+                        Property altProp = getWikibaseProperty("P2044");
                         if (isNotBlank(paramValue) && (!villageEntity.getClaims().containsKey(altProp)
                             || null == villageEntity.getClaims().get(altProp))) {
                             Claim altClaim = extractWdAltitudeDataFromParam(altProp, meterEnt, paramValue, roWpReference);
@@ -1504,6 +1665,8 @@ public class FixVillages {
                 }
             }
             String villageImage = initialTemplate.getParams().get("imagine");
+            Property imageWikidataProperty = getWikibaseProperty("P18");
+            Property captionProp = getWikibaseProperty("P2096");
             if (isNotEmpty(villageImage)) {
                 Matcher imageMatcher = imageInInfoboxPattern.matcher(villageImage);
                 if (contains(villageImage, "{{#property:P18}}")) {
@@ -1511,7 +1674,6 @@ public class FixVillages {
                 } else if (imageMatcher.matches()) {
                     String imageName = imageMatcher.group(8);
                     imageName = URLDecoder.decode(imageName, "UTF-8");
-                    Property imageWikidataProperty = new Property("P18");
                     if (commonsWiki.exists(List.of("File:" + imageName))[0]) {
                         String imageClaimId = null;
                         boolean captionQualifierFound = false;
@@ -1556,7 +1718,7 @@ public class FixVillages {
                 initialTemplate.removeParam("dimensiune_imagine");
             }
             if (villageEntity.getClaims().containsKey(captionProp) && null != villageEntity.getClaims().get(captionProp)) {
-                Set<Claim> imagesClaims = villageEntity.getClaims().get(imageProp);
+                Set<Claim> imagesClaims = villageEntity.getClaims().get(imageWikidataProperty);
                 if (imagesClaims.size() == 1) {
                     Claim imageClaim = imagesClaims.iterator().next();
                     String imageClaimId = imageClaim.getId();
@@ -1721,11 +1883,18 @@ public class FixVillages {
             }
         }
 
+        Property nativeLabelProp = getWikibaseProperty("P1705");
         Set<Claim> villageNativeLabelClaims = villageEntity.getClaims(nativeLabelProp);
+        LanguageString roNativeName = new LanguageString("ro", villageName);
         if (null == villageNativeLabelClaims || 0 == villageNativeLabelClaims.size()) {
-            LanguageString roNativeName = new LanguageString("ro", villageName);
             Claim roNativeNameClaim = new Claim(nativeLabelProp, roNativeName);
             dwiki.addClaim(compositeVillage.getEnt().getId(), roNativeNameClaim);
+        }
+        Property officialNameProp = getWikibaseProperty("P1448");
+        Set<Claim> villageOfficialNameClaims = villageEntity.getClaims(officialNameProp);
+        if (SetUtils.emptyIfNull(villageOfficialNameClaims).isEmpty()) {
+            Claim roOfficialNameClaim = new Claim(officialNameProp, roNativeName);
+            dwiki.addClaim(compositeVillage.getEnt().getId(), roOfficialNameClaim);
         }
 
         if (villageChanged) {
@@ -1860,7 +2029,7 @@ public class FixVillages {
         }
 
         String partyIntro = "";
-        Set<Claim> mayors = communeItem.getClaims().get(WikibasePropertyFactory.getWikibaseProperty("P6"));
+        Set<Claim> mayors = communeItem.getClaims().get(getWikibaseProperty("P6"));
         Claim mayorClaim = null;
         for (Claim eachMayorClaim : mayors) {
             if (null == mayorClaim || Rank.PREFERRED.equals(eachMayorClaim.getRank())) {
@@ -1870,7 +2039,7 @@ public class FixVillages {
         if (null != mayorClaim) {
             Item mayorItem = (Item) mayorClaim.getValue();
             Entity mayorEnt = wdcache.get(mayorItem.getEnt());
-            Set<Claim> partyClaims = mayorEnt.getClaims().get(WikibasePropertyFactory.getWikibaseProperty("P102"));
+            Set<Claim> partyClaims = mayorEnt.getClaims().get(getWikibaseProperty("P102"));
             Claim partyClaim = null;
             for (Claim eachPartyClaim : partyClaims) {
                 if (null == partyClaim || Rank.PREFERRED.equals(eachPartyClaim.getRank())) {
@@ -1963,7 +2132,7 @@ public class FixVillages {
             if (startsWith(lowerCase(trim(ref)), "google earth")) {
                 Set<Snak> newRef = new HashSet<Snak>();
                 Snak statedInGgErth = new Snak();
-                statedInGgErth.setProperty(WikibasePropertyFactory.getWikibaseProperty("P143"));
+                statedInGgErth.setProperty(getWikibaseProperty("P143"));
                 statedInGgErth.setData(new Item(new Entity("Q42274")));
                 newRef.add(statedInGgErth);
                 refs.add(newRef);
@@ -1987,7 +2156,7 @@ public class FixVillages {
         Matcher numberRangeMatcher = numberRangePattern.matcher(areaString);
         String ref = null;
         if (roFormatedNumberMatcher.find()) {
-            NumberFormat nf = NumberFormat.getNumberInstance(new Locale("ro"));
+            NumberFormat nf = NumberFormat.getNumberInstance(Locale.of("ro"));
             area = nf.parse(roFormatedNumberMatcher.group(0)).doubleValue();
         } else if (simpleRefMatcher.find()) {
             ref = simpleRefMatcher.group(1);
@@ -2011,7 +2180,7 @@ public class FixVillages {
             if (startsWith(lowerCase(trim(ref)), "google earth")) {
                 Set<Snak> newRef = new HashSet<Snak>();
                 Snak statedInGgErth = new Snak();
-                statedInGgErth.setProperty(WikibasePropertyFactory.getWikibaseProperty("P143"));
+                statedInGgErth.setProperty(getWikibaseProperty("P143"));
                 statedInGgErth.setData(new Item(new Entity("Q42274")));
                 newRef.add(statedInGgErth);
                 refs.add(newRef);
@@ -2309,7 +2478,7 @@ public class FixVillages {
         SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
     }
-    
+
     private static class DemoEntryComparator implements Comparator<Entry<String, Integer>> {
 
         @Override
