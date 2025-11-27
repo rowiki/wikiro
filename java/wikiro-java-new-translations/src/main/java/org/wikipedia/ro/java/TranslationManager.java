@@ -80,6 +80,7 @@ public class TranslationManager extends AbstractExecutable
         List<Revision> recentNewPages = wiki.newPages(helper);
         for (Revision eachNewPage : recentNewPages)
         {
+            LOG.info("Page created: {}", eachNewPage.getTitle());
             String eachNewPageTitle = wiki.getRevision(eachNewPage.getID()).getTitle();
             String[] newPageLinks = wiki.whatLinksHere(eachNewPageTitle, Wiki.MAIN_NAMESPACE);
             for (String eachNewPageLink : newPageLinks)
