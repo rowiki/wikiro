@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.security.auth.login.LoginException;
 
@@ -272,7 +273,10 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                 LOG.log(Level.INFO, "''{0}'' already exists! skipping...", actualLocalArticleTitle);
                 continue;
             }
-            String foreignArticleTitle = actualForeignTitleMap.get(articleTitle);
+            String foreignArticleTitle = Stream.of(articleTitle, actualLocalArticleTitle)
+                .map(actualForeignTitleMap::get)
+                .filter(StringUtils::isNotBlank)
+                .findFirst().orElse(articleTitle);
             String replacedString = null;
             String sourceLang = removeEnd(sourceWikiCode, "wiki");
 
