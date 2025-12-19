@@ -152,7 +152,7 @@ public class TranslationManager extends AbstractExecutable
         {
             msg.append(".\n");
         }
-        wiki.edit("Utilizator:Andrebot/Erori procesare pagini traduse", msg.toString(), "Robot: raport eroare procesare pagini traduse");
+        wiki.edit("Utilizator:Andrebot/Statut procesare pagini traduse", msg.toString(), "Robot: raport statut procesare pagini traduse");
     }
 
 
@@ -231,12 +231,10 @@ public class TranslationManager extends AbstractExecutable
 
     private String getExceptionDescriptor(Throwable e)
     {
-        Optional<Throwable> cause = Optional.of(e.getCause());
+        Optional<Throwable> cause = Optional.ofNullable(e.getCause());
         return String.format("%s: %s cauzat de %s: %s", e.getClass(), e.getMessage(), cause.map(Throwable::getClass).orElse(null), cause.map(Throwable::getClass).map(Objects::toString).orElse("necunoscut"), cause.map(Throwable::getMessage).orElse("necunoscut"));
     }
     
-    
-
     @Override
     protected void init() throws FailedLoginException, IOException
     {
