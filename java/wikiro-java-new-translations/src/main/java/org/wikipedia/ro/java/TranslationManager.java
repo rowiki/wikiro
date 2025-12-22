@@ -132,7 +132,7 @@ public class TranslationManager extends AbstractExecutable
             msg.append("\nNu am reușit să procesez următoarele pagini traduse noi:\n");
             for (Entry<String, String> processingFailure : newTranslationsStatus.getProcessingFailures().entrySet())
             {
-                msg.append("* [[").append(processingFailure.getKey()).append(" – ").append(processingFailure.getValue()).append("]]\n");
+                msg.append("* [[").append(processingFailure.getKey()).append("]] – ").append(processingFailure.getValue()).append("\n");
             }
         }
         msg.append("\n").append(newTranslationsStatus.getSuccessfulProcessings().size()).append(" pagini traduse noi procesate fără probleme.\n");
@@ -145,7 +145,7 @@ public class TranslationManager extends AbstractExecutable
             msg.append(":\n");
             for (Entry<String, String> processingFailure : linkbackStatus.getProcessingFailures().entrySet())
             {
-                msg.append("* [[").append(processingFailure.getKey()).append(" – ").append(processingFailure.getValue()).append("]]\n");
+                msg.append("* [[").append(processingFailure.getKey()).append("]] – ").append(processingFailure.getValue()).append("\n");
             }
         }
         else
