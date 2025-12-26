@@ -31,6 +31,7 @@ import org.wikipedia.Wiki.Revision;
 import org.wikipedia.ro.legacyoperations.CleanupIll;
 import org.wikipedia.ro.legacyoperations.ReindexFootnotes;
 import org.wikipedia.ro.legacyoperations.ReplaceCrossLinkWithIll;
+import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiTemplate;
 import org.wikipedia.ro.utility.AbstractExecutable;
 
@@ -123,7 +124,7 @@ public class TranslationManager extends AbstractExecutable
             msg.append("\nNu am putut procesa următoarele pagini modificate prin traducere:\n");
             for (Entry<String, String> processingFailure: editedTranslationsStatus.getProcessingFailures().entrySet())
             {
-                msg.append("* [[").append(processingFailure.getKey()).append(" – ").append(processingFailure.getValue()).append("]]\n");
+                msg.append("* ").append(new WikiLink(processingFailure.getKey())).append(" – ").append(processingFailure.getValue()).append("\n");
             }
         }
         msg.append("\n").append(editedTranslationsStatus.getSuccessfulProcessings().size()).append(" pagini modificate prin traducere procesate fără probleme.\n");
@@ -132,7 +133,7 @@ public class TranslationManager extends AbstractExecutable
             msg.append("\nNu am reușit să procesez următoarele pagini traduse noi:\n");
             for (Entry<String, String> processingFailure : newTranslationsStatus.getProcessingFailures().entrySet())
             {
-                msg.append("* [[").append(processingFailure.getKey()).append("]] – ").append(processingFailure.getValue()).append("\n");
+                msg.append("* ").append(new WikiLink(processingFailure.getKey())).append(" – ").append(processingFailure.getValue()).append("\n");
             }
         }
         msg.append("\n").append(newTranslationsStatus.getSuccessfulProcessings().size()).append(" pagini traduse noi procesate fără probleme.\n");
@@ -145,7 +146,7 @@ public class TranslationManager extends AbstractExecutable
             msg.append(":\n");
             for (Entry<String, String> processingFailure : linkbackStatus.getProcessingFailures().entrySet())
             {
-                msg.append("* [[").append(processingFailure.getKey()).append("]] – ").append(processingFailure.getValue()).append("\n");
+                msg.append("** ").append(new WikiLink(processingFailure.getKey())).append(" – ").append(processingFailure.getValue()).append("\n");
             }
         }
         else
