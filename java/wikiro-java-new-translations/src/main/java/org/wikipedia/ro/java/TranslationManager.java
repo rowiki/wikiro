@@ -14,6 +14,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -98,7 +103,17 @@ public class TranslationManager extends AbstractExecutable
                 {
                     String notReplacedText = wiki.getPageText(List.of(eachNewPageLink)).stream().findFirst().orElse("");
                     CleanupIll illCleanup = new CleanupIll(wiki, wiki, dwiki, eachNewPageLink);
-                    String replacedText = illCleanup.execute();
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    Future<String> future = executor.submit(() -> illCleanup.execute());
+                    String replacedText;
+                    try {
+                        replacedText = future.get(20, TimeUnit.MINUTES);
+                    } catch (TimeoutException e) {
+                        future.cancel(true); // Interrupt the task
+                        throw e;
+                    } finally {
+                        executor.shutdownNow();
+                    }
                     if (!notReplacedText.equals(replacedText)) {
                         wiki.edit(eachNewPageLink, replacedText, "Robot: înlocuit formate Ill redundante");
                         linkbackStatus.addSuccessfulProcessing(eachNewPageLink);
