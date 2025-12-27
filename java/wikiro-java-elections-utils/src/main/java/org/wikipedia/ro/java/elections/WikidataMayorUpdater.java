@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -218,6 +217,9 @@ public class WikidataMayorUpdater
             {
                 Item countyItem = (Item) eachResult.get("county");
                 Entity county = WD_ENT_CACHE.get(countyItem.getEnt());
+                if (!county.getId().equals("Q45868")) {
+                    continue;
+                }
                 System.out.printf("----------------- %s ----------------%n", county.getLabels().get("ro"));
                 if (on || onSwitch.get().equalsIgnoreCase(county.getLabels().get("ro")))
                 {
@@ -228,14 +230,15 @@ public class WikidataMayorUpdater
                     continue;
                 }
                 Set<Claim> claims = county.getClaims(WikibasePropertyFactory.getWikibaseProperty("P150"));
-                claims.stream().map(Claim::getMainsnak).map(Snak::getData).map(Item.class::cast).map(Item::getEnt).forEach(e -> updateMayor(e, mayorCollection));
+                claims.stream().map(Claim::getMainsnak).map(Snak::getData).map(Item.class::cast).map(Item::getEnt)
+                    .forEach(e -> updateMayor(e, mayorCollection));
 
             }
-            
             Entity bucharestEnt = WD_ENT_CACHE.get(new Entity("Q19660"));
             Set<Claim> sectorClaims = bucharestEnt.getClaims(WikibasePropertyFactory.getWikibaseProperty("P1383"));
             System.out.printf("----------------- București sectoare ----------------%n");
-            sectorClaims.stream().map(Claim::getMainsnak).map(Snak::getData).map(Item.class::cast).map(Item::getEnt).forEach(e -> updateMayor(e, mayorCollection));
+            //sectorClaims.stream().map(Claim::getMainsnak).map(Snak::getData).map(Item.class::cast).map(Item::getEnt).forEach(e -> updateMayor(e, mayorCollection));
+            
         }
         catch (IOException | WikibaseException | FailedLoginException e)
         {
@@ -251,6 +254,10 @@ public class WikidataMayorUpdater
 
     private static void updateMayor(Entity communeEnt, MongoCollection<Mayor> mayorCollection)
     {
+        System.out.printf("Processing commune %s (%s)%n", communeEnt.getLabels().get("ro"), communeEnt.getId());
+        if(!StringUtils.substringBefore(communeEnt.getId(), "$").equals("12148992")) {
+            return;
+        }
         try
         {
             communeEnt = WD_ENT_CACHE.get(communeEnt);
