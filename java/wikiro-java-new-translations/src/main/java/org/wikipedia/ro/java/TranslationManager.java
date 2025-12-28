@@ -107,7 +107,7 @@ public class TranslationManager extends AbstractExecutable
                     Future<String> future = executor.submit(() -> illCleanup.execute());
                     String replacedText;
                     try {
-                        replacedText = future.get(20, TimeUnit.MINUTES);
+                        replacedText = future.get(5, TimeUnit.MINUTES);
                     } catch (TimeoutException e) {
                         future.cancel(true); // Interrupt the task
                         throw e;
@@ -195,7 +195,17 @@ public class TranslationManager extends AbstractExecutable
                 {
                     String notReplacedText = wiki.getPageText(List.of(newPage)).stream().findFirst().orElse("");
                     ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
-                    String replacedText = rcl.execute();
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    Future<String> future = executor.submit(() -> rcl.execute());
+                    String replacedText;
+                    try {
+                        replacedText = future.get(5, TimeUnit.MINUTES); // 10 seconds timeout
+                    } catch (TimeoutException e) {
+                        future.cancel(true); // Interrupt the task
+                        throw e;
+                    } finally {
+                        executor.shutdownNow();
+                    }
                     if (!replacedText.equals(notReplacedText))
                     {
                         opsDone.add("înlocuit legături roșii sau spre alte wikiuri cu Ill");
