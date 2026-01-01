@@ -4,13 +4,13 @@
 	<groupId>org.wikipedia.ro.java</groupId>
 	<artifactId>wikiro-java-utils</artifactId>
 	<packaging>jar</packaging>
-	<version>1.5</version>
+	<version>1.6</version>
 	<name>wikiro-java-utils</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
-		<maven.compiler.source>16</maven.compiler.source>
-		<maven.compiler.target>16</maven.compiler.target>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
 	</properties>
 
 	<dependencies>
