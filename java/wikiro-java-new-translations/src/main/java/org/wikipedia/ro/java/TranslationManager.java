@@ -168,11 +168,87 @@ public class TranslationManager extends AbstractExecutable
         {
             msg.append(".\n");
         }
+        
+        BatchTranslationProcessingStatus processManualCallsStatus = processManualCalls();
+        if (processManualCallsStatus.getProcessingFailures().size() + processManualCallsStatus.getSuccessfulProcessings().size() > 0)
+        {
+            msg.append("\n== Starea procesării manuale a paginilor traduse ==\n");
+            msg.append("\nAm procesat manual ").append(processManualCallsStatus.getSuccessfulProcessings().size()).append(" pagini fără probleme.\n");
+            if (!processManualCallsStatus.getProcessingFailures().isEmpty())
+            {
+                msg.append("\nNu am putut procesa următoarele pagini solicitate manual:\n");
+                for (Entry<String, String> processingFailure : processManualCallsStatus.getProcessingFailures().entrySet())
+                {
+                    msg.append("* ").append(new WikiLink(processingFailure.getKey())).append(" – ").append(processingFailure.getValue()).append("\n");
+                }
+            }
+        }        
         wiki.edit("Utilizator:Andrebot/Statut procesare pagini traduse", msg.toString(), "Robot: raport statut procesare pagini traduse");
     }
 
+    public BatchTranslationProcessingStatus processManualCalls() throws IOException  {
+        BatchTranslationProcessingStatus status = new BatchTranslationProcessingStatus();
+        // Read the list of page titles
+        List<String> pageTitles = wiki.getPageText(List.of("Utilizator:Andrebot/traduceri-de-prelucrat"))
+            .stream()
+            .flatMap(text -> Stream.of(text.split("\\R")))
+            .map(String::trim)
+            .filter(line -> !line.isEmpty())
+            .filter(line -> !line.startsWith("#"))
+            .collect(Collectors.toList());
 
+        for (String pageTitleLine : pageTitles) {
+            try {
+                String[] parts = pageTitleLine.split("\\|", 2);
+                String pageTitle = parts[0].trim();
+                String srcLang = parts.length > 1 ? parts[1].trim() : "en";
+                Wiki srcWiki = Wiki.newSession(srcLang + ".wikipedia.org");
 
+                // Read the page text
+                String originalText = wiki.getPageText(List.of(pageTitle)).stream().findFirst().orElse("");
+
+                // ReplaceCrossLinkWithIll
+                ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, wiki, dwiki, pageTitle);
+                ExecutorService rclExecutor = Executors.newSingleThreadExecutor();
+                Future<String> rclFuture = rclExecutor.submit(() -> rcl.executeWithInitialText(originalText));
+                String rclResult;
+                try {
+                    rclResult = rclFuture.get(10, TimeUnit.MINUTES);
+                } catch (TimeoutException e) {
+                    rclFuture.cancel(true);
+                    throw new RuntimeException("ReplaceCrossLinkWithIll timed out for " + pageTitle, e);
+                } finally {
+                    rclExecutor.shutdownNow();
+                }
+
+                // CleanupIll
+                CleanupIll illCleanup = new CleanupIll(wiki, wiki, dwiki, pageTitle);
+                ExecutorService illExecutor = Executors.newSingleThreadExecutor();
+                Future<String> illFuture = illExecutor.submit(() -> illCleanup.executeWithInitialText(rclResult));
+                String illResult;
+                try {
+                    illResult = illFuture.get(10, TimeUnit.MINUTES);
+                } catch (TimeoutException e) {
+                    illFuture.cancel(true);
+                    throw new RuntimeException("CleanupIll timed out for " + pageTitle, e);
+                } finally {
+                    illExecutor.shutdownNow();
+                }
+
+                // If the text changed, update the page
+                if (!originalText.equals(illResult)) {
+                    wiki.edit(pageTitle, illResult, "Robot: executat la cerere managementul formatelor Ill");
+                }
+                status.addSuccessfulProcessing(pageTitle);
+                
+            } catch (Throwable e) {
+                LOG.error("Failed to process page {}", pageTitleLine, e);
+                status.addProcessingFailure(pageTitleLine, getExceptionDescriptor(e));
+            }
+        }
+        return status;
+    }
+    
     private BatchTranslationProcessingStatus processTranslations(List<Revision> recentTranslations) throws IOException, LoginException
     {
         int idx = 0;
