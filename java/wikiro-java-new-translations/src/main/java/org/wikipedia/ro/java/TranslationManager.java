@@ -194,7 +194,8 @@ public class TranslationManager extends AbstractExecutable
             .flatMap(text -> Stream.of(text.split("\\R")))
             .map(String::trim)
             .filter(line -> !line.isEmpty())
-            .filter(line -> !line.startsWith("#"))
+            .filter(line -> !line.startsWith("{"))
+            .filter(line -> !line.startsWith("<"))
             .collect(Collectors.toList());
 
         for (String pageTitleLine : pageTitles) {
