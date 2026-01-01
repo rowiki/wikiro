@@ -60,7 +60,11 @@ public class CleanupIll implements WikiOperation {
         status = new String[] { "status.changes.todo.inarticle", article, String.valueOf(0), "?" };
         LOG.log(Level.INFO, "Cleaning up Ill templates in article ''{0}''", article);
         String pageText = targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("");
+        
+        return this.executeWithInitialText(pageText);
+    }
 
+    public String executeWithInitialText(String pageText) throws IOException, WikibaseException, LoginException {
         Matcher illMatcher = PATTERN_ILL.matcher(pageText);
         StringBuilder replacedTextBuilder = new StringBuilder(pageText);
         int offset = 0;

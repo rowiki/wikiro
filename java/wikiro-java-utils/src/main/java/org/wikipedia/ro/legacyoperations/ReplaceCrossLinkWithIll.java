@@ -67,6 +67,10 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         status = new String[] { "status.reading.text", article, targetWikiCode };
         LOG.log(Level.INFO, "Replacing cross links with Ill in article ''{0}''", article);
         String text = targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("");
+        return this.executeWithInitialText(text);
+    }
+        
+    public String executeWithInitialText(String text) throws IOException, LoginException, WikibaseException {
         Pattern namespacepattern = Pattern.compile("((?:Template|Wikipedia):)?(.*)");
 
         status = new String[] { "status.identifying.links" };
@@ -112,9 +116,10 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                         roArticlesCache.put(lang + ":" + foreignTitle, roTitle);
                     }
                 } catch (WikibaseException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                    final String exTitle = roTitle;
+                    final String exFoTitle = foreignTitle;
+                    LOG.log(Level.SEVERE, e, () -> "Wikidata error when processing page \"" + exTitle + "\" (" + exFoTitle + ").");
+               }
             }
             String replacedString = null;
             if (null != roTitle && StringUtils.equals(roTitle, localLabel)) {
@@ -168,7 +173,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                         }
                     }
                 } catch (WikibaseException e) {
-                    e.printStackTrace();
+                    LOG.log(Level.SEVERE, e, () -> "Wikidata error when processing page \"" + articleTitle + "\".");
                 }
             }
             String replacedString;
