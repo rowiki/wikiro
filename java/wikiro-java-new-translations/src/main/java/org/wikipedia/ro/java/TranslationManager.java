@@ -107,7 +107,7 @@ public class TranslationManager extends AbstractExecutable
                     Future<String> future = executor.submit(() -> illCleanup.execute());
                     String replacedText;
                     try {
-                        replacedText = future.get(5, TimeUnit.MINUTES);
+                        replacedText = future.get(15, TimeUnit.MINUTES);
                     } catch (TimeoutException e) {
                         future.cancel(true); // Interrupt the task
                         throw e;
@@ -209,12 +209,12 @@ public class TranslationManager extends AbstractExecutable
                 String originalText = wiki.getPageText(List.of(pageTitle)).stream().findFirst().orElse("");
 
                 // ReplaceCrossLinkWithIll
-                ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, wiki, dwiki, pageTitle);
+                ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, srcWiki, dwiki, pageTitle);
                 ExecutorService rclExecutor = Executors.newSingleThreadExecutor();
                 Future<String> rclFuture = rclExecutor.submit(() -> rcl.executeWithInitialText(originalText));
                 String rclResult;
                 try {
-                    rclResult = rclFuture.get(10, TimeUnit.MINUTES);
+                    rclResult = rclFuture.get(15, TimeUnit.MINUTES);
                 } catch (TimeoutException e) {
                     rclFuture.cancel(true);
                     throw new RuntimeException("ReplaceCrossLinkWithIll timed out for " + pageTitle, e);
@@ -223,12 +223,12 @@ public class TranslationManager extends AbstractExecutable
                 }
 
                 // CleanupIll
-                CleanupIll illCleanup = new CleanupIll(wiki, wiki, dwiki, pageTitle);
+                CleanupIll illCleanup = new CleanupIll(wiki, srcWiki, dwiki, pageTitle);
                 ExecutorService illExecutor = Executors.newSingleThreadExecutor();
                 Future<String> illFuture = illExecutor.submit(() -> illCleanup.executeWithInitialText(rclResult));
                 String illResult;
                 try {
-                    illResult = illFuture.get(10, TimeUnit.MINUTES);
+                    illResult = illFuture.get(15, TimeUnit.MINUTES);
                 } catch (TimeoutException e) {
                     illFuture.cancel(true);
                     throw new RuntimeException("CleanupIll timed out for " + pageTitle, e);
