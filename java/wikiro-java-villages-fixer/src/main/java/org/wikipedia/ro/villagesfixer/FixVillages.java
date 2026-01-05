@@ -123,7 +123,7 @@ public class FixVillages {
     private static final String MOLDOVA_LINK = "[[Moldova Occidentală|Moldova]]";
     private static final String BUCOVINA_LINK = "[[Bucovina]]";
 
-    private static final NumberFormat RO_NUMBER_FORMAT = NumberFormat.getInstance(new Locale("ro"));
+    private static final NumberFormat RO_NUMBER_FORMAT = NumberFormat.getInstance(Locale.of("ro"));
 
     private static String collationDescription = "<  0 < 1 < 2 < 3 < 4 < 5 < 6 < 7 < 8 < 9 "
         + "< a, A < ă, Ă < â, Â‚ < b, B < c, C < d, D < e, E < f, F < g, G < h, H < i, I"
@@ -377,7 +377,7 @@ public class FixVillages {
                         dwiki.setDescription(communeWikibaseItem.getId(), "ro", communeDescr);
                         communeChanged = true;
                     }
-                    if (!StringUtils.equals(communeWikibaseItem.getLabels().get("ro"), communeName)) {
+                    if (!StringUtils.equals(extractRoNameFromEntity(communeWikibaseItem), communeName)) {
                         dwiki.setLabel(communeWikibaseItem.getId(), "ro", communeName);
                         communeChanged = true;
                     }
@@ -1450,7 +1450,7 @@ public class FixVillages {
         }
 
         String villageName = trim(removeStart(
-            removeEnd(removeEnd(villageEntity.getLabels().get("ro"), ", " + eachCounty), "(" + communeName + ")"),
+            removeEnd(removeEnd(extractRoNameFromEntity(villageEntity), ", " + eachCounty), "(" + communeName + ")"),
             "Comuna "));
         crtSettlementName = villageName;
         LOG.info("Processing settlement {}, UAT {}, county {}; settlement type: {}", crtSettlementName, crtCommuneName,
@@ -1466,7 +1466,7 @@ public class FixVillages {
             String.format("%s %s %s, județul %s, România", villageType, villageRelationWithCommune, communeName, eachCounty);
 
         boolean villageChanged = false;
-        if (!StringUtils.equals(villageEntity.getLabels().get("ro"), villageName)) {
+        if (!StringUtils.equals(extractRoNameFromEntity(villageEntity), villageName)) {
             dwiki.setLabel(villageEntity.getId(), "ro", villageName);
             communeChanged = villageChanged = true;
         }
@@ -1903,6 +1903,10 @@ public class FixVillages {
             Thread.sleep(1000l * sleeptime);
         }
         return communeChanged;
+    }
+
+    private static String extractRoNameFromEntity(Entity villageEntity) {
+        return defaultString(villageEntity.getLabels().get("ro"), villageEntity.getLabels().get("mul"));
     }
 
     private static final Pattern POLITICS_SECTION_PATTERN = Pattern.compile(
