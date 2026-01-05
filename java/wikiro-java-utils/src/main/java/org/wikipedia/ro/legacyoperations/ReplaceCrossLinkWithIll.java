@@ -262,7 +262,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             LOG.log(Level.INFO, "Second pass: Link: {0}", link);
             String articleLink = removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
-            String linkTitle = defaultString(innerLinkMatcher.group(3), articleTitle);
+            String linkTitle = defaultString(innerLinkMatcher.group(3), articleLink);
             if (isBlank(articleTitle)) {
                 LOG.log(Level.INFO, "Article title blank in link ''{0}''! skipping...", innerLinkMatcher.group(0));
                 continue;

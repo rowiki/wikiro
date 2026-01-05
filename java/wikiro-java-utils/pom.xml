@@ -4,7 +4,7 @@
 	<groupId>org.wikipedia.ro.java</groupId>
 	<artifactId>wikiro-java-utils</artifactId>
 	<packaging>jar</packaging>
-	<version>1.6</version>
+	<version>1.7</version>
 	<name>wikiro-java-utils</name>
 	<url>http://maven.apache.org</url>
 
