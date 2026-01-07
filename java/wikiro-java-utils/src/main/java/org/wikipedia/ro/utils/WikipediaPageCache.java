@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -96,4 +97,12 @@ public class WikipediaPageCache {
     public void invalidateAll() {
         cache.clear();
     }
+    
+    public void invalidatePagesIf(Wiki wiki, Predicate<String> predicate) {
+        String prefix = wiki.getDomain() + ":";
+        cache.keySet().removeIf(key -> 
+            key.startsWith(prefix) && predicate.test(key.substring(prefix.length()))
+        );
+    }
+    
 }
