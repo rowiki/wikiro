@@ -33,7 +33,7 @@ public class WikipediaPageCache {
     private final Map<String, CachedPage> cache = new ConcurrentHashMap<>();
 
     public boolean pageExists(Wiki wiki, String title) {
-        String cacheKey = String.format("%s:%s", wiki.getDomain(), title);
+        String cacheKey = computeCacheKey(wiki, title);
         if (!cache.containsKey(title)) {
             boolean[] exists = null;
             try {
@@ -52,9 +52,14 @@ public class WikipediaPageCache {
         }
         return cache.get(cacheKey).exists; 
     }
+
+    private String computeCacheKey(Wiki wiki, String title) {
+        String cacheKey = String.format("%s:%s", wiki.getDomain(), title);
+        return cacheKey;
+    }
     
     public CachedPage getPage(Wiki wiki, String title) {
-        String cacheKey = String.format("%s:%s", wiki.getDomain(), title);
+        String cacheKey = computeCacheKey(wiki, title);
         if (cache.containsKey(title) && cache.get(cacheKey).text != null) {
             return cache.get(cacheKey);
         }
@@ -78,9 +83,14 @@ public class WikipediaPageCache {
         
         return cache.get(title);
     }
+    
+    public String getPageText(Wiki wiki, String title) {
+        CachedPage page = getPage(wiki, title);
+        return page != null ? page.getText() : null;
+    }
 
-    public void invalidatePage(String title) {
-        cache.remove(title);
+    public void invalidatePage(Wiki wiki, String title) {
+        cache.remove(computeCacheKey(wiki, title));
     }
 
     public void invalidateAll() {

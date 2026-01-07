@@ -39,6 +39,7 @@ import org.wikipedia.ro.legacyoperations.ReplaceCrossLinkWithIll;
 import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiTemplate;
 import org.wikipedia.ro.utility.AbstractExecutable;
+import org.wikipedia.ro.utils.WikipediaPageCache;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -52,6 +53,8 @@ public class TranslationManager extends AbstractExecutable
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(TranslationManager.class);
     Pattern commentPattern = Pattern.compile("\\[\\[:(\\w+):Special:Redirect/revision/(\\d+)\\|([^\\]]+)\\]\\]");
     Pattern translPagePattern = Pattern.compile("\\{\\{\\s*[Pp]agină[_\\s]tradusă");
+    
+    private final WikipediaPageCache wikipediaPageCache = new WikipediaPageCache(); 
 
     @Override
     protected void execute() throws IOException, WikibaseException, LoginException
@@ -188,15 +191,16 @@ public class TranslationManager extends AbstractExecutable
 
     public BatchTranslationProcessingStatus processManualCalls() throws IOException  {
         BatchTranslationProcessingStatus status = new BatchTranslationProcessingStatus();
+        String manuallyProcessedTranslationsPage = wikipediaPageCache.getPageText(wiki, "Utilizator:Andrebot/traduceri-de-prelucrat");
         // Read the list of page titles
-        List<String> pageTitles = wiki.getPageText(List.of("Utilizator:Andrebot/traduceri-de-prelucrat"))
-            .stream()
-            .flatMap(text -> Stream.of(text.split("\\R")))
+        List<String> pageTitles = manuallyProcessedTranslationsPage.lines()
             .map(String::trim)
             .filter(line -> !line.isEmpty())
             .filter(line -> !line.startsWith("{"))
             .filter(line -> !line.startsWith("<"))
             .collect(Collectors.toList());
+        
+        List<String> linesKept = new ArrayList<>();
 
         for (String pageTitleLine : pageTitles) {
             try {
@@ -206,7 +210,7 @@ public class TranslationManager extends AbstractExecutable
                 Wiki srcWiki = Wiki.newSession(srcLang + ".wikipedia.org");
 
                 // Read the page text
-                String originalText = wiki.getPageText(List.of(pageTitle)).stream().findFirst().orElse("");
+                String originalText = wikipediaPageCache.getPageText(wiki, pageTitle);
 
                 // ReplaceCrossLinkWithIll
                 ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, srcWiki, dwiki, pageTitle);
@@ -239,14 +243,32 @@ public class TranslationManager extends AbstractExecutable
                 // If the text changed, update the page
                 if (!originalText.equals(illResult)) {
                     wiki.edit(pageTitle, illResult, "Robot: executat la cerere managementul formatelor Ill");
+                    wikipediaPageCache.invalidatePage(wiki, pageTitle);
                 }
                 status.addSuccessfulProcessing(pageTitle);
                 
             } catch (Throwable e) {
                 LOG.error("Failed to process page {}", pageTitleLine, e);
                 status.addProcessingFailure(pageTitleLine, getExceptionDescriptor(e));
+                linesKept.add(pageTitleLine); // Keep the line for retry
             }
         }
+        
+        String replacement = "<pre>\n" + String.join("\n", linesKept) + "\n</pre>";
+        String updatedPage = manuallyProcessedTranslationsPage.replaceAll(
+            "(?s)<pre>.*?</pre>", 
+            Matcher.quoteReplacement(replacement)
+        );
+        
+        try
+        {
+            wiki.edit("Utilizator:Andrebot/traduceri-de-prelucrat", updatedPage, "Robot: actualizat lista de traduceri de prelucrat manual");
+        }
+        catch (LoginException | IOException e)
+        {
+            LOG.error("Failed to update the manual processing list page", e);
+        }
+        
         return status;
     }
     
