@@ -147,6 +147,7 @@ public class TestWikiTemplateParser {
     }
 
     //@Test
+    //commented for now: params containing <ref> tags are not yet supported
     public void testTemplateFromRealArticleApcarBaltazar() {
         String text =
             "{{citat|... o artă de caracter, care are pretenția să rămâie ca un stil propriu al ei, nu trebuie să se mărginească la recopierea unor elemente de artă, fără a căuta să imprime un carcater deosebit acestor elemente... Stilului românesc care așteaptă, trebuie să aibă la bază unele elemente naționale, cum și unele produse ale unei arte, ce s-a convenit a se numi arta trecutului... Pentru această conlucrare însă a elementului primitiv trebuie ceva mai mult decât aimpla lui alipire la produsele timpurilor moderne... prin urmare, pe un fond național să se așeze o compoziție decorativă nouă, care să corespundă principiilor stricte de artă, o artă așa cum o înțeleg artiștii timpurilor noastre, adică o artă cu proporții, cu armonie și mai presus de toate cu originalitate. În ce privește această ultimă calitate, să ne ferim cât mai mult de nefericitele importațiuni străine, ele înseși fiind uneori produse imperfecte sub raportul decorativ.<ref name=petru32/>|Apcar Baltazar: ''[[s:Spre un stil românesc|Spre un stil românesc]]'', în ziarul ''[[Viața Românească]]'' din [[noiembrie]] [[1908]]}}";
