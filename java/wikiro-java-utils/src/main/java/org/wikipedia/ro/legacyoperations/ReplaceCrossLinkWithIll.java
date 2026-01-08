@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,6 +41,7 @@ import org.wikipedia.Wiki;
 import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiTemplate;
 import org.wikipedia.ro.utils.WikidataCacheManager;
+import org.wikipedia.ro.utils.WikipediaPageCache;
 
 @Operation(labelKey = "operation.insertill.label", useWikibase = true)
 public class ReplaceCrossLinkWithIll implements WikiOperation {
@@ -51,6 +53,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
     private String sourceWikiCode;
     private String targetWikiCode;
     private String[] status = new String[] { "status.not.inited" };
+    private WikipediaPageCache pageCache = new WikipediaPageCache();
 
     private Map<String, String> roArticlesCache = new HashMap<>();
 
@@ -66,8 +69,8 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
     public String execute() throws IOException, LoginException, WikibaseException {
         status = new String[] { "status.reading.text", article, targetWikiCode };
         LOG.log(Level.INFO, "Replacing cross links with Ill in article ''{0}''", article);
-        String text = targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("");
-        return this.executeWithInitialText(text);
+        String text = pageCache.getPageText(targetWiki, article);
+        return this.executeWithInitialText(defaultString(text));
     }
         
     public String executeWithInitialText(String text) throws IOException, LoginException, WikibaseException {
@@ -178,7 +181,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             }
             String replacedString;
             if (null != roArticle) {
-                replacedString = new WikiLink(roArticle, defaultString(linkTitle, articleTitle)).toString();
+                replacedString = new WikiLink(roArticle, Objects.toString(linkTitle, articleTitle)).toString();
             } else if (null == wbEntity) {
                 replacedString = new WikiTemplate().setSingleLine(true).setTemplateTitle("Ill").setParam("1", lang)
                     .setParam("2", roLabel).setParam("3", articleTitle).setParam("4", linkTitle).toString();
@@ -227,7 +230,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         }
         List<String> localResolvedRedirects = targetWiki.resolveRedirects(localLinks);
         for (int idx = 0; idx < localLinks.size(); idx++) {
-            actualLocalTitleMap.put(localLinks.get(idx), defaultString(localResolvedRedirects.get(idx), localLinks.get(idx)));
+            actualLocalTitleMap.put(localLinks.get(idx), Objects.toString(localResolvedRedirects.get(idx), localLinks.get(idx)));
         }
         localLinks = actualLocalTitleMap.values().stream().filter(x -> !isNotReplaceableLink(x)).collect(Collectors.toList());
         boolean[] localExistanceArray = targetWiki.exists(localLinks);
@@ -241,7 +244,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             List<String> actualForeignTitles = sourceWiki.resolveRedirects(nonExistingLinks);
             for (int idx = 0; idx < nonExistingLinks.size(); idx++) {
                 actualForeignTitleMap.put(nonExistingLinks.get(idx),
-                    defaultString(actualForeignTitles.get(idx), nonExistingLinks.get(idx)));
+                    Objects.toString(actualForeignTitles.get(idx), nonExistingLinks.get(idx)));
             }
         }
 
@@ -262,7 +265,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             LOG.log(Level.INFO, "Second pass: Link: {0}", link);
             String articleLink = removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
-            String linkTitle = defaultString(innerLinkMatcher.group(3), articleLink);
+            String linkTitle = Objects.toString(innerLinkMatcher.group(3), articleLink);
             if (isBlank(articleTitle)) {
                 LOG.log(Level.INFO, "Article title blank in link ''{0}''! skipping...", innerLinkMatcher.group(0));
                 continue;
@@ -319,7 +322,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                             .setParam("3", linkTitle).setSingleLine(true).toString();
                 }
             }
-            replacedString = defaultString(replacedString, innerLinkMatcher.group(0));
+            replacedString = Objects.toString(replacedString, innerLinkMatcher.group(0));
             innerLinkMatcher.appendReplacement(anotherNewText, replacedString);
 
         }
