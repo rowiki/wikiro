@@ -49,8 +49,10 @@ public class WikipediaPageCache {
     }
 
     public void loadPagesInfo(Wiki wiki, String... titles) {
-        List<String> titlesToLoad =
-            List.of(titles).stream().filter(title -> !cache.containsKey(computeCacheKey(wiki, title))).toList();
+        List<String> titlesToLoad = List.of(titles).stream()
+            .filter(title -> !cache.containsKey(computeCacheKey(wiki, title)) || cache.get(computeCacheKey(wiki, title)).redirect == null)
+            .toList();
+        
         if (titlesToLoad.isEmpty()) {
             return;
         }
