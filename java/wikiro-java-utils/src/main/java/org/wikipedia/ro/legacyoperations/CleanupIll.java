@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -31,10 +32,12 @@ import org.wikipedia.ro.model.WikiTemplate;
 import org.wikipedia.ro.parser.ParseResult;
 import org.wikipedia.ro.parser.WikiTemplateParser;
 import org.wikipedia.ro.utils.WikidataCacheManager;
+import org.wikipedia.ro.utils.WikipediaPageCache;
 
 @Operation(useWikibase = true, labelKey = "operation.cleanupIll.label")
 public class CleanupIll implements WikiOperation {
     private static final Logger LOG = Logger.getLogger(CleanupIll.class.getCanonicalName());
+    private static final WikipediaPageCache PAGE_CACHE = new WikipediaPageCache();
 
     private String[] status = new String[] { "status.not.inited" };
     private Wiki targetWiki;
@@ -59,7 +62,7 @@ public class CleanupIll implements WikiOperation {
     public String execute() throws IOException, WikibaseException, LoginException {
         status = new String[] { "status.changes.todo.inarticle", article, String.valueOf(0), "?" };
         LOG.log(Level.INFO, "Cleaning up Ill templates in article ''{0}''", article);
-        String pageText = targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("");
+        String pageText = PAGE_CACHE.getPageText(targetWiki, article);
         
         return this.executeWithInitialText(pageText);
     }
@@ -108,8 +111,8 @@ public class CleanupIll implements WikiOperation {
             label = substringAfter(baseTargetPage, "{{!}}");
         }
         String targetPage = WikidataCacheManager.getCachedRedirect(targetWiki, baseTargetPage);
-        String sourcePage = defaultString(wikipartListToString(illTemplate.getParam("3")), baseTargetPage);
-        label = defaultString(label, defaultString(wikipartListToString(illTemplate.getParam("4")), baseTargetPage));
+        String sourcePage = Objects.toString(wikipartListToString(illTemplate.getParam("3")), baseTargetPage);
+        label = Objects.toString(label, Objects.toString(wikipartListToString(illTemplate.getParam("4")), baseTargetPage));
 
         if ("d".equals(langId)) {
             WikiTemplate prospectiveIllWdTemplate = new WikiTemplate();
@@ -119,7 +122,7 @@ public class CleanupIll implements WikiOperation {
             prospectiveIllWdTemplate.setParam("3", label);
 
             String wikidataReplacementLink = extractLinkTextFromWikidata(prospectiveIllWdTemplate);
-            return defaultString(wikidataReplacementLink, prospectiveIllWdTemplate.toString());
+            return Objects.toString(wikidataReplacementLink, prospectiveIllWdTemplate.toString());
         }
 
         if (targetWiki.exists(List.of(targetPage))[0]) {
