@@ -95,25 +95,26 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             status = new String[] { "status.analyzing.link", foreignTitle };
 
             String roTitle = roArticlesCache.get(lang + ":" + foreignTitle);
-            Entity wbEntity = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).getByArticle(lang + "wiki", foreignTitle);
+            Entity wbEntity = null;
+            if (equalsAny(lowerCase(lang), "s", "wikt")) {
+                continue;
+            } else if ("d".equals(lang)) {
+                wbEntity = dataWiki
+                    .getWikibaseItemById(WikidataCacheManager.getCachedRedirect(dataWiki, foreignTitle));
+            } else {
+                wbEntity = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).getByArticle(lang + "wiki", foreignTitle);
+            }
             if (null == roTitle && null == wbEntity) {
                 try {
                     if (null == wbEntity) {
-                        if (equalsAny(lowerCase(lang), "s", "wikt")) {
-                            continue;
-                        } else if ("d".equals(lang)) {
-                            wbEntity = dataWiki
-                                .getWikibaseItemById(WikidataCacheManager.getCachedRedirect(dataWiki, foreignTitle));
-                        } else {
-                            String fullForeignTitle = substringBefore(foreignTitle, "#");
-                            Matcher namespaceMatcher = namespacepattern.matcher(fullForeignTitle);
-                            namespaceMatcher.matches();
-                            String namespace = defaultString(namespaceMatcher.group(1));
-                            String simpleForeignTitle = namespaceMatcher.group(2);
-                            foreignTitle = capitalize(namespace) + capitalize(simpleForeignTitle);
-                            String target = WikidataCacheManager.getCachedRedirect(sourceWiki, foreignTitle);
-                            wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(lang + "wiki", target);
-                        }
+                        String fullForeignTitle = substringBefore(foreignTitle, "#");
+                        Matcher namespaceMatcher = namespacepattern.matcher(fullForeignTitle);
+                        namespaceMatcher.matches();
+                        String namespace = defaultString(namespaceMatcher.group(1));
+                        String simpleForeignTitle = namespaceMatcher.group(2);
+                        foreignTitle = capitalize(namespace) + capitalize(simpleForeignTitle);
+                        String target = WikidataCacheManager.getCachedRedirect(sourceWiki, foreignTitle);
+                        wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(lang + "wiki", target);
                     }
                     roTitle = Optional.ofNullable(wbEntity).map(Entity::getLabels).map(m -> m.get("ro")).orElse(null);
                     if (!isBlank(roTitle)) {
