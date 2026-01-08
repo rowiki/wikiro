@@ -53,7 +53,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
     private String sourceWikiCode;
     private String targetWikiCode;
     private String[] status = new String[] { "status.not.inited" };
-    private WikipediaPageCache pageCache = new WikipediaPageCache();
+    private WikipediaPageCache pageCache = WikipediaPageCache.getInstance();
 
     private Map<String, String> roArticlesCache = new HashMap<>();
 

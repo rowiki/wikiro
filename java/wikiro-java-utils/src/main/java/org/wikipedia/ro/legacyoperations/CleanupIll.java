@@ -37,7 +37,7 @@ import org.wikipedia.ro.utils.WikipediaPageCache;
 @Operation(useWikibase = true, labelKey = "operation.cleanupIll.label")
 public class CleanupIll implements WikiOperation {
     private static final Logger LOG = Logger.getLogger(CleanupIll.class.getCanonicalName());
-    private static final WikipediaPageCache PAGE_CACHE = new WikipediaPageCache();
+    private static final WikipediaPageCache PAGE_CACHE = WikipediaPageCache.getInstance();
 
     private String[] status = new String[] { "status.not.inited" };
     private Wiki targetWiki;

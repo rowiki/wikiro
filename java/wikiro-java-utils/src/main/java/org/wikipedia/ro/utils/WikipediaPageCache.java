@@ -39,6 +39,15 @@ public class WikipediaPageCache {
 
     private final Map<String, CachedPage> cache = new ConcurrentHashMap<>();
 
+    private static WikipediaPageCache singletonInstance = null;
+
+    public static WikipediaPageCache getInstance() {
+        if (singletonInstance == null) {
+            singletonInstance = new WikipediaPageCache();
+        }
+        return singletonInstance;
+    }
+
     public void loadPagesInfo(Wiki wiki, String... titles) {
         List<String> titlesToLoad =
             List.of(titles).stream().filter(title -> !cache.containsKey(computeCacheKey(wiki, title))).toList();
@@ -66,8 +75,21 @@ public class WikipediaPageCache {
         }
     }
 
-    public void loadPageTexts(Wiki wiki, String... titles) {
-        
+    public boolean pageRedirects(Wiki wiki, String title) {
+        String cacheKey = computeCacheKey(wiki, title);
+        if (!cache.containsKey(cacheKey))
+        {
+            try
+            {
+                loadPagesInfo(wiki, title);
+            }
+            catch (Exception e)
+            {
+                LOG.log(Level.SEVERE, e, () -> "Metainfo of page " + cacheKey + " failed to load");
+                return false;
+            }
+        }
+        return cache.get(cacheKey).redirect == Boolean.TRUE;
     }
     
     public boolean pageExists(Wiki wiki, String title) {
