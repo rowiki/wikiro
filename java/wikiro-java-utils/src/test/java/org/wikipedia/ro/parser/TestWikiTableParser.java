@@ -3,8 +3,8 @@ package org.wikipedia.ro.parser;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wikipedia.ro.model.PartContext;
 import org.wikipedia.ro.model.PlainText;
 import org.wikipedia.ro.model.WikiLink;
@@ -22,14 +22,14 @@ public class TestWikiTableParser {
         WikiTableParser parser = new WikiTableParser();
         ParseResult<WikiTable> parseResult = parser.parse(wikiText);
         WikiTable parsedTable = parseResult.getIdentifiedPart();
-        Assert.assertNotNull(parsedTable.getSubParts());
-        Assert.assertEquals(1, parsedTable.getSubParts().size());
-        Assert.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableCell);
+        Assertions.assertNotNull(parsedTable.getSubParts());
+        Assertions.assertEquals(1, parsedTable.getSubParts().size());
+        Assertions.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableCell);
         WikiTableCell captionPart = (WikiTableCell) parsedTable.getSubParts().get(0);
-        Assert.assertEquals(1, captionPart.getSubParts().size());
-        Assert.assertTrue(captionPart.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, captionPart.getSubParts().size());
+        Assertions.assertTrue(captionPart.getSubParts().get(0) instanceof PlainText);
         PlainText captionTxt = (PlainText) captionPart.getSubParts().get(0);
-        Assert.assertEquals("my caption", captionTxt.getText().trim());
+        Assertions.assertEquals("my caption", captionTxt.getText().trim());
     }
 
     @Test
@@ -39,26 +39,26 @@ public class TestWikiTableParser {
         WikiTableParser parser = new WikiTableParser();
         ParseResult<WikiTable> parseResult = parser.parse(wikiText);
         WikiTable parsedTable = parseResult.getIdentifiedPart();
-        Assert.assertNotNull(parsedTable.getSubParts());
+        Assertions.assertNotNull(parsedTable.getSubParts());
 
-        Assert.assertEquals(1, parsedTable.getSubParts().size());
-        Assert.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableRow);
+        Assertions.assertEquals(1, parsedTable.getSubParts().size());
+        Assertions.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableRow);
         WikiTableRow row = (WikiTableRow) parsedTable.getSubParts().get(0);
 
-        Assert.assertEquals(2, row.getSubParts().size());
-        Assert.assertTrue(row.getSubParts().get(0) instanceof WikiTableCell);
+        Assertions.assertEquals(2, row.getSubParts().size());
+        Assertions.assertTrue(row.getSubParts().get(0) instanceof WikiTableCell);
 
         WikiTableCell wikiCell1 = (WikiTableCell) row.getSubParts().get(0);
-        Assert.assertEquals(1, wikiCell1.getSubParts().size());
-        Assert.assertTrue(wikiCell1.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, wikiCell1.getSubParts().size());
+        Assertions.assertTrue(wikiCell1.getSubParts().get(0) instanceof PlainText);
         PlainText wikiCell1Text = (PlainText) wikiCell1.getSubParts().get(0);
-        Assert.assertEquals("first cell", wikiCell1Text.getText().trim());
+        Assertions.assertEquals("first cell", wikiCell1Text.getText().trim());
 
         WikiTableCell wikiCell2 = (WikiTableCell) row.getSubParts().get(1);
-        Assert.assertEquals(1, wikiCell2.getSubParts().size());
-        Assert.assertTrue(wikiCell2.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, wikiCell2.getSubParts().size());
+        Assertions.assertTrue(wikiCell2.getSubParts().get(0) instanceof PlainText);
         PlainText wikiCelleText = (PlainText) wikiCell2.getSubParts().get(0);
-        Assert.assertEquals("second cell", wikiCelleText.getText().trim());
+        Assertions.assertEquals("second cell", wikiCelleText.getText().trim());
     }
 
     @Test
@@ -68,26 +68,26 @@ public class TestWikiTableParser {
         WikiTableParser parser = new WikiTableParser();
         ParseResult<WikiTable> parseResult = parser.parse(wikiText);
         WikiTable parsedTable = parseResult.getIdentifiedPart();
-        Assert.assertNotNull(parsedTable.getSubParts());
+        Assertions.assertNotNull(parsedTable.getSubParts());
 
-        Assert.assertEquals(1, parsedTable.getSubParts().size());
-        Assert.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableRow);
+        Assertions.assertEquals(1, parsedTable.getSubParts().size());
+        Assertions.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableRow);
         WikiTableRow row = (WikiTableRow) parsedTable.getSubParts().get(0);
 
-        Assert.assertEquals(2, row.getSubParts().size());
-        Assert.assertTrue(row.getSubParts().get(0) instanceof WikiTableCell);
+        Assertions.assertEquals(2, row.getSubParts().size());
+        Assertions.assertTrue(row.getSubParts().get(0) instanceof WikiTableCell);
 
         WikiTableCell wikiCell1 = (WikiTableCell) row.getSubParts().get(0);
-        Assert.assertEquals(1, wikiCell1.getSubParts().size());
-        Assert.assertTrue(wikiCell1.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, wikiCell1.getSubParts().size());
+        Assertions.assertTrue(wikiCell1.getSubParts().get(0) instanceof PlainText);
         PlainText wikiCell1Text = (PlainText) wikiCell1.getSubParts().get(0);
-        Assert.assertEquals("first cell", wikiCell1Text.getText().trim());
+        Assertions.assertEquals("first cell", wikiCell1Text.getText().trim());
 
         WikiTableCell wikiCell2 = (WikiTableCell) row.getSubParts().get(1);
-        Assert.assertEquals(1, wikiCell2.getSubParts().size());
-        Assert.assertTrue(wikiCell2.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, wikiCell2.getSubParts().size());
+        Assertions.assertTrue(wikiCell2.getSubParts().get(0) instanceof PlainText);
         PlainText wikiCell2Text = (PlainText) wikiCell2.getSubParts().get(0);
-        Assert.assertEquals("second cell", wikiCell2Text.getText().trim());
+        Assertions.assertEquals("second cell", wikiCell2Text.getText().trim());
     }
 
     @Test
@@ -98,44 +98,44 @@ public class TestWikiTableParser {
         WikiTableParser parser = new WikiTableParser();
         ParseResult<WikiTable> parseResult = parser.parse(wikiText);
         WikiTable parsedTable = parseResult.getIdentifiedPart();
-        Assert.assertNotNull(parsedTable.getSubParts());
+        Assertions.assertNotNull(parsedTable.getSubParts());
 
-        Assert.assertEquals(2, parsedTable.getSubParts().size());
-        Assert.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableRow);
+        Assertions.assertEquals(2, parsedTable.getSubParts().size());
+        Assertions.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableRow);
         WikiTableRow row = (WikiTableRow) parsedTable.getSubParts().get(0);
 
-        Assert.assertEquals(2, row.getSubParts().size());
-        Assert.assertTrue(row.getSubParts().get(0) instanceof WikiTableCell);
-        Assert.assertTrue(row.getSubParts().get(1) instanceof WikiTableCell);
+        Assertions.assertEquals(2, row.getSubParts().size());
+        Assertions.assertTrue(row.getSubParts().get(0) instanceof WikiTableCell);
+        Assertions.assertTrue(row.getSubParts().get(1) instanceof WikiTableCell);
 
         WikiTableCell wikiCell1 = (WikiTableCell) row.getSubParts().get(0);
-        Assert.assertEquals(1, wikiCell1.getSubParts().size());
-        Assert.assertTrue(wikiCell1.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, wikiCell1.getSubParts().size());
+        Assertions.assertTrue(wikiCell1.getSubParts().get(0) instanceof PlainText);
         PlainText wikiCell1Text = (PlainText) wikiCell1.getSubParts().get(0);
-        Assert.assertEquals("first cell", wikiCell1Text.getText().trim());
+        Assertions.assertEquals("first cell", wikiCell1Text.getText().trim());
 
         WikiTableCell wikiCell2 = (WikiTableCell) row.getSubParts().get(1);
-        Assert.assertEquals(1, wikiCell2.getSubParts().size());
-        Assert.assertTrue(wikiCell2.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, wikiCell2.getSubParts().size());
+        Assertions.assertTrue(wikiCell2.getSubParts().get(0) instanceof PlainText);
         PlainText wikiCelleText = (PlainText) wikiCell2.getSubParts().get(0);
-        Assert.assertEquals("second cell", wikiCelleText.getText().trim());
+        Assertions.assertEquals("second cell", wikiCelleText.getText().trim());
 
         WikiTableRow row2 = (WikiTableRow) parsedTable.getSubParts().get(1);
 
-        Assert.assertTrue(row.getSubParts().get(0) instanceof WikiTableCell);
-        Assert.assertTrue(row.getSubParts().get(1) instanceof WikiTableCell);
+        Assertions.assertTrue(row.getSubParts().get(0) instanceof WikiTableCell);
+        Assertions.assertTrue(row.getSubParts().get(1) instanceof WikiTableCell);
 
         WikiTableCell wikiCell3 = (WikiTableCell) row2.getSubParts().get(0);
-        Assert.assertEquals(1, wikiCell3.getSubParts().size());
-        Assert.assertTrue(wikiCell3.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, wikiCell3.getSubParts().size());
+        Assertions.assertTrue(wikiCell3.getSubParts().get(0) instanceof PlainText);
         PlainText wikiCell3Text = (PlainText) wikiCell3.getSubParts().get(0);
-        Assert.assertEquals("third cell", wikiCell3Text.getText().trim());
+        Assertions.assertEquals("third cell", wikiCell3Text.getText().trim());
 
         WikiTableCell wikiCell4 = (WikiTableCell) row2.getSubParts().get(1);
-        Assert.assertEquals(1, wikiCell4.getSubParts().size());
-        Assert.assertTrue(wikiCell4.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, wikiCell4.getSubParts().size());
+        Assertions.assertTrue(wikiCell4.getSubParts().get(0) instanceof PlainText);
         PlainText wikiCell4Text = (PlainText) wikiCell4.getSubParts().get(0);
-        Assert.assertEquals("fourth cell", wikiCell4Text.getText().trim());
+        Assertions.assertEquals("fourth cell", wikiCell4Text.getText().trim());
     }
 
     @Test
@@ -146,44 +146,44 @@ public class TestWikiTableParser {
         WikiTableParser parser = new WikiTableParser();
         ParseResult<WikiTable> parseResult = parser.parse(wikiText);
         WikiTable parsedTable = parseResult.getIdentifiedPart();
-        Assert.assertNotNull(parsedTable.getSubParts());
+        Assertions.assertNotNull(parsedTable.getSubParts());
 
-        Assert.assertEquals(2, parsedTable.getSubParts().size());
-        Assert.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableRow);
+        Assertions.assertEquals(2, parsedTable.getSubParts().size());
+        Assertions.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableRow);
         WikiTableRow row1 = (WikiTableRow) parsedTable.getSubParts().get(0);
 
-        Assert.assertEquals(2, row1.getSubParts().size());
-        Assert.assertTrue(row1.getSubParts().get(0) instanceof WikiTableCell);
-        Assert.assertTrue(row1.getSubParts().get(1) instanceof WikiTableCell);
+        Assertions.assertEquals(2, row1.getSubParts().size());
+        Assertions.assertTrue(row1.getSubParts().get(0) instanceof WikiTableCell);
+        Assertions.assertTrue(row1.getSubParts().get(1) instanceof WikiTableCell);
 
         WikiTableCell wikiCell1 = (WikiTableCell) row1.getSubParts().get(0);
-        Assert.assertEquals(1, wikiCell1.getSubParts().size());
-        Assert.assertTrue(wikiCell1.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, wikiCell1.getSubParts().size());
+        Assertions.assertTrue(wikiCell1.getSubParts().get(0) instanceof PlainText);
         PlainText wikiCell1Text = (PlainText) wikiCell1.getSubParts().get(0);
-        Assert.assertEquals("first cell", wikiCell1Text.getText().trim());
+        Assertions.assertEquals("first cell", wikiCell1Text.getText().trim());
 
         WikiTableCell wikiCell2 = (WikiTableCell) row1.getSubParts().get(1);
-        Assert.assertEquals(1, wikiCell2.getSubParts().size());
-        Assert.assertTrue(wikiCell2.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, wikiCell2.getSubParts().size());
+        Assertions.assertTrue(wikiCell2.getSubParts().get(0) instanceof PlainText);
         PlainText wikiCell2Text = (PlainText) wikiCell2.getSubParts().get(0);
-        Assert.assertEquals("second cell", wikiCell2Text.getText().trim());
+        Assertions.assertEquals("second cell", wikiCell2Text.getText().trim());
 
         WikiTableRow row2 = (WikiTableRow) parsedTable.getSubParts().get(1);
-        Assert.assertEquals(2, row2.getSubParts().size());
-        Assert.assertTrue(row2.getSubParts().get(0) instanceof WikiTableCell);
-        Assert.assertTrue(row2.getSubParts().get(1) instanceof WikiTableCell);
+        Assertions.assertEquals(2, row2.getSubParts().size());
+        Assertions.assertTrue(row2.getSubParts().get(0) instanceof WikiTableCell);
+        Assertions.assertTrue(row2.getSubParts().get(1) instanceof WikiTableCell);
 
         WikiTableCell wikiCell3 = (WikiTableCell) row2.getSubParts().get(0);
-        Assert.assertEquals(1, wikiCell3.getSubParts().size());
-        Assert.assertTrue(wikiCell3.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, wikiCell3.getSubParts().size());
+        Assertions.assertTrue(wikiCell3.getSubParts().get(0) instanceof PlainText);
         PlainText wikiCell3Text = (PlainText) wikiCell3.getSubParts().get(0);
-        Assert.assertEquals("third cell", wikiCell3Text.getText().trim());
+        Assertions.assertEquals("third cell", wikiCell3Text.getText().trim());
 
         WikiTableCell wikiCell4 = (WikiTableCell) row2.getSubParts().get(1);
-        Assert.assertEquals(1, wikiCell4.getSubParts().size());
-        Assert.assertTrue(wikiCell4.getSubParts().get(0) instanceof PlainText);
+        Assertions.assertEquals(1, wikiCell4.getSubParts().size());
+        Assertions.assertTrue(wikiCell4.getSubParts().get(0) instanceof PlainText);
         PlainText wikiCell4Text = (PlainText) wikiCell4.getSubParts().get(0);
-        Assert.assertEquals("fourth cell", wikiCell4Text.getText().trim());
+        Assertions.assertEquals("fourth cell", wikiCell4Text.getText().trim());
     }
 
     @Test
@@ -205,10 +205,10 @@ public class TestWikiTableParser {
         WikiTableParser parser = new WikiTableParser();
         ParseResult<WikiTable> parseResult = parser.parse(tableText);
         WikiTable parsedTable = parseResult.getIdentifiedPart();
-        Assert.assertNotNull(parsedTable.getSubParts());
+        Assertions.assertNotNull(parsedTable.getSubParts());
 
-        Assert.assertEquals(12, parsedTable.getSubParts().size());
-        Assert.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableRow);
+        Assertions.assertEquals(12, parsedTable.getSubParts().size());
+        Assertions.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableRow);
         WikiTableRow row1 = (WikiTableRow) parsedTable.getSubParts().get(0);
 
     }
@@ -225,18 +225,18 @@ public class TestWikiTableParser {
         WikiTableParser parser = new WikiTableParser();
         ParseResult<WikiTable> parseResult = parser.parse(tableText);
         WikiTable parsedTable = parseResult.getIdentifiedPart();
-        Assert.assertNotNull(parsedTable.getSubParts());
+        Assertions.assertNotNull(parsedTable.getSubParts());
 
-        Assert.assertEquals(1, parsedTable.getSubParts().size());
-        Assert.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableRow);
+        Assertions.assertEquals(1, parsedTable.getSubParts().size());
+        Assertions.assertTrue(parsedTable.getSubParts().get(0) instanceof WikiTableRow);
         WikiTableRow row1 = (WikiTableRow) parsedTable.getSubParts().get(0);
 
-        Assert.assertEquals(1, row1.getSubParts().size());
-        Assert.assertTrue(row1.getSubParts().get(0) instanceof WikiTableCell);
+        Assertions.assertEquals(1, row1.getSubParts().size());
+        Assertions.assertTrue(row1.getSubParts().get(0) instanceof WikiTableCell);
         WikiTableCell cell1 = (WikiTableCell) row1.getSubParts().get(0);
         List<PartContext> eminescuSearchRes =
             cell1.search(part -> part instanceof PlainText && ((PlainText) part).getText().contains("EMINESCU"));
-        Assert.assertEquals(1, eminescuSearchRes.size());
+        Assertions.assertEquals(1, eminescuSearchRes.size());
     }
 
     @Test
@@ -271,12 +271,12 @@ public class TestWikiTableParser {
         WikiTableParser sut = new WikiTableParser();
         ParseResult<WikiTable> parseResult = sut.parse(tableText);
         WikiTable parsedTable = parseResult.getIdentifiedPart();
-        Assert.assertNotNull(parsedTable.getSubParts());
+        Assertions.assertNotNull(parsedTable.getSubParts());
 
         WikiPart firstPart = parsedTable.getSubParts().get(0);
-        Assert.assertTrue(firstPart instanceof WikiTableRow);
+        Assertions.assertTrue(firstPart instanceof WikiTableRow);
         WikiTableRow firstRow = (WikiTableRow) firstPart;
-        Assert.assertEquals(3, firstRow.getSubParts().size());
+        Assertions.assertEquals(3, firstRow.getSubParts().size());
 
     }
 
@@ -303,18 +303,18 @@ public class TestWikiTableParser {
         WikiTableParser sut = new WikiTableParser();
         ParseResult<WikiTable> parseResult = sut.parse(wikiText);
         WikiTable parsedTable = parseResult.getIdentifiedPart();
-        Assert.assertNotNull(parsedTable.getSubParts());
+        Assertions.assertNotNull(parsedTable.getSubParts());
 
         WikiPart firstPart = parsedTable.getSubParts().get(0);
-        Assert.assertTrue(firstPart instanceof WikiTableRow);
+        Assertions.assertTrue(firstPart instanceof WikiTableRow);
         WikiTableRow firstRow = (WikiTableRow) firstPart;
-        Assert.assertEquals(1, firstRow.getSubParts().size());
+        Assertions.assertEquals(1, firstRow.getSubParts().size());
 
         WikiPart firstPartOfFirstRow = firstRow.getSubParts().get(0);
-        Assert.assertTrue(firstPartOfFirstRow instanceof WikiTableCell);
+        Assertions.assertTrue(firstPartOfFirstRow instanceof WikiTableCell);
         WikiTableCell firstCell = (WikiTableCell) firstPartOfFirstRow;
-        Assert.assertEquals("style=\"background:#50C878; padding-bottom:2px;\" colspan=\"2\"",
+        Assertions.assertEquals("style=\"background:#50C878; padding-bottom:2px;\" colspan=\"2\"",
             firstCell.getAttribs().stream().map(Object::toString).collect(Collectors.joining()).trim());
-        Assert.assertTrue(firstCell.getSubParts().stream().anyMatch(part -> part instanceof WikiLink));
+        Assertions.assertTrue(firstCell.getSubParts().stream().anyMatch(part -> part instanceof WikiLink));
     }
 }

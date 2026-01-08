@@ -1,7 +1,7 @@
 package org.wikipedia.ro.parser;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wikipedia.ro.model.PlainText;
 import org.wikipedia.ro.model.WikiLink;
 
@@ -14,14 +14,14 @@ public class TestWikiLinkParser {
         WikiLinkParser sut = new WikiLinkParser();
         ParseResult<WikiLink> parseResult = sut.parse(text);
 
-        Assert.assertEquals("[[Link]]", parseResult.getParsedString());
-        Assert.assertEquals("", parseResult.getUnparsedString());
+        Assertions.assertEquals("[[Link]]", parseResult.getParsedString());
+        Assertions.assertEquals("", parseResult.getUnparsedString());
         WikiLink identifiedPart = parseResult.getIdentifiedPart();
-        Assert.assertNotNull(identifiedPart);
-        Assert.assertTrue(identifiedPart instanceof WikiLink);
+        Assertions.assertNotNull(identifiedPart);
+        Assertions.assertTrue(identifiedPart instanceof WikiLink);
 
-        Assert.assertEquals("Link", identifiedPart.getTarget());
-        Assert.assertEquals(0, identifiedPart.getLabelStructure().size());
+        Assertions.assertEquals("Link", identifiedPart.getTarget());
+        Assertions.assertEquals(0, identifiedPart.getLabelStructure().size());
     }
 
     @Test
@@ -32,16 +32,16 @@ public class TestWikiLinkParser {
 
         ParseResult<WikiLink> parseResult = sut.parse(text);
 
-        Assert.assertEquals("[[Link|Target]]", parseResult.getParsedString());
-        Assert.assertEquals("", parseResult.getUnparsedString());
-        Assert.assertNotNull(parseResult.getIdentifiedPart());
+        Assertions.assertEquals("[[Link|Target]]", parseResult.getParsedString());
+        Assertions.assertEquals("", parseResult.getUnparsedString());
+        Assertions.assertNotNull(parseResult.getIdentifiedPart());
         WikiLink parsedPart = parseResult.getIdentifiedPart();
-        Assert.assertTrue(parsedPart instanceof WikiLink);
+        Assertions.assertTrue(parsedPart instanceof WikiLink);
 
-        Assert.assertEquals("Link", parsedPart.getTarget());
-        Assert.assertEquals(1, parsedPart.getLabelStructure().size());
-        Assert.assertTrue(parsedPart.getLabelStructure().get(0) instanceof PlainText);
-        Assert.assertEquals("Target", ((PlainText) parsedPart.getLabelStructure().get(0)).getText());
+        Assertions.assertEquals("Link", parsedPart.getTarget());
+        Assertions.assertEquals(1, parsedPart.getLabelStructure().size());
+        Assertions.assertTrue(parsedPart.getLabelStructure().get(0) instanceof PlainText);
+        Assertions.assertEquals("Target", ((PlainText) parsedPart.getLabelStructure().get(0)).getText());
 
     }
 
@@ -53,15 +53,15 @@ public class TestWikiLinkParser {
 
         ParseResult<WikiLink> parseResult = sut.parse(text);
 
-        Assert.assertEquals("[[Link|Target]]", parseResult.getParsedString());
-        Assert.assertEquals(" and more", parseResult.getUnparsedString());
+        Assertions.assertEquals("[[Link|Target]]", parseResult.getParsedString());
+        Assertions.assertEquals(" and more", parseResult.getUnparsedString());
         
         WikiLink parsedPart = parseResult.getIdentifiedPart();
-        Assert.assertNotNull(parsedPart);
-        Assert.assertEquals("Link", parsedPart.getTarget());
-        Assert.assertEquals(1, parsedPart.getLabelStructure().size());
-        Assert.assertTrue(parsedPart.getLabelStructure().get(0) instanceof PlainText);
-        Assert.assertEquals("Target", ((PlainText) parsedPart.getLabelStructure().get(0)).getText());
+        Assertions.assertNotNull(parsedPart);
+        Assertions.assertEquals("Link", parsedPart.getTarget());
+        Assertions.assertEquals(1, parsedPart.getLabelStructure().size());
+        Assertions.assertTrue(parsedPart.getLabelStructure().get(0) instanceof PlainText);
+        Assertions.assertEquals("Target", ((PlainText) parsedPart.getLabelStructure().get(0)).getText());
 
     }
     

@@ -2,8 +2,8 @@ package org.wikipedia.ro.utils;
 
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wikipedia.ro.model.WikiTemplate;
 
 public class TestPageUtils {
@@ -11,6 +11,6 @@ public class TestPageUtils {
     public void testFindsTwoTemplates() {
         List<WikiTemplate> templatesInText =
             PageUtils.getTemplatesInText("Gigi {{are}} {{ouă|2}} în {{locație|nume=cuibar}}");
-        Assert.assertEquals(3, templatesInText.size());
+        Assertions.assertEquals(3, templatesInText.size());
     }
 }

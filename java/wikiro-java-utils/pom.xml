@@ -4,7 +4,7 @@
 	<groupId>org.wikipedia.ro.java</groupId>
 	<artifactId>wikiro-java-utils</artifactId>
 	<packaging>jar</packaging>
-	<version>1.7</version>
+	<version>1.8</version>
 	<name>wikiro-java-utils</name>
 	<url>http://maven.apache.org</url>
 
@@ -15,25 +15,40 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.6</version>
+			<version>3.14.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
-			<version>4.1</version>
+			<version>4.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wikipedia</groupId>
 			<artifactId>wiki-java</artifactId>
 			<version>0.39-SNAPSHOT</version>
 		</dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.11.0</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.14.2</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>1.14.2</version>
+            <scope>test</scope>
+        </dependency>
+
 	</dependencies>
 </project>

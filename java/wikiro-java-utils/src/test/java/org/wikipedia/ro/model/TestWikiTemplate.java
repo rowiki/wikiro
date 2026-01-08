@@ -2,8 +2,8 @@ package org.wikipedia.ro.model;
 
 import java.util.Arrays;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TestWikiTemplate {
 
@@ -12,7 +12,7 @@ public class TestWikiTemplate {
         WikiTemplate sut = new WikiTemplate();
         sut.setTemplateTitle("Template");
         
-        Assert.assertEquals("{{Template}}", sut.toString());
+        Assertions.assertEquals("{{Template}}", sut.toString());
     }
 
     @Test
@@ -22,7 +22,7 @@ public class TestWikiTemplate {
         sut.setParam("1", Arrays.asList(new PlainText("t1")));
         sut.setParam("2", Arrays.asList(new PlainText("t2")));
         
-        Assert.assertEquals("{{Template|t1|t2}}", sut.toString());
+        Assertions.assertEquals("{{Template|t1|t2}}", sut.toString());
     }
 
     @Test
@@ -33,7 +33,7 @@ public class TestWikiTemplate {
         sut.setParam("2", Arrays.asList(new PlainText("t2")));
         sut.setParam("4", Arrays.asList(new PlainText("t4")));
         
-        Assert.assertEquals("{{Template|t1|t2|4=t4}}", sut.toString());
+        Assertions.assertEquals("{{Template|t1|t2|4=t4}}", sut.toString());
     }
     
     @Test
@@ -45,7 +45,7 @@ public class TestWikiTemplate {
         sut.setParam("4", Arrays.asList(new PlainText("t4")));
         sut.setParam("key", Arrays.asList(new PlainText("value")));
         
-        Assert.assertEquals("{{Template|t1|t2|4=t4|key=value}}", sut.toString());
+        Assertions.assertEquals("{{Template|t1|t2|4=t4|key=value}}", sut.toString());
     }
     
     @Test
@@ -57,7 +57,7 @@ public class TestWikiTemplate {
         sut.setParam("4", Arrays.asList(new PlainText("t4")));
         sut.setSingleLine(false);
         
-        Assert.assertEquals("{{Template\n|t1\n|t2\n| 4 = t4\n}}", sut.toString());
+        Assertions.assertEquals("{{Template\n|t1\n|t2\n| 4 = t4\n}}", sut.toString());
     }
     
     @Test
@@ -70,7 +70,7 @@ public class TestWikiTemplate {
         sut.setParam("key", Arrays.asList(new PlainText("value")));
         sut.setSingleLine(false);
         
-        Assert.assertEquals("{{Template\n|t1\n|t2\n| 4 = t4\n| key = value\n}}", sut.toString());
+        Assertions.assertEquals("{{Template\n|t1\n|t2\n| 4 = t4\n| key = value\n}}", sut.toString());
     }
 
 }

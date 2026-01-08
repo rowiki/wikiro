@@ -1,9 +1,12 @@
 package org.wikipedia.ro.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wikipedia.ro.model.PlainText;
 import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiPart;
@@ -18,12 +21,12 @@ public class TestAggregatingParser {
 
         List<ParseResult<WikiPart>> parseRes = sut.parse(wikiText);
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertEquals(1, parseRes.size());
+        assertNotNull(parseRes);
+        assertEquals(1, parseRes.size());
         ParseResult<? extends WikiPart> theResult = parseRes.get(0);
-        Assert.assertTrue(theResult.getIdentifiedPart() instanceof WikiLink);
+        assertTrue(theResult.getIdentifiedPart() instanceof WikiLink);
         WikiLink link = (WikiLink) theResult.getIdentifiedPart();
-        Assert.assertEquals("link", link.getTarget());
+        assertEquals("link", link.getTarget());
     }
     
     @Test
@@ -34,16 +37,16 @@ public class TestAggregatingParser {
 
         List<ParseResult<WikiPart>> parseRes = sut.parse(wikiText);
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertEquals(2, parseRes.size());
+        assertNotNull(parseRes);
+        assertEquals(2, parseRes.size());
         ParseResult<WikiPart> firstResult = parseRes.get(0);
-        Assert.assertTrue(firstResult.getIdentifiedPart() instanceof WikiLink);
+        assertTrue(firstResult.getIdentifiedPart() instanceof WikiLink);
         WikiLink link = (WikiLink) firstResult.getIdentifiedPart();
-        Assert.assertEquals("link", link.getTarget());
+        assertEquals("link", link.getTarget());
 
         ParseResult<WikiPart> secondResult = parseRes.get(1);
-        Assert.assertTrue(secondResult.getIdentifiedPart() instanceof PlainText);
+        assertTrue(secondResult.getIdentifiedPart() instanceof PlainText);
         PlainText plainText = (PlainText) secondResult.getIdentifiedPart();
-        Assert.assertEquals(" and text", plainText.getText());
+        assertEquals(" and text", plainText.getText());
     }
 }

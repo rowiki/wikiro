@@ -1,7 +1,7 @@
 package org.wikipedia.ro.parser;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wikipedia.ro.model.PlainText;
 
 public class TestWikiTextParser {
@@ -11,10 +11,10 @@ public class TestWikiTextParser {
         WikiTextParser sut = new WikiTextParser();
         ParseResult<PlainText> parseResult = sut.parse("wiki text");
 
-        Assert.assertEquals("wiki text", parseResult.getParsedString());
-        Assert.assertEquals("", parseResult.getUnparsedString());
-        Assert.assertNotNull(parseResult.getIdentifiedPart());
-        Assert.assertEquals("wiki text", parseResult.getIdentifiedPart().getText());
+        Assertions.assertEquals("wiki text", parseResult.getParsedString());
+        Assertions.assertEquals("", parseResult.getUnparsedString());
+        Assertions.assertNotNull(parseResult.getIdentifiedPart());
+        Assertions.assertEquals("wiki text", parseResult.getIdentifiedPart().getText());
     }
     
     @Test
@@ -22,10 +22,10 @@ public class TestWikiTextParser {
         WikiTextParser sut = new WikiTextParser();
         ParseResult<PlainText> parseResult = sut.parse("wiki text[[link]]");
 
-        Assert.assertEquals("wiki text", parseResult.getParsedString());
-        Assert.assertEquals("[[link]]", parseResult.getUnparsedString());
-        Assert.assertNotNull(parseResult.getIdentifiedPart());
-        Assert.assertEquals("wiki text", parseResult.getIdentifiedPart().getText());
+        Assertions.assertEquals("wiki text", parseResult.getParsedString());
+        Assertions.assertEquals("[[link]]", parseResult.getUnparsedString());
+        Assertions.assertNotNull(parseResult.getIdentifiedPart());
+        Assertions.assertEquals("wiki text", parseResult.getIdentifiedPart().getText());
         
     }
 
@@ -34,10 +34,10 @@ public class TestWikiTextParser {
         WikiTextParser sut = new WikiTextParser();
         ParseResult<PlainText> parseResult = sut.parse("wiki text{{Template}}");
 
-        Assert.assertEquals("wiki text", parseResult.getParsedString());
-        Assert.assertEquals("{{Template}}", parseResult.getUnparsedString());
-        Assert.assertNotNull(parseResult.getIdentifiedPart());
-        Assert.assertEquals("wiki text", parseResult.getIdentifiedPart().getText());
+        Assertions.assertEquals("wiki text", parseResult.getParsedString());
+        Assertions.assertEquals("{{Template}}", parseResult.getUnparsedString());
+        Assertions.assertNotNull(parseResult.getIdentifiedPart());
+        Assertions.assertEquals("wiki text", parseResult.getIdentifiedPart().getText());
         
     }
 

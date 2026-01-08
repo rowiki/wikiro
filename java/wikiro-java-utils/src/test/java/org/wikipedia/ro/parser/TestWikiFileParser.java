@@ -1,9 +1,13 @@
 package org.wikipedia.ro.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wikipedia.ro.model.PlainText;
 import org.wikipedia.ro.model.WikiFile;
 import org.wikipedia.ro.model.WikiLink;
@@ -17,24 +21,24 @@ public class TestWikiFileParser {
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
         
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
+        assertEquals(wikiText, parseRes.getParsedString());
+        assertEquals("", parseRes.getUnparsedString());
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertNotNull(parseRes.getIdentifiedPart());
+        assertNotNull(parseRes);
+        assertNotNull(parseRes.getIdentifiedPart());
 
         WikiFile parsedFile = parseRes.getIdentifiedPart();
-        Assert.assertEquals("Fișier", parsedFile.getNamespace());
-        Assert.assertEquals("gigibobo.jpg", parsedFile.getName());
-        Assert.assertNull(parsedFile.getDisplayType());
-        Assert.assertNull(parsedFile.getAlignment());
-        Assert.assertNull(parsedFile.getAlt());
-        Assert.assertNull(parsedFile.getBorder());
-        Assert.assertNull(parsedFile.getLang());
-        Assert.assertNull(parsedFile.getLink());
-        Assert.assertNull(parsedFile.getLocation());
-        Assert.assertNull(parsedFile.getSize());
-        Assert.assertEquals(0, parsedFile.getCaptions().size());
+        assertEquals("Fișier", parsedFile.getNamespace());
+        assertEquals("gigibobo.jpg", parsedFile.getName());
+        assertNull(parsedFile.getDisplayType());
+        assertNull(parsedFile.getAlignment());
+        assertNull(parsedFile.getAlt());
+        assertNull(parsedFile.getBorder());
+        assertNull(parsedFile.getLang());
+        assertNull(parsedFile.getLink());
+        assertNull(parsedFile.getLocation());
+        assertNull(parsedFile.getSize());
+        assertEquals(0, parsedFile.getCaptions().size());
     }
 
     @Test
@@ -43,30 +47,30 @@ public class TestWikiFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
+        assertEquals(wikiText, parseRes.getParsedString());
+        assertEquals("", parseRes.getUnparsedString());
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertNotNull(parseRes.getIdentifiedPart());
+        assertNotNull(parseRes);
+        assertNotNull(parseRes.getIdentifiedPart());
 
         WikiFile parsedFile = parseRes.getIdentifiedPart();
-        Assert.assertEquals("Fișier", parsedFile.getNamespace());
-        Assert.assertEquals("gigibobo.jpg", parsedFile.getName());
-        Assert.assertNull(parsedFile.getAlignment());
-        Assert.assertNull(parsedFile.getDisplayType());
-        Assert.assertNull(parsedFile.getAlt());
-        Assert.assertNull(parsedFile.getBorder());
-        Assert.assertNull(parsedFile.getLang());
-        Assert.assertNull(parsedFile.getLink());
-        Assert.assertNull(parsedFile.getLocation());
-        Assert.assertNull(parsedFile.getSize());
-        Assert.assertEquals(1, parsedFile.getCaptions().size());
+        assertEquals("Fișier", parsedFile.getNamespace());
+        assertEquals("gigibobo.jpg", parsedFile.getName());
+        assertNull(parsedFile.getAlignment());
+        assertNull(parsedFile.getDisplayType());
+        assertNull(parsedFile.getAlt());
+        assertNull(parsedFile.getBorder());
+        assertNull(parsedFile.getLang());
+        assertNull(parsedFile.getLink());
+        assertNull(parsedFile.getLocation());
+        assertNull(parsedFile.getSize());
+        assertEquals(1, parsedFile.getCaptions().size());
         List<WikiPart> captionParts = parsedFile.getCaption();
-        Assert.assertEquals(2, captionParts.size());
-        Assert.assertTrue(captionParts.get(0) instanceof WikiLink);
-        Assert.assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
-        Assert.assertTrue(captionParts.get(1) instanceof PlainText);
-        Assert.assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
+        assertEquals(2, captionParts.size());
+        assertTrue(captionParts.get(0) instanceof WikiLink);
+        assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
+        assertTrue(captionParts.get(1) instanceof PlainText);
+        assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
     }
 
     @Test
@@ -75,30 +79,30 @@ public class TestWikiFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
+        assertEquals(wikiText, parseRes.getParsedString());
+        assertEquals("", parseRes.getUnparsedString());
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertNotNull(parseRes.getIdentifiedPart());
+        assertNotNull(parseRes);
+        assertNotNull(parseRes.getIdentifiedPart());
 
         WikiFile parsedFile = parseRes.getIdentifiedPart();
-        Assert.assertEquals("Fișier", parsedFile.getNamespace());
-        Assert.assertEquals("gigibobo.jpg", parsedFile.getName());
-        Assert.assertNull(parsedFile.getDisplayType());
-        Assert.assertNull(parsedFile.getAlignment());
-        Assert.assertNull(parsedFile.getAlt());
-        Assert.assertNull(parsedFile.getBorder());
-        Assert.assertNull(parsedFile.getLang());
-        Assert.assertNull(parsedFile.getLink());
-        Assert.assertNull(parsedFile.getLocation());
-        Assert.assertEquals("upright", parsedFile.getSize());
-        Assert.assertEquals(1, parsedFile.getCaptions().size());
+        assertEquals("Fișier", parsedFile.getNamespace());
+        assertEquals("gigibobo.jpg", parsedFile.getName());
+        assertNull(parsedFile.getDisplayType());
+        assertNull(parsedFile.getAlignment());
+        assertNull(parsedFile.getAlt());
+        assertNull(parsedFile.getBorder());
+        assertNull(parsedFile.getLang());
+        assertNull(parsedFile.getLink());
+        assertNull(parsedFile.getLocation());
+        assertEquals("upright", parsedFile.getSize());
+        assertEquals(1, parsedFile.getCaptions().size());
         List<WikiPart> captionParts = parsedFile.getCaption();
-        Assert.assertEquals(2, captionParts.size());
-        Assert.assertTrue(captionParts.get(0) instanceof WikiLink);
-        Assert.assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
-        Assert.assertTrue(captionParts.get(1) instanceof PlainText);
-        Assert.assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
+        assertEquals(2, captionParts.size());
+        assertTrue(captionParts.get(0) instanceof WikiLink);
+        assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
+        assertTrue(captionParts.get(1) instanceof PlainText);
+        assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
     }
 
     @Test
@@ -107,30 +111,30 @@ public class TestWikiFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
+        assertEquals(wikiText, parseRes.getParsedString());
+        assertEquals("", parseRes.getUnparsedString());
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertNotNull(parseRes.getIdentifiedPart());
+        assertNotNull(parseRes);
+        assertNotNull(parseRes.getIdentifiedPart());
 
         WikiFile parsedFile = parseRes.getIdentifiedPart();
-        Assert.assertEquals("Fișier", parsedFile.getNamespace());
-        Assert.assertEquals("gigibobo.jpg", parsedFile.getName());
-        Assert.assertNull(parsedFile.getDisplayType());
-        Assert.assertNull(parsedFile.getAlignment());
-        Assert.assertNull(parsedFile.getAlt());
-        Assert.assertNull(parsedFile.getBorder());
-        Assert.assertNull(parsedFile.getLang());
-        Assert.assertNull(parsedFile.getLink());
-        Assert.assertNull(parsedFile.getLocation());
-        Assert.assertEquals("upright=0.7", parsedFile.getSize());
-        Assert.assertEquals(1, parsedFile.getCaptions().size());
+        assertEquals("Fișier", parsedFile.getNamespace());
+        assertEquals("gigibobo.jpg", parsedFile.getName());
+        assertNull(parsedFile.getDisplayType());
+        assertNull(parsedFile.getAlignment());
+        assertNull(parsedFile.getAlt());
+        assertNull(parsedFile.getBorder());
+        assertNull(parsedFile.getLang());
+        assertNull(parsedFile.getLink());
+        assertNull(parsedFile.getLocation());
+        assertEquals("upright=0.7", parsedFile.getSize());
+        assertEquals(1, parsedFile.getCaptions().size());
         List<WikiPart> captionParts = parsedFile.getCaption();
-        Assert.assertEquals(2, captionParts.size());
-        Assert.assertTrue(captionParts.get(0) instanceof WikiLink);
-        Assert.assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
-        Assert.assertTrue(captionParts.get(1) instanceof PlainText);
-        Assert.assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
+        assertEquals(2, captionParts.size());
+        assertTrue(captionParts.get(0) instanceof WikiLink);
+        assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
+        assertTrue(captionParts.get(1) instanceof PlainText);
+        assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
     }
 
     @Test
@@ -139,30 +143,30 @@ public class TestWikiFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
+        assertEquals(wikiText, parseRes.getParsedString());
+        assertEquals("", parseRes.getUnparsedString());
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertNotNull(parseRes.getIdentifiedPart());
+        assertNotNull(parseRes);
+        assertNotNull(parseRes.getIdentifiedPart());
 
         WikiFile parsedFile = parseRes.getIdentifiedPart();
-        Assert.assertEquals("Fișier", parsedFile.getNamespace());
-        Assert.assertEquals("gigibobo.jpg", parsedFile.getName());
-        Assert.assertNull(parsedFile.getAlignment());
-        Assert.assertNull(parsedFile.getDisplayType());
-        Assert.assertNull(parsedFile.getAlt());
-        Assert.assertNull(parsedFile.getBorder());
-        Assert.assertNull(parsedFile.getLang());
-        Assert.assertNull(parsedFile.getLink());
-        Assert.assertNull(parsedFile.getLocation());
-        Assert.assertEquals("216px", parsedFile.getSize());
-        Assert.assertEquals(1, parsedFile.getCaptions().size());
+        assertEquals("Fișier", parsedFile.getNamespace());
+        assertEquals("gigibobo.jpg", parsedFile.getName());
+        assertNull(parsedFile.getAlignment());
+        assertNull(parsedFile.getDisplayType());
+        assertNull(parsedFile.getAlt());
+        assertNull(parsedFile.getBorder());
+        assertNull(parsedFile.getLang());
+        assertNull(parsedFile.getLink());
+        assertNull(parsedFile.getLocation());
+        assertEquals("216px", parsedFile.getSize());
+        assertEquals(1, parsedFile.getCaptions().size());
         List<WikiPart> captionParts = parsedFile.getCaption();
-        Assert.assertEquals(2, captionParts.size());
-        Assert.assertTrue(captionParts.get(0) instanceof WikiLink);
-        Assert.assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
-        Assert.assertTrue(captionParts.get(1) instanceof PlainText);
-        Assert.assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
+        assertEquals(2, captionParts.size());
+        assertTrue(captionParts.get(0) instanceof WikiLink);
+        assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
+        assertTrue(captionParts.get(1) instanceof PlainText);
+        assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
     }
 
     @Test
@@ -171,30 +175,30 @@ public class TestWikiFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
+        assertEquals(wikiText, parseRes.getParsedString());
+        assertEquals("", parseRes.getUnparsedString());
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertNotNull(parseRes.getIdentifiedPart());
+        assertNotNull(parseRes);
+        assertNotNull(parseRes.getIdentifiedPart());
 
         WikiFile parsedFile = parseRes.getIdentifiedPart();
-        Assert.assertEquals("Fișier", parsedFile.getNamespace());
-        Assert.assertEquals("gigibobo.jpg", parsedFile.getName());
-        Assert.assertNull(parsedFile.getAlignment());
-        Assert.assertNull(parsedFile.getDisplayType());
-        Assert.assertNull(parsedFile.getAlt());
-        Assert.assertNull(parsedFile.getBorder());
-        Assert.assertNull(parsedFile.getLang());
-        Assert.assertNull(parsedFile.getLink());
-        Assert.assertNull(parsedFile.getLocation());
-        Assert.assertEquals("200x200px", parsedFile.getSize());
-        Assert.assertEquals(1, parsedFile.getCaptions().size());
+        assertEquals("Fișier", parsedFile.getNamespace());
+        assertEquals("gigibobo.jpg", parsedFile.getName());
+        assertNull(parsedFile.getAlignment());
+        assertNull(parsedFile.getDisplayType());
+        assertNull(parsedFile.getAlt());
+        assertNull(parsedFile.getBorder());
+        assertNull(parsedFile.getLang());
+        assertNull(parsedFile.getLink());
+        assertNull(parsedFile.getLocation());
+        assertEquals("200x200px", parsedFile.getSize());
+        assertEquals(1, parsedFile.getCaptions().size());
         List<WikiPart> captionParts = parsedFile.getCaption();
-        Assert.assertEquals(2, captionParts.size());
-        Assert.assertTrue(captionParts.get(0) instanceof WikiLink);
-        Assert.assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
-        Assert.assertTrue(captionParts.get(1) instanceof PlainText);
-        Assert.assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
+        assertEquals(2, captionParts.size());
+        assertTrue(captionParts.get(0) instanceof WikiLink);
+        assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
+        assertTrue(captionParts.get(1) instanceof PlainText);
+        assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
     }
 
     @Test
@@ -203,30 +207,30 @@ public class TestWikiFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
+        assertEquals(wikiText, parseRes.getParsedString());
+        assertEquals("", parseRes.getUnparsedString());
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertNotNull(parseRes.getIdentifiedPart());
+        assertNotNull(parseRes);
+        assertNotNull(parseRes.getIdentifiedPart());
 
         WikiFile parsedFile = parseRes.getIdentifiedPart();
-        Assert.assertEquals("Fișier", parsedFile.getNamespace());
-        Assert.assertEquals("gigibobo.jpg", parsedFile.getName());
-        Assert.assertNull(parsedFile.getAlignment());
-        Assert.assertNull(parsedFile.getAlt());
-        Assert.assertEquals("thumb", parsedFile.getDisplayType());
-        Assert.assertEquals("border", parsedFile.getBorder());
-        Assert.assertNull(parsedFile.getLang());
-        Assert.assertNull(parsedFile.getLink());
-        Assert.assertNull(parsedFile.getLocation());
-        Assert.assertEquals("200x200px", parsedFile.getSize());
-        Assert.assertEquals(1, parsedFile.getCaptions().size());
+        assertEquals("Fișier", parsedFile.getNamespace());
+        assertEquals("gigibobo.jpg", parsedFile.getName());
+        assertNull(parsedFile.getAlignment());
+        assertNull(parsedFile.getAlt());
+        assertEquals("thumb", parsedFile.getDisplayType());
+        assertEquals("border", parsedFile.getBorder());
+        assertNull(parsedFile.getLang());
+        assertNull(parsedFile.getLink());
+        assertNull(parsedFile.getLocation());
+        assertEquals("200x200px", parsedFile.getSize());
+        assertEquals(1, parsedFile.getCaptions().size());
         List<WikiPart> captionParts = parsedFile.getCaption();
-        Assert.assertEquals(2, captionParts.size());
-        Assert.assertTrue(captionParts.get(0) instanceof WikiLink);
-        Assert.assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
-        Assert.assertTrue(captionParts.get(1) instanceof PlainText);
-        Assert.assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
+        assertEquals(2, captionParts.size());
+        assertTrue(captionParts.get(0) instanceof WikiLink);
+        assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
+        assertTrue(captionParts.get(1) instanceof PlainText);
+        assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
     }
     
     
@@ -236,30 +240,30 @@ public class TestWikiFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
+        assertEquals(wikiText, parseRes.getParsedString());
+        assertEquals("", parseRes.getUnparsedString());
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertNotNull(parseRes.getIdentifiedPart());
+        assertNotNull(parseRes);
+        assertNotNull(parseRes.getIdentifiedPart());
 
         WikiFile parsedFile = parseRes.getIdentifiedPart();
-        Assert.assertEquals("Fișier", parsedFile.getNamespace());
-        Assert.assertEquals("gigibobo.jpg", parsedFile.getName());
-        Assert.assertNull(parsedFile.getDisplayType());
-        Assert.assertNull(parsedFile.getAlignment());
-        Assert.assertNull(parsedFile.getAlt());
-        Assert.assertNull(parsedFile.getBorder());
-        Assert.assertEquals("ro", parsedFile.getLang());
-        Assert.assertNull(parsedFile.getLink());
-        Assert.assertNull(parsedFile.getLocation());
-        Assert.assertNull(parsedFile.getSize());
-        Assert.assertEquals(1, parsedFile.getCaptions().size());
+        assertEquals("Fișier", parsedFile.getNamespace());
+        assertEquals("gigibobo.jpg", parsedFile.getName());
+        assertNull(parsedFile.getDisplayType());
+        assertNull(parsedFile.getAlignment());
+        assertNull(parsedFile.getAlt());
+        assertNull(parsedFile.getBorder());
+        assertEquals("ro", parsedFile.getLang());
+        assertNull(parsedFile.getLink());
+        assertNull(parsedFile.getLocation());
+        assertNull(parsedFile.getSize());
+        assertEquals(1, parsedFile.getCaptions().size());
         List<WikiPart> captionParts = parsedFile.getCaption();
-        Assert.assertEquals(2, captionParts.size());
-        Assert.assertTrue(captionParts.get(0) instanceof WikiLink);
-        Assert.assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
-        Assert.assertTrue(captionParts.get(1) instanceof PlainText);
-        Assert.assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
+        assertEquals(2, captionParts.size());
+        assertTrue(captionParts.get(0) instanceof WikiLink);
+        assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
+        assertTrue(captionParts.get(1) instanceof PlainText);
+        assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
     }
 
     @Test
@@ -268,29 +272,29 @@ public class TestWikiFileParser {
 
         WikiFileParser fileParser = new WikiFileParser();
         ParseResult<WikiFile> parseRes = fileParser.parse(wikiText);
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
+        assertEquals(wikiText, parseRes.getParsedString());
+        assertEquals("", parseRes.getUnparsedString());
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertNotNull(parseRes.getIdentifiedPart());
+        assertNotNull(parseRes);
+        assertNotNull(parseRes.getIdentifiedPart());
 
         WikiFile parsedFile = parseRes.getIdentifiedPart();
-        Assert.assertEquals("Fișier", parsedFile.getNamespace());
-        Assert.assertEquals("gigibobo.jpg", parsedFile.getName());
-        Assert.assertNull(parsedFile.getAlignment());
-        Assert.assertNull(parsedFile.getAlt());
-        Assert.assertEquals("thumb", parsedFile.getDisplayType());
-        Assert.assertNull(parsedFile.getBorder());
-        Assert.assertNull(parsedFile.getLang());
-        Assert.assertNull(parsedFile.getLink());
-        Assert.assertEquals("left", parsedFile.getLocation());
-        Assert.assertEquals("upright", parsedFile.getSize());
-        Assert.assertEquals(1, parsedFile.getCaptions().size());
+        assertEquals("Fișier", parsedFile.getNamespace());
+        assertEquals("gigibobo.jpg", parsedFile.getName());
+        assertNull(parsedFile.getAlignment());
+        assertNull(parsedFile.getAlt());
+        assertEquals("thumb", parsedFile.getDisplayType());
+        assertNull(parsedFile.getBorder());
+        assertNull(parsedFile.getLang());
+        assertNull(parsedFile.getLink());
+        assertEquals("left", parsedFile.getLocation());
+        assertEquals("upright", parsedFile.getSize());
+        assertEquals(1, parsedFile.getCaptions().size());
         List<WikiPart> captionParts = parsedFile.getCaption();
-        Assert.assertEquals(2, captionParts.size());
-        Assert.assertTrue(captionParts.get(0) instanceof WikiLink);
-        Assert.assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
-        Assert.assertTrue(captionParts.get(1) instanceof PlainText);
-        Assert.assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
+        assertEquals(2, captionParts.size());
+        assertTrue(captionParts.get(0) instanceof WikiLink);
+        assertEquals("Gigi bobo", ((WikiLink) captionParts.get(0)).getTarget());
+        assertTrue(captionParts.get(1) instanceof PlainText);
+        assertEquals(" cu nana", ((PlainText) captionParts.get(1)).getText());
     }
 }

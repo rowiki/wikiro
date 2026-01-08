@@ -3,8 +3,8 @@ package org.wikipedia.ro.parser;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wikipedia.ro.model.PlainText;
 import org.wikipedia.ro.model.WikiTag;
 import org.wikipedia.ro.model.WikiTemplate;
@@ -19,15 +19,15 @@ public class TestWikiTagParser {
 
         ParseResult<WikiTag> parseRes = sut.parse(wikiText);
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
-        Assert.assertEquals("span", parseRes.getIdentifiedPart().getTagName());
-        Assert.assertEquals(1, parseRes.getIdentifiedPart().getAttributes().size());
-        Assert.assertEquals("tr", parseRes.getIdentifiedPart().getAttributes().get("lang").stream().map(Object::toString)
+        Assertions.assertNotNull(parseRes);
+        Assertions.assertEquals(wikiText, parseRes.getParsedString());
+        Assertions.assertEquals("", parseRes.getUnparsedString());
+        Assertions.assertEquals("span", parseRes.getIdentifiedPart().getTagName());
+        Assertions.assertEquals(1, parseRes.getIdentifiedPart().getAttributes().size());
+        Assertions.assertEquals("tr", parseRes.getIdentifiedPart().getAttributes().get("lang").stream().map(Object::toString)
             .collect(Collectors.joining("")));
-        Assert.assertFalse(parseRes.getIdentifiedPart().isClosing());
-        Assert.assertFalse(parseRes.getIdentifiedPart().isSelfClosing());
+        Assertions.assertFalse(parseRes.getIdentifiedPart().isClosing());
+        Assertions.assertFalse(parseRes.getIdentifiedPart().isSelfClosing());
     }
 
     @Test
@@ -38,13 +38,13 @@ public class TestWikiTagParser {
 
         ParseResult<WikiTag> parseRes = sut.parse(wikiText);
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
-        Assert.assertEquals("span", parseRes.getIdentifiedPart().getTagName());
-        Assert.assertEquals(0, parseRes.getIdentifiedPart().getAttributes().size());
-        Assert.assertTrue(parseRes.getIdentifiedPart().isClosing());
-        Assert.assertFalse(parseRes.getIdentifiedPart().isSelfClosing());
+        Assertions.assertNotNull(parseRes);
+        Assertions.assertEquals(wikiText, parseRes.getParsedString());
+        Assertions.assertEquals("", parseRes.getUnparsedString());
+        Assertions.assertEquals("span", parseRes.getIdentifiedPart().getTagName());
+        Assertions.assertEquals(0, parseRes.getIdentifiedPart().getAttributes().size());
+        Assertions.assertTrue(parseRes.getIdentifiedPart().isClosing());
+        Assertions.assertFalse(parseRes.getIdentifiedPart().isSelfClosing());
     }
 
     @Test
@@ -55,13 +55,13 @@ public class TestWikiTagParser {
 
         ParseResult<WikiTag> parseRes = sut.parse(wikiText);
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
-        Assert.assertEquals("br", parseRes.getIdentifiedPart().getTagName());
-        Assert.assertEquals(0, parseRes.getIdentifiedPart().getAttributes().size());
-        Assert.assertFalse(parseRes.getIdentifiedPart().isClosing());
-        Assert.assertTrue(parseRes.getIdentifiedPart().isSelfClosing());
+        Assertions.assertNotNull(parseRes);
+        Assertions.assertEquals(wikiText, parseRes.getParsedString());
+        Assertions.assertEquals("", parseRes.getUnparsedString());
+        Assertions.assertEquals("br", parseRes.getIdentifiedPart().getTagName());
+        Assertions.assertEquals(0, parseRes.getIdentifiedPart().getAttributes().size());
+        Assertions.assertFalse(parseRes.getIdentifiedPart().isClosing());
+        Assertions.assertTrue(parseRes.getIdentifiedPart().isSelfClosing());
     }
 
     @Test
@@ -73,15 +73,15 @@ public class TestWikiTagParser {
 
         ParseResult<WikiTag> parseRes = sut.parse(wikiText);
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertEquals("<test key='val'>", parseRes.getParsedString());
-        Assert.assertEquals("and another thing", parseRes.getUnparsedString());
-        Assert.assertEquals("test", parseRes.getIdentifiedPart().getTagName());
-        Assert.assertEquals(1, parseRes.getIdentifiedPart().getAttributes().size());
-        Assert.assertEquals("val", parseRes.getIdentifiedPart().getAttributes().get("key").stream().map(Object::toString)
+        Assertions.assertNotNull(parseRes);
+        Assertions.assertEquals("<test key='val'>", parseRes.getParsedString());
+        Assertions.assertEquals("and another thing", parseRes.getUnparsedString());
+        Assertions.assertEquals("test", parseRes.getIdentifiedPart().getTagName());
+        Assertions.assertEquals(1, parseRes.getIdentifiedPart().getAttributes().size());
+        Assertions.assertEquals("val", parseRes.getIdentifiedPart().getAttributes().get("key").stream().map(Object::toString)
             .collect(Collectors.joining("")));
-        Assert.assertFalse(parseRes.getIdentifiedPart().isClosing());
-        Assert.assertFalse(parseRes.getIdentifiedPart().isSelfClosing());
+        Assertions.assertFalse(parseRes.getIdentifiedPart().isClosing());
+        Assertions.assertFalse(parseRes.getIdentifiedPart().isSelfClosing());
     }
 
     @Test
@@ -92,27 +92,27 @@ public class TestWikiTagParser {
 
         ParseResult<WikiTag> parseRes = sut.parse(wikiText);
 
-        Assert.assertNotNull(parseRes);
-        Assert.assertEquals(wikiText, parseRes.getParsedString());
-        Assert.assertEquals("", parseRes.getUnparsedString());
-        Assert.assertEquals("span", parseRes.getIdentifiedPart().getTagName());
-        Assert.assertEquals(1, parseRes.getIdentifiedPart().getAttributes().size());
-        Assert.assertEquals(2, parseRes.getIdentifiedPart().getAttributes().get("lang").size());
-        Assert.assertEquals("en_{{Abbreviation|country=USA}}", parseRes.getIdentifiedPart().getAttributes().get("lang")
+        Assertions.assertNotNull(parseRes);
+        Assertions.assertEquals(wikiText, parseRes.getParsedString());
+        Assertions.assertEquals("", parseRes.getUnparsedString());
+        Assertions.assertEquals("span", parseRes.getIdentifiedPart().getTagName());
+        Assertions.assertEquals(1, parseRes.getIdentifiedPart().getAttributes().size());
+        Assertions.assertEquals(2, parseRes.getIdentifiedPart().getAttributes().get("lang").size());
+        Assertions.assertEquals("en_{{Abbreviation|country=USA}}", parseRes.getIdentifiedPart().getAttributes().get("lang")
             .stream().map(Object::toString).collect(Collectors.joining("")));
-        Assert.assertTrue(parseRes.getIdentifiedPart().getAttributes().get("lang").get(0) instanceof PlainText);
-        Assert.assertEquals("en_", ((PlainText) parseRes.getIdentifiedPart().getAttributes().get("lang").get(0)).getText());
+        Assertions.assertTrue(parseRes.getIdentifiedPart().getAttributes().get("lang").get(0) instanceof PlainText);
+        Assertions.assertEquals("en_", ((PlainText) parseRes.getIdentifiedPart().getAttributes().get("lang").get(0)).getText());
 
-        Assert.assertTrue(parseRes.getIdentifiedPart().getAttributes().get("lang").get(1) instanceof WikiTemplate);
+        Assertions.assertTrue(parseRes.getIdentifiedPart().getAttributes().get("lang").get(1) instanceof WikiTemplate);
         WikiTemplate tmpl = (WikiTemplate) parseRes.getIdentifiedPart().getAttributes().get("lang").get(1);
-        Assert.assertEquals("Abbreviation", tmpl.getTemplateTitle());
-        Assert.assertEquals(1, tmpl.getParamNames().size());
-        Assert.assertNotNull(tmpl.getParam("country"));
-        Assert.assertEquals(1, tmpl.getParam("country").size());
-        Assert.assertEquals("USA", tmpl.getParam("country").get(0).toString());
+        Assertions.assertEquals("Abbreviation", tmpl.getTemplateTitle());
+        Assertions.assertEquals(1, tmpl.getParamNames().size());
+        Assertions.assertNotNull(tmpl.getParam("country"));
+        Assertions.assertEquals(1, tmpl.getParam("country").size());
+        Assertions.assertEquals("USA", tmpl.getParam("country").get(0).toString());
 
-        Assert.assertFalse(parseRes.getIdentifiedPart().isClosing());
-        Assert.assertFalse(parseRes.getIdentifiedPart().isSelfClosing());
+        Assertions.assertFalse(parseRes.getIdentifiedPart().isClosing());
+        Assertions.assertFalse(parseRes.getIdentifiedPart().isSelfClosing());
     }
 
     @Test
@@ -122,14 +122,14 @@ public class TestWikiTagParser {
         WikiTagParser sut = new WikiTagParser();
         ParseResult<WikiTag> parseRes = sut.parse(wikiText);
 
-        Assert.assertEquals("<font color=white>", parseRes.getParsedString());
-        Assert.assertEquals("Out of tag", parseRes.getUnparsedString());
+        Assertions.assertEquals("<font color=white>", parseRes.getParsedString());
+        Assertions.assertEquals("Out of tag", parseRes.getUnparsedString());
 
         WikiTag tag = parseRes.getIdentifiedPart();
-        Assert.assertEquals("font", tag.getTagName());
-        Assert.assertEquals(1, tag.getAttributes().size());
-        Assert.assertNotNull(tag.getAttributes().get("color"));
-        Assert.assertEquals("white",
+        Assertions.assertEquals("font", tag.getTagName());
+        Assertions.assertEquals(1, tag.getAttributes().size());
+        Assertions.assertNotNull(tag.getAttributes().get("color"));
+        Assertions.assertEquals("white",
             tag.getAttributes().get("color").stream().map(Object::toString).collect(Collectors.joining()));
     }
     
@@ -140,14 +140,14 @@ public class TestWikiTagParser {
         WikiTagParser sut = new WikiTagParser();
         ParseResult<WikiTag> parseRes = sut.parse(wikiText);
 
-        Assert.assertEquals("<font color=white/>", parseRes.getParsedString());
-        Assert.assertEquals("Out of tag", parseRes.getUnparsedString());
+        Assertions.assertEquals("<font color=white/>", parseRes.getParsedString());
+        Assertions.assertEquals("Out of tag", parseRes.getUnparsedString());
 
         WikiTag tag = parseRes.getIdentifiedPart();
-        Assert.assertEquals("font", tag.getTagName());
-        Assert.assertEquals(1, tag.getAttributes().size());
-        Assert.assertNotNull(tag.getAttributes().get("color"));
-        Assert.assertEquals("white",
+        Assertions.assertEquals("font", tag.getTagName());
+        Assertions.assertEquals(1, tag.getAttributes().size());
+        Assertions.assertNotNull(tag.getAttributes().get("color"));
+        Assertions.assertEquals("white",
             tag.getAttributes().get("color").stream().map(Object::toString).collect(Collectors.joining()));
     }
 
@@ -160,10 +160,10 @@ public class TestWikiTagParser {
         ParseResult<WikiTag> parseRes = sut.parse(wikiText);
 
         WikiTag tag = parseRes.getIdentifiedPart();
-        Assert.assertEquals("div", tag.getTagName());
-        Assert.assertEquals("NavHead",
+        Assertions.assertEquals("div", tag.getTagName());
+        Assertions.assertEquals("NavHead",
             tag.getAttributes().get("class").stream().map(Object::toString).collect(Collectors.joining()));
-        Assert.assertEquals(
+        Assertions.assertEquals(
             "background-color:#025ad0;border:1px solid #000000;padding: 0px 0px 0px 4px; font-size: 100%; text-align:left;margin:0px;color:#330000",
             tag.getAttributes().get("style").stream().map(Object::toString).collect(Collectors.joining()));
     }
