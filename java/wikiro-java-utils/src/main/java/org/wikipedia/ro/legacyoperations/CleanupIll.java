@@ -125,7 +125,7 @@ public class CleanupIll implements WikiOperation {
             return Objects.toString(wikidataReplacementLink, prospectiveIllWdTemplate.toString());
         }
 
-        if (targetWiki.exists(List.of(targetPage))[0]) {
+        if (PAGE_CACHE.pageExists(targetWiki, targetPage)) {
             return new WikiLink(targetPage, label).toString();
         } else {
             Wiki linkSourceWiki = Wiki.newSession(langId + ".wikipedia.org");
