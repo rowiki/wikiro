@@ -2,6 +2,7 @@ package org.wikipedia.ro.toolbox;
 
 import static org.apache.commons.lang3.StringUtils.appendIfMissing;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
+import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNoneEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -16,7 +17,6 @@ import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -69,6 +69,7 @@ import org.wikipedia.ro.legacyoperations.Operation;
 import org.wikipedia.ro.legacyoperations.WikiOperation;
 import org.wikipedia.ro.toolbox.generators.PageGenerator;
 import org.wikipedia.ro.utils.TextUtils;
+import org.wikipedia.ro.utils.WikipediaPageCache;
 
 public class WikipediaToolboxGUI {
 
@@ -78,6 +79,7 @@ public class WikipediaToolboxGUI {
     private static Wikibase dataWiki = new Wikibase("www.wikidata.org");
     private static Map<String, Component> dataComponentsMap = new HashMap<String, Component>();
     private static JFrame frame;
+    private static WikipediaPageCache PAGE_CACHE = WikipediaPageCache.getInstance();
     
     public static void main(String[] args) {
         bundle = ResourceBundle.getBundle("uitexts.uitexts", new Locale("ro"));
@@ -586,10 +588,7 @@ public class WikipediaToolboxGUI {
                         Thread.sleep(500l);
                     }
 
-                    String initText = "";
-                    if (targetWiki.exists(List.of(actionParams[i]))[0]) {
-                        initText = targetWiki.getPageText(List.of(actionParams[i])).stream().findFirst().orElse("");
-                    }
+                    String initText = defaultString(PAGE_CACHE.getPageText(targetWiki, actionParams[i]));
                     String result = action.execute();
 
                     if (!StringUtils.equals(initText, result)) {
@@ -602,6 +601,7 @@ public class WikipediaToolboxGUI {
                             targetWiki.login(uname, pwd);
                         }
                         targetWiki.edit(actionParams[i], result, commitMessage);
+                        PAGE_CACHE.invalidatePage(targetWiki, actionParams[i]);
                         timeToStart = System.currentTimeMillis() + throttle;
                     }
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | RuntimeException e1) {
