@@ -61,13 +61,13 @@ public class CleanupIll implements WikiOperation {
     @Override
     public String execute() throws IOException, WikibaseException, LoginException {
         status = new String[] { "status.changes.todo.inarticle", article, String.valueOf(0), "?" };
-        LOG.log(Level.INFO, "Cleaning up Ill templates in article ''{0}''", article);
         String pageText = PAGE_CACHE.getPageText(targetWiki, article);
         
         return this.executeWithInitialText(pageText);
     }
 
     public String executeWithInitialText(String pageText) throws IOException, WikibaseException, LoginException {
+        LOG.log(Level.INFO, "Cleaning up Ill templates in article ''{0}''", article);
         Matcher illMatcher = PATTERN_ILL.matcher(pageText);
         StringBuilder replacedTextBuilder = new StringBuilder(pageText);
         int offset = 0;

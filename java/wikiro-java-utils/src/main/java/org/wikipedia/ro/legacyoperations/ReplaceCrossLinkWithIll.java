@@ -68,12 +68,13 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
     public String execute() throws IOException, LoginException, WikibaseException {
         status = new String[] { "status.reading.text", article, targetWikiCode };
-        LOG.log(Level.INFO, "Replacing cross links with Ill in article ''{0}''", article);
+        
         String text = pageCache.getPageText(targetWiki, article);
         return this.executeWithInitialText(defaultString(text));
     }
         
     public String executeWithInitialText(String text) throws IOException, LoginException, WikibaseException {
+        LOG.log(Level.INFO, "Replacing cross links with Ill in article ''{0}''", article);
         Pattern namespacepattern = Pattern.compile("((?:Template|Wikipedia):)?(.*)");
 
         status = new String[] { "status.identifying.links" };
