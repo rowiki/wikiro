@@ -107,7 +107,7 @@ public class WikipediaPageCache {
                     }
                 }, 3);
                 cache.put(cacheKey, new CachedPage(null, exists[0], null));
-            } catch (TimeoutException e) {
+            } catch (Exception e) {
                 LOG.log(Level.SEVERE, e, () -> "Metainfo of page " + cacheKey + " failed to load");
                 return false;
             }
