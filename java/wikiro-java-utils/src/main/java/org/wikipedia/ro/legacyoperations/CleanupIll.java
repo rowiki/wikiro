@@ -1,7 +1,6 @@
 package org.wikipedia.ro.legacyoperations;
 
 import static org.apache.commons.lang3.StringUtils.contains;
-import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.prependIfMissing;
 import static org.apache.commons.lang3.StringUtils.substring;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
@@ -10,7 +9,6 @@ import static org.wikipedia.ro.utils.ParseUtils.wikipartListToString;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
