@@ -108,9 +108,10 @@ public class CleanupIll implements WikiOperation {
             baseTargetPage = substringBefore(baseTargetPage, "{{!}}");
             label = substringAfter(baseTargetPage, "{{!}}");
         }
-        String targetPage = WikidataCacheManager.getCachedRedirect(targetWiki, baseTargetPage);
         String sourcePage = Objects.toString(wikipartListToString(illTemplate.getParam("3")), baseTargetPage);
+        String targetPage = null != baseTargetPage ? WikidataCacheManager.getCachedRedirect(targetWiki, baseTargetPage): sourcePage; 
         label = Objects.toString(label, Objects.toString(wikipartListToString(illTemplate.getParam("4")), baseTargetPage));
+        targetPage = Objects.toString(targetPage, label);
 
         if ("d".equals(langId)) {
             WikiTemplate prospectiveIllWdTemplate = new WikiTemplate();
