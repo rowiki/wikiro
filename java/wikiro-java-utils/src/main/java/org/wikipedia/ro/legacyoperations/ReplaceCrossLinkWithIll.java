@@ -197,7 +197,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         LOG.log(Level.INFO, "{0} found", countMatches);
         wlAsExtLinkMatcher.appendTail(anotherNewText);
 
-        String innerLinkRegEx = "\\[\\[(?!Fișier:)([^:][^\\|\\]\\[]+?)(\\|((?:([^\\|\\]\\[]*?)|(\\{\\{[^\\}]*\\}\\}))+))?\\]\\]";
+        String innerLinkRegEx = "\\[\\[(?!(Fișier:|File:))([^:][^\\|\\]\\[]+?)(\\|((?:([^\\|\\]\\[]*?)|(\\{\\{[^\\}]*\\}\\}))+))?\\]\\]";
         Pattern innerLinkPattern = Pattern.compile(innerLinkRegEx);
         Matcher innerLinkMatcher = innerLinkPattern.matcher(anotherNewText.toString());
         anotherNewText = new StringBuffer();
