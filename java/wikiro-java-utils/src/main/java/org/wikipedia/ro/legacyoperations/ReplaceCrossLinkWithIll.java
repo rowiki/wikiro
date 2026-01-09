@@ -325,7 +325,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                 }
             }
             replacedString = Objects.toString(replacedString, innerLinkMatcher.group(0));
-            innerLinkMatcher.appendReplacement(anotherNewText, replacedString);
+            innerLinkMatcher.appendReplacement(anotherNewText, Matcher.quoteReplacement(replacedString));
 
         }
         innerLinkMatcher.appendTail(anotherNewText);
