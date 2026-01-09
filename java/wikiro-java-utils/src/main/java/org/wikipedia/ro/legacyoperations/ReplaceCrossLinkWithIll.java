@@ -144,7 +144,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             LOG.log(Level.INFO, "{0} ---> {1}", new Object[] { extLinkMatcher.group(0), replacedString});
             countMatches++;
         }
-        LOG.log(Level.INFO, "{0} found", countMatches);
+        LOG.log(Level.INFO, "{0} cross-wiki links found", countMatches);
         extLinkMatcher.appendTail(newText);
 
         String wlAsExtLinkRegEx = "\\[(https?\\:)?//([^\\.]+)(?:\\.m)?\\.wikipedia.org/wiki/([^\\s]+)\\s+([^\\]]+)\\]";
@@ -196,10 +196,10 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             LOG.log(Level.INFO, "{0} ---> {1}", new Object[] {wlAsExtLinkMatcher.group(0), replacedString});
             countMatches++;
         }
-        LOG.log(Level.INFO, "{0} found", countMatches);
+        LOG.log(Level.INFO, "{0} external links to Wikipedia", countMatches);
         wlAsExtLinkMatcher.appendTail(anotherNewText);
 
-        String innerLinkRegEx = "\\[\\[(?!(Fișier:|File:))([^:][^\\|\\]\\[]+?)(\\|((?:([^\\|\\]\\[]*?)|(\\{\\{[^\\}]*\\}\\}))+))?\\]\\]";
+        String innerLinkRegEx = "\\[\\[(?!(?:Fișier:|File:))([^:][^\\|\\]\\[]+?)(\\|((?:([^\\|\\]\\[]*?)|(\\{\\{[^\\}]*\\}\\}))+))?\\]\\]";
         Pattern innerLinkPattern = Pattern.compile(innerLinkRegEx);
         Matcher innerLinkMatcher = innerLinkPattern.matcher(anotherNewText.toString());
         anotherNewText = new StringBuffer();
