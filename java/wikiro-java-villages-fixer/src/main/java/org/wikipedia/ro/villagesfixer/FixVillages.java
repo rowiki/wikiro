@@ -28,6 +28,7 @@ import static org.apache.commons.lang3.StringUtils.substring;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 import static org.apache.commons.lang3.StringUtils.trim;
+import static org.wikibase.WikibasePropertyFactory.getWikibaseProperty;
 
 import java.io.Console;
 import java.io.IOException;
@@ -62,7 +63,6 @@ import java.util.stream.Stream;
 
 import javax.security.auth.login.LoginException;
 
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.collections4.keyvalue.DefaultMapEntry;
 import org.apache.commons.lang3.ObjectUtils;
@@ -72,7 +72,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
-import static org.wikibase.WikibasePropertyFactory.getWikibaseProperty;
 import org.wikibase.data.Claim;
 import org.wikibase.data.CommonsMedia;
 import org.wikibase.data.Entity;
@@ -96,6 +95,7 @@ import org.wikipedia.ro.parser.ParseResult;
 import org.wikipedia.ro.parser.WikiTemplateParser;
 import org.wikipedia.ro.parser.WikiTextParser;
 import org.wikipedia.ro.utils.LinkUtils;
+import org.wikipedia.ro.utils.WikipediaPageCache;
 import org.wikipedia.ro.villagesfixer.model.DMSCoordinates;
 import org.wikipedia.ro.villagesfixer.model.DMSValue;
 
@@ -158,7 +158,8 @@ public class FixVillages {
         "<ref name=\"lege_290_2018\">{{Cite act|url=https://legislatie.just.ro/Public/DetaliiDocument/208652|year=2018|type=Legea|number=290|legislature=Parlamentul României|chapter=Anexă: Denumirea și componența unităților administrativ-teritoriale pe județe}}</ref>";
 
     private static String crtSettlementName = null, crtCommuneName = null, crtCountyName = null;
-
+    private static WikipediaPageCache WIKI_PAGE_CACHE = new WikipediaPageCache();
+    
     static {
         RO_NUMBER_FORMAT.setMaximumFractionDigits(2);
     }
@@ -413,8 +414,8 @@ public class FixVillages {
                     int templateAnalysisStart = 0;
 
                     String rocommunearticle = communeWikibaseItem.getSitelinks().get("rowiki").getPageName();
-                    String pageText = rowiki.getPageText(List.of(rocommunearticle)).stream().findFirst().orElse("");
-                    String initialPageText = pageText;
+                    String pageText = WIKI_PAGE_CACHE.getPageText(rowiki, rocommunearticle);
+                    String initialPageText = defaultString(pageText);
 
                     String sirutaFromWd = null;
                     Set<Claim> sirutaClaims = communeClaims.get(sirutaProp);
@@ -963,6 +964,7 @@ public class FixVillages {
                         if (!StringUtils.equals(pageText, initialPageText)) {
                             rowiki.edit(rocommunearticle, pageText,
                                 "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, recategorisit, standardizat introducerea și secțiunile Demografie și Administrație. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
+                            WIKI_PAGE_CACHE.invalidatePage(rowiki, rocommunearticle);
                             communeChanged = true;
                         }
 
@@ -977,6 +979,9 @@ public class FixVillages {
                 Path coordsLogFile = Path.of(System.getProperty("java.io.tmpdir"), "wki", "coords-" + eachCounty.toLowerCase() + ".log.txt");
                 coordsLogFile.getParent().toFile().mkdirs();
                 Files.writeString(coordsLogFile, coordinatesStat.toString());
+                
+                WIKI_PAGE_CACHE.invalidatePagesIf(rowiki, k -> endsWith(k, String.format(", %s", eachCounty)) );
+                LOG.info("Finished county {}", eachCounty);
             }
         } catch (WikibaseException | LoginException | ParseException e) {
             LOG.error("Error filling in villages", e);
@@ -1483,14 +1488,13 @@ public class FixVillages {
             String rovillagearticle = villageEntity.getSitelinks().get("rowiki").getPageName();
             mapToAdd.put(villageName, rovillagearticle);
 
-            Optional<Map<String, Object>> pageInfo = rowiki.getPageInfo(List.of(rovillagearticle)).stream().findFirst();
-            if (!pageInfo.isEmpty() && (Boolean) pageInfo.get().get("redirect")) {
+            if (WIKI_PAGE_CACHE.pageRedirects(rowiki, rovillagearticle)) {
                 LOG.info("Page {} is a redirect, skipping", rovillagearticle);
                 return communeChanged;
             }
             
-            String pageText = rowiki.getPageText(List.of(rovillagearticle)).stream().findFirst().orElse("");
-            String initialPageText = pageText;
+            String pageText = WIKI_PAGE_CACHE.getPageText(rowiki, rovillagearticle);
+            String initialPageText = defaultString(pageText);
             
             pageText = commentedEol.matcher(pageText).replaceAll("");
 
@@ -1879,6 +1883,7 @@ public class FixVillages {
             if (!StringUtils.equals(pageText, initialPageText)) {
                 rowiki.edit(rovillagearticle, pageText,
                     "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard, recategorisit. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
+                WIKI_PAGE_CACHE.invalidatePage(rowiki, rovillagearticle);
                 villageChanged = true;
             }
         }
