@@ -3,17 +3,12 @@ package org.wikipedia.ro.legacyoperations;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 import static org.apache.commons.lang3.StringUtils.defaultString;
-import static org.apache.commons.lang3.StringUtils.equalsAny;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
-import static org.apache.commons.lang3.StringUtils.prependIfMissing;
-import static org.apache.commons.lang3.StringUtils.removeEnd;
-import static org.apache.commons.lang3.StringUtils.removeStart;
-import static org.apache.commons.lang3.StringUtils.replace;
-import static org.apache.commons.lang3.StringUtils.startsWith;
-import static org.apache.commons.lang3.StringUtils.startsWithAny;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 import static org.apache.commons.lang3.StringUtils.trim;
+import static org.apache.commons.lang3.Strings.CI;
+import static org.apache.commons.lang3.Strings.CS;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -89,14 +84,14 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             if (3 < lang.length()) {
                 continue;
             }
-            String foreignTitle = replace(extLinkMatcher.group("foreigntitle"), "_", " ");
+            String foreignTitle = CS.replace(extLinkMatcher.group("foreigntitle"), "_", " ");
             String localLabel = extLinkMatcher.group("locallabel");
 
             status = new String[] { "status.analyzing.link", foreignTitle };
 
             String roTitle = roArticlesCache.get(lang + ":" + foreignTitle);
             Entity wbEntity = null;
-            if (equalsAny(lowerCase(lang), "s", "wikt")) {
+            if (CS.equalsAny(lowerCase(lang), "s", "wikt")) {
                 continue;
             } else if ("d".equals(lang)) {
                 wbEntity = dataWiki
@@ -127,19 +122,19 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                }
             }
             String replacedString = null;
-            if (null != roTitle && StringUtils.equals(roTitle, localLabel)) {
+            if (null != roTitle && CS.equals(roTitle, localLabel)) {
                 replacedString = new WikiLink(roTitle, localLabel).toString();
             } else if (null == wbEntity) {
                 replacedString = new WikiTemplate().setTemplateTitle("Ill").setSingleLine(true).setParam("1", lang)
                     .setParam("2", roTitle).setParam("3", foreignTitle).setParam("4", localLabel).toString();
             } else {
                 replacedString = new WikiTemplate().setTemplateTitle("Ill-wd").setSingleLine(true)
-                    .setParam("1", prependIfMissing(wbEntity.getId(), "Q")).setParam("3", localLabel).toString();
+                    .setParam("1", CI.prependIfMissing(wbEntity.getId(), "Q")).setParam("3", localLabel).toString();
             }
 
             if (null != replacedString) {
                 extLinkMatcher.appendReplacement(newText,
-                    startsWith(foreignTitle, "Special:") ? extLinkMatcher.group(0) : replacedString);
+                    CI.startsWith(foreignTitle, "Special:") ? extLinkMatcher.group(0) : replacedString);
             }
             LOG.log(Level.INFO, "{0} ---> {1}", new Object[] { extLinkMatcher.group(0), replacedString});
             countMatches++;
@@ -153,18 +148,22 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         StringBuffer anotherNewText = new StringBuffer();
         while (wlAsExtLinkMatcher.find()) {
             String lang = wlAsExtLinkMatcher.group(2);
-            String articleTitle = URLDecoder.decode(wlAsExtLinkMatcher.group(3), "UTF-8");
+            String articleTitle = CS.replace(URLDecoder.decode(wlAsExtLinkMatcher.group(3), "UTF-8"), "_", " ");
             String linkTitle = wlAsExtLinkMatcher.group(4);
 
             status = new String[] { "status.analyzing.link", articleTitle };
 
             Wiki srcWiki = Wiki.newSession(lang + ".wikipedia.org");
             String target = WikidataCacheManager.getCachedRedirect(srcWiki, articleTitle);
-            String targetLang = removeEnd(targetWikiCode, "wiki");
-            String sourceLang = defaultIfEmpty(lang, removeEnd(sourceWikiCode, "wiki"));
+            String targetLang = CS.removeEnd(targetWikiCode, "wiki");
+            String sourceLang = defaultIfEmpty(lang, CI.removeEnd(srcWiki.getDomain(), ".wikipedia.org"));
 
             String roLabel = null;
             String roArticle = roArticlesCache.get(sourceLang + ":" + target);
+
+            if (CI.equals(targetLang, sourceLang)) {
+                roArticle = target;
+            }
             Entity wbEntity = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).getByArticle(sourceLang + "wiki", target);
             if (null == roArticle && null == wbEntity) {
                 try {
@@ -189,10 +188,10 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                     .setParam("2", roLabel).setParam("3", articleTitle).setParam("4", linkTitle).toString();
             } else {
                 replacedString = new WikiTemplate().setSingleLine(true).setTemplateTitle("Ill-wd")
-                    .setParam("1", prependIfMissing(wbEntity.getId(), "Q")).setParam("3", linkTitle).toString();
+                    .setParam("1", CI.prependIfMissing(wbEntity.getId(), "Q")).setParam("3", linkTitle).toString();
             }
             wlAsExtLinkMatcher.appendReplacement(anotherNewText,
-                startsWith(articleTitle, "Special:") ? wlAsExtLinkMatcher.group(0) : replacedString);
+                CI.startsWith(articleTitle, "Special:") ? wlAsExtLinkMatcher.group(0) : replacedString);
             LOG.log(Level.INFO, "{0} ---> {1}", new Object[] {wlAsExtLinkMatcher.group(0), replacedString});
             countMatches++;
         }
@@ -214,9 +213,9 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
             String link = innerLinkMatcher.group(1);
             //link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());'
-            link = replace(link, "_", " ");
+            link = CS.replace(link, "_", " ");
             LOG.log(Level.INFO, "First pass: Link: {0}", link);
-            String articleLink = removeStart(trim(link), " ");
+            String articleLink = CS.removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
             if (isBlank(articleTitle)) {
                 LOG.log(Level.INFO, "Blank article title in link ''{0}''! skipping...", innerLinkMatcher.group(0));
@@ -263,9 +262,9 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
             String link = innerLinkMatcher.group(1);
             //link = URLDecoder.decode(link, StandardCharsets.UTF_8.name());
-            link = replace(link, "_", " ");
+            link = CI.replace(link, "_", " ");
             LOG.log(Level.INFO, "Second pass: Link: {0}", link);
-            String articleLink = removeStart(trim(link), " ");
+            String articleLink = CS.removeStart(trim(link), " ");
             String articleTitle = capitalize(substringBefore(articleLink, "#"));
             String linkTitle = Objects.toString(innerLinkMatcher.group(3), articleLink);
             if (isBlank(articleTitle)) {
@@ -288,7 +287,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                 .filter(StringUtils::isNotBlank)
                 .findFirst().orElse(articleTitle);
             String replacedString = null;
-            String sourceLang = removeEnd(sourceWikiCode, "wiki");
+            String sourceLang = CI.removeEnd(sourceWikiCode, "wiki");
 
             String roLabel = null;
             String roArticle = roArticlesCache.get(sourceLang + ":" + foreignArticleTitle);
@@ -320,7 +319,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                             .setParam("3", articleLink).setParam("4", linkTitle).setSingleLine(true).toString();
                 } else {
                     replacedString =
-                        new WikiTemplate().setTemplateTitle("Ill-wd").setParam("1", prependIfMissing(wbEntity.getId(), "Q"))
+                        new WikiTemplate().setTemplateTitle("Ill-wd").setParam("1", CI.prependIfMissing(wbEntity.getId(), "Q"))
                             .setParam("3", linkTitle).setSingleLine(true).toString();
                 }
             }
@@ -335,7 +334,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
     }
 
     private boolean isNotReplaceableLink(String articleLink) {
-        return startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:", ":s:",
+        return CI.startsWithAny(lowerCase(articleLink), "google:", "wiktionary:", "iarchive:", "file:", "fișier:", "image:", ":s:",
             "imagine:", "categorie:", "category:", "arxiv:", "openlibrary:", "s:", "imdbname:", "c:file:", "doi:", "issn:", "wp:",
             "bibcode:", "imdbtitle:", "foldoc:", "gutenberg:", "rfc:", "wikisource:", "oeis:", "special:", "wikt:", "wikiquote:");
     }
