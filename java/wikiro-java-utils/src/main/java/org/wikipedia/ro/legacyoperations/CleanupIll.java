@@ -153,7 +153,7 @@ public class CleanupIll implements WikiOperation {
                 Sitelink targetSitelink = sitelinks.get(targetWikiCode);
                 if (null != targetSitelink) {
                     if (null == label && null != wdItem.getLabels()) {
-                        label = wdItem.getLabels().get(CI.removeEnd(targetWikiCode, "wiki"));
+                        label = Objects.toString(wdItem.getLabels().get(CI.removeEnd(targetWikiCode, "wiki")), wdItem.getLabels().get("mul"));
                     }
                     
                     WikiLink link = new WikiLink(targetSitelink.getPageName(), label);
