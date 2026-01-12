@@ -1,10 +1,10 @@
 package org.wikipedia.ro.legacyoperations;
 
-import static org.apache.commons.lang3.StringUtils.contains;
-import static org.apache.commons.lang3.StringUtils.prependIfMissing;
 import static org.apache.commons.lang3.StringUtils.substring;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
+import static org.apache.commons.lang3.Strings.CI;
+import static org.apache.commons.lang3.Strings.CS;
 import static org.wikipedia.ro.utils.ParseUtils.wikipartListToString;
 
 import java.io.IOException;
@@ -19,7 +19,6 @@ import java.util.regex.Pattern;
 import javax.security.auth.login.LoginException;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikibase.data.Entity;
@@ -35,7 +34,6 @@ import org.wikipedia.ro.utils.WikipediaPageCache;
 @Operation(useWikibase = true, labelKey = "operation.cleanupIll.label")
 public class CleanupIll implements WikiOperation {
     private static final Logger LOG = Logger.getLogger(CleanupIll.class.getCanonicalName());
-    private static final WikipediaPageCache PAGE_CACHE = WikipediaPageCache.getInstance();
 
     private String[] status = new String[] { "status.not.inited" };
     private Wiki targetWiki;
@@ -59,7 +57,7 @@ public class CleanupIll implements WikiOperation {
     @Override
     public String execute() throws IOException, WikibaseException, LoginException {
         status = new String[] { "status.changes.todo.inarticle", article, String.valueOf(0), "?" };
-        String pageText = PAGE_CACHE.getPageText(targetWiki, article);
+        String pageText = WikipediaPageCache.getInstance().getPageText(targetWiki, article);
         
         return this.executeWithInitialText(pageText);
     }
@@ -80,7 +78,7 @@ public class CleanupIll implements WikiOperation {
                 String.valueOf(instancesFound) };
 
             String newLinkText = null;
-            if (StringUtils.equals(illMatcher.group(1), "-wd")) {
+            if (CS.equals(illMatcher.group(1), "-wd")) {
                 newLinkText = extractLinkTextFromWikidata(illTemplate);
 
             } else if (null == illMatcher.group(1)) {
@@ -104,7 +102,7 @@ public class CleanupIll implements WikiOperation {
         String langId = wikipartListToString(illTemplate.getParam("1"));
         String baseTargetPage = wikipartListToString(illTemplate.getParam("2"));
         String label = null;
-        if (contains(baseTargetPage, "{{!}}")) {
+        if (CS.contains(baseTargetPage, "{{!}}")) {
             baseTargetPage = substringBefore(baseTargetPage, "{{!}}");
             label = substringAfter(baseTargetPage, "{{!}}");
         }
@@ -124,7 +122,7 @@ public class CleanupIll implements WikiOperation {
             return Objects.toString(wikidataReplacementLink, prospectiveIllWdTemplate.toString());
         }
 
-        if (PAGE_CACHE.pageExists(targetWiki, targetPage)) {
+        if (WikipediaPageCache.getInstance().pageExists(targetWiki, targetPage)) {
             return new WikiLink(targetPage, label).toString();
         } else {
             Wiki linkSourceWiki = Wiki.newSession(langId + ".wikipedia.org");
@@ -144,16 +142,20 @@ public class CleanupIll implements WikiOperation {
     private String extractLinkTextFromWikidata(WikiTemplate illTemplate) throws IOException, WikibaseException {
         String wdId = wikipartListToString(illTemplate.getParam("1"));
         String label = wikipartListToString(illTemplate.getParam("3"));
-
-        String qId = prependIfMissing(wdId, "Q");
+        
+        String qId = CI.prependIfMissing(wdId, "Q");
         qId = WikidataCacheManager.getCachedRedirect(dataWiki, qId);
 
         try {
             Entity wdItem = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).get(qId);
             if (null != wdItem) {
-                Map<String, Sitelink> sitelinks = ObjectUtils.defaultIfNull(wdItem.getSitelinks(), Collections.emptyMap());
+                Map<String, Sitelink> sitelinks = ObjectUtils.getIfNull(wdItem.getSitelinks(), Collections.emptyMap());
                 Sitelink targetSitelink = sitelinks.get(targetWikiCode);
                 if (null != targetSitelink) {
+                    if (null == label && null != wdItem.getLabels()) {
+                        label = wdItem.getLabels().get(CI.removeEnd(targetWikiCode, "wiki"));
+                    }
+                    
                     WikiLink link = new WikiLink(targetSitelink.getPageName(), label);
                     return link.toString();
                 }
