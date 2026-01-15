@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Predicate;
 import java.util.logging.Level;
@@ -38,16 +39,48 @@ public class WikipediaPageCache {
     }
 
     private final Map<String, CachedPage> cache = new ConcurrentHashMap<>();
+    private final ConcurrentLinkedDeque<String> textsLoaded = new ConcurrentLinkedDeque<>();
+    private long cachedTextSize = 0l;
+    private long maxCachedTextSize = -1l;
 
     private static WikipediaPageCache singletonInstance = null;
 
+    
     public static WikipediaPageCache getInstance() {
         if (singletonInstance == null) {
             singletonInstance = new WikipediaPageCache();
+            String maxSizeStr = System.getProperty("wikipedia.page.cache.maxsize");
+            singletonInstance.maxCachedTextSize = parseSizeWithSuffix(maxSizeStr);
         }
         return singletonInstance;
     }
 
+    private static long parseSizeWithSuffix(String sizeStr)    {
+        if (sizeStr == null)        {
+            return -1L;
+        }
+        String trimmed = sizeStr.trim().toUpperCase();
+        long multiplier = 1L;
+        if (trimmed.endsWith("K"))        {
+            multiplier = 1024L;
+            trimmed = trimmed.substring(0, trimmed.length() - 1);
+        }
+        else if (trimmed.endsWith("M"))        {
+            multiplier = 1024L * 1024L;
+            trimmed = trimmed.substring(0, trimmed.length() - 1);
+        }
+        else if (trimmed.endsWith("G"))        {
+            multiplier = 1024L * 1024L * 1024L;
+            trimmed = trimmed.substring(0, trimmed.length() - 1);
+        }
+        try        {
+            return Long.parseLong(trimmed) * multiplier;
+        }        catch (NumberFormatException e)        {
+            LOG.log(Level.WARNING, e, () -> "Invalid wikipedia.page.cache.maxsize value: " + sizeStr);
+            return -1L;
+        }
+    }
+    
     public void loadPagesInfo(Wiki wiki, String... titles) {
         List<String> titlesToLoad = List.of(titles).stream()
             .filter(title -> !cache.containsKey(computeCacheKey(wiki, title)) || cache.get(computeCacheKey(wiki, title)).redirect == null)
@@ -140,6 +173,18 @@ public class WikipediaPageCache {
                 pageText = texts.get(0);
             }
             cache.put(cacheKey, new CachedPage(pageText, cachedPage.exist, cachedPage.redirect));
+            textsLoaded.addLast(cacheKey);
+            cachedTextSize += pageText != null ? pageText.length() : 0;
+            while (maxCachedTextSize > 0 && cachedTextSize > maxCachedTextSize && !textsLoaded.isEmpty())
+            {
+                String oldestKey = textsLoaded.removeFirst();
+                CachedPage removedPage = cache.get(oldestKey);
+                if (removedPage != null && removedPage.text != null)
+                {
+                    cachedTextSize -= removedPage.text.length();
+                    cache.put(oldestKey, new CachedPage(null, removedPage.exist, removedPage.redirect));
+                }
+            }
         } catch (TimeoutException e) {
             LOG.log(Level.SEVERE, e, () -> "Page " + cacheKey + " failed to load");
         }
