@@ -30,5 +30,13 @@ public class WikidataCacheManager {
         }
         return redirectCaches.get(wiki).get(s);
     }
+    
+    /**
+     * Clears all caches. This method is intended for testing purposes only.
+     */
+    public static void clearCaches() {
+        wikidataCache = null;
+        redirectCaches.clear();
+    }
 
 }
