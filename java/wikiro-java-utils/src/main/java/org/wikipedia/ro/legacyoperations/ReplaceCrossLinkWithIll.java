@@ -73,7 +73,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         Pattern namespacepattern = Pattern.compile("((?:Template|Wikipedia):)?(.*)");
 
         status = new String[] { "status.identifying.links" };
-        String extLinkRegEx = "\\[\\[\\:(?<lang>.*?)\\:(?<foreigntitle>.*?)(\\|(?<locallabel>.*?))?\\]]";
+        String extLinkRegEx = "\\[\\[\\:(?<lang>.*?)\\:(?<foreigntitle>.*?)(\\|(?<locallabel>.*?))?\\]\\]";
         Pattern extLinkPattern = Pattern.compile(extLinkRegEx, Pattern.DOTALL);
         Matcher extLinkMatcher = extLinkPattern.matcher(text);
         StringBuffer newText = new StringBuffer();

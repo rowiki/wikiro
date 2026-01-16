@@ -5,16 +5,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -27,6 +34,7 @@ import org.wikipedia.ro.cache.WikidataEntitiesCache;
 import org.wikipedia.ro.utils.WikidataCacheManager;
 import org.wikipedia.ro.utils.WikipediaPageCache;
 
+@Execution(ExecutionMode.SAME_THREAD)
 class TestReplaceCrossLinkWithIll {
     private Wiki targetWiki;
     private Wiki sourceWiki;
@@ -40,10 +48,13 @@ class TestReplaceCrossLinkWithIll {
         sourceWiki = mock(Wiki.class);
         dataWiki = mock(Wikibase.class);
         pageCache = mock(WikipediaPageCache.class);
-        // Static singleton
-        try (MockedStatic<WikipediaPageCache> cacheMock = mockStatic(WikipediaPageCache.class)) {
-            cacheMock.when(WikipediaPageCache::getInstance).thenReturn(pageCache);
-        }
+    }
+
+    @AfterEach
+    void tearDown() {
+        reset(targetWiki, sourceWiki, dataWiki);
+        WikidataCacheManager.clearCaches();
+        WikipediaPageCache.getInstance().invalidateAll();
     }
 
     @Test
@@ -56,18 +67,28 @@ class TestReplaceCrossLinkWithIll {
     @Test
     void testCrossWikiLinkReplacedWithIll() throws Exception {
         ReplaceCrossLinkWithIll op = new ReplaceCrossLinkWithIll(targetWiki, sourceWiki, dataWiki, "Test");
-        String text = "Some [[fr:Paris|Paris in French]] text.";
-        when(sourceWiki.resolveRedirects(anyList())).thenReturn(Collections.singletonList("Paris"));
-        when(targetWiki.resolveRedirects(anyList())).thenReturn(Collections.singletonList("Paris"));
-        when(targetWiki.exists(anyList())).thenReturn(new boolean[]{false});
-        when(sourceWiki.exists(anyList())).thenReturn(new boolean[]{true});
-        // Mock WikidataCacheManager
-        try (MockedStatic<WikidataCacheManager> wdMock = mockStatic(WikidataCacheManager.class)) {
-            wdMock.when(() -> WikidataCacheManager.getWikidataEntitiesCache(any())).thenReturn(mock(WikidataEntitiesCache.class));
-            wdMock.when(() -> WikidataCacheManager.getCachedRedirect(any(Wiki.class), anyString())).thenReturn("Paris");
-            wdMock.when(() -> WikidataCacheManager.getCachedRedirect(any(Wikibase.class), anyString())).thenReturn("Paris");
-            wdMock.when(() -> WikidataCacheManager.getCachedRedirect(any(Wiki.class), anyString())).thenReturn("Paris");
-            wdMock.when(() -> WikidataCacheManager.getCachedRedirect(any(Wikibase.class), anyString())).thenReturn("Paris");
+        String text = "Some [[:fr:Paris|Paris in French]] text.";
+        when(sourceWiki.resolveRedirects(anyList())).thenAnswer(inv -> inv.getArgument(0));
+        when(sourceWiki.getDomain()).thenReturn("fr.wikipedia.org");
+        when(targetWiki.resolveRedirects(anyList())).thenAnswer(inv -> inv.getArgument(0));
+        when(targetWiki.exists(anyList())).thenAnswer(inv -> {
+            List<String> titles = inv.getArgument(0);
+            boolean[] result = new boolean[titles.size()];
+            Arrays.fill(result, false);
+            return result;
+        });
+        when(sourceWiki.exists(argThat(list -> list.contains("Paris")))).thenAnswer(inv -> {
+            List<String> titles = inv.getArgument(0);
+            boolean[] result = new boolean[titles.size()];
+            for (int i = 0; i < titles.size(); i++) {
+                result[i] = titles.get(i).equals("Paris");
+            }
+            return result;
+        });
+        
+        try (MockedStatic<Wiki> wikiMock = mockStatic(Wiki.class)) {
+            wikiMock.when(() -> Wiki.newSession("fr.wikipedia.org")).thenReturn(sourceWiki);
+            
             String result = op.executeWithInitialText(text);
             assertTrue(result.contains("{{Ill"));
         }
