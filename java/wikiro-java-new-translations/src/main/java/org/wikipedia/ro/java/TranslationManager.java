@@ -92,9 +92,10 @@ public class TranslationManager extends AbstractExecutable
 
         List<Revision> recentNewPages;
         try {
+            final RequestHelper fHelper = helper;
             recentNewPages = RetryHelper.retry(() -> {
                 try {
-                    return wiki.newPages(helper);
+                    return wiki.newPages(fHelper);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -108,9 +109,10 @@ public class TranslationManager extends AbstractExecutable
             LOG.info("Page created: {}", eachNewPage.getTitle());
             Revision revision;
             try {
+                final Revision fEachNewPage = eachNewPage;
                 revision = RetryHelper.retry(() -> {
                     try {
-                        return wiki.getRevision(eachNewPage.getID());
+                        return wiki.getRevision(fEachNewPage.getID());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
