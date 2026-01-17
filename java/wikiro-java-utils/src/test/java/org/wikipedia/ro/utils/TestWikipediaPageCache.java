@@ -8,13 +8,17 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -237,6 +241,119 @@ class TestWikipediaPageCache {
         assertEquals("Text 2", texts.get(1));
         assertNull(texts.get(2)); // Non-existent page
         assertEquals("Text 3", texts.get(3));
+    }
+
+    @Test
+    void testSavePageWhenInCache() throws Exception {
+        WikipediaPageCache cache = WikipediaPageCache.createInstance();
+        cache.invalidateAll();
+        
+        // Setup initial page in cache
+        wikiTexts = new HashMap<>();
+        wikiTexts.put("TestPage", "Original text");
+        wikiRedirects = new HashMap<>();
+        
+        // Load page into cache
+        String originalText = cache.getPageText(wiki, "TestPage");
+        assertEquals("Original text", originalText);
+        
+        // Mock edit call
+        doAnswer(invocation -> {
+            String title = invocation.getArgument(0);
+            String newText = invocation.getArgument(1);
+            wikiTexts.put(title, newText);
+            return null;
+        }).when(wiki).edit(eq("TestPage"), any(), any(), any());
+        
+        // Act - save updated text
+        String updatedText = "Updated text";
+        cache.savePage(wiki, "TestPage", updatedText, "Test edit summary");
+        
+        // Assert - cache should be updated with new text
+        WikipediaPageCache.CachedPage cachedPage = cache.getPage(wiki, "TestPage");
+        assertNotNull(cachedPage);
+        assertEquals(updatedText, cachedPage.getText());
+    }
+
+    @Test
+    void testSavePageWhenNotInCache() throws Exception {
+        WikipediaPageCache cache = WikipediaPageCache.createInstance();
+        cache.invalidateAll();
+        
+        // Setup initial page texts
+        wikiTexts = new HashMap<>();
+        wikiRedirects = new HashMap<>();
+        doAnswer(inv -> {
+            String title = inv.getArgument(0);
+            String newText = inv.getArgument(1);
+            wikiTexts.put(title, newText);
+            return null;
+        }).when(wiki).edit(any(), any(), any());
+
+        // Act - save page that's not in cache (should use edit without timestamp)
+        String newText = "New page text";
+        cache.savePage(wiki, "NewPage", newText, "Creating new page");
+        
+        // Assert - verify that edit with 3 arguments (no timestamp) was called
+        verify(wiki, times(1)).edit(eq("NewPage"), eq(newText), eq("Creating new page"));
+        
+        // Assert - page should be added to cache
+        WikipediaPageCache.CachedPage cachedPage = cache.getPage(wiki, "NewPage");
+        assertNotNull(cachedPage);
+    }
+
+    @Test
+    void testSavePageWithConcurrentModification() throws Exception {
+        WikipediaPageCache cache = WikipediaPageCache.createInstance();
+        cache.invalidateAll();
+        
+        // Setup initial page in cache
+        wikiTexts = Map.of("TestPage", "Original text");
+        wikiRedirects = Collections.emptyMap();
+        
+        // Load page into cache to get a timestamp
+        String originalText = cache.getPageText(wiki, "TestPage");
+        assertEquals("Original text", originalText);
+        
+        // Mock edit to throw ConcurrentModificationException
+        doThrow(ConcurrentModificationException.class).
+            when(wiki).edit(eq("TestPage"), any(), any(), any());
+        
+        // Act & Assert
+        try {
+            cache.savePage(wiki, "TestPage", "Updated text", "Test edit");
+            assertTrue(false, "Expected ConcurrentModificationException to be thrown");
+        } catch (Exception e) {
+            // Expected - should propagate the exception
+            assertTrue(e.getCause() instanceof ConcurrentModificationException 
+                    || e instanceof ConcurrentModificationException);
+        }
+    }
+
+    @Test
+    void testSavePageUpdatesCache() throws Exception {
+        WikipediaPageCache cache = WikipediaPageCache.createInstance();
+        cache.invalidateAll();
+        
+        // Setup initial page in cache
+        wikiTexts = Map.of("TestPage", "Original text");
+        wikiRedirects = Collections.emptyMap();
+        // Load page into cache
+        String originalText = cache.getPageText(wiki, "TestPage");
+        
+        // Save updated text
+        String updatedText = "Updated text content";
+        cache.savePage(wiki, "TestPage", updatedText, "Update summary");
+        
+        // Verify that edit with 4 arguments (with timestamp) was called
+        verify(wiki, times(1)).edit(eq("TestPage"), eq(updatedText), eq("Update summary"), any());
+        
+        // Get from cache again (should not call wiki.getPageText again)
+        String cachedText = cache.getPageText(wiki, "TestPage");
+        
+        // Assert
+        assertEquals("Original text", originalText);
+        assertEquals(updatedText, cachedText);
     }
 
     

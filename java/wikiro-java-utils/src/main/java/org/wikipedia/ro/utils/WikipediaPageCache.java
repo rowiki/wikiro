@@ -1,6 +1,7 @@
 package org.wikipedia.ro.utils;
 
 import java.io.IOException;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.security.auth.login.LoginException;
+
 import org.wikipedia.Wiki;
 
 public class WikipediaPageCache {
@@ -22,6 +25,7 @@ public class WikipediaPageCache {
         private final Boolean exist;
         private final Boolean redirect;
         private final String realTitle;
+        private final OffsetDateTime cachedAt = OffsetDateTime.now();
 
         public CachedPage(String text, Boolean exist, Boolean redirect, String realTitle) {
             this.text = text;
@@ -44,6 +48,10 @@ public class WikipediaPageCache {
 
         public String getRealTitle() {
             return realTitle;
+        }
+
+        public OffsetDateTime getCachedAt() {
+            return cachedAt;
         }
     }
 
@@ -257,19 +265,7 @@ public class WikipediaPageCache {
                         String cacheKey = computeCacheKey(wiki, title);
                         String pageText = texts.get(i);
                         CachedPage cachedPage = cache.get(cacheKey);
-                        cache.put(cacheKey, new CachedPage(pageText, cachedPage.exist, cachedPage.redirect, cachedPage.realTitle));
-                        textsLoaded.addLast(cacheKey);
-                        cachedTextSize += pageText != null ? pageText.length() : 0;
-                    }
-                    
-                    // Clean up cache if it exceeds maximum size
-                    while (maxCachedTextSize > 0 && cachedTextSize > maxCachedTextSize && !textsLoaded.isEmpty()) {
-                        String oldestKey = textsLoaded.removeFirst();
-                        CachedPage removedPage = cache.get(oldestKey);
-                        if (removedPage != null && removedPage.text != null) {
-                            cachedTextSize -= removedPage.text.length();
-                            cache.put(oldestKey, new CachedPage(null, removedPage.exist, removedPage.redirect, removedPage.realTitle));
-                        }
+                        addTextToCache(cacheKey, new CachedPage(pageText, cachedPage.exist, cachedPage.redirect, cachedPage.realTitle));
                     }
                 }
             } catch (TimeoutException e) {
@@ -284,18 +280,75 @@ public class WikipediaPageCache {
     }
 
     public void invalidatePage(Wiki wiki, String title) {
-        cache.remove(computeCacheKey(wiki, title));
+        CachedPage removedCacheEntry = cache.remove(computeCacheKey(wiki, title));
+        if (removedCacheEntry != null && removedCacheEntry.text != null) {
+            cachedTextSize -= removedCacheEntry.text.length();
+            textsLoaded.remove(computeCacheKey(wiki, title));
+        }
     }
 
     public void invalidateAll() {
         cache.clear();
+        cachedTextSize = 0l;
+        textsLoaded.clear();
     }
     
     public void invalidatePagesIf(Wiki wiki, Predicate<String> predicate) {
         String prefix = wiki.getDomain() + ":";
-        cache.keySet().removeIf(key -> 
-            key.startsWith(prefix) && predicate.test(key.substring(prefix.length()))
-        );
+        List<String> entriesToRemove = cache.keySet().stream()
+            .filter(k -> k.startsWith(prefix) && predicate.test(k.substring(prefix.length())))
+            .toList();
+
+        Integer removedSize = entriesToRemove.stream()
+            .map(k -> cache.get(k).text.length())
+            .reduce(0, Integer::sum);
+        entriesToRemove.forEach(cache::remove);
+        textsLoaded.removeAll(entriesToRemove);
+        cachedTextSize -= removedSize;
     }
     
+    public void savePage(Wiki wiki, String title, String text, String editSummary) {
+        String cacheKey = computeCacheKey(wiki, title);
+        CachedPage cachedPage = cache.get(cacheKey);
+        
+        OffsetDateTime cachedAt = cachedPage != null ? cachedPage.getCachedAt() : null;
+        
+        try {
+            if (cachedAt != null) {
+                wiki.edit(title, text, editSummary, cachedAt);
+            } else {
+                wiki.edit(title, text, editSummary);
+            }
+        } catch (IOException | LoginException e) {
+            throw new RuntimeException("Failed to save page: " + title, e);
+        }
+
+        // Renew the cache with the new content
+        if (cachedPage != null) {
+            addTextToCache(cacheKey,
+                    new CachedPage(text, cachedPage.exists(), cachedPage.redirects(), cachedPage.getRealTitle()));
+        } else {
+            addTextToCache(cacheKey, new CachedPage(text, true, false, null));
+        }
+    }
+
+    private void addTextToCache(String cacheKey, CachedPage newPage) {
+        cache.put(cacheKey, newPage);
+        if (newPage.text != null) {
+            textsLoaded.addLast(cacheKey);
+            cachedTextSize += newPage.text.length();
+            cleanupCacheIfNeeded();
+        }
+    }
+
+    private void cleanupCacheIfNeeded() {
+        while (maxCachedTextSize > 0 && cachedTextSize > maxCachedTextSize && !textsLoaded.isEmpty()) {
+            String oldestKey = textsLoaded.removeFirst();
+            CachedPage removedPage = cache.get(oldestKey);
+            if (removedPage != null && removedPage.text != null) {
+                cachedTextSize -= removedPage.text.length();
+                cache.put(oldestKey, new CachedPage(null, removedPage.exists(), removedPage.redirects(), removedPage.getRealTitle()));
+            }
+        }
+    }
 }
