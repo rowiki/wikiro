@@ -39,6 +39,7 @@ import org.wikipedia.ro.legacyoperations.ReplaceCrossLinkWithIll;
 import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiTemplate;
 import org.wikipedia.ro.utility.AbstractExecutable;
+import org.wikipedia.ro.utils.RetryHelper;
 import org.wikipedia.ro.utils.WikipediaPageCache;
 
 import ch.qos.logback.classic.Level;
@@ -88,12 +89,52 @@ public class TranslationManager extends AbstractExecutable
         helper.withinDateRange(lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
 
         BatchTranslationProcessingStatus linkbackStatus = new BatchTranslationProcessingStatus();
-        List<Revision> recentNewPages = wiki.newPages(helper);
+
+        List<Revision> recentNewPages;
+        try {
+            recentNewPages = RetryHelper.retry(() -> {
+                try {
+                    return wiki.newPages(helper);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }, 10);
+        } catch (TimeoutException e) {
+            LOG.error("Failed to fetch recent new pages", e);
+            return;
+        }
         for (Revision eachNewPage : recentNewPages)
         {
             LOG.info("Page created: {}", eachNewPage.getTitle());
-            String eachNewPageTitle = wiki.getRevision(eachNewPage.getID()).getTitle();
-            String[] newPageLinks = wiki.whatLinksHere(eachNewPageTitle, Wiki.MAIN_NAMESPACE);
+            Revision revision;
+            try {
+                revision = RetryHelper.retry(() -> {
+                    try {
+                        return wiki.getRevision(eachNewPage.getID());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }, 10);
+            } catch (TimeoutException e) {
+                linkbackStatus.addProcessingFailure(eachNewPage.getTitle(), "Failed to fetch revision for page " + eachNewPage.getTitle() + ": "+ e.getMessage());
+                LOG.error("Failed to fetch revision for page {}", eachNewPage.getTitle(), e);
+                continue;
+            }
+            String eachNewPageTitle = revision.getTitle();
+            String[] newPageLinks;
+            try {
+                newPageLinks = RetryHelper.retry(() -> {
+                    try {
+                        return wiki.whatLinksHere(eachNewPageTitle, Wiki.MAIN_NAMESPACE);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }, 10);
+            } catch (TimeoutException e) {
+                linkbackStatus.addProcessingFailure(eachNewPageTitle, "Failed to fetch what links to page " + eachNewPageTitle + ": " + e.getMessage());
+                LOG.error("Failed to fetch what links here for page {}", eachNewPageTitle, e);
+                continue;
+            }
             for (String eachNewPageLink : newPageLinks)
             {
                 if (null == eachNewPageLink)
@@ -102,7 +143,7 @@ public class TranslationManager extends AbstractExecutable
                 }
                 try
                 {
-                    String notReplacedText = wiki.getPageText(List.of(eachNewPageLink)).stream().findFirst().orElse("");
+                    String notReplacedText = WikipediaPageCache.getInstance().getPageText(wiki, eachNewPageLink);
                     CleanupIll illCleanup = new CleanupIll(wiki, wiki, dwiki, eachNewPageLink);
                     ExecutorService executor = Executors.newSingleThreadExecutor();
                     Future<String> future = executor.submit(() -> illCleanup.executeWithInitialText(notReplacedText));
