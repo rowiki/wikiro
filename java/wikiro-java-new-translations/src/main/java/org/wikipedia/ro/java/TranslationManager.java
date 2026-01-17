@@ -54,8 +54,6 @@ public class TranslationManager extends AbstractExecutable
     Pattern commentPattern = Pattern.compile("\\[\\[:(\\w+):Special:Redirect/revision/(\\d+)\\|([^\\]]+)\\]\\]");
     Pattern translPagePattern = Pattern.compile("\\{\\{\\s*[Pp]agină[_\\s]tradusă");
     
-    private final WikipediaPageCache wikipediaPageCache = new WikipediaPageCache(); 
-
     @Override
     protected void execute() throws IOException, WikibaseException, LoginException
     {
@@ -107,10 +105,10 @@ public class TranslationManager extends AbstractExecutable
                     String notReplacedText = wiki.getPageText(List.of(eachNewPageLink)).stream().findFirst().orElse("");
                     CleanupIll illCleanup = new CleanupIll(wiki, wiki, dwiki, eachNewPageLink);
                     ExecutorService executor = Executors.newSingleThreadExecutor();
-                    Future<String> future = executor.submit(() -> illCleanup.execute());
+                    Future<String> future = executor.submit(() -> illCleanup.executeWithInitialText(notReplacedText));
                     String replacedText;
                     try {
-                        replacedText = future.get(15, TimeUnit.MINUTES);
+                        replacedText = future.get(10, TimeUnit.MINUTES);
                     } catch (TimeoutException e) {
                         future.cancel(true); // Interrupt the task
                         throw e;
@@ -191,7 +189,7 @@ public class TranslationManager extends AbstractExecutable
 
     public BatchTranslationProcessingStatus processManualCalls() throws IOException  {
         BatchTranslationProcessingStatus status = new BatchTranslationProcessingStatus();
-        String manuallyProcessedTranslationsPage = wikipediaPageCache.getPageText(wiki, "Utilizator:Andrebot/traduceri-de-prelucrat");
+        String manuallyProcessedTranslationsPage = WikipediaPageCache.getInstance().getPageText(wiki, "Utilizator:Andrebot/traduceri-de-prelucrat");
         // Read the list of page titles
         List<String> pageTitles = manuallyProcessedTranslationsPage.lines()
             .map(String::trim)
@@ -210,7 +208,7 @@ public class TranslationManager extends AbstractExecutable
                 Wiki srcWiki = Wiki.newSession(srcLang + ".wikipedia.org");
 
                 // Read the page text
-                String originalText = wikipediaPageCache.getPageText(wiki, pageTitle);
+                String originalText = WikipediaPageCache.getInstance().getPageText(wiki, pageTitle);
 
                 // ReplaceCrossLinkWithIll
                 ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, srcWiki, dwiki, pageTitle);
@@ -243,7 +241,7 @@ public class TranslationManager extends AbstractExecutable
                 // If the text changed, update the page
                 if (!originalText.equals(illResult)) {
                     wiki.edit(pageTitle, illResult, "Robot: executat la cerere managementul formatelor Ill");
-                    wikipediaPageCache.invalidatePage(wiki, pageTitle);
+                    WikipediaPageCache.getInstance().invalidatePage(wiki, pageTitle);
                 }
                 status.addSuccessfulProcessing(pageTitle);
                 

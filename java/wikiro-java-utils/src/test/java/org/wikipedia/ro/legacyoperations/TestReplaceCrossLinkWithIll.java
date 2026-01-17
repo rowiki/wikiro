@@ -85,6 +85,7 @@ class TestReplaceCrossLinkWithIll {
             }
             return result;
         });
+        when(dataWiki.getWikibaseItemBySiteAndTitle("frwiki", "Paris")).thenReturn(null);
         
         try (MockedStatic<Wiki> wikiMock = mockStatic(Wiki.class)) {
             wikiMock.when(() -> Wiki.newSession("fr.wikipedia.org")).thenReturn(sourceWiki);
