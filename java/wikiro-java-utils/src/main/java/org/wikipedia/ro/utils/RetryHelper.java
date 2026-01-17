@@ -9,16 +9,21 @@ public class RetryHelper {
     
     public static <T> T retry(Supplier<T> operation, int maxAttempts) throws TimeoutException {
         int attempts = 0;
+        Exception ex = null;
         while (attempts < maxAttempts) {
             try {
                 T result = operation.get();
                 if (result != null) {
                     return result;
                 }
+            } catch (Exception e) {
+                ex = e;
             } finally {
                 attempts++;
             }
         }
-        throw new TimeoutException("Operation failed after " + maxAttempts + " attempts");
+        TimeoutException tex = new TimeoutException("Operation failed after " + maxAttempts + " attempts");
+        tex.initCause(ex);
+        throw tex;
     }
 }
