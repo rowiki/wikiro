@@ -107,7 +107,7 @@ public class CleanupIll implements WikiOperation {
             label = substringAfter(baseTargetPage, "{{!}}");
         }
         String sourcePage = Objects.toString(wikipartListToString(illTemplate.getParam("3")), baseTargetPage);
-        String targetPage = null != baseTargetPage ? WikidataCacheManager.getCachedRedirect(targetWiki, baseTargetPage): sourcePage; 
+        String targetPage = null != baseTargetPage ? WikipediaPageCache.getInstance().getRealTitle(targetWiki, baseTargetPage): sourcePage; 
         label = Objects.toString(label, Objects.toString(wikipartListToString(illTemplate.getParam("4")), baseTargetPage));
         targetPage = Objects.toString(targetPage, label);
 
@@ -127,7 +127,7 @@ public class CleanupIll implements WikiOperation {
         } else {
             Wiki linkSourceWiki = Wiki.newSession(langId + ".wikipedia.org");
             Entity wdItem = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).getByArticle(langId + "wiki",
-                WikidataCacheManager.getCachedRedirect(linkSourceWiki, sourcePage));
+                WikipediaPageCache.getInstance().getRealTitle(linkSourceWiki, sourcePage));
             if (null != wdItem) {
                 Sitelink targetSitelink = wdItem.getSitelinks().get(targetWikiCode);
                 if (null != targetSitelink) {

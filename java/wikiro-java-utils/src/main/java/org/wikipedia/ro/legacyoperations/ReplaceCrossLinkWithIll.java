@@ -108,7 +108,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                         String namespace = defaultString(namespaceMatcher.group(1));
                         String simpleForeignTitle = namespaceMatcher.group(2);
                         foreignTitle = capitalize(namespace) + capitalize(simpleForeignTitle);
-                        String target = WikidataCacheManager.getCachedRedirect(sourceWiki, foreignTitle);
+                        String target = WikipediaPageCache.getInstance().getRealTitle(sourceWiki, foreignTitle);
                         wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(lang + "wiki", target);
                     }
                     roTitle = Optional.ofNullable(wbEntity).map(Entity::getLabels).map(m -> m.get("ro")).orElse(null);
@@ -154,7 +154,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             status = new String[] { "status.analyzing.link", articleTitle };
 
             Wiki srcWiki = Wiki.newSession(lang + ".wikipedia.org");
-            String target = WikidataCacheManager.getCachedRedirect(srcWiki, articleTitle);
+            String target = WikipediaPageCache.getInstance().getRealTitle(srcWiki, articleTitle);
             String targetLang = CS.removeEnd(targetWikiCode, "wiki");
             String sourceLang = defaultIfEmpty(lang, CI.removeEnd(srcWiki.getDomain(), ".wikipedia.org"));
 

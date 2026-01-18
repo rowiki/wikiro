@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -15,9 +14,11 @@ import java.util.regex.Pattern;
 
 import javax.security.auth.login.LoginException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikipedia.Wiki;
+import org.wikipedia.ro.utils.WikipediaPageCache;
 
 @Operation(useWikibase = true, labelKey = "operation.reindexfn.label")
 public class ReindexFootnotes implements WikiOperation {
@@ -40,11 +41,10 @@ public class ReindexFootnotes implements WikiOperation {
     @Override
     public String execute() throws IOException, WikibaseException, LoginException {
         LOG.log(Level.INFO, "Reindexing footnotes of page {0}", article);
-        Optional<String> pageTextOpt = targetWiki.getPageText(List.of(article)).stream().findFirst();
-        if (pageTextOpt.isEmpty()) {
+        String pageText = WikipediaPageCache.getInstance().getPageText(targetWiki, article);
+        if (StringUtils.isEmpty(pageText)) {
             throw new IOException("Page " + article + " could not be loaded");
         }
-        String pageText = pageTextOpt.get();
 
         return processText(pageText);
     }

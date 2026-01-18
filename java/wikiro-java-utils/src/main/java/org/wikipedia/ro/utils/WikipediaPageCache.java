@@ -333,12 +333,12 @@ public class WikipediaPageCache {
     }
 
     private void addTextToCache(String cacheKey, CachedPage newPage) {
-        cache.put(cacheKey, newPage);
         if (newPage.text != null) {
             textsLoaded.addLast(cacheKey);
             cachedTextSize += newPage.text.length();
             cleanupCacheIfNeeded();
         }
+        cache.put(cacheKey, newPage);
     }
 
     private void cleanupCacheIfNeeded() {

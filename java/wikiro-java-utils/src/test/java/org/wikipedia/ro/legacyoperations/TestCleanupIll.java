@@ -6,6 +6,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -29,19 +32,69 @@ class TestCleanupIll {
     private Wiki sourceWiki;
     private Wikibase dataWiki;
 
+    // Share mutable maps with the wiki mocks, same as TestReplaceCrossLinkWithIll
+    private Map<String, String> targetWikiTexts = new HashMap<>();
+    private Map<String, String> sourceWikiTexts = new HashMap<>();
+    private Map<String, String> targetWikiRedirects = new HashMap<>();
+    private Map<String, String> sourceWikiRedirects = new HashMap<>();
+
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         targetWiki = mock(Wiki.class, "target=ro");
         sourceWiki = mock(Wiki.class, "source=fr");
         dataWiki = mock(Wikibase.class, "wikidata");
 
-        when(targetWiki.getDomain()).thenReturn("ro.wikipedia.org");
-        when(sourceWiki.getDomain()).thenReturn("fr.wikipedia.org");
+        initializeWikiMock(targetWiki, "ro.wikipedia.org", targetWikiRedirects, targetWikiTexts);
+        initializeWikiMock(sourceWiki, "fr.wikipedia.org", sourceWikiRedirects, sourceWikiTexts);
+    }
+
+    private void initializeWikiMock(Wiki wiki, String domain, Map<String, String> redirectMap, Map<String, String> textMap) throws IOException {
+        when(wiki.getDomain()).thenReturn(domain);
+        when(wiki.getPageText(any())).thenAnswer(invocation -> {
+            List<String> titles = invocation.getArgument(0);
+            List<String> texts = new ArrayList<>();
+            for (String title : titles) {
+                texts.add(textMap.get(title));
+            }
+            return texts;
+        });
+        when(wiki.exists(any())).thenAnswer(inv -> {
+            List<String> titles = inv.getArgument(0);
+            boolean[] result = new boolean[titles.size()];
+            for (int i = 0; i < titles.size(); i++) {
+                result[i] = textMap.containsKey(titles.get(i)) || redirectMap.containsKey(titles.get(i));
+            }
+            return result;
+        });
+        when(wiki.resolveRedirects(any())).thenAnswer(inv -> {
+            List<String> titles = inv.getArgument(0);
+            List<String> redirects = new ArrayList<>();
+            for (String title : titles) {
+                redirects.add(redirectMap.getOrDefault(title, title));
+            }
+            return redirects;
+        });
+        when(wiki.getPageInfo(any())).thenAnswer(invocation -> {
+            List<String> titles = invocation.getArgument(0);
+            List<Map<String, Object>> infoList = new ArrayList<>();
+            for (String title : titles) {
+                Map<String, Object> info = new HashMap<>();
+                info.put("exists", textMap.containsKey(title) || redirectMap.containsKey(title));
+                info.put("redirect", redirectMap.containsKey(title));
+                infoList.add(info);
+            }
+            return infoList;
+        });
     }
 
     @AfterEach
     void tearDown() {
         reset(targetWiki, sourceWiki, dataWiki);
+        // Reassign fresh mutable maps (avoids issues if tests used immutable maps)
+        targetWikiTexts = new HashMap<>();
+        sourceWikiTexts = new HashMap<>();
+        targetWikiRedirects = new HashMap<>();
+        sourceWikiRedirects = new HashMap<>();
         WikidataCacheManager.clearCaches();
         WikipediaPageCache.getInstance().invalidateAll();
     }
@@ -101,14 +154,6 @@ class TestCleanupIll {
         when(wdEntity.getSitelinks()).thenReturn(Map.of("rowiki", sitelink));
 
         try (MockedStatic<Wiki> wikiMock = mockStatic(Wiki.class)) {
-            when(targetWiki.resolveRedirects(argThat(list -> list.contains("Paris")))).thenAnswer(invocation -> invocation.getArgument(0));
-            when(targetWiki.exists(argThat(list -> list.contains("Paris")))).thenAnswer(inv -> {
-                List<String> titles = inv.getArgument(0);
-                boolean[] result = new boolean[titles.size()];
-                Arrays.fill(result, false);
-                return result;
-            });
-
             wikiMock.when(() -> Wiki.newSession("fr.wikipedia.org")).thenReturn(sourceWiki);
             when(dataWiki.getWikibaseItemBySiteAndTitle("frwiki", "Paris")).thenReturn(wdEntity);
             
@@ -123,15 +168,7 @@ class TestCleanupIll {
     void testExecuteWithInitialText_IllTemplateWithExistingTargetPage() throws Exception {
         String pageText = "Before {{Ill|fr|Paris|Paris|Paris label}} After";
 
-        when(targetWiki.resolveRedirects(argThat(list -> list.contains("Paris")))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(targetWiki.exists(argThat(list -> list.contains("Paris")))).thenAnswer(inv -> {
-            List<String> titles = inv.getArgument(0);
-            boolean[] result = new boolean[titles.size()];
-            for (int i = 0; i < titles.size(); i++) {
-                result[i] = titles.get(i).equals("Paris");
-            }
-            return result;
-        });
+        targetWikiTexts.put("Paris", "Some content about Paris");
         
         CleanupIll op = new CleanupIll(targetWiki, sourceWiki, dataWiki, "Test");
         String result = op.executeWithInitialText(pageText);
@@ -142,14 +179,6 @@ class TestCleanupIll {
     @Test
     void testExecuteWithInitialText_IllTemplateWithNonExistingTargetPage() throws Exception {
         String pageText = "Before {{Ill|fr|Paris|Paris|Paris label}} After";
-
-        when(targetWiki.resolveRedirects(argThat(list -> list.contains("Paris")))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(targetWiki.exists(argThat(list -> list.contains("Paris")))).thenAnswer(inv -> {
-            List<String> titles = inv.getArgument(0);
-            boolean[] result = new boolean[titles.size()];
-            Arrays.fill(result, false);
-            return result;
-        });
         
         Entity wdEntity = mock(Entity.class);
         Sitelink sitelink = new Sitelink("frwiki", "Paris");
