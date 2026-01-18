@@ -174,24 +174,42 @@ public class WikipediaPageCache {
     }
     
     public boolean pageExists(Wiki wiki, String title) {
-        String cacheKey = computeCacheKey(wiki, title);
-        if (!cache.containsKey(cacheKey)) {
-            boolean[] exists = null;
+        return pagesExist(wiki, title)[0];
+    }
+
+    public boolean[] pagesExist(Wiki wiki, String... titles) {
+        List<String> titlesToLoad = List.of(titles).stream()
+            .filter(title -> !cache.containsKey(computeCacheKey(wiki, title)) || cache.get(computeCacheKey(wiki, title)).exist == null)
+            .toList();
+        
+        if (!titlesToLoad.isEmpty()) {
             try {
-                exists = RetryHelper.retry(() -> {
+                boolean[] existsArray = RetryHelper.retry(() -> {
                     try {
-                        return wiki.exists(List.of(title));
+                        return wiki.exists(titlesToLoad);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }, 3);
-                cache.put(cacheKey, new CachedPage(null, exists[0], null, null));
+                
+                for (int idx = 0; idx < titlesToLoad.size(); idx++) {
+                    String title = titlesToLoad.get(idx);
+                    String cacheKey = computeCacheKey(wiki, title);
+                    CachedPage existingCache = cache.get(cacheKey);
+                    cache.put(cacheKey, new CachedPage(existingCache != null ? existingCache.text : null, existsArray[idx], existingCache != null ? existingCache.redirect : null, existingCache != null ? existingCache.realTitle : null));
+                }
             } catch (Exception e) {
-                LOG.log(Level.SEVERE, e, () -> "Metainfo of page " + cacheKey + " failed to load");
-                return false;
+                LOG.log(Level.SEVERE, e, () -> "Pages metainfo failed to load for wiki " + wiki.getDomain());
             }
         }
-        return cache.get(cacheKey).exist == Boolean.TRUE; 
+        
+        boolean[] result = new boolean[titles.length];
+        for (int i = 0; i < titles.length; i++) {
+            String cacheKey = computeCacheKey(wiki, titles[i]);
+            CachedPage cachedPage = cache.get(cacheKey);
+            result[i] = cachedPage != null && Boolean.TRUE.equals(cachedPage.exist);
+        }
+        return result;
     }
 
     private String computeCacheKey(Wiki wiki, String title) {

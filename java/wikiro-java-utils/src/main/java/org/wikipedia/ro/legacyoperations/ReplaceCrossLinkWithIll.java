@@ -229,12 +229,12 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                 localLinks.add(articleTitle);
             }
         }
-        List<String> localResolvedRedirects = targetWiki.resolveRedirects(localLinks);
+        List<String> localResolvedRedirects = WikipediaPageCache.getInstance().getRealTitles(targetWiki, localLinks.toArray(String[]::new));
         for (int idx = 0; idx < localLinks.size(); idx++) {
             actualLocalTitleMap.put(localLinks.get(idx), Objects.toString(localResolvedRedirects.get(idx), localLinks.get(idx)));
         }
         localLinks = actualLocalTitleMap.values().stream().filter(x -> !isNotReplaceableLink(x)).collect(Collectors.toList());
-        boolean[] localExistanceArray = targetWiki.exists(localLinks);
+        boolean[] localExistanceArray =  WikipediaPageCache.getInstance().pagesExist(targetWiki, localLinks.toArray(String[]::new));
         for (int idx = 0; idx < localLinks.size(); idx++) {
             localLinkExistenceMap.put(localLinks.get(idx), Boolean.valueOf(localExistanceArray[idx]));
         }
@@ -242,7 +242,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
         List<String> nonExistingLinks = localLinkExistenceMap.keySet().stream()
             .filter(key -> !localLinkExistenceMap.get(key)).collect(Collectors.toList());
         if (!nonExistingLinks.isEmpty()) {
-            List<String> actualForeignTitles = sourceWiki.resolveRedirects(nonExistingLinks);
+            List<String> actualForeignTitles = WikipediaPageCache.getInstance().getRealTitles(sourceWiki, nonExistingLinks.toArray(String[]::new));
             for (int idx = 0; idx < nonExistingLinks.size(); idx++) {
                 actualForeignTitleMap.put(nonExistingLinks.get(idx),
                     Objects.toString(actualForeignTitles.get(idx), nonExistingLinks.get(idx)));
@@ -251,7 +251,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
 
         nonExistingLinks = actualForeignTitleMap.values().stream().collect(Collectors.toList());
         if (!nonExistingLinks.isEmpty()) {
-            boolean[] foreignLinkExistenceArray = sourceWiki.exists(nonExistingLinks);
+            boolean[] foreignLinkExistenceArray =  WikipediaPageCache.getInstance().pagesExist(sourceWiki, nonExistingLinks.toArray(String[]::new));
             for (int idx = 0; idx < foreignLinkExistenceArray.length; idx++) {
                 foreignLinkExistenceMap.put(nonExistingLinks.get(idx), Boolean.valueOf(foreignLinkExistenceArray[idx]));
             }
