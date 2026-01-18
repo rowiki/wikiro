@@ -29,6 +29,7 @@ import org.wikipedia.Wiki.RequestHelper;
 import org.wikipedia.Wiki.Revision;
 import org.wikipedia.ro.java.citation.handlers.Handler;
 import org.wikipedia.ro.utility.AbstractExecutable;
+import org.wikipedia.ro.utils.WikipediaPageCache;
 
 public class CitationCompleter extends AbstractExecutable
 {
@@ -56,7 +57,7 @@ public class CitationCompleter extends AbstractExecutable
 
         wiki.getRevisions(revIds).stream().filter(Objects::nonNull).map(Revision::getTitle).forEach(pageTitles::add);
         ArrayList<String> pageTitlesList = new ArrayList<>(pageTitles);
-        List<String> pageTexts = wiki.getPageText(pageTitlesList);
+        List<String> pageTexts = WikipediaPageCache.getInstance().getPageTexts(wiki, pageTitlesList.toArray(String[]::new));
         Map<String, String> pagesTitlesAndTexts = new LinkedHashMap<>();
 
         for (int i = 0; i < pageTexts.size(); i++)
@@ -109,7 +110,7 @@ public class CitationCompleter extends AbstractExecutable
 
             if (0 < citationsChanged)
             {
-                wiki.edit(pgdata.getKey(), sb.toString(), "Robot: completat automat " + (1 == citationsChanged ? "o citare" : (citationsChanged + " citări")));
+                WikipediaPageCache.getInstance().savePage(wiki, pgdata.getKey(), sb.toString(), "Robot: completat automat " + (1 == citationsChanged ? "o citare" : (citationsChanged + " citări")));
             }
         }
         wiki.edit("Utilizator:Andrebot/dată-vizitare-pagini-editate", now.toString(), "Robot: actualizare dată vizitare pagini editate");
