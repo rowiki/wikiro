@@ -10,6 +10,16 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,7 +57,67 @@ public class DefaultCitationHandler implements Handler
     
     private static final Pattern LOCALE_PATTERN = Pattern.compile("([^_\\-]+)(?:[_\\-](\\w+))?");
     
-    private Set<ProcessingStep> additionalProcessingSteps = new LinkedHashSet<>(); 
+    private final HttpClient httpClient;
+    private final SSLSocketFactory sslSocketFactory;
+    private final HostnameVerifier hostnameVerifier;
+    
+    private Set<ProcessingStep> additionalProcessingSteps = new LinkedHashSet<>();
+    
+    public DefaultCitationHandler() {
+        this.httpClient = createTrustAllHttpClient();
+        this.sslSocketFactory = createTrustAllSSLSocketFactory();
+        this.hostnameVerifier = createTrustAllHostnameVerifier();
+    }
+    
+    private static HostnameVerifier createTrustAllHostnameVerifier() {
+        return new HostnameVerifier() {
+            public boolean verify(String hostname, SSLSession session) {
+                return true;
+            }
+        };
+    }
+    
+    private static SSLSocketFactory createTrustAllSSLSocketFactory() {
+        try {
+            TrustManager[] trustAllCerts = new TrustManager[] {
+                new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return new X509Certificate[0];
+                    }
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+                }
+            };
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            return sslContext.getSocketFactory();
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            LOG.warn("Failed to create trust-all SSL socket factory, using default", e);
+            return HttpsURLConnection.getDefaultSSLSocketFactory();
+        }
+    }
+    
+    private static HttpClient createTrustAllHttpClient() {
+        try {
+            TrustManager[] trustAllCerts = new TrustManager[] {
+                new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return new X509Certificate[0];
+                    }
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {}
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {}
+                }
+            };
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            return HttpClient.newBuilder()
+                .sslContext(sslContext)
+                .build();
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            LOG.warn("Failed to create trust-all HTTP client, using default", e);
+            return HttpClient.newBuilder().build();
+        }
+    } 
 
     public DefaultCitationHandler addProcessingStep(ProcessingStep step) {
         additionalProcessingSteps.add(step);
@@ -83,13 +153,11 @@ public class DefaultCitationHandler implements Handler
 
     private Map<String, String> completeCitationFromCitoid(String url)
     {
-        HttpClient client = HttpClient.newBuilder().build();
-
         try
         {
             HttpRequest req = HttpRequest.newBuilder(new URI("https://ro.wikipedia.org/api/rest_v1/data/citation/zotero/" + encodeURIComponent(url)))
                 .setHeader("User-Agent", "Andrebot CitationCompleter; Java " + System.getProperty("java.version")).build();
-            HttpResponse<String> response = client.send(req, BodyHandlers.ofString());
+            HttpResponse<String> response = httpClient.send(req, BodyHandlers.ofString());
             Gson gson = new Gson();
             String body = response.body();
             LOG.debug("Zotero body: {}", body);
@@ -194,7 +262,10 @@ public class DefaultCitationHandler implements Handler
         String language = null;
         try
         {
-            Document doc = Jsoup.connect(url).get();
+            HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
+            Document doc = Jsoup.connect(url)
+                .sslSocketFactory(sslSocketFactory)
+                .get();
             Elements ogTitleElems = doc.select("meta[property=og:title]");
             if (null != ogTitleElems && !ogTitleElems.isEmpty())
             {
