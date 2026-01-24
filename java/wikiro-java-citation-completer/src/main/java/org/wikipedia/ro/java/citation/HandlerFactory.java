@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 
-import org.apache.commons.lang3.StringUtils;
+import static org.apache.commons.lang3.Strings.CS;
+import static org.apache.commons.lang3.Strings.CI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wikipedia.ro.java.citation.handlers.ConvertDateFromTimestampProcessingStep;
@@ -45,26 +46,28 @@ public class HandlerFactory
             LOG.info("Bad URI {}: {}", url, e.getMessage());
             return handlerList;
         }
-        if (GoogleBooksHandler.GOOGLE_BOOKS_PATTERN.matcher(srcURI.getHost() + srcURI.getPath()).matches())
-        {
-            handlerList.add(new GoogleBooksHandler());
-        }
-
-        if (YoutubeHandler.YOUTUBE_PATTERN.matcher(srcURI.getHost()).find())
-        {
-            handlerList.add(new YoutubeHandler());
+        String host = srcURI.getHost();
+        if (host != null) {
+            // Only do host-based matching if we have a valid host
+            if (GoogleBooksHandler.GOOGLE_BOOKS_PATTERN.matcher(host + srcURI.getPath()).matches()) {
+                handlerList.add(new GoogleBooksHandler());
+            }
+            
+            if (YoutubeHandler.YOUTUBE_PATTERN.matcher(host).find()) {
+                handlerList.add(new YoutubeHandler());
+            }
         }
 
         DefaultCitationHandler defaultCitationHandler = new DefaultCitationHandler();
 
-        if ("adevarul.ro".equals(srcURI.getHost()))
-        {
-            defaultCitationHandler.addProcessingStep(new ConvertDateFromTimestampProcessingStep());
-            defaultCitationHandler.addProcessingStep(new RemoveParamsProcessingStep("language"));
-        }
-        if (StringUtils.equalsAnyIgnoreCase(srcURI.getHost(), "cinemagia.ro"))
-        {
-            defaultCitationHandler.addProcessingStep(new RemoveParamsProcessingStep("author1"));
+        if (host != null) {
+            if (CI.equals(host, "adevarul.ro")) {
+                defaultCitationHandler.addProcessingStep(new ConvertDateFromTimestampProcessingStep());
+                defaultCitationHandler.addProcessingStep(new RemoveParamsProcessingStep("language"));
+            }
+            if (CI.equals(host, "cinemagia.ro")) {
+                defaultCitationHandler.addProcessingStep(new RemoveParamsProcessingStep("author1"));
+            }
         }
 
         handlerList.add(defaultCitationHandler);

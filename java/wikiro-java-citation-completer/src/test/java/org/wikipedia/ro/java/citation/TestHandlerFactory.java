@@ -68,4 +68,20 @@ public class TestHandlerFactory
         
         Assert.assertEquals("Expected to find id from URL", "mlugG4vfmw8C", new GoogleBooksHandler().findBookId(URI.create(gbUrl)).orElse(null));
     }
+    
+    @Test
+    public void testUrlWithUnderscoreInHostname()
+    {
+        HandlerFactory sut = HandlerFactory.createHandlerFactory();
+        
+        // URL with underscore in hostname is technically invalid per URI spec,
+        // but URI constructor succeeds and getHost() returns null.
+        // The handler factory should handle this gracefully and return a default handler.
+        String urlWithUnderscore = "https://forza_azzurri.homestead.com/clubs_prof_j.html";
+        List<Handler> actualHandlers = sut.getHandlers(urlWithUnderscore);
+
+        Assert.assertNotNull("Handler list should not be null", actualHandlers);
+        Assert.assertEquals("Should return at least one handler (default)", 1, actualHandlers.size());
+        Assert.assertTrue("The handler should be default", actualHandlers.get(0) instanceof DefaultCitationHandler);
+    }
 }
