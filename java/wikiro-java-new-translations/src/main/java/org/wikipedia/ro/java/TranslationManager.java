@@ -1,5 +1,7 @@
 package org.wikipedia.ro.java;
 
+import static org.apache.commons.lang3.Strings.CS;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -159,7 +161,7 @@ public class TranslationManager extends AbstractExecutable
                         executor.shutdownNow();
                     }
                     if (!notReplacedText.equals(replacedText)) {
-                        wiki.edit(eachNewPageLink, replacedText, "Robot: înlocuit formate Ill redundante");
+                        WikipediaPageCache.getInstance().savePage(wiki, eachNewPageLink, replacedText, "Robot: înlocuit formate Ill redundante");
                         linkbackStatus.addSuccessfulProcessing(eachNewPageLink);
                     }
                 }
@@ -283,8 +285,7 @@ public class TranslationManager extends AbstractExecutable
 
                 // If the text changed, update the page
                 if (!originalText.equals(illResult)) {
-                    wiki.edit(pageTitle, illResult, "Robot: executat la cerere managementul formatelor Ill");
-                    WikipediaPageCache.getInstance().invalidatePage(wiki, pageTitle);
+                    WikipediaPageCache.getInstance().savePage(wiki, pageTitle, illResult, "Robot: executat la cerere managementul formatelor Ill");
                 }
                 status.addSuccessfulProcessing(pageTitle);
                 
@@ -352,15 +353,25 @@ public class TranslationManager extends AbstractExecutable
                     }
                     
                     ReindexFootnotes rfn = new ReindexFootnotes(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
-                    String reindexedFnText = rfn.processText(replacedText);
-                    if (!reindexedFnText.equals(replacedText))
+                    Future<String> rfnFuture = executor.submit(() -> rfn.processText(replacedText));
+                    String reindexedFnText;
+                    try {
+                        reindexedFnText = rfnFuture.get(5, TimeUnit.MINUTES);
+                    } catch (TimeoutException e) {
+                        rfnFuture.cancel(true);
+                        throw e;
+                    } finally {
+                        executor.shutdownNow();
+                    }
+                    
+                    if (!CS.equals(reindexedFnText, replacedText))
                     {
                         opsDone.add("reindexat note de subsol");
                     }
                     
                     if (!opsDone.isEmpty())
                     {
-                        wiki.edit(newPage, reindexedFnText, "Robot: " + opsDone.stream().collect(Collectors.joining("; ")));
+                        WikipediaPageCache.getInstance().savePage(wiki, newPage, reindexedFnText, "Robot: " + opsDone.stream().collect(Collectors.joining("; ")));
                     }
                     status.addSuccessfulProcessing(newPage);
                 }
