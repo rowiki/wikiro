@@ -353,6 +353,7 @@ public class TranslationManager extends AbstractExecutable
                     }
                     
                     ReindexFootnotes rfn = new ReindexFootnotes(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
+                    executor = Executors.newSingleThreadExecutor();
                     Future<String> rfnFuture = executor.submit(() -> rfn.processText(replacedText));
                     String reindexedFnText;
                     try {
