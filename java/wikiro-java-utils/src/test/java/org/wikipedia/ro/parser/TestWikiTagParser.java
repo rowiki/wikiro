@@ -149,6 +149,7 @@ public class TestWikiTagParser {
         Assertions.assertNotNull(tag.getAttributes().get("color"));
         Assertions.assertEquals("white",
             tag.getAttributes().get("color").stream().map(Object::toString).collect(Collectors.joining()));
+        Assertions.assertTrue(tag.isSelfClosing());
     }
 
     @Test

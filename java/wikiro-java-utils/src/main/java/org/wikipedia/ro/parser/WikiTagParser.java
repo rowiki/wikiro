@@ -132,6 +132,7 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
                     if ('>' == crtChar) {
                         isFinishedReading = true;
                     } else if ('/' == crtChar) {
+                        tagUC.setSelfClosing(true);
                         state = STATE_READING_END_OF_TAG;
                     } else {
                         state = STATE_READING_ATTRIB_NAME;
