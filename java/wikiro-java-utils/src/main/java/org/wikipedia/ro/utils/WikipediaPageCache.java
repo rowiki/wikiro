@@ -318,6 +318,7 @@ public class WikipediaPageCache {
             .toList();
 
         Integer removedSize = entriesToRemove.stream()
+            .filter(k -> cache.get(k).text != null)
             .map(k -> cache.get(k).text.length())
             .reduce(0, Integer::sum);
         entriesToRemove.forEach(cache::remove);
