@@ -158,7 +158,7 @@ public class FixVillages {
         "<ref name=\"lege_290_2018\">{{Cite act|url=https://legislatie.just.ro/Public/DetaliiDocument/208652|year=2018|type=Legea|number=290|legislature=Parlamentul României|chapter=Anexă: Denumirea și componența unităților administrativ-teritoriale pe județe}}</ref>";
 
     private static String crtSettlementName = null, crtCommuneName = null, crtCountyName = null;
-    private static WikipediaPageCache WIKI_PAGE_CACHE = new WikipediaPageCache();
+    private static WikipediaPageCache WIKI_PAGE_CACHE = WikipediaPageCache.createInstance();
     
     static {
         RO_NUMBER_FORMAT.setMaximumFractionDigits(2);
