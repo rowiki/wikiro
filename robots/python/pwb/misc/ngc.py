@@ -83,6 +83,6 @@ def galaxy_generator():
 
 
 if __name__ == '__main__':
-    bot = GalaxyArticles(4000)
+    bot = GalaxyArticles(1000)
     bot.generator = galaxy_generator()
     bot.run()

@@ -4,9 +4,7 @@
 import pywikibot
 import re
 
-from collections import OrderedDict
 from pywikibot.bot import SingleSiteBot
-from wikiro.robots.python.pwb import wikidata
 
 
 import wikiro.robots.python.pwb.wikidata as wikidata

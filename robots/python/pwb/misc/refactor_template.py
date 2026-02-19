@@ -49,7 +49,7 @@ def rebuild_template_from_dict(data, keys, skip_empty=False, inline=False):
             print("ERROR: key {key} is not in data {data}".format(key=key, data=data))
             data[key] = ""
 
-        if skip_empty and sf.isNullorEmpty(data[key].strip()):
+        if skip_empty and sf.is_null_or_empty(data[key].strip()):
             continue
 
         if key == "_name":
