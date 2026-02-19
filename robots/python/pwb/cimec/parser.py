@@ -20,7 +20,8 @@ class CimecParser:
 		return self.replace_diacritics(value)
 
 	def parse_single_data_row(self, row):
-		cols = [div for div in row.find_all('div') if div['class'][0].find('col') == 0]
+		cols = [div for div in row.find_all('div') if div.get('class') is not
+				None and div['class'][0].find('col') == 0]
 		if len(cols) != 2:
 			return None, None
 		label = cols[0].find('b')
@@ -41,7 +42,7 @@ class CimecParser:
 		try:
 			r = requests.get(url)
 		except:
-			print('Request failed:', url)
+			print('Request failed:', url, flush=True)
 			time.sleep(5)
 			return None
 	
@@ -85,7 +86,7 @@ class CimecParser:
 
 		if parseDetails:
 			details = self.parse_item_page(line['key'])
-			if details == None:
+			if details is None:
 				return False
 			print('Merging for key', key)
 			self.db[key] = self.merge_info(line, details)
@@ -96,25 +97,29 @@ class CimecParser:
 		print('Line', self.db[key])
 		return True
 
+	def get_content_table(self, parsed_html):
+		table = parsed_html.find(id='myTable')
+		if table:
+			return table.tbody
+		return None
+
 	def parse_list(self, offset, parseDetails=True):
 		page = int(offset / self.config['page_size'] + 1)
 		url = self.config['list_url'].format(offset, page)
-		print('Parsing ', url)
+		print('Parsing ', url, flush=True)
 		try:
 			r = requests.get(url)
 		except:
-			print('Request failed:', url)
+			print('Request failed:', url, flush=True)
 			time.sleep(5)
 			return False
 
-		html = r.text
-		parsed_html = BeautifulSoup(html, 'html.parser')
+		parsed_html = BeautifulSoup(r.content, 'html.parser')
 		self.parse_total_number(parsed_html)
 
-		table = parsed_html.find(id='myTable')
-		if table:
-			table = table.tbody
-		else:
+		table = self.get_content_table(parsed_html)
+		if table is None:
+			print("No table found", flush=True)
 			return False
 		rows = table.find_all('tr')
 		retry = []
@@ -126,12 +131,13 @@ class CimecParser:
 
 		#retry once for now
 		for offset, row in retry:
+			print("Retrying offset", offset, flush=True)
 			done = self.parse_row(row, offset, parseDetails)
 			if not done:
 				return False
 		return True
 
-	def enhance_table_cell(self, tag):
+	def enhance_table_cell(self, tag) -> str:
 		text = tag.text.strip()
 		return self.replace_diacritics(text)
 
@@ -150,19 +156,20 @@ class CimecParser:
 	def parse(self, start, filename, useCache=False, parseDetails=True):
 		retry_list = []
 		if useCache:
-			with open(filename, 'r') as f:
+			with open(filename, 'r', encoding='utf-8') as f:
 				self.db = json.loads(f.read())
 		while self.total and start < self.total:
 			success = self.parse_list(start, parseDetails)
-			if success == False:
+			if not success:
 				retry_list.append(start)
 			start += self.config['page_size']
-			with open(filename, 'w') as f:
+			with open(filename, 'w', encoding='utf-8') as f:
 				f.write(json.dumps(self.db, indent=2))
 		#just one retry for now
+		print(f"Retrying {len(retry_list)} failed items")
 		for start in retry_list:
 			success = self.parse_list(start)
-			with open(filename, 'w') as f:
+			with open(filename, 'w', encoding='utf-8') as f:
 				f.write(json.dumps(self.db, indent=2))
 		print ('DB size', len(self.db))
 

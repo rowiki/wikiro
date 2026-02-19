@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# -*- coding: utf-8  -*-
 
 import wikiro.robots.python.pwb.cimec as cimec
 import json
@@ -39,11 +40,15 @@ class CimecUploader:
 		self.site = site
 		self.wsite = pywikibot.Site()
 
-	def check_exists(self, filename):
-		page = pywikibot.FilePage(filename)
+	def dump_database(self, database):
+		with open(f'{self.site}.json', 'w') as f:
+			json.dump(database, f, indent=2)
+
+	def check_exists(self, filename) -> bool:
+		page = pywikibot.FilePage(pywikibot.Site(), filename)
 		return page.exists()
 
-	def replace_diacritics(self, text):
+	def replace_diacritics(self, text: str) -> str:
 		text = text.replace(u'ş', u'ș')
 		text = text.replace(u'ţ', u'ț')
 		text = text.replace(u'Ş', u'Ș')
@@ -77,8 +82,8 @@ class CimecUploader:
 		return ""
 
 	def build_info_source(self, data):
-		return "[{} Institutul Național al Patrimoniului - Cimec]" \
-			.format(cimec.config[self.site]['home_url'])
+		url = cimec.config[self.site]['item_url'].format(data['key'])
+		return f"[{url} Institutul Național al Patrimoniului - Cimec]"
 
 	def build_info_date(self, data):
 		return "necunoscut"
@@ -123,7 +128,7 @@ class CimecUploader:
 		text += "\n== Licențiere ==\n"
 		text += self.build_license_section(data) + "\n"
 		text += self.build_categories(data)
-		return text
+		return text.strip().replace("\r\n", "\n")
 
 	def upload(self, database):
 		"""

@@ -15,6 +15,13 @@ config = {
 		'item_url': 'http://ghidulmuzeelor.cimec.ro/id.asp?k={}',
 		'page_size': 20,
 	},
+	'etnomon':
+	{
+		'home_url': 'https://monumente-etnografice.cimec.ro/',
+		'list_url': 'https://monumente-etnografice.cimec.ro/muzee-in-aer-liber.asp?start={}&page={}',
+		'item_url': 'https://monumente-etnografice.cimec.ro/muzee-in-aer-liber.asp?ID={}',
+		'page_size': 30,
+	},
 }
 
 counties = {

@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 
-from collections import OrderedDict
 import itertools
 import json
-import pywikibot
+from collections import OrderedDict
+from typing import Dict, Iterable, List
+
 import unicodedata
 
-import wikiro.robots.python.pwb.cimec as cimec
+import pywikibot
 
 wikitext_size_limit = 1000000
 expanded_size_limit = 1 * 1024 * 1024
@@ -39,7 +40,7 @@ class CimecListGenerator:
 			handler = getattr(self, '_handle_' + ascii_cell, None)
 			if not handler:
 				print(dir(self))
-				pywikibot.error("Handler for %s not found: _handle_%s" % (cell, ascii_cell));
+				pywikibot.error("Handler for %s not found: _handle_%s" % (cell, ascii_cell))
 				exit(1)
 
 			handler_result = handler(cell, self.wiki_to_json_keys[cell], data)
@@ -56,26 +57,32 @@ class CimecListGenerator:
 			template = old_template.replace("\n\n", "\n")
 		return template
 
-	def filtered_data_generator(self, data, filters):
-		for d in sorted(data):
+	def filtered_data_generator(self, data: Iterable[Dict], filters: Dict):
+		for d in data:
 			for f in filters:
-				if filters.get(f) != data[d].get(f):
+				if filters.get(f) != d.get(f):
 					break
 			else:
-				yield data[d]
+				yield d
 
-	def generate_filters(self, data, filter_keys):
+	def generate_filters(self, data: Iterable[Dict], filter_keys: List) -> Dict:
+		"""
+		Return an OrderedDict containing filter_keys as keys and a list of all
+		values for that key as values.
+
+		@param data: An iterable containing the data
+		@param filter_keys: A list containing the keys
+		"""
 		filters = OrderedDict({})
 		for f in filter_keys:
 			filters[f] = set()
 		for d in data:
 			for f in filter_keys:
-					filters[f].add(data[d].get(f))
+					filters[f].add(d.get(f).strip())
 		for f in filter_keys:
 			filters[f] = sorted(filters[f], reverse=True)
 
-
-		print(filters)
+		#print(filters)
 		return filters
 
 	def build_header(self, filters):
@@ -88,7 +95,7 @@ class CimecListGenerator:
 		text = ""
 		text += self.build_header(filters)
 		prefix = text
-		for d in self.filtered_data_generator(data, filters):
+		for d in self.filtered_data_generator(data.values(), filters):
 			text += self.build_wiki_line(d)
 		if text == prefix: # no lines
 			return ""
@@ -97,7 +104,7 @@ class CimecListGenerator:
 
 	def count_list_size(self, data, filters):
 		count = 0
-		for d in self.filtered_data_generator(data, filters):
+		for d in self.filtered_data_generator(data.values(), filters):
 			count +=1
 		return count
 
@@ -178,7 +185,7 @@ class CimecListGenerator:
 		print("HTML length:", lenhtml)
 		if self.optimized < max_optimization_level and \
 			(over_limit or
-			 lenwiki > wikitext_size_limit or \
+			 lenwiki > wikitext_size_limit or
 			 lenhtml > expanded_size_limit):
 			self.optimized += 1
 			self.build_single_list(data, content_filters, display_filter)
@@ -203,7 +210,7 @@ class CimecListGenerator:
 		page = pywikibot.Page(pywikibot.Site(), list_name)
 		if page.exists():
 			old_text = page.get()
-		if self.section == None:
+		if self.section is None:
 			text = "\n".join([intro, list_contents, categories])
 			text = text.strip()
 			text = text.replace("\r\n", "\n")
@@ -282,7 +289,7 @@ class CimecListGenerator:
 			data = json.load(f)
 		pywikibot.output("Loaded data")
 		if type(filter_keys) == list:
-			filters = self.generate_filters(data, filter_keys)
+			filters = self.generate_filters(data.values(), filter_keys)
 		else:
 			filters = filter_keys
 		return data, filters
@@ -291,7 +298,8 @@ class CimecListGenerator:
 		data, filters = self.prepare_data(filter_keys)
 		extra_filters = None
 		if extra_filter_keys:
-			extra_filters = self.generate_filters(data, extra_filter_keys)
+			extra_filters = self.generate_filters(data.values(),
+												  extra_filter_keys)
 		#self.build_lists(data, filters, extra_filters)
 		self.build_main_page(data, filters, extra_filters)
 
