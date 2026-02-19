@@ -21,11 +21,8 @@ Example: "python diacritics_redirects.py -start:B -always"
 __version__ = '$Id: diacritics_redirects.py 7918 2010-02-08 11:24:22Z xqt $'
 #
 
-import time, sys, re
-import string
 import pywikibot
 from pywikibot import pagegenerators
-from pywikibot import config as user
 
 docuReplacements = {
     '&params;': pagegenerators.parameterHelp
@@ -95,9 +92,9 @@ class DiacriticsBot:
         else:            
             pywikibot.output(u'[[%s]] will be created' % page_mod.title())
             if not self.acceptall:
-                choice = pywikibot.inputChoice(
+                choice = pywikibot.input_choice(
                         u'Do you want to move the page?',
-                        ['Yes', 'No', 'All', 'Quit'], ['y', 'N', 'a', 'q'], 'N')
+                        [('Yes', 'y'), ('No', 'N'), ('All', 'a'), ('Quit', 'q')])
                 if choice == 'a':
                     self.acceptall = True
                 elif choice == 'q':
@@ -120,7 +117,7 @@ def main():
         elif genFactory.handle_arg(arg):
             pass
         else:
-            pywikibot.showHelp(u'diacritics_redirects')
+            pywikibot.show_help(u'diacritics_redirects')
             return
 
     gen = genFactory.getCombinedGenerator()

@@ -99,7 +99,7 @@ class DiacriticsBot:
                 	page_mod.put(u"#%s [[%s]]" % (self.site.redirect(True), page_t), comment)
                 except Exception as e:
                     pywikibot.output(u"An error occurred, skipping...")
-                    print type(e)
+                    print(type(e))
 
 def main():
     genFactory = pagegenerators.GeneratorFactory()
