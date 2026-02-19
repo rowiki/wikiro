@@ -64,15 +64,19 @@ def evacuate_file(file_page, lang, family):
         os.remove(tmp_file_name)
         return
 
-    success = local_file_page.upload(source=tmp_file_name, 
+    tmp_local_file_page = pywikibot.FilePage(local_site, "Fișier:-" + file_page.title(with_ns=False))
+    if tmp_local_file_page.exists():
+        success = True
+    else:
+        success = tmp_local_file_page.upload(source=tmp_file_name,
                comment=f"Evacuez un fișier ce va fi șters de la Commons", 
                text=local_text, 
                ignore_warnings=True)
     os.remove(tmp_file_name)
     if success:
-        pywikibot.output(f"Uploaded {local_file_page.title()}")
+        pywikibot.output(f"Uploaded {tmp_local_file_page.title()}")
     else:
-        pywikibot.error(f"Error uploading {local_file_page.title()}")
+        pywikibot.error(f"Error uploading {tmp_local_file_page.title()}")
 
 def main():
     op = None
