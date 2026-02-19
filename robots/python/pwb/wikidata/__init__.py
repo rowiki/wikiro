@@ -22,13 +22,15 @@ def get_labels(item):
         return item.labels.get('ro') or item.labels.get('mul') or item.labels.get('en') or item.labels.get('fr') or None
 
 def sparql_generator(query, site) -> Generator[Any, Any, None]:
-	repo = site.data_repository()
-	dependencies = {'endpoint': 'https://query-main.wikidata.org/sparql', 'entity_url': 'https://www.wikidata.org/entity', 'repo': None}#repo}
-	query_object = sparql.SparqlQuery(**dependencies)
-	for elem in query_object.select(query):
-		yield elem
+    repo = site.data_repository()
+    dependencies = {'endpoint': 'https://query-main.wikidata.org/sparql', 'entity_url': 'https://www.wikidata.org/entity', 'repo': None}#repo}
+    query_object = sparql.SparqlQuery(**dependencies)
+    #print(query)
+    for elem in query_object.select(query):
+        yield elem
 
 def wbType_to_string(target, link: bool=True) -> str:
+<<<<<<< Updated upstream
         if type(target) == pywikibot.ItemPage:
             site = pywikibot.Site().data_repository()
             item = pywikibot.ItemPage(site, target.id)
@@ -58,3 +60,32 @@ def wbType_to_string(target, link: bool=True) -> str:
                     return None
             return str(target.text)
         return str(target)
+=======
+    if type(target) == pywikibot.ItemPage:
+        site = pywikibot.Site().data_repository()
+        item = pywikibot.ItemPage(site, target.id)
+        text = get_labels(item)
+        if link == False:
+                return text
+        if pywikibot.Site().dbName() in item.sitelinks:
+                localpage = item.sitelinks[pywikibot.getSite().dbName()]
+                return "[[%s|%s]]" % (localpage, text)
+        return "{{ill-wd|%s}}" % target.id
+    elif type(target) == pywikibot.FilePage:
+        if link:
+            return str(target)
+        else:
+            return target.title()
+    elif type(target) == pywikibot.WbQuantity:
+        r = str(target.amount)
+        if r.find('.') > -1:
+                r = r.replace('.',',')
+        return r
+    elif type(target) == pywikibot.WbTime:
+        return "-".join(str(target.year), str(target.month), str(target.day))
+    elif type(target) == pywikibot.WbMonolingualText:
+        if target.language not in ['en', 'fr', 'ro']:
+                return None
+        return str(target.text)
+    return str(target)
+>>>>>>> Stashed changes

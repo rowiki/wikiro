@@ -391,8 +391,8 @@ def linkedImages(page):
             raise
     return result
 
-def isNullorEmpty(s):
-	return bool(not s or s.strip() == u"")
+def is_null_or_empty(s):
+	return bool(not s or len(s) == 0 or str(s).strip() == "")
 
 # --------------- CSV functions -------------------
 
