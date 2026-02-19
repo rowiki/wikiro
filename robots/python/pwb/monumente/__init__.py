@@ -438,6 +438,14 @@ config = {
 			# the databases we work on
 			'natura2000': 'cod_natura2000',
 		},
+		{
+			'name': 'Exponat etnografic',
+			'author': [],
+			'image': 'imagine',
+			'description': 'nume',
+			# the databases we work on
+			'lmi': 'cod-lmi',
+		}
 		],
 		'qualityTemplates':
 		[

@@ -18,11 +18,13 @@ Command line parameters:
          to be used for retrieving data
 '''
 
-import sys, time, warnings, json, string, re
-#sys.path.append("..")
+import json
+import re
+
+# sys.path.append("..")
 import pywikibot
-from pywikibot import pagegenerators
 from pywikibot import config as user
+from pywikibot import pagegenerators
 
 options = {
 	('ro', 'lmi'): 
@@ -54,7 +56,7 @@ def getYearsFromWikidata(page):
 	return None
 
 def processArticle(text, page, conf):
-	pywikibot.output(u'Working on "%s"' % page.title(True))
+	pywikibot.output(u'Working on "%s"' % page.title())
 	regexp = conf['codeRegexp']
 	results = re.findall(regexp, text)
 	if results == None:
@@ -65,16 +67,18 @@ def processArticle(text, page, conf):
 		for result in results:
 			code = result[0]
 			if code in fullDict:
-				fullDict[code].append({"name": page.title(withNamespace=False), "dead": year})
+				fullDict[code].append({"Creatori": page.title(with_ns=False),
+									   "Copyright": year})
 			else:
-				fullDict[code] = [{"name": page.title(withNamespace=False), "dead": year}]
+				fullDict[code] = [{"Creatori": page.title(with_ns=False),
+								   "Copyright":	year}]
 	
 def main():
 	lang = u'ro'
 	db = u'lmi'
 	textfile = u''
 
-	for arg in pywikibot.handleArgs():
+	for arg in pywikibot.handle_args():
 		if arg.startswith('-lang:'):
 			lang = arg [len('-lang:'):]
 			user.mylang = lang
@@ -84,7 +88,7 @@ def main():
 			db = arg [len('-db:'):]
 	
 	site = pywikibot.Site()
-	lang = site.language()
+	lang = site.lang
 	if not options.get((lang,db)):
 		pywikibot.output(u'I have no options for language "%s"' % lang)
 		return False
@@ -93,7 +97,7 @@ def main():
 			
 	authorTemplate = pywikibot.Page(site, u'%s:%s' % (site.namespace(10), langOpt.get('authorTemplate')))
 
-	transGen = pagegenerators.ReferringPageGenerator(authorTemplate, onlyTemplateInclusion=True)
+	transGen = authorTemplate.getReferences(only_template_inclusion=True)
 	filteredGen = pagegenerators.NamespaceFilterPageGenerator(transGen, langOpt.get('namespaces'), site)
 	pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 50)
 	

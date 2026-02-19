@@ -1,17 +1,17 @@
 #!/usr/bin/python
 # -:- coding: utf8 -:-
 
+import json
+import sys
+
 #
 # (C) Strainu 2016
 #
 # Distributed under the terms of the MIT license.
 #
 import pywikibot
-from pywikibot import i18n, config, pagegenerators, textlib, weblib
+from pywikibot import pagegenerators
 
-import sys
-import csv
-import json
 sys.path.append("wikiro/robots/python/pwb")
 import strainu_functions as sf
 from wikidata import robot_romania as robot
@@ -165,7 +165,7 @@ if __name__ == "__main__":
     _db = "lmi"
     db_json = readJson("_".join(filter(None, [_lang, _db, "db.json"])), "database")
     page = pywikibot.Page(pywikibot.Site(), "Format:codLMI", ns=10)
-    generator = pagegenerators.ReferringPageGenerator(page, onlyTemplateInclusion=True)
+    generator = page.getReferences(only_template_inclusion=True)
     bot = robot.WikidataBot(site=True, generator = generator)
 
     bot.workers.append(MonumentsData(db_json, config[_db]))
