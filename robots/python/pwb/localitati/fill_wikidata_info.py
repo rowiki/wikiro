@@ -1,26 +1,20 @@
 #!/usr/bin/python
 # -:- coding: utf8 -:-
 
+import json
+
+import sirutalib
+
 #
 # (C) Strainu 2016-2017
 #
 # Distributed under the terms of the MIT license.
 #
 import pywikibot
-
-from pywikibot import config as user
-from pywikibot import pagegenerators
-from pywikibot.data import sparql
-
-import json
-import sys
-
-import sirutalib
-
-import wikiro.robots.python.pwb.localitati.postal_codes as postal_codes
-import wikiro.robots.python.pwb.strainu_functions as sf
 import wikiro.robots.python.pwb.csvUtils as csvUtils
-
+import wikiro.robots.python.pwb.strainu_functions as sf
+from pywikibot import config as user
+from pywikibot.data import sparql
 from wikiro.robots.python.pwb.localitati import config
 from wikiro.robots.python.pwb.wikidata import robot_romania as robot
 

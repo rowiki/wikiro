@@ -271,7 +271,7 @@ class CityListBuilder:
 			self.submit_section(page, section)
 
 if __name__ == "__main__":
-	for county in ['Iași']:#config['counties']:
+	for county in config['counties']:
 		bot = CityListBuilder(county, uat_only=False)
 		bot.publish("Listă de localități din județul {county}".format(county=county))
 		bot = CityListBuilder(county, uat_only=True)
