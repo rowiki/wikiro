@@ -113,6 +113,8 @@ Q932046 (Vârteșcoiu VN)
 Q2722093 (Vintileasca VN)
 
 //SATE, LOCALITĂȚI - ca excepție față de comuna sau județul definite în altă regiune
+Q12149098 (Rudari OT)
+
 Q12109817 (Câinenii Mici VL)
 Q12097547 (Greblești VL)
 Q12145367 (Priloage VL)
