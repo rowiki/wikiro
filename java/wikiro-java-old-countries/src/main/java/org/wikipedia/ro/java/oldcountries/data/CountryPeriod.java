@@ -31,19 +31,26 @@ import org.wikibase.data.Time;
 
 public enum CountryPeriod
 {
-    RO(ROMANIA_CRT, new Time(LocalDate.of(1989, 12, 22)), null), RSR(ROMANIA_RS, new Time(LocalDate.of(1965, 8, 21)), new Time(LocalDate.of(1989, 12, 22))), RPR(ROMANIA_RP,
-        new Time(LocalDate.of(1947, 12, 30)), new Time(LocalDate.of(1965, 8, 21))), RO_REGAT(ROMANIA_REGAT, new Time(LocalDate.of(1881, 5, 10)).setCalendarModelToJulian(),
+    RO(ROMANIA_CRT, new Time(LocalDate.of(1989, 12, 22)), null),
+    RSR(ROMANIA_RS, new Time(LocalDate.of(1965, 8, 21)), new Time(LocalDate.of(1989, 12, 22))),
+    RPR(ROMANIA_RP, new Time(LocalDate.of(1947, 12, 30)), new Time(LocalDate.of(1965, 8, 21))),
+    RO_REGAT(ROMANIA_REGAT, new Time(LocalDate.of(1881, 5, 10)).setCalendarModelToJulian(),
             new Time(LocalDate.of(1947, 12, 30)).setCalendarModelToJulian()), PRINC_UNITE(ROMANIA_PRINCIPAT, new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian(),
                 new Time(LocalDate.of(1881, 5, 10)).setCalendarModelToJulian()), MUNTENIA(TARA_ROMANEASCA, null,
                     new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()), MOLDOVA_VEST(MOLDOVA, null, new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()),
 
-    OTTOMAN_BRAILA(IMP_OTOMAN, new Time(1540), new Time(LocalDate.of(1829, 9, 2)).setCalendarModelToJulian()), OTTOMAN_GIURGIU(IMP_OTOMAN,
+    OTTOMAN_BRAILA(IMP_OTOMAN, new Time(1540), new Time(LocalDate.of(1829, 9, 2)).setCalendarModelToJulian()),
+    
+    OTTOMAN_GIURGIU(IMP_OTOMAN,
         new Time(1417), new Time(LocalDate.of(1829, 9, 2)).setCalendarModelToJulian()), PRE_OTTOMAN_BRAILA(TARA_ROMANEASCA, null,
-            new Time(1540)), PRE_OTTOMAN_GIURGIU(TARA_ROMANEASCA, null, new Time(1417)), POST_OTTOMAN_BRAILA_GIURGIU(
-                TARA_ROMANEASCA, new Time(LocalDate.of(1829, 9, 2)).setCalendarModelToJulian(), new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()),
+            new Time(1540)),
+    
+    PRE_OTTOMAN_GIURGIU(TARA_ROMANEASCA, null, new Time(1417)),
+    POST_OTTOMAN_BRAILA_GIURGIU(TARA_ROMANEASCA, new Time(LocalDate.of(1829, 9, 2)).setCalendarModelToJulian(), new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()),
 
-    POST_AUSTRIAN_OLTENIA(TARA_ROMANEASCA, new Time(LocalDate.of(1739, 8, 21)), new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()), AUSTRIAN_OLTENIA(IMP_HABSBURG,
-        new Time(LocalDate.of(1718, 7, 21)), new Time(LocalDate.of(1739, 8, 21))), PRE_AUSTRIAN_OLTENIA(TARA_ROMANEASCA, null, new Time(LocalDate.of(1718, 7, 21))),
+    POST_AUSTRIAN_OLTENIA(TARA_ROMANEASCA, new Time(LocalDate.of(1739, 8, 21)), new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()),
+    AUSTRIAN_OLTENIA(IMP_HABSBURG, new Time(LocalDate.of(1718, 7, 21)), new Time(LocalDate.of(1739, 8, 21))),
+    PRE_AUSTRIAN_OLTENIA(TARA_ROMANEASCA, null, new Time(LocalDate.of(1718, 7, 21))),
 
     POST_OTTOMAN_DOBROGEA(ROMANIA_PRINCIPAT, new Time(LocalDate.of(1878, 7, 1)).setCalendarModelToJulian(),
         new Time(LocalDate.of(1881, 5, 10)).setCalendarModelToJulian()), OTTOMAN_DOBROGEA(IMP_OTOMAN, new Time(1411l), new Time(LocalDate.of(1878, 7, 1)).setCalendarModelToJulian()),
