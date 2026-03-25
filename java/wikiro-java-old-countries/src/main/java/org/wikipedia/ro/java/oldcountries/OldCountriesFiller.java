@@ -57,7 +57,6 @@ public class OldCountriesFiller extends AbstractExecutable
     private Map<String, HistoricalRegion> REGIONS_MAP = new HashMap<>();
     private static final Pattern Q_PATTERN = Pattern.compile("Q\\d+");
     private static final long YEARS_DIFF_TOLERANCE = 1;
-    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(OldCountriesFiller.class);
     
     @Override
     protected void init() throws FailedLoginException, IOException
@@ -93,13 +92,13 @@ public class OldCountriesFiller extends AbstractExecutable
                 }
                 catch (IOException e)
                 {
-                    LOG.error("Error loading region data from file {}", regionPath, e);
+                    log.error("Error loading region data from file {}", regionPath, e);
                 }
             });
         }
         catch (URISyntaxException | IOException e)
         {
-            LOG.error("Error loading regions resource from {}", resourceURL, e);
+            log.error("Error loading regions resource from {}", resourceURL, e);
         }
         
     }
@@ -127,7 +126,7 @@ public class OldCountriesFiller extends AbstractExecutable
         
         List<Map<String, Object>> resultSet = dwiki.query(allUATsQuery);
         String startCounty = "Prahova";
-        String startCommune = "Filipeștii de Târg";
+        String startCommune = "Gorgota";
         String firstFoundCounty = null;
         
         dwiki.setAssertionMode(Wiki.ASSERT_USER | Wiki.ASSERT_BOT);
@@ -191,14 +190,14 @@ public class OldCountriesFiller extends AbstractExecutable
 
     private void setCountriesForEntity(InceptedWbObject settlement, UAT uat, boolean go) throws IOException, WikibaseException
     {
-        System.out.printf("Executing for settlement %s, go: %s%n", settlement.getName(), String.valueOf(go));
+        log.info("Executing for settlement {}, go: {}", settlement.getName(), String.valueOf(go));
         HistoricalRegion reg = findRegionByEntityWdIdAndUat(settlement.getWdId(), uat);
         if (null == reg)
         {
-            System.err.printf("No region found for settlement %s (%s)%n", settlement.getName(), settlement.getWdId());
+            log.info("No region found for settlement {} ({})", settlement.getName(), settlement.getWdId());
             return;
         }
-        System.out.printf("Region for settlement %s, is: %s%n", settlement.getName(), reg);
+        log.info("Region for settlement {}, is: {}", settlement.getName(), reg);
         List<CountryPeriod> countries = reg.getCountries();
 
         Entity settlementEntity = cache.get(settlement.getWdId());
@@ -387,7 +386,7 @@ public class OldCountriesFiller extends AbstractExecutable
             switch (op.getType())
             {
             case CREATE:
-                System.out.printf("         CREATE: %s with quals: %s%n", op.getNewClaim(), op.getNewClaim().getQualifiers());
+                log.info("         CREATE: {} with quals: {}", op.getNewClaim(), op.getNewClaim().getQualifiers());
                 if (go)
                 {
                     String claimId = dwiki.executeWithRelogin(() -> dwiki.addClaim(settlement.getWdId(), op.getNewClaim()));
@@ -396,7 +395,7 @@ public class OldCountriesFiller extends AbstractExecutable
                 }
                 break;
             case REPLACE:
-                System.out.printf("         REPLACE CLAIM: %s with %s with quals %s%n", op.getOldClaim().getId(), op.getNewClaim(), op.getNewClaim().getQualifiers());
+                log.info("         REPLACE CLAIM: %s with {} with quals {}", op.getOldClaim().getId(), op.getNewClaim(), op.getNewClaim().getQualifiers());
                 if (go)
                 {
                     if (!Claim.contentEquals(op.getNewClaim(), op.getOldClaim()))
@@ -411,14 +410,14 @@ public class OldCountriesFiller extends AbstractExecutable
                 }
                 break;
             case DELETE:
-                System.out.printf("         DELETE CLAIM: %s%n", op.getOldClaim());
+                log.info("         DELETE CLAIM: {}", op.getOldClaim());
                 if (go)
                 {
                     dwiki.executeWithRelogin(() -> dwiki.removeClaim(op.getOldClaim().getId()));
                 }
                 break;
             case ADD_QUALIFIER:
-                System.out.printf("         EDIT CLAIM: %s ADD QUALIFIER:%s=%s%n", op.getOldClaim(), op.getQualifierProperty(), op.getQualifierData());
+                log.info("         EDIT CLAIM: {} ADD QUALIFIER:{}={}", op.getOldClaim(), op.getQualifierProperty(), op.getQualifierData());
                 if (go)
                 {
                     dwiki.executeWithRelogin(() -> dwiki.addQualifier(op.getOldClaim().getId(), op.getQualifierProperty().getId(), op.getQualifierData()));
