@@ -34,10 +34,10 @@ public enum CountryPeriod
     RO(ROMANIA_CRT, new Time(LocalDate.of(1989, 12, 22)), null),
     RSR(ROMANIA_RS, new Time(LocalDate.of(1965, 8, 21)), new Time(LocalDate.of(1989, 12, 22))),
     RPR(ROMANIA_RP, new Time(LocalDate.of(1947, 12, 30)), new Time(LocalDate.of(1965, 8, 21))),
-    RO_REGAT(ROMANIA_REGAT, new Time(LocalDate.of(1881, 5, 10)).setCalendarModelToJulian(),
-            new Time(LocalDate.of(1947, 12, 30)).setCalendarModelToJulian()), PRINC_UNITE(ROMANIA_PRINCIPAT, new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian(),
-                new Time(LocalDate.of(1881, 5, 10)).setCalendarModelToJulian()), MUNTENIA(TARA_ROMANEASCA, null,
-                    new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()), MOLDOVA_VEST(MOLDOVA, null, new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()),
+    RO_REGAT(ROMANIA_REGAT, new Time(LocalDate.of(1881, 5, 10)).setCalendarModelToJulian(), new Time(LocalDate.of(1947, 12, 30))),
+    PRINC_UNITE(ROMANIA_PRINCIPAT, new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian(), new Time(LocalDate.of(1881, 5, 10)).setCalendarModelToJulian()),
+    MUNTENIA(TARA_ROMANEASCA, null, new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()),
+    MOLDOVA_VEST(MOLDOVA, null, new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()),
 
     OTTOMAN_BRAILA(IMP_OTOMAN, new Time(1540), new Time(LocalDate.of(1829, 9, 2)).setCalendarModelToJulian()),
     
