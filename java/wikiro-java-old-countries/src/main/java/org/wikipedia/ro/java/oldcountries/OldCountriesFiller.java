@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -33,6 +31,7 @@ import org.wikibase.data.Item;
 import org.wikibase.data.Snak;
 import org.wikibase.data.Time;
 import org.wikibase.data.WikibaseData;
+import org.wikipedia.Wiki;
 import org.wikipedia.ro.cache.WikidataEntitiesCache;
 import org.wikipedia.ro.java.oldcountries.data.CountryPeriod;
 import org.wikipedia.ro.java.oldcountries.data.HistoricCountry;
@@ -58,6 +57,7 @@ public class OldCountriesFiller extends AbstractExecutable
     private Map<String, HistoricalRegion> REGIONS_MAP = new HashMap<>();
     private static final Pattern Q_PATTERN = Pattern.compile("Q\\d+");
     private static final long YEARS_DIFF_TOLERANCE = 1;
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(OldCountriesFiller.class);
     
     @Override
     protected void init() throws FailedLoginException, IOException
@@ -93,14 +93,13 @@ public class OldCountriesFiller extends AbstractExecutable
                 }
                 catch (IOException e)
                 {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    LOG.error("Error loading region data from file {}", regionPath, e);
                 }
             });
         }
         catch (URISyntaxException | IOException e)
         {
-            e.printStackTrace();
+            LOG.error("Error loading regions resource from {}", resourceURL, e);
         }
         
     }
@@ -127,9 +126,11 @@ public class OldCountriesFiller extends AbstractExecutable
     {
         
         List<Map<String, Object>> resultSet = dwiki.query(allUATsQuery);
-        String startCounty = "Olt";
-        String startCommune = "Baldovinești";
+        String startCounty = "Prahova";
+        String startCommune = "Filipeștii de Târg";
         String firstFoundCounty = null;
+        
+        dwiki.setAssertionMode(Wiki.ASSERT_USER | Wiki.ASSERT_BOT);
 
         for (Map<String, Object> result : resultSet)
         {
@@ -389,9 +390,9 @@ public class OldCountriesFiller extends AbstractExecutable
                 System.out.printf("         CREATE: %s with quals: %s%n", op.getNewClaim(), op.getNewClaim().getQualifiers());
                 if (go)
                 {
-                    String claimId = dwiki.addClaim(settlement.getWdId(), op.getNewClaim());
+                    String claimId = dwiki.executeWithRelogin(() -> dwiki.addClaim(settlement.getWdId(), op.getNewClaim()));
                     op.getNewClaim().setId(claimId);
-                    dwiki.editClaim(op.getNewClaim());
+                    dwiki.executeWithRelogin(() -> dwiki.editClaim(op.getNewClaim()));
                 }
                 break;
             case REPLACE:
@@ -401,7 +402,7 @@ public class OldCountriesFiller extends AbstractExecutable
                     if (!Claim.contentEquals(op.getNewClaim(), op.getOldClaim()))
                     {
                         op.getNewClaim().setId(op.getOldClaim().getId());
-                        dwiki.editClaim(op.getNewClaim());
+                        dwiki.executeWithRelogin(() -> dwiki.editClaim(op.getNewClaim()));
                     }
                     else
                     {
@@ -413,14 +414,14 @@ public class OldCountriesFiller extends AbstractExecutable
                 System.out.printf("         DELETE CLAIM: %s%n", op.getOldClaim());
                 if (go)
                 {
-                    dwiki.removeClaim(op.getOldClaim().getId());
+                    dwiki.executeWithRelogin(() -> dwiki.removeClaim(op.getOldClaim().getId()));
                 }
                 break;
             case ADD_QUALIFIER:
                 System.out.printf("         EDIT CLAIM: %s ADD QUALIFIER:%s=%s%n", op.getOldClaim(), op.getQualifierProperty(), op.getQualifierData());
                 if (go)
                 {
-                    dwiki.addQualifier(op.getOldClaim().getId(), op.getQualifierProperty().getId(), op.getQualifierData());
+                    dwiki.executeWithRelogin(() -> dwiki.addQualifier(op.getOldClaim().getId(), op.getQualifierProperty().getId(), op.getQualifierData()));
                 }
             }
         }
@@ -430,7 +431,7 @@ public class OldCountriesFiller extends AbstractExecutable
             Set<Claim> histRegClaims = settlementEntity.getClaims(WikibasePropertyFactory.getWikibaseProperty("P6885"));
             if (null == histRegClaims || histRegClaims.isEmpty())
             {
-                dwiki.addClaim(settlementEntity.getId(), reg.getHistoricalRegionClaim());
+                dwiki.executeWithRelogin(() -> dwiki.addClaim(settlementEntity.getId(), reg.getHistoricalRegionClaim()));
             }
         }
     }
