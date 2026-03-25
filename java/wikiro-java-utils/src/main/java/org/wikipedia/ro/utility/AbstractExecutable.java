@@ -51,7 +51,7 @@ public abstract class AbstractExecutable {
         Credentials wikiCreds = identifyCredentials("rowiki");
         wiki.login(wikiCreds.username, wikiCreds.password);
         Credentials dwikiCreds = identifyCredentials("dwiki");
-        dwiki.login(dwikiCreds.username, dwikiCreds.password);
+        dwiki.loginWithCredentials(dwikiCreds.username, dwikiCreds.password);
         wiki.setMarkBot(true);
         dwiki.setMarkBot(true);
         

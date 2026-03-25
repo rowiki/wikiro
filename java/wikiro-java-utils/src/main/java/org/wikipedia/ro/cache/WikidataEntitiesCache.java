@@ -32,7 +32,7 @@ public class WikidataEntitiesCache {
         String key = String.format("%s:%s", wiki, title);
         String qId = articleIndex.get(key);
         if (null == qId) {
-            Entity ent = wikidata.getWikibaseItemBySiteAndTitle(wiki, title);
+            Entity ent = wikidata.executeWithRelogin(() -> wikidata.getWikibaseItemBySiteAndTitle(wiki, title));
             if (null != ent) {
                 articleIndex.put(key, ent.getId());
                 qIdIndex.put(ent.getId(), ent);
