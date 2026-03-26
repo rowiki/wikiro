@@ -110,7 +110,7 @@ public class CitationCompleter extends AbstractExecutable
 
             if (0 < citationsChanged)
             {
-                WikipediaPageCache.getInstance().savePage(wiki, pgdata.getKey(), sb.toString(), "Robot: completat automat " + (1 == citationsChanged ? "o citare" : (citationsChanged + " citări")));
+                WikipediaPageCache.getInstance().savePage(wiki, pgdata.getKey(), sb.toString(), "Robot: completat automat " + (1 == citationsChanged ? "o citare" : (citationsChanged + " citări")), getReloginCallback());
             }
         }
         wiki.edit("Utilizator:Andrebot/dată-vizitare-pagini-editate", now.toString(), "Robot: actualizare dată vizitare pagini editate");
