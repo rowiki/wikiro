@@ -6,6 +6,7 @@ import static org.apache.commons.lang3.StringUtils.upperCase;
 import java.io.Console;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.TimeoutException;
 
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
@@ -14,11 +15,15 @@ import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.utils.Credentials;
+import org.wikipedia.ro.utils.RetryHelper;
 
 public abstract class AbstractExecutable {
 
     protected Wiki wiki;
     protected Wikibase dwiki;
+    
+    protected Credentials wikiCreds;
+    protected Credentials dwikiCreds;
 
     protected Credentials identifyCredentials(String target) {
         Credentials credentials = new Credentials();
@@ -48,9 +53,9 @@ public abstract class AbstractExecutable {
         wiki = Wiki.newSession("ro.wikipedia.org");
         dwiki = new Wikibase();
 
-        Credentials wikiCreds = identifyCredentials("rowiki");
+        wikiCreds = identifyCredentials("rowiki");
         wiki.login(wikiCreds.username, wikiCreds.password);
-        Credentials dwikiCreds = identifyCredentials("dwiki");
+        dwikiCreds = identifyCredentials("dwiki");
         dwiki.loginWithCredentials(dwikiCreds.username, dwikiCreds.password);
         wiki.setMarkBot(true);
         dwiki.setMarkBot(true);
@@ -80,4 +85,26 @@ public abstract class AbstractExecutable {
             dwiki.logout();
         }
     }
+    
+    protected void wikiEditWithRetry(String title, String text, String summary) throws TimeoutException {
+        RetryHelper.retry(() -> {
+            try {
+                wiki.edit(title, text, summary);
+                return Boolean.TRUE;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }, 10, getReloginCallback());
+    }
+
+    protected Runnable getReloginCallback() {
+        return () -> {
+            try {
+                wiki.login(wikiCreds.username, wikiCreds.password);
+            } catch (Exception e) {
+                throw new RuntimeException("Relogin failed", e);
+            }
+        };
+    }
+
 }

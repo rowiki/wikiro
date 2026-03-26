@@ -2,14 +2,17 @@ package org.wikipedia.ro.legacyoperations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +22,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.wikibase.Wikibase;
+import org.wikibase.WikibaseException;
 import org.wikibase.data.Entity;
 import org.wikibase.data.Sitelink;
 import org.wikipedia.Wiki;
@@ -39,13 +44,15 @@ class TestCleanupIll {
     private Map<String, String> sourceWikiRedirects = new HashMap<>();
 
     @BeforeEach
-    void setUp() throws IOException {
+    void setUp() throws IOException, WikibaseException {
         targetWiki = mock(Wiki.class, "target=ro");
         sourceWiki = mock(Wiki.class, "source=fr");
         dataWiki = mock(Wikibase.class, "wikidata");
 
         initializeWikiMock(targetWiki, "ro.wikipedia.org", targetWikiRedirects, targetWikiTexts);
         initializeWikiMock(sourceWiki, "fr.wikipedia.org", sourceWikiRedirects, sourceWikiTexts);
+        
+        when(dataWiki.executeWithRelogin(Mockito.any())).thenCallRealMethod();
     }
 
     private void initializeWikiMock(Wiki wiki, String domain, Map<String, String> redirectMap, Map<String, String> textMap) throws IOException {

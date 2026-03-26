@@ -325,7 +325,7 @@ class TestWikipediaPageCache {
             assertTrue(false, "Expected ConcurrentModificationException to be thrown");
         } catch (Exception e) {
             // Expected - should propagate the exception
-            assertTrue(e.getCause() instanceof ConcurrentModificationException 
+            assertTrue(e.getCause().getCause() instanceof ConcurrentModificationException 
                     || e instanceof ConcurrentModificationException);
         }
     }
