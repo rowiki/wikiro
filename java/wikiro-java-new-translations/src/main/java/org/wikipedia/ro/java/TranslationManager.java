@@ -51,22 +51,22 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 
-public class TranslationManager extends AbstractExecutable
-{
+public class TranslationManager extends AbstractExecutable {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(TranslationManager.class);
     Pattern commentPattern = Pattern.compile("\\[\\[:(\\w+):Special:Redirect/revision/(\\d+)\\|([^\\]]+)\\]\\]");
     Pattern translPagePattern = Pattern.compile("\\{\\{\\s*[Pp]agină[_\\s]tradusă");
-    
+
     @Override
-    protected void execute() throws IOException, WikibaseException, LoginException
-    {
+    protected void execute() throws IOException, WikibaseException, LoginException {
         LocalDate lastVisit = findLastVisit();
         RequestHelper helper = wiki.new RequestHelper();
         helper.inNamespaces(Wiki.MAIN_NAMESPACE);
         helper.taggedWith("contenttranslation");
 
         LocalDate now = LocalDate.now();
-        helper.withinDateRange(lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
+        helper.withinDateRange(
+            lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())),
+            OffsetDateTime.now());
 
         Map<String, Boolean> filter = new HashMap<>();
         filter.put("new", Boolean.TRUE);
@@ -75,20 +75,24 @@ public class TranslationManager extends AbstractExecutable
         List<Revision> recentTranslations = wiki.newPages(helper);
         LOG.info("Found {} new pages translated to process", recentTranslations.size());
         BatchTranslationProcessingStatus newTranslationsStatus = processTranslations(recentTranslations);
-        
+
         helper = wiki.new RequestHelper();
         helper.inNamespaces(Wiki.MAIN_NAMESPACE);
         helper.taggedWith("contenttranslation");
 
         now = LocalDate.now();
-        helper.withinDateRange(lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
+        helper.withinDateRange(
+            lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())),
+            OffsetDateTime.now());
         List<Revision> editedTranslations = wiki.recentChanges(helper, "edit");
         LOG.info("Found {} edited translations to process", editedTranslations.size());
         BatchTranslationProcessingStatus editedTranslationsStatus = processTranslations(editedTranslations);
 
         helper = wiki.new RequestHelper();
         helper.inNamespaces(Wiki.MAIN_NAMESPACE);
-        helper.withinDateRange(lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())), OffsetDateTime.now());
+        helper.withinDateRange(
+            lastVisit.atStartOfDay().atOffset(ZoneId.of("Europe/Bucharest").getRules().getOffset(LocalDateTime.now())),
+            OffsetDateTime.now());
 
         BatchTranslationProcessingStatus linkbackStatus = new BatchTranslationProcessingStatus();
 
@@ -106,8 +110,7 @@ public class TranslationManager extends AbstractExecutable
             LOG.error("Failed to fetch recent new pages", e);
             return;
         }
-        for (Revision eachNewPage : recentNewPages)
-        {
+        for (Revision eachNewPage : recentNewPages) {
             LOG.info("Page created: {}", eachNewPage.getTitle());
             Revision revision;
             try {
@@ -120,7 +123,8 @@ public class TranslationManager extends AbstractExecutable
                     }
                 }, 10);
             } catch (TimeoutException e) {
-                linkbackStatus.addProcessingFailure(eachNewPage.getTitle(), "Failed to fetch revision for page " + eachNewPage.getTitle() + ": "+ e.getMessage());
+                linkbackStatus.addProcessingFailure(eachNewPage.getTitle(),
+                    "Failed to fetch revision for page " + eachNewPage.getTitle() + ": " + e.getMessage());
                 LOG.error("Failed to fetch revision for page {}", eachNewPage.getTitle(), e);
                 continue;
             }
@@ -135,18 +139,16 @@ public class TranslationManager extends AbstractExecutable
                     }
                 }, 10);
             } catch (TimeoutException e) {
-                linkbackStatus.addProcessingFailure(eachNewPageTitle, "Failed to fetch what links to page " + eachNewPageTitle + ": " + e.getMessage());
+                linkbackStatus.addProcessingFailure(eachNewPageTitle,
+                    "Failed to fetch what links to page " + eachNewPageTitle + ": " + e.getMessage());
                 LOG.error("Failed to fetch what links here for page {}", eachNewPageTitle, e);
                 continue;
             }
-            for (String eachNewPageLink : newPageLinks)
-            {
-                if (null == eachNewPageLink)
-                {
+            for (String eachNewPageLink : newPageLinks) {
+                if (null == eachNewPageLink) {
                     continue;
                 }
-                try
-                {
+                try {
                     String notReplacedText = WikipediaPageCache.getInstance().getPageText(wiki, eachNewPageLink);
                     CleanupIll illCleanup = new CleanupIll(wiki, wiki, dwiki, eachNewPageLink);
                     ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -161,88 +163,97 @@ public class TranslationManager extends AbstractExecutable
                         executor.shutdownNow();
                     }
                     if (!notReplacedText.equals(replacedText)) {
-                        WikipediaPageCache.getInstance().savePage(wiki, eachNewPageLink, replacedText, "Robot: înlocuit formate Ill redundante");
+                        WikipediaPageCache.getInstance().savePage(wiki, eachNewPageLink, replacedText,
+                            "Robot: înlocuit formate Ill redundante", getReloginCallback());
                         linkbackStatus.addSuccessfulProcessing(eachNewPageLink);
                     }
-                }
-                catch (Throwable e)
-                {
-                    LOG.error("Failed to cleanup redundant Ill templates in page {} that links to {}", eachNewPageLink, eachNewPageTitle, e);
+                } catch (Throwable e) {
+                    LOG.error("Failed to cleanup redundant Ill templates in page {} that links to {}", eachNewPageLink,
+                        eachNewPageTitle, e);
                     linkbackStatus.addProcessingFailure(eachNewPageLink, getExceptionDescriptor(e));
                 }
             }
         }
-        
+
         LOG.info("Finished visiting articles. Setting new reference date.");
-        wiki.edit("Utilizator:Andrebot/dată-vizitare-pagini-noi", now.toString(), "Robot: actualizare dată vizitare pagini noi");
+        wiki.setAssertionMode(Wiki.ASSERT_USER);
+
+        try {
+            wikiEditWithRetry("Utilizator:Andrebot/dată-vizitare-pagini-noi", now.toString(),
+                "Robot: actualizare dată vizitare pagini noi");
+        } catch (TimeoutException e) {
+            LOG.error("Failed to update last visit date", e);
+        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d MMMM yyyy").withLocale(Locale.of("ro"));
 
-        StringBuilder msg = new StringBuilder("\n== Starea paginilor traduse în ")
-            .append(now.format(formatter)).append(" ==\n");
-        if (!editedTranslationsStatus.getProcessingFailures().isEmpty())
-        {
+        StringBuilder msg =
+            new StringBuilder("\n== Starea paginilor traduse în ").append(now.format(formatter)).append(" ==\n");
+        if (!editedTranslationsStatus.getProcessingFailures().isEmpty()) {
             msg.append("\nNu am putut procesa următoarele pagini modificate prin traducere:\n");
-            for (Entry<String, String> processingFailure: editedTranslationsStatus.getProcessingFailures().entrySet())
-            {
-                msg.append("** ").append(new WikiLink(processingFailure.getKey())).append(" – ").append(processingFailure.getValue()).append("\n");
+            for (Entry<String, String> processingFailure : editedTranslationsStatus.getProcessingFailures().entrySet()) {
+                msg.append("** ").append(new WikiLink(processingFailure.getKey())).append(" – ")
+                    .append(processingFailure.getValue()).append("\n");
             }
         }
-        msg.append("\n").append(editedTranslationsStatus.getSuccessfulProcessings().size()).append(" pagini modificate prin traducere procesate fără probleme.\n");
-        if (!newTranslationsStatus.getProcessingFailures().isEmpty())
-        {
+        msg.append("\n").append(editedTranslationsStatus.getSuccessfulProcessings().size())
+            .append(" pagini modificate prin traducere procesate fără probleme.\n");
+        if (!newTranslationsStatus.getProcessingFailures().isEmpty()) {
             msg.append("\nNu am reușit să procesez următoarele pagini traduse noi:\n");
-            for (Entry<String, String> processingFailure : newTranslationsStatus.getProcessingFailures().entrySet())
-            {
-                msg.append("** ").append(new WikiLink(processingFailure.getKey())).append(" – ").append(processingFailure.getValue()).append("\n");
+            for (Entry<String, String> processingFailure : newTranslationsStatus.getProcessingFailures().entrySet()) {
+                msg.append("** ").append(new WikiLink(processingFailure.getKey())).append(" – ")
+                    .append(processingFailure.getValue()).append("\n");
             }
         }
-        msg.append("\n").append(newTranslationsStatus.getSuccessfulProcessings().size()).append(" pagini traduse noi procesate fără probleme.\n");
-        
-        msg.append("\nÎnlocuirea formatelor de tip Ill redundante în paginile care trimit spre articole nou-create a decurs astfel:\n");
-        msg.append("\n* ").append(linkbackStatus.getSuccessfulProcessings().size()).append(" pagini procesate fără probleme.\n");
+        msg.append("\n").append(newTranslationsStatus.getSuccessfulProcessings().size())
+            .append(" pagini traduse noi procesate fără probleme.\n");
+
+        msg.append(
+            "\nÎnlocuirea formatelor de tip Ill redundante în paginile care trimit spre articole nou-create a decurs astfel:\n");
+        msg.append("\n* ").append(linkbackStatus.getSuccessfulProcessings().size())
+            .append(" pagini procesate fără probleme.\n");
         msg.append("\n* ").append(linkbackStatus.getProcessingFailures().size()).append(" pagini cu erori");
-        if (!linkbackStatus.getProcessingFailures().isEmpty())
-        {
+        if (!linkbackStatus.getProcessingFailures().isEmpty()) {
             msg.append(":\n");
-            for (Entry<String, String> processingFailure : linkbackStatus.getProcessingFailures().entrySet())
-            {
-                msg.append("** ").append(new WikiLink(processingFailure.getKey())).append(" – ").append(processingFailure.getValue()).append("\n");
+            for (Entry<String, String> processingFailure : linkbackStatus.getProcessingFailures().entrySet()) {
+                msg.append("** ").append(new WikiLink(processingFailure.getKey())).append(" – ")
+                    .append(processingFailure.getValue()).append("\n");
             }
-        }
-        else
-        {
+        } else {
             msg.append(".\n");
         }
-        
+
         BatchTranslationProcessingStatus processManualCallsStatus = processManualCalls();
-        if (processManualCallsStatus.getProcessingFailures().size() + processManualCallsStatus.getSuccessfulProcessings().size() > 0)
-        {
+        if (processManualCallsStatus.getProcessingFailures().size()
+            + processManualCallsStatus.getSuccessfulProcessings().size() > 0) {
             msg.append("\n== Starea procesării manuale a paginilor traduse ==\n");
-            msg.append("\nAm procesat manual ").append(processManualCallsStatus.getSuccessfulProcessings().size()).append(" pagini fără probleme.\n");
-            if (!processManualCallsStatus.getProcessingFailures().isEmpty())
-            {
+            msg.append("\nAm procesat manual ").append(processManualCallsStatus.getSuccessfulProcessings().size())
+                .append(" pagini fără probleme.\n");
+            if (!processManualCallsStatus.getProcessingFailures().isEmpty()) {
                 msg.append("\nNu am putut procesa următoarele pagini solicitate manual:\n");
-                for (Entry<String, String> processingFailure : processManualCallsStatus.getProcessingFailures().entrySet())
-                {
-                    msg.append("* ").append(new WikiLink(processingFailure.getKey())).append(" – ").append(processingFailure.getValue()).append("\n");
+                for (Entry<String, String> processingFailure : processManualCallsStatus.getProcessingFailures().entrySet()) {
+                    msg.append("* ").append(new WikiLink(processingFailure.getKey())).append(" – ")
+                        .append(processingFailure.getValue()).append("\n");
                 }
             }
-        }        
-        wiki.edit("Utilizator:Andrebot/Statut procesare pagini traduse", msg.toString(), "Robot: raport statut procesare pagini traduse");
+        }
+
+        try {
+            wikiEditWithRetry("Utilizator:Andrebot/traduceri-de-prelucrat", msg.toString(),
+                "Robot: actualizat lista de traduceri de prelucrat manual");
+        } catch (TimeoutException e) {
+            LOG.error("Failed to update the manual processing list page", e);
+        }
     }
 
-    public BatchTranslationProcessingStatus processManualCalls() throws IOException  {
+    public BatchTranslationProcessingStatus processManualCalls() throws IOException {
         BatchTranslationProcessingStatus status = new BatchTranslationProcessingStatus();
-        String manuallyProcessedTranslationsPage = WikipediaPageCache.getInstance().getPageText(wiki, "Utilizator:Andrebot/traduceri-de-prelucrat");
+        String manuallyProcessedTranslationsPage =
+            WikipediaPageCache.getInstance().getPageText(wiki, "Utilizator:Andrebot/traduceri-de-prelucrat");
         // Read the list of page titles
-        List<String> pageTitles = manuallyProcessedTranslationsPage.lines()
-            .map(String::trim)
-            .filter(line -> !line.isEmpty())
-            .filter(line -> !line.startsWith("{"))
-            .filter(line -> !line.startsWith("<"))
-            .collect(Collectors.toList());
-        
+        List<String> pageTitles = manuallyProcessedTranslationsPage.lines().map(String::trim).filter(line -> !line.isEmpty())
+            .filter(line -> !line.startsWith("{")).filter(line -> !line.startsWith("<")).collect(Collectors.toList());
+
         List<String> linesKept = new ArrayList<>();
 
         for (String pageTitleLine : pageTitles) {
@@ -285,44 +296,39 @@ public class TranslationManager extends AbstractExecutable
 
                 // If the text changed, update the page
                 if (!originalText.equals(illResult)) {
-                    WikipediaPageCache.getInstance().savePage(wiki, pageTitle, illResult, "Robot: executat la cerere managementul formatelor Ill");
+                    WikipediaPageCache.getInstance().savePage(wiki, pageTitle, illResult,
+                        "Robot: executat la cerere managementul formatelor Ill", getReloginCallback());
                 }
                 status.addSuccessfulProcessing(pageTitle);
-                
+
             } catch (Throwable e) {
                 LOG.error("Failed to process page {}", pageTitleLine, e);
                 status.addProcessingFailure(pageTitleLine, getExceptionDescriptor(e));
                 linesKept.add(pageTitleLine); // Keep the line for retry
             }
         }
-        
+
         String replacement = "<pre>\n" + String.join("\n", linesKept) + "\n</pre>";
-        String updatedPage = manuallyProcessedTranslationsPage.replaceAll(
-            "(?s)<pre>.*?</pre>", 
-            Matcher.quoteReplacement(replacement)
-        );
-        
-        try
-        {
-            wiki.edit("Utilizator:Andrebot/traduceri-de-prelucrat", updatedPage, "Robot: actualizat lista de traduceri de prelucrat manual");
-        }
-        catch (LoginException | IOException e)
-        {
+        String updatedPage =
+            manuallyProcessedTranslationsPage.replaceAll("(?s)<pre>.*?</pre>", Matcher.quoteReplacement(replacement));
+
+        try {
+            wikiEditWithRetry("Utilizator:Andrebot/traduceri-de-prelucrat", updatedPage,
+                "Robot: actualizat lista de traduceri de prelucrat manual");
+        } catch (TimeoutException e) {
             LOG.error("Failed to update the manual processing list page", e);
         }
-        
+
         return status;
     }
-    
-    private BatchTranslationProcessingStatus processTranslations(List<Revision> recentTranslations) throws IOException, LoginException
-    {
+
+    private BatchTranslationProcessingStatus processTranslations(List<Revision> recentTranslations)
+        throws IOException, LoginException {
         int idx = 0;
         BatchTranslationProcessingStatus status = new BatchTranslationProcessingStatus();
-        for (Revision rev : recentTranslations)
-        {
+        for (Revision rev : recentTranslations) {
             Matcher commentMatcher = commentPattern.matcher(rev.getComment());
-            if (commentMatcher.find())
-            {
+            if (commentMatcher.find()) {
                 String lang = commentMatcher.group(1);
                 String langRevision = commentMatcher.group(2);
                 String langTitle = commentMatcher.group(3);
@@ -330,12 +336,12 @@ public class TranslationManager extends AbstractExecutable
                 String talkText = null;
                 String newPage = wiki.getRevision(rev.getID()).getTitle();
                 LOG.info("Working on page: \"{}\", {} of {}", newPage, ++idx, recentTranslations.size());
-                
+
                 List<String> opsDone = new ArrayList<String>();
-                try
-                {
+                try {
                     String notReplacedText = wiki.getPageText(List.of(newPage)).stream().findFirst().orElse("");
-                    ReplaceCrossLinkWithIll rcl = new ReplaceCrossLinkWithIll(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
+                    ReplaceCrossLinkWithIll rcl =
+                        new ReplaceCrossLinkWithIll(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
                     ExecutorService executor = Executors.newSingleThreadExecutor();
                     Future<String> future = executor.submit(() -> rcl.execute());
                     String replacedText;
@@ -347,12 +353,12 @@ public class TranslationManager extends AbstractExecutable
                     } finally {
                         executor.shutdownNow();
                     }
-                    if (!replacedText.equals(notReplacedText))
-                    {
+                    if (!replacedText.equals(notReplacedText)) {
                         opsDone.add("înlocuit legături roșii sau spre alte wikiuri cu Ill");
                     }
-                    
-                    ReindexFootnotes rfn = new ReindexFootnotes(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
+
+                    ReindexFootnotes rfn =
+                        new ReindexFootnotes(wiki, Wiki.newSession(lang + ".wikipedia.org"), dwiki, newPage);
                     executor = Executors.newSingleThreadExecutor();
                     Future<String> rfnFuture = executor.submit(() -> rfn.processText(replacedText));
                     String reindexedFnText;
@@ -364,30 +370,25 @@ public class TranslationManager extends AbstractExecutable
                     } finally {
                         executor.shutdownNow();
                     }
-                    
-                    if (!CS.equals(reindexedFnText, replacedText))
-                    {
+
+                    if (!CS.equals(reindexedFnText, replacedText)) {
                         opsDone.add("reindexat note de subsol");
                     }
-                    
-                    if (!opsDone.isEmpty())
-                    {
-                        WikipediaPageCache.getInstance().savePage(wiki, newPage, reindexedFnText, "Robot: " + opsDone.stream().collect(Collectors.joining("; ")));
+
+                    if (!opsDone.isEmpty()) {
+                        WikipediaPageCache.getInstance().savePage(wiki, newPage, reindexedFnText,
+                            "Robot: " + opsDone.stream().collect(Collectors.joining("; ")), getReloginCallback());
                     }
                     status.addSuccessfulProcessing(newPage);
-                }
-                catch (Throwable e)
-                {
+                } catch (Throwable e) {
                     LOG.error("Failed to replace cross-links and red links with Ill-wd in page {}", newPage, e);
                     status.addProcessingFailure(newPage, getExceptionDescriptor(e));
                 }
                 String talkPage = wiki.getTalkPage(newPage);
-                if (wiki.exists(List.of(talkPage))[0])
-                {
+                if (wiki.exists(List.of(talkPage))[0]) {
                     talkText = wiki.getPageText(List.of(talkPage)).stream().findFirst().orElse("");
                     Matcher translPageMatcher = translPagePattern.matcher(talkText);
-                    if (translPageMatcher.find())
-                    {
+                    if (translPageMatcher.find()) {
                         continue;
                     }
                 }
@@ -399,31 +400,37 @@ public class TranslationManager extends AbstractExecutable
                 translTextTemplate.setParam("2", langTitle);
                 translTextTemplate.setParam("version", langRevision);
 
-                talkText = Stream.of(translTextTemplate.toString(), talkText).filter(Objects::nonNull).collect(Collectors.joining("\n"));
-                wiki.edit(talkPage, talkText, "Robot: adăugat format {{Pagină tradusă}}");
+                talkText = Stream.of(translTextTemplate.toString(), talkText).filter(Objects::nonNull)
+                    .collect(Collectors.joining("\n"));
+                
+                try {
+                    wikiEditWithRetry(talkPage, talkText, "Robot: adăugat format {{Pagină tradusă}}");
+                } catch (TimeoutException e) {
+                    LOG.error("Failed to edit talk page {} to add the translation template", talkPage, e);
+                }
             }
 
         }
         return status;
     }
 
-    private String getExceptionDescriptor(Throwable e)
-    {
+    private String getExceptionDescriptor(Throwable e) {
         Optional<Throwable> cause = Optional.ofNullable(e.getCause());
-        return String.format("%s: %s cauzat de %s: %s", e.getClass(), e.getMessage(), cause.map(Throwable::getClass).orElse(null), cause.map(Throwable::getClass).map(Objects::toString).orElse("necunoscut"), cause.map(Throwable::getMessage).orElse("necunoscut"));
+        return String.format("%s: %s cauzat de %s: %s", e.getClass(), e.getMessage(),
+            cause.map(Throwable::getClass).orElse(null),
+            cause.map(Throwable::getClass).map(Objects::toString).orElse("necunoscut"),
+            cause.map(Throwable::getMessage).orElse("necunoscut"));
     }
-    
+
     @Override
-    protected void init() throws FailedLoginException, IOException
-    {
+    protected void init() throws FailedLoginException, IOException {
         initLogging();
         super.init();
     }
 
-    private void initLogging()
-    {
+    private void initLogging() {
         LoggerContext logbackContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-        
+
         PatternLayoutEncoder ple = new PatternLayoutEncoder();
 
         ple.setPattern("%date %level %logger{10} [%file:%line] %msg%n");
@@ -435,40 +442,37 @@ public class TranslationManager extends AbstractExecutable
         appender.setName("console");
         appender.setEncoder(ple);
         appender.start();
-        
+
         Logger roWikiLog = logbackContext.getLogger("org.wikipedia.ro");
         roWikiLog.setAdditive(false);
         roWikiLog.setLevel(Level.INFO);
         roWikiLog.addAppender(appender);
-        
-        Logger wikiLog =  logbackContext.getLogger("wiki");
+
+        Logger wikiLog = logbackContext.getLogger("wiki");
         wikiLog.setAdditive(false);
         wikiLog.setLevel(Level.WARN);
         wikiLog.addAppender(appender);
 
         SLF4JBridgeHandler.removeHandlersForRootLogger();
-        SLF4JBridgeHandler.install();        
+        SLF4JBridgeHandler.install();
     }
 
-
-
-    private LocalDate findLastVisit() throws IOException
-    {
+    private LocalDate findLastVisit() throws IOException {
         RequestHelper rh = wiki.new RequestHelper();
         rh.byUser("Andrebot");
         rh.limitedTo(1);
         List<Revision> revs = wiki.getPageHistory("Utilizator:Andrebot/dată-vizitare-pagini-noi", rh);
-        
+
         rh.byUser("Andrei Stroe");
         revs.addAll(wiki.getPageHistory("Utilizator:Andrebot/dată-vizitare-pagini-noi", rh));
-        
+
         revs.sort((r1, r2) -> r2.getTimestamp().compareTo(r1.getTimestamp()));
-        
+
         Optional<Revision> latestRevOpt = revs.stream().findFirst();
         if (!latestRevOpt.isPresent()) {
             return LocalDate.now().minusDays(3);
         }
-        
+
         String strText = latestRevOpt.get().getText();
         return LocalDate.parse(strText);
     }
