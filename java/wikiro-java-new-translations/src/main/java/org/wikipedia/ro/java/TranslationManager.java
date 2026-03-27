@@ -239,7 +239,7 @@ public class TranslationManager extends AbstractExecutable {
         }
 
         try {
-            wikiEditWithRetry("Utilizator:Andrebot/traduceri-de-prelucrat", msg.toString(),
+            wikiEditWithRetry("Utilizator:Andrebot/Statut procesare pagini traduse", msg.toString(),
                 "Robot: actualizat lista de traduceri de prelucrat manual");
         } catch (TimeoutException e) {
             LOG.error("Failed to update the manual processing list page", e);
