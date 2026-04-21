@@ -4,6 +4,7 @@ public class VillageHistoryParams {
     private String bauerName;
     private String bauerDescription;
     private String bauerPage;
+    private String weissName;
     private String spechtName;
 
     private String cataName;
@@ -22,6 +23,15 @@ public class VillageHistoryParams {
     private String idx1956Name;
     private String idx1956Descr;
     private String idx1956Page;
+    
+
+    public String getWeissName() {
+        return weissName;
+    }
+
+    public void setWeissName(String weissName) {
+        this.weissName = weissName;
+    }
 
     public String getBauerName() {
         return bauerName;

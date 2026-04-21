@@ -13,6 +13,7 @@ public class VillageHistoryService {
 
         buildBauerPhrase(params, phrases);
         buildSpechtPhrase(params, phrases);
+        buildWeissPhrase(params, phrases);
         buildCataPhrase(params, phrases);
         buildIdxPhrase(params, phrases);
 
@@ -131,7 +132,7 @@ public class VillageHistoryService {
             phrases.add(sb.toString());
 
         }
-        
+
         if (idx1956Name != null && !idx1956Name.isEmpty()) {
             StringBuilder sb = new StringBuilder();
             if (idx1954Name != null && !idx1954Name.isEmpty()) {
@@ -160,4 +161,14 @@ public class VillageHistoryService {
             phrases.add(sb.toString());
         }
     }
+
+    private void buildWeissPhrase(VillageHistoryParams params, List<String> phrases) {
+        String weissName = params.getWeissName();
+        if (weissName != null && !weissName.isEmpty()) {
+            String phrase = "Harta Turciei Europene a lui Franz von Weiss din 1829 menționează satul cu numele ''" + weissName
+                + "''.<ref>{{Citat Q|Q136100477}}</ref>";
+            phrases.add(phrase);
+        }
+    }
+
 }
