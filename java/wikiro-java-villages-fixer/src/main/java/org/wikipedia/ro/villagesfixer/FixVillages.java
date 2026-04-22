@@ -3,31 +3,22 @@ package org.wikipedia.ro.villagesfixer;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static java.util.stream.Collectors.joining;
-import static org.apache.commons.lang3.StringUtils.contains;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
 import static org.apache.commons.lang3.StringUtils.defaultString;
-import static org.apache.commons.lang3.StringUtils.endsWith;
-import static org.apache.commons.lang3.StringUtils.endsWithAny;
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.lang3.StringUtils.lowerCase;
-import static org.apache.commons.lang3.StringUtils.prependIfMissing;
-import static org.apache.commons.lang3.StringUtils.removeEnd;
-import static org.apache.commons.lang3.StringUtils.removeStart;
-import static org.apache.commons.lang3.StringUtils.removeStartIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.replace;
 import static org.apache.commons.lang3.StringUtils.replaceEach;
-import static org.apache.commons.lang3.StringUtils.startsWith;
-import static org.apache.commons.lang3.StringUtils.startsWithAny;
 import static org.apache.commons.lang3.StringUtils.substring;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 import static org.apache.commons.lang3.StringUtils.trim;
+import static org.apache.commons.lang3.Strings.CI;
+import static org.apache.commons.lang3.Strings.CS;
 import static org.wikibase.WikibasePropertyFactory.getWikibaseProperty;
 
 import java.io.Console;
@@ -180,9 +171,9 @@ public class FixVillages {
             rowiki.getCategoryMembers("Category:Județe din România", Wiki.CATEGORY_NAMESPACE);
         List<String> countyNames = new ArrayList<>();
         for (String eachArticleName : countyCategoryMembersList) {
-            String countyNameNoCat = removeStart(eachArticleName, "Categorie:");
-            if (startsWith(countyNameNoCat, "Județul")) {
-                countyNames.add(trim(removeStart(countyNameNoCat, "Județul")));
+            String countyNameNoCat = CI.removeStart(eachArticleName, "Categorie:");
+            if (CS.startsWith(countyNameNoCat, "Județul")) {
+                countyNames.add(trim(CI.removeStart(countyNameNoCat, "Județul")));
             }
         }
 
@@ -219,7 +210,7 @@ public class FixVillages {
             }
 
             public int compare(String o1, String o2) {
-                return collator.compare(removeStart(o1, prefix), removeStart(o2, prefix));
+                return collator.compare(CS.removeStart(o1, prefix), CS.removeStart(o2, prefix));
             }
         };
         Collections.sort(countyNames, roComp.init("Județul "));
@@ -272,7 +263,7 @@ public class FixVillages {
                 crtCountyName = eachCounty;
                 LOG.info("Starting up county {}", crtCountyName);
 
-                Entity countyEnt = wdcache.getByArticle("rowiki", StringUtils.prependIfMissing(crtCountyName, "Județul "));
+                Entity countyEnt = wdcache.getByArticle("rowiki", CI.prependIfMissing(crtCountyName, "Județul "));
                 Set<Claim> regPlate = countyEnt.getBestClaims(regPlateProp);
                 String countySymbol = regPlate.stream().filter(c -> "statement".equals(c.getType())).map(Claim::getMainsnak)
                     .map(Snak::getData).filter(d -> d instanceof StringData).map(StringData.class::cast).findFirst()
@@ -293,10 +284,10 @@ public class FixVillages {
                 subcategoriesList
                     .addAll(rowiki.getCategoryMembers("Category:Comune din județul " + eachCounty, Wiki.CATEGORY_NAMESPACE));
                 for (String eachSubcat : subcategoriesList) {
-                    String catTitle = removeStart(eachSubcat, "Categorie:");
+                    String catTitle = CI.removeStart(eachSubcat, "Categorie:");
                     List<String> subarticles = rowiki.getCategoryMembers(eachSubcat, Wiki.MAIN_NAMESPACE);
                     for (String eachSubarticle : subarticles) {
-                        if (StringUtils.equals(eachSubarticle, catTitle)) {
+                        if (CS.equals(eachSubarticle, catTitle)) {
                             categoryMembersList.add(eachSubarticle);
                         }
                     }
@@ -323,7 +314,7 @@ public class FixVillages {
 
                 String countyCapitalId = null;
                 Entity countyEntity =
-                    dwiki.getWikibaseItemBySiteAndTitle("rowiki", prependIfMissing(eachCounty, "Județul "));
+                    dwiki.getWikibaseItemBySiteAndTitle("rowiki", CI.prependIfMissing(eachCounty, "Județul "));
                 Set<Claim> countyCapitalClaims = countyEntity.getClaims().get(capitalProp);
                 for (Claim eachCountyCapitalClaim : countyCapitalClaims) {
                     countyCapitalId = ((Item) eachCountyCapitalClaim.getMainsnak().getData()).getEnt().getId();
@@ -341,7 +332,7 @@ public class FixVillages {
                     Entity communeWikibaseItem = wdcache.getByArticle("rowiki", eachCommuneArticle);
 
                     String communeName = trim(substringBefore(
-                        removeStart(removeEnd(removeEnd(eachCommuneArticle, ", " + eachCounty), ", România"), "Comuna "),
+                        CS.removeStart(CS.removeEnd(CS.removeEnd(eachCommuneArticle, ", " + eachCounty), ", România"), "Comuna "),
                         "("));
                     LOG.info("Working on commune {}, county {}", communeName, crtCountyName);
                     crtCommuneName = communeName;
@@ -356,13 +347,13 @@ public class FixVillages {
                     }
                     for (Claim eachInstanceOfClaim : instanceOfClaims) {
                         Item instanceType = (Item) eachInstanceOfClaim.getMainsnak().getData();
-                        if (removeStartIgnoreCase(instanceType.getEnt().getId(), "Q").equals("640364")) {
+                        if (CI.removeStart(instanceType.getEnt().getId(), "Q").equals("640364")) {
                             communeType = CommuneType.MUNICIPIU;
                             break;
-                        } else if (removeStartIgnoreCase(instanceType.getEnt().getId(), "Q").equals("16858213")) {
+                        } else if (CI.removeStart(instanceType.getEnt().getId(), "Q").equals("16858213")) {
                             communeType = CommuneType.ORAS;
                             break;
-                        } else if (removeStartIgnoreCase(instanceType.getEnt().getId(), "Q").equals("659103")) {
+                        } else if (CI.removeStart(instanceType.getEnt().getId(), "Q").equals("659103")) {
                             communeType = CommuneType.COMUNA;
                             break;
                         }
@@ -374,11 +365,11 @@ public class FixVillages {
 
                     String communeDescr = String.format("%s din județul %s, România", communeType.getTypeName(), eachCounty);
                     boolean communeChanged = false;
-                    if (!StringUtils.equals(communeWikibaseItem.getDescriptions().get("ro"), communeDescr)) {
+                    if (!CS.equals(communeWikibaseItem.getDescriptions().get("ro"), communeDescr)) {
                         dwiki.setDescription(communeWikibaseItem.getId(), "ro", communeDescr);
                         communeChanged = true;
                     }
-                    if (!StringUtils.equals(extractRoNameFromEntity(communeWikibaseItem), communeName)) {
+                    if (!CS.equals(extractRoNameFromEntity(communeWikibaseItem), communeName)) {
                         dwiki.setLabel(communeWikibaseItem.getId(), "ro", communeName);
                         communeChanged = true;
                     }
@@ -400,7 +391,7 @@ public class FixVillages {
                     Pattern communeLinkPattern =
                         Pattern.compile("\\[\\[\\s*((C|c)omuna )?" + communeName + "(, " + eachCounty + ")?\\s*(\\||\\])");
                     Pattern countyCategoryPattern = Pattern.compile(
-                        "\\[\\[Categor(y|(ie))\\:Orașe din județul " + replace(eachCounty, "-", "\\-") + ".*?\\]\\]");
+                        "\\[\\[Categor(y|(ie))\\:Orașe din județul " + CS.replace(eachCounty, "-", "\\-") + ".*?\\]\\]");
 
                     for (Claim eachCompositeVillageClaim : compositeVillagesClaims) {
                         communeChanged = processSettlement(rowiki, commonsWiki, dwiki, meterEnt, squareKmEnt,
@@ -442,11 +433,11 @@ public class FixVillages {
                         previousTemplateAnalysisStart = templateAnalysisStart;
                         templateAnalysisStart = templateAnalysisStart + initialTemplateText.length()
                             + initTextParseRes.getParsedString().length();
-                    } while (!startsWithAny(lowerCase(initialTemplate.getTemplateTitle()), "cutie", "casetă", "infobox",
+                    } while (!CI.startsWithAny(initialTemplate.getTemplateTitle(), "cutie", "casetă", "infobox",
                         "infocaseta") && templateAnalysisStart < pageText.length()
                         && previousTemplateAnalysisStart != templateAnalysisStart);
 
-                    if (startsWithAny(lowerCase(initialTemplate.getTemplateTitle()), "cutie", "casetă", "caseta", "infobox",
+                    if (CI.startsWithAny(initialTemplate.getTemplateTitle(), "cutie", "casetă", "caseta", "infobox",
                         "infocaseta")) {
                         initialTemplate.setSingleLine(false);
                         initialTemplate.removeParam("nume");
@@ -458,7 +449,7 @@ public class FixVillages {
                         initialTemplate.removeParam("tip_așezare");
                         initialTemplate.removeParam("tip_asezare");
                         initialTemplate.removeParam("componenta");
-                        if (StringUtils.equalsIgnoreCase("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
+                        if (CI.equals("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
                             if (isBlank(initialTemplate.getParams().get("nume_nativ"))
                                 && isNotBlank(initialTemplate.getParams().get("alt_nume"))) {
                                 initialTemplate.setParam("nume_nativ", initialTemplate.getParams().get("alt_nume"));
@@ -474,10 +465,10 @@ public class FixVillages {
 
                         for (String eachParam : initialTemplate.getParamNames()) {
                             String paramValue = initialTemplate.getParams().get(eachParam);
-                            if (startsWithAny(eachParam, "comună", "oraș", "tip_subdiviziune", "nume_subdiviziune")
+                            if (CS.startsWithAny(eachParam, "comună", "oraș", "tip_subdiviziune", "nume_subdiviziune")
                                 || eachParam.matches("p?\\d+") || isBlank(paramValue)) {
                                 initialTemplate.removeParam(eachParam);
-                            } else if (equalsIgnoreCase("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
+                            } else if (CI.equals("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
                                 Matcher ifMatcher = ifPattern.matcher(paramValue);
                                 StringBuffer sbuf = new StringBuffer();
                                 while (ifMatcher.find()) {
@@ -488,7 +479,7 @@ public class FixVillages {
                                     initialTemplate.setParam(eachParam, sbuf.toString());
                                 }
                             }
-                            if (startsWith(eachParam, "suprafață_totală_km2")) {
+                            if (CS.startsWith(eachParam, "suprafață_totală_km2")) {
                                 if (isNotBlank(paramValue) && (!communeWikibaseItem.getClaims().containsKey(areaProp)
                                     || null == communeWikibaseItem.getClaims().get(areaProp))) {
                                     Claim areaClaim =
@@ -502,15 +493,15 @@ public class FixVillages {
                                 }
                                 initialTemplate.removeParam(eachParam);
                             }
-                            if (startsWith(eachParam, "sit-")) {
+                            if (CS.startsWith(eachParam, "sit-")) {
                                 if (isNotBlank(paramValue) && (communeWikibaseItem.getClaims().containsKey(webAddrProp))
-                                    || (!StringUtils.equals("sit-adresă", eachParam)
+                                    || (!CS.equals("sit-adresă", eachParam)
                                         && !communeWikibaseItem.getClaims().containsKey(webAddrProp)
                                         && !initialTemplate.getParams().containsKey("sit-adresă"))) {
                                     initialTemplate.removeParam(eachParam);
                                 }
                             }
-                            if (StringUtils.equals(eachParam, "altitudine")) {
+                            if (CS.equals(eachParam, "altitudine")) {
                                 if (isNotBlank(paramValue) && (!communeWikibaseItem.getClaims().containsKey(altProp)
                                     || null == communeWikibaseItem.getClaims().get(altProp))) {
                                     Claim altClaim =
@@ -524,7 +515,7 @@ public class FixVillages {
                                 }
                                 initialTemplate.removeParam(eachParam);
                             }
-                            if (startsWith(eachParam, "lider_") && !endsWith(eachParam, "_titlu")) {
+                            if (CS.startsWith(eachParam, "lider_") && !CS.endsWith(eachParam, "_titlu")) {
                                 Set<Claim> mayorClaim = communeWikibaseItem.getClaims().get(mayorProp);
                                 if (null != mayorClaim && 0 < mayorClaim.size()) {
                                     initialTemplate.removeParam(eachParam);
@@ -547,7 +538,7 @@ public class FixVillages {
                     String coatOfArms = initialTemplate.getParams().get("stemă");
                     if (isNotEmpty(coatOfArms)) {
                         Matcher coatOfArmsMatcher = imageInInfoboxPattern.matcher(coatOfArms);
-                        if (contains(coatOfArms, "{{#property:P94}}")) {
+                        if (CS.contains(coatOfArms, "{{#property:P94}}")) {
                             initialTemplate.removeParam("stemă");
                         } else if (coatOfArmsMatcher.matches()) {
                             String coatOfArmsImageName = coatOfArmsMatcher.group(8);
@@ -587,8 +578,7 @@ public class FixVillages {
                             int matchedNativeNames = 0;
                             for (String eachNativeName : nativeNamesArray) {
                                 for (Claim eachCommuneNativeLabelClaim : communeNativeLabelClaims) {
-                                    if (StringUtils
-                                        .equals(
+                                    if (CS.equals(
                                             trim(LanguageString.class
                                                 .cast(eachCommuneNativeLabelClaim.getMainsnak().getData()).getText()),
                                             trim(eachNativeName))) {
@@ -606,11 +596,11 @@ public class FixVillages {
                     String communeImage = initialTemplate.getParams().get("imagine");
                     if (isNotEmpty(communeImage)) {
                         Matcher imageMatcher = imageInInfoboxPattern.matcher(communeImage);
-                        if (contains(communeImage, "{{#property:P18}}")) {
+                        if (CS.contains(communeImage, "{{#property:P18}}")) {
                             initialTemplate.removeParam("imagine");
                         } else if (imageMatcher.matches()) {
                             String imageName = URLDecoder.decode(imageMatcher.group(8), StandardCharsets.UTF_8.name());
-                            if (endsWithAny(lowerCase(imageName), "jpg", "jpeg", "png")) {
+                            if (CI.endsWithAny(imageName, "jpg", "jpeg", "png")) {
                                 Property imageWikidataProperty = new Property("P18");
                                 if (commonsWiki.exists(List.of("File:" + imageName))[0]) {
                                     String imageClaimId = null;
@@ -622,10 +612,10 @@ public class FixVillages {
                                     } else {
                                         Optional<Claim> possibleImageClaim =
                                             communeClaims.get(imageWikidataProperty).stream().findFirst();
-                                        if (possibleImageClaim.isPresent() && StringUtils.equals(
-                                            replace(possibleImageClaim.map(Claim::getValue).map(CommonsMedia.class::cast)
+                                        if (possibleImageClaim.isPresent() && CS.equals(
+                                            CS.replace(possibleImageClaim.map(Claim::getValue).map(CommonsMedia.class::cast)
                                                 .map(CommonsMedia::getFileName).get(), " ", "_"),
-                                            replace(imageName, " ", "_"))) {
+                                            CS.replace(imageName, " ", "_"))) {
                                             Claim imageClaim = possibleImageClaim.get();
                                             imageClaimId = imageClaim.getId();
                                             captionQualifierFound = (null != imageClaim.getQualifiers().get(captionProp));
@@ -635,7 +625,7 @@ public class FixVillages {
                                     String communeImageCaption =
                                         defaultIfEmpty(initialTemplate.getParams().get("imagine_descriere"),
                                             initialTemplate.getParams().get("descriere"));
-                                    communeImageCaption = replace(communeImageCaption, "'''", "");
+                                    communeImageCaption = CS.replace(communeImageCaption, "'''", "");
 
                                     if (isNotEmpty(communeImageCaption) && null != imageClaimId && !captionQualifierFound) {
                                         dwiki.addQualifier(imageClaimId, captionProp.getId(),
@@ -679,9 +669,9 @@ public class FixVillages {
 
                     String articleAfterInfobox = trim(pageText.substring(templateAnalysisStart));
 
-                    while (startsWithAny(trim(articleAfterInfobox), "[[Fișier", "[[File", "[[Imagine", "[[Image",
+                    while (CS.startsWithAny(trim(articleAfterInfobox), "[[Fișier", "[[File", "[[Imagine", "[[Image",
                         "[[Categorie", "{{")) {
-                        if (startsWithAny(trim(articleAfterInfobox), "[[Fișier", "[[File", "[[Imagine", "[[Image",
+                        if (CS.startsWithAny(trim(articleAfterInfobox), "[[Fișier", "[[File", "[[Imagine", "[[Image",
                             "[[Categorie")) {
                             int imgIdx = 0;
                             int depth = 0;
@@ -695,7 +685,7 @@ public class FixVillages {
                                 imgIdx++;
                             } while (depth > 0 && imgIdx < articleAfterInfobox.length() - 1);
                             articleAfterInfobox = trim(substring(articleAfterInfobox, imgIdx + 2));
-                        } else if (startsWith(trim(articleAfterInfobox), "{{")) {
+                        } else if (CS.startsWith(trim(articleAfterInfobox), "{{")) {
                             articleAfterInfobox = trim(
                                 substring(articleAfterInfobox, new WikiTemplate(articleAfterInfobox).getTemplateLength()));
                         }
@@ -736,13 +726,13 @@ public class FixVillages {
                         communeTypeLink = "un [[Lista orașelor din România|oraș]]";
                     } else if (communeType == CommuneType.MUNICIPIU) {
                         communeTypeLink = "un [[Municipiile României|municipiu]]";
-                        if (prependIfMissing(countyCapitalId, "Q")
-                            .equals(prependIfMissing(communeWikibaseItem.getId(), "Q"))) {
+                        if (CS.prependIfMissing(countyCapitalId, "Q")
+                            .equals(CS.prependIfMissing(communeWikibaseItem.getId(), "Q"))) {
                             communeTypeLink = "[[Municipiile României|municipiul]] de reședință";
                         }
                     }
                     String countyLink = "în [[județul " + eachCounty + "]]";
-                    if (prependIfMissing(countyCapitalId, "Q").equals(prependIfMissing(communeWikibaseItem.getId(), "Q"))) {
+                    if (CS.prependIfMissing(countyCapitalId, "Q").equals(CS.prependIfMissing(communeWikibaseItem.getId(), "Q"))) {
                         countyLink = "al [[" + countyEntity.getSitelinks().get("rowiki").getPageName() + "|județului "
                             + (eachCounty.equalsIgnoreCase(communeName) ? "cu același nume" : eachCounty) + "]]";
                     }
@@ -757,7 +747,7 @@ public class FixVillages {
                                 communeTypeLink, countyLink, getHistoricalRegionLink(null, communeName, eachCounty));
                             if (communeType == CommuneType.COMUNA) {
                                 intro = intro + String.format(", formată numai din satul de reședință%s",
-                                    StringUtils.equals(communeName, villagesEntryList.get(0).getKey()) ? " cu același nume"
+                                    CS.equals(communeName, villagesEntryList.get(0).getKey()) ? " cu același nume"
                                         : String.format(", [[%s|%s]]", villagesEntryList.get(0).getValue(),
                                             villagesEntryList.get(0).getKey()));
                             }
@@ -795,7 +785,7 @@ public class FixVillages {
                                     }
                                     if (null == eachSettlementEntry.getValue() || (null != capitalEntity.getSitelinks()
                                         && null != capitalEntity.getSitelinks().get("rowiki")
-                                        && StringUtils.equals(eachSettlementEntry.getValue(),
+                                        && CS.equals(eachSettlementEntry.getValue(),
                                             capitalEntity.getSitelinks().get("rowiki").getPageName()))) {
                                         villagesList.append(" (reședința)");
                                     }
@@ -830,7 +820,7 @@ public class FixVillages {
                                         .append(eachVillageEntry.getKey()).append("]]");
                                     if (null == eachVillageEntry.getValue() || (null != capitalEntity.getSitelinks()
                                         && null != capitalEntity.getSitelinks().get("rowiki")
-                                        && StringUtils.equals(eachVillageEntry.getValue(),
+                                        && CS.equals(eachVillageEntry.getValue(),
                                             capitalEntity.getSitelinks().get("rowiki").getPageName()))) {
                                         villagesList.append(" (reședința)");
                                     }
@@ -877,7 +867,7 @@ public class FixVillages {
                                 String[] locationPart = eachOldParagraphSetence.split("(situat|aflat)ă?");
                                 if (locationPart.length > 1) {
                                     String transformedLocation =
-                                        String.format("Se află %s", removeEnd(trim(locationPart[1]), "."));
+                                        String.format("Se află %s", CS.removeEnd(trim(locationPart[1]), "."));
                                     transformedLocation = transformedLocation
                                         .replaceAll("județului\\s+\\[\\[(J|j)udețul\\s+.*?(\\|.*?)?\\]\\]", "județului");
                                     transformedLocation = transformedLocation
@@ -889,7 +879,7 @@ public class FixVillages {
 
                                 continue;
                             }
-                            newFirstParagraphSentences.add(removeEnd(trim(eachOldParagraphSetence), "."));
+                            newFirstParagraphSentences.add(CS.removeEnd(trim(eachOldParagraphSetence), "."));
                             newFirstParagraphRefs.add(eachOldParagraphRefs);
                         }
 
@@ -897,7 +887,7 @@ public class FixVillages {
                         for (int sentenceIdx = 0; sentenceIdx < newFirstParagraphSentences.size(); sentenceIdx++) {
                             String aSentence = newFirstParagraphSentences.get(sentenceIdx);
                             newFirstParagraphBuilder.append(aSentence);
-                            if (!startsWith(aSentence, "{{") || !endsWith(aSentence, "}}")) {
+                            if (!CS.startsWith(aSentence, "{{") || !CS.endsWith(aSentence, "}}")) {
                                 newFirstParagraphBuilder.append('.')
                                     .append(defaultString(newFirstParagraphRefs.get(sentenceIdx)));
                             }
@@ -907,7 +897,7 @@ public class FixVillages {
                             newFirstParagraphBuilder.append(' ');
                         }
                         String newFirstParagraph = trim(newFirstParagraphBuilder.toString());
-                        pageText = pageText.replace(firstParagraph, newFirstParagraph);
+                        pageText = CS.replaceOnce(pageText, firstParagraph, newFirstParagraph);
 
                         String sortingKey = replaceEach(communeName, new String[] { "ă", "â", "ș", "ț", "î" },
                             new String[] { "aă", "aăâ", "sș", "tț", "iî" });
@@ -961,7 +951,7 @@ public class FixVillages {
                         }
                         
 
-                        if (!StringUtils.equals(pageText, initialPageText)) {
+                        if (!CS.equals(pageText, initialPageText)) {
                             rowiki.edit(rocommunearticle, pageText,
                                 "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, recategorisit, standardizat introducerea și secțiunile Demografie și Administrație. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
                             WIKI_PAGE_CACHE.invalidatePage(rowiki, rocommunearticle);
@@ -980,7 +970,7 @@ public class FixVillages {
                 coordsLogFile.getParent().toFile().mkdirs();
                 Files.writeString(coordsLogFile, coordinatesStat.toString());
                 
-                WIKI_PAGE_CACHE.invalidatePagesIf(rowiki, k -> endsWith(k, String.format(", %s", eachCounty)) );
+                WIKI_PAGE_CACHE.invalidatePagesIf(rowiki, k -> CS.endsWith(k, String.format(", %s", eachCounty)) );
                 LOG.info("Finished county {}", eachCounty);
             }
         } catch (WikibaseException | LoginException | ParseException e) {
@@ -1448,14 +1438,14 @@ public class FixVillages {
         Set<Claim> villageInstanceOfClaims = villageEntity.getClaims().get(getWikibaseProperty("P31"));
         for (Claim eachVillageInstanceOfClaim : villageInstanceOfClaims) {
             Item villageTypeItem = (Item) eachVillageInstanceOfClaim.getMainsnak().getData();
-            if (removeStart(villageTypeItem.getEnt().getId(), "Q").equals("15921247")) {
+            if (CI.removeStart(villageTypeItem.getEnt().getId(), "Q").equals("15921247")) {
                 villageType = "localitate componentă";
                 break;
             }
         }
 
-        String villageName = trim(removeStart(
-            removeEnd(removeEnd(extractRoNameFromEntity(villageEntity), ", " + eachCounty), "(" + communeName + ")"),
+        String villageName = trim(CS.removeStart(
+            CS.removeEnd(CS.removeEnd(extractRoNameFromEntity(villageEntity), ", " + eachCounty), "(" + communeName + ")"),
             "Comuna "));
         crtSettlementName = villageName;
         LOG.info("Processing settlement {}, UAT {}, county {}; settlement type: {}", crtSettlementName, crtCommuneName,
@@ -1471,11 +1461,11 @@ public class FixVillages {
             String.format("%s %s %s, județul %s, România", villageType, villageRelationWithCommune, communeName, eachCounty);
 
         boolean villageChanged = false;
-        if (!StringUtils.equals(extractRoNameFromEntity(villageEntity), villageName)) {
+        if (!CS.equals(extractRoNameFromEntity(villageEntity), villageName)) {
             dwiki.setLabel(villageEntity.getId(), "ro", villageName);
             communeChanged = villageChanged = true;
         }
-        if (!StringUtils.equals(villageEntity.getDescriptions().get("ro"), villageDescr)) {
+        if (!CS.equals(villageEntity.getDescriptions().get("ro"), villageDescr)) {
             dwiki.setDescription(villageEntity.getId(), "ro", villageDescr);
             communeChanged = villageChanged = true;
         }
@@ -1516,11 +1506,11 @@ public class FixVillages {
                 previousTemplateAnalysisStart = templateAnalysisStart;
                 templateAnalysisStart =
                     templateAnalysisStart + textParseRes.getParsedString().length() + initialTemplate.getTemplateLength();
-            } while (!startsWithAny(lowerCase(initialTemplate.getTemplateTitle()), "cutie", "casetă", "infobox",
+            } while (!CI.startsWithAny(initialTemplate.getTemplateTitle(), "cutie", "casetă", "infobox",
                 "infocaseta") && templateAnalysisStart < pageText.length()
                 && previousTemplateAnalysisStart != templateAnalysisStart);
 
-            if (startsWithAny(lowerCase(initialTemplate.getTemplateTitle()), "cutie", "casetă", "caseta", "infobox",
+            if (CI.startsWithAny(initialTemplate.getTemplateTitle(), "cutie", "casetă", "caseta", "infobox",
                 "infocaseta")) {
                 initialTemplate.setSingleLine(false);
                 initialTemplate.removeParam("nume");
@@ -1557,10 +1547,9 @@ public class FixVillages {
                             String[] nativeNamesArray = nativeNameInTemplateString.split("<br\\s*/?\\s*>");
                             int matchedNativeNames = 0;
                             for (String eachNativeName : nativeNamesArray) {
-                                eachNativeName = removeStart(removeEnd(eachNativeName, "''"), "''");
+                                eachNativeName = CS.removeStart(CS.removeEnd(eachNativeName, "''"), "''");
                                 for (Claim eachVillageNativeLabelClaim : villageNativeLabelClaims) {
-                                    if (StringUtils
-                                        .equals(
+                                    if (CS.equals(
                                             trim(LanguageString.class
                                                 .cast(eachVillageNativeLabelClaim.getMainsnak().getData()).getText()),
                                             trim(eachNativeName))) {
@@ -1585,7 +1574,7 @@ public class FixVillages {
                         }
                     }
                 }
-                if (StringUtils.equalsIgnoreCase("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
+                if (CI.equals("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
                     if (isBlank(initialTemplate.getParams().get("nume_nativ"))
                         && isNotBlank(initialTemplate.getParams().get("alt_nume"))) {
                         initialTemplate.setParam("nume_nativ", initialTemplate.getParams().get("alt_nume"));
@@ -1597,10 +1586,10 @@ public class FixVillages {
                 }
                 for (String eachParam : initialTemplate.getParamNames()) {
                     String paramValue = initialTemplate.getParams().get(eachParam);
-                    if (startsWithAny(eachParam, "comună", "oraș", "tip_subdiviziune", "nume_subdiviziune")
+                    if (CS.startsWithAny(eachParam, "comună", "oraș", "tip_subdiviziune", "nume_subdiviziune")
                         || eachParam.matches("p?\\d+") || isBlank(paramValue)) {
                         initialTemplate.removeParam(eachParam);
-                    } else if (equalsIgnoreCase("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
+                    } else if (CI.equals("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
                         Matcher ifMatcher = ifPattern.matcher(paramValue);
                         StringBuffer sbuf = new StringBuffer();
                         while (ifMatcher.find()) {
@@ -1611,7 +1600,7 @@ public class FixVillages {
                             initialTemplate.setParam(eachParam, sbuf.toString());
                         }
                     }
-                    if (startsWith(eachParam, "suprafață_totală_km2")) {
+                    if (CS.startsWith(eachParam, "suprafață_totală_km2")) {
                         Property areaProp = getWikibaseProperty("P2046");
                         if (isNotBlank(paramValue) && (!villageEntity.getClaims().containsKey(areaProp)
                             || null == villageEntity.getClaims().get(areaProp))) {
@@ -1625,7 +1614,7 @@ public class FixVillages {
                         }
                         initialTemplate.removeParam(eachParam);
                     }
-                    if (StringUtils.equals(eachParam, "altitudine")) {
+                    if (CS.equals(eachParam, "altitudine")) {
                         Property altProp = getWikibaseProperty("P2044");
                         if (isNotBlank(paramValue) && (!villageEntity.getClaims().containsKey(altProp)
                             || null == villageEntity.getClaims().get(altProp))) {
@@ -1648,9 +1637,9 @@ public class FixVillages {
 
             String articleAfterInfobox = trim(pageText.substring(templateAnalysisStart));
 
-            while (startsWithAny(trim(articleAfterInfobox), "[[Fișier", "[[File", "[[Imagine", "[[Image", "[[Categorie",
+            while (CS.startsWithAny(trim(articleAfterInfobox), "[[Fișier", "[[File", "[[Imagine", "[[Image", "[[Categorie",
                 "{{")) {
-                if (startsWithAny(trim(articleAfterInfobox), "[[Fișier", "[[File", "[[Imagine", "[[Image", "[[Categorie")) {
+                if (CS.startsWithAny(trim(articleAfterInfobox), "[[Fișier", "[[File", "[[Imagine", "[[Image", "[[Categorie")) {
                     int imgIdx = 0;
                     int depth = 0;
                     do {
@@ -1663,7 +1652,7 @@ public class FixVillages {
                         imgIdx++;
                     } while (depth > 0 && imgIdx < articleAfterInfobox.length() - 1);
                     articleAfterInfobox = trim(substring(articleAfterInfobox, imgIdx + 2));
-                } else if (startsWith(trim(articleAfterInfobox), "{{")) {
+                } else if (CS.startsWith(trim(articleAfterInfobox), "{{")) {
                     articleAfterInfobox =
                         trim(substring(articleAfterInfobox, new WikiTemplate(articleAfterInfobox).getTemplateLength()));
                 }
@@ -1673,7 +1662,7 @@ public class FixVillages {
             Property captionProp = getWikibaseProperty("P2096");
             if (isNotEmpty(villageImage)) {
                 Matcher imageMatcher = imageInInfoboxPattern.matcher(villageImage);
-                if (contains(villageImage, "{{#property:P18}}")) {
+                if (CS.contains(villageImage, "{{#property:P18}}")) {
                     initialTemplate.removeParam("imagine");
                 } else if (imageMatcher.matches()) {
                     String imageName = imageMatcher.group(8);
@@ -1689,11 +1678,10 @@ public class FixVillages {
                             Optional<Claim> possibleImageClaim =
                                 villageEntity.getClaims().get(imageWikidataProperty).stream().findFirst();
                             if (possibleImageClaim.isPresent()
-                                && StringUtils
-                                    .equals(
-                                        replace(possibleImageClaim.map(Claim::getValue).map(CommonsMedia.class::cast)
+                                && CS.equals(
+                                        CS.replace(possibleImageClaim.map(Claim::getValue).map(CommonsMedia.class::cast)
                                             .map(CommonsMedia::getFileName).get(), " ", "_"),
-                                        replace(imageName, " ", "_"))) {
+                                        CS.replace(imageName, " ", "_"))) {
                                 Claim imageClaim = possibleImageClaim.get();
                                 imageClaimId = imageClaim.getId();
                                 Set<Snak> captions = imageClaim.getQualifiers().get(captionProp);
@@ -1705,7 +1693,7 @@ public class FixVillages {
                         }
                         String villageImageCaption = defaultIfEmpty(initialTemplate.getParams().get("imagine_descriere"),
                             initialTemplate.getParams().get("descriere"));
-                        villageImageCaption = replace(villageImageCaption, "'''", "");
+                        villageImageCaption = CS.replace(villageImageCaption, "'''", "");
                         if (isNotEmpty(villageImageCaption) && null != imageClaimId && !captionQualifierFound) {
                             dwiki.addQualifier(imageClaimId, captionProp.getId(),
                                 new LanguageString("ro", villageImageCaption));
@@ -1747,7 +1735,7 @@ public class FixVillages {
             if (isEmpty(firstParagraph)) {
                 firstParagraph = initialTemplate.getBeforeText();
             }
-            while (startsWith(trim(firstParagraph), "{{")) {
+            while (CS.startsWith(trim(firstParagraph), "{{")) {
                 WikiTemplateParser extraTemplateParser = new WikiTemplateParser();
                 ParseResult<WikiTemplate> extraTemplateParseRes = extraTemplateParser.parse(trim(restOfArticle));
 
@@ -1755,7 +1743,7 @@ public class FixVillages {
                 restOfArticle =
                     substringAfter(substring(trim(restOfArticle), extraTemplateParseRes.getParsedString().length()), "\n");
             }
-            while (startsWith(trim(firstParagraph), "[[")) {
+            while (CS.startsWith(trim(firstParagraph), "[[")) {
                 int inLink = 1;
                 String imageSpace = trim(firstParagraph + restOfArticle);
                 int idx;
@@ -1801,7 +1789,7 @@ public class FixVillages {
             List<String> newFirstParagraphSentences = new ArrayList<String>();
             List<String> newFirstParagraphRefs = new ArrayList<String>();
 
-            String villageIndefArticle = startsWith(villageType, "localitate") ? "o" : "un";
+            String villageIndefArticle = CS.startsWith(villageType, "localitate") ? "o" : "un";
             String communeLink = communeWikibaseItem.getSitelinks().get("rowiki").getPageName();
             String communeTypeForIntro = communeType.getTypeNameAcc();
             String genitiveCommuneType = communeType.getTypeNameGen();
@@ -1816,7 +1804,7 @@ public class FixVillages {
             }
             String villageIntro = String.format("este %s %s %s [[%s|%s %s]] din [[județul %s]], %s, [[România]]",
                 villageIndefArticle, villageType, in, communeLink, communeTypeForIntro,
-                StringUtils.equals(communeName, villageName) ? "cu același nume" : communeName, eachCounty,
+                CS.equals(communeName, villageName) ? "cu același nume" : communeName, eachCounty,
                 getHistoricalRegionLink(villageName, communeName, eachCounty));
 
             String l = "sat".equalsIgnoreCase(villageType) ? "l" : "";
@@ -1824,10 +1812,10 @@ public class FixVillages {
             String residenceIntro =
                 String.format("este %s de reședință a%s [[%s|%s %s]] din [[județul %s]], %s, [[România]]",
                     articulatedVillageType, l, communeLink, genitiveCommuneType,
-                    StringUtils.equals(communeName, villageName) ? "cu același nume" : communeName, eachCounty,
+                    CS.equals(communeName, villageName) ? "cu același nume" : communeName, eachCounty,
                     getHistoricalRegionLink(villageName, communeName, eachCounty));
 
-            String intro = StringUtils.equals(capitalEntity.getId(), villageEntity.getId()) ? residenceIntro : villageIntro;
+            String intro = CS.equals(capitalEntity.getId(), villageEntity.getId()) ? residenceIntro : villageIntro;
 
             newFirstParagraphSentences.add("'''" + villageName + "'''" + qualifier + " " + intro);
             newFirstParagraphRefs.add("");
@@ -1844,7 +1832,7 @@ public class FixVillages {
                         Pattern[] locationTransformerPatterns = new Pattern[] {
                             Pattern.compile("((\\[\\[județ\\]\\])|județ)ului\\s+\\[\\[(J|j)udețul\\s+.*?(\\|.*?)?\\]\\]"),
                             Pattern.compile("\\[\\[(J|j)udețul\\s+.*?\\|județului\\s+.*?\\]\\]") };
-                        String transformedLocation = "Se află " + removeEnd(trim(locationPart[1]), ".");
+                        String transformedLocation = "Se află " + CS.removeEnd(trim(locationPart[1]), ".");
                         for (Pattern eachLocationTransformerPattern : locationTransformerPatterns) {
                             Matcher locationTransformationMatcher =
                                 eachLocationTransformerPattern.matcher(transformedLocation);
@@ -1856,7 +1844,7 @@ public class FixVillages {
                     }
                     continue;
                 }
-                eachOldParagraphSentence = removeEnd(trim(eachOldParagraphSentence), ".");
+                eachOldParagraphSentence = CS.removeEnd(trim(eachOldParagraphSentence), ".");
                 eachOldParagraphSentence = fullLocationPattern.matcher(eachOldParagraphSentence).replaceAll("");
                 newFirstParagraphSentences.add(eachOldParagraphSentence);
                 newFirstParagraphRefs.add(eachOldParagraphRef);
@@ -1871,7 +1859,7 @@ public class FixVillages {
             pageText = pageText.replace(firstParagraph, newFirstParagraph);
 
             List<String> desiredCategories = new ArrayList<>();
-            if (startsWith(villageType, "localitate")) {
+            if (CS.startsWith(villageType, "localitate")) {
                 desiredCategories.add(String.format("Localități urbane din județul %s", eachCounty));
             } else {
                 desiredCategories.add(String.format("Sate din județul %s", eachCounty));
@@ -1880,7 +1868,7 @@ public class FixVillages {
             pageText =
                 recategorize(pageText, new String[] { villageName, communeName }, rovillagearticle, desiredCategories);
 
-            if (!StringUtils.equals(pageText, initialPageText)) {
+            if (!CS.equals(pageText, initialPageText)) {
                 rowiki.edit(rovillagearticle, pageText,
                     "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard, recategorisit. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
                 WIKI_PAGE_CACHE.invalidatePage(rowiki, rovillagearticle);
@@ -1911,7 +1899,7 @@ public class FixVillages {
     }
 
     private static String extractRoNameFromEntity(Entity villageEntity) {
-        return defaultString(villageEntity.getLabels().get("ro"), villageEntity.getLabels().get("mul"));
+        return Objects.toString(villageEntity.getLabels().get("ro"), villageEntity.getLabels().get("mul"));
     }
 
     private static final Pattern POLITICS_SECTION_PATTERN = Pattern.compile(
@@ -1940,7 +1928,7 @@ public class FixVillages {
             if (catLocation < 0) {
                 catLocation = categoryMatcher.start();
             }
-            if (startsWith(catName, "Localități din județul ")) {
+            if (CS.startsWith(catName, "Localități din județul ")) {
                 categoryMatcher.appendReplacement(sbuf, "");
                 continue;
             }
@@ -1982,11 +1970,11 @@ public class FixVillages {
                                                                   CommuneType communeType, String siruta, Entity communeItem,
                                                                   WikidataEntitiesCache wdcache)
         throws IOException, WikibaseException {
-        String communeNameRegexForMongo = replace(communeName, "ș", "(ș|ş)");
-        communeNameRegexForMongo = replace(communeNameRegexForMongo, "ț", "[țţ]");
-        communeNameRegexForMongo = replace(communeNameRegexForMongo, "Ș", "[ȘŞ]");
-        communeNameRegexForMongo = replace(communeNameRegexForMongo, "Ț", "[ȚŢ]");
-        communeNameRegexForMongo = replace(communeNameRegexForMongo, "â", "[âî]");
+        String communeNameRegexForMongo = CS.replace(communeName, "ș", "(ș|ş)");
+        communeNameRegexForMongo = CS.replace(communeNameRegexForMongo, "ț", "[țţ]");
+        communeNameRegexForMongo = CS.replace(communeNameRegexForMongo, "Ș", "[ȘŞ]");
+        communeNameRegexForMongo = CS.replace(communeNameRegexForMongo, "Ț", "[ȚŢ]");
+        communeNameRegexForMongo = CS.replace(communeNameRegexForMongo, "â", "[âî]");
         communeNameRegexForMongo =
             replaceEach(communeNameRegexForMongo, new String[] { " ", "-" }, new String[] { "( |\\-)", "( |\\-)" });
         communeNameRegexForMongo = "^" + communeNameRegexForMongo + "$";
@@ -2115,7 +2103,7 @@ public class FixVillages {
         Matcher simpleRefMatcher = simpleRefPattern.matcher(data);
         if (simpleRefMatcher.find()) {
             ref = simpleRefMatcher.group(1);
-            data = replace(data, simpleRefMatcher.group(0), "");
+            data = CS.replace(data, simpleRefMatcher.group(0), "");
         }
 
         Quantity altQty = new Quantity();
@@ -2138,7 +2126,7 @@ public class FixVillages {
         Set<Set<Snak>> refs = new HashSet<Set<Snak>>();
         refs.add(baseReferences);
         if (null != ref) {
-            if (startsWith(lowerCase(trim(ref)), "google earth")) {
+            if (CI.startsWith(trim(ref), "google earth")) {
                 Set<Snak> newRef = new HashSet<Snak>();
                 Snak statedInGgErth = new Snak();
                 statedInGgErth.setProperty(getWikibaseProperty("P143"));
@@ -2158,7 +2146,7 @@ public class FixVillages {
                                                     Set<Snak> baseReferences)
         throws ParseException {
         Quantity areaQty = new Quantity();
-        String areaString = trim(removeStart(removeEnd(trim(lowerCase(data)), "}}"), "{{formatnum:"));
+        String areaString = trim(CI.removeStart(CS.removeEnd(trim(lowerCase(data)), "}}"), "{{formatnum:"));
         double area = 0d;
         Matcher roFormatedNumberMatcher = roFormattedNumberStringRegex.matcher(areaString);
         Matcher simpleRefMatcher = simpleRefPattern.matcher(areaString);
@@ -2169,7 +2157,7 @@ public class FixVillages {
             area = nf.parse(roFormatedNumberMatcher.group(0)).doubleValue();
         } else if (simpleRefMatcher.find()) {
             ref = simpleRefMatcher.group(1);
-            areaString = replace(areaString, simpleRefMatcher.group(0), "");
+            areaString = CS.replace(areaString, simpleRefMatcher.group(0), "");
             area = Double.parseDouble(areaString);
         } else if (numberRangeMatcher.find()) {
             area = Double.parseDouble(numberRangeMatcher.group(1));
@@ -2186,7 +2174,7 @@ public class FixVillages {
         Set<Set<Snak>> refs = new HashSet<Set<Snak>>();
         refs.add(baseReferences);
         if (null != ref) {
-            if (startsWith(lowerCase(trim(ref)), "google earth")) {
+            if (CI.startsWith(trim(ref), "google earth")) {
                 Set<Snak> newRef = new HashSet<Snak>();
                 Snak statedInGgErth = new Snak();
                 statedInGgErth.setProperty(getWikibaseProperty("P143"));
@@ -2434,6 +2422,9 @@ public class FixVillages {
             }
             if ("Mitocu Dragomirnei".equalsIgnoreCase(trim(commune)) && "Mitocași".equalsIgnoreCase(trim(settlement))) {
                 return MOLDOVA_LINK;
+            }
+            if ("Poiana Stampei".equalsIgnoreCase(trim(commune)) && "Dornișoara".equalsIgnoreCase(trim(settlement))) {
+                return TRANSYLVANIA_LINK;
             }
             if ("Șaru Dornei".equalsIgnoreCase(trim(commune)) && !"Șaru Bucovinei".equalsIgnoreCase(trim(settlement))) {
                 return MOLDOVA_LINK;
