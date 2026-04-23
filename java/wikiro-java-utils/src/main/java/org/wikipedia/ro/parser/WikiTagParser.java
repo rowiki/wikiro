@@ -1,9 +1,10 @@
 package org.wikipedia.ro.parser;
 
 import static org.apache.commons.lang3.StringUtils.lowerCase;
-import static org.apache.commons.lang3.StringUtils.removeStart;
+import static org.apache.commons.lang3.Strings.CS;
+import static org.apache.commons.lang3.Strings.CI;
 import static org.apache.commons.lang3.StringUtils.split;
-import static org.apache.commons.lang3.StringUtils.trim;
+import static org.apache.commons.lang3.StringUtils.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,13 +25,20 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
     private static final int STATE_READING_ATTRIB_NAME = 2;
     private static final int STATE_READING_ATTRIB_VALUE = 4;
     private static final int STATE_READING_END_OF_TAG = 6;
+
     @Override
     public boolean startsWithMe(String wikiText) {
-        if (null == wikiText || !wikiText.startsWith("<")) {
+        if (wikiText == null) {
             return false;
         }
-        String tagFromTagName = trim(removeStart(wikiText, "<"));
-        return validTagNames.contains(lowerCase(split(tagFromTagName, " \n/>")[0]));
+
+        int closeIndex = wikiText.indexOf('>');
+        if (closeIndex == -1) {
+            return false;
+        }
+
+        String potentialTag = wikiText.substring(0, closeIndex + 1);
+        return isValidXmlTag(potentialTag);
     }
 
     @Override
@@ -180,4 +188,85 @@ public class WikiTagParser extends WikiPartParser<WikiTag> {
         this.validTagNames = validTagNames;
     }
 
+    private boolean isValidXmlTag(String text) {
+        if (text == null || text.length() < 3 || !text.startsWith("<") || !text.endsWith(">")) {
+            return false;
+        }
+        // Remove < and >
+        String innerText = trim(text.substring(1, text.length() - 1));
+
+        // Check for self-closing tag
+        boolean isSelfClosing = innerText.endsWith("/");
+        if (isSelfClosing) {
+            innerText = trim(CS.removeEnd(innerText, "/"));
+        }
+
+        // Check for closing tag
+        boolean isClosing = innerText.startsWith("/");
+        if (isClosing) {
+            innerText = trim(CS.removeStart(innerText, "/"));
+            // Closing tags shouldn't have attributes
+            if (CS.contains(innerText, " ")) {
+                return false;
+            }
+            final String finalInnerText = innerText;
+            return validTagNames.stream().anyMatch(tag -> CI.equals(tag, finalInnerText));
+        }
+
+        // Extract tag name (first word before whitespace or end)
+        String tagName;
+        int spaceIndex = CS.indexOf(innerText, " ");
+        if (spaceIndex > 0) {
+            tagName = innerText.substring(0, spaceIndex);
+            String attributes = trim(innerText.substring(spaceIndex));
+
+            // Validate attributes section
+            if (!isValidAttributeSection(attributes)) {
+                return false;
+            }
+        } else {
+            tagName = innerText;
+        }
+
+        // Validate tag name contains only valid characters
+        if (isEmpty(tagName) || !tagName.matches("[a-zA-Z][a-zA-Z0-9]*")) {
+            return false;
+        }
+
+        // Check if tag name is in valid list
+        return validTagNames.stream().anyMatch(tag -> CI.equals(tag, tagName));
+    }
+
+    private boolean isValidAttributeSection(String attributes) {
+        boolean inQuotes = false;
+        char quoteChar = '\0';
+        boolean expectingValue = false;
+        for (int i = 0; i < attributes.length(); i++) {
+            char c = attributes.charAt(i);
+
+            if (inQuotes) {
+                // Inside quotes, anything goes
+                if (c == quoteChar) {
+                    inQuotes = false;
+                    expectingValue = false;
+                }
+            } else {
+                if (c == '"' || c == '\'') {
+                    if (!expectingValue) {
+                        return false;
+                    }
+                    inQuotes = true;
+                    quoteChar = c;
+                } else if (c == '=') {
+                    expectingValue = true;
+                } else if (c == '[' || c == ']') {
+                    // Brackets outside of attribute values are invalid
+                    return false;
+                }
+            }
+        }
+
+        // All quotes should be closed
+        return !inQuotes;
+    }
 }
