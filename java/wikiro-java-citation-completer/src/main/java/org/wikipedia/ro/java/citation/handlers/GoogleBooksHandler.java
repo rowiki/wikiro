@@ -50,7 +50,7 @@ public class GoogleBooksHandler implements Handler
             booksService = new Books.Builder(GoogleNetHttpTransport.newTrustedTransport(), 
                 GsonFactory.getDefaultInstance(), null)
                 .setApplicationName("wikipedia-citations-completer")
-                .setGoogleClientRequestInitializer(new BooksRequestInitializer())
+                .setGoogleClientRequestInitializer(new BooksRequestInitializer(System.getenv("GOOGLE_BOOKS_API_KEY")))
                 .build();
         }
         return booksService;
