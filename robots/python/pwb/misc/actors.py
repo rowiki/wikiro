@@ -10,39 +10,97 @@ import wikiro.robots.python.pwb.wikidata as wikidata
 from pywikibot import ItemPage
 from pywikibot.bot import SingleSiteBot
 
-#country = "Q183"  # Germany
-#country_name = "Germania"
-#country_people = "german"
-#country = "Q142"  # France
-#country_name = "Franța"
-#country_people = "francez"
-#country = "Q36"  # Poland
-#country_name = "Polonia"
-#country_people = "polonez"
-#country = "Q218"  # Romania
-#country_name = "România"
-#country_people = "român"
-#country = "Q29"  # Spania
-#country_name = "Spania"
-#country_people = "spaniol"
-#country = "Q38"  # Italia
-#country_name = "Italia"
-#country_people = "italian"
-#country = "Q28"  # Ungaria
-#country_name = "Ungaria"
-#country_people = "maghiar"
-#country = "Q34"  # Suedia
-#country_name = "Suedia"
-#country_people = "suedez"
-#country = "Q33"  # Finlanda
-#country_name = "Finlanda"
-#country_people = "finlandez"
-#country = "Q222"  # Albania
-#country_name = "Albania"
-#country_people = "albanez"
-country = "Q55" # Olanda
-country_name = "Țările de Jos"
-country_people = "neerlandez"
+global country
+global country_name
+global country_people
+
+countries = {
+        "Portugalia": {
+            "country": "Q45",
+            "country_name": "Portugalia",
+            "country_people": "portughez"
+            },
+        "Malta": {
+            "country": "Q233",
+            "country_name": "Malta",
+            "country_people": "maltez"
+            },
+        "China": {
+            "country": "Q148",
+            "country_name": "China",
+            "country_people": "chinez"
+            },
+        "Bulgaria": {
+            "country": "Q219",
+            "country_name": "Bulgaria",
+            "country_people": "bulgar"
+            },
+        "Czech Republic": {
+            "country": "Q213",
+            "country_name": "Cehia",
+            "country_people": "ceh"
+            },
+        "Denmark": {
+            "country": "Q35",
+            "country_name": "Danemarca",
+            "country_people": "danez"
+            },
+        #"Germany": {
+        #    "country": "Q183",  # Germany
+        #    "country_name": "Germania",
+        #    "country_people": "german"
+        #    },
+        "France": {
+            "country": "Q142",  # France
+            "country_name": "Franța",
+            "country_people": "francez"
+},
+        "Poland": {
+            "country": "Q36",  # Poland
+            "country_name": "Polonia",
+            "country_people": "polonez"
+},
+        "Romania": {
+            "country": "Q218",  # Romania
+            "country_name": "România",
+            "country_people": "român"
+},
+        "Spain": {
+            "country": "Q29",  # Spania
+            "country_name": "Spania",
+            "country_people": "spaniol"
+},
+        "Italy": {
+            "country": "Q38",  # Italia
+            "country_name": "Italia",
+            "country_people": "italian"
+},
+        "Hungary": {
+            "country": "Q28",  # Ungaria
+            "country_name": "Ungaria",
+            "country_people": "maghiar"
+},
+        "Sweden": {
+            "country": "Q34",  # Suedia
+            "country_name": "Suedia",
+            "country_people": "suedez"
+},
+        "Finland": {
+            "country": "Q33",  # Finlanda
+            "country_name": "Finlanda",
+            "country_people": "finlandez"
+},
+        "Albania": {
+            "country": "Q222",  # Albania
+            "country_name": "Albania",
+            "country_people": "albanez"
+},
+        "Netherland": {
+            "country": "Q55", # Olanda
+            "country_name": "Țările de Jos",
+            "country_people": "neerlandez"
+        }
+}
 
 
 def get_gender_data(claims, masc=None, fem=None):
@@ -145,15 +203,15 @@ Lista de mai jos conține filmele prezente în Wikidata și {filmography_type} {
         defaultsort = get_defaultsort(page.claims, name)
         qid = page.title()
         if article_type == "director":
-            filmography_query = ("SELECT DISTINCT ?item (YEAR(?date) AS ?year) { ?item wdt:P57 wd:"
+            filmography_query = ("SELECT DISTINCT ?item (YEAR(MIN(?date)) AS ?year) WHERE { ?item wdt:P57 wd:"
              + qid
-             + ". ?item wdt:P577 ?date } ORDER BY ?date ?item")
+             + ". ?item wdt:P577 ?date } GROUP BY ?item ORDER BY ?year")
             filmography_type = "regizate de"
             category = "Regizori " + country_people + "i"
         elif article_type == "actor":
-            filmography_query = ("SELECT DISTINCT ?item (YEAR(?date) AS ?year) { ?item wdt:P161 wd:"
+            filmography_query = ("SELECT DISTINCT ?item (YEAR(MIN(?date)) AS ?year) WHERE { ?item wdt:P161 wd:"
              + qid
-             + ". ?item wdt:P577 ?date } ORDER BY ?date ?item")
+             + ". ?item wdt:P577 ?date } GROUP BY ?item ORDER BY ?year")
             filmography_type = "în care a jucat"
             category = "Actori " + country_people + "i"
             if get_gender_data(page.claims) == "ă":
@@ -263,6 +321,7 @@ def actor_list(qid: str):
 def generic_generator(query):
     pattern = re.compile("Q\d+")
     site = pywikibot.Site().data_repository()
+    print(query)
     for elem in wikidata.sparql_generator(query, pywikibot.Site()):
         qid = pattern.search(elem['item']).group(0)
         yield pywikibot.ItemPage(site, qid)
@@ -283,6 +342,11 @@ def combined_generator(country: str):
     yield from director_generator(country)
 
 if __name__ == '__main__':
-    bot = ActorArticles(2_000_000)
-    bot.generator = combined_generator(country)
-    bot.run()
+    global country, country_name, country_people
+    for name in countries:
+        country = countries[name]["country"]
+        country_name = countries[name]["country_name"]
+        country_people = countries[name]["country_people"]
+        bot = ActorArticles(2_000_000)
+        bot.generator = combined_generator(country)
+        bot.run()
