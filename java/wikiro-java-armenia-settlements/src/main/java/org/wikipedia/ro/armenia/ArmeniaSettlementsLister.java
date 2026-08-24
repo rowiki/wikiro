@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,10 +66,18 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
     private static final Pattern COMMUNE_HAMAINK_PATTERN =
             Pattern.compile("(?i)\\(\\s*hamaink\\s*\\)|\\bhamaink\\b\\.?");
 
+    // Armenian Wikidata labels for settlements/municipalities sometimes carry a trailing
+    // parenthesized disambiguator in the Armenian script itself, e.g. "Ֆարաքար
+    // (համայնք)". That bracketed part is not part of the actual name, so it is
+    // stripped before the label is transliterated/used.
+    private static final Pattern ARMENIAN_BRACKET_PATTERN = Pattern.compile("\\s*\\([^()]*\\)\\s*$");
+
     private static final String ROWIKI_SITE_ID = "rowiki";
     private static final String EDIT_SUMMARY = "Articol nou despre o localitate din Armenia";
     private static final String NEW_COMMUNE_SUMMARY = "Articol nou despre o comună din Armenia";
     private static final String RENAME_SUMMARY = "Redenumit conform [[WP:TLOC]] și [[Wikipedia:Transliterare]]";
+    private static final String REDIRECT_SUMMARY = "Redirect către o localitate din Armenia";
+    private static final String DISAMBIGUATION_SUMMARY = "Pagină de dezambiguizare pentru localități omonime din Armenia";
 
     /**
      * SPARQL query to retrieve towns and villages of Armenia from Wikidata,
@@ -179,6 +189,12 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
         // if they differ -- see the disambiguation/rename pass below.
         List<PendingSettlement> pendingSettlements = new ArrayList<>();
 
+        // Villages' and towns' plain names (without disambiguation), collected for the
+        // final pass -- see {@link #generateNameDisambiguationPages} -- that creates a
+        // bare-name redirect/disambiguation page, or a "<Name> (dezambiguizare)" page for
+        // names shared with a town, wherever such a page isn't already taken.
+        List<NamedSettlementEntry> namedSettlementEntries = new ArrayList<>();
+
         for (Map<String, Object> row : results) {
             Object itemObj = row.get("item");
             if (!(itemObj instanceof Item item)) {
@@ -191,9 +207,10 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
             String roArticleName = (String) row.get("roArticleName");
             String settlementTypeQid = asQid(row.get("settlementType"));
 
-            String translit = transliterateArmenian(hyLabel);
+            String cleanedHyLabel = stripArmenianBracket(hyLabel);
+            String translit = transliterateArmenian(cleanedHyLabel);
             String displayName = roLabel != null ? roLabel
-                    : (translit != null ? translit : hyLabel);
+                    : (translit != null ? translit : cleanedHyLabel);
 
             if (displayName == null) {
                 // No Armenian or Romanian label at all -- nothing to name the article after.
@@ -235,6 +252,23 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
             }
         }
 
+        // Towns normally keep their plain name as their article title. But if two or more
+        // towns share the same name, that name can no longer unambiguously identify a
+        // single article -- such towns are disambiguated by province below, exactly like
+        // villages (see the town branch of the articleTitle computation).
+        Map<String, Long> townCountByName = new HashMap<>();
+        for (PendingSettlement pending : pendingSettlements) {
+            if (TOWN_QID.equals(pending.settlementTypeQid())) {
+                townCountByName.merge(pending.displayName().trim(), 1L, Long::sum);
+            }
+        }
+        Set<String> namesWithMultipleTowns = new HashSet<>();
+        for (Map.Entry<String, Long> entry : townCountByName.entrySet()) {
+            if (entry.getValue() > 1) {
+                namesWithMultipleTowns.add(entry.getKey());
+            }
+        }
+
         for (PendingSettlement pending : pendingSettlements) {
             String qid = pending.qid();
             String displayName = pending.displayName();
@@ -250,11 +284,14 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
                 String key = nameProvinceKey(pending);
                 boolean duplicate = key != null && nameProvinceCounts.getOrDefault(key, 0) > 1;
                 if (duplicate && pending.commune() != null) {
-                    String communeName = transliterateArmenian(pending.commune().hyLabel());
+                    String communeName = transliterateArmenian(stripArmenianBracket(pending.commune().hyLabel()));
                     articleTitle = displayName + " (" + communeName + "), " + locationInfo.provinceName();
                 } else {
                     articleTitle = displayName + ", " + locationInfo.provinceName();
                 }
+            } else if (TOWN_QID.equals(settlementTypeQid) && locationInfo.provinceName() != null
+                    && namesWithMultipleTowns.contains(displayName.trim())) {
+                articleTitle = displayName + ", " + locationInfo.provinceName();
             } else {
                 articleTitle = displayName;
             }
@@ -266,16 +303,24 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
                     log.debug(qid + "\texists, title correct: " + articleTitle);
                 } else {
                     finalArticleTitle = resolveTitleCollision(qid, articleTitle, existingTitle);
-                    log.debug(qid + "\trename needed: \"" + existingTitle + "\" -> \"" + finalArticleTitle + "\"");
-                    renameArticleAndRelink(qid, existingTitle, finalArticleTitle);
-                    renamedCount++;
+                    if (finalArticleTitle.equals(existingTitle)) {
+                        log.debug(qid + "\trename skipped: recalculated title \"" + articleTitle
+                                + "\" collides with an unrelated page, and the disambiguated fallback is already"
+                                + " the existing title \"" + existingTitle + "\"");
+                    } else {
+                        log.debug(qid + "\trename needed: \"" + existingTitle + "\" -> \"" + finalArticleTitle + "\"");
+                        renameArticleAndRelink(qid, existingTitle, finalArticleTitle);
+                        renamedCount++;
+                    }
                 }
                 addCommuneMember(communeMembers, pending.commune(), qid, displayName, settlementTypeQid, finalArticleTitle);
+                collectNamedSettlementEntry(namedSettlementEntries, pending, finalArticleTitle);
                 continue;
             }
 
             finalArticleTitle = resolveTitleCollision(qid, articleTitle, null);
             addCommuneMember(communeMembers, pending.commune(), qid, displayName, settlementTypeQid, finalArticleTitle);
+            collectNamedSettlementEntry(namedSettlementEntries, pending, finalArticleTitle);
 
             String articleContent = buildNewVillageArticle(displayName, settlementTypeQid, locationInfo.locationText(),
                     locationInfo.provinceName());
@@ -297,8 +342,10 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
         log.info("  Pages to create:                 " + toCreateCount);
 
         Map<String, AdminParent> provincesEncountered = new LinkedHashMap<>();
-        generateCommuneArticles(communeMembers, provincesEncountered);
+        Map<String, String> communeArticleTitles = new HashMap<>();
+        generateCommuneArticles(communeMembers, provincesEncountered, communeArticleTitles);
         generateProvinceArticles(provincesEncountered);
+        generateNameDisambiguationPages(namedSettlementEntries, communeArticleTitles);
     }
 
     /**
@@ -313,7 +360,8 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
      * for the same reliability reasons as {@link #findAdminParent}.
      */
     private void generateCommuneArticles(Map<String, List<SettlementRef>> communeMembers,
-            Map<String, AdminParent> provincesEncountered) throws IOException, WikibaseException {
+            Map<String, AdminParent> provincesEncountered, Map<String, String> communeArticleTitles)
+            throws IOException, WikibaseException {
         log.debug("");
         log.debug("Resolving commune articles...");
 
@@ -335,9 +383,10 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
 
             String communeHyLabel = communeEntity.getLabels().get("hy");
             String communeRoLabel = communeEntity.getLabels().get("ro");
-            String communeTranslit = transliterateArmenian(communeHyLabel);
+            String cleanedCommuneHyLabel = stripArmenianBracket(communeHyLabel);
+            String communeTranslit = transliterateArmenian(cleanedCommuneHyLabel);
             String communeDisplayName = stripHamaink(communeRoLabel != null ? communeRoLabel
-                    : (communeTranslit != null ? communeTranslit : communeHyLabel));
+                    : (communeTranslit != null ? communeTranslit : cleanedCommuneHyLabel));
 
             if (communeDisplayName == null) {
                 log.debug(communeQid + "\tskipped commune article generation: no hy/ro label found");
@@ -371,11 +420,19 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
                 String existingTitle = communeRoSitelink.getPageName();
                 if (existingTitle.equals(articleTitle)) {
                     log.debug(communeQid + "\t" + communeHyLabel + "\tcommune exists, title correct: " + articleTitle);
+                    communeArticleTitles.put(communeQid, articleTitle);
                 } else {
                     String finalArticleTitle = resolveTitleCollision(communeQid, articleTitle, existingTitle);
-                    log.debug(communeQid + "\trename needed: \"" + existingTitle + "\" -> \"" + finalArticleTitle + "\"");
-                    renameArticleAndRelink(communeQid, existingTitle, finalArticleTitle);
-                    renamedCount++;
+                    if (finalArticleTitle.equals(existingTitle)) {
+                        log.debug(communeQid + "\trename skipped: recalculated title \"" + articleTitle
+                                + "\" collides with an unrelated page, and the disambiguated fallback is already"
+                                + " the existing title \"" + existingTitle + "\"");
+                    } else {
+                        log.debug(communeQid + "\trename needed: \"" + existingTitle + "\" -> \"" + finalArticleTitle + "\"");
+                        renameArticleAndRelink(communeQid, existingTitle, finalArticleTitle);
+                        renamedCount++;
+                    }
+                    communeArticleTitles.put(communeQid, finalArticleTitle);
                 }
                 continue;
             }
@@ -393,6 +450,7 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
                 String redirectTarget = onlyMember.articleTitle();
                 String redirectContent = "#REDIRECT [[" + redirectTarget + "]]";
                 String finalArticleTitle = resolveTitleCollision(communeQid, articleTitle, null);
+                communeArticleTitles.put(communeQid, finalArticleTitle);
 
                 log.debug("---- commune redirect for " + communeQid + " (\"" + finalArticleTitle
                         + "\" -> \"" + redirectTarget + "\") ----");
@@ -405,6 +463,7 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
             String villageEnumeration = buildVillageEnumeration(members, communeDisplayName, capitalQid);
             String articleContent = buildNewCommuneArticle(communeDisplayName, province.qid(), provinceName, villageEnumeration);
             String finalArticleTitle = resolveTitleCollision(communeQid, articleTitle, null);
+            communeArticleTitles.put(communeQid, finalArticleTitle);
 
             log.debug("---- commune article content for " + communeQid + " (" + finalArticleTitle + ") ----");
             log.debug(articleContent);
@@ -468,9 +527,15 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
                     log.debug(provinceQid + "\t" + provinceHyLabel + "\tprovince exists, title correct: " + articleTitle);
                 } else {
                     String finalArticleTitle = resolveTitleCollision(provinceQid, articleTitle, existingTitle);
-                    log.debug(provinceQid + "\trename needed: \"" + existingTitle + "\" -> \"" + finalArticleTitle + "\"");
-                    renameArticleAndRelink(provinceQid, existingTitle, finalArticleTitle);
-                    renamedCount++;
+                    if (finalArticleTitle.equals(existingTitle)) {
+                        log.debug(provinceQid + "\trename skipped: recalculated title \"" + articleTitle
+                                + "\" collides with an unrelated page, and the disambiguated fallback is already"
+                                + " the existing title \"" + existingTitle + "\"");
+                    } else {
+                        log.debug(provinceQid + "\trename needed: \"" + existingTitle + "\" -> \"" + finalArticleTitle + "\"");
+                        renameArticleAndRelink(provinceQid, existingTitle, finalArticleTitle);
+                        renamedCount++;
+                    }
                 }
                 continue;
             }
@@ -493,6 +558,175 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
         log.info("  Renamed (title mismatch):        " + renamedCount);
         log.info("  Skipped (missing label):         " + skippedCount);
         log.info("  Pages to create:                 " + toCreateCount);
+    }
+
+    /**
+     * Generates (dry-run only) whatever page, if any, belongs at each distinct plain
+     * settlement name collected into {@code namedSettlementEntries}, skipping any name
+     * whose page (plain name, or "&lt;Name&gt; (dezambiguizare)") is already taken:
+     * <ul>
+     * <li>a name shared by villages only (no town) gets a page at the plain name itself
+     * -- a redirect to the village's article if only one village has that name, or a
+     * disambiguation page listing all of them if several do (per
+     * {@link #buildDisambiguationArticle});</li>
+     * <li>a name held by exactly one town and no village is left alone -- the town's own
+     * article already occupies the plain name unambiguously;</li>
+     * <li>a name shared by two or more towns, and/or by a town and one or more villages,
+     * additionally gets a disambiguation page at "&lt;Name&gt; (dezambiguizare)" listing
+     * every settlement sharing the name, since the plain name is (or may be) already the
+     * town's own article title.</li>
+     * </ul>
+     *
+     * @param communeArticleTitles each commune's resolved article title (see
+     *      {@link #generateCommuneArticles}), used to link to the commune in each
+     *      village disambiguation entry.
+     */
+    private void generateNameDisambiguationPages(List<NamedSettlementEntry> namedSettlementEntries,
+            Map<String, String> communeArticleTitles) throws IOException {
+        log.debug("");
+        log.debug("Resolving bare-name redirect/disambiguation pages...");
+
+        Map<String, List<NamedSettlementEntry>> entriesByName = new LinkedHashMap<>();
+        for (NamedSettlementEntry entry : namedSettlementEntries) {
+            entriesByName.computeIfAbsent(entry.displayName().trim(), k -> new ArrayList<>()).add(entry);
+        }
+
+        int skippedCount = 0;
+        int redirectCount = 0;
+        int disambiguationCount = 0;
+
+        for (Map.Entry<String, List<NamedSettlementEntry>> group : entriesByName.entrySet()) {
+            String name = group.getKey();
+            List<NamedSettlementEntry> entries = group.getValue();
+            long townCount = entries.stream().filter(e -> TOWN_QID.equals(e.settlementTypeQid())).count();
+
+            if (townCount == 0) {
+                if (pageExists(name)) {
+                    log.debug(name + "\tskipped bare-name page: already exists");
+                    skippedCount++;
+                    continue;
+                }
+                if (entries.size() == 1) {
+                    String redirectTarget = entries.get(0).articleTitle();
+                    String redirectContent = "#REDIRECT [[" + redirectTarget + "]]";
+                    log.debug("---- bare-name redirect \"" + name + "\" -> \"" + redirectTarget + "\" ----");
+                    createSupplementaryPage(name, redirectContent, REDIRECT_SUMMARY);
+                    redirectCount++;
+                } else {
+                    String articleContent = buildDisambiguationArticle(name, entries, communeArticleTitles);
+                    log.debug("---- bare-name disambiguation page \"" + name + "\" ----");
+                    log.debug(articleContent);
+                    log.debug("");
+                    createSupplementaryPage(name, articleContent, DISAMBIGUATION_SUMMARY);
+                    disambiguationCount++;
+                }
+                continue;
+            }
+
+            if (townCount == 1 && entries.size() == 1) {
+                // The lone town at this name already unambiguously occupies the plain
+                // name with its own article -- nothing else to do.
+                continue;
+            }
+
+            // Two or more towns share this name, and/or a town shares it with one or more
+            // villages -- the plain name is (or may be) already a real article of its own
+            // (the town's, possibly disambiguated by province if there are several), so
+            // the combined listing goes at "<Name> (dezambiguizare)" instead.
+            String disambiguationTitle = name + " (dezambiguizare)";
+            if (pageExists(disambiguationTitle)) {
+                log.debug(disambiguationTitle + "\tskipped disambiguation page: already exists");
+                skippedCount++;
+                continue;
+            }
+            String articleContent = buildDisambiguationArticle(name, entries, communeArticleTitles);
+            log.debug("---- disambiguation page \"" + disambiguationTitle + "\" ----");
+            log.debug(articleContent);
+            log.debug("");
+            createSupplementaryPage(disambiguationTitle, articleContent, DISAMBIGUATION_SUMMARY);
+            disambiguationCount++;
+        }
+
+        log.debug("");
+        log.info("Bare-name page summary:");
+        log.info("  Distinct village/town names found: " + entriesByName.size());
+        log.info("  Already exist (skipped):           " + skippedCount);
+        log.info("  Redirects to create:               " + redirectCount);
+        log.info("  Disambiguation pages to create:    " + disambiguationCount);
+    }
+
+    /**
+     * Checks whether {@code title} already exists as a ro.wikipedia page.
+     */
+    private boolean pageExists(String title) throws IOException {
+        boolean[] exists = wiki.exists(List.of(title));
+        return exists.length > 0 && exists[0];
+    }
+
+    /**
+     * Builds the wikitext for a disambiguation page listing every settlement named
+     * {@code name}, sorted by province name first and by municipality (commune) name
+     * second (both case-insensitive; towns, which have no commune, sort before any named
+     * commune within the same province). One bullet per {@code entries}. A village reads
+     * "* [[&lt;ArticleTitle&gt;|&lt;Name&gt;]], un sat din [[&lt;CommuneArticleTitle&gt;
+     * |comuna &lt;CommuneName&gt;]], [[provincia &lt;ProvinceName&gt;]]"; a town reads
+     * "* [[&lt;ArticleTitle&gt;|&lt;Name&gt;]], un oraș din [[provincia
+     * &lt;ProvinceName&gt;]]" (province clause omitted if unresolved, since towns aren't
+     * required to have one). Every bullet ends in a semicolon, except the last, which
+     * ends in a period. Terminated with the "{{dezambiguizare}}" template.
+     *
+     * @param communeArticleTitles each commune's resolved article title, keyed by QID;
+     *      falls back to "Comuna &lt;CommuneName&gt;" (unlinked resolution not being
+     *      available) if a given village's commune isn't present in the map.
+     */
+    private String buildDisambiguationArticle(String name, List<NamedSettlementEntry> entries,
+            Map<String, String> communeArticleTitles) {
+        List<NamedSettlementEntry> sortedEntries = new ArrayList<>(entries);
+        sortedEntries.sort(Comparator
+                .comparing((NamedSettlementEntry e) -> e.provinceName() != null ? e.provinceName() : "",
+                        String.CASE_INSENSITIVE_ORDER)
+                .thenComparing(e -> e.communeDisplayName() != null ? e.communeDisplayName() : "",
+                        String.CASE_INSENSITIVE_ORDER));
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("'''").append(name).append("''' este denumirea mai multor localit\u0103\u021bi din [[Armenia]]:\n");
+        for (int i = 0; i < sortedEntries.size(); i++) {
+            NamedSettlementEntry entry = sortedEntries.get(i);
+            sb.append("* ").append(LinkUtils.createLink(entry.articleTitle(), name));
+            if (VILLAGE_QID.equals(entry.settlementTypeQid())) {
+                String communeLabel = "comuna " + entry.communeDisplayName();
+                String communeArticleTitle = communeArticleTitles.getOrDefault(entry.communeQid(),
+                        "Comuna " + entry.communeDisplayName());
+                sb.append(", un sat din ").append(LinkUtils.createLink(communeArticleTitle, communeLabel));
+                if (entry.provinceName() != null) {
+                    sb.append(", [[provincia ").append(entry.provinceName()).append("]]");
+                }
+            } else {
+                sb.append(", un ora\u0219");
+                if (entry.provinceName() != null) {
+                    sb.append(" din [[provincia ").append(entry.provinceName()).append("]]");
+                }
+            }
+            sb.append(i == sortedEntries.size() - 1 ? ".\n" : ";\n");
+        }
+        sb.append("\n{{dezambiguizare}}\n");
+        return sb.toString();
+    }
+
+    /**
+     * Logs what would be done to create {@code articleTitle} on ro.wikipedia, without
+     * actually performing it. Unlike {@link #createArticleAndLink}, this is for pages
+     * (bare-name redirects/disambiguation pages) that aren't themselves a Wikidata
+     * item's own article, so no Wikidata sitelink is set.
+     */
+    private void createSupplementaryPage(String articleTitle, String articleContent, String summary) {
+        log.debug("would create page \"" + articleTitle + "\" (summary: \"" + summary + "\").");
+
+        // try {
+        //     wikiEditWithRetry(articleTitle, articleContent, summary);
+        // } catch (TimeoutException e) {
+        //     log.debug("failed to create page \"" + articleTitle + "\": " + e.getMessage());
+        // }
     }
 
     /**
@@ -731,6 +965,20 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
     }
 
     /**
+     * A village's or town's plain display name (without any disambiguation applied to
+     * {@code articleTitle}), collected so that -- once every settlement's final title is
+     * known -- {@link #generateNameDisambiguationPages} can decide what, if anything,
+     * belongs at that plain name: a redirect/disambiguation page at the plain name itself
+     * (village-only name collisions), or a "&lt;Name&gt; (dezambiguizare)" page (when a
+     * town shares the name with another town and/or with one or more villages).
+     * {@code communeQid}/{@code communeDisplayName} are null for towns, which aren't
+     * disambiguated by commune.
+     */
+    private record NamedSettlementEntry(String displayName, String articleTitle, String settlementTypeQid,
+            String communeQid, String communeDisplayName, String provinceName) {
+    }
+
+    /**
      * Returns a case-insensitive key combining a pending village's display name and
      * province name, used to detect villages that would otherwise end up with the same
      * title (same name, same province, different commune). Returns null for anything
@@ -755,6 +1003,30 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
         }
         communeMembers.computeIfAbsent(commune.qid(), k -> new ArrayList<>())
                 .add(new SettlementRef(qid, displayName, settlementTypeQid, articleTitle));
+    }
+
+    /**
+     * Registers {@code pending} in {@code namedSettlementEntries}, for the later
+     * bare-name/disambiguation-page pass (see {@link #generateNameDisambiguationPages}).
+     * A village is only registered if its commune and province were both successfully
+     * resolved (both are needed to build its disambiguation-page bullet); a town is
+     * always registered (its bullet only needs its -- possibly unresolved -- province).
+     */
+    private void collectNamedSettlementEntry(List<NamedSettlementEntry> namedSettlementEntries,
+            PendingSettlement pending, String finalArticleTitle) {
+        String settlementTypeQid = pending.settlementTypeQid();
+        String provinceName = pending.locationInfo().provinceName();
+        if (VILLAGE_QID.equals(settlementTypeQid)) {
+            if (pending.commune() == null || provinceName == null) {
+                return;
+            }
+            String communeDisplayName = stripHamaink(transliterateArmenian(stripArmenianBracket(pending.commune().hyLabel())));
+            namedSettlementEntries.add(new NamedSettlementEntry(pending.displayName(), finalArticleTitle,
+                    settlementTypeQid, pending.commune().qid(), communeDisplayName, provinceName));
+        } else if (TOWN_QID.equals(settlementTypeQid)) {
+            namedSettlementEntries.add(new NamedSettlementEntry(pending.displayName(), finalArticleTitle,
+                    settlementTypeQid, null, null, provinceName));
+        }
     }
 
     /**
@@ -863,7 +1135,7 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
      * settlement located in that commune.
      */
     private String formatCommuneReference(AdminParent commune, String settlementDisplayName) {
-        String communeName = stripHamaink(transliterateArmenian(commune.hyLabel()));
+        String communeName = stripHamaink(transliterateArmenian(stripArmenianBracket(commune.hyLabel())));
         String label = communeName != null && settlementDisplayName != null
                 && settlementDisplayName.trim().equalsIgnoreCase(communeName.trim())
                 ? "comuna cu același nume"
@@ -1226,5 +1498,16 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
             return null;
         }
         return COMMUNE_HAMAINK_PATTERN.matcher(name).replaceAll("").replaceAll("\\s+", " ").trim();
+    }
+
+    /**
+     * Removes a trailing parenthesized disambiguator from a raw Armenian label (before
+     * transliteration), e.g. "\u0556\u0561\u0580\u0561\u0584\u0561\u0580 (\u0570\u0561\u0574\u0561\u0575\u0576\u0584)" becomes "\u0556\u0561\u0580\u0561\u0584\u0561\u0580".
+     */
+    private static String stripArmenianBracket(String hyLabel) {
+        if (hyLabel == null) {
+            return null;
+        }
+        return ARMENIAN_BRACKET_PATTERN.matcher(hyLabel).replaceAll("").trim();
     }
 }
