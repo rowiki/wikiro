@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Pattern;
 
 import javax.security.auth.login.LoginException;
@@ -714,19 +715,18 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
     }
 
     /**
-     * Logs what would be done to create {@code articleTitle} on ro.wikipedia, without
-     * actually performing it. Unlike {@link #createArticleAndLink}, this is for pages
-     * (bare-name redirects/disambiguation pages) that aren't themselves a Wikidata
-     * item's own article, so no Wikidata sitelink is set.
+     * Creates {@code articleTitle} on ro.wikipedia. Unlike {@link #createArticleAndLink},
+     * this is for pages (bare-name redirects/disambiguation pages) that aren't themselves
+     * a Wikidata item's own article, so no Wikidata sitelink is set.
      */
     private void createSupplementaryPage(String articleTitle, String articleContent, String summary) {
-        log.debug("would create page \"" + articleTitle + "\" (summary: \"" + summary + "\").");
+        log.debug("creating page \"" + articleTitle + "\" (summary: \"" + summary + "\").");
 
-        // try {
-        //     wikiEditWithRetry(articleTitle, articleContent, summary);
-        // } catch (TimeoutException e) {
-        //     log.debug("failed to create page \"" + articleTitle + "\": " + e.getMessage());
-        // }
+        try {
+            wikiEditWithRetry(articleTitle, articleContent, summary);
+        } catch (TimeoutException e) {
+            log.debug("failed to create page \"" + articleTitle + "\": " + e.getMessage());
+        }
     }
 
     /**
@@ -846,46 +846,43 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
     }
 
     /**
-     * Logs what would be done to create the new article on ro.wikipedia and link it
-     * back to the Wikidata item {@code qid}, without actually performing either action.
-     * The actual creation/linking code is left commented out below so it can be
-     * re-enabled once the generated content has been reviewed.
+     * Creates the new article on ro.wikipedia and links it back to the Wikidata item
+     * {@code qid} via its "rowiki" sitelink.
      */
-    private void createArticleAndLink(String qid, String articleTitle, String articleContent, String summary) {
-        log.debug(qid + "\twould create article \"" + articleTitle + "\" (summary: \""
-                + summary + "\") and link it to the Wikidata item via \"" + ROWIKI_SITE_ID + "\" sitelink.");
+    private void createArticleAndLink(String qid, String articleTitle, String articleContent, String summary)
+            throws IOException, WikibaseException {
+        log.debug(qid + "\tcreating article \"" + articleTitle + "\" (summary: \""
+                + summary + "\") and linking it to the Wikidata item via \"" + ROWIKI_SITE_ID + "\" sitelink.");
 
-        // try {
-        //     wikiEditWithRetry(articleTitle, articleContent, summary);
-        // } catch (TimeoutException e) {
-        //     log.debug(qid + "\tfailed to create article \"" + articleTitle + "\": " + e.getMessage());
-        //     return;
-        // }
-        //
-        // dwiki.setSitelink(qid, ROWIKI_SITE_ID, articleTitle);
-        // log.debug(qid + "\tlinked article \"" + articleTitle + "\" to the Wikidata item.");
+        try {
+            wikiEditWithRetry(articleTitle, articleContent, summary);
+        } catch (TimeoutException e) {
+            log.debug(qid + "\tfailed to create article \"" + articleTitle + "\": " + e.getMessage());
+            return;
+        }
+
+        dwiki.setSitelink(qid, ROWIKI_SITE_ID, articleTitle);
+        log.debug(qid + "\tlinked article \"" + articleTitle + "\" to the Wikidata item.");
     }
 
     /**
-     * Logs what would be done to rename an existing article on ro.wikipedia (because
-     * its current title doesn't match the title we compute) and update its Wikidata
-     * sitelink to the new title, without actually performing either action. The actual
-     * move/relink code is left commented out below, per the same dry-run policy as
-     * {@link #createArticleAndLink}.
+     * Renames an existing article on ro.wikipedia (because its current title doesn't
+     * match the title we compute) and updates its Wikidata sitelink to the new title.
      */
-    private void renameArticleAndRelink(String qid, String oldTitle, String newTitle) {
-        log.debug(qid + "\twould rename article \"" + oldTitle + "\" to \"" + newTitle + "\" (summary: \""
-                + RENAME_SUMMARY + "\") and update its \"" + ROWIKI_SITE_ID + "\" sitelink accordingly.");
+    private void renameArticleAndRelink(String qid, String oldTitle, String newTitle)
+            throws IOException, WikibaseException {
+        log.debug(qid + "\trenaming article \"" + oldTitle + "\" to \"" + newTitle + "\" (summary: \""
+                + RENAME_SUMMARY + "\") and updating its \"" + ROWIKI_SITE_ID + "\" sitelink accordingly.");
 
-        // try {
-        //     wiki.move(oldTitle, newTitle, RENAME_SUMMARY);
-        // } catch (IOException | LoginException e) {
-        //     log.debug(qid + "\tfailed to rename article \"" + oldTitle + "\" to \"" + newTitle + "\": " + e.getMessage());
-        //     return;
-        // }
-        //
-        // dwiki.setSitelink(qid, ROWIKI_SITE_ID, newTitle);
-        // log.debug(qid + "\trelinked article \"" + newTitle + "\" to the Wikidata item.");
+        try {
+            wiki.move(oldTitle, newTitle, RENAME_SUMMARY);
+        } catch (IOException | LoginException e) {
+            log.debug(qid + "\tfailed to rename article \"" + oldTitle + "\" to \"" + newTitle + "\": " + e.getMessage());
+            return;
+        }
+
+        dwiki.setSitelink(qid, ROWIKI_SITE_ID, newTitle);
+        log.debug(qid + "\trelinked article \"" + newTitle + "\" to the Wikidata item.");
     }
 
     /**
