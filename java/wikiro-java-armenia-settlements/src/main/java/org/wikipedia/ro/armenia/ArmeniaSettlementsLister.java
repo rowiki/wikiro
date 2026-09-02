@@ -1334,14 +1334,16 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
      * $1 - the Romanian name of the commune
      * $2 - the province clause, {{Ill-wd|<provinceQid>|3=<provinceName>}}
      * $3 - the village enumeration, as built by {@link #buildVillageEnumeration}
-     * $4 - the category ("Comune în Armenia")
+     * $4 - the category ("Comune din provincia &lt;ProvinceName&gt;"), falling back to
+     * "Comune din Armenia" if {@code provinceName} could not be resolved
      */
     private String buildNewCommuneArticle(String communeName, String provinceQid, String provinceName, String villageEnumeration) {
+        String category = provinceName != null ? "Comune din provincia " + provinceName : "Comune din Armenia";
         return newCommuneTemplate
                 .replace("$1", communeName)
                 .replace("$2", "{{Ill-wd|" + provinceQid + "|3=provincia " + provinceName + "}}")
                 .replace("$3", villageEnumeration)
-                .replace("$4", "Comune din Armenia");
+                .replace("$4", category);
     }
 
     /**
