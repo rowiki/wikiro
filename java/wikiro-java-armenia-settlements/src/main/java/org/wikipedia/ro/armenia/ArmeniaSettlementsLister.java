@@ -73,6 +73,10 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
     // stripped before the label is transliterated/used.
     private static final Pattern ARMENIAN_BRACKET_PATTERN = Pattern.compile("\\s*\\([^()]*\\)\\s*$");
 
+    // Single switch controlling whether pages are actually created/renamed/linked;
+    // keep false for dry-run (log-only) runs.
+    private static final boolean EDITING_ENABLED = false;
+
     private static final String ROWIKI_SITE_ID = "rowiki";
     private static final String EDIT_SUMMARY = "Articol nou despre o localitate din Armenia";
     private static final String NEW_COMMUNE_SUMMARY = "Articol nou despre o comună din Armenia";
@@ -722,6 +726,11 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
     private void createSupplementaryPage(String articleTitle, String articleContent, String summary) {
         log.debug("creating page \"" + articleTitle + "\" (summary: \"" + summary + "\").");
 
+        if (!EDITING_ENABLED) {
+            log.debug("editing disabled, skipping page creation \"" + articleTitle + "\".");
+            return;
+        }
+
         try {
             wikiEditWithRetry(articleTitle, articleContent, summary);
         } catch (TimeoutException e) {
@@ -854,6 +863,11 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
         log.debug(qid + "\tcreating article \"" + articleTitle + "\" (summary: \""
                 + summary + "\") and linking it to the Wikidata item via \"" + ROWIKI_SITE_ID + "\" sitelink.");
 
+        if (!EDITING_ENABLED) {
+            log.debug(qid + "\tediting disabled, skipping article creation/link \"" + articleTitle + "\".");
+            return;
+        }
+
         try {
             wikiEditWithRetry(articleTitle, articleContent, summary);
         } catch (TimeoutException e) {
@@ -873,6 +887,11 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
             throws IOException, WikibaseException {
         log.debug(qid + "\trenaming article \"" + oldTitle + "\" to \"" + newTitle + "\" (summary: \""
                 + RENAME_SUMMARY + "\") and updating its \"" + ROWIKI_SITE_ID + "\" sitelink accordingly.");
+
+        if (!EDITING_ENABLED) {
+            log.debug(qid + "\tediting disabled, skipping article rename/relink \"" + oldTitle + "\" -> \"" + newTitle + "\".");
+            return;
+        }
 
         try {
             wiki.move(oldTitle, newTitle, RENAME_SUMMARY);
@@ -1299,8 +1318,8 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
             String provinceName) {
         String typeLabel = VILLAGE_QID.equals(settlementTypeQid) ? "sat" : "oraș";
         String typeCategoryLabel = VILLAGE_QID.equals(settlementTypeQid) ? "Sate" : "Orașe";
-        String category = provinceName != null ? typeCategoryLabel + " în provincia " + provinceName
-                : typeCategoryLabel + " în Armenia";
+        String category = provinceName != null ? typeCategoryLabel + " din provincia " + provinceName
+                : typeCategoryLabel + " din Armenia";
 
         return newVillageTemplate
                 .replace("$1", roName)
@@ -1322,7 +1341,7 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
                 .replace("$1", communeName)
                 .replace("$2", "{{Ill-wd|" + provinceQid + "|3=provincia " + provinceName + "}}")
                 .replace("$3", villageEnumeration)
-                .replace("$4", "Comune în Armenia");
+                .replace("$4", "Comune din Armenia");
     }
 
     /**
@@ -1334,7 +1353,7 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
     private String buildNewProvinceArticle(String provinceName) {
         return newProvinceTemplate
                 .replace("$1", provinceName)
-                .replace("$2", "Provincii în Armenia");
+                .replace("$2", "Provincii din Armenia");
     }
 
     /**
