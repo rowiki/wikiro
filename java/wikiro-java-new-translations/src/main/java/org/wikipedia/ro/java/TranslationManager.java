@@ -58,6 +58,13 @@ public class TranslationManager extends AbstractExecutable {
 
     @Override
     protected void execute() throws IOException, WikibaseException, LoginException {
+        // Fail fast rather than silently running as an anonymous/unauthenticated account
+        if (null == wiki.getCurrentUser() || null == dwiki.getCurrentUser()) {
+            throw new FailedLoginException("Not authenticated on wiki and/or dwiki; aborting to avoid unauthenticated edits");
+        }
+        wiki.setAssertionMode(Wiki.ASSERT_USER);
+        dwiki.setAssertionMode(Wiki.ASSERT_USER);
+
         LocalDate lastVisit = findLastVisit();
         RequestHelper helper = wiki.new RequestHelper();
         helper.inNamespaces(Wiki.MAIN_NAMESPACE);
@@ -176,7 +183,6 @@ public class TranslationManager extends AbstractExecutable {
         }
 
         LOG.info("Finished visiting articles. Setting new reference date.");
-        wiki.setAssertionMode(Wiki.ASSERT_USER);
 
         try {
             wikiEditWithRetry("Utilizator:Andrebot/dată-vizitare-pagini-noi", now.toString(),
