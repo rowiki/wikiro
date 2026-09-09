@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +28,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.wikipedia.Wiki;
 
@@ -111,6 +110,7 @@ class TestWikipediaPageCache {
         WikipediaPageCache cache = WikipediaPageCache.createInstance();
         cache.invalidateAll();
         reset(wiki);
+        when(wiki.getDomain()).thenReturn("testwiki.org");
         List<Map<String, Object>> pageInfo = List.of(
             Map.of("exists", true, "redirect", false)
         );
@@ -134,6 +134,7 @@ class TestWikipediaPageCache {
             Map.of("exists", true, "redirect", false)
         );
         reset(wiki);
+        when(wiki.getDomain()).thenReturn("testwiki.org");
         when(wiki.getPageInfo(any())).thenReturn(pageInfo);
         when(wiki.getPageText(List.of("Foo"))).thenReturn(List.of("Foo text")).thenReturn(List.of("Foo text2"));
         when(wiki.getPageText(List.of("Bar"))).thenReturn(List.of("Bar text")).thenReturn(List.of("Bar text2"));
