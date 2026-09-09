@@ -16,6 +16,7 @@ import org.wikibase.WikibaseException;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.utils.Credentials;
 import org.wikipedia.ro.utils.RetryHelper;
+import org.wikipedia.ro.utils.WikipediaPageCache;
 
 public abstract class AbstractExecutable {
 
@@ -57,8 +58,13 @@ public abstract class AbstractExecutable {
         wiki.login(wikiCreds.username, wikiCreds.password);
         dwikiCreds = identifyCredentials("dwiki");
         dwiki.loginWithCredentials(dwikiCreds.username, dwikiCreds.password);
+        // Let cached read operations (page info/exists/text) relogin with the cached credentials too
+        WikipediaPageCache.getInstance().registerReloginCallback(wiki, getReloginCallback());
         wiki.setMarkBot(true);
         dwiki.setMarkBot(true);
+        // Make the API itself reject any edit made under a dropped/unauthenticated session
+        wiki.setAssertionMode(Wiki.ASSERT_USER);
+        dwiki.setAssertionMode(Wiki.ASSERT_USER);
         
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -100,7 +106,10 @@ public abstract class AbstractExecutable {
     protected Runnable getReloginCallback() {
         return () -> {
             try {
+                int assertMode = wiki.getAssertionMode();
+                wiki.setAssertionMode(Wiki.ASSERT_NONE);
                 wiki.login(wikiCreds.username, wikiCreds.password);
+                wiki.setAssertionMode(assertMode);
             } catch (Exception e) {
                 throw new RuntimeException("Relogin failed", e);
             }

@@ -2,7 +2,6 @@ package org.wikipedia.ro.utils;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -58,6 +57,7 @@ public class WikipediaPageCache {
 
     private final Map<String, CachedPage> cache = new ConcurrentHashMap<>();
     private final ConcurrentLinkedDeque<String> textsLoaded = new ConcurrentLinkedDeque<>();
+    private final Map<String, Runnable> reloginCallbacks = new ConcurrentHashMap<>();
     private long cachedTextSize = 0l;
     private long maxCachedTextSize = -1l;
 
@@ -104,6 +104,19 @@ public class WikipediaPageCache {
     private WikipediaPageCache() {
     }
 
+    /**
+     * Registers a callback to re-authenticate {@code wiki} when a read operation detects the
+     * session is no longer logged in. Without this, cached read operations (page info, exists
+     * checks, page text) never attempt a relogin and just retry with the same dropped session.
+     */
+    public void registerReloginCallback(Wiki wiki, Runnable reloginCallback) {
+        reloginCallbacks.put(wiki.getDomain(), reloginCallback);
+    }
+
+    private Runnable getReloginCallback(Wiki wiki) {
+        return reloginCallbacks.get(wiki.getDomain());
+    }
+
     public void loadPagesInfo(Wiki wiki, String... titles) {
         List<String> titlesToLoad = List.of(titles).stream().filter(title -> !cache.containsKey(computeCacheKey(wiki, title))
             || cache.get(computeCacheKey(wiki, title)).redirect == null).toList();
@@ -118,7 +131,7 @@ public class WikipediaPageCache {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }, 3);
+            }, 3, getReloginCallback(wiki));
 
             // Identify and resolve redirects
             List<String> redirectTitles = titlesToLoad.stream().filter(title -> {
@@ -134,7 +147,7 @@ public class WikipediaPageCache {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }, 3);
+            }, 3, getReloginCallback(wiki));
 
             for (int titleIdx = 0; titleIdx < titlesToLoad.size(); titleIdx++) {
                 String title = titlesToLoad.get(titleIdx);
@@ -180,7 +193,7 @@ public class WikipediaPageCache {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                }, 3);
+                }, 3, getReloginCallback(wiki));
 
                 for (int idx = 0; idx < titlesToLoad.size(); idx++) {
                     String title = titlesToLoad.get(idx);
@@ -261,7 +274,7 @@ public class WikipediaPageCache {
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                    }, 3);
+                    }, 3, getReloginCallback(wiki));
 
                     for (int i = 0; i < existingTitles.size(); i++) {
                         String title = existingTitles.get(i);
