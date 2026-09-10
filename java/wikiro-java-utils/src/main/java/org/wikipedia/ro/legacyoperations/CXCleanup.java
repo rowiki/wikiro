@@ -54,7 +54,7 @@ public class CXCleanup implements WikiOperation {
 
     public String execute() throws IOException, LoginException, WikibaseException {
         status = new String[] { "status.searching.wikibase.item.by.article", targetWikiCode, article };
-        Entity ent = dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, article);
+        Entity ent = dataWiki.executeWithRelogin(() -> dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, article));
         String translation = removeEnd(sourceWikiCode, "wiki") + ":" + ent.getSitelinks().get(sourceWikiCode).getPageName();
         status = new String[] { "status.reading.text", article, targetWikiCode };
         String text = targetWiki.getPageText(List.of(article)).stream().findFirst().orElse("");

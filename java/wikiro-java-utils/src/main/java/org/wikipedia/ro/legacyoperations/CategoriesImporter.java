@@ -8,7 +8,6 @@ import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -62,7 +61,7 @@ public class CategoriesImporter implements WikiOperation {
         StringBuffer articleBuilder = new StringBuffer(targetWiki.getPageText(List.of(article)).stream().findFirst().orElse(""));
         Entity articleItem = null;
         try {
-            articleItem = dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, article);
+            articleItem = dataWiki.executeWithRelogin(() -> dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, article));
         } catch (WikibaseException e) {
             return articleBuilder.toString();
         }
@@ -88,7 +87,7 @@ public class CategoriesImporter implements WikiOperation {
                 removeStart(sourceCatFullPageName, sourceWiki.namespaceIdentifier(Wiki.CATEGORY_NAMESPACE)),
                 sourceWikiCode };
             try {
-                eachCatItem = dataWiki.getWikibaseItemBySiteAndTitle(sourceWikiCode, sourceCatFullPageName);
+                eachCatItem = dataWiki.executeWithRelogin(() -> dataWiki.getWikibaseItemBySiteAndTitle(sourceWikiCode, sourceCatFullPageName));
             } catch (WikibaseException wbe) {
             }
             if (null != eachCatItem) {

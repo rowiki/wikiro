@@ -94,8 +94,9 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             if (CS.equalsAny(lowerCase(lang), "s", "wikt")) {
                 continue;
             } else if ("d".equals(lang)) {
+                final String fForeignTitle = foreignTitle;
                 wbEntity = dataWiki
-                    .getWikibaseItemById(WikidataCacheManager.getCachedRedirect(dataWiki, foreignTitle));
+                    .executeWithRelogin(() -> dataWiki.getWikibaseItemById(WikidataCacheManager.getCachedRedirect(dataWiki, fForeignTitle)));
             } else {
                 wbEntity = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).getByArticle(lang + "wiki", foreignTitle);
             }
@@ -109,7 +110,8 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                         String simpleForeignTitle = namespaceMatcher.group(2);
                         foreignTitle = capitalize(namespace) + capitalize(simpleForeignTitle);
                         String target = WikipediaPageCache.getInstance().getRealTitle(sourceWiki, foreignTitle);
-                        wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(lang + "wiki", target);
+                        final String fTarget = target;
+                        wbEntity = dataWiki.executeWithRelogin(() -> dataWiki.getWikibaseItemBySiteAndTitle(lang + "wiki", fTarget));
                     }
                     roTitle = Optional.ofNullable(wbEntity).map(Entity::getLabels).map(m -> m.get("ro")).orElse(null);
                     if (!isBlank(roTitle)) {
@@ -167,7 +169,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
             Entity wbEntity = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).getByArticle(sourceLang + "wiki", target);
             if (null == roArticle && null == wbEntity) {
                 try {
-                    wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(sourceLang + "wiki", target);
+                    wbEntity = dataWiki.executeWithRelogin(() -> dataWiki.getWikibaseItemBySiteAndTitle(sourceLang + "wiki", target));
                     if (null != wbEntity) {
                         roLabel = wbEntity.getLabels().get(targetLang);
                         Sitelink roSitelink = wbEntity.getSitelinks().get(targetWikiCode);
@@ -296,7 +298,7 @@ public class ReplaceCrossLinkWithIll implements WikiOperation {
                 Entity wbEntity = WikidataCacheManager.getWikidataEntitiesCache(dataWiki).getByArticle(sourceLang + "wiki", foreignArticleTitle);
                 if (null == roArticle && null == wbEntity) {
                     try {
-                        wbEntity = dataWiki.getWikibaseItemBySiteAndTitle(sourceWikiCode, foreignArticleTitle);
+                        wbEntity = dataWiki.executeWithRelogin(() -> dataWiki.getWikibaseItemBySiteAndTitle(sourceWikiCode, foreignArticleTitle));
                     } catch (WikibaseException e) {
                         e.printStackTrace();
                     } catch (Throwable th) {

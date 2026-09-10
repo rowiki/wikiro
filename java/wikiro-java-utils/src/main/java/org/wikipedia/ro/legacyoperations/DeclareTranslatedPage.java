@@ -64,7 +64,7 @@ public class DeclareTranslatedPage implements WikiOperation {
         String articlePage = substringAfter(article, ":");
 
         status = new String[] { "status.identifying.item" };
-        Entity wbentity = dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, articlePage);
+        Entity wbentity = dataWiki.executeWithRelogin(() -> dataWiki.getWikibaseItemBySiteAndTitle(targetWikiCode, articlePage));
         String sourceArticle = wbentity.getSitelinks().get(sourceWikiCode).getPageName();
 
         status = new String[] { "status.last.revision.src" };

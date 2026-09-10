@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.wikibase.Wikibase;
-import org.wikipedia.Wiki;
+import org.wikibase.WikibaseException;
 import org.wikipedia.ro.cache.Cache;
 import org.wikipedia.ro.cache.WikidataEntitiesCache;
 
@@ -22,11 +22,20 @@ public class WikidataCacheManager {
         return wikidataCache;
     }
     
-    private static Map<Wiki, Cache<String, IOException>> redirectCaches = new HashMap<>();
+    private static Map<Wikibase, Cache<String, IOException>> redirectCaches = new HashMap<>();
     
-    public static String getCachedRedirect(final Wiki wiki, String s) throws IOException {
+    public static String getCachedRedirect(final Wikibase wiki, String s) throws IOException {
         if (!redirectCaches.containsKey(wiki)) {
-            redirectCaches.put(wiki, new Cache<>(key -> wiki.resolveRedirects(Stream.ofNullable(key).filter(Objects::nonNull).collect(Collectors.toList())).stream().findFirst().orElse(key)));
+            redirectCaches.put(wiki, new Cache<>(key -> {
+                try {
+                    // Relogin and retry once if the session dropped, instead of failing outright
+                    return wiki.executeWithRelogin(() -> wiki
+                        .resolveRedirects(Stream.ofNullable(key).filter(Objects::nonNull).collect(Collectors.toList()))
+                        .stream().findFirst().orElse(key));
+                } catch (WikibaseException e) {
+                    throw new IOException("Failed to resolve redirect for " + key, e);
+                }
+            }));
         }
         return redirectCaches.get(wiki).get(s);
     }

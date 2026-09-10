@@ -22,7 +22,7 @@ public class WikidataEntitiesCache {
     public Entity get(String id) throws IOException, WikibaseException {
         Entity entity = qIdIndex.get(id);
         if (null == entity) {
-            entity = wikidata.getWikibaseItemById(id);
+            entity = wikidata.executeWithRelogin(() -> wikidata.getWikibaseItemById(id));
             qIdIndex.put(id, entity);
         }
         return entity;
