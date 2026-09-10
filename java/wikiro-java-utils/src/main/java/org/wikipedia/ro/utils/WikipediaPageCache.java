@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.TimeoutException;
@@ -268,13 +269,15 @@ public class WikipediaPageCache {
                 }).toList();
 
                 if (!existingTitles.isEmpty()) {
+                    // A page confirmed to exist should never come back with null text; if it does,
+                    // it's a transient fetch glitch, so retry instead of accepting the batch as-is
                     List<String> texts = RetryHelper.retry(() -> {
                         try {
                             return wiki.getPageText(existingTitles);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                    }, 3, getReloginCallback(wiki));
+                    }, 3, list -> list.stream().noneMatch(Objects::isNull), getReloginCallback(wiki));
 
                     for (int i = 0; i < existingTitles.size(); i++) {
                         String title = existingTitles.get(i);

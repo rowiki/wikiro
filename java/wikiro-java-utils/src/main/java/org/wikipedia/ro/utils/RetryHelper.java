@@ -2,6 +2,7 @@
 package org.wikipedia.ro.utils;
 
 import java.util.concurrent.TimeoutException;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -9,17 +10,29 @@ public class RetryHelper {
     public static final Logger LOG = Logger.getLogger(RetryHelper.class.getCanonicalName());
 
     public static <T> T retry(Supplier<T> operation, int maxAttempts) throws TimeoutException {
-        return retry(operation, maxAttempts, null);
+        return retry(operation, maxAttempts, (Runnable) null);
     }
 
     public static <T> T retry(Supplier<T> operation, int maxAttempts, Runnable relogin) throws TimeoutException {
+        return retry(operation, maxAttempts, null, relogin);
+    }
+
+    /**
+     * Like {@link #retry(Supplier, int, Runnable)}, but also rejects (and retries) a non-null
+     * result that fails {@code isValid}, e.g. a batch result containing unexpected null entries.
+     */
+    public static <T> T retry(Supplier<T> operation, int maxAttempts, Predicate<T> isValid, Runnable relogin)
+        throws TimeoutException {
         int attempts = 0;
         Throwable ex = null;
         while (attempts < maxAttempts) {
             try {
                 T result = operation.get();
-                if (result != null) {
+                if (result != null && (isValid == null || isValid.test(result))) {
                     return result;
+                }
+                if (result != null) {
+                    LOG.warning("Result failed validation on attempt " + (attempts + 1) + ", retrying");
                 }
             } catch (AssertionError e) {
                 ex = e;
