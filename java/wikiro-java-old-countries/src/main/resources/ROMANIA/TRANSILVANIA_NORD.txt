@@ -30,6 +30,7 @@ Q722493 (Vaida-Cămăraș, Căianu CJ)
 Q267692 (Cojocna, Cojocna CJ)
 Q721236 (Cara, Cojocna CJ)
 Q7271050 (Moriști, Cojocna CJ)
+Q12102103 (Dornișoara, Poiana Stampei SV)
 
 // -- restul
 Q514987 (Ghimeș-Făget BC)

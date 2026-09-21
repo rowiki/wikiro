@@ -39,13 +39,14 @@ public enum CountryPeriod
     MUNTENIA(TARA_ROMANEASCA, null, new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()),
     MOLDOVA_VEST(MOLDOVA, null, new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()),
 
-    OTTOMAN_BRAILA(IMP_OTOMAN, new Time(1540), new Time(LocalDate.of(1829, 9, 2)).setCalendarModelToJulian()),
+    OTTOMAN_BRAILA(IMP_OTOMAN, new Time(1540).setCalendarModelToJulian(), new Time(LocalDate.of(1829, 9, 2)).setCalendarModelToJulian()),
     
     OTTOMAN_GIURGIU(IMP_OTOMAN,
-        new Time(1417), new Time(LocalDate.of(1829, 9, 2)).setCalendarModelToJulian()), PRE_OTTOMAN_BRAILA(TARA_ROMANEASCA, null,
-            new Time(1540)),
+        new Time(1417).setCalendarModelToJulian(), new Time(LocalDate.of(1829, 9, 2)).setCalendarModelToJulian()),
     
-    PRE_OTTOMAN_GIURGIU(TARA_ROMANEASCA, null, new Time(1417)),
+    PRE_OTTOMAN_BRAILA(TARA_ROMANEASCA, null, new Time(1540).setCalendarModelToJulian()),
+    
+    PRE_OTTOMAN_GIURGIU(TARA_ROMANEASCA, null, new Time(1417).setCalendarModelToJulian()),
     POST_OTTOMAN_BRAILA_GIURGIU(TARA_ROMANEASCA, new Time(LocalDate.of(1829, 9, 2)).setCalendarModelToJulian(), new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()),
 
     POST_AUSTRIAN_OLTENIA(TARA_ROMANEASCA, new Time(LocalDate.of(1739, 8, 21)), new Time(LocalDate.of(1859, 1, 24)).setCalendarModelToJulian()),
@@ -54,9 +55,9 @@ public enum CountryPeriod
 
     POST_OTTOMAN_DOBROGEA(ROMANIA_PRINCIPAT, new Time(LocalDate.of(1878, 7, 1)).setCalendarModelToJulian(),
         new Time(LocalDate.of(1881, 5, 10)).setCalendarModelToJulian()), OTTOMAN_DOBROGEA(IMP_OTOMAN, new Time(1411l), new Time(LocalDate.of(1878, 7, 1)).setCalendarModelToJulian()),
-        PRE_OTTOMAN_DOBROGEA(DOBRUJA_DESPOTATE, new Time(1356), new Time(1411)), BULG_EMP2_DOBRUJA(BULG_EMP2, new Time(1185l), new Time(1422l)),
-        BIZANTINE_DOBROGEA2(BIZANTINE_EMP, new Time(1018l), new Time(1185l)), BULG_EMP1_DOBRUJA(BULG_EMP1, new Time(681l), new Time(1018l)),
-        BIZANTINE_DOBROGEA1(BIZANTINE_EMP, new Time(330l), new Time(681l)), ROMAN_DOBROGEA(ROMAN_EMP, null, new Time(330l)),
+        PRE_OTTOMAN_DOBROGEA(DOBRUJA_DESPOTATE, new Time(1356).setCalendarModelToJulian(), new Time(1411).setCalendarModelToJulian()), BULG_EMP2_DOBRUJA(BULG_EMP2, new Time(1185l).setCalendarModelToJulian(), new Time(1422l).setCalendarModelToJulian()),
+        BIZANTINE_DOBROGEA2(BIZANTINE_EMP, new Time(1018l).setCalendarModelToJulian(), new Time(1185l).setCalendarModelToJulian()), BULG_EMP1_DOBRUJA(BULG_EMP1, new Time(681l).setCalendarModelToJulian(), new Time(1018l).setCalendarModelToJulian()),
+        BIZANTINE_DOBROGEA1(BIZANTINE_EMP, new Time(330l).setCalendarModelToJulian(), new Time(681l).setCalendarModelToJulian()), ROMAN_DOBROGEA(ROMAN_EMP, null, new Time(330l).setCalendarModelToJulian()),
 
     POST_AUT_HU_BUCOVINA(ROMANIA_REGAT, new Time(LocalDate.of(1918, 11, 28)), new Time(LocalDate.of(1947, 12, 30))), AUT_HU_BUCOVINA(AUSTRO_UNGARIA,
         new Time(LocalDate.of(1867, 3, 30)), new Time(LocalDate.of(1918, 11, 28))),
@@ -79,21 +80,23 @@ public enum CountryPeriod
         new Time(LocalDate.of(1774, 7, 21)), new Time(LocalDate.of(1804, 8, 11))), HABSBURG_BANAT(IMP_HABSBURG, new Time(LocalDate.of(1718, 7, 21)),
             new Time(LocalDate.of(1804, 8, 11))), MOLDOVA_BUCOVINA(MOLDOVA, null, new Time(LocalDate.of(1774, 7, 21))),
 
-    OTTOMAN_WEST_BANAT(IMP_OTOMAN, new Time(LocalDate.of(1552, 7, 26)), new Time(LocalDate.of(1718, 7, 21))), OTTOMAN_EAST_BANAT(IMP_OTOMAN,
-        new Time(1658l), new Time(LocalDate.of(1718, 7, 21))), PRE_OTTOMAN_WEST_BANAT(UNGARIA_EST_REGAT, new Time(LocalDate.of(1526, 11, 11)),
-            new Time(LocalDate.of(1552, 7, 26))), PRE_OTTOMAN_EAST_BANAT(TRANSILVANIA, new Time(LocalDate.of(1570, 8, 16)),
+    OTTOMAN_WEST_BANAT(IMP_OTOMAN, new Time(LocalDate.of(1552, 7, 26)).setCalendarModelToJulian(), new Time(LocalDate.of(1718, 7, 21))), OTTOMAN_EAST_BANAT(IMP_OTOMAN,
+        new Time(1658l), new Time(LocalDate.of(1718, 7, 21))), PRE_OTTOMAN_WEST_BANAT(UNGARIA_EST_REGAT, new Time(LocalDate.of(1526, 11, 11)).setCalendarModelToJulian(),
+            new Time(LocalDate.of(1552, 7, 26)).setCalendarModelToJulian()),
+    
+    PRE_OTTOMAN_EAST_BANAT(TRANSILVANIA, new Time(LocalDate.of(1570, 8, 16)).setCalendarModelToJulian(),
                 new Time(1658l)),
 
     HABSBURG_CRISANA(IMP_HABSBURG, new Time(LocalDate.of(1699, 1, 26)), new Time(LocalDate.of(1804, 8, 11))), OTTOMAN_SOUTH_CRISANA(IMP_OTOMAN, new Time(1551),
-        new Time(LocalDate.of(1699, 1, 26))), PRE_OTTOMAN_SOUTH_CRISANA(UNGARIA_EST_REGAT, new Time(LocalDate.of(1526, 11, 11)), new Time(1551)),
+        new Time(LocalDate.of(1699, 1, 26))), PRE_OTTOMAN_SOUTH_CRISANA(UNGARIA_EST_REGAT, new Time(LocalDate.of(1526, 11, 11)).setCalendarModelToJulian(), new Time(1551).setCalendarModelToJulian()),
 
     OTTOMAN_NORTH_CRISANA(IMP_OTOMAN, new Time(1660), new Time(LocalDate.of(1699, 1, 26))),
 
-    TRANSYLVANIA_PRINCIPAT(TRANSILVANIA, new Time(LocalDate.of(1570, 8, 16)), new Time(LocalDate.of(1711, 4, 29))), TRANSYLVANIAN_NORTH_CRISANA(
-        TRANSILVANIA, new Time(LocalDate.of(1570, 8, 16)), new Time(1660)), EAST_HUNGARIAN_KINGDOM(UNGARIA_EST_REGAT,
-            new Time(LocalDate.of(1526, 11, 11)), new Time(LocalDate.of(1570, 8, 16))),
+    TRANSYLVANIA_PRINCIPAT(TRANSILVANIA, new Time(LocalDate.of(1570, 8, 16)).setCalendarModelToJulian(), new Time(LocalDate.of(1711, 4, 29))), TRANSYLVANIAN_NORTH_CRISANA(
+        TRANSILVANIA, new Time(LocalDate.of(1570, 8, 16)).setCalendarModelToJulian(), new Time(1660)), EAST_HUNGARIAN_KINGDOM(UNGARIA_EST_REGAT,
+            new Time(LocalDate.of(1526, 11, 11)).setCalendarModelToJulian(), new Time(LocalDate.of(1570, 8, 16)).setCalendarModelToJulian()),
 
-    HUNGARY_KINGDOM_TRANSILVANIA_ET_AL(UNGARIA_REGAT, null, new Time(LocalDate.of(1526, 11, 11)));
+    HUNGARY_KINGDOM_TRANSILVANIA_ET_AL(UNGARIA_REGAT, null, new Time(LocalDate.of(1526, 11, 11)).setCalendarModelToJulian());
 
     HistoricCountry country;
     Time startTime;

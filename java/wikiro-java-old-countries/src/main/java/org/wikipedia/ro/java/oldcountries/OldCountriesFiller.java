@@ -125,8 +125,8 @@ public class OldCountriesFiller extends AbstractExecutable
     {
         
         List<Map<String, Object>> resultSet = dwiki.query(allUATsQuery);
-        String startCounty = "Prahova";
-        String startCommune = "Gorgota";
+        String startCounty = "Vâlcea";
+        String startCommune = "Amărăști";
         String firstFoundCounty = null;
         
         dwiki.setAssertionMode(Wiki.ASSERT_USER | Wiki.ASSERT_BOT);

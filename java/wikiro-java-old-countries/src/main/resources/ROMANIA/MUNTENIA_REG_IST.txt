@@ -120,6 +120,7 @@ Q12097547 (Greblești VL)
 Q12145367 (Priloage VL)
 
 Q12092784 (Vulcăneasa, Mera VN)
+Q12148977 (Roșioara, Mera VN)
 Q12123420 (Mândești-Munteni, Focșani VN)
 Q12167252 (Hângulești, Vulturu VN)
 Q12120982 (Maluri, Vulturu VN)
