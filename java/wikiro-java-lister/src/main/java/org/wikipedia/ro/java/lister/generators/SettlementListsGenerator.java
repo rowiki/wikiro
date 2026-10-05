@@ -38,12 +38,20 @@ public class SettlementListsGenerator implements WikidataListGenerator {
 
     private final static List<String> COUNTRY_IDS = new ArrayList<>();
 
-    private final static String COMMUNE_QUERY_TEMPLATE = "select distinct ?commune ?communeLabel (sample(?img) as ?img) (sample(?flag) as ?flag) (sample(?coA) as ?coA) (sample(?pop) as ?pop) (sample(?area) as ?area)\n"
-        + "WHERE {\n" + " ?commune wdt:P31 ?instance.\n" + " VALUES ?instance {wd:Q659103 wd:Q640364 wd:Q16858213}\n"
-        + " ?commune wdt:P131 wd:%s.\n" + " OPTIONAL {?commune wdt:P41 ?flag}\n" + " OPTIONAL {?commune wdt:P94 ?coA}\n"
-        + " OPTIONAL {?commune wdt:P18 ?img }\n" + " OPTIONAL {?commune wdt:P1082 ?pop}\n"
-        + " OPTIONAL {?commune wdt:P2046 ?area}\n"
-        + "SERVICE wikibase:label { bd:serviceParam wikibase:language \"ro\" } }\n" + "GROUP BY ?commune ?communeLabel ORDER BY ?communeLabel";
+    private final static String COMMUNE_QUERY_TEMPLATE = """
+        select distinct ?commune ?communeLabel (sample(?img) as ?img) (sample(?flag) as ?flag) (sample(?coA) as ?coA) (sample(?pop) as ?pop) (sample(?area) as ?area)
+            WHERE {
+                ?commune wdt:P31 ?instance.
+                VALUES ?instance {wd:Q659103 wd:Q640364 wd:Q16858213}
+                ?commune wdt:P131 wd:%s.
+                OPTIONAL {?commune wdt:P41 ?flag}
+                OPTIONAL {?commune wdt:P94 ?coA}
+                OPTIONAL {?commune wdt:P18 ?img }
+                OPTIONAL {?commune wdt:P1082 ?pop}
+                OPTIONAL {?commune wdt:P2046 ?area}
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "ro" } }
+            GROUP BY ?commune ?communeLabel ORDER BY ?communeLabel
+            """;
 
     static {
         COUNTRY_IDS.add("Q218"); // Romania
