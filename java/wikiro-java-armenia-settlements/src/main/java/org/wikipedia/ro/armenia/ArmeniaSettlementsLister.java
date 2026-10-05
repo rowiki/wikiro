@@ -23,13 +23,13 @@ import org.wikibase.data.Item;
 import org.wikibase.data.Property;
 import org.wikibase.data.Sitelink;
 import org.wikipedia.ro.translit.IcuTransliterationService;
-import org.wikipedia.ro.utility.AbstractExecutable;
 import org.wikipedia.ro.utils.LinkUtils;
+import org.wikipedia.ro.wikidata.WikidataQueryProcessor;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ArmeniaSettlementsLister extends AbstractExecutable {
+public class ArmeniaSettlementsLister extends WikidataQueryProcessor {
 
     private static final String TRANSLIT_MODULE_URL =
             "https://ro.wikipedia.org/w/index.php?title=Modul:Transliteration/langdata&action=raw";
@@ -75,7 +75,7 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
 
     // Single switch controlling whether pages are actually created/renamed/linked;
     // keep false for dry-run (log-only) runs.
-    private static final boolean EDITING_ENABLED = false;
+    private static final boolean EDITING_ENABLED = true;
 
     private static final String ROWIKI_SITE_ID = "rowiki";
     private static final String EDIT_SUMMARY = "Articol nou despre o localitate din Armenia";
@@ -163,87 +163,92 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
     // resolution (P138 "named after" lookups included) requires extra Wikibase calls.
     private final Map<String, String> provinceDisplayNameCache = new HashMap<>();
 
+    private int noLabelCount = 0;
+    private int skippedGenerationCount = 0;
+
+    // Settlements (villages/towns) grouped by the commune (municipality) they belong
+    // to, used afterwards to build each commune's village enumeration. This is built
+    // for ALL settlements, whether or not they already have their own ro.wp article,
+    // since a commune's enumeration needs to list all of its member settlements.
+    private final Map<String, List<SettlementRef>> communeMembers = new LinkedHashMap<>();
+
+    // Settlements awaiting a (re-)computed title, collected here instead of being
+    // finalized immediately, so that (a) duplicate (name, province) pairs can be
+    // detected across ALL of them, and (b) settlements that already have an article
+    // can have their existing title compared against the computed one, and renamed
+    // if they differ -- see the disambiguation/rename pass in #afterProcessing.
+    private final List<PendingSettlement> pendingSettlements = new ArrayList<>();
+
+    // Villages' and towns' plain names (without disambiguation), collected for the
+    // final pass -- see {@link #generateNameDisambiguationPages} -- that creates a
+    // bare-name redirect/disambiguation page, or a "<Name> (dezambiguizare)" page for
+    // names shared with a town, wherever such a page isn't already taken.
+    private final List<NamedSettlementEntry> namedSettlementEntries = new ArrayList<>();
+
     @Override
-    protected void execute() throws IOException, WikibaseException, LoginException {
+    protected String getQuery() {
+        return ARMENIA_SETTLEMENTS_SPARQL;
+    }
+
+    @Override
+    protected void beforeQuery() throws IOException {
         transliterationService = IcuTransliterationService.fromLuaUrl(TRANSLIT_MODULE_URL);
         newVillageTemplate = loadTemplate(NEW_VILLAGE_TEMPLATE_RESOURCE);
         newCommuneTemplate = loadTemplate(NEW_COMMUNE_TEMPLATE_RESOURCE);
         newProvinceTemplate = loadTemplate(NEW_PROVINCE_TEMPLATE_RESOURCE);
+    }
 
-        log.debug("Querying Wikidata for Armenia settlements...");
-        List<Map<String, Object>> results = dwiki.query(ARMENIA_SETTLEMENTS_SPARQL);
-        log.debug("Found " + results.size() + " settlements.");
-        log.debug("");
+    @Override
+    protected void processResult(Map<String, Object> row) throws IOException, WikibaseException {
+        Object itemObj = row.get("item");
+        if (!(itemObj instanceof Item item)) {
+            return;
+        }
 
+        String qid = item.getEnt().getId();
+        String hyLabel = (String) row.get("hyLabel");
+        String roLabel = (String) row.get("roLabel");
+        String roArticleName = (String) row.get("roArticleName");
+        String settlementTypeQid = asQid(row.get("settlementType"));
+
+        String cleanedHyLabel = stripArmenianBracket(hyLabel);
+        String translit = transliterateArmenian(cleanedHyLabel);
+        String displayName = roLabel != null ? roLabel
+                : (translit != null ? translit : cleanedHyLabel);
+
+        if (displayName == null) {
+            // No Armenian or Romanian label at all -- nothing to name the article after.
+            log.debug(qid + "\tskipped: no hy/ro label found");
+            noLabelCount++;
+            return;
+        }
+
+        AdminParent commune = findAdminParent(qid, MUNICIPALITY_TYPE_QID);
+
+        log.debug(qid + "\t" + hyLabel + "\tresolving: " + displayName
+                + (roArticleName != null ? " (existing article: " + roArticleName + ")" : " (new)"));
+
+        LocationInfo locationInfo = resolveLocationInfo(qid, settlementTypeQid, displayName, commune);
+        if (locationInfo == null) {
+            skippedGenerationCount++;
+            // Location info couldn't be fully resolved -- still register the
+            // settlement in its commune's enumeration, using its existing title (if
+            // any) or its plain name as a best-effort fallback (no province
+            // disambiguation available, and no way to verify/rename an existing title).
+            addCommuneMember(communeMembers, commune, qid, displayName, settlementTypeQid,
+                    roArticleName != null ? roArticleName : displayName);
+            return;
+        }
+
+        pendingSettlements.add(new PendingSettlement(qid, displayName, settlementTypeQid, commune, locationInfo,
+                roArticleName));
+    }
+
+    @Override
+    protected void afterProcessing(List<Map<String, Object>> results) throws IOException, WikibaseException {
         int existingCount = 0;
         int renamedCount = 0;
-        int noLabelCount = 0;
-        int skippedGenerationCount = 0;
         int toCreateCount = 0;
-
-        // Settlements (villages/towns) grouped by the commune (municipality) they belong
-        // to, used afterwards to build each commune's village enumeration. This is built
-        // for ALL settlements, whether or not they already have their own ro.wp article,
-        // since a commune's enumeration needs to list all of its member settlements.
-        Map<String, List<SettlementRef>> communeMembers = new LinkedHashMap<>();
-
-        // Settlements awaiting a (re-)computed title, collected here instead of being
-        // finalized immediately, so that (a) duplicate (name, province) pairs can be
-        // detected across ALL of them, and (b) settlements that already have an article
-        // can have their existing title compared against the computed one, and renamed
-        // if they differ -- see the disambiguation/rename pass below.
-        List<PendingSettlement> pendingSettlements = new ArrayList<>();
-
-        // Villages' and towns' plain names (without disambiguation), collected for the
-        // final pass -- see {@link #generateNameDisambiguationPages} -- that creates a
-        // bare-name redirect/disambiguation page, or a "<Name> (dezambiguizare)" page for
-        // names shared with a town, wherever such a page isn't already taken.
-        List<NamedSettlementEntry> namedSettlementEntries = new ArrayList<>();
-
-        for (Map<String, Object> row : results) {
-            Object itemObj = row.get("item");
-            if (!(itemObj instanceof Item item)) {
-                continue;
-            }
-
-            String qid = item.getEnt().getId();
-            String hyLabel = (String) row.get("hyLabel");
-            String roLabel = (String) row.get("roLabel");
-            String roArticleName = (String) row.get("roArticleName");
-            String settlementTypeQid = asQid(row.get("settlementType"));
-
-            String cleanedHyLabel = stripArmenianBracket(hyLabel);
-            String translit = transliterateArmenian(cleanedHyLabel);
-            String displayName = roLabel != null ? roLabel
-                    : (translit != null ? translit : cleanedHyLabel);
-
-            if (displayName == null) {
-                // No Armenian or Romanian label at all -- nothing to name the article after.
-                log.debug(qid + "\tskipped: no hy/ro label found");
-                noLabelCount++;
-                continue;
-            }
-
-            AdminParent commune = findAdminParent(qid, MUNICIPALITY_TYPE_QID);
-
-            log.debug(qid + "\t" + hyLabel + "\tresolving: " + displayName
-                    + (roArticleName != null ? " (existing article: " + roArticleName + ")" : " (new)"));
-
-            LocationInfo locationInfo = resolveLocationInfo(qid, settlementTypeQid, displayName, commune);
-            if (locationInfo == null) {
-                skippedGenerationCount++;
-                // Location info couldn't be fully resolved -- still register the
-                // settlement in its commune's enumeration, using its existing title (if
-                // any) or its plain name as a best-effort fallback (no province
-                // disambiguation available, and no way to verify/rename an existing title).
-                addCommuneMember(communeMembers, commune, qid, displayName, settlementTypeQid,
-                        roArticleName != null ? roArticleName : displayName);
-                continue;
-            }
-
-            pendingSettlements.add(new PendingSettlement(qid, displayName, settlementTypeQid, commune, locationInfo,
-                    roArticleName));
-        }
 
         // Villages sharing the same (name, province) pair would otherwise get identical
         // titles -- e.g. two different villages both named "Foo" in the same province.
@@ -451,7 +456,9 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
             if (onlyMember != null) {
                 // The commune consists of a single settlement (village or town) --
                 // redirect to that settlement's own article instead of duplicating its
-                // content in a separate page.
+                // content in a separate page. Since the page is just a redirect and not
+                // the commune's own dedicated article, no Wikidata sitelink is set on the
+                // commune item for it.
                 String redirectTarget = onlyMember.articleTitle();
                 String redirectContent = "#REDIRECT [[" + redirectTarget + "]]";
                 String finalArticleTitle = resolveTitleCollision(communeQid, articleTitle, null);
@@ -459,7 +466,7 @@ public class ArmeniaSettlementsLister extends AbstractExecutable {
 
                 log.debug("---- commune redirect for " + communeQid + " (\"" + finalArticleTitle
                         + "\" -> \"" + redirectTarget + "\") ----");
-                createArticleAndLink(communeQid, finalArticleTitle, redirectContent, NEW_COMMUNE_SUMMARY);
+                createSupplementaryPage(finalArticleTitle, redirectContent, NEW_COMMUNE_SUMMARY);
                 toCreateCount++;
                 continue;
             }

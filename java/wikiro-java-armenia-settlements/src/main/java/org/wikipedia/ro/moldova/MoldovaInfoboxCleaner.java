@@ -30,7 +30,7 @@ public class MoldovaInfoboxCleaner extends WikidataQueryProcessor {
     private static final Pattern INFOBOX_PATTERN = Pattern.compile("\\{\\{\\s*[Ii]nfocaseta\\s+A[șş]ezare");
 
     private static final List<String> PARAMS_TO_REMOVE =
-            List.of("populație", "recensământ", "populație_note_subsol", "densitate");
+            List.of("populație", "populatie", "populația", "populatia", "recensamant", "recensământ", "populație_note_subsol", "densitate", "populație note subsol");
 
     // Concrete types instead of a transitive P279* closure, which times out on the public WDQS.
     // Q532 village, Q4413925 seat village, Q4229812 commune of Moldova, Q515 city, Q3957 town.
