@@ -1,7 +1,9 @@
 
 package org.wikipedia.ro.textgen;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class VillageHistoryServiceTest {
         List<String> phrases = service.buildPhrases(params);
         assertEquals(1, phrases.size());
         assertEquals(
-            "Satul este menționat în memoriile generalului Bauer din 1778 ca ''Testsat''.<ref>{{Citat Q|Q136757066}}</ref>",
+            "Satul este menționat în memoriile generalului Bauer din 1778 ca ''Testsat''.{{RefQ|Q136757066}}",
             phrases.get(0));
     }
 
@@ -65,7 +67,7 @@ public class VillageHistoryServiceTest {
         List<String> phrases = service.buildPhrases(params);
         assertEquals(1, phrases.size());
         assertTrue(phrases.get(0).contains(", drept un sat mic"));
-        assertTrue(phrases.get(0).contains(".<ref>"));
+        assertTrue(phrases.get(0).contains(".{{RefQ|Q136757066"));
     }
 
     @Test
@@ -90,7 +92,7 @@ public class VillageHistoryServiceTest {
         assertTrue(phrase.contains("''Testsat''"));
         assertTrue(phrase.contains(", drept un sat mic"));
         assertTrue(phrase.contains("|p=42"));
-        assertTrue(phrase.endsWith("}}</ref>"));
+        assertTrue(phrase.endsWith("}}"));
     }
 
     @Test
@@ -140,7 +142,7 @@ public class VillageHistoryServiceTest {
         List<String> phrases = service.buildPhrases(params);
         assertEquals(1, phrases.size());
         assertEquals(
-            "Pe harta Specht a Țării Românești din 1790, apare cu denumirea ''Testdorf''.<ref>{{Citat Q|Q136659961}}</ref>",
+            "Pe harta Specht a Țării Românești din 1790, apare cu denumirea ''Testdorf''.{{RefQ|Q136659961}}",
             phrases.get(0));
     }
 
@@ -168,7 +170,7 @@ public class VillageHistoryServiceTest {
         assertEquals(1, phrases.size());
         String phrase = phrases.get(0);
         assertTrue(phrase.startsWith("Catagrafia din 1831 consemnează satul cu numele ''Satul Vechi''"));
-        assertTrue(phrase.contains(".<ref>{{Citat Q|Q136354833}}</ref>"));
+        assertTrue(phrase.contains(".{{RefQ|Q136354833}}"));
         assertFalse(phrase.contains("plasa"));
         assertFalse(phrase.contains("județul"));
         assertFalse(phrase.contains("moșia"));
@@ -288,7 +290,7 @@ public class VillageHistoryServiceTest {
         params.setCataName("Sat");
         params.setCataPop("120");
         String phrase = service.buildPhrases(params).get(0);
-        assertTrue(phrase.contains(", având 120 familii"));
+        assertTrue(phrase.contains(", având 120 de familii"));
     }
 
     @Test
@@ -307,7 +309,7 @@ public class VillageHistoryServiceTest {
         params.setCataPop("120");
         params.setCataFeci("15");
         String phrase = service.buildPhrases(params).get(0);
-        assertTrue(phrase.contains(", având 120 familii și 15 feciori de muncă"));
+        assertTrue(phrase.contains(", având 120 de familii și 15 feciori de muncă"));
     }
 
     @Test
@@ -362,7 +364,7 @@ public class VillageHistoryServiceTest {
         assertTrue(phrase.contains("județul Neamț (interbelic)"));
         assertTrue(phrase.contains("moșia ''Moșia Y''"));
         assertTrue(phrase.contains("deținută de Vasile Ion"));
-        assertTrue(phrase.contains("80 familii"));
+        assertTrue(phrase.contains("80 de familii"));
         assertTrue(phrase.contains("10 feciori de muncă"));
         assertTrue(phrase.contains("|p=99"));
     }
@@ -377,7 +379,7 @@ public class VillageHistoryServiceTest {
         assertEquals(1, phrases.size());
         String phrase = phrases.get(0);
         assertTrue(phrase.startsWith("Indicele localităților din 1954 menționează satul cu numele ''Sat54''"));
-        assertTrue(phrase.contains(".<ref>{{Citat Q|Q136158772}}</ref>"));
+        assertTrue(phrase.contains(".{{RefQ|Q136158772}}"));
         assertFalse(phrase.contains("descriindu-l"));
         assertFalse(phrase.contains("|p="));
     }
@@ -795,7 +797,7 @@ public class VillageHistoryServiceTest {
         params.setBauerName("X");
         params.setBauerPage("5");
         String phrase = service.buildPhrases(params).get(0);
-        assertTrue(phrase.contains("<ref>{{Citat Q|Q136757066|p=5}}</ref>"));
+        assertTrue(phrase.contains("{{RefQ|Q136757066|p=5}}"));
     }
 
     @Test
@@ -803,7 +805,7 @@ public class VillageHistoryServiceTest {
         VillageHistoryParams params = new VillageHistoryParams();
         params.setSpechtName("X");
         String phrase = service.buildPhrases(params).get(0);
-        assertTrue(phrase.contains("<ref>{{Citat Q|Q136659961}}</ref>"));
+        assertTrue(phrase.contains("{{RefQ|Q136659961}}"));
     }
 
     @Test
@@ -812,7 +814,7 @@ public class VillageHistoryServiceTest {
         params.setCataName("X");
         params.setCataPage("33");
         String phrase = service.buildPhrases(params).get(0);
-        assertTrue(phrase.contains("<ref>{{Citat Q|Q136354833|p=33}}</ref>"));
+        assertTrue(phrase.contains("{{RefQ|Q136354833|p=33}}"));
     }
 
     @Test
@@ -821,7 +823,7 @@ public class VillageHistoryServiceTest {
         params.setIdx1954Name("X");
         params.setIdx1954Page("44");
         String phrase = service.buildPhrases(params).get(0);
-        assertTrue(phrase.contains("<ref>{{Citat Q|Q136158772|p=44}}</ref>"));
+        assertTrue(phrase.contains("{{RefQ|Q136158772|p=44}}"));
     }
 
     @Test
@@ -830,10 +832,10 @@ public class VillageHistoryServiceTest {
         params.setIdx1956Name("X");
         params.setIdx1956Page("55");
         String phrase = service.buildPhrases(params).get(0);
-        assertTrue(phrase.contains("<ref>{{Citat Q|Q136158759|p=55}}</ref>"));
+        assertTrue(phrase.contains("{{RefQ|Q136158759|p=55}}"));
     }
 
-    // ===== Each phrase ends with </ref> =====
+    // ===== Each phrase ends with }} =====
 
     @Test
     public void testAllPhrases_endWithRefClose() {
@@ -844,7 +846,7 @@ public class VillageHistoryServiceTest {
         params.setIdx1954Name("I54");
         params.setIdx1956Name("I56");
         for (String phrase : service.buildPhrases(params)) {
-            assertTrue(phrase.endsWith("</ref>"), "Phrase should end with </ref>: " + phrase);
+            assertTrue(phrase.endsWith("}}"), "Phrase should end with }}: " + phrase);
         }
     }
 
@@ -859,7 +861,7 @@ public class VillageHistoryServiceTest {
         params.setIdx1954Name("I54");
         params.setIdx1956Name("I56");
         for (String phrase : service.buildPhrases(params)) {
-            assertTrue(phrase.contains(".<ref>"), "Phrase should contain .<ref>: " + phrase);
+            assertTrue(phrase.contains(".{{RefQ|"), "Phrase should contain .{{RefQ|: " + phrase);
         }
     }
 }
