@@ -19,6 +19,7 @@ public class VillageHistoryService {
         buildOrgComPhrase(params, phrases);
         buildLegeComunalaPhrase(params, phrases);
         buildSatLegeComunalaPhrase(params, phrases);
+        buildDict1872Phrase(params, phrases);
         buildMdgrPhrase(params, phrases);
         buildIdxPhrase(params, phrases);
 
@@ -221,6 +222,29 @@ public class VillageHistoryService {
                 + "''.{{RefQ|Q136100477}}";
             phrases.add(phrase);
         }
+    }
+
+    private void buildDict1872Phrase(VillageHistoryParams params, List<String> phrases) {
+        String name = params.getDict1872Name();
+        if (name == null || name.isEmpty()) {
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("În ''Dicționarul topografic și statistic al României'' din 1872, localitatea apare ca „").append(name).append("”");
+
+        String details = params.getDict1872Details();
+        if (details != null && !details.isEmpty()) {
+            sb.append(", ").append(details);
+        }
+
+        sb.append(".{{RefQ|Q141453946");
+        String page = params.getDict1872Page();
+        if (page != null && !page.isEmpty()) {
+            sb.append("|p=").append(page);
+        }
+        sb.append("}}");
+        phrases.add(sb.toString());
     }
 
     private void buildMdgrPhrase(VillageHistoryParams params, List<String> phrases) {

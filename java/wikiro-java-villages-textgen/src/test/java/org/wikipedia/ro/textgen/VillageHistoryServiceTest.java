@@ -864,4 +864,62 @@ public class VillageHistoryServiceTest {
             assertTrue(phrase.contains(".{{RefQ|"), "Phrase should contain .{{RefQ|: " + phrase);
         }
     }
+
+    // ===== Dicționarul topografic 1872 =====
+
+    @Test
+    public void testDict1872_nameOnly() {
+        VillageHistoryParams params = new VillageHistoryParams();
+        params.setDict1872Name("Testsat");
+        List<String> phrases = service.buildPhrases(params);
+        assertEquals(1, phrases.size());
+        assertEquals(
+            "În ''Dicționarul topografic și statistic al României'' din 1872, localitatea apare ca „Testsat”.{{RefQ|Q141453946}}",
+            phrases.get(0));
+    }
+
+    @Test
+    public void testDict1872_nameAndDetails() {
+        VillageHistoryParams params = new VillageHistoryParams();
+        params.setDict1872Name("Testsat");
+        params.setDict1872Details("ca sat de 50 de familii");
+        List<String> phrases = service.buildPhrases(params);
+        assertEquals(1, phrases.size());
+        assertEquals(
+            "În ''Dicționarul topografic și statistic al României'' din 1872, localitatea apare ca „Testsat”, ca sat de 50 de familii.{{RefQ|Q141453946}}",
+            phrases.get(0));
+    }
+
+    @Test
+    public void testDict1872_nameDetailsAndPage() {
+        VillageHistoryParams params = new VillageHistoryParams();
+        params.setDict1872Name("Testsat");
+        params.setDict1872Details("ca sat de 50 de familii");
+        params.setDict1872Page("123");
+        List<String> phrases = service.buildPhrases(params);
+        assertEquals(1, phrases.size());
+        assertEquals(
+            "În ''Dicționarul topografic și statistic al României'' din 1872, localitatea apare ca „Testsat”, ca sat de 50 de familii.{{RefQ|Q141453946|p=123}}",
+            phrases.get(0));
+    }
+
+    @Test
+    public void testDict1872_emptyDetailsOmitsComma() {
+        VillageHistoryParams params = new VillageHistoryParams();
+        params.setDict1872Name("Testsat");
+        params.setDict1872Details("");
+        params.setDict1872Page("7");
+        assertEquals(
+            "În ''Dicționarul topografic și statistic al României'' din 1872, localitatea apare ca „Testsat”.{{RefQ|Q141453946|p=7}}",
+            service.buildPhrases(params).get(0));
+    }
+
+    @Test
+    public void testDict1872_emptyName_producesNoPhrase() {
+        VillageHistoryParams params = new VillageHistoryParams();
+        params.setDict1872Name("");
+        params.setDict1872Details("detalii");
+        params.setDict1872Page("7");
+        assertTrue(service.buildPhrases(params).isEmpty());
+    }
 }

@@ -100,6 +100,10 @@ public class VillageHistoryGUI extends JFrame {
     private final JTextField satLegeComunalaCountyField = createField(28);
     private final JTextField satLegeComunalaPageField = createField(14);
 
+    private final JTextField dict1872NameField = createField(28);
+    private final JTextField dict1872DetailsField = createField(28);
+    private final JTextField dict1872PageField = createField(14);
+
     private final JTextArea outputArea = new JTextArea(8, 60);
 
     private static JTextField createField(int columns) {
@@ -129,12 +133,22 @@ public class VillageHistoryGUI extends JFrame {
             new JTextField[] { cataNameField, cataPlasaField, cataCountyField, cataMosieField, cataOwnerField, cataPopField,
                 cataFeciField, cataPageField }));
 
-        sourcesPanel.add(createSatLegeComunalaSection());
-
-        sourcesPanel.add(createMdgrSection());
-
         JScrollPane sourcesScroll = new JScrollPane(sourcesPanel);
         sourcesScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        JPanel mdgrPanel = new JPanel();
+        mdgrPanel.setLayout(new BoxLayout(mdgrPanel, BoxLayout.Y_AXIS));
+        mdgrPanel.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
+
+        mdgrPanel.add(createSatLegeComunalaSection());
+
+        mdgrPanel.add(createSection("Dicționar topografic 1872", new String[] { "Denumire", "Detalii", "Pagină" },
+            new JTextField[] { dict1872NameField, dict1872DetailsField, dict1872PageField }));
+
+        mdgrPanel.add(createMdgrSection());
+
+        JScrollPane mdgrScroll = new JScrollPane(mdgrPanel);
+        mdgrScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         JPanel indexesPanel = new JPanel();
         indexesPanel.setLayout(new BoxLayout(indexesPanel, BoxLayout.Y_AXIS));
@@ -171,6 +185,7 @@ public class VillageHistoryGUI extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setFont(LABEL_FONT);
         tabbedPane.addTab("Surse istorice", sourcesScroll);
+        tabbedPane.addTab("Surse istorice [2]", mdgrScroll);
         tabbedPane.addTab("Indici", indexesScroll);
         tabbedPane.addTab("Reformă 1864", reforma1864Scroll);
 
@@ -296,6 +311,9 @@ public class VillageHistoryGUI extends JFrame {
         params.setSatLegeComunalaPlasa(getTextOrNull(satLegeComunalaPlasaField));
         params.setSatLegeComunalaCounty(getTextOrNull(satLegeComunalaCountyField));
         params.setSatLegeComunalaPage(getTextOrNull(satLegeComunalaPageField));
+        params.setDict1872Name(getTextOrNull(dict1872NameField));
+        params.setDict1872Details(getTextOrNull(dict1872DetailsField));
+        params.setDict1872Page(getTextOrNull(dict1872PageField));
 
         VillageHistoryService service = new VillageHistoryService();
         String result = service.buildText(params);
@@ -313,18 +331,18 @@ public class VillageHistoryGUI extends JFrame {
             orgComComuneField, orgComPlasaField, orgComCountyField, orgComPageField, orgComCaseField, orgComFamiliiField, orgComBisericiField,
             legeComunalaPlasaField, legeComunalaCountyField, legeComunalaPageField, legeComunalaVillagesField,
             legeComunalaCaseField, legeComunalaFamiliiField, legeComunalaBisericiField,
-            satLegeComunalaCommuneField, satLegeComunalaPlasaField, satLegeComunalaCountyField, satLegeComunalaPageField }) {
+            satLegeComunalaCommuneField, satLegeComunalaPlasaField, satLegeComunalaCountyField, satLegeComunalaPageField,
+            dict1872NameField, dict1872DetailsField, dict1872PageField }) {
             field.setText("");
+            field.setEnabled(true);
         }
         for (JCheckBox box : new JCheckBox[] { mdgrSameCommuneCheck, mdgrIsResedintaCheck, mdgrCommuneSameNameCheck,
             mdgrSamePlasaCheck, mdgrSameCountyCheck, legeComunalaSingleVillageCheck,
             satLegeComunalaCapitalCheck, satLegeComunalaSameNameCheck }) {
             box.setSelected(false);
+            box.setEnabled(true);
         }
-        updateMdgrCommuneFieldStates();
-        legeComunalaVillagesField.setEnabled(true);
         legeComunalaExtArea.setText("");
-        satLegeComunalaCommuneField.setEnabled(true);
         outputArea.setText("");
     }
 

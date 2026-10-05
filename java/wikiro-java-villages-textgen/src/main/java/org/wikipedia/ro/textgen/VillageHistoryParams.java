@@ -402,4 +402,16 @@ public class VillageHistoryParams {
     public void setSatLegeComunalaCounty(String v) { this.satLegeComunalaCounty = v; }
     public String getSatLegeComunalaPage() { return satLegeComunalaPage; }
     public void setSatLegeComunalaPage(String v) { this.satLegeComunalaPage = v; }
+
+    // Dicționarul topografic și statistic al României, 1872 (Q141453946)
+    private String dict1872Name;
+    private String dict1872Details;
+    private String dict1872Page;
+
+    public String getDict1872Name() { return dict1872Name; }
+    public void setDict1872Name(String v) { this.dict1872Name = v; }
+    public String getDict1872Details() { return dict1872Details; }
+    public void setDict1872Details(String v) { this.dict1872Details = v; }
+    public String getDict1872Page() { return dict1872Page; }
+    public void setDict1872Page(String v) { this.dict1872Page = v; }
 }
