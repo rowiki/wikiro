@@ -157,6 +157,11 @@ public class TranslationManager extends AbstractExecutable {
                 }
                 try {
                     String notReplacedText = WikipediaPageCache.getInstance().getPageText(wiki, eachNewPageLink);
+                    if (null == notReplacedText) {
+                        // Page may have been deleted/moved since whatLinksHere was queried, or its info failed to load
+                        LOG.warn("Skipping {} (linked from {}): page text unavailable", eachNewPageLink, eachNewPageTitle);
+                        continue;
+                    }
                     CleanupIll illCleanup = new CleanupIll(wiki, wiki, dwiki, eachNewPageLink);
                     ExecutorService executor = Executors.newSingleThreadExecutor();
                     Future<String> future = executor.submit(() -> illCleanup.executeWithInitialText(notReplacedText));
