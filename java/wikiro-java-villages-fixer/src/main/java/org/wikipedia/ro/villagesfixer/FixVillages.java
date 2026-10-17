@@ -47,6 +47,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -82,10 +83,12 @@ import org.wikipedia.ro.model.PlainText;
 import org.wikipedia.ro.model.WikiLink;
 import org.wikipedia.ro.model.WikiPart;
 import org.wikipedia.ro.model.WikiTemplate;
+import org.wikipedia.ro.parser.AggregatingParser;
 import org.wikipedia.ro.parser.ParseResult;
 import org.wikipedia.ro.parser.WikiTemplateParser;
 import org.wikipedia.ro.parser.WikiTextParser;
 import org.wikipedia.ro.utils.LinkUtils;
+import org.wikipedia.ro.utils.RetryHelper;
 import org.wikipedia.ro.utils.WikipediaPageCache;
 import org.wikipedia.ro.villagesfixer.model.DMSCoordinates;
 import org.wikipedia.ro.villagesfixer.model.DMSValue;
@@ -145,12 +148,15 @@ public class FixVillages {
         "<div style=\"float:(?:left|right)\">\\s*\\{\\{Pie chart(.*?)</div>\\s*Conform (.*)<ref name=\"insse_20\\d1_rel\">.*?</ref>",
         Pattern.DOTALL);
     private static Pattern REF_PATTERN = Pattern.compile("(<ref[^>]*>)(.*?)</ref>");
+    private static final String INTRO_TEMPLATE = "{{Introducere așezare}}";
+    private static final Pattern INTRO_TEMPLATE_PATTERN =
+        Pattern.compile("\\{\\{\\s*[Ii]ntroducere așezare\\s*(?:\\|[^{}]*)?\\}\\}");
     private static final String INTRO_REF =
         "<ref name=\"lege_290_2018\">{{Cite act|url=https://legislatie.just.ro/Public/DetaliiDocument/208652|year=2018|type=Legea|number=290|legislature=Parlamentul României|chapter=Anexă: Denumirea și componența unităților administrativ-teritoriale pe județe}}</ref>";
 
     private static String crtSettlementName = null, crtCommuneName = null, crtCountyName = null;
     private static WikipediaPageCache WIKI_PAGE_CACHE = WikipediaPageCache.createInstance();
-    
+
     static {
         RO_NUMBER_FORMAT.setMaximumFractionDigits(2);
     }
@@ -216,33 +222,34 @@ public class FixVillages {
         Collections.sort(countyNames, roComp.init("Județul "));
 
         try {
-            String rowpusername = System.getenv("WP_USER");
-            String datausername = System.getenv("WD_USER");
+            rowpusername = System.getenv("WP_USER");
+            datausername = System.getenv("WD_USER");
 
-            char[] rowppassword = null == System.getenv("WP_PASS") ? null : System.getenv("WP_PASS").toCharArray();
-            char[] datapassword = null == System.getenv("WD_PASS") ? null : System.getenv("WD_PASS").toCharArray();
+            rowppasswords = null == System.getenv("WP_PASS") ? null : System.getenv("WP_PASS").toCharArray();
+            datapasswords = null == System.getenv("WD_PASS") ? null : System.getenv("WD_PASS").toCharArray();
             Console sysConsole = System.console();
             if (null == rowpusername) {
                 sysConsole.printf("Wiki username:");
                 rowpusername = sysConsole.readLine();
             }
-            if (null == rowppassword) {
+            if (null == rowppasswords) {
                 sysConsole.printf("Wiki password:");
-                rowppassword = sysConsole.readPassword();
+                rowppasswords = sysConsole.readPassword();
             }
             if (null == datausername) {
                 sysConsole.printf("Data username:");
                 datausername = sysConsole.readLine();
             }
-            if (null == datapassword) {
+            if (null == datapasswords) {
                 sysConsole.printf("Data password:");
-                datapassword = sysConsole.readPassword();
+                datapasswords = sysConsole.readPassword();
             }
 
             LOG.info("Logging in to ro wiki with username: {}", rowpusername);
-            rowiki.login(rowpusername, rowppassword);
+            rowiki.login(rowpusername, rowppasswords);
+            rowiki.setAssertionMode(Wiki.ASSERT_BOT);
             LOG.info("Logging in to wikibase with username: {}", datausername);
-            dwiki.login(datausername, datapassword);
+            dwiki.login(datausername, datapasswords);
 
             LOG.info("Login successful");
 
@@ -331,9 +338,8 @@ public class FixVillages {
                     crtSettlementName = null;
                     Entity communeWikibaseItem = wdcache.getByArticle("rowiki", eachCommuneArticle);
 
-                    String communeName = trim(substringBefore(
-                        CS.removeStart(CS.removeEnd(CS.removeEnd(eachCommuneArticle, ", " + eachCounty), ", România"), "Comuna "),
-                        "("));
+                    String communeName = trim(substringBefore(CS.removeStart(
+                        CS.removeEnd(CS.removeEnd(eachCommuneArticle, ", " + eachCounty), ", România"), "Comuna "), "("));
                     LOG.info("Working on commune {}, county {}", communeName, crtCountyName);
                     crtCommuneName = communeName;
                     if (!communeTouched && countyStart.equals(eachCounty) && !communeName.equals(communeStart)) {
@@ -394,8 +400,8 @@ public class FixVillages {
                         "\\[\\[Categor(y|(ie))\\:Orașe din județul " + CS.replace(eachCounty, "-", "\\-") + ".*?\\]\\]");
 
                     for (Claim eachCompositeVillageClaim : compositeVillagesClaims) {
-                        communeChanged = processSettlement(rowiki, commonsWiki, dwiki, meterEnt, squareKmEnt,
-                            roWpReference, eachCounty, countyLinkPattern, communeWikibaseItem, communeName, communeType, communeChanged,
+                        communeChanged = processSettlement(rowiki, commonsWiki, dwiki, meterEnt, squareKmEnt, roWpReference,
+                            eachCounty, countyLinkPattern, communeWikibaseItem, communeName, communeType, communeChanged,
                             villages, urbanSettlements, capitalEntity, communeLinkPattern, eachCompositeVillageClaim);
                         crtSettlementName = null;
                     }
@@ -578,7 +584,8 @@ public class FixVillages {
                             int matchedNativeNames = 0;
                             for (String eachNativeName : nativeNamesArray) {
                                 for (Claim eachCommuneNativeLabelClaim : communeNativeLabelClaims) {
-                                    if (CS.equals(
+                                    if (CS
+                                        .equals(
                                             trim(LanguageString.class
                                                 .cast(eachCommuneNativeLabelClaim.getMainsnak().getData()).getText()),
                                             trim(eachNativeName))) {
@@ -705,6 +712,11 @@ public class FixVillages {
                     numberMatcher.appendTail(formattedNumberBuf);
                     workingFirstParagraph = formattedNumberBuf.toString();
 
+                    // {{Introducere așezare}} lives on its own line, never inside the first line
+                    boolean introTemplateElsewhere =
+                        countIntroTemplates(pageText) > countIntroTemplates(firstParagraph);
+                    workingFirstParagraph = removeIntroTemplate(workingFirstParagraph);
+
                     Matcher sentenceMatcher = sentencePattern.matcher(workingFirstParagraph);
                     List<String> firstParagraphSentences = new ArrayList<>();
                     List<String> firstParagraphRefs = new ArrayList<>();
@@ -732,7 +744,8 @@ public class FixVillages {
                         }
                     }
                     String countyLink = "în [[județul " + eachCounty + "]]";
-                    if (CS.prependIfMissing(countyCapitalId, "Q").equals(CS.prependIfMissing(communeWikibaseItem.getId(), "Q"))) {
+                    if (CS.prependIfMissing(countyCapitalId, "Q")
+                        .equals(CS.prependIfMissing(communeWikibaseItem.getId(), "Q"))) {
                         countyLink = "al [[" + countyEntity.getSitelinks().get("rowiki").getPageName() + "|județului "
                             + (eachCounty.equalsIgnoreCase(communeName) ? "cu același nume" : eachCounty) + "]]";
                     }
@@ -743,8 +756,8 @@ public class FixVillages {
                         String intro = null;
 
                         if (1 == villagesEntryList.size() && urbanSettlementsEntryList.isEmpty()) {
-                            intro = String.format("'''%s'''%s este %s %s, %s, [[România]]", communeName, qualifier,
-                                communeTypeLink, countyLink, getHistoricalRegionLink(null, communeName, eachCounty));
+                            intro = String.format("'''%s'''%s este %s %s, [[România]]", communeName, qualifier,
+                                communeTypeLink, countyLink);
                             if (communeType == CommuneType.COMUNA) {
                                 intro = intro + String.format(", formată numai din satul de reședință%s",
                                     CS.equals(communeName, villagesEntryList.get(0).getKey()) ? " cu același nume"
@@ -827,9 +840,8 @@ public class FixVillages {
                                     idx++;
                                 }
                             }
-                            intro = String.format("'''%s'''%s este %s %s, %s, [[România]]%s", communeName, qualifier,
-                                communeTypeLink, countyLink, getHistoricalRegionLink(null, communeName, eachCounty),
-                                villagesList);
+                            intro = String.format("'''%s'''%s este %s %s, [[România]]%s", communeName, qualifier,
+                                communeTypeLink, countyLink, villagesList);
                         }
                         List<String> newFirstParagraphSentences = new ArrayList<>();
                         List<String> newFirstParagraphRefs = new ArrayList<>();
@@ -897,6 +909,9 @@ public class FixVillages {
                             newFirstParagraphBuilder.append(' ');
                         }
                         String newFirstParagraph = trim(newFirstParagraphBuilder.toString());
+                        if (!introTemplateElsewhere) {
+                            newFirstParagraph = newFirstParagraph + "\n" + INTRO_TEMPLATE;
+                        }
                         pageText = CS.replaceOnce(pageText, firstParagraph, newFirstParagraph);
 
                         String sortingKey = replaceEach(communeName, new String[] { "ă", "â", "ș", "ț", "î" },
@@ -949,7 +964,6 @@ public class FixVillages {
                             Claim roOfficialNameClaim = new Claim(officialNameProp, roNativeName);
                             dwiki.addClaim(communeWikibaseItem.getId(), roOfficialNameClaim);
                         }
-                        
 
                         if (!CS.equals(pageText, initialPageText)) {
                             rowiki.edit(rocommunearticle, pageText,
@@ -965,15 +979,16 @@ public class FixVillages {
                         Thread.sleep(1000l * sleeptime);
                     }
                 }
-                
-                Path coordsLogFile = Path.of(System.getProperty("java.io.tmpdir"), "wki", "coords-" + eachCounty.toLowerCase() + ".log.txt");
+
+                Path coordsLogFile =
+                    Path.of(System.getProperty("java.io.tmpdir"), "wki", "coords-" + eachCounty.toLowerCase() + ".log.txt");
                 coordsLogFile.getParent().toFile().mkdirs();
                 Files.writeString(coordsLogFile, coordinatesStat.toString());
-                
-                WIKI_PAGE_CACHE.invalidatePagesIf(rowiki, k -> CS.endsWith(k, String.format(", %s", eachCounty)) );
+
+                WIKI_PAGE_CACHE.invalidatePagesIf(rowiki, k -> CS.endsWith(k, String.format(", %s", eachCounty)));
                 LOG.info("Finished county {}", eachCounty);
             }
-        } catch (WikibaseException | LoginException | ParseException e) {
+        } catch (WikibaseException | LoginException | ParseException | TimeoutException e) {
             LOG.error("Error filling in villages", e);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -1017,7 +1032,8 @@ public class FixVillages {
         }
         if (paramNames.contains("coordonate")) {
             List<WikiPart> coordParam = initialTemplate.getParam("coordonate");
-            Optional<WikiTemplate> coordTmpl = coordParam.stream().filter(WikiTemplate.class::isInstance).map(WikiTemplate.class::cast).findFirst();
+            Optional<WikiTemplate> coordTmpl =
+                coordParam.stream().filter(WikiTemplate.class::isInstance).map(WikiTemplate.class::cast).findFirst();
             if (coordTmpl.isPresent()) {
                 if ("coor dms".equalsIgnoreCase(coordTmpl.get().getTemplateTitle())) {
                     List<WikiPart> latdParam = coordTmpl.get().getParam("1");
@@ -1026,40 +1042,30 @@ public class FixVillages {
                     List<WikiPart> longdParam = coordTmpl.get().getParam("5");
                     List<WikiPart> longmParam = coordTmpl.get().getParam("6");
                     List<WikiPart> longsParam = coordTmpl.get().getParam("7");
-                    DMSValue lat = DMSValue.fromDMS(
-                        extractStringFromPartList(latdParam),
-                        extractStringFromPartList(latmParam),
-                        extractStringFromPartList(latsParam));
-                    DMSValue lon = DMSValue.fromDMS(
-                        extractStringFromPartList(longdParam),
-                        extractStringFromPartList(longmParam),
-                        extractStringFromPartList(longsParam));
+                    DMSValue lat = DMSValue.fromDMS(extractStringFromPartList(latdParam),
+                        extractStringFromPartList(latmParam), extractStringFromPartList(latsParam));
+                    DMSValue lon = DMSValue.fromDMS(extractStringFromPartList(longdParam),
+                        extractStringFromPartList(longmParam), extractStringFromPartList(longsParam));
                     DMSCoordinates dms = new DMSCoordinates(lat, lon);
-                    coordinatesStat.append("\n    coor dms:").append(dms.getLatitude()).append(" N ").append(dms.getLongitude()).append(" E");
+                    coordinatesStat.append("\n    coor dms:").append(dms.getLatitude()).append(" N ")
+                        .append(dms.getLongitude()).append(" E");
                 } else if ("coor dm".equalsIgnoreCase(coordTmpl.get().getTemplateTitle())) {
                     List<WikiPart> latdParam = coordTmpl.get().getParam("1");
                     List<WikiPart> latmParam = coordTmpl.get().getParam("2");
                     List<WikiPart> longdParam = coordTmpl.get().getParam("4");
                     List<WikiPart> longmParam = coordTmpl.get().getParam("5");
-                    DMSValue lat = DMSValue.fromDMS(
-                        extractStringFromPartList(latdParam),
-                        extractStringFromPartList(latmParam),
-                        null);
-                    DMSValue lon = DMSValue.fromDMS(
-                        extractStringFromPartList(longdParam),
-                        extractStringFromPartList(longmParam),
-                        null);
+                    DMSValue lat =
+                        DMSValue.fromDMS(extractStringFromPartList(latdParam), extractStringFromPartList(latmParam), null);
+                    DMSValue lon =
+                        DMSValue.fromDMS(extractStringFromPartList(longdParam), extractStringFromPartList(longmParam), null);
                     DMSCoordinates dms = new DMSCoordinates(lat, lon);
-                    coordinatesStat.append("\n    coor dms:").append(dms.getLatitude()).append(" N ").append(dms.getLongitude()).append(" E");
+                    coordinatesStat.append("\n    coor dms:").append(dms.getLatitude()).append(" N ")
+                        .append(dms.getLongitude()).append(" E");
                 } else if ("coord".equalsIgnoreCase(coordTmpl.get().getTemplateTitle())) {
-                    List<String> params = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8)
-                        .stream()
-                        .map(String::valueOf)
-                        .map(s -> coordTmpl.get().getParam(s))
-                        .map(FixVillages::extractStringFromPartList)
+                    List<String> params = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8).stream().map(String::valueOf)
+                        .map(s -> coordTmpl.get().getParam(s)).map(FixVillages::extractStringFromPartList)
                         .collect(Collectors.toList());
-                    if (Arrays.asList(3, 4, 5).stream().map(params::get).allMatch(StringUtils::isBlank))
-                    {
+                    if (Arrays.asList(3, 4, 5).stream().map(params::get).allMatch(StringUtils::isBlank)) {
                         float lat = 0f, lon = 0f;
                         lat = Float.parseFloat(params.get(0));
                         lon = Float.parseFloat(params.get(1));
@@ -1069,13 +1075,15 @@ public class FixVillages {
                         DMSValue lat = DMSValue.fromDMS(params.get(0), params.get(1), params.get(2));
                         DMSValue lon = DMSValue.fromDMS(params.get(4), params.get(5), params.get(6));
                         DMSCoordinates dms = new DMSCoordinates(lat, lon);
-                        coordinatesStat.append("\n    coord:").append(dms.getLatitude()).append(" N ").append(dms.getLongitude()).append(" E");
+                        coordinatesStat.append("\n    coord:").append(dms.getLatitude()).append(" N ")
+                            .append(dms.getLongitude()).append(" E");
                     } else if (StringUtils.defaultString(params.get(2)).matches("(?i)[NS]")
                         && StringUtils.defaultString(params.get(5)).matches("(?i)[EVW]")) {
                         DMSValue lat = DMSValue.fromDMS(params.get(0), params.get(1), null);
                         DMSValue lon = DMSValue.fromDMS(params.get(3), params.get(4), null);
                         DMSCoordinates dms = new DMSCoordinates(lat, lon);
-                        coordinatesStat.append("\n    coord:").append(dms.getLatitude()).append(" N ").append(dms.getLongitude()).append(" E");
+                        coordinatesStat.append("\n    coord:").append(dms.getLatitude()).append(" N ")
+                            .append(dms.getLongitude()).append(" E");
                     } else if (StringUtils.defaultString(params.get(1)).matches("(?i)[NS]")
                         && StringUtils.defaultString(params.get(3)).matches("(?i)[EVW]")) {
                         float lat = 0f, lon = 0f;
@@ -1090,18 +1098,20 @@ public class FixVillages {
         }
     }
 
-    private static DMSValue extractDMSValue(WikiTemplate initialTemplate, String degStr, List<String> minutesParams, List<String> secondsParams) {
+    private static DMSValue extractDMSValue(WikiTemplate initialTemplate, String degStr, List<String> minutesParams,
+                                            List<String> secondsParams) {
         DMSValue dms;
         dms = new DMSValue();
         dms.setDegrees(Integer.parseInt(degStr));
-        List<WikiPart> minutesParam = minutesParams.stream().map(initialTemplate::getParam).filter(Objects::nonNull).findFirst().orElse(Collections.emptyList());
+        List<WikiPart> minutesParam = minutesParams.stream().map(initialTemplate::getParam).filter(Objects::nonNull)
+            .findFirst().orElse(Collections.emptyList());
         String minutesStr = trim(extractStringFromPartList(minutesParam));
         if (minutesStr.matches("\\d+")) {
             dms.setMinutes(extractIntFromPartList(minutesParam));
-            List<WikiPart> secondsParam = secondsParams.stream().map(initialTemplate::getParam)
-                .filter(Objects::nonNull).findFirst().orElse(Collections.emptyList());
+            List<WikiPart> secondsParam = secondsParams.stream().map(initialTemplate::getParam).filter(Objects::nonNull)
+                .findFirst().orElse(Collections.emptyList());
             dms.setSeconds(extractIntFromPartList(secondsParam));
-        } else if (minutesStr.matches("\\d+\\.\\d+")){
+        } else if (minutesStr.matches("\\d+\\.\\d+")) {
             float latmf = Float.parseFloat(minutesStr);
             dms.setMinutes((int) latmf);
             dms.setSeconds((int) (60 * (latmf - dms.getMinutes())));
@@ -1114,7 +1124,8 @@ public class FixVillages {
     }
 
     private static String extractStringFromPartList(List<WikiPart> parts) {
-        if (null == parts) return null;
+        if (null == parts)
+            return null;
         return parts.stream().map(WikiPart::toString).collect(joining());
     }
 
@@ -1426,10 +1437,10 @@ public class FixVillages {
                                              Entity squareKmEnt, Set<Snak> roWpReference, String eachCounty,
                                              Pattern countyLinkPattern, Entity communeWikibaseItem, String communeName,
                                              CommuneType communeType, boolean communeChanged, Map<String, String> villages,
-                                             Map<String, String> urbanSettlements, Entity capitalEntity, Pattern communeLinkPattern,
-                                             Claim eachCompositeVillageClaim)
+                                             Map<String, String> urbanSettlements, Entity capitalEntity,
+                                             Pattern communeLinkPattern, Claim eachCompositeVillageClaim)
         throws IOException, WikibaseException, ParseException, UnsupportedEncodingException, LoginException,
-        InterruptedException {
+        InterruptedException, TimeoutException {
         Item compositeVillage = (Item) eachCompositeVillageClaim.getMainsnak().getData();
 
         Entity villageEntity = dwiki.getWikibaseItemById(compositeVillage.getEnt());
@@ -1482,36 +1493,41 @@ public class FixVillages {
                 LOG.info("Page {} is a redirect, skipping", rovillagearticle);
                 return communeChanged;
             }
-            
+
             String pageText = WIKI_PAGE_CACHE.getPageText(rowiki, rovillagearticle);
             String initialPageText = defaultString(pageText);
-            
+
             pageText = commentedEol.matcher(pageText).replaceAll("");
 
             WikiTemplate initialTemplate = null;
             String initialTemplateText = null;
-            int templateAnalysisStart = 0;
+            int infoboxStartPosition = 0;
 
-            int previousTemplateAnalysisStart = -1;
-            do {
-                WikiTextParser textParser = new WikiTextParser();
-                ParseResult<PlainText> textParseRes = textParser.parse(pageText.substring(templateAnalysisStart));
+            StringBuilder textBeforeInfoboxBuilder = new StringBuilder();
+            List<WikiTemplate> templatesBeforeInfobox = new ArrayList<>();
 
-                WikiTemplateParser templateParser = new WikiTemplateParser();
-                ParseResult<WikiTemplate> templateParseRes = templateParser.parse(textParseRes.getUnparsedString());
+            AggregatingParser aggregatingParser = new AggregatingParser();
+            List<ParseResult<WikiPart>> parsedParts = aggregatingParser.parse(pageText);
+            for (int partIdx = 0; partIdx < parsedParts.size(); partIdx++) {
+                ParseResult<WikiPart> eachPartParseRes = parsedParts.get(partIdx);
+                if (eachPartParseRes.getIdentifiedPart() instanceof WikiTemplate) {
+                    WikiTemplate template = (WikiTemplate) eachPartParseRes.getIdentifiedPart();
+                    if (CI.startsWithAny(template.getTemplateTitle(), "cutie", "casetă", "infobox", "infocaseta")) {
+                        initialTemplate = template;
+                        initialTemplateText = eachPartParseRes.getParsedString();
+                        break;
+                    } else {
+                        templatesBeforeInfobox.add(template);
+                        infoboxStartPosition += eachPartParseRes.getParsedString().length();
+                    }
+                } else {
+                    String parsedString = eachPartParseRes.getParsedString();
+                    infoboxStartPosition += parsedString.length();
+                    textBeforeInfoboxBuilder.append(parsedString);
+                }
+            }
 
-                initialTemplate = templateParseRes.getIdentifiedPart();
-                initialTemplateText = templateParseRes.getParsedString();
-
-                previousTemplateAnalysisStart = templateAnalysisStart;
-                templateAnalysisStart =
-                    templateAnalysisStart + textParseRes.getParsedString().length() + initialTemplate.getTemplateLength();
-            } while (!CI.startsWithAny(initialTemplate.getTemplateTitle(), "cutie", "casetă", "infobox",
-                "infocaseta") && templateAnalysisStart < pageText.length()
-                && previousTemplateAnalysisStart != templateAnalysisStart);
-
-            if (CI.startsWithAny(initialTemplate.getTemplateTitle(), "cutie", "casetă", "caseta", "infobox",
-                "infocaseta")) {
+            if (CI.startsWithAny(initialTemplate.getTemplateTitle(), "cutie", "casetă", "caseta", "infobox", "infocaseta")) {
                 initialTemplate.setSingleLine(false);
                 initialTemplate.removeParam("nume");
                 initialTemplate.removeParam("județ");
@@ -1549,7 +1565,8 @@ public class FixVillages {
                             for (String eachNativeName : nativeNamesArray) {
                                 eachNativeName = CS.removeStart(CS.removeEnd(eachNativeName, "''"), "''");
                                 for (Claim eachVillageNativeLabelClaim : villageNativeLabelClaims) {
-                                    if (CS.equals(
+                                    if (CS
+                                        .equals(
                                             trim(LanguageString.class
                                                 .cast(eachVillageNativeLabelClaim.getMainsnak().getData()).getText()),
                                             trim(eachNativeName))) {
@@ -1632,14 +1649,14 @@ public class FixVillages {
                 }
             } else {
                 pageText = "{{Infocaseta Așezare}}" + pageText;
-                templateAnalysisStart = "{{Infocaseta Așezare}}".length();
             }
 
-            String articleAfterInfobox = trim(pageText.substring(templateAnalysisStart));
-
+            String articleAfterInfobox = trim(substring(pageText, infoboxStartPosition + initialTemplateText.length()));
+            List<String> partsAfterInfobox = new ArrayList<>();
             while (CS.startsWithAny(trim(articleAfterInfobox), "[[Fișier", "[[File", "[[Imagine", "[[Image", "[[Categorie",
                 "{{")) {
-                if (CS.startsWithAny(trim(articleAfterInfobox), "[[Fișier", "[[File", "[[Imagine", "[[Image", "[[Categorie")) {
+                if (CS.startsWithAny(trim(articleAfterInfobox), "[[Fișier", "[[File", "[[Imagine", "[[Image",
+                    "[[Categorie")) {
                     int imgIdx = 0;
                     int depth = 0;
                     do {
@@ -1651,10 +1668,16 @@ public class FixVillages {
                         }
                         imgIdx++;
                     } while (depth > 0 && imgIdx < articleAfterInfobox.length() - 1);
+                    partsAfterInfobox.add(CS.appendIfMissing(substring(articleAfterInfobox, 0, imgIdx + 1), "\n"));
                     articleAfterInfobox = trim(substring(articleAfterInfobox, imgIdx + 2));
                 } else if (CS.startsWith(trim(articleAfterInfobox), "{{")) {
+                    WikiTemplateParser wtp = new WikiTemplateParser();
+                    ParseResult<WikiTemplate> wtpRes = wtp.parse(articleAfterInfobox);
+                    WikiTemplate postInfoboxTemplate = wtpRes.getIdentifiedPart();
+                    
+                    partsAfterInfobox.add(CS.appendIfMissing(postInfoboxTemplate.toString(), "\n"));
                     articleAfterInfobox =
-                        trim(substring(articleAfterInfobox, new WikiTemplate(articleAfterInfobox).getTemplateLength()));
+                        trim(substring(articleAfterInfobox, postInfoboxTemplate.getTemplateLength()));
                 }
             }
             String villageImage = initialTemplate.getParams().get("imagine");
@@ -1678,7 +1701,8 @@ public class FixVillages {
                             Optional<Claim> possibleImageClaim =
                                 villageEntity.getClaims().get(imageWikidataProperty).stream().findFirst();
                             if (possibleImageClaim.isPresent()
-                                && CS.equals(
+                                && CS
+                                    .equals(
                                         CS.replace(possibleImageClaim.map(Claim::getValue).map(CommonsMedia.class::cast)
                                             .map(CommonsMedia::getFileName).get(), " ", "_"),
                                         CS.replace(imageName, " ", "_"))) {
@@ -1726,15 +1750,25 @@ public class FixVillages {
                 }
             }
 
-            if (null != initialTemplateText && null != initialTemplate.toString()) {
-                pageText = pageText.replace(initialTemplateText, initialTemplate.toString());
+            String firstParagraph;
+            String restOfArticle;
+            String textBeforeInfobox = textBeforeInfoboxBuilder.toString();
+            if (isBlank(textBeforeInfobox)) {
+                firstParagraph = substringBefore(articleAfterInfobox, "\n");
+                restOfArticle = substringAfter(articleAfterInfobox, "\n");
+            } else {
+                firstParagraph = substringBefore(textBeforeInfobox, "\n");
+                restOfArticle = substringAfter(textBeforeInfobox, "\n") + articleAfterInfobox;
             }
 
-            String firstParagraph = substringBefore(articleAfterInfobox, "\n");
-            String restOfArticle = substringAfter(articleAfterInfobox, "\n");
             if (isEmpty(firstParagraph)) {
                 firstParagraph = initialTemplate.getBeforeText();
             }
+            if (isEmpty(firstParagraph)) {
+                firstParagraph = substringBefore(restOfArticle, "\n");
+                restOfArticle = substringAfter(restOfArticle, "\n");
+            }
+
             while (CS.startsWith(trim(firstParagraph), "{{")) {
                 WikiTemplateParser extraTemplateParser = new WikiTemplateParser();
                 ParseResult<WikiTemplate> extraTemplateParseRes = extraTemplateParser.parse(trim(restOfArticle));
@@ -1771,10 +1805,18 @@ public class FixVillages {
             numberMatcher.appendTail(formattedNumberBuf);
             workingFirstParagraph = formattedNumberBuf.toString();
 
+            // {{Introducere așezare}} lives on its own line, never inside the first line
+            boolean introTemplateElsewhere = countIntroTemplates(pageText) > countIntroTemplates(firstParagraph);
+            workingFirstParagraph = removeIntroTemplate(workingFirstParagraph);
+
             Matcher sentenceMatcher = sentencePattern.matcher(workingFirstParagraph);
             List<String> firstParagraphSentences = new ArrayList<String>();
             List<String> firstParagraphRefs = new ArrayList<String>();
             while (sentenceMatcher.find()) {
+                if (sentenceMatcher.group().isEmpty()) {
+                    break; // prevent infinite loop on zero-length match
+                }
+
                 firstParagraphSentences.add(sentenceMatcher.group(1));
                 firstParagraphRefs.add(defaultIfBlank(defaultIfBlank(sentenceMatcher.group(8), sentenceMatcher.group(10)),
                     sentenceMatcher.group(6)));
@@ -1786,8 +1828,7 @@ public class FixVillages {
                 qualifier = qualifierMatcher.group(1);
             }
 
-            List<String> newFirstParagraphSentences = new ArrayList<String>();
-            List<String> newFirstParagraphRefs = new ArrayList<String>();
+            List<ReffedSentence> newFirstParagraphSentences = new ArrayList<>();
 
             String villageIndefArticle = CS.startsWith(villageType, "localitate") ? "o" : "un";
             String communeLink = communeWikibaseItem.getSitelinks().get("rowiki").getPageName();
@@ -1802,23 +1843,20 @@ public class FixVillages {
                     in = "a";
                 }
             }
-            String villageIntro = String.format("este %s %s %s [[%s|%s %s]] din [[județul %s]], %s, [[România]]",
+            String villageIntro = String.format("este %s %s %s [[%s|%s %s]] din [[județul %s]], [[România]]",
                 villageIndefArticle, villageType, in, communeLink, communeTypeForIntro,
-                CS.equals(communeName, villageName) ? "cu același nume" : communeName, eachCounty,
-                getHistoricalRegionLink(villageName, communeName, eachCounty));
+                CS.equals(communeName, villageName) ? "cu același nume" : communeName, eachCounty);
 
             String l = "sat".equalsIgnoreCase(villageType) ? "l" : "";
             String articulatedVillageType = "sat".equals(villageType) ? "satul" : "localitatea componentă";
-            String residenceIntro =
-                String.format("este %s de reședință a%s [[%s|%s %s]] din [[județul %s]], %s, [[România]]",
-                    articulatedVillageType, l, communeLink, genitiveCommuneType,
-                    CS.equals(communeName, villageName) ? "cu același nume" : communeName, eachCounty,
-                    getHistoricalRegionLink(villageName, communeName, eachCounty));
+            String residenceIntro = String.format(
+                "este %s de reședință a%s [[%s|%s %s]] din [[județul %s]], [[România]]", articulatedVillageType, l,
+                communeLink, genitiveCommuneType, CS.equals(communeName, villageName) ? "cu același nume" : communeName,
+                eachCounty);
 
             String intro = CS.equals(capitalEntity.getId(), villageEntity.getId()) ? residenceIntro : villageIntro;
 
-            newFirstParagraphSentences.add("'''" + villageName + "'''" + qualifier + " " + intro);
-            newFirstParagraphRefs.add("");
+            newFirstParagraphSentences.add(new ReffedSentence("'''" + villageName + "'''" + qualifier + " " + intro));
 
             for (int sentenceIdx = 0; sentenceIdx < firstParagraphSentences.size(); sentenceIdx++) {
                 String eachOldParagraphSentence = firstParagraphSentences.get(sentenceIdx);
@@ -1839,24 +1877,63 @@ public class FixVillages {
                             transformedLocation = locationTransformationMatcher.replaceAll("județului");
                         }
                         transformedLocation = fullLocationPattern.matcher(transformedLocation).replaceAll("");
-                        newFirstParagraphSentences.add(transformedLocation);
-                        newFirstParagraphRefs.add("");
+                        newFirstParagraphSentences.add(new ReffedSentence(transformedLocation));
                     }
                     continue;
                 }
                 eachOldParagraphSentence = CS.removeEnd(trim(eachOldParagraphSentence), ".");
                 eachOldParagraphSentence = fullLocationPattern.matcher(eachOldParagraphSentence).replaceAll("");
-                newFirstParagraphSentences.add(eachOldParagraphSentence);
-                newFirstParagraphRefs.add(eachOldParagraphRef);
+                newFirstParagraphSentences.add(
+                    new ReffedSentence(eachOldParagraphSentence, StringUtils.defaultIfBlank(eachOldParagraphRef, null)));
             }
 
-            StringBuilder newFirstParagraphBuilder = new StringBuilder();
-            for (int sentenceIdx = 0; sentenceIdx < newFirstParagraphSentences.size(); sentenceIdx++) {
-                newFirstParagraphBuilder.append(newFirstParagraphSentences.get(sentenceIdx)).append('.')
-                    .append(defaultString(newFirstParagraphRefs.get(sentenceIdx))).append(' ');
+            String newFirstParagraph = newFirstParagraphSentences.stream().filter(s -> !s.getText().isEmpty())
+                .map(s -> s.setText(CS.appendIfMissing(s.getText(), ".")))
+                .map(s -> Stream.of(s.getText(), s.getRef()).filter(StringUtils::isNotBlank).collect(joining()))
+                .collect(joining(" "));
+            if (!introTemplateElsewhere) {
+                newFirstParagraph = newFirstParagraph + "\n" + INTRO_TEMPLATE;
             }
-            String newFirstParagraph = trim(newFirstParagraphBuilder.toString());
-            pageText = pageText.replace(firstParagraph, newFirstParagraph);
+
+            // Find where articleAfterInfobox starts in pageText
+            int articleAfterInfoboxStart = pageText.indexOf(articleAfterInfobox);
+            if (articleAfterInfoboxStart >= 0) {
+                // Replace firstParagraph only within articleAfterInfobox section
+                String beforeArticle = pageText.substring(0, articleAfterInfoboxStart);
+                String modifiedAfterInfobox = CS.replaceOnce(articleAfterInfobox, firstParagraph, newFirstParagraph);
+                pageText = beforeArticle + modifiedAfterInfobox;
+            } else {
+                // Fallback to original behavior
+                pageText = CS.replaceOnce(pageText, firstParagraph, newFirstParagraph);
+            }
+
+            // Store the replacement for later
+            String paragraphToReplace = firstParagraph;
+            String replacementParagraph = newFirstParagraph;
+
+            // Reconstruct page in correct order
+            StringBuilder reconstructedPage = new StringBuilder();
+
+            // 1. Add maintenance templates before infobox
+            if (!templatesBeforeInfobox.isEmpty()) {
+                for (WikiTemplate template : templatesBeforeInfobox) {
+                    reconstructedPage.append(template.toString()).append("\n");
+                }
+            }
+
+            // 2. Add the infobox
+            if (initialTemplate != null) {
+                reconstructedPage.append(initialTemplate.toString()).append("\n");
+            }
+            partsAfterInfobox.stream().forEach(reconstructedPage::append);
+            
+            // 3. Add the new first paragraph
+            reconstructedPage.append(replacementParagraph).append("\n");
+
+            // 4. Add the rest of the article (after the old first paragraph)
+            reconstructedPage.append(restOfArticle);
+
+            pageText = reconstructedPage.toString();
 
             List<String> desiredCategories = new ArrayList<>();
             if (CS.startsWith(villageType, "localitate")) {
@@ -1869,8 +1946,25 @@ public class FixVillages {
                 recategorize(pageText, new String[] { villageName, communeName }, rovillagearticle, desiredCategories);
 
             if (!CS.equals(pageText, initialPageText)) {
-                rowiki.edit(rovillagearticle, pageText,
-                    "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard, recategorisit. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
+                final String storedPageText = pageText;
+                RetryHelper.retry(() -> {
+                    try {
+                        rowiki.edit(rovillagearticle, storedPageText,
+                            "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard, recategorisit. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
+                        return Boolean.TRUE;
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }, 10, () -> {
+                    try {
+                        int assertMode = rowiki.getAssertionMode();
+                        rowiki.setAssertionMode(Wiki.ASSERT_NONE);
+                        rowiki.login(rowpusername, rowppasswords);
+                        rowiki.setAssertionMode(assertMode);
+                    } catch (Exception e) {
+                        throw new RuntimeException("Relogin failed", e);
+                    }});
+                
                 WIKI_PAGE_CACHE.invalidatePage(rowiki, rovillagearticle);
                 villageChanged = true;
             }
@@ -1914,6 +2008,10 @@ public class FixVillages {
         Pattern.DOTALL);
     private static final Pattern CATEGORY_PATTERN =
         Pattern.compile("\\[\\[(?:C|c)ategor(?:y|ie):([^\\]\\|]*)(?:\\|(.*?))?\\]\\]");
+    private static String rowpusername;
+    private static String datausername;
+    private static char[] rowppasswords;
+    private static char[] datapasswords;
 
     private static String recategorize(String pageText, String[] namingChain, String articleTitle,
                                        List<String> desiredCategories) {
@@ -2242,7 +2340,10 @@ public class FixVillages {
                 .contains(trim(commune))) {
                 return MUNTENIA_LINK;
             } else if (Arrays.asList("Mera").contains(trim(commune))) {
-                if (Arrays.asList("Vulcăneasa").contains(trim(settlement))) {
+                if (null == settlement) {
+                    return "la limita între regiunile istorice " + join(Arrays.asList(MOLDOVA_LINK, MUNTENIA_LINK), " și ");
+                }
+                if (Arrays.asList("Roșioara", "Vulcăneasa").contains(trim(settlement))) {
                     return MUNTENIA_LINK;
                 }
             } else if (Arrays.asList("Focșani", "Vulturu").contains(trim(commune))) {
@@ -2441,6 +2542,23 @@ public class FixVillages {
         return null;
     }
 
+    private static int countIntroTemplates(String text) {
+        int count = 0;
+        Matcher m = INTRO_TEMPLATE_PATTERN.matcher(defaultString(text));
+        while (m.find()) {
+            count++;
+        }
+        return count;
+    }
+
+    private static String removeIntroTemplate(String text) {
+        Matcher m = INTRO_TEMPLATE_PATTERN.matcher(text);
+        if (!m.find()) {
+            return text;
+        }
+        return trim(m.replaceAll("").replaceAll(" {2,}", " "));
+    }
+
     private static void initLogging() {
         LoggerContext logbackContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
@@ -2496,6 +2614,40 @@ public class FixVillages {
                 return 1;
             }
             return arg1.getValue() - arg0.getValue();
+        }
+    }
+
+    private static class ReffedSentence {
+        private String text;
+        private String ref;
+
+        public String getRef() {
+            return ref;
+        }
+
+        public ReffedSentence setRef(String ref) {
+            this.ref = ref;
+            return this;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public ReffedSentence setText(String text) {
+            this.text = text;
+            return this;
+        }
+
+        public ReffedSentence(String text, String ref) {
+            super();
+            this.text = text;
+            this.ref = ref;
+        }
+
+        public ReffedSentence(String text) {
+            super();
+            this.text = text;
         }
     }
 }
