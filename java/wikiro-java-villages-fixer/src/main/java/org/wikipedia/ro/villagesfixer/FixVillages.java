@@ -24,6 +24,8 @@ import static org.wikibase.WikibasePropertyFactory.getWikibaseProperty;
 import java.io.Console;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -32,6 +34,8 @@ import java.nio.file.Path;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.RuleBasedCollator;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -75,6 +79,7 @@ import org.wikibase.data.Rank;
 import org.wikibase.data.Snak;
 import org.wikibase.data.StringData;
 import org.wikibase.data.Time;
+import org.wikibase.data.URLData;
 import org.wikibase.data.WikibaseData;
 import org.wikipedia.Wiki;
 import org.wikipedia.ro.InitializableComparator;
@@ -154,6 +159,24 @@ public class FixVillages {
     private static final String INTRO_REF =
         "<ref name=\"lege_290_2018\">{{Cite act|url=https://legislatie.just.ro/Public/DetaliiDocument/208652|year=2018|type=Legea|number=290|legislature=Parlamentul României|chapter=Anexă: Denumirea și componența unităților administrativ-teritoriale pe județe}}</ref>";
 
+    // Official administrative-territorial units dataset from data.gov.ro; used as the source of the UAT areas.
+    private static final Path DBF_FILE = Path.of("/work/var/wki/Unitate_administrativa_UAT.dbf");
+    private static final String DBF_CODE_COLUMN = "natCode";
+    private static final String DBF_AREA_COLUMN = "Shape_Area";
+    private static final BigDecimal SQUARE_METERS_PER_SQUARE_KM = BigDecimal.valueOf(1_000_000);
+    private static final double AREA_TOLERANCE_KM2 = 0.1d;
+    private static final String AREA_SOURCE_ITEM = "Q97098010";
+    private static final String AREA_SOURCE_URL =
+        "https://data.gov.ro/dataset/unitati-administrativ-teritoriale-07-03-2024/resource/7169c5ce-6a88-4fdf-8b78-03069bc09510";
+    private static final String GREGORIAN_CALENDAR = "http://www.wikidata.org/entity/Q1985727";
+
+    // DBF records indexed by SIRUTA code (leading zeros stripped), filled in main()
+    private static final Map<String, Map<String, String>> DBF_BY_CODE = new HashMap<>();
+
+    private enum AreaUpdate {
+        NO_DATA, UNCHANGED, UPDATED
+    }
+
     private static String crtSettlementName = null, crtCommuneName = null, crtCountyName = null;
     private static WikipediaPageCache WIKI_PAGE_CACHE = WikipediaPageCache.createInstance();
 
@@ -163,6 +186,10 @@ public class FixVillages {
 
     public static void main(String[] args) throws IOException {
         initLogging();
+        for (Map<String, String> dbfRow : DbfReader.read(DBF_FILE, StandardCharsets.UTF_8)) {
+            DBF_BY_CODE.putIfAbsent(normalizeCode(dbfRow.get(DBF_CODE_COLUMN)), dbfRow);
+        }
+        LOG.info("Loaded {} records from {}", DBF_BY_CODE.size(), DBF_FILE);
         Wiki rowiki = Wiki.newSession("ro.wikipedia.org");
         Wiki commonsWiki = Wiki.newSession("commons.wikimedia.org");
 
@@ -380,6 +407,12 @@ public class FixVillages {
                         communeChanged = true;
                     }
 
+                    AreaUpdate areaUpdate = updateAreaFromDbf(dwiki, communeWikibaseItem, areaProp, squareKmEnt);
+                    boolean areaSetFromDbf = areaUpdate == AreaUpdate.UPDATED;
+                    if (areaSetFromDbf) {
+                        communeChanged = true;
+                    }
+
                     Map<Property, Set<Claim>> communeClaims = communeWikibaseItem.getClaims();
                     Set<Claim> compositeVillagesClaims = communeClaims.get(new Property("P1383"));
                     Set<Rank> availableRanks =
@@ -486,8 +519,9 @@ public class FixVillages {
                                 }
                             }
                             if (CS.startsWith(eachParam, "suprafață_totală_km2")) {
-                                if (isNotBlank(paramValue) && (!communeWikibaseItem.getClaims().containsKey(areaProp)
-                                    || null == communeWikibaseItem.getClaims().get(areaProp))) {
+                                if (isNotBlank(paramValue) && !areaSetFromDbf
+                                    && (!communeWikibaseItem.getClaims().containsKey(areaProp)
+                                        || null == communeWikibaseItem.getClaims().get(areaProp))) {
                                     Claim areaClaim =
                                         extractWdAreaDataFromParam(areaProp, squareKmEnt, paramValue, roWpReference);
                                     String claimId = dwiki.addClaim(communeWikibaseItem.getId(), areaClaim);
@@ -999,6 +1033,127 @@ public class FixVillages {
                 dwiki.logout();
             }
         }
+    }
+
+    // Leading zeros are ignored so that padded and unpadded codes match.
+    private static String normalizeCode(String code) {
+        return code == null ? "" : code.trim().replaceFirst("^0+(?=.)", "");
+    }
+
+    private static BigDecimal toSquareKm(String squareMeters) {
+        if (isBlank(squareMeters)) {
+            return null;
+        }
+        try {
+            return new BigDecimal(squareMeters.trim()).divide(SQUARE_METERS_PER_SQUARE_KM).setScale(2,
+                RoundingMode.DOWN);
+        } catch (NumberFormatException e) {
+            LOG.warn("Invalid area value in dbf: {}", squareMeters);
+            return null;
+        }
+    }
+
+    /** Converts the amount of a Wikidata area claim to km2; null if the claim is not a convertible quantity. */
+    private static Double areaClaimInSquareKm(Claim claim) {
+        if (!(claim.getMainsnak().getData() instanceof Quantity qty)) {
+            return null;
+        }
+        String unitId = qty.getUnit() == null || qty.getUnit().getEnt() == null ? null : qty.getUnit().getEnt().getId();
+        if (unitId == null || CS.equals(unitId, "Q712226")) { // square kilometre
+            return qty.getAmount();
+        }
+        if (CS.equals(unitId, "Q35852")) { // hectare
+            return qty.getAmount() / 100d;
+        }
+        if (CS.equals(unitId, "Q25343")) { // square metre
+            return qty.getAmount() / 1_000_000d;
+        }
+        return null;
+    }
+
+    private static Time currentDateAsTime() {
+        String today = "+" + LocalDate.now(ZoneOffset.UTC) + "T00:00:00Z";
+        return new Time(today, 0, 0, 0, 11, GREGORIAN_CALENDAR);
+    }
+
+    private static Set<Snak> buildDbfAreaReference() {
+        Snak statedIn = new Snak();
+        statedIn.setProperty(getWikibaseProperty("P248"));
+        statedIn.setData(new Item(new Entity(AREA_SOURCE_ITEM)));
+
+        Snak referenceUrl = new Snak();
+        referenceUrl.setProperty(getWikibaseProperty("P854"));
+        referenceUrl.setData(new URLData(AREA_SOURCE_URL));
+
+        Snak retrieved = new Snak();
+        retrieved.setProperty(getWikibaseProperty("P813"));
+        retrieved.setData(currentDateAsTime());
+
+        Set<Snak> reference = new LinkedHashSet<>();
+        reference.add(statedIn);
+        reference.add(referenceUrl);
+        reference.add(retrieved);
+        return reference;
+    }
+
+    /**
+     * Sets P2046 of a commune/town/municipality from the data.gov.ro dbf (converted to km2). Existing statements are
+     * replaced only if none of them is within {@link #AREA_TOLERANCE_KM2} of the dbf value, or if there is none.
+     */
+    private static AreaUpdate updateAreaFromDbf(Wikibase dwiki, Entity communeItem, Property areaProp,
+                                                Entity squareKmEnt)
+        throws IOException, WikibaseException {
+        Map<Property, Set<Claim>> claims = communeItem.getClaims();
+
+        Map<String, String> dbfRecord = null;
+        for (Claim eachSirutaClaim : SetUtils.emptyIfNull(claims.get(getWikibaseProperty("P843")))) {
+            if ("statement".equals(eachSirutaClaim.getType())
+                && eachSirutaClaim.getMainsnak().getData() instanceof StringData siruta) {
+                dbfRecord = DBF_BY_CODE.get(normalizeCode(siruta.getValue()));
+                if (dbfRecord != null) {
+                    break;
+                }
+            }
+        }
+        if (dbfRecord == null) {
+            LOG.warn("No dbf record found for {} ({})", communeItem.getId(), crtCommuneName);
+            return AreaUpdate.NO_DATA;
+        }
+        BigDecimal dbfAreaKm2 = toSquareKm(dbfRecord.get(DBF_AREA_COLUMN));
+        if (dbfAreaKm2 == null) {
+            return AreaUpdate.NO_DATA;
+        }
+
+        List<Claim> oldAreaClaims = SetUtils.emptyIfNull(claims.get(areaProp)).stream()
+            .filter(c -> "statement".equals(c.getType())).toList();
+        for (Claim eachOldClaim : oldAreaClaims) {
+            Double oldAreaKm2 = areaClaimInSquareKm(eachOldClaim);
+            if (null != oldAreaKm2 && Math.abs(oldAreaKm2 - dbfAreaKm2.doubleValue()) <= AREA_TOLERANCE_KM2) {
+                return AreaUpdate.UNCHANGED;
+            }
+        }
+
+        Quantity areaQty = new Quantity();
+        areaQty.setAmount(dbfAreaKm2.doubleValue());
+        areaQty.setUnit(new Item(squareKmEnt));
+        Claim areaClaim = new Claim(areaProp, areaQty);
+        areaClaim.getMainsnak().setDatatype("quantity");
+        areaClaim.addReference(buildDbfAreaReference());
+
+        LOG.info("Setting area of {} ({}) to {} km2 from dbf, replacing {} old statement(s)", communeItem.getId(),
+            crtCommuneName, dbfAreaKm2.toPlainString(), oldAreaClaims.size());
+        // Add the new statement first so the item is never left without an area if the edit fails
+        String claimId = dwiki.addClaim(communeItem.getId(), areaClaim);
+        if (null == claimId) {
+            return AreaUpdate.NO_DATA;
+        }
+        for (Set<Snak> eachRef : areaClaim.getReferences()) {
+            dwiki.addReference(claimId, new ArrayList<Snak>(eachRef));
+        }
+        for (Claim eachOldClaim : oldAreaClaims) {
+            dwiki.removeClaim(eachOldClaim.getId());
+        }
+        return AreaUpdate.UPDATED;
     }
 
     private static void verifyCoordinates(WikiTemplate initialTemplate, StringBuilder coordinatesStat) {
