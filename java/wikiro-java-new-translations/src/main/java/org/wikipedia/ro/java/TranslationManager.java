@@ -53,6 +53,10 @@ import ch.qos.logback.core.ConsoleAppender;
 
 public class TranslationManager extends AbstractExecutable {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(TranslationManager.class);
+
+    private static final String BOT_NAME = "Slartibot";
+    private static final String BOT_HANDLER_NAME = "SlartibartfastT";
+
     Pattern commentPattern = Pattern.compile("\\[\\[:(\\w+):Special:Redirect/revision/(\\d+)\\|([^\\]]+)\\]\\]");
     Pattern translPagePattern = Pattern.compile("\\{\\{\\s*[Pp]agină[_\\s]tradusă");
 
@@ -190,7 +194,7 @@ public class TranslationManager extends AbstractExecutable {
         LOG.info("Finished visiting articles. Setting new reference date.");
 
         try {
-            wikiEditWithRetry("Utilizator:Andrebot/dată-vizitare-pagini-noi", now.toString(),
+            wikiEditWithRetry("Utilizator:%s/dată-vizitare-pagini-noi".formatted(BOT_NAME), now.toString(),
                 "Robot: actualizare dată vizitare pagini noi");
         } catch (TimeoutException e) {
             LOG.error("Failed to update last visit date", e);
@@ -250,7 +254,7 @@ public class TranslationManager extends AbstractExecutable {
         }
 
         try {
-            wikiEditWithRetry("Utilizator:Andrebot/Statut procesare pagini traduse", msg.toString(),
+            wikiEditWithRetry("Utilizator:%s/Statut procesare pagini traduse".formatted(BOT_NAME), msg.toString(),
                 "Robot: actualizat lista de traduceri de prelucrat manual");
         } catch (TimeoutException e) {
             LOG.error("Failed to update the manual processing list page", e);
@@ -260,7 +264,7 @@ public class TranslationManager extends AbstractExecutable {
     public BatchTranslationProcessingStatus processManualCalls() throws IOException {
         BatchTranslationProcessingStatus status = new BatchTranslationProcessingStatus();
         String manuallyProcessedTranslationsPage =
-            WikipediaPageCache.getInstance().getPageText(wiki, "Utilizator:Andrebot/traduceri-de-prelucrat");
+            WikipediaPageCache.getInstance().getPageText(wiki, "Utilizator:%s/traduceri-de-prelucrat".formatted(BOT_NAME));
         // Read the list of page titles
         List<String> pageTitles = manuallyProcessedTranslationsPage.lines().map(String::trim).filter(line -> !line.isEmpty())
             .filter(line -> !line.startsWith("{")).filter(line -> !line.startsWith("<")).collect(Collectors.toList());
@@ -324,7 +328,7 @@ public class TranslationManager extends AbstractExecutable {
             manuallyProcessedTranslationsPage.replaceAll("(?s)<pre>.*?</pre>", Matcher.quoteReplacement(replacement));
 
         try {
-            wikiEditWithRetry("Utilizator:Andrebot/traduceri-de-prelucrat", updatedPage,
+            wikiEditWithRetry("Utilizator:%s/traduceri-de-prelucrat".formatted(BOT_NAME), updatedPage,
                 "Robot: actualizat lista de traduceri de prelucrat manual");
         } catch (TimeoutException e) {
             LOG.error("Failed to update the manual processing list page", e);
@@ -470,12 +474,12 @@ public class TranslationManager extends AbstractExecutable {
 
     private LocalDate findLastVisit() throws IOException {
         RequestHelper rh = wiki.new RequestHelper();
-        rh.byUser("Andrebot");
+        rh.byUser(BOT_NAME);
         rh.limitedTo(1);
-        List<Revision> revs = wiki.getPageHistory("Utilizator:Andrebot/dată-vizitare-pagini-noi", rh);
+        List<Revision> revs = wiki.getPageHistory("Utilizator:%s/dată-vizitare-pagini-noi".formatted(BOT_NAME), rh);
 
-        rh.byUser("Andrei Stroe");
-        revs.addAll(wiki.getPageHistory("Utilizator:Andrebot/dată-vizitare-pagini-noi", rh));
+        rh.byUser(BOT_HANDLER_NAME);
+        revs.addAll(wiki.getPageHistory("Utilizator:%s/dată-vizitare-pagini-noi".formatted(BOT_NAME), rh));
 
         revs.sort((r1, r2) -> r2.getTimestamp().compareTo(r1.getTimestamp()));
 
