@@ -35,6 +35,9 @@ public class CitationCompleter extends AbstractExecutable
 {
     private static final Logger LOG = LoggerFactory.getLogger(CitationCompleter.class);
 
+    private static final String BOT_NAME = "Slartibot";
+    private static final String BOT_HANDLER_NAME = "SlartibartfastT";
+
     public static final Pattern REF_URL_PATTERN = Pattern
         .compile("\\<ref\\s*(\\sname\\=(?:\\\"[^\\\"]+\\\"|\\w+))?\\>\\s*(((http|https)://)(www.)?[a-zA-Z0-9@:%._\\+~#?&//=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%._\\\\+~#?&//=]*))</ref>");
 
@@ -113,18 +116,18 @@ public class CitationCompleter extends AbstractExecutable
                 WikipediaPageCache.getInstance().savePage(wiki, pgdata.getKey(), sb.toString(), "Robot: completat automat " + (1 == citationsChanged ? "o citare" : (citationsChanged + " citări")), getReloginCallback());
             }
         }
-        wiki.edit("Utilizator:Andrebot/dată-vizitare-pagini-editate", now.toString(), "Robot: actualizare dată vizitare pagini editate");
+        wiki.edit("Utilizator:%s/dată-vizitare-pagini-editate".formatted(BOT_NAME), now.toString(), "Robot: actualizare dată vizitare pagini editate");
     }
 
     private LocalDate findLastVisit() throws IOException
     {
         RequestHelper rh = wiki.new RequestHelper();
-        rh.byUser("Andrebot");
+        rh.byUser(BOT_NAME);
         rh.limitedTo(1);
-        List<Revision> revs = wiki.getPageHistory("Utilizator:Andrebot/dată-vizitare-pagini-editate", rh);
+        List<Revision> revs = wiki.getPageHistory("Utilizator:%s/dată-vizitare-pagini-editate".formatted(BOT_NAME), rh);
 
-        rh.byUser("Andrei Stroe");
-        revs.addAll(wiki.getPageHistory("Utilizator:Andrebot/dată-vizitare-pagini-editate", rh));
+        rh.byUser(BOT_HANDLER_NAME);
+        revs.addAll(wiki.getPageHistory("Utilizator:%s/dată-vizitare-pagini-editate".formatted(BOT_NAME), rh));
 
         revs.sort((r1, r2) -> r2.getTimestamp().compareTo(r1.getTimestamp()));
 
