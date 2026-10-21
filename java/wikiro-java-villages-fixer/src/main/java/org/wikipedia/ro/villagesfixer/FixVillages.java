@@ -747,7 +747,12 @@ public class FixVillages {
                             communeTypeLink = "[[Municipiile României|municipiul]] de reședință";
                         }
                     }
-                    String countyLink = "în [[județul " + eachCounty + "]]";
+                    boolean eponymousCounty = eachCounty.equalsIgnoreCase(communeName);
+                    String countyLink = eponymousCounty
+                        ? "în [[județul " + eachCounty + "|județul cu același nume]]"
+                        : "în [[județul " + eachCounty + "]]";
+                    // no comma after "cu același nume": "... al județului cu același nume din România"
+                    String romaniaSeparator = eponymousCounty ? " din " : ", ";
                     if (CS.prependIfMissing(countyCapitalId, "Q")
                         .equals(CS.prependIfMissing(communeWikibaseItem.getId(), "Q"))) {
                         countyLink = "al [[" + countyEntity.getSitelinks().get("rowiki").getPageName() + "|județului "
@@ -760,8 +765,8 @@ public class FixVillages {
                         String intro = null;
 
                         if (1 == villagesEntryList.size() && urbanSettlementsEntryList.isEmpty()) {
-                            intro = String.format("'''%s'''%s este %s %s, [[România]]", communeName, qualifier,
-                                communeTypeLink, countyLink);
+                            intro = String.format("'''%s'''%s este %s %s%s[[România]]", communeName, qualifier,
+                                communeTypeLink, countyLink, romaniaSeparator);
                             if (communeType == CommuneType.COMUNA) {
                                 intro = intro + String.format(", formată numai din satul de reședință%s",
                                     CS.equals(communeName, villagesEntryList.get(0).getKey()) ? " cu același nume"
@@ -844,8 +849,8 @@ public class FixVillages {
                                     idx++;
                                 }
                             }
-                            intro = String.format("'''%s'''%s este %s %s, [[România]]%s", communeName, qualifier,
-                                communeTypeLink, countyLink, villagesList);
+                            intro = String.format("'''%s'''%s este %s %s%s[[România]]%s", communeName, qualifier,
+                                communeTypeLink, countyLink, romaniaSeparator, villagesList);
                         }
                         List<String> newFirstParagraphSentences = new ArrayList<>();
                         List<String> newFirstParagraphRefs = new ArrayList<>();
