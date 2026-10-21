@@ -21,7 +21,6 @@ import static org.apache.commons.lang3.Strings.CI;
 import static org.apache.commons.lang3.Strings.CS;
 import static org.wikibase.WikibasePropertyFactory.getWikibaseProperty;
 
-import java.io.Console;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -168,7 +167,10 @@ public class FixVillages {
     private static final String AREA_SOURCE_ITEM = "Q97098010";
     private static final String AREA_SOURCE_URL =
         "https://data.gov.ro/dataset/unitati-administrativ-teritoriale-07-03-2024/resource/7169c5ce-6a88-4fdf-8b78-03069bc09510";
-    private static final String GREGORIAN_CALENDAR = "http://www.wikidata.org/entity/Q1985727";
+    private static final String AREA_FOOTNOTE = "{{RefQ|" + AREA_SOURCE_ITEM + "|url=" + AREA_SOURCE_URL + "}}";
+    // P2241 (reason for deprecated rank) = Q126598282
+    private static final String DEPRECATION_REASON_PROPERTY = "P2241";
+    private static final String DEPRECATION_REASON_ITEM = "Q126598282";
 
     // DBF records indexed by SIRUTA code (leading zeros stripped), filled in main()
     private static final Map<String, Map<String, String>> DBF_BY_CODE = new HashMap<>();
@@ -200,8 +202,17 @@ public class FixVillages {
         }
 
         Wikibase dwiki = new Wikibase();
+        // Nothing is authenticated up front: each site logs in only when a write needs it, or when a read fails with an
+        // authentication-related error.
+        roAuth = new LazyAuth<>("ro.wikipedia", "WP_USER", "WP_PASS", rowiki, (w, user, pass) -> {
+            w.setAssertionMode(Wiki.ASSERT_NONE);
+            w.login(user, pass);
+            w.setAssertionMode(Wiki.ASSERT_BOT);
+        }, null);
+        wdAuth = new LazyAuth<>("wikidata", "WD_USER", "WD_PASS", dwiki, (w, user, pass) -> w.login(user, pass),
+            Wikibase::logout);
         List<String> countyCategoryMembersList =
-            rowiki.getCategoryMembers("Category:Județe din România", Wiki.CATEGORY_NAMESPACE);
+            roRead(() -> rowiki.getCategoryMembers("Category:Județe din România", Wiki.CATEGORY_NAMESPACE));
         List<String> countyNames = new ArrayList<>();
         for (String eachArticleName : countyCategoryMembersList) {
             String countyNameNoCat = CI.removeStart(eachArticleName, "Categorie:");
@@ -249,37 +260,6 @@ public class FixVillages {
         Collections.sort(countyNames, roComp.init("Județul "));
 
         try {
-            rowpusername = System.getenv("WP_USER");
-            datausername = System.getenv("WD_USER");
-
-            rowppasswords = null == System.getenv("WP_PASS") ? null : System.getenv("WP_PASS").toCharArray();
-            datapasswords = null == System.getenv("WD_PASS") ? null : System.getenv("WD_PASS").toCharArray();
-            Console sysConsole = System.console();
-            if (null == rowpusername) {
-                sysConsole.printf("Wiki username:");
-                rowpusername = sysConsole.readLine();
-            }
-            if (null == rowppasswords) {
-                sysConsole.printf("Wiki password:");
-                rowppasswords = sysConsole.readPassword();
-            }
-            if (null == datausername) {
-                sysConsole.printf("Data username:");
-                datausername = sysConsole.readLine();
-            }
-            if (null == datapasswords) {
-                sysConsole.printf("Data password:");
-                datapasswords = sysConsole.readPassword();
-            }
-
-            LOG.info("Logging in to ro wiki with username: {}", rowpusername);
-            rowiki.login(rowpusername, rowppasswords);
-            rowiki.setAssertionMode(Wiki.ASSERT_BOT);
-            LOG.info("Logging in to wikibase with username: {}", datausername);
-            dwiki.login(datausername, datapasswords);
-
-            LOG.info("Login successful");
-
             WikidataEntitiesCache wdcache = new WikidataEntitiesCache(dwiki);
             rowiki.setMarkBot(true);
             dwiki.setMarkBot(true);
@@ -297,7 +277,7 @@ public class FixVillages {
                 crtCountyName = eachCounty;
                 LOG.info("Starting up county {}", crtCountyName);
 
-                Entity countyEnt = wdcache.getByArticle("rowiki", CI.prependIfMissing(crtCountyName, "Județul "));
+                Entity countyEnt = wdRead(() -> wdcache.getByArticle("rowiki", CI.prependIfMissing(crtCountyName, "Județul ")));
                 Set<Claim> regPlate = countyEnt.getBestClaims(regPlateProp);
                 String countySymbol = regPlate.stream().filter(c -> "statement".equals(c.getType())).map(Claim::getMainsnak)
                     .map(Snak::getData).filter(d -> d instanceof StringData).map(StringData.class::cast).findFirst()
@@ -305,21 +285,21 @@ public class FixVillages {
 
                 countyTouched = true;
                 List<String> categoryMembers =
-                    rowiki.getCategoryMembers("Category:Orașe din județul " + eachCounty, Wiki.MAIN_NAMESPACE);
+                    roRead(() -> rowiki.getCategoryMembers("Category:Orașe din județul " + eachCounty, Wiki.MAIN_NAMESPACE));
                 List<String> categoryMembersList = new ArrayList<>();
                 categoryMembersList.addAll(categoryMembers);
                 categoryMembersList
-                    .addAll(rowiki.getCategoryMembers("Category:Comune din județul " + eachCounty, Wiki.MAIN_NAMESPACE));
+                    .addAll(roRead(() -> rowiki.getCategoryMembers("Category:Comune din județul " + eachCounty, Wiki.MAIN_NAMESPACE)));
 
                 List<String> subcategories =
-                    rowiki.getCategoryMembers("Category:Orașe din județul " + eachCounty, Wiki.CATEGORY_NAMESPACE);
+                    roRead(() -> rowiki.getCategoryMembers("Category:Orașe din județul " + eachCounty, Wiki.CATEGORY_NAMESPACE));
                 List<String> subcategoriesList = new ArrayList<>();
                 subcategoriesList.addAll(subcategories);
                 subcategoriesList
-                    .addAll(rowiki.getCategoryMembers("Category:Comune din județul " + eachCounty, Wiki.CATEGORY_NAMESPACE));
+                    .addAll(roRead(() -> rowiki.getCategoryMembers("Category:Comune din județul " + eachCounty, Wiki.CATEGORY_NAMESPACE)));
                 for (String eachSubcat : subcategoriesList) {
                     String catTitle = CI.removeStart(eachSubcat, "Categorie:");
-                    List<String> subarticles = rowiki.getCategoryMembers(eachSubcat, Wiki.MAIN_NAMESPACE);
+                    List<String> subarticles = roRead(() -> rowiki.getCategoryMembers(eachSubcat, Wiki.MAIN_NAMESPACE));
                     for (String eachSubarticle : subarticles) {
                         if (CS.equals(eachSubarticle, catTitle)) {
                             categoryMembersList.add(eachSubarticle);
@@ -337,18 +317,18 @@ public class FixVillages {
                         + eachCounty + "]]",
                     "[[Categorie:Geografia județului " + eachCounty
                         + "]]\n[[Categorie:Subunități administrative ale județelor României|" + eachCounty + "]]", };
-                boolean[] categories = rowiki.exists(settlementCategories);
+                boolean[] categories = roRead(() -> rowiki.exists(settlementCategories));
 
                 for (int catIdx = 0; catIdx < settlementCategories.size(); catIdx++) {
                     if (!categories[catIdx]) {
-                        rowiki.edit(settlementCategories.get(catIdx), settlementCategoriesContent[catIdx],
+                        roAuth.authenticated().edit(settlementCategories.get(catIdx), settlementCategoriesContent[catIdx],
                             "Creare categorii cu localități și subunități administrative pentru județul " + eachCounty);
                     }
                 }
 
                 String countyCapitalId = null;
                 Entity countyEntity =
-                    dwiki.getWikibaseItemBySiteAndTitle("rowiki", CI.prependIfMissing(eachCounty, "Județul "));
+                    wdRead(() -> dwiki.getWikibaseItemBySiteAndTitle("rowiki", CI.prependIfMissing(eachCounty, "Județul ")));
                 Set<Claim> countyCapitalClaims = countyEntity.getClaims().get(capitalProp);
                 for (Claim eachCountyCapitalClaim : countyCapitalClaims) {
                     countyCapitalId = ((Item) eachCountyCapitalClaim.getMainsnak().getData()).getEnt().getId();
@@ -363,7 +343,7 @@ public class FixVillages {
                 }
                 for (String eachCommuneArticle : new LinkedHashSet<String>(categoryMembersList)) {
                     crtSettlementName = null;
-                    Entity communeWikibaseItem = wdcache.getByArticle("rowiki", eachCommuneArticle);
+                    Entity communeWikibaseItem = wdRead(() -> wdcache.getByArticle("rowiki", eachCommuneArticle));
 
                     String communeName = trim(substringBefore(CS.removeStart(
                         CS.removeEnd(CS.removeEnd(eachCommuneArticle, ", " + eachCounty), ", România"), "Comuna "), "("));
@@ -399,18 +379,19 @@ public class FixVillages {
                     String communeDescr = String.format("%s din județul %s, România", communeType.getTypeName(), eachCounty);
                     boolean communeChanged = false;
                     if (!CS.equals(communeWikibaseItem.getDescriptions().get("ro"), communeDescr)) {
-                        dwiki.setDescription(communeWikibaseItem.getId(), "ro", communeDescr);
+                        wdAuth.authenticated().setDescription(communeWikibaseItem.getId(), "ro", communeDescr);
                         communeChanged = true;
                     }
                     if (!CS.equals(extractRoNameFromEntity(communeWikibaseItem), communeName)) {
-                        dwiki.setLabel(communeWikibaseItem.getId(), "ro", communeName);
+                        wdAuth.authenticated().setLabel(communeWikibaseItem.getId(), "ro", communeName);
                         communeChanged = true;
                     }
 
-                    AreaUpdate areaUpdate = updateAreaFromDbf(dwiki, communeWikibaseItem, areaProp, squareKmEnt);
-                    boolean areaSetFromDbf = areaUpdate == AreaUpdate.UPDATED;
-                    if (areaSetFromDbf) {
-                        communeChanged = true;
+                    // Stage 1: the area from data.gov.ro only goes into the infobox. Copying it to Wikidata
+                    // (updateAreaFromDbf) is on hold until the next stage.
+                    BigDecimal dbfAreaKm2 = findDbfAreaKm2(communeWikibaseItem);
+                    if (null == dbfAreaKm2) {
+                        LOG.warn("No area found in dbf for {} ({})", communeWikibaseItem.getId(), crtCommuneName);
                     }
 
                     Map<Property, Set<Claim>> communeClaims = communeWikibaseItem.getClaims();
@@ -425,7 +406,7 @@ public class FixVillages {
 
                     Set<Claim> capitalClaims = communeWikibaseItem.getClaims().get(new Property("P36"));
                     Claim capitalClaim = capitalClaims.stream().findFirst().get();
-                    Entity capitalEntity = dwiki.getWikibaseItemById(((Item) capitalClaim.getMainsnak().getData()).getEnt());
+                    Entity capitalEntity = wdRead(() -> dwiki.getWikibaseItemById(((Item) capitalClaim.getMainsnak().getData()).getEnt()));
 
                     Pattern communeLinkPattern =
                         Pattern.compile("\\[\\[\\s*((C|c)omuna )?" + communeName + "(, " + eachCounty + ")?\\s*(\\||\\])");
@@ -444,7 +425,7 @@ public class FixVillages {
                     int templateAnalysisStart = 0;
 
                     String rocommunearticle = communeWikibaseItem.getSitelinks().get("rowiki").getPageName();
-                    String pageText = WIKI_PAGE_CACHE.getPageText(rowiki, rocommunearticle);
+                    String pageText = roRead(() -> WIKI_PAGE_CACHE.getPageText(rowiki, rocommunearticle));
                     String initialPageText = defaultString(pageText);
 
                     String sirutaFromWd = null;
@@ -518,21 +499,6 @@ public class FixVillages {
                                     initialTemplate.setParam(eachParam, sbuf.toString());
                                 }
                             }
-                            if (CS.startsWith(eachParam, "suprafață_totală_km2")) {
-                                if (isNotBlank(paramValue) && !areaSetFromDbf
-                                    && (!communeWikibaseItem.getClaims().containsKey(areaProp)
-                                        || null == communeWikibaseItem.getClaims().get(areaProp))) {
-                                    Claim areaClaim =
-                                        extractWdAreaDataFromParam(areaProp, squareKmEnt, paramValue, roWpReference);
-                                    String claimId = dwiki.addClaim(communeWikibaseItem.getId(), areaClaim);
-                                    if (null != claimId) {
-                                        for (Set<Snak> eachRef : areaClaim.getReferences()) {
-                                            dwiki.addReference(claimId, new ArrayList<Snak>(eachRef));
-                                        }
-                                    }
-                                }
-                                initialTemplate.removeParam(eachParam);
-                            }
                             if (CS.startsWith(eachParam, "sit-")) {
                                 if (isNotBlank(paramValue) && (communeWikibaseItem.getClaims().containsKey(webAddrProp))
                                     || (!CS.equals("sit-adresă", eachParam)
@@ -546,10 +512,10 @@ public class FixVillages {
                                     || null == communeWikibaseItem.getClaims().get(altProp))) {
                                     Claim altClaim =
                                         extractWdAltitudeDataFromParam(altProp, meterEnt, paramValue, roWpReference);
-                                    String claimId = dwiki.addClaim(communeWikibaseItem.getId(), altClaim);
+                                    String claimId = wdAuth.authenticated().addClaim(communeWikibaseItem.getId(), altClaim);
                                     if (null != claimId) {
                                         for (Set<Snak> eachRef : altClaim.getReferences()) {
-                                            dwiki.addReference(claimId, new ArrayList<Snak>(eachRef));
+                                            wdAuth.authenticated().addReference(claimId, new ArrayList<Snak>(eachRef));
                                         }
                                     }
                                 }
@@ -570,6 +536,10 @@ public class FixVillages {
                         initialTemplate.removeParam("recensamant");
                         initialTemplate.removeParam("populație_note_subsol");
 
+                        if (null != dbfAreaKm2 && CI.equals("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
+                            initialTemplate.setParam("suprafață_totală_km2", dbfAreaKm2.toPlainString());
+                            initialTemplate.setParam("suprafață_note_subsol", AREA_FOOTNOTE);
+                        }
                     } else {
                         pageText = "{{Infocaseta Așezare}}" + pageText;
                         templateAnalysisStart = "{{Infocaseta Așezare}}".length();
@@ -590,7 +560,7 @@ public class FixVillages {
                                 .orElse(false)) {
                                 Set<Claim> coatOfArmsFromWd = communeClaims.get(coatOfArmsImageWikidataProperty);
                                 if (null == coatOfArmsFromWd || coatOfArmsFromWd.isEmpty()) {
-                                    dwiki.addClaim(communeWikibaseItem.getId(),
+                                    wdAuth.authenticated().addClaim(communeWikibaseItem.getId(),
                                         new Claim(coatOfArmsImageWikidataProperty, new CommonsMedia(coatOfArmsImageName)));
                                 } else {
                                     List<Claim> coatOfArmsFromWdList = new ArrayList<>(coatOfArmsFromWd);
@@ -599,7 +569,7 @@ public class FixVillages {
                                     }
                                     coatOfArmsFromWdList.get(0).setValue(new CommonsMedia(coatOfArmsImageName));
                                     coatOfArmsFromWd = new HashSet<>(coatOfArmsFromWdList);
-                                    dwiki.editClaim(coatOfArmsFromWdList.get(0));
+                                    wdAuth.authenticated().editClaim(coatOfArmsFromWdList.get(0));
                                 }
                                 initialTemplate.removeParam("stemă");
                             }
@@ -647,7 +617,7 @@ public class FixVillages {
                                     String imageClaimId = null;
                                     boolean captionQualifierFound = false;
                                     if (!communeClaims.containsKey(imageWikidataProperty)) {
-                                        imageClaimId = dwiki.addClaim(communeWikibaseItem.getId(),
+                                        imageClaimId = wdAuth.authenticated().addClaim(communeWikibaseItem.getId(),
                                             new Claim(imageWikidataProperty, new CommonsMedia(imageName)));
                                         initialTemplate.removeParam("imagine");
                                     } else {
@@ -669,7 +639,7 @@ public class FixVillages {
                                     communeImageCaption = CS.replace(communeImageCaption, "'''", "");
 
                                     if (isNotEmpty(communeImageCaption) && null != imageClaimId && !captionQualifierFound) {
-                                        dwiki.addQualifier(imageClaimId, captionProp.getId(),
+                                        wdAuth.authenticated().addQualifier(imageClaimId, captionProp.getId(),
                                             new LanguageString("ro", communeImageCaption));
                                     }
                                     initialTemplate.removeParam("descriere");
@@ -699,9 +669,9 @@ public class FixVillages {
                             if (null != imageClaimId) {
                                 Set<Claim> imageDescriptionClaims = communeClaims.get(captionProp);
                                 for (Claim eachImageDescriptionClaim : imageDescriptionClaims) {
-                                    dwiki.addQualifier(imageClaimId, captionProp.getId(),
+                                    wdAuth.authenticated().addQualifier(imageClaimId, captionProp.getId(),
                                         eachImageDescriptionClaim.getValue());
-                                    dwiki.removeClaim(eachImageDescriptionClaim.getId());
+                                    wdAuth.authenticated().removeClaim(eachImageDescriptionClaim.getId());
                                     communeChanged = true;
                                 }
                             }
@@ -990,17 +960,17 @@ public class FixVillages {
                         LanguageString roNativeName = new LanguageString("ro", communeName);
                         if (null == communeNativeLabelClaims || communeNativeLabelClaims.isEmpty()) {
                             Claim roNativeNameClaim = new Claim(nativeLabelProp, roNativeName);
-                            dwiki.addClaim(communeWikibaseItem.getId(), roNativeNameClaim);
+                            wdAuth.authenticated().addClaim(communeWikibaseItem.getId(), roNativeNameClaim);
                         }
                         Property officialNameProp = getWikibaseProperty("P1448");
                         Set<Claim> communeOfficialNameClaims = communeWikibaseItem.getClaims(officialNameProp);
                         if (SetUtils.emptyIfNull(communeOfficialNameClaims).isEmpty()) {
                             Claim roOfficialNameClaim = new Claim(officialNameProp, roNativeName);
-                            dwiki.addClaim(communeWikibaseItem.getId(), roOfficialNameClaim);
+                            wdAuth.authenticated().addClaim(communeWikibaseItem.getId(), roOfficialNameClaim);
                         }
 
                         if (!CS.equals(pageText, initialPageText)) {
-                            rowiki.edit(rocommunearticle, pageText,
+                            roAuth.authenticated().edit(rocommunearticle, pageText,
                                 "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, recategorisit, standardizat introducerea și secțiunile Demografie și Administrație. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
                             WIKI_PAGE_CACHE.invalidatePage(rowiki, rocommunearticle);
                             communeChanged = true;
@@ -1029,9 +999,7 @@ public class FixVillages {
         } finally {
             LOG.info("Stopped at {}",
                 Stream.of(crtSettlementName, crtCommuneName, crtCountyName).filter(Objects::nonNull).collect(joining(", ")));
-            if (null != dwiki) {
-                dwiki.logout();
-            }
+            wdAuth.logoutIfLoggedIn();
         }
     }
 
@@ -1072,8 +1040,7 @@ public class FixVillages {
     }
 
     private static Time currentDateAsTime() {
-        String today = "+" + LocalDate.now(ZoneOffset.UTC) + "T00:00:00Z";
-        return new Time(today, 0, 0, 0, 11, GREGORIAN_CALENDAR);
+        return new Time(LocalDate.now(ZoneOffset.UTC));
     }
 
     private static Set<Snak> buildDbfAreaReference() {
@@ -1096,36 +1063,38 @@ public class FixVillages {
         return reference;
     }
 
+    /** Area in km2 (2 decimals, rounded down) from the dbf record matching the item's SIRUTA code, or null. */
+    private static BigDecimal findDbfAreaKm2(Entity communeItem) {
+        for (Claim eachSirutaClaim : SetUtils.emptyIfNull(communeItem.getClaims().get(getWikibaseProperty("P843")))) {
+            if ("statement".equals(eachSirutaClaim.getType())
+                && eachSirutaClaim.getMainsnak().getData() instanceof StringData siruta) {
+                Map<String, String> dbfRecord = DBF_BY_CODE.get(normalizeCode(siruta.getValue()));
+                if (dbfRecord != null) {
+                    return toSquareKm(dbfRecord.get(DBF_AREA_COLUMN));
+                }
+            }
+        }
+        return null;
+    }
+
     /**
-     * Sets P2046 of a commune/town/municipality from the data.gov.ro dbf (converted to km2). Existing statements are
-     * replaced only if none of them is within {@link #AREA_TOLERANCE_KM2} of the dbf value, or if there is none.
+     * ON HOLD (not called yet). Sets P2046 of a commune/town/municipality from the data.gov.ro dbf (converted to km2). Existing statements are
+     * replaced only if none of the non-deprecated ones is within {@link #AREA_TOLERANCE_KM2} of the dbf value, or if
+     * there is none. Replaced statements are not removed: they get the deprecated rank and a P2241 qualifier.
      */
     private static AreaUpdate updateAreaFromDbf(Wikibase dwiki, Entity communeItem, Property areaProp,
                                                 Entity squareKmEnt)
         throws IOException, WikibaseException {
         Map<Property, Set<Claim>> claims = communeItem.getClaims();
 
-        Map<String, String> dbfRecord = null;
-        for (Claim eachSirutaClaim : SetUtils.emptyIfNull(claims.get(getWikibaseProperty("P843")))) {
-            if ("statement".equals(eachSirutaClaim.getType())
-                && eachSirutaClaim.getMainsnak().getData() instanceof StringData siruta) {
-                dbfRecord = DBF_BY_CODE.get(normalizeCode(siruta.getValue()));
-                if (dbfRecord != null) {
-                    break;
-                }
-            }
-        }
-        if (dbfRecord == null) {
-            LOG.warn("No dbf record found for {} ({})", communeItem.getId(), crtCommuneName);
-            return AreaUpdate.NO_DATA;
-        }
-        BigDecimal dbfAreaKm2 = toSquareKm(dbfRecord.get(DBF_AREA_COLUMN));
+        BigDecimal dbfAreaKm2 = findDbfAreaKm2(communeItem);
         if (dbfAreaKm2 == null) {
+            LOG.warn("No dbf area found for {} ({})", communeItem.getId(), crtCommuneName);
             return AreaUpdate.NO_DATA;
         }
 
         List<Claim> oldAreaClaims = SetUtils.emptyIfNull(claims.get(areaProp)).stream()
-            .filter(c -> "statement".equals(c.getType())).toList();
+            .filter(c -> "statement".equals(c.getType())).filter(c -> c.getRank() != Rank.DEPRECATED).toList();
         for (Claim eachOldClaim : oldAreaClaims) {
             Double oldAreaKm2 = areaClaimInSquareKm(eachOldClaim);
             if (null != oldAreaKm2 && Math.abs(oldAreaKm2 - dbfAreaKm2.doubleValue()) <= AREA_TOLERANCE_KM2) {
@@ -1140,18 +1109,22 @@ public class FixVillages {
         areaClaim.getMainsnak().setDatatype("quantity");
         areaClaim.addReference(buildDbfAreaReference());
 
-        LOG.info("Setting area of {} ({}) to {} km2 from dbf, replacing {} old statement(s)", communeItem.getId(),
+        LOG.info("Setting area of {} ({}) to {} km2 from dbf, deprecating {} old statement(s)", communeItem.getId(),
             crtCommuneName, dbfAreaKm2.toPlainString(), oldAreaClaims.size());
+        areaClaim.setRank(Rank.NORMAL);
         // Add the new statement first so the item is never left without an area if the edit fails
-        String claimId = dwiki.addClaim(communeItem.getId(), areaClaim);
+        String claimId = wdAuth.authenticated().addClaim(communeItem.getId(), areaClaim);
         if (null == claimId) {
             return AreaUpdate.NO_DATA;
         }
         for (Set<Snak> eachRef : areaClaim.getReferences()) {
-            dwiki.addReference(claimId, new ArrayList<Snak>(eachRef));
+            wdAuth.authenticated().addReference(claimId, new ArrayList<Snak>(eachRef));
         }
         for (Claim eachOldClaim : oldAreaClaims) {
-            dwiki.removeClaim(eachOldClaim.getId());
+            eachOldClaim.setRank(Rank.DEPRECATED);
+            wdAuth.authenticated().editClaim(eachOldClaim);
+            wdAuth.authenticated().addQualifier(eachOldClaim.getId(), DEPRECATION_REASON_PROPERTY,
+                new Item(new Entity(DEPRECATION_REASON_ITEM)));
         }
         return AreaUpdate.UPDATED;
     }
@@ -1459,7 +1432,7 @@ public class FixVillages {
     private static String createLinkToDemGroup(WikidataEntitiesCache wdcache, DemographicGroup demGroup) {
         try {
             String linkToGroup;
-            Entity demGroupEnt = wdcache.get(demGroup.getqId());
+            Entity demGroupEnt = wdRead(() -> wdcache.get(demGroup.getqId()));
             if (Optional.ofNullable(demGroupEnt).map(Entity::getSitelinks).map(m -> m.containsKey("rowiki")).orElse(false)) {
                 linkToGroup =
                     new WikiLink(demGroupEnt.getSitelinks().get("rowiki").getPageName(), demGroup.getId()).toString();
@@ -1598,7 +1571,7 @@ public class FixVillages {
         InterruptedException, TimeoutException {
         Item compositeVillage = (Item) eachCompositeVillageClaim.getMainsnak().getData();
 
-        Entity villageEntity = dwiki.getWikibaseItemById(compositeVillage.getEnt());
+        Entity villageEntity = wdRead(() -> dwiki.getWikibaseItemById(compositeVillage.getEnt()));
 
         String villageType = "sat";
         Set<Claim> villageInstanceOfClaims = villageEntity.getClaims().get(getWikibaseProperty("P31"));
@@ -1628,11 +1601,11 @@ public class FixVillages {
 
         boolean villageChanged = false;
         if (!CS.equals(extractRoNameFromEntity(villageEntity), villageName)) {
-            dwiki.setLabel(villageEntity.getId(), "ro", villageName);
+            wdAuth.authenticated().setLabel(villageEntity.getId(), "ro", villageName);
             communeChanged = villageChanged = true;
         }
         if (!CS.equals(villageEntity.getDescriptions().get("ro"), villageDescr)) {
-            dwiki.setDescription(villageEntity.getId(), "ro", villageDescr);
+            wdAuth.authenticated().setDescription(villageEntity.getId(), "ro", villageDescr);
             communeChanged = villageChanged = true;
         }
 
@@ -1644,12 +1617,12 @@ public class FixVillages {
             String rovillagearticle = villageEntity.getSitelinks().get("rowiki").getPageName();
             mapToAdd.put(villageName, rovillagearticle);
 
-            if (WIKI_PAGE_CACHE.pageRedirects(rowiki, rovillagearticle)) {
+            if (roRead(() -> WIKI_PAGE_CACHE.pageRedirects(rowiki, rovillagearticle))) {
                 LOG.info("Page {} is a redirect, skipping", rovillagearticle);
                 return communeChanged;
             }
 
-            String pageText = WIKI_PAGE_CACHE.getPageText(rowiki, rovillagearticle);
+            String pageText = roRead(() -> WIKI_PAGE_CACHE.getPageText(rowiki, rovillagearticle));
             String initialPageText = defaultString(pageText);
 
             pageText = commentedEol.matcher(pageText).replaceAll("");
@@ -1777,10 +1750,10 @@ public class FixVillages {
                         if (isNotBlank(paramValue) && (!villageEntity.getClaims().containsKey(areaProp)
                             || null == villageEntity.getClaims().get(areaProp))) {
                             Claim areaClaim = extractWdAreaDataFromParam(areaProp, squareKmEnt, paramValue, roWpReference);
-                            String claimId = dwiki.addClaim(villageEntity.getId(), areaClaim);
+                            String claimId = wdAuth.authenticated().addClaim(villageEntity.getId(), areaClaim);
                             if (null != claimId) {
                                 for (Set<Snak> eachRef : areaClaim.getReferences()) {
-                                    dwiki.addReference(claimId, new ArrayList<Snak>(eachRef));
+                                    wdAuth.authenticated().addReference(claimId, new ArrayList<Snak>(eachRef));
                                 }
                             }
                         }
@@ -1791,10 +1764,10 @@ public class FixVillages {
                         if (isNotBlank(paramValue) && (!villageEntity.getClaims().containsKey(altProp)
                             || null == villageEntity.getClaims().get(altProp))) {
                             Claim altClaim = extractWdAltitudeDataFromParam(altProp, meterEnt, paramValue, roWpReference);
-                            String claimId = dwiki.addClaim(villageEntity.getId(), altClaim);
+                            String claimId = wdAuth.authenticated().addClaim(villageEntity.getId(), altClaim);
                             if (null != claimId) {
                                 for (Set<Snak> eachRef : altClaim.getReferences()) {
-                                    dwiki.addReference(claimId, new ArrayList<Snak>(eachRef));
+                                    wdAuth.authenticated().addReference(claimId, new ArrayList<Snak>(eachRef));
                                 }
                             }
                         }
@@ -1849,7 +1822,7 @@ public class FixVillages {
                         String imageClaimId = null;
                         boolean captionQualifierFound = false;
                         if (!villageEntity.getClaims().containsKey(imageWikidataProperty)) {
-                            imageClaimId = dwiki.addClaim(villageEntity.getId(),
+                            imageClaimId = wdAuth.authenticated().addClaim(villageEntity.getId(),
                                 new Claim(imageWikidataProperty, new CommonsMedia(imageName)));
                             initialTemplate.removeParam("imagine");
                         } else {
@@ -1874,7 +1847,7 @@ public class FixVillages {
                             initialTemplate.getParams().get("descriere"));
                         villageImageCaption = CS.replace(villageImageCaption, "'''", "");
                         if (isNotEmpty(villageImageCaption) && null != imageClaimId && !captionQualifierFound) {
-                            dwiki.addQualifier(imageClaimId, captionProp.getId(),
+                            wdAuth.authenticated().addQualifier(imageClaimId, captionProp.getId(),
                                 new LanguageString("ro", villageImageCaption));
                         }
                         initialTemplate.removeParam("descriere");
@@ -1897,8 +1870,8 @@ public class FixVillages {
                         Set<Claim> imageDescriptionClaims = villageEntity.getClaims().get(captionProp);
                         for (Claim eachImageDescriptionClaim : imageDescriptionClaims) {
                             WikibaseData imageDescriptionLangString = eachImageDescriptionClaim.getValue();
-                            dwiki.addQualifier(imageClaimId, captionProp.getId(), imageDescriptionLangString);
-                            dwiki.removeClaim(eachImageDescriptionClaim.getId());
+                            wdAuth.authenticated().addQualifier(imageClaimId, captionProp.getId(), imageDescriptionLangString);
+                            wdAuth.authenticated().removeClaim(eachImageDescriptionClaim.getId());
                             villageChanged = true;
                         }
                     }
@@ -2104,7 +2077,7 @@ public class FixVillages {
                 final String storedPageText = pageText;
                 RetryHelper.retry(() -> {
                     try {
-                        rowiki.edit(rovillagearticle, storedPageText,
+                        roAuth.authenticated().edit(rovillagearticle, storedPageText,
                             "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard, recategorisit. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
                         return Boolean.TRUE;
                     } catch (Exception e) {
@@ -2112,10 +2085,7 @@ public class FixVillages {
                     }
                 }, 10, () -> {
                     try {
-                        int assertMode = rowiki.getAssertionMode();
-                        rowiki.setAssertionMode(Wiki.ASSERT_NONE);
-                        rowiki.login(rowpusername, rowppasswords);
-                        rowiki.setAssertionMode(assertMode);
+                        roAuth.relogin();
                     } catch (Exception e) {
                         throw new RuntimeException("Relogin failed", e);
                     }});
@@ -2130,13 +2100,13 @@ public class FixVillages {
         LanguageString roNativeName = new LanguageString("ro", villageName);
         if (null == villageNativeLabelClaims || 0 == villageNativeLabelClaims.size()) {
             Claim roNativeNameClaim = new Claim(nativeLabelProp, roNativeName);
-            dwiki.addClaim(compositeVillage.getEnt().getId(), roNativeNameClaim);
+            wdAuth.authenticated().addClaim(compositeVillage.getEnt().getId(), roNativeNameClaim);
         }
         Property officialNameProp = getWikibaseProperty("P1448");
         Set<Claim> villageOfficialNameClaims = villageEntity.getClaims(officialNameProp);
         if (SetUtils.emptyIfNull(villageOfficialNameClaims).isEmpty()) {
             Claim roOfficialNameClaim = new Claim(officialNameProp, roNativeName);
-            dwiki.addClaim(compositeVillage.getEnt().getId(), roOfficialNameClaim);
+            wdAuth.authenticated().addClaim(compositeVillage.getEnt().getId(), roOfficialNameClaim);
         }
 
         if (villageChanged) {
@@ -2163,10 +2133,18 @@ public class FixVillages {
         Pattern.DOTALL);
     private static final Pattern CATEGORY_PATTERN =
         Pattern.compile("\\[\\[(?:C|c)ategor(?:y|ie):([^\\]\\|]*)(?:\\|(.*?))?\\]\\]");
-    private static String rowpusername;
-    private static String datausername;
-    private static char[] rowppasswords;
-    private static char[] datapasswords;
+    private static LazyAuth<Wiki> roAuth;
+    private static LazyAuth<Wikibase> wdAuth;
+
+    /** Read on ro.wikipedia; logs in only if the read fails for authentication reasons. */
+    private static <T> T roRead(LazyAuth.ThrowingSupplier<T> operation) throws IOException {
+        return roAuth.read(operation);
+    }
+
+    /** Read on Wikidata; logs in only if the read fails for authentication reasons. */
+    private static <T> T wdRead(LazyAuth.ThrowingSupplier<T> operation) throws IOException, WikibaseException {
+        return wdAuth.read(operation);
+    }
 
     private static String recategorize(String pageText, String[] namingChain, String articleTitle,
                                        List<String> desiredCategories) {
@@ -2288,7 +2266,7 @@ public class FixVillages {
         }
         if (null != mayorClaim) {
             Item mayorItem = (Item) mayorClaim.getValue();
-            Entity mayorEnt = wdcache.get(mayorItem.getEnt());
+            Entity mayorEnt = wdRead(() -> wdcache.get(mayorItem.getEnt()));
             Set<Claim> partyClaims = mayorEnt.getClaims().get(getWikibaseProperty("P102"));
             Claim partyClaim = null;
             for (Claim eachPartyClaim : partyClaims) {
