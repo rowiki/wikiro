@@ -30,7 +30,7 @@ def get_interwiki_page(site, interwiki_link):
     if ':' in interwiki_link:
         prefix, title = interwiki_link.split(':', 1)
         if prefix == 'mw':  # Special case for MediaWiki.org
-            target_site = pywikibot.Site(code='en', fam='mediawiki')
+            target_site = pywikibot.Site(code='mediawiki', fam='mediawiki')
         else:
             target_site = pywikibot.Site(code=prefix, fam=site.family.name)
         return pywikibot.Page(target_site, title)
@@ -73,6 +73,7 @@ def adjust_templates(adjusted_content):
 
 def main():
     site = pywikibot.Site()
+    site.login()
     template = 'Template:mwimport'
     template_page = pywikibot.Page(site, template)
 
