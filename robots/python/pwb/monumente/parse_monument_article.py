@@ -86,6 +86,11 @@ _trace = False
 _db = "lmi"
 _coordVariance = 0.001 #decimal degrees
 
+PARSE_QUICK = 0
+PARSE_NORMAL = 1
+PARSE_EXTENDED = 2
+PARSE_FULL = 3
+
 class Trace:
 	def __init__(self, name):
 		if (_trace):
@@ -522,84 +527,88 @@ def processArticle(text, page, conf):
 	else:
 		addElementToOutput(code, dictElem, title)
 
-def main():
-	#trace = Trace(sys._getframe().f_code.co_name)
-	PARSE_QUICK = 0
-	PARSE_NORMAL = 1
-	PARSE_EXTENDED = 2
-	PARSE_FULL = 3
-	lang = 'ro'
-	textfile = ''
+def setup_quality_regex(langOpt):
+	q_reg = "\{\{("
+	for t in langOpt.get('qualityTemplates'):
+		q_reg += t + "|"
+	q_reg = q_reg[:-1] + ")(.*)\}\}"
+	return re.compile(q_reg, re.I)
+
+def parse_arguments():
+	global _db
 	parse_type = PARSE_NORMAL
 	preload = True
 	incremental = False
 	namespaces = None
 
-	global _log
-	global fullDict
-	global qualityRegexp
-	global _db
-
 	for arg in pywikibot.handle_args():
 		if arg.startswith('-lang:'):
-			lang = arg [len('-lang:'):]
-			user.mylang = lang
-		if arg.startswith('-family'):
-			user.family = arg [len('-family:'):]
-		if arg.startswith('-db:'):
-			_db = arg [len('-db:'):]
-		if arg.startswith('-nopreload'):
+			user.mylang = arg[len('-lang:'):]
+		elif arg.startswith('-family'):
+			user.family = arg[len('-family:'):]
+		elif arg.startswith('-db:'):
+			_db = arg[len('-db:'):]
+		elif arg.startswith('-nopreload'):
 			preload = False
-		if arg.startswith('-incremental'):
+		elif arg.startswith('-incremental'):
 			incremental = True
-		if arg.startswith('-ns'):
+		elif arg.startswith('-ns'):
 			namespaces = [int(x) for x in arg[len('-ns:'):].split(',')]
-		if arg.startswith('-parse'):
-			if  arg [len('-parse:'):] == "full":
-				parse_type = PARSE_FULL
-			elif arg [len('-parse:'):] == "quick":
-				parse_type = PARSE_QUICK
+		elif arg.startswith('-parse'):
+			parse_type = {
+                "full": PARSE_FULL,
+                "quick": PARSE_QUICK,
+                "normal": PARSE_NORMAL
+            }.get(arg[len('-parse:'):], PARSE_NORMAL)
+			if parse_type == PARSE_QUICK:
 				preload = False
-			elif arg [len('-parse:'):] == "normal":
-				parse_type = PARSE_NORMAL
-	
+	return parse_type, preload, incremental, namespaces
+
+
+def build_generator(site, langOpt, namespace, preload):
+	transGen = []
+	for template in langOpt.get(_db).get('codeTemplate'):
+		row_template = pywikibot.Page(
+			site, '%s:%s' % (site.namespace(10), template)
+			)
+		transGen.append(
+			row_template.getReferences(follow_redirects=False, content=False, namespaces=[namespace])
+			)
+	combined_gen = filter_unique(
+		itertools.chain.from_iterable(transGen)
+	)
+	if preload:
+		pre_generator = pagegenerators.PreloadingGenerator(combined_gen, 500)
+	else:
+		pre_generator = combined_gen
+	return pre_generator
+
+def main():
+	#trace = Trace(sys._getframe().f_code.co_name)
+	global _log, fullDict, qualityRegexp, _db
+	lang = 'ro'
+	textfile = ''
+	parse_type, preload, incremental, namespaces = parse_arguments()
+
 	site = pywikibot.Site()
 	lang = user.mylang
 	if not options.get(lang):
 		pywikibot.output('I have no options for language "%s"' % lang)
 		return False
-
 	langOpt = options.get(lang)
+
 	if not namespaces:
 		namespaces = langOpt.get(_db).get('namespaces')
 
-	_log = "_".join([lang, _db, _log]);
+	_log = "_".join([lang, _db, _log])
 	initLog()
 
-	qReg = "\{\{("
-	for t in langOpt.get('qualityTemplates'):
-		qReg = qReg + t + "|"
-	qReg = qReg[:-1]
-	qReg += ")(.*)\}\}"
-	#print qReg
-	qualityRegexp = re.compile(qReg, re.I)
+	qualityRegexp = setup_quality_regex(langOpt)
+
 	site.login()
 
 	for namespace in namespaces:
-		transGen = []
-		for template in langOpt.get(_db).get('codeTemplate'):
-			rowTemplate = pywikibot.Page(site, '%s:%s' % (site.namespace(10), \
-								template))
-			transGen.append(rowTemplate.getReferences(follow_redirects=False,content=False))
-		combinedGen = itertools.chain(*transGen)
-		combinedGen = filter_unique(combinedGen, key=hash)
-		#combinedGen = pagegenerators.CategorizedPageGenerator(pywikibot.Category(site, u"Categorie:Imagini încărcate în cadrul Wiki Loves Monuments 2020"))
-		filteredGen = pagegenerators.NamespaceFilterPageGenerator(combinedGen,
-									[namespace], site)
-		if preload:
-			pregenerator = pagegenerators.PreloadingGenerator(filteredGen, 500)
-		else:
-			pregenerator = filteredGen
+		pregenerator = build_generator(site, langOpt, namespace, preload)
 
 		count = 0
 		if namespace == 0:
@@ -617,13 +626,13 @@ def main():
 					f = open(tempfile, "r+")
 				else:
 					f = open(filename, "r+")
-				print((f.name))
+				print(f.name)
 				jsonFile = json.load(f)
-				f.close();
+				f.close()
 			except:
 				jsonFile = {}
 			if reuse_data:
-				#fullDict = jsonFile
+				fullDict = jsonFile
 				pywikibot.output("Importing %d values from input file" % len(jsonFile))
 
 			#pre-calculate as much as possible of the information we'll need
@@ -657,7 +666,7 @@ def main():
 						lastedit = 0
 					# if we preloaded the page, we already have the time
 					if parse_type == PARSE_NORMAL:
-						pageEdit = page.editTime().totimestampformat()
+						pageEdit = page.latest_revision.timestamp.totimestampformat()
 					elif parse_type == PARSE_EXTENDED:
 						pageEdit = pywikibot.Timestamp.fromISOformat(page._timestamp).totimestampformat()
 					if int(pageEdit) <= int(lastedit):
