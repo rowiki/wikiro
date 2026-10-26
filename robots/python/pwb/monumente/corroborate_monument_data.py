@@ -102,7 +102,10 @@ import urllib
 sys.path.append("wikiro/robots/python/pwb")
 import strainu_functions as strainu
 from strainu_functions import is_null_or_empty
+
 import csvUtils
+
+import wikidata as wikidata
 
 import monumente
 from monumente import Changes, Quality
@@ -258,7 +261,7 @@ def updateTableData(url, code, field, newvalue, olddata, upload = True, text = N
             if codeFound:
                 break
     else: #for .. else
-        log(u"* [Listă] ''E'': ''[%s]'' Codul nu este prezent în [[%s|listă]]" % (rawCode, title))
+        log(u"* [Listă] ''E'': ''[%s]'' Codul nu este prezent în [[%s|listă]]" % (code, title))
         pywikibot.output(u"updateTableData: Code %s not found, giving up" % code)
         return text, False
 
@@ -550,10 +553,10 @@ def getYearsFromWikidata(page):
     data = wdpage.get()
     #print data['claims']
     if 'P570' in data['claims']:
-        if len(data['claims']['P570']) > 1:
+        claim = wikidata.find_best_claim(data['claims']['P570'])
+        if claim.rank == 'normal' and len(data['claims']['P570']) > 1:
             log(u"* [WD] '''W''': ''[%s]'' are mai multe date ale decesului la Wikidata" % (page.title()))
             return None
-        claim = data['claims']['P570'][0]
         return claim.getTarget().year
     return None
 
@@ -730,6 +733,13 @@ def find_field_by_type(fields, type: Changes) -> str|None:
             return field
     return None
 
+def has_duplicate_page(allPages: list) -> bool:
+    allPagesSet = set([x['name'] for x in allPages])
+    if len(allPagesSet) > 1:
+        return True
+    return False
+    
+
 
 def main():
     otherFile = None
@@ -842,8 +852,8 @@ def main():
 
             if code in pages_local:
                 allPages.extend(pages_local[code])
-                if len(allPages) > 1:
-                    log_links_for_page('WP', 'E', code,
+                if len(allPages) > 1 and has_duplicate_page(allPages):
+                        log_links_for_page('WP', 'E', code,
                                        'Codul este prezent în mai multe '
                                         'articole pe Wikipedia',
                                        [x['name'] for x in allPages])
@@ -887,7 +897,7 @@ def main():
                 pictures.extend(files_local[code])
             if code in categories_commons:
                 allPages.extend(categories_commons[code])
-                if len(categories_commons[code]) > 1:
+                if len(categories_commons[code]) > 1 and has_duplicate_page(categories_commons[code]):
                     log_links_for_page(
                         'COM', 'E', code,
                         'Codului îi corespund mai multe categorii la Commons',
@@ -1028,8 +1038,10 @@ def main():
                 articleText, _ = updateTableData(monument["source"], code,
                                 commonsField, "commons:" + cat["name"],
                                 monument, text=articleText)
-            elif monument.get("Commons") and monument.get("Commons").strip() != ("commons:" + cat["name"].strip()):
-                log_links_for_page(
+            elif monument.get("Commons"):
+                cats = [{'name': monument.get("Commons").strip()}, {'name': "commons:" + cat["name"].strip()}]
+                if has_duplicate_page(cats):
+                    log_links_for_page(
                     'COM', 'E', code,
                     'Codului îi corespund mai multe categorii la Commons',
                     ["commons:" + cat["name"], monument["Commons"]]
@@ -1069,8 +1081,8 @@ def main():
                 continue
             if not otherSrc:
                 otherSrc = u"sursă externă necunoscută"
-            if (otherLat > 0 and strainu.getSec(otherLat) == 0) and \
-                (otherLong > 0 and strainu.getSec(otherLong) == 0):
+            if (otherLat > 0 and not strainu.hasSec(otherLat)) and \
+                (otherLong > 0 and not strainu.hasSec(otherLong)):
                 log(u"* [%s] ''W'': ''[%s]'' Coordonatele (%f,%f) din %s au nevoie de o verificare - secundele sunt 0" \
                  %(otherSrc, code, otherLat, otherLong, otherSrc))
                 continue

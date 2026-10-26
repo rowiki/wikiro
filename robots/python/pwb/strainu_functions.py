@@ -260,6 +260,8 @@ def convertUrlToWikilink(url):
         title = q["title"][0]
     else:
         title = urllib.parse.unquote(pr.path.split('/')[-1].encode("utf8"))
+    if title.startswith("File:") or title.startswith("Image:") or title.startswith("Fișier:"):
+        title = ":" + title
     return title
 
 
@@ -313,6 +315,12 @@ def getSec(decimal):
     if decimal < 0:
         decimal = -decimal
     return int(math.floor(((decimal - math.floor(decimal)) * 3600) % 60))
+
+def hasSec(decimal):
+    """True if the decimal degrees has anything under minute, false otherwise"""
+    if decimal < 0:
+        decimal = -decimal
+    return (decimal * 3600) % 60 != 0
 
 def geosign(check, plus, minus):
     if check == plus:
