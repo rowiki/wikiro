@@ -6,7 +6,6 @@ import re
 
 from collections import OrderedDict
 from pywikibot.bot import SingleSiteBot
-from wikiro.robots.python.pwb import wikidata
 
 
 import wikiro.robots.python.pwb.wikidata as wikidata
@@ -25,7 +24,7 @@ class OlympiansArticles(SingleSiteBot):
 
 == Participări ==
 Lista de mai jos prezintă principalele competiții la care a participat {nume} de-a lungul carierei.
-* {{{{Listă de la Wikidata|P1344|sep=</li><li>}}}}
+* {{{{Listă de la Wikidata|P1344|sep=<br/><li>}}}}
 
 == Note ==
 <references/>
@@ -89,7 +88,7 @@ Lista de mai jos prezintă principalele competiții la care a participat {nume} 
             #        if not female and part != "Q499327":
             #            continue
             #         result += " " + target.text
-            result += " ce a reprezentat [[" + (country.getSitelink("rowiki") or wikibase.get_labels(country) or "o țară necunoscută") + "]]"
+            result += " ce a reprezentat [[" + (country.getSitelink("rowiki") or wikidata.get_labels(country) or "o țară necunoscută") + "]]"
         
         if description is not None:
             return description, cat
@@ -276,16 +275,20 @@ Lista de mai jos prezintă principalele competiții la care a participat {nume} 
             return False
 
 
-def olympiansGenerator():
-    query = """SELECT DISTINCT ?item ?itemLabel ?itemDescription WHERE {
+def olympiansGenerator(limit=None):
+    query = """SELECT DISTINCT ?item WHERE {
+      ?item p:P1344/pq:P166 ?medal .
+      ?medal wdt:P361 wd:Q636830 .
       ?item wdt:P31 wd:Q5 .
-      ?item p:P1344 [ pq:P166 ?medal ] .
-      ?medal wdt:P279 wd:Q636830 .
-      SERVICE wikibase:label { bd:serviceParam wikibase:language "ro,en". }
-      OPTIONAL { ?sitelink schema:about ?item . ?sitelink schema:inLanguage "ro" }
-      FILTER(!BOUND(?sitelink))
+
+      MINUS {
+        ?article schema:about ?item ;
+                 schema:isPartOf <https://ro.wikipedia.org/> .
+      }
     }
 """
+    if limit is not None:
+        query += f"LIMIT {limit}"
     pattern = re.compile("Q\d+")
     site = pywikibot.Site().data_repository()
     for elem in wikidata.sparql_generator(query, pywikibot.Site()):
@@ -294,6 +297,7 @@ def olympiansGenerator():
 
 
 if __name__ == '__main__':
-    bot = OlympiansArticles(10000)
-    bot.generator = olympiansGenerator()
+    limit = 1000
+    bot = OlympiansArticles(limit)
+    bot.generator = olympiansGenerator(limit)
     bot.run()
