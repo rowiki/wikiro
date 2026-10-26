@@ -980,7 +980,7 @@ public class FixVillages {
 
                         if (!CS.equals(pageText, initialPageText)) {
                             roAuth.authenticated().edit(rocommunearticle, pageText,
-                                "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, recategorisit, standardizat introducerea și secțiunile Demografie și Administrație. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
+                                "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, recategorisit, standardizat introducerea și secțiunile Demografie și Administrație. Greșit? Raportați [[Discuție Utilizator:SlartibartfastT|aici]].");
                             WIKI_PAGE_CACHE.invalidatePage(rowiki, rocommunearticle);
                             communeChanged = true;
                         }
@@ -2102,7 +2102,7 @@ public class FixVillages {
                 RetryHelper.retry(() -> {
                     try {
                         roAuth.authenticated().edit(rovillagearticle, storedPageText,
-                            "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard, recategorisit. Greșit? Raportați [[Discuție Utilizator:Andrei Stroe|aici]].");
+                            "Eliminare din infocasetă parametri migrați la Wikidata sau fără valoare, revizitat introducere standard, recategorisit. Greșit? Raportați [[Discuție Utilizator:SlartibartfastT|aici]].");
                         return Boolean.TRUE;
                     } catch (Exception e) {
                         throw new RuntimeException(e);
