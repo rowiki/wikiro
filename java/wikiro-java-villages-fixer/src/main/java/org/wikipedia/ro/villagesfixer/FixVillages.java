@@ -1073,7 +1073,7 @@ public class FixVillages {
                 return new BigDecimal(areaString);
             }
             if (RO_DECIMAL_PATTERN.matcher(areaString).matches()) {
-                return new BigDecimal(CS.replace(CS.remove(areaString, '.'), ",", "."));
+                return new BigDecimal(CS.replace(CS.remove(areaString, "."), ",", "."));
             }
         } catch (NumberFormatException e) {
             LOG.warn("Invalid area value in infobox: {}", value);
