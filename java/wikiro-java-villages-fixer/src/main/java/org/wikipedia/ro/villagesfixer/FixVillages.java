@@ -162,22 +162,23 @@ public class FixVillages {
     private static final String INTRO_REF =
         "<ref name=\"lege_290_2018\">{{Cite act|url=https://legislatie.just.ro/Public/DetaliiDocument/208652|year=2018|type=Legea|number=290|legislature=Parlamentul României|chapter=Anexă: Denumirea și componența unităților administrativ-teritoriale pe județe}}</ref>";
 
-    // Official administrative-territorial units dataset from data.gov.ro; used as the source of the UAT areas.
+    // Official administrative-territorial units dataset from data.gov.ro; used as the source of the UAT areas when the
+    // infobox area is not already taken from it.
     private static final Path DBF_FILE = Path.of("/work/var/wki/Unitate_administrativa_UAT.dbf");
     private static final String DBF_CODE_COLUMN = "natCode";
     private static final String DBF_AREA_COLUMN = "Shape_Area";
     private static final BigDecimal SQUARE_METERS_PER_SQUARE_KM = BigDecimal.valueOf(1_000_000);
-    private static final double AREA_TOLERANCE_KM2 = 0.1d;
     private static final String AREA_SOURCE_ITEM = "Q97098010";
     private static final String AREA_SOURCE_URL =
         "https://data.gov.ro/dataset/unitati-administrativ-teritoriale-07-03-2024/resource/7169c5ce-6a88-4fdf-8b78-03069bc09510";
-    private static final String AREA_FOOTNOTE = "{{RefQ|" + AREA_SOURCE_ITEM + "|url=" + AREA_SOURCE_URL + "}}";
+    private static final Pattern PLAIN_DECIMAL_PATTERN = Pattern.compile("\\d+(?:\\.\\d+)?");
+    private static final Pattern RO_DECIMAL_PATTERN = Pattern.compile("\\d{1,3}(?:\\.\\d{3})*(?:,\\d+)?|\\d+(?:,\\d+)?");
     // P2241 (reason for deprecated rank) = Q126598282
     private static final String DEPRECATION_REASON_PROPERTY = "P2241";
     private static final String DEPRECATION_REASON_ITEM = "Q126598282";
 
-    // DBF records indexed by SIRUTA code (leading zeros stripped), filled in main()
-    private static final Map<String, Map<String, String>> DBF_BY_CODE = new HashMap<>();
+    // DBF records indexed by SIRUTA code (leading zeros stripped), loaded lazily on first need
+    private static Map<String, Map<String, String>> dbfByCode = null;
 
     private enum AreaUpdate {
         NO_DATA, UNCHANGED, UPDATED
@@ -192,10 +193,6 @@ public class FixVillages {
 
     public static void main(String[] args) throws IOException {
         initLogging();
-        for (Map<String, String> dbfRow : DbfReader.read(DBF_FILE, StandardCharsets.UTF_8)) {
-            DBF_BY_CODE.putIfAbsent(normalizeCode(dbfRow.get(DBF_CODE_COLUMN)), dbfRow);
-        }
-        LOG.info("Loaded {} records from {}", DBF_BY_CODE.size(), DBF_FILE);
         Wiki rowiki = Wiki.newSession("ro.wikipedia.org");
         Wiki commonsWiki = Wiki.newSession("commons.wikimedia.org");
 
@@ -391,13 +388,6 @@ public class FixVillages {
                         communeChanged = true;
                     }
 
-                    // Stage 1: the area from data.gov.ro only goes into the infobox. Copying it to Wikidata
-                    // (updateAreaFromDbf) is on hold until the next stage.
-                    BigDecimal dbfAreaKm2 = findDbfAreaKm2(communeWikibaseItem);
-                    if (null == dbfAreaKm2) {
-                        LOG.warn("No area found in dbf for {} ({})", communeWikibaseItem.getId(), crtCommuneName);
-                    }
-
                     Map<Property, Set<Claim>> communeClaims = communeWikibaseItem.getClaims();
                     Set<Claim> compositeVillagesClaims = communeClaims.get(new Property("P1383"));
                     Set<Rank> availableRanks =
@@ -525,6 +515,13 @@ public class FixVillages {
                                 }
                                 initialTemplate.removeParam(eachParam);
                             }
+                            if (CS.equals(eachParam, "suprafață_totală_km2") && isNotBlank(paramValue)) {
+                                if (moveCommuneAreaToWikidata(communeWikibaseItem, areaProp, squareKmEnt, paramValue,
+                                    initialTemplate.getParams().get("suprafață_note_subsol"))) {
+                                    initialTemplate.removeParam(eachParam);
+                                    initialTemplate.removeParam("suprafață_note_subsol");
+                                }
+                            }
                             if (CS.startsWith(eachParam, "lider_") && !CS.endsWith(eachParam, "_titlu")) {
                                 Set<Claim> mayorClaim = communeWikibaseItem.getClaims().get(mayorProp);
                                 if (null != mayorClaim && 0 < mayorClaim.size()) {
@@ -539,18 +536,16 @@ public class FixVillages {
                         initialTemplate.removeParam("populatie");
                         initialTemplate.removeParam("recensamant");
                         initialTemplate.removeParam("populație_note_subsol");
-
-                        if (null != dbfAreaKm2 && CI.equals("Infocaseta Așezare", initialTemplate.getTemplateTitle())) {
-                            initialTemplate.setParam("suprafață_totală_km2", dbfAreaKm2.toPlainString());
-                            initialTemplate.setParam("suprafață_note_subsol", AREA_FOOTNOTE);
-                        }
                     } else {
                         pageText = "{{Infocaseta Așezare}}" + pageText;
                         templateAnalysisStart = "{{Infocaseta Așezare}}".length();
                     }
 
                     String coatOfArms = initialTemplate.getParams().get("stemă");
-                    if (isNotEmpty(coatOfArms)) {
+                    Set<Claim> coatOfArmsFromWd = communeClaims.get(new Property("P94"));
+                    if (null != coatOfArmsFromWd && !coatOfArmsFromWd.isEmpty()) {
+                        initialTemplate.removeParam("stemă");
+                    } else if (isNotEmpty(coatOfArms)) {
                         Matcher coatOfArmsMatcher = imageInInfoboxPattern.matcher(coatOfArms);
                         if (CS.contains(coatOfArms, "{{#property:P94}}")) {
                             initialTemplate.removeParam("stemă");
@@ -562,19 +557,8 @@ public class FixVillages {
                                     false)
                                 .stream().map(l -> l.contains("Category:Coat of arms placeholders")).findFirst()
                                 .orElse(false)) {
-                                Set<Claim> coatOfArmsFromWd = communeClaims.get(coatOfArmsImageWikidataProperty);
-                                if (null == coatOfArmsFromWd || coatOfArmsFromWd.isEmpty()) {
-                                    wdAuth.authenticated().addClaim(communeWikibaseItem.getId(),
-                                        new Claim(coatOfArmsImageWikidataProperty, new CommonsMedia(coatOfArmsImageName)));
-                                } else {
-                                    List<Claim> coatOfArmsFromWdList = new ArrayList<>(coatOfArmsFromWd);
-                                    while (coatOfArmsFromWdList.size() > 1) {
-                                        coatOfArmsFromWdList.remove(1);
-                                    }
-                                    coatOfArmsFromWdList.get(0).setValue(new CommonsMedia(coatOfArmsImageName));
-                                    coatOfArmsFromWd = new HashSet<>(coatOfArmsFromWdList);
-                                    wdAuth.authenticated().editClaim(coatOfArmsFromWdList.get(0));
-                                }
+                                wdAuth.authenticated().addClaim(communeWikibaseItem.getId(),
+                                    new Claim(coatOfArmsImageWikidataProperty, new CommonsMedia(coatOfArmsImageName)));
                                 initialTemplate.removeParam("stemă");
                             }
                         }
@@ -584,28 +568,7 @@ public class FixVillages {
 
                     Set<Claim> communeNativeLabelClaims = communeWikibaseItem.getClaims(nativeLabelProp);
                     if (null != communeNativeLabelClaims && !communeNativeLabelClaims.isEmpty()) {
-                        List<WikiPart> nativeNameInTemplateParts = initialTemplate.getParam("nume_nativ");
-                        if (null != nativeNameInTemplateParts && !nativeNameInTemplateParts.isEmpty()) {
-                            String nativeNameInTemplateString =
-                                nativeNameInTemplateParts.stream().map(WikiPart::toString).collect(joining());
-                            String[] nativeNamesArray = nativeNameInTemplateString.split("<br\\s*/?\\s*>");
-                            int matchedNativeNames = 0;
-                            for (String eachNativeName : nativeNamesArray) {
-                                for (Claim eachCommuneNativeLabelClaim : communeNativeLabelClaims) {
-                                    if (CS
-                                        .equals(
-                                            trim(LanguageString.class
-                                                .cast(eachCommuneNativeLabelClaim.getMainsnak().getData()).getText()),
-                                            trim(eachNativeName))) {
-                                        matchedNativeNames++;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (matchedNativeNames == nativeNamesArray.length) {
-                                initialTemplate.removeParam("nume_nativ");
-                            }
-                        }
+                        initialTemplate.removeParam("nume_nativ");
                     }
 
                     String communeImage = initialTemplate.getParams().get("imagine");
@@ -657,13 +620,17 @@ public class FixVillages {
                         initialTemplate.removeParam("descriere");
                         initialTemplate.removeParam("imagine_dimensiune");
                         initialTemplate.removeParam("dimensiune_imagine");
-
-                        if (null != sirutaFromWd) {
-                            initialTemplate.removeParam("cod_clasificare");
-                            initialTemplate.removeParam("tip_cod_clasificare");
-                            initialTemplate.removeParam("siruta");
-                        }
-
+                    }
+                    Set<Claim> communeImageClaims = communeClaims.get(imageProp);
+                    if (null != communeImageClaims && !communeImageClaims.isEmpty()) {
+                        initialTemplate.removeParam("imagine");
+                        initialTemplate.removeParam("imagine_descriere");
+                        initialTemplate.removeParam("descriere");
+                    }
+                    if (null != sirutaFromWd) {
+                        initialTemplate.removeParam("cod_clasificare");
+                        initialTemplate.removeParam("tip_cod_clasificare");
+                        initialTemplate.removeParam("siruta");
                     }
                     if (communeClaims.containsKey(captionProp) && null != communeClaims.get(captionProp)) {
                         Set<Claim> imagesClaims = communeClaims.get(imageProp);
@@ -1048,11 +1015,7 @@ public class FixVillages {
         return null;
     }
 
-    private static Time currentDateAsTime() {
-        return new Time(LocalDate.now(ZoneOffset.UTC));
-    }
-
-    private static Set<Snak> buildDbfAreaReference() {
+    private static Set<Snak> buildGovRoAreaReference() {
         Snak statedIn = new Snak();
         statedIn.setProperty(getWikibaseProperty("P248"));
         statedIn.setData(new Item(new Entity(AREA_SOURCE_ITEM)));
@@ -1063,7 +1026,7 @@ public class FixVillages {
 
         Snak retrieved = new Snak();
         retrieved.setProperty(getWikibaseProperty("P813"));
-        retrieved.setData(currentDateAsTime());
+        retrieved.setData(new Time(LocalDate.now(ZoneOffset.UTC)));
 
         Set<Snak> reference = new LinkedHashSet<>();
         reference.add(statedIn);
@@ -1072,12 +1035,24 @@ public class FixVillages {
         return reference;
     }
 
+    private static Map<String, Map<String, String>> getDbfByCode() throws IOException {
+        if (null == dbfByCode) {
+            Map<String, Map<String, String>> records = new HashMap<>();
+            for (Map<String, String> dbfRow : DbfReader.read(DBF_FILE, StandardCharsets.UTF_8)) {
+                records.putIfAbsent(normalizeCode(dbfRow.get(DBF_CODE_COLUMN)), dbfRow);
+            }
+            LOG.info("Loaded {} records from {}", records.size(), DBF_FILE);
+            dbfByCode = records;
+        }
+        return dbfByCode;
+    }
+
     /** Area in km2 (2 decimals, rounded down) from the dbf record matching the item's SIRUTA code, or null. */
-    private static BigDecimal findDbfAreaKm2(Entity communeItem) {
+    private static BigDecimal findDbfAreaKm2(Entity communeItem) throws IOException {
         for (Claim eachSirutaClaim : SetUtils.emptyIfNull(communeItem.getClaims().get(getWikibaseProperty("P843")))) {
             if ("statement".equals(eachSirutaClaim.getType())
                 && eachSirutaClaim.getMainsnak().getData() instanceof StringData siruta) {
-                Map<String, String> dbfRecord = DBF_BY_CODE.get(normalizeCode(siruta.getValue()));
+                Map<String, String> dbfRecord = getDbfByCode().get(normalizeCode(siruta.getValue()));
                 if (dbfRecord != null) {
                     return toSquareKm(dbfRecord.get(DBF_AREA_COLUMN));
                 }
@@ -1086,42 +1061,96 @@ public class FixVillages {
         return null;
     }
 
-    /**
-     * ON HOLD (not called yet). Sets P2046 of a commune/town/municipality from the data.gov.ro dbf (converted to km2). Existing statements are
-     * replaced only if none of the non-deprecated ones is within {@link #AREA_TOLERANCE_KM2} of the dbf value, or if
-     * there is none. Replaced statements are not removed: they get the deprecated rank and a P2241 qualifier.
-     */
-    private static AreaUpdate updateAreaFromDbf(Wikibase dwiki, Entity communeItem, Property areaProp,
-                                                Entity squareKmEnt)
-        throws IOException, WikibaseException {
-        Map<Property, Set<Claim>> claims = communeItem.getClaims();
+    private static boolean isGovRoAreaFootnote(String footnote) {
+        return CS.contains(footnote, AREA_SOURCE_ITEM) || CS.contains(footnote, AREA_SOURCE_URL);
+    }
 
-        BigDecimal dbfAreaKm2 = findDbfAreaKm2(communeItem);
-        if (dbfAreaKm2 == null) {
-            LOG.warn("No dbf area found for {} ({})", communeItem.getId(), crtCommuneName);
-            return AreaUpdate.NO_DATA;
+    /** Parses a km2 value written either as a plain decimal (45.31) or in Romanian format (1.234,56); null otherwise. */
+    private static BigDecimal parseInfoboxAreaKm2(String value) {
+        String areaString = trim(CI.removeStart(CS.removeEnd(trim(lowerCase(value)), "}}"), "{{formatnum:"));
+        try {
+            if (PLAIN_DECIMAL_PATTERN.matcher(areaString).matches()) {
+                return new BigDecimal(areaString);
+            }
+            if (RO_DECIMAL_PATTERN.matcher(areaString).matches()) {
+                return new BigDecimal(CS.replace(CS.remove(areaString, '.'), ",", "."));
+            }
+        } catch (NumberFormatException e) {
+            LOG.warn("Invalid area value in infobox: {}", value);
         }
+        return null;
+    }
 
-        List<Claim> oldAreaClaims = SetUtils.emptyIfNull(claims.get(areaProp)).stream()
+    /**
+     * Moves the area of a commune/town/municipality from its infobox to Wikidata. If the infobox value is cited to the
+     * data.gov.ro dataset it is used as is; otherwise the area is computed from the data.gov.ro dbf (loaded lazily).
+     *
+     * @return true if Wikidata now holds the area, so it can be removed from the infobox
+     */
+    private static boolean moveCommuneAreaToWikidata(Entity communeItem, Property areaProp, Entity squareKmEnt,
+                                                     String infoboxArea, String infoboxAreaFootnote)
+        throws IOException, WikibaseException {
+        BigDecimal areaKm2 = null;
+        if (isGovRoAreaFootnote(infoboxAreaFootnote)) {
+            areaKm2 = parseInfoboxAreaKm2(infoboxArea);
+            if (null == areaKm2) {
+                LOG.warn("Could not parse infobox area '{}' of {} ({})", infoboxArea, communeItem.getId(), crtCommuneName);
+            }
+        }
+        if (null == areaKm2) {
+            areaKm2 = findDbfAreaKm2(communeItem);
+            if (null == areaKm2) {
+                LOG.warn("No dbf area found for {} ({}); leaving the area in the infobox", communeItem.getId(),
+                    crtCommuneName);
+                return false;
+            }
+        }
+        return AreaUpdate.NO_DATA != updateAreaOnWikidata(communeItem, areaProp, squareKmEnt, areaKm2);
+    }
+
+    /**
+     * Sets P2046 of a commune/town/municipality to the given data.gov.ro value (km2), with normal rank. Every
+     * non-deprecated statement with a different value gets the deprecated rank and a P2241 qualifier. If a statement
+     * with the same value already exists, it only gets the data.gov.ro reference instead of being duplicated.
+     */
+    private static AreaUpdate updateAreaOnWikidata(Entity communeItem, Property areaProp, Entity squareKmEnt,
+                                                   BigDecimal areaKm2)
+        throws IOException, WikibaseException {
+        List<Claim> oldAreaClaims = SetUtils.emptyIfNull(communeItem.getClaims().get(areaProp)).stream()
             .filter(c -> "statement".equals(c.getType())).filter(c -> c.getRank() != Rank.DEPRECATED).toList();
+        Claim sameAreaClaim = null;
+        List<Claim> differentAreaClaims = new ArrayList<>();
         for (Claim eachOldClaim : oldAreaClaims) {
             Double oldAreaKm2 = areaClaimInSquareKm(eachOldClaim);
-            if (null != oldAreaKm2 && Math.abs(oldAreaKm2 - dbfAreaKm2.doubleValue()) <= AREA_TOLERANCE_KM2) {
-                return AreaUpdate.UNCHANGED;
+            if (null == sameAreaClaim && null != oldAreaKm2
+                && BigDecimal.valueOf(oldAreaKm2).setScale(2, RoundingMode.HALF_UP).compareTo(areaKm2) == 0) {
+                sameAreaClaim = eachOldClaim;
+            } else {
+                differentAreaClaims.add(eachOldClaim);
             }
+        }
+        deprecateAreaClaims(differentAreaClaims);
+
+        if (null != sameAreaClaim) {
+            if (hasGovRoAreaReference(sameAreaClaim)) {
+                return differentAreaClaims.isEmpty() ? AreaUpdate.UNCHANGED : AreaUpdate.UPDATED;
+            }
+            LOG.info("Area of {} ({}) already is {} km2, adding data.gov.ro reference, deprecated {} old statement(s)",
+                communeItem.getId(), crtCommuneName, areaKm2.toPlainString(), differentAreaClaims.size());
+            wdAuth.authenticated().addReference(sameAreaClaim.getId(), new ArrayList<Snak>(buildGovRoAreaReference()));
+            return AreaUpdate.UPDATED;
         }
 
         Quantity areaQty = new Quantity();
-        areaQty.setAmount(dbfAreaKm2.doubleValue());
+        areaQty.setAmount(areaKm2.doubleValue());
         areaQty.setUnit(new Item(squareKmEnt));
         Claim areaClaim = new Claim(areaProp, areaQty);
         areaClaim.getMainsnak().setDatatype("quantity");
-        areaClaim.addReference(buildDbfAreaReference());
+        areaClaim.addReference(buildGovRoAreaReference());
 
-        LOG.info("Setting area of {} ({}) to {} km2 from dbf, deprecating {} old statement(s)", communeItem.getId(),
-            crtCommuneName, dbfAreaKm2.toPlainString(), oldAreaClaims.size());
+        LOG.info("Setting area of {} ({}) to {} km2 from data.gov.ro, deprecated {} old statement(s)",
+            communeItem.getId(), crtCommuneName, areaKm2.toPlainString(), differentAreaClaims.size());
         areaClaim.setRank(Rank.NORMAL);
-        // Add the new statement first so the item is never left without an area if the edit fails
         String claimId = wdAuth.authenticated().addClaim(communeItem.getId(), areaClaim);
         if (null == claimId) {
             return AreaUpdate.NO_DATA;
@@ -1129,13 +1158,25 @@ public class FixVillages {
         for (Set<Snak> eachRef : areaClaim.getReferences()) {
             wdAuth.authenticated().addReference(claimId, new ArrayList<Snak>(eachRef));
         }
-        for (Claim eachOldClaim : oldAreaClaims) {
-            eachOldClaim.setRank(Rank.DEPRECATED);
-            wdAuth.authenticated().editClaim(eachOldClaim);
-            wdAuth.authenticated().addQualifier(eachOldClaim.getId(), DEPRECATION_REASON_PROPERTY,
+        return AreaUpdate.UPDATED;
+    }
+
+    private static void deprecateAreaClaims(List<Claim> areaClaims) throws IOException, WikibaseException {
+        for (Claim eachClaim : areaClaims) {
+            eachClaim.setRank(Rank.DEPRECATED);
+            wdAuth.authenticated().editClaim(eachClaim);
+            wdAuth.authenticated().addQualifier(eachClaim.getId(), DEPRECATION_REASON_PROPERTY,
                 new Item(new Entity(DEPRECATION_REASON_ITEM)));
         }
-        return AreaUpdate.UPDATED;
+    }
+
+    private static boolean hasGovRoAreaReference(Claim claim) {
+        Property statedInProp = getWikibaseProperty("P248");
+        List<Set<Snak>> references = claim.getReferences();
+        return null != references && references.stream().flatMap(Set::stream)
+            .filter(snak -> statedInProp.equals(snak.getProperty())).map(Snak::getData)
+            .anyMatch(d -> d instanceof Item item && null != item.getEnt()
+                && CS.equals(AREA_SOURCE_ITEM, item.getEnt().getId()));
     }
 
     private static void verifyCoordinates(WikiTemplate initialTemplate, StringBuilder coordinatesStat) {
@@ -1708,29 +1749,7 @@ public class FixVillages {
 
                     Set<Claim> villageNativeLabelClaims = villageEntity.getClaims(getWikibaseProperty("P1705"));
                     if (null != villageNativeLabelClaims && !villageNativeLabelClaims.isEmpty()) {
-                        List<WikiPart> nativeNameInTemplateParts = initialTemplate.getParam("nume_nativ");
-                        if (null != nativeNameInTemplateParts && !nativeNameInTemplateParts.isEmpty()) {
-                            String nativeNameInTemplateString =
-                                nativeNameInTemplateParts.stream().map(x -> x.toString()).collect(joining());
-                            String[] nativeNamesArray = nativeNameInTemplateString.split("<br\\s*/?\\s*>");
-                            int matchedNativeNames = 0;
-                            for (String eachNativeName : nativeNamesArray) {
-                                eachNativeName = CS.removeStart(CS.removeEnd(eachNativeName, "''"), "''");
-                                for (Claim eachVillageNativeLabelClaim : villageNativeLabelClaims) {
-                                    if (CS
-                                        .equals(
-                                            trim(LanguageString.class
-                                                .cast(eachVillageNativeLabelClaim.getMainsnak().getData()).getText()),
-                                            trim(eachNativeName))) {
-                                        matchedNativeNames++;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (matchedNativeNames == nativeNamesArray.length) {
-                                initialTemplate.removeParam("nume_nativ");
-                            }
-                        }
+                        initialTemplate.removeParam("nume_nativ");
                     }
 
                     Set<Claim> sirutaClaims = villageEntity.getClaims().get(getWikibaseProperty("P843"));
@@ -1739,6 +1758,7 @@ public class FixVillages {
                             if ("statement".equals(eachSirutaClaim.getType())) {
                                 initialTemplate.removeParam("cod_clasificare");
                                 initialTemplate.removeParam("tip_cod_clasificare");
+                                initialTemplate.removeParam("siruta");
                             }
                         }
                     }
@@ -1782,6 +1802,7 @@ public class FixVillages {
                             }
                         }
                         initialTemplate.removeParam(eachParam);
+                        initialTemplate.removeParam("suprafață_note_subsol");
                     }
                     if (CS.equals(eachParam, "altitudine")) {
                         Property altProp = getWikibaseProperty("P2044");
@@ -1884,6 +1905,12 @@ public class FixVillages {
                 initialTemplate.removeParam("descriere");
                 initialTemplate.removeParam("imagine_dimensiune");
                 initialTemplate.removeParam("dimensiune_imagine");
+            }
+            Set<Claim> villageImageClaims = villageEntity.getClaims().get(imageWikidataProperty);
+            if (null != villageImageClaims && !villageImageClaims.isEmpty()) {
+                initialTemplate.removeParam("imagine");
+                initialTemplate.removeParam("imagine_descriere");
+                initialTemplate.removeParam("descriere");
             }
             if (villageEntity.getClaims().containsKey(captionProp) && null != villageEntity.getClaims().get(captionProp)) {
                 Set<Claim> imagesClaims = villageEntity.getClaims().get(imageWikidataProperty);
