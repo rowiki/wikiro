@@ -174,6 +174,8 @@ public class FixVillages {
     private static final Pattern PLAIN_DECIMAL_PATTERN = Pattern.compile("\\d+(?:\\.\\d+)?");
     private static final Pattern RO_DECIMAL_PATTERN = Pattern.compile("\\d{1,3}(?:\\.\\d{3})*(?:,\\d+)?|\\d+(?:,\\d+)?");
     // P2241 (reason for deprecated rank) = Q126598282
+    // Wikidata properties used by Modul:Wikidata.findImageAndCaption for the infobox image, in order of precedence
+    private static final List<String> INFOBOX_IMAGE_PROPERTIES = List.of("P2716", "P18", "P10", "P1766");
     private static final String DEPRECATION_REASON_PROPERTY = "P2241";
     private static final String DEPRECATION_REASON_ITEM = "Q126598282";
 
@@ -571,62 +573,7 @@ public class FixVillages {
                         initialTemplate.removeParam("nume_nativ");
                     }
 
-                    String communeImage = initialTemplate.getParams().get("imagine");
-                    if (isNotEmpty(communeImage)) {
-                        Matcher imageMatcher = imageInInfoboxPattern.matcher(communeImage);
-                        if (CS.contains(communeImage, "{{#property:P18}}")) {
-                            initialTemplate.removeParam("imagine");
-                        } else if (imageMatcher.matches()) {
-                            String imageName = URLDecoder.decode(imageMatcher.group(8), StandardCharsets.UTF_8.name());
-                            if (CI.endsWithAny(imageName, "jpg", "jpeg", "png")) {
-                                Property imageWikidataProperty = new Property("P18");
-                                if (commonsWiki.exists(List.of("File:" + imageName))[0]) {
-                                    String imageClaimId = null;
-                                    boolean captionQualifierFound = false;
-                                    if (!communeClaims.containsKey(imageWikidataProperty)) {
-                                        imageClaimId = wdAuth.authenticated().addClaim(communeWikibaseItem.getId(),
-                                            new Claim(imageWikidataProperty, new CommonsMedia(imageName)));
-                                        initialTemplate.removeParam("imagine");
-                                    } else {
-                                        Optional<Claim> possibleImageClaim =
-                                            communeClaims.get(imageWikidataProperty).stream().findFirst();
-                                        if (possibleImageClaim.isPresent() && CS.equals(
-                                            CS.replace(possibleImageClaim.map(Claim::getValue).map(CommonsMedia.class::cast)
-                                                .map(CommonsMedia::getFileName).get(), " ", "_"),
-                                            CS.replace(imageName, " ", "_"))) {
-                                            Claim imageClaim = possibleImageClaim.get();
-                                            imageClaimId = imageClaim.getId();
-                                            captionQualifierFound = (null != imageClaim.getQualifiers().get(captionProp));
-                                            initialTemplate.removeParam("imagine");
-                                        }
-                                    }
-                                    String communeImageCaption =
-                                        defaultIfEmpty(initialTemplate.getParams().get("imagine_descriere"),
-                                            initialTemplate.getParams().get("descriere"));
-                                    communeImageCaption = CS.replace(communeImageCaption, "'''", "");
-
-                                    if (isNotEmpty(communeImageCaption) && null != imageClaimId && !captionQualifierFound) {
-                                        wdAuth.authenticated().addQualifier(imageClaimId, captionProp.getId(),
-                                            new LanguageString("ro", communeImageCaption));
-                                    }
-                                    initialTemplate.removeParam("descriere");
-                                    initialTemplate.removeParam("imagine_descriere");
-                                }
-                            }
-                        }
-                    } else {
-                        initialTemplate.removeParam("imagine");
-                        initialTemplate.removeParam("imagine_descriere");
-                        initialTemplate.removeParam("descriere");
-                        initialTemplate.removeParam("imagine_dimensiune");
-                        initialTemplate.removeParam("dimensiune_imagine");
-                    }
-                    Set<Claim> communeImageClaims = communeClaims.get(imageProp);
-                    if (null != communeImageClaims && !communeImageClaims.isEmpty()) {
-                        initialTemplate.removeParam("imagine");
-                        initialTemplate.removeParam("imagine_descriere");
-                        initialTemplate.removeParam("descriere");
-                    }
+                    moveImageToWikidata(commonsWiki, communeWikibaseItem, initialTemplate, true);
                     if (null != sirutaFromWd) {
                         initialTemplate.removeParam("cod_clasificare");
                         initialTemplate.removeParam("tip_cod_clasificare");
@@ -1177,6 +1124,105 @@ public class FixVillages {
             .filter(snak -> statedInProp.equals(snak.getProperty())).map(Snak::getData)
             .anyMatch(d -> d instanceof Item item && null != item.getEnt()
                 && CS.equals(AREA_SOURCE_ITEM, item.getEnt().getId()));
+    }
+
+    /** The image shown by the infobox from Wikidata: the claim, the property it belongs to and its file name. */
+    private record WikidataInfoboxImage(Property property, Claim claim, String fileName) {
+    }
+
+    /**
+     * Mirrors findImageAndCaption from Modul:Wikidata, used by Modul:InfoboxSettlement: the first of
+     * {@link #INFOBOX_IMAGE_PROPERTIES} that has best-ranked statements provides the image, from its first statement.
+     */
+    private static WikidataInfoboxImage findWikidataInfoboxImage(Entity entity) {
+        for (String eachPropId : INFOBOX_IMAGE_PROPERTIES) {
+            Property prop = getWikibaseProperty(eachPropId);
+            List<Claim> nonDeprecatedClaims = SetUtils.emptyIfNull(entity.getClaims().get(prop)).stream()
+                .filter(c -> c.getRank() != Rank.DEPRECATED).toList();
+            List<Claim> bestClaims = nonDeprecatedClaims.stream().filter(c -> c.getRank() == Rank.PREFERRED).toList();
+            if (bestClaims.isEmpty()) {
+                bestClaims = nonDeprecatedClaims;
+            }
+            if (!bestClaims.isEmpty()) {
+                Claim firstClaim = bestClaims.get(0);
+                String fileName = firstClaim.getMainsnak().getData() instanceof CommonsMedia media
+                    ? media.getFileName()
+                    : null;
+                return new WikidataInfoboxImage(prop, firstClaim, fileName);
+            }
+        }
+        return null;
+    }
+
+    private static String normalizeFileName(String fileName) {
+        String normalized = trim(CS.replace(defaultString(fileName), "_", " "));
+        return normalized.isEmpty() ? normalized
+            : normalized.substring(0, 1).toUpperCase(Locale.ROOT) + normalized.substring(1);
+    }
+
+    private static boolean hasRoCaption(Claim claim) {
+        return SetUtils.emptyIfNull(claim.getQualifiers().get(getWikibaseProperty("P2096"))).stream()
+            .map(Snak::getData).anyMatch(d -> d instanceof LanguageString ls && CS.equals("ro", ls.getLanguage()));
+    }
+
+    /**
+     * Copies the infobox image to P18 when the item has no P18 and removes the local image (and its caption) only if it
+     * has just been copied there or if it is the image the infobox already shows from Wikidata.
+     */
+    private static void moveImageToWikidata(Wiki commonsWiki, Entity entity, WikiTemplate template,
+                                            boolean onlyPhotos)
+        throws IOException, WikibaseException {
+        String image = template.getParams().get("imagine");
+        if (isEmpty(image)) {
+            template.removeParam("imagine");
+            template.removeParam("imagine_descriere");
+            template.removeParam("descriere");
+            template.removeParam("imagine_dimensiune");
+            template.removeParam("dimensiune_imagine");
+            return;
+        }
+        Property p18 = getWikibaseProperty("P18");
+        WikidataInfoboxImage wdImage = findWikidataInfoboxImage(entity);
+        if (CS.contains(image, "{{#property:P18}}")) {
+            if (null != wdImage && p18.equals(wdImage.property())) {
+                template.removeParam("imagine");
+            }
+            return;
+        }
+        Matcher imageMatcher = imageInInfoboxPattern.matcher(image);
+        if (!imageMatcher.matches()) {
+            return;
+        }
+        String imageName = URLDecoder.decode(imageMatcher.group(8), StandardCharsets.UTF_8);
+        if ((onlyPhotos && !CI.endsWithAny(imageName, "jpg", "jpeg", "png"))
+            || !commonsWiki.exists(List.of("File:" + imageName))[0]) {
+            return;
+        }
+
+        String shownImageClaimId = null;
+        boolean shownImageHasCaption = false;
+        if (SetUtils.emptyIfNull(entity.getClaims().get(p18)).isEmpty()) {
+            String newClaimId = wdAuth.authenticated().addClaim(entity.getId(), new Claim(p18, new CommonsMedia(imageName)));
+            // Even if another image (e.g. P2716) takes precedence in the infobox, this one is now kept at Wikidata
+            shownImageClaimId = newClaimId;
+        } else if (null != wdImage && null != wdImage.fileName()
+            && CS.equals(normalizeFileName(wdImage.fileName()), normalizeFileName(imageName))) {
+            shownImageClaimId = wdImage.claim().getId();
+            shownImageHasCaption = hasRoCaption(wdImage.claim());
+        }
+        if (null == shownImageClaimId) {
+            LOG.info("Keeping local image {} of {}, different from the one on Wikidata", imageName, entity.getId());
+            return;
+        }
+
+        String caption = CS.replace(defaultIfEmpty(template.getParams().get("imagine_descriere"),
+            template.getParams().get("descriere")), "'''", "");
+        if (isNotEmpty(caption) && !shownImageHasCaption) {
+            wdAuth.authenticated().addQualifier(shownImageClaimId, "P2096", new LanguageString("ro", caption));
+        }
+        template.removeParam("imagine");
+        template.removeParam("imagine_descriere");
+        template.removeParam("descriere");
     }
 
     private static void verifyCoordinates(WikiTemplate initialTemplate, StringBuilder coordinatesStat) {
@@ -1853,65 +1899,9 @@ public class FixVillages {
                         trim(substring(articleAfterInfobox, postInfoboxTemplate.getTemplateLength()));
                 }
             }
-            String villageImage = initialTemplate.getParams().get("imagine");
             Property imageWikidataProperty = getWikibaseProperty("P18");
             Property captionProp = getWikibaseProperty("P2096");
-            if (isNotEmpty(villageImage)) {
-                Matcher imageMatcher = imageInInfoboxPattern.matcher(villageImage);
-                if (CS.contains(villageImage, "{{#property:P18}}")) {
-                    initialTemplate.removeParam("imagine");
-                } else if (imageMatcher.matches()) {
-                    String imageName = imageMatcher.group(8);
-                    imageName = URLDecoder.decode(imageName, "UTF-8");
-                    if (commonsWiki.exists(List.of("File:" + imageName))[0]) {
-                        String imageClaimId = null;
-                        boolean captionQualifierFound = false;
-                        if (!villageEntity.getClaims().containsKey(imageWikidataProperty)) {
-                            imageClaimId = wdAuth.authenticated().addClaim(villageEntity.getId(),
-                                new Claim(imageWikidataProperty, new CommonsMedia(imageName)));
-                            initialTemplate.removeParam("imagine");
-                        } else {
-                            Optional<Claim> possibleImageClaim =
-                                villageEntity.getClaims().get(imageWikidataProperty).stream().findFirst();
-                            if (possibleImageClaim.isPresent()
-                                && CS
-                                    .equals(
-                                        CS.replace(possibleImageClaim.map(Claim::getValue).map(CommonsMedia.class::cast)
-                                            .map(CommonsMedia::getFileName).get(), " ", "_"),
-                                        CS.replace(imageName, " ", "_"))) {
-                                Claim imageClaim = possibleImageClaim.get();
-                                imageClaimId = imageClaim.getId();
-                                Set<Snak> captions = imageClaim.getQualifiers().get(captionProp);
-                                if (null != captions) {
-                                    captionQualifierFound = true;
-                                }
-                                initialTemplate.removeParam("imagine");
-                            }
-                        }
-                        String villageImageCaption = defaultIfEmpty(initialTemplate.getParams().get("imagine_descriere"),
-                            initialTemplate.getParams().get("descriere"));
-                        villageImageCaption = CS.replace(villageImageCaption, "'''", "");
-                        if (isNotEmpty(villageImageCaption) && null != imageClaimId && !captionQualifierFound) {
-                            wdAuth.authenticated().addQualifier(imageClaimId, captionProp.getId(),
-                                new LanguageString("ro", villageImageCaption));
-                        }
-                        initialTemplate.removeParam("descriere");
-                        initialTemplate.removeParam("imagine_descriere");
-                    }
-                }
-            } else {
-                initialTemplate.removeParam("imagine");
-                initialTemplate.removeParam("imagine_descriere");
-                initialTemplate.removeParam("descriere");
-                initialTemplate.removeParam("imagine_dimensiune");
-                initialTemplate.removeParam("dimensiune_imagine");
-            }
-            Set<Claim> villageImageClaims = villageEntity.getClaims().get(imageWikidataProperty);
-            if (null != villageImageClaims && !villageImageClaims.isEmpty()) {
-                initialTemplate.removeParam("imagine");
-                initialTemplate.removeParam("imagine_descriere");
-                initialTemplate.removeParam("descriere");
-            }
+            moveImageToWikidata(commonsWiki, villageEntity, initialTemplate, false);
             if (villageEntity.getClaims().containsKey(captionProp) && null != villageEntity.getClaims().get(captionProp)) {
                 Set<Claim> imagesClaims = villageEntity.getClaims().get(imageWikidataProperty);
                 if (imagesClaims.size() == 1) {
