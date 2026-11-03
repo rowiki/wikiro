@@ -1120,10 +1120,11 @@ public class FixVillages {
     private static boolean hasGovRoAreaReference(Claim claim) {
         Property statedInProp = getWikibaseProperty("P248");
         List<Set<Snak>> references = claim.getReferences();
+        // Parsed item ids are numeric, without the Q prefix
         return null != references && references.stream().flatMap(Set::stream)
             .filter(snak -> statedInProp.equals(snak.getProperty())).map(Snak::getData)
             .anyMatch(d -> d instanceof Item item && null != item.getEnt()
-                && CS.equals(AREA_SOURCE_ITEM, item.getEnt().getId()));
+                && CS.equals(CI.removeStart(AREA_SOURCE_ITEM, "Q"), CI.removeStart(item.getEnt().getId(), "Q")));
     }
 
     /** The image shown by the infobox from Wikidata: the claim, the property it belongs to and its file name. */
