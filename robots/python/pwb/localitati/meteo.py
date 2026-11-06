@@ -16,7 +16,9 @@ normals, and precipitation days.
 
 Pages that already contain a weather box are skipped.  The box is appended to
 the ``Climă``/``Climat`` section when one exists; otherwise a ``Climă``
-subsection is created at the end of ``Geografie``.
+subsection is created at the end of ``Geografie``.  If neither section exists,
+a ``Geografie``/``Geografia`` section at the same level is inserted immediately
+before the ``Demografie``/``Demografia``/``Date demografice`` section.
 
 The year range defaults to 2001-2025 and can be changed with
 ``-start-year:`` and ``-end-year:``.  The range must lie within the data,
@@ -83,8 +85,9 @@ MONTH_NAMES = (
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 )
 
-CLIMATE_SECTION_TITLES = {"clima", "climat", "climă", "date climatice", "date meteo"}
-GEOGRAPHY_SECTION_TITLES = {"geografie", "date geografice", "geografia"}
+CLIMATE_SECTION_TITLES = {"climă", "clima", "climat", "date climatice", "date meteo"}
+GEOGRAPHY_SECTION_TITLES = {"geografie", "geografia", "date geografice", "descriere geografica"}
+DEMOGRAPHY_SECTION_TITLES = {"demografie", "demografia", "date demografice"}
 SECTION_PATTERN = re.compile(
     r"^(={2,6})\s*(.+?)\s*\1\s*$", re.MULTILINE
 )
@@ -285,6 +288,8 @@ def add_weather_box(text: str, box: str) -> tuple[str, str] | None:
 
     The box is appended to a ``Climă``/``Climat`` section when one exists.
     Otherwise a ``Climă`` subsection is created at the end of ``Geografie``.
+    If neither exists, a ``Geografie``/``Geografia`` section at the same level
+    is inserted immediately before the demography section.
     """
     section = find_section(text, CLIMATE_SECTION_TITLES)
     if section is not None:
@@ -292,12 +297,23 @@ def add_weather_box(text: str, box: str) -> tuple[str, str] | None:
         return insert_block(text, end, box), f"section '{title}'"
 
     section = find_section(text, GEOGRAPHY_SECTION_TITLES)
+    if section is not None:
+        _start, end, level, title = section
+        heading = "=" * (level + 1)
+        normalized = normalize_heading(title)
+        climate = "Clima" if normalized == "geografia" else "Climă"
+        block = f"{heading} {climate} {heading}\n\n{box}"
+        return insert_block(text, end, block), f"subsection under '{title}'"
+
+    section = find_section(text, DEMOGRAPHY_SECTION_TITLES)
     if section is None:
         return None
-    _start, end, level, title = section
-    heading = "=" * (level + 1)
-    block = f"{heading} Climă {heading}\n\n{box}"
-    return insert_block(text, end, block), f"subsection under '{title}'"
+    start, _end, level, title = section
+    heading = "=" * level
+    normalized = normalize_heading(title)
+    geography = "Geografia" if normalized == "demografia" else "Geografie"
+    block = f"{heading} {geography} {heading}\n\n{box}"
+    return insert_block(text, start, block), f"section before '{title}'"
 
 
 def parse_year_options(args: list[str]) -> tuple[int, int, list[str]]:
@@ -600,8 +616,11 @@ def process_page(
     if section is None:
         section = find_section(text, GEOGRAPHY_SECTION_TITLES)
     if section is None:
+        section = find_section(text, DEMOGRAPHY_SECTION_TITLES)
+    if section is None:
         pywikibot.warning(
-            f"Skipping {page.title()}: no Climă/Climat or Geografie section"
+            f"Skipping {page.title()}: no Climă/Climat, Geografie, or "
+            "Demografie section"
         )
         return
 
