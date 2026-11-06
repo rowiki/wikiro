@@ -1,14 +1,12 @@
 #!/usr/bin/python
 #-*- coding:utf-8 -*-
 
-import pywikibot
 import re
 
-from collections import OrderedDict
+import pywikibot
+import wikiro.robots.python.pwb.wikidata as wikidata
 from pywikibot.bot import SingleSiteBot
 
-
-import wikiro.robots.python.pwb.wikidata as wikidata
 
 class OlympiansArticles(SingleSiteBot):
     def __init__(self, limit=None):
@@ -32,8 +30,8 @@ Lista de mai jos prezintă principalele competiții la care a participat {nume} 
 {{{{ciot-sport}}}}
 {{{{Control de autoritate}}}}
 {{{{DEFAULTSORT:{sort}}}}}
-[[Categorie:Nașteri în {an}]]
-[[Categorie:Nașteri pe {data}]]
+{categorie_an}
+{catagorie_data}
 {categorie_aur}
 {categorie_argint}
 {categorie_bronz}
@@ -98,7 +96,10 @@ Lista de mai jos prezintă principalele competiții la care a participat {nume} 
     def skip_page(self, page) -> bool:
         if self.limit is not None and self.counter['read'] >= self.limit:
             return True
-        return False
+        if "rowiki" in page.sitelinks:
+            pywikibot.output(f"{page.title()} already has rowiki sitelink")
+            return True
+        return super().skip_page(page)
 
     def get_participation_years(self, claims):
         lista = set([])
@@ -128,7 +129,8 @@ Lista de mai jos prezintă principalele competiții la care a participat {nume} 
                         continue
                     qual = qual[0]
                     #print(qual)
-                    year = qual.getTarget().labels.get("ro")[-4:]
+                    year = (qual.getTarget().labels.get("ro")
+                            or qual.getTarget().labels.get("fr"))[-4:]
                     lista.add(year)
             if "P166" in participation.qualifiers:
                 honor = wikidata.find_best_claim(participation.qualifiers["P166"])
@@ -146,6 +148,10 @@ Lista de mai jos prezintă principalele competiții la care a participat {nume} 
         else:
             claim = wikidata.find_best_claim(claims["P569"])
             target = claim.getTarget()
+            if target.precision < 9:
+                return None, None
+            if target.precision == 9:
+                return None, str(target.year)
             months = [" ianuarie", " februarie", " martie", " aprilie", " mai", " iunie",
                     " iulie", " august", " septembrie", " octombrie", " noiembrie", " decembrie"]
             day = str(target.day) + months[target.month-1]
@@ -184,6 +190,14 @@ Lista de mai jos prezintă principalele competiții la care a participat {nume} 
         else:
             categorie_bronz = ""
         ocupatie,cat_sport=self.get_sport(description, claims)
+        categorie_data = ""
+        categorie_an = ""
+        if data is not None:
+            categorie_data = f"[[Categorie:Nașteri pe {data}]]"
+        if an is not None:
+            categorie_an = f"[[Categorie:Nașteri în {an}]]"
+        if data is None and an is None:
+            categorie_data = "[[Categorie:Nașteri cu dată necunoscută]]"
 
         text = self.article_template.format(nume=label,
                 un=self.get_gender_data(claims, "un", "o"),
@@ -195,8 +209,8 @@ Lista de mai jos prezintă principalele competiții la care a participat {nume} 
                 argint=argint,
                 bronz=bronz,
                 sort=defaultsort,
-                an=an,
-                data=data,
+                categorie_an=categorie_an,
+                categorie_data=categorie_data,
                 categorie_aur=categorie_aur,
                 categorie_argint=categorie_argint,
                 categorie_bronz=categorie_bronz,
@@ -242,12 +256,7 @@ Lista de mai jos prezintă principalele competiții la care a participat {nume} 
             defaultsort = name + ", " + defaultsort
         return defaultsort
 
-
-
     def treat(self, page) -> None:
-        if "rowiki" in page.sitelinks:
-            pywikibot.output(f"{page.title()} already has rowiki sitelink")
-            return False
         name = wikidata.get_labels(page)
         print(name)
         try:
@@ -259,7 +268,7 @@ Lista de mai jos prezintă principalele competiții la care a participat {nume} 
                 ropage = pywikibot.Page(pywikibot.Site(), name + " (sportiv)")
                 if ropage.exists():
                     pywikibot.output(f"Articolul {name} există deja.")
-                    return False
+                    return
             ropage.put(self.temporary_article, "Creez articol temporar pentru " + name)
             import time
             time.sleep(1)
@@ -268,11 +277,11 @@ Lista de mai jos prezintă principalele competiții la care a participat {nume} 
             if "P570" not in page.claims:
                 tpage = ropage.toggleTalkPage()
                 tpage.put("{{bpv}}", "Adaug {{bpv}}")
-            return True
         except Exception as e:
             print(e)
             #raise e
-            return False
+            import traceback
+            traceback.print_exc()
 
 
 def olympiansGenerator(limit=None):
