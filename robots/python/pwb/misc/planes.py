@@ -125,10 +125,12 @@ class PlaneArticles(SingleSiteBot):
         defaultsort += ", aeroport"
         text = self.build_article(name, page.claims, defaultsort)
         print(text)
-        #return
+        if not pywikibot.input_yn("Upload article " + name + "?", None):
+            return
         ropage = pywikibot.Page(pywikibot.Site(), name)
         if ropage.exists():
-                return
+            pywikibot.output("Article " + name + " already exists, skipping.")
+            return
         ropage.put(self.temporary_article, "Creez articol temporar pentru " + name)
         page.setSitelink(ropage)
         ropage.put(text, "Finalizez articolul despre " + name)
@@ -139,6 +141,9 @@ def planesGenerator():
     ?item wdt:P238 ?code.
     FILTER NOT EXISTS {
       ?item wdt:P3999 ?inchis.
+    }
+    FILTER NOT EXISTS {
+      ?item wdt:P31 wd:Q55488.
     }
     ?item wikibase:sitelinks ?linkcount .
   FILTER (?linkcount >= 1) . # only include items with 1 or more sitelinks
