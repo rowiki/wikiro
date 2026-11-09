@@ -48,34 +48,21 @@ import itertools
 import json
 import math
 import re
-import sys
 import unicodedata
 from datetime import date
-from pathlib import Path
 from typing import Iterable
 
 import mwparserfromhell
+import pandas as pd
 import pywikibot
 from pywikibot import pagegenerators
-
-
-def load_ro_climate():
-    """Return the bundled client class, error class, and default store URL.
-
-    The imports are deferred so pages with a non-automatic weather box can be
-    skipped without loading pandas and zarr.
-    """
-    try:
-        from ro_climate import DEFAULT_STORE, RoClimate, RoClimateError
-    except ModuleNotFoundError as exc:
-        if exc.name != "ro_climate":
-            raise
-        # The library lives in the repository's meteo/ directory but is not
-        # necessarily installed in the environment running this script.
-        _REPO_ROOT = Path(__file__).resolve().parents[5]
-        sys.path.insert(0, str(_REPO_ROOT / "meteo"))
-        from ro_climate import DEFAULT_STORE, RoClimate, RoClimateError
-    return RoClimate, RoClimateError, DEFAULT_STORE
+from ro_climate import (
+    DEFAULT_STORE,
+    RoClimate,
+    RoClimateError,
+    load_station_series,
+    nearest_stations,
+)
 
 
 DEFAULT_START_YEAR = 2001
@@ -83,6 +70,7 @@ DEFAULT_END_YEAR = 2025
 FIRST_DATA_YEAR = 1961
 COMPARISON_START_YEAR = FIRST_DATA_YEAR
 COMPARISON_END_YEAR = 2000
+STATION_MAX_DISTANCE_KM = 5.0
 PRECIPITATION_DAYS_THRESHOLD = 1.0
 
 SECTION_START_MARKER = "<!-- Început secțiune meteo -->"
@@ -333,6 +321,23 @@ def normalize_heading(title: str) -> str:
     return " ".join(text.casefold().split())
 
 
+def normalize_place_name(name: str) -> str:
+    """Return a comparison key for a station or article name.
+
+    Parenthesised text and a county suffix after a comma are ignored, as are
+    case, diacritics, hyphens, and other punctuation.
+    """
+    text = re.sub(r"\([^)]*\)", " ", name)
+    text = text.split(",")[0]
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(
+        character for character in text
+        if not unicodedata.combining(character)
+    )
+    text = re.sub(r"[^a-z0-9]+", " ", text.casefold())
+    return " ".join(text.split())
+
+
 def find_section(
     text: str, titles: set[str]
 ) -> tuple[int, int, int, str] | None:
@@ -515,8 +520,6 @@ def load_climate_frame(
     three are spatial means and the record columns are spatial extremes;
     for a point all columns are the cell's own daily values.
     """
-    import pandas as pd
-
     start = f"{start_year}-01-01"
     end = f"{end_year}-12-31"
 
@@ -567,10 +570,8 @@ def load_comparison_frame(
     """Return the daily means for the comparison period.
 
     Only the ``mean`` reduction is needed because the narrative compares the
-    mean temperature and the mean annual precipitation with 1971-2000.
+    mean temperature and the mean annual precipitation with 1961-2000.
     """
-    import pandas as pd
-
     start = f"{start_year}-01-01"
     end = f"{end_year}-12-31"
 
@@ -610,6 +611,84 @@ def load_comparison_frame(
     )
 
 
+def find_matching_station(
+    title: str, lon: float | None, lat: float | None
+):
+    """Return the nearest station within 5 km whose name matches the title."""
+    if lon is None or lat is None:
+        return None
+    key = normalize_place_name(title)
+    if not key:
+        return None
+    try:
+        candidates = nearest_stations(
+            lon,
+            lat,
+            n=1000,
+            max_distance_km=STATION_MAX_DISTANCE_KM,
+        )
+    except Exception as exc:
+        pywikibot.warning(
+            f"Could not look up stations near {lon}, {lat}: {exc}"
+        )
+        return None
+    for station, _distance in candidates:
+        if normalize_place_name(station.name) == key:
+            return station
+    return None
+
+
+def load_station_frames(
+    station, start_year: int, end_year: int
+) -> tuple[pd.DataFrame, pd.DataFrame] | None:
+    """Return ``(current, comparison)`` station frames, or ``None``."""
+    try:
+        series = load_station_series(
+            station,
+            start=f"{COMPARISON_START_YEAR}-01-01",
+            end=f"{end_year}-12-31",
+            variables=CLIMATE_VARIABLES,
+        )
+    except Exception as exc:
+        pywikibot.warning(
+            f"Could not load station {station.name}: {exc}"
+        )
+        return None
+
+    data = series.data
+    frame = pd.DataFrame(
+        {
+            "max_temp": data["max_temp"],
+            "min_temp": data["min_temp"],
+            "precipitation": data["precipitation"],
+            "record_max_temp": data["max_temp"],
+            "record_min_temp": data["min_temp"],
+        }
+    )
+    current = frame.loc[
+        f"{start_year}-01-01":f"{end_year}-12-31"
+    ]
+    comparison = frame.loc[
+        f"{COMPARISON_START_YEAR}-01-01":f"{COMPARISON_END_YEAR}-12-31"
+    ]
+    for part in (current, comparison):
+        if part.empty:
+            return None
+        if not all(
+            part[column].notna().any() for column in CLIMATE_VARIABLES
+        ):
+            return None
+    if current.index.min().year > start_year:
+        return None
+    if current.index.max().year < end_year:
+        return None
+    if comparison.index.min().year > COMPARISON_START_YEAR:
+        return None
+    if comparison.index.max().year < COMPARISON_END_YEAR:
+        return None
+    return current, comparison
+
+
 def monthly_weather_values(frame: pd.DataFrame) -> dict[str, pd.Series]:
     """Return monthly weather-box values keyed by parameter suffix."""
     month = frame.index.month
@@ -640,8 +719,6 @@ def monthly_weather_values(frame: pd.DataFrame) -> dict[str, pd.Series]:
 
 def format_number(value: float, decimals: int = 1) -> str | None:
     """Format a number with Romanian decimal separators."""
-    import pandas as pd
-
     if value is None or pd.isna(value):
         return None
     number = float(value)
@@ -727,8 +804,6 @@ def build_climate_text(
     end_year: int,
 ) -> str:
     """Return the Romanian climate paragraph for the page."""
-    import pandas as pd
-
     mean_temperature = period_mean_temperature(frame)
     old_temperature = period_mean_temperature(comparison)
     mean_precipitation = float(annual_precipitation(frame).mean())
@@ -912,8 +987,8 @@ class ClimateSession:
         Raises
         ------
         ClimateSessionError
-            If the library cannot be imported, the client cannot be created,
-            or the requested years are outside the available data.
+            If the client cannot be created or the requested years are
+            outside the available data.
         """
         if self._ready:
             if self._error is not None:
@@ -922,15 +997,11 @@ class ClimateSession:
         self._ready = True
 
         try:
-            RoClimate, RoClimateError, default_store = load_ro_climate()
-        except ImportError as exc:
-            self._error = f"Could not import ro_climate: {exc}"
-            raise ClimateSessionError(self._error) from exc
-
-        try:
             # Use the published store URL; STAC discovery adds a round trip
             # to every invocation and the URL is stable.
-            client = RoClimate(store_url=default_store, chunk_cache_max_mb=100000)
+            client = RoClimate(
+                store_url=DEFAULT_STORE, chunk_cache_max_mb=100000
+            )
         except Exception as exc:
             self._error = f"Could not create the climate client: {exc}"
             raise ClimateSessionError(self._error) from exc
@@ -1026,23 +1097,39 @@ def process_page(
         pywikibot.warning(f"{page.title()}: no coordinates found")
         return
 
-    climate = session.get()
-    _RoClimate, RoClimateError, _DEFAULT_STORE = load_ro_climate()
-    try:
-        frame = load_climate_frame(
-            climate, lat, lon, polygon, start_year, end_year
-        )
-        comparison = load_comparison_frame(
-            climate,
-            lat,
-            lon,
-            polygon,
-            COMPARISON_START_YEAR,
-            COMPARISON_END_YEAR,
-        )
-    except RoClimateError as exc:
-        pywikibot.error(f"{page.title()}: {exc}")
-        return
+    frame = None
+    comparison = None
+    station = find_matching_station(page.title(), lon, lat)
+    if station is not None:
+        loaded = load_station_frames(station, start_year, end_year)
+        if loaded is not None:
+            frame, comparison = loaded
+            pywikibot.output(
+                f"{page.title()}: using observations from {station.name}"
+            )
+        else:
+            pywikibot.warning(
+                f"{page.title()}: station {station.name} has unusable data; "
+                "using gridded data"
+            )
+
+    if frame is None or comparison is None:
+        climate = session.get()
+        try:
+            frame = load_climate_frame(
+                climate, lat, lon, polygon, start_year, end_year
+            )
+            comparison = load_comparison_frame(
+                climate,
+                lat,
+                lon,
+                polygon,
+                COMPARISON_START_YEAR,
+                COMPARISON_END_YEAR,
+            )
+        except RoClimateError as exc:
+            pywikibot.error(f"{page.title()}: {exc}")
+            return
 
     try:
         paragraph = build_climate_text(
