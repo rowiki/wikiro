@@ -14,11 +14,18 @@ client is queried for the requested years and a metric-only ``{{Weather box}}``
 is added to the page: monthly record and average temperatures, precipitation
 normals, and precipitation days.
 
-Pages that already contain a weather box are skipped.  The box is appended to
-the ``Climă``/``Climat`` section when one exists; otherwise a ``Climă``
-subsection is created at the end of ``Geografie``.  If neither section exists,
-a ``Geografie``/``Geografia`` section at the same level is inserted immediately
-before the ``Demografie``/``Demografia``/``Date demografice`` section.
+A Romanian climate paragraph is generated from the same data and placed
+immediately before the weather box.  The paragraph and the box are wrapped in
+``<!-- Început secțiune meteo -->`` and ``<!-- Sfârșit secțiune meteo -->``
+markers.  Pages with a non-automatic weather box are skipped; an existing
+automatic box is replaced.  The paragraph compares the mean temperature and
+annual precipitation with 1971-2000, so that period is loaded as well.
+
+The box is appended to the ``Climă``/``Climat`` section when one exists;
+otherwise a ``Climă`` subsection is created at the end of ``Geografie``.  If
+neither section exists, a ``Geografie``/``Geografia`` section at the same
+level is inserted immediately before the
+``Demografie``/``Demografia``/``Date demografice`` section.
 
 The year range defaults to 2001-2025 and can be changed with
 ``-start-year:`` and ``-end-year:``.  The range must lie within the data,
@@ -39,6 +46,7 @@ from __future__ import annotations
 
 import itertools
 import json
+import math
 import re
 import sys
 import unicodedata
@@ -54,7 +62,7 @@ from pywikibot import pagegenerators
 def load_ro_climate():
     """Return the bundled client class, error class, and default store URL.
 
-    The imports are deferred so pages that already have a weather box can be
+    The imports are deferred so pages with a non-automatic weather box can be
     skipped without loading pandas and zarr.
     """
     try:
@@ -73,7 +81,12 @@ def load_ro_climate():
 DEFAULT_START_YEAR = 2001
 DEFAULT_END_YEAR = 2025
 FIRST_DATA_YEAR = 1961
+COMPARISON_START_YEAR = FIRST_DATA_YEAR
+COMPARISON_END_YEAR = 2000
 PRECIPITATION_DAYS_THRESHOLD = 1.0
+
+SECTION_START_MARKER = "<!-- Început secțiune meteo -->"
+SECTION_END_MARKER = "<!-- Sfârșit secțiune meteo -->"
 
 SIRUTA_PROPERTY = "P843"
 COORDINATE_PROPERTY = "P625"
@@ -83,6 +96,11 @@ CLIMATE_VARIABLES = ("max_temp", "min_temp", "precipitation")
 MONTH_NAMES = (
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+)
+ROMANIAN_MONTHS = (
+    "ianuarie", "februarie", "martie", "aprilie", "mai", "iunie",
+    "iulie", "august", "septembrie", "octombrie", "noiembrie",
+    "decembrie",
 )
 
 CLIMATE_SECTION_TITLES = {"climă", "clima", "climat", "date climatice", "date meteo"}
@@ -227,13 +245,82 @@ def is_weather_box_template(
     return name.replace(" ", "").casefold() == "weatherbox"
 
 
-def has_weather_box(text: str) -> bool:
-    """Return whether the page text already contains a Weather box."""
-    code = mwparserfromhell.parse(text)
-    return any(
-        is_weather_box_template(template)
-        for template in code.filter_templates(recursive=True)
+def weather_box_is_automatic(
+    template: mwparserfromhell.nodes.Template,
+) -> bool:
+    """Return whether a Weather box has ``automatic=yes``."""
+    for parameter in template.params:
+        name = str(parameter.name).strip().casefold()
+        if name != "automatic":
+            continue
+        value = str(parameter.value).strip().casefold()
+        return value in {"yes", "true", "1", "da"}
+    return False
+
+
+def find_marked_section(text: str) -> tuple[int, int] | None:
+    """Return the span of the marked climate section, if present."""
+    start = text.find(SECTION_START_MARKER)
+    if start == -1:
+        return None
+    end = text.find(
+        SECTION_END_MARKER, start + len(SECTION_START_MARKER)
     )
+    if end == -1:
+        return None
+    return start, end + len(SECTION_END_MARKER)
+
+
+def find_weather_box_spans(
+    text: str,
+) -> list[tuple[int, int, mwparserfromhell.nodes.Template]]:
+    """Return ``(start, end, template)`` for every Weather box."""
+    code = mwparserfromhell.parse(text)
+    templates = [
+        template
+        for template in code.filter_templates(recursive=True)
+        if is_weather_box_template(template)
+    ]
+    spans: list[tuple[int, int, mwparserfromhell.nodes.Template]] = []
+    search_from = 0
+    for template in templates:
+        snippet = str(template)
+        start = text.find(snippet, search_from)
+        if start == -1:
+            start = text.find(snippet)
+        if start == -1:
+            continue
+        end = start + len(snippet)
+        spans.append((start, end, template))
+        search_from = end
+    return spans
+
+
+def can_update_weather_section(
+    marked: tuple[int, int] | None,
+    spans: list[tuple[int, int, mwparserfromhell.nodes.Template]],
+) -> tuple[bool, str]:
+    """Return whether the weather section may be updated."""
+    if marked is not None:
+        start, end = marked
+        inside = [span for span in spans if start <= span[0] < end]
+        outside = [
+            span for span in spans if not (start <= span[0] < end)
+        ]
+        if outside:
+            return False, "Weather box outside the marked section"
+        if len(inside) > 1:
+            return False, "multiple Weather boxes in the marked section"
+        if any(
+            not weather_box_is_automatic(span[2]) for span in inside
+        ):
+            return False, "Weather box in the marked section is not automatic"
+        return True, ""
+    if len(spans) > 1:
+        return False, "multiple Weather boxes"
+    if spans and not weather_box_is_automatic(spans[0][2]):
+        return False, "Weather box is not automatic"
+    return True, ""
 
 
 def normalize_heading(title: str) -> str:
@@ -283,10 +370,12 @@ def insert_block(text: str, end: int, block: str) -> str:
     return prefix + lead + block + trail + suffix
 
 
-def add_weather_box(text: str, box: str) -> tuple[str, str] | None:
-    """Return ``(new_text, location)`` with the box added, or ``None``.
+def add_weather_section(
+    text: str, block: str
+) -> tuple[str, str] | None:
+    """Return ``(new_text, location)`` with the climate block added.
 
-    The box is appended to a ``Climă``/``Climat`` section when one exists.
+    The block is appended to a ``Climă``/``Climat`` section when one exists.
     Otherwise a ``Climă`` subsection is created at the end of ``Geografie``.
     If neither exists, a ``Geografie``/``Geografia`` section at the same level
     is inserted immediately before the demography section.
@@ -294,7 +383,7 @@ def add_weather_box(text: str, box: str) -> tuple[str, str] | None:
     section = find_section(text, CLIMATE_SECTION_TITLES)
     if section is not None:
         _start, end, _level, title = section
-        return insert_block(text, end, box), f"section '{title}'"
+        return insert_block(text, end, block), f"section '{title}'"
 
     section = find_section(text, GEOGRAPHY_SECTION_TITLES)
     if section is not None:
@@ -302,8 +391,11 @@ def add_weather_box(text: str, box: str) -> tuple[str, str] | None:
         heading = "=" * (level + 1)
         normalized = normalize_heading(title)
         climate = "Clima" if normalized == "geografia" else "Climă"
-        block = f"{heading} {climate} {heading}\n\n{box}"
-        return insert_block(text, end, block), f"subsection under '{title}'"
+        section_block = f"{heading} {climate} {heading}\n\n{block}"
+        return (
+            insert_block(text, end, section_block),
+            f"subsection under '{title}'",
+        )
 
     section = find_section(text, DEMOGRAPHY_SECTION_TITLES)
     if section is None:
@@ -312,8 +404,30 @@ def add_weather_box(text: str, box: str) -> tuple[str, str] | None:
     heading = "=" * level
     normalized = normalize_heading(title)
     geography = "Geografia" if normalized == "demografia" else "Geografie"
-    block = f"{heading} {geography} {heading}\n\n{box}"
-    return insert_block(text, start, block), f"section before '{title}'"
+    section_block = f"{heading} {geography} {heading}\n\n{block}"
+    return (
+        insert_block(text, start, section_block),
+        f"section before '{title}'",
+    )
+
+
+def replace_or_add_weather_section(
+    text: str,
+    block: str,
+    marked: tuple[int, int] | None,
+    spans: list[tuple[int, int, mwparserfromhell.nodes.Template]],
+) -> tuple[str, str] | None:
+    """Return ``(new_text, location)`` with the climate block placed."""
+    if marked is not None:
+        start, end = marked
+        return text[:start] + block + text[end:], "marked section"
+    if spans:
+        start, end, _template = spans[0]
+        return (
+            text[:start] + block + text[end:],
+            "existing automatic Weather box",
+        )
+    return add_weather_section(text, block)
 
 
 def parse_year_options(args: list[str]) -> tuple[int, int, list[str]]:
@@ -342,6 +456,21 @@ def parse_year_options(args: list[str]) -> tuple[int, int, list[str]]:
             remaining.append(arg)
 
     return start_year, end_year, remaining
+
+def parse_force_options(args: list[str]) -> tuple[bool, list[str]]:
+    """Return ``(force, remaining_args)``."""
+    prefix = "-force"
+    force = False
+    remaining: list[str] = []
+
+    for arg in args:
+        if not arg.startswith(prefix):
+            remaining.append(arg)
+            continue
+        force = True
+
+
+    return force, remaining
 
 
 def last_complete_year(frontier: pd.Timestamp) -> int:
@@ -427,6 +556,60 @@ def load_climate_frame(
     )
 
 
+def load_comparison_frame(
+    climate: RoClimate,
+    lat: float | None,
+    lon: float | None,
+    polygon: list[tuple[float, float]] | None,
+    start_year: int,
+    end_year: int,
+) -> pd.DataFrame:
+    """Return the daily means for the comparison period.
+
+    Only the ``mean`` reduction is needed because the narrative compares the
+    mean temperature and the mean annual precipitation with 1971-2000.
+    """
+    import pandas as pd
+
+    start = f"{start_year}-01-01"
+    end = f"{end_year}-12-31"
+
+    if polygon is not None:
+        area = climate.area(
+            polygon=polygon,
+            start=start,
+            end=end,
+            variables=CLIMATE_VARIABLES,
+            reductions=("mean",),
+        )
+        return pd.DataFrame(
+            {
+                "max_temp": area.data["max_temp_mean"],
+                "min_temp": area.data["min_temp_mean"],
+                "precipitation": area.data["precipitation_mean"],
+                "record_max_temp": area.data["max_temp_max"],
+                "record_min_temp": area.data["min_temp_min"],
+            }
+        )
+
+    point = climate.point(
+        lon,
+        lat,
+        start=start,
+        end=end,
+        variables=CLIMATE_VARIABLES,
+    )
+    return pd.DataFrame(
+        {
+            "max_temp": point.data["max_temp"],
+            "min_temp": point.data["min_temp"],
+            "precipitation": point.data["precipitation"],
+            "record_max_temp": point.data["max_temp"],
+            "record_min_temp": point.data["min_temp"],
+        }
+    )
+
+
 def monthly_weather_values(frame: pd.DataFrame) -> dict[str, pd.Series]:
     """Return monthly weather-box values keyed by parameter suffix."""
     month = frame.index.month
@@ -455,20 +638,208 @@ def monthly_weather_values(frame: pd.DataFrame) -> dict[str, pd.Series]:
     }
 
 
-def format_number(value: float) -> str | None:
-    """Format one monthly value with one decimal, or ``None`` if missing."""
+def format_number(value: float, decimals: int = 1) -> str | None:
+    """Format a number with Romanian decimal separators."""
     import pandas as pd
 
     if value is None or pd.isna(value):
         return None
-    return f"{float(value):.1f}".replace(".", ",")
+    number = float(value)
+    if decimals == 0:
+        rounded = math.floor(abs(number) + 0.5)
+        if number < 0:
+            rounded = -rounded
+        return str(rounded)
+    return f"{number:.{decimals}f}".replace(".", ",")
 
 
-def weather_box_source() -> str:
-    """Return the weather-box source citation."""
+def format_prose_number(value: float, decimals: int = 1) -> str | None:
+    """Format a number for prose, using the Unicode minus sign."""
+    formatted = format_number(value, decimals)
+    if formatted is None:
+        return None
+    return formatted.replace("-", "−")
+
+
+def period_mean_temperature(frame: pd.DataFrame) -> float:
+    """Return the mean of the daily mean temperature."""
+    daily_mean = (frame["max_temp"] + frame["min_temp"]) / 2
+    return float(daily_mean.mean())
+
+
+def annual_precipitation(frame: pd.DataFrame) -> pd.Series:
+    """Return annual precipitation totals, dropping empty years."""
+    return frame["precipitation"].resample("YS").sum(
+        min_count=1
+    ).dropna()
+
+
+def temperature_extremes(
+    frame: pd.DataFrame,
+) -> tuple[float, pd.Timestamp, float, pd.Timestamp]:
+    """Return the absolute minimum and maximum with their dates."""
+    minimum = frame["record_min_temp"].dropna()
+    maximum = frame["record_max_temp"].dropna()
+    if minimum.empty or maximum.empty:
+        raise ValueError("no temperature extremes available")
     return (
-        "Administrația Națională de Meteorologie (MeteoRomania), "
-        "CC BY 4.0<ref>{{Citat web |title=ANM daily gridded "
+        float(minimum.min()),
+        minimum.idxmin(),
+        float(maximum.max()),
+        maximum.idxmax(),
+    )
+
+
+def precipitation_extremes(
+    frame: pd.DataFrame,
+) -> tuple[int, float, int, float]:
+    """Return the wettest and driest year with annual totals."""
+    annual = annual_precipitation(frame)
+    if annual.empty:
+        raise ValueError("no precipitation totals available")
+    return (
+        int(annual.idxmax().year),
+        float(annual.max()),
+        int(annual.idxmin().year),
+        float(annual.min()),
+    )
+
+
+def format_ro_date(value: pd.Timestamp) -> str:
+    """Return a date in Romanian long form."""
+    return f"{value.day} {ROMANIAN_MONTHS[value.month - 1]} {value.year}"
+
+
+def change_phrase(delta: float, unit: str, decimals: int = 1) -> str:
+    """Return a Romanian increase/decrease phrase."""
+    threshold = 0.5 * 10 ** (-decimals)
+    if abs(delta) < threshold:
+        return "aproximativ constantă"
+    direction = "creștere" if delta > 0 else "scădere"
+    value = format_number(abs(delta), decimals)
+    return f"în {direction} cu {value} {unit}"
+
+
+def build_climate_text(
+    frame: pd.DataFrame,
+    comparison: pd.DataFrame,
+    start_year: int,
+    end_year: int,
+) -> str:
+    """Return the Romanian climate paragraph for the page."""
+    import pandas as pd
+
+    mean_temperature = period_mean_temperature(frame)
+    old_temperature = period_mean_temperature(comparison)
+    mean_precipitation = float(annual_precipitation(frame).mean())
+    old_precipitation = float(annual_precipitation(comparison).mean())
+
+    monthly = (frame["max_temp"] + frame["min_temp"]).div(2).groupby(
+        frame.index.month
+    ).mean()
+    if monthly.empty:
+        raise ValueError("no monthly temperatures available")
+    cold_month = int(monthly.idxmin())
+    warm_month = int(monthly.idxmax())
+    cold_temperature = float(monthly.loc[cold_month])
+    warm_temperature = float(monthly.loc[warm_month])
+
+    (
+        minimum_temperature,
+        minimum_date,
+        maximum_temperature,
+        maximum_date,
+    ) = temperature_extremes(frame)
+    (
+        wettest_year,
+        wettest_value,
+        driest_year,
+        driest_value,
+    ) = precipitation_extremes(frame)
+    (
+        minimum_temperature_old,
+        minimum_date_old,
+        maximum_temperature_old,
+        maximum_date_old,
+    ) = temperature_extremes(comparison)
+    (
+        wettest_year_old,
+        wettest_value_old,
+        driest_year_old,
+        driest_value_old,
+    ) = precipitation_extremes(comparison)
+    if minimum_temperature_old < minimum_temperature:
+        minimum_temperature = minimum_temperature_old
+        minimum_date = minimum_date_old
+    if maximum_temperature_old > maximum_temperature:
+        maximum_temperature = maximum_temperature_old
+        maximum_date = maximum_date_old
+    if wettest_value_old > wettest_value:
+        wettest_value = wettest_value_old
+        wettest_year = wettest_year_old
+    if driest_value_old < driest_value:
+        driest_value = driest_value_old
+        driest_year = driest_year_old
+
+    values = (
+        mean_temperature,
+        old_temperature,
+        mean_precipitation,
+        old_precipitation,
+        cold_temperature,
+        warm_temperature,
+        minimum_temperature,
+        maximum_temperature,
+        wettest_value,
+        driest_value,
+    )
+    if any(pd.isna(value) for value in values):
+        raise ValueError("incomplete climate values")
+
+    return (
+        "Conform datelor Administrației Naționale de Meteorologie, "
+        f"în intervalul {start_year}–{end_year}, temperatura medie anuală "
+        f"a fost de {format_prose_number(mean_temperature)} °C, "
+        f"{change_phrase(mean_temperature - old_temperature, '°C')} față "
+        f"de perioada {COMPARISON_START_YEAR}–{COMPARISON_END_YEAR}, "
+        "iar media lunară a variat între "
+        f"{format_prose_number(cold_temperature)} °C în "
+        f"{ROMANIAN_MONTHS[cold_month - 1]} și "
+        f"{format_prose_number(warm_temperature)} °C în "
+        f"{ROMANIAN_MONTHS[warm_month - 1]}. "
+        "Media anuală a precipitațiilor a fost de "
+        f"{format_prose_number(mean_precipitation, 0)} mm, "
+        f"{change_phrase(mean_precipitation - old_precipitation, 'mm', 0)} "
+        f"față de perioada {COMPARISON_START_YEAR}–{COMPARISON_END_YEAR}, "
+        "cu un maxim de "
+        f"{format_prose_number(wettest_value, 0)} mm în {wettest_year} "
+        "și un minim de "
+        f"{format_prose_number(driest_value, 0)} mm în {driest_year}. "
+        f"Între {COMPARISON_START_YEAR} și {end_year}, minima absolută a fost "
+        f"de {format_prose_number(minimum_temperature)} °C, pe "
+        f"{format_ro_date(minimum_date)}, iar maxima absolută "
+        f"de {format_prose_number(maximum_temperature)} °C, pe "
+        f"{format_ro_date(maximum_date)}."
+        f"{weather_section_source(short=False)}"
+    )
+
+
+def build_climate_section(text: str, box: str) -> str:
+    """Return the marked section with the paragraph and weather box."""
+    return (
+        f"{SECTION_START_MARKER}\n"
+        f"{text}\n\n"
+        f"{box}\n"
+        f"{SECTION_END_MARKER}"
+    )
+
+
+def weather_section_source(short=False) -> str:
+    """Return the weather-box source citation."""
+    if short:
+        return "<ref name=\"eocube\"/>"
+    return (
+        "<ref name=\"eocube\">{{Citat web |title=ANM daily gridded "
         "meteorological cube |url=https://stac.eocube.ro/collections/"
         "anm-daily-grids/items/anm-daily-grids-open-v1 "
         "|publisher=EOCube.RO |via=data.gov.ro "
@@ -515,7 +886,7 @@ def build_weather_box(
         if value is not None:
             lines.append(f"|{month_name} precipitation days={value}")
 
-    lines.append(f"|source 1={weather_box_source()}")
+    lines.append(f"|source 1=Administrația Națională de Meteorologie (MeteoRomania), CC-BY-SA-4.0{weather_section_source(short=True)}")
     lines.append("}}")
     return "\n".join(lines)
 
@@ -559,7 +930,7 @@ class ClimateSession:
         try:
             # Use the published store URL; STAC discovery adds a round trip
             # to every invocation and the URL is stable.
-            client = RoClimate(store_url=default_store)
+            client = RoClimate(store_url=default_store, chunk_cache_max_mb=100000)
         except Exception as exc:
             self._error = f"Could not create the climate client: {exc}"
             raise ClimateSessionError(self._error) from exc
@@ -591,8 +962,9 @@ def process_page(
     session: ClimateSession,
     start_year: int,
     end_year: int,
+    force: bool = False,
 ) -> None:
-    """Add a metric-only weather box to one page."""
+    """Add the climate paragraph and weather box to one page."""
     try:
         text = page.get()
     except pywikibot.exceptions.IsRedirectPageError:
@@ -606,23 +978,28 @@ def process_page(
         pywikibot.error(f"Could not read {page.title()}: {exc}")
         return
 
-    if has_weather_box(text):
-        pywikibot.warning(
-            f"Skipping {page.title()}: Weather box already exists"
-        )
+    marked = find_marked_section(text)
+    if marked is not None and not force:
+        pywikibot.output(f"{page.title()}: found marked climate section, skipping")
+        return
+    spans = find_weather_box_spans(text)
+    allowed, reason = can_update_weather_section(marked, spans)
+    if not allowed:
+        pywikibot.warning(f"Skipping {page.title()}: {reason}")
         return
 
-    section = find_section(text, CLIMATE_SECTION_TITLES)
-    if section is None:
-        section = find_section(text, GEOGRAPHY_SECTION_TITLES)
-    if section is None:
-        section = find_section(text, DEMOGRAPHY_SECTION_TITLES)
-    if section is None:
-        pywikibot.warning(
-            f"Skipping {page.title()}: no Climă/Climat, Geografie, or "
-            "Demografie section"
-        )
-        return
+    if marked is None and not spans:
+        section = find_section(text, CLIMATE_SECTION_TITLES)
+        if section is None:
+            section = find_section(text, GEOGRAPHY_SECTION_TITLES)
+        if section is None:
+            section = find_section(text, DEMOGRAPHY_SECTION_TITLES)
+        if section is None:
+            pywikibot.warning(
+                f"Skipping {page.title()}: no Climă/Climat, Geografie, or "
+                "Demografie section"
+            )
+            return
 
     try:
         _siruta, lat, lon, geoshape = get_siruta_and_location(page)
@@ -655,23 +1032,44 @@ def process_page(
         frame = load_climate_frame(
             climate, lat, lon, polygon, start_year, end_year
         )
+        comparison = load_comparison_frame(
+            climate,
+            lat,
+            lon,
+            polygon,
+            COMPARISON_START_YEAR,
+            COMPARISON_END_YEAR,
+        )
     except RoClimateError as exc:
+        pywikibot.error(f"{page.title()}: {exc}")
+        return
+
+    try:
+        paragraph = build_climate_text(
+            frame, comparison, start_year, end_year
+        )
+    except ValueError as exc:
         pywikibot.error(f"{page.title()}: {exc}")
         return
 
     values = monthly_weather_values(frame)
     box = build_weather_box(page.title(), values, start_year, end_year)
-    result = add_weather_box(text, box)
+    block = build_climate_section(paragraph, box)
+    result = replace_or_add_weather_section(
+        text, block, marked, spans
+    )
     if result is None:
         pywikibot.warning(
-            f"Skipping {page.title()}: no place to add the weather box"
+            f"Skipping {page.title()}: no place to add the climate section"
         )
         return
 
     new_text, location = result
-    pywikibot.output(f"{page.title()}: adding weather box to {location}")
+    pywikibot.output(
+        f"{page.title()}: adding climate section to {location}"
+    )
     try:
-        page.put(new_text, "Adaug {{weather box}}", minor=False)
+        page.put(new_text, "Adaug secțiunea meteo", minor=False)
     except Exception as exc:
         pywikibot.error(f"Could not save {page.title()}: {exc}")
 
@@ -683,6 +1081,11 @@ def main(*args: str) -> None:
         start_year, end_year, local_args = parse_year_options(local_args)
     except ValueError as exc:
         pywikibot.error(f"Invalid year option: {exc}")
+        return
+    try:
+        force, local_args = parse_force_options(local_args)
+    except ValueError as exc:
+        pywikibot.error(f"Invalid force option: {exc}")
         return
 
     generator_factory = pagegenerators.GeneratorFactory()
@@ -703,7 +1106,7 @@ def main(*args: str) -> None:
     session = ClimateSession(start_year, end_year)
     try:
         for page in generator:
-            process_page(page, session, start_year, end_year)
+            process_page(page, session, start_year, end_year, force)
     except ClimateSessionError as exc:
         pywikibot.error(str(exc))
     finally:
