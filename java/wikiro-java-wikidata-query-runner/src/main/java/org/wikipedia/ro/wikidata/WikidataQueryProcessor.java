@@ -9,9 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
+import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 
+import org.slf4j.MDC;
+import org.wikibase.Wikibase;
 import org.wikibase.WikibaseException;
+import org.wikipedia.Wiki;
 import org.wikipedia.ro.utility.AbstractExecutable;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +33,11 @@ public abstract class WikidataQueryProcessor extends AbstractExecutable {
 
     private boolean dryRun = Boolean.parseBoolean(System.getProperty("dryRun", "true"));
     private BufferedWriter dryRunLog;
+
+    protected WikidataQueryProcessor() {
+        // Read by logback.xml to name the log file logs/<ClassName>.log
+        MDC.put("logName", getClass().getSimpleName());
+    }
 
     /**
      * Tells whether page saves are only logged rather than performed on-wiki.
@@ -88,6 +97,61 @@ public abstract class WikidataQueryProcessor extends AbstractExecutable {
         } catch (TimeoutException e) {
             throw new IOException("Edit of " + title + " failed: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Tells whether the session on ro.wikipedia must be logged in. By default only real (non dry-run)
+     * runs need it, since reading pages and running queries works anonymously.
+     *
+     * @return {@code true} if the ro.wikipedia login is required
+     */
+    protected boolean requiresWikiLogin() {
+        return !dryRun;
+    }
+
+    /**
+     * Tells whether the session on Wikidata must be logged in. By default it is not, as the processors
+     * only read from Wikidata (query and entity reads); override when writing to Wikidata.
+     *
+     * @return {@code true} if the Wikidata login is required
+     */
+    protected boolean requiresWikidataLogin() {
+        return false;
+    }
+
+    /**
+     * Supplies the maxlag (in seconds) used for API requests on both wikis. Overridable.
+     *
+     * @return the maxlag, or a negative value to keep the library default
+     */
+    protected int getMaxLag() {
+        return -1;
+    }
+
+    @Override
+    protected void init() throws FailedLoginException, IOException {
+        wiki = Wiki.newSession("ro.wikipedia.org");
+        dwiki = new Wikibase();
+        if (getMaxLag() >= 0) {
+            wiki.setMaxLag(getMaxLag());
+            dwiki.setMaxLag(getMaxLag());
+        }
+        if (requiresWikiLogin()) {
+            wikiCreds = identifyCredentials("rowiki");
+            wiki.login(wikiCreds.username, wikiCreds.password);
+            wiki.setMarkBot(true);
+            wiki.setAssertionMode(Wiki.ASSERT_USER);
+        }
+        if (requiresWikidataLogin()) {
+            dwikiCreds = identifyCredentials("dwiki");
+            dwiki.loginWithCredentials(dwikiCreds.username, dwikiCreds.password);
+            dwiki.setMarkBot(true);
+            dwiki.setAssertionMode(Wiki.ASSERT_USER);
+        }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            wiki.logout();
+            dwiki.logout();
+        }));
     }
 
     // Strips the common leading/trailing lines, so only the changed region is listed.
