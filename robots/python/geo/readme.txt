@@ -2,6 +2,9 @@ This folder contains python robots related to handling geographic date from Wiki
 
 osm2wiki_coord.py - insert OSM coordinates in Wikipedia articles marked in the nodes.
 osm_siruta_postcodes.py - import postcode data from SIRUTA to OSM; from there, it can be imported easier in 			Wikipedia
+osm_add_wikidata.py - add wikidata=* tags to the OSM nodes, ways and relations listed in a CSV file
+			(see https://wiki.openstreetmap.org/wiki/Automated_Edits/Strainubot/wikidata_id)
+			an optional siruta column in the CSV is checked against siruta:code
 extract_coodinates.py - extract coordinates and article names from articles about villages from ro.wp; it will also 
 			work for other articles, but the performance will be lower.
 geowiki_sql2csv.sh - download the data dumps containing coordinates from Wikipedia articles from 
