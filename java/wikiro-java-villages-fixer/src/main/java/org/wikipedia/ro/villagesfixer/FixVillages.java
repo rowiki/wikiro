@@ -1603,8 +1603,7 @@ public class FixVillages {
         nf.setMaximumFractionDigits(2);
 
         StringBuilder ethnChartBuilder =
-            new StringBuilder("{{Pie chart\n|thumb=left\n|caption=Componența ").append(demoType.getAdjective()).append(" a ")
-                .append(communeType.getTypeNameGen()).append(' ').append(communeName);
+            new StringBuilder("{{Pie chart\n|thumb=left\n|caption=Componența ").append(demoType.getAdjective());
         if (StringUtils.isNotBlank(style)) {
             ethnChartBuilder.append("\n|style=").append(style);
         }
