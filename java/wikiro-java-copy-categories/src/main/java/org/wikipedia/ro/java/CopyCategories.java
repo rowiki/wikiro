@@ -58,6 +58,7 @@ public class CopyCategories extends AbstractExecutable {
     private static final Pattern QID_PATTERN = Pattern.compile("Q[1-9]\\d*");
 
     private static final Pattern WIKI_CODE_PATTERN = Pattern.compile("[a-z]{2,3}(-[a-z]+)*|simple");
+    private static final String RO_LANGUAGE = "ro";
     private static final String SITELINK_SUMMARY = "Adăugat legătură către categoria din Wikipedia în română";
 
     private final String roCategoryArg;
@@ -155,6 +156,10 @@ public class CopyCategories extends AbstractExecutable {
         if (!WikipediaPageCache.getInstance().pageExists(srcWiki, srcCategory)) {
             throw fail("Category %s does not exist on the Wikipedia in \"%s\" (stale sitelink?)", srcCategory, sourceWikiCode);
         }
+        String existingRoLabel = item.getLabels() == null ? null : item.getLabels().get(RO_LANGUAGE);
+        boolean needsRoLabel = existingRoLabel == null || existingRoLabel.isBlank();
+        LOG.info(needsRoLabel ? "Item {} has no Romanian label, it will be set" : "Item {} already has a Romanian label ({})",
+            qid, existingRoLabel);
         LOG.info("Source: {}:{} ({}); new category: {}", sourceWikiCode, srcCategory, qid, roCategory);
 
         // 3. Breadth-first walk up the source wiki's category tree, looking for Romanian counterparts
@@ -169,7 +174,7 @@ public class CopyCategories extends AbstractExecutable {
             loginForEditing();
         }
         createRoCategory(roCategory, roParents);
-        addSitelink(qid, roCategory);
+        updateWikidataItem(qid, roCategory, needsRoLabel);
     }
 
     /**
@@ -274,16 +279,32 @@ public class CopyCategories extends AbstractExecutable {
             WikipediaPageCache.getInstance().savePage(wiki, roCategory, pageText, createSummary, getReloginCallback()));
     }
 
-    private void addSitelink(String qid, String roCategory) throws IOException, WikibaseException {
+    /**
+     * Adds the rowiki sitelink to the item and, if the item has no Romanian label, sets it to the title of the new
+     * page (category items on Wikidata are labelled with the full title, namespace prefix included).
+     */
+    private void updateWikidataItem(String qid, String roCategory, boolean setRoLabel)
+        throws IOException, WikibaseException {
         if (DRY_RUN) {
             LOG.info("DRY RUN: would add sitelink {}:{} to Wikidata item {} with summary \"{}\"", RO_SITE_ID, roCategory,
                 qid, SITELINK_SUMMARY);
+            if (setRoLabel) {
+                LOG.info("DRY RUN: would set the Romanian label of Wikidata item {} to \"{}\"", qid, roCategory);
+            }
             return;
         }
         withUserAssertion(dwiki, () -> dwiki.executeWithRelogin(() -> {
             dwiki.setSitelink(qid, RO_SITE_ID, roCategory);
             return null;
         }));
+        LOG.info("Added sitelink {}:{} to {}", RO_SITE_ID, roCategory, qid);
+        if (setRoLabel) {
+            withUserAssertion(dwiki, () -> dwiki.executeWithRelogin(() -> {
+                dwiki.setLabel(qid, RO_LANGUAGE, roCategory);
+                return null;
+            }));
+            LOG.info("Set the Romanian label of {} to \"{}\"", qid, roCategory);
+        }
         // the cached copy of the item is now stale
         WikidataCacheManager.getWikidataEntitiesCache(dwiki).invalidate(qid);
     }
