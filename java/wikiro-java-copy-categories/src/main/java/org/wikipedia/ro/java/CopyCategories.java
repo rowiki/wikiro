@@ -34,9 +34,10 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 
 /**
- * Creates a category on the Romanian Wikipedia by mirroring the position of an English Wikipedia category.
+ * Creates a category on the Romanian Wikipedia by mirroring the position of a category of another Wikipedia
+ * (English by default, selectable with the wiki code).
  * <p>
- * The English category is identified through the enwiki sitelink of the given Wikidata item. Its parent categories
+ * The source category is identified through the sitelink to the source wiki (e.g. enwiki) of the given Wikidata item. Its parent categories
  * (hidden categories, which include tracking ones, are excluded) are walked breadth-first, level by level, looking on Wikidata for
  * Romanian counterparts. At the first level where at least one counterpart exists, the new Romanian category is
  * created inside all counterparts found at that level, and linked to the Wikidata item.
@@ -50,24 +51,57 @@ public class CopyCategories extends AbstractExecutable {
     static final boolean DRY_RUN = false;
 
     private static final String RO_WIKI_HOST = "ro.wikipedia.org";
-    private static final String EN_WIKI_HOST = "en.wikipedia.org";
-    private static final String EN_SITE_ID = "enwiki";
+    static final String DEFAULT_SOURCE_WIKI_CODE = "en";
     private static final String RO_SITE_ID = "rowiki";
     private static final String RO_CATEGORY_PREFIX = "Categorie:";
     private static final int MAX_DEPTH = 15;
     private static final Pattern QID_PATTERN = Pattern.compile("Q[1-9]\\d*");
 
-    private static final String CREATE_SUMMARY = "Robot: creat categorie pe baza categoriei echivalente din Wikipedia în engleză";
+    private static final Pattern WIKI_CODE_PATTERN = Pattern.compile("[a-z]{2,3}(-[a-z]+)*|simple");
     private static final String SITELINK_SUMMARY = "Adăugat legătură către categoria din Wikipedia în română";
 
     private final String roCategoryArg;
     private final String wikidataIdArg;
+    private final String sourceWikiCode;
+    private final String srcSiteId;
+    private final String createSummary;
 
-    private Wiki enwiki;
+    private Wiki srcWiki;
 
+    /** Uses the English Wikipedia as source. */
     public CopyCategories(String roCategoryName, String wikidataItemId) {
+        this(roCategoryName, wikidataItemId, DEFAULT_SOURCE_WIKI_CODE);
+    }
+
+    /**
+     * @param sourceWikiCode language code of the Wikipedia whose category tree is explored, e.g. "en", "fr", "de";
+     *            null or blank means "en"
+     */
+    public CopyCategories(String roCategoryName, String wikidataItemId, String sourceWikiCode) {
         this.roCategoryArg = roCategoryName;
         this.wikidataIdArg = wikidataItemId;
+        this.sourceWikiCode = normalizeWikiCode(sourceWikiCode);
+        this.srcSiteId = siteIdFor(this.sourceWikiCode);
+        this.createSummary = "Robot: creat categorie pe baza categoriei echivalente din Wikipedia (" + this.sourceWikiCode + ")";
+    }
+
+    private static String normalizeWikiCode(String code) {
+        String normalized = code == null || code.isBlank() ? DEFAULT_SOURCE_WIKI_CODE : code.strip().toLowerCase();
+        if (!WIKI_CODE_PATTERN.matcher(normalized).matches()) {
+            throw new IllegalArgumentException("'" + code + "' is not a valid Wikipedia language code (e.g. en, fr, de)");
+        }
+        if ("ro".equals(normalized)) {
+            throw new IllegalArgumentException("The source wiki can't be the Romanian Wikipedia itself");
+        }
+        return normalized;
+    }
+
+    /** The Wikidata site ID of a Wikipedia: the code with hyphens turned into underscores, plus "wiki". */
+    static String siteIdFor(String wikiCode) {
+        if ("be-tarask".equals(wikiCode)) {
+            return "be_x_oldwiki"; // historical exception
+        }
+        return wikiCode.replace('-', '_') + "wiki";
     }
 
     /**
@@ -80,7 +114,7 @@ public class CopyCategories extends AbstractExecutable {
         initLogging();
         wiki = Wiki.newSession(RO_WIKI_HOST);
         dwiki = new Wikibase();
-        enwiki = Wiki.newSession(EN_WIKI_HOST);
+        srcWiki = Wiki.newSession(sourceWikiCode + ".wikipedia.org");
     }
 
     @Override
@@ -95,7 +129,7 @@ public class CopyCategories extends AbstractExecutable {
             throw fail("Category %s already exists on the Romanian Wikipedia", roCategory);
         }
 
-        // 2. Load the Wikidata item and find the English category
+        // 2. Load the Wikidata item and find the source category
         String qid = wikidataIdArg == null ? "" : wikidataIdArg.trim().toUpperCase();
         if (!QID_PATTERN.matcher(qid).matches()) {
             throw fail("'%s' is not a valid Wikidata item ID", wikidataIdArg);
@@ -106,28 +140,28 @@ public class CopyCategories extends AbstractExecutable {
             throw fail("Wikidata item %s does not exist", qid);
         }
         Map<String, Sitelink> sitelinks = item.getSitelinks();
-        Sitelink enSitelink = sitelinks == null ? null : sitelinks.get(EN_SITE_ID);
-        if (enSitelink == null) {
-            throw fail("Wikidata item %s has no sitelink to the English Wikipedia", qid);
+        Sitelink srcSitelink = sitelinks == null ? null : sitelinks.get(srcSiteId);
+        if (srcSitelink == null) {
+            throw fail("Wikidata item %s has no sitelink to the Wikipedia in \"%s\" (%s)", qid, sourceWikiCode, srcSiteId);
         }
         if (sitelinks.get(RO_SITE_ID) != null) {
             throw fail("Wikidata item %s already has a sitelink to the Romanian Wikipedia (%s)", qid,
                 sitelinks.get(RO_SITE_ID).getPageName());
         }
-        String enCategory = enSitelink.getPageName();
-        if (enwiki.namespace(enCategory) != Wiki.CATEGORY_NAMESPACE) {
-            throw fail("The English Wikipedia sitelink of %s (%s) is not a category", qid, enCategory);
+        String srcCategory = srcSitelink.getPageName();
+        if (srcWiki.namespace(srcCategory) != Wiki.CATEGORY_NAMESPACE) {
+            throw fail("The %s sitelink of %s (%s) is not a category", srcSiteId, qid, srcCategory);
         }
-        if (!WikipediaPageCache.getInstance().pageExists(enwiki, enCategory)) {
-            throw fail("Category %s does not exist on the English Wikipedia (stale sitelink?)", enCategory);
+        if (!WikipediaPageCache.getInstance().pageExists(srcWiki, srcCategory)) {
+            throw fail("Category %s does not exist on the Wikipedia in \"%s\" (stale sitelink?)", srcCategory, sourceWikiCode);
         }
-        LOG.info("Source: {} ({}); new category: {}", enCategory, qid, roCategory);
+        LOG.info("Source: {}:{} ({}); new category: {}", sourceWikiCode, srcCategory, qid, roCategory);
 
-        // 3. Breadth-first walk up the English category tree, looking for Romanian counterparts
-        Set<String> roParents = findRomanianParents(enCategory);
+        // 3. Breadth-first walk up the source wiki's category tree, looking for Romanian counterparts
+        Set<String> roParents = findRomanianParents(srcCategory);
         if (roParents.isEmpty()) {
             throw fail("No Romanian counterpart found among the ancestors of %s within %d levels; nothing to do",
-                enCategory, MAX_DEPTH);
+                srcCategory, MAX_DEPTH);
         }
 
         // 4. Create the category page and link it on Wikidata
@@ -139,20 +173,20 @@ public class CopyCategories extends AbstractExecutable {
     }
 
     /**
-     * Walks the parent categories of the given English category breadth-first (hidden categories, tracking ones
+     * Walks the parent categories of the given source category breadth-first (hidden categories, tracking ones
      * included, are filtered out in the API request). At each level, every category found is looked up for a Romanian counterpart. The walk stops at the first
      * level where at least one counterpart exists, and all counterparts found at that level are returned.
      */
-    private Set<String> findRomanianParents(String enStartCategory) throws IOException, WikibaseException {
+    private Set<String> findRomanianParents(String srcStartCategory) throws IOException, WikibaseException {
         Set<String> visited = new HashSet<>();
-        visited.add(enStartCategory);
-        List<String> currentLevel = List.of(enStartCategory);
+        visited.add(srcStartCategory);
+        List<String> currentLevel = List.of(srcStartCategory);
 
         for (int depth = 1; depth <= MAX_DEPTH && !currentLevel.isEmpty(); depth++) {
             // Not cacheable through the utility library (it only caches page text/existence), so this is a direct call.
             // filterBy(hidden=false) becomes clshow=!hidden: hidden categories (and thus tracking ones) are left out.
-            Wiki.RequestHelper helper = enwiki.new RequestHelper().filterBy(Map.of("hidden", Boolean.FALSE));
-            List<List<String>> parentsPerCategory = enwiki.getCategories(currentLevel, helper, false);
+            Wiki.RequestHelper helper = srcWiki.new RequestHelper().filterBy(Map.of("hidden", Boolean.FALSE));
+            List<List<String>> parentsPerCategory = srcWiki.getCategories(currentLevel, helper, false);
 
             Set<String> nextLevel = new LinkedHashSet<>();
             for (List<String> parents : parentsPerCategory) {
@@ -168,13 +202,13 @@ public class CopyCategories extends AbstractExecutable {
             LOG.info("Level {}: {} categories: {}", depth, nextLevel.size(), nextLevel);
 
             Map<String, String> found = new LinkedHashMap<>();
-            for (String enParent : nextLevel) {
-                Optional<String> roEquivalent = findRomanianEquivalent(enParent);
-                roEquivalent.ifPresent(ro -> found.put(enParent, ro));
+            for (String srcParent : nextLevel) {
+                Optional<String> roEquivalent = findRomanianEquivalent(srcParent);
+                roEquivalent.ifPresent(ro -> found.put(srcParent, ro));
             }
             if (!found.isEmpty()) {
                 final int level = depth;
-                found.forEach((en, ro) -> LOG.info("Level {}: {} -> {}", level, en, ro));
+                found.forEach((src, ro) -> LOG.info("Level {}: {} -> {}", level, src, ro));
                 return new LinkedHashSet<>(found.values());
             }
             currentLevel = new ArrayList<>(nextLevel);
@@ -182,9 +216,9 @@ public class CopyCategories extends AbstractExecutable {
         return Set.of();
     }
 
-    /** Finds the existing (non-redirect) Romanian category that corresponds to an English category, through Wikidata. */
-    private Optional<String> findRomanianEquivalent(String enCategory) throws IOException, WikibaseException {
-        Entity entity = WikidataCacheManager.getWikidataEntitiesCache(dwiki).getByArticle(EN_SITE_ID, enCategory);
+    /** Finds the existing (non-redirect) Romanian category that corresponds to a source wiki category, through Wikidata. */
+    private Optional<String> findRomanianEquivalent(String srcCategory) throws IOException, WikibaseException {
+        Entity entity = WikidataCacheManager.getWikidataEntitiesCache(dwiki).getByArticle(srcSiteId, srcCategory);
         if (entity == null || entity.getSitelinks() == null) {
             return Optional.empty();
         }
@@ -232,12 +266,12 @@ public class CopyCategories extends AbstractExecutable {
         String pageText = text.toString().stripTrailing();
 
         if (DRY_RUN) {
-            LOG.info("DRY RUN: would create page [[{}]] with summary \"{}\" and text:\n{}", roCategory, CREATE_SUMMARY,
+            LOG.info("DRY RUN: would create page [[{}]] with summary \"{}\" and text:\n{}", roCategory, createSummary,
                 pageText);
             return;
         }
         withUserAssertion(wiki, () ->
-            WikipediaPageCache.getInstance().savePage(wiki, roCategory, pageText, CREATE_SUMMARY, getReloginCallback()));
+            WikipediaPageCache.getInstance().savePage(wiki, roCategory, pageText, createSummary, getReloginCallback()));
     }
 
     private void addSitelink(String qid, String roCategory) throws IOException, WikibaseException {
